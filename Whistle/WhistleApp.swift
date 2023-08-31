@@ -11,6 +11,9 @@ import SwiftUI
 
 @main
 struct WhistleApp: App {
+
+  // MARK: Lifecycle
+
   init() {
     Font.registerFonts(fontName: "SF-Pro-Display-Semibold")
     Font.registerFonts(fontName: "SF-Pro-Text-Regular")
@@ -18,13 +21,27 @@ struct WhistleApp: App {
     Font.registerFontsTTF(fontName: "SF-Pro")
   }
 
+  // MARK: Internal
+
+  @StateObject var appleSignInViewModel = AppleSignInViewModel()
+  @StateObject var userAuth = UserAuth()
+  @State var testBool = false
+
   var body: some Scene {
     WindowGroup {
-//            ContentView()
       NavigationStack {
-        TabbarView()
+        if userAuth.isAccess {
+          TabbarView()
+        } else {
+          SignInView()
+        }
       }
       .tint(.black)
+      .onAppear {
+        if userAuth.isAccess {
+          userAuth.loadData { }
+        }
+      }
     }
   }
 }
