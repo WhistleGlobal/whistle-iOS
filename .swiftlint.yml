@@ -1,0 +1,133 @@
+#disabled_rules: # 실행에서 제외할 룰 식별자들
+#  - trailing_whitespace
+#  - file_length
+#  - large_tuple
+#  - function_body_length
+#  - function_parameter_count
+#  - type_body_length
+#  - syntactic_sugar
+#  - unused_closure_parameter
+#  - unused_control_flow_label
+#  - inclusive_language
+#  - todo
+#  - closure_parameter_position
+#  - opening_brace
+#  - colon
+#  - fatal_error_message
+#  - implicitly_unwrapped_optional
+#  - legacy_cggeometry_functions
+#  - legacy_constant
+#  - legacy_constructor
+#  - legacy_nsgeometry_functions
+#  - operator_usage_whitespace
+#  - return_arrow_whitespace
+#  - trailing_newline
+#  - unused_optional_binding
+#  - vertical_whitespace
+#  - void_return
+#  - custom_rules
+#
+#opt_in_rules: # 일부 룰은 옵트 인 형태로 제공
+#  - empty_count
+#  - missing_docs
+#  - indentation_width
+#  - closure_end_indentation
+#  - empty_string # count보다 isEmtpy 선호
+#  - sorted_imports # import 파일 알파벳 순 정렬
+#
+#cyclomatic_complexity:
+#  ignores_case_statements: true
+#
+#  # 사용 가능한 모든 룰은 swiftlint rules 명령으로 확인 가능
+#included: # 린트 과정에 포함할 파일 경로. 이 항목이 존재하면 `--path`는 무시됨
+#  - Source
+#  - Whistle
+#
+## 네이밍 룰은 경고/에러에 min_length와 max_length를 각각 설정 가능
+## 제외할 이름을 설정할 수 있음
+#type_name:
+#  min_length: 1 # 경고에만 적용됨
+#  max_length:
+#    warning: 120
+#  allowed_symbols:
+#    - _
+#
+## 식별자 네이밍 커스텀 정의
+#identifier_name:
+#  min_length:
+#    warning: 0
+#    error: 0
+#  max_length:
+#    warning: 120
+#    error: 120
+#  allowed_symbols:
+#    - $
+#    - _
+#
+
+only_rules:
+  - colon
+  - fatal_error_message
+  - implicitly_unwrapped_optional
+  - legacy_cggeometry_functions
+  - legacy_constant
+  - legacy_constructor
+  - legacy_nsgeometry_functions
+  - operator_usage_whitespace
+  - return_arrow_whitespace
+  - trailing_newline
+  - unused_optional_binding
+  - vertical_whitespace
+  - void_return
+  - custom_rules
+  - line_length
+  - identifier_name
+
+excluded:
+  - Carthage
+  - Pods
+  - .build
+
+colon:
+  apply_to_dictionaries: false
+
+indentation: 2
+
+line_length: 120
+
+identifier_name:
+  min_length:
+    warning: 0
+    error: 0
+  max_length:
+    warning: 120
+    error: 120
+  allowed_symbols:
+    - $
+    - _
+    
+custom_rules:
+  no_objcMembers:
+    name: "@objcMembers"
+    regex: "@objcMembers"
+    message: "Explicitly use @objc on each member you want to expose to Objective-C"
+    severity: error
+  no_direct_standard_out_logs:
+    name: "Writing log messages directly to standard out is disallowed"
+    regex: "(\\bprint|\\bdebugPrint|\\bdump|Swift\\.print|Swift\\.debugPrint|Swift\\.dump)\\s*\\("
+    match_kinds:
+    - identifier
+    message: "Don't commit `print(…)`, `debugPrint(…)`, or `dump(…)` as they write to standard out in release. Either log to a dedicated logging system or silence this warning in debug-only scenarios explicitly using `// swiftlint:disable:next no_direct_standard_out_logs`"
+    severity: warning
+  no_file_literal:
+    name: "#file is disallowed"
+    regex: "(\\b#file\\b)"
+    match_kinds:
+    - identifier
+    message: "Instead of #file, use #fileID"
+  no_filepath_literal:
+    name: "#filePath is disallowed"
+    regex: "(\\b#filePath\\b)"
+    match_kinds:
+    - identifier
+    message: "Instead of #filePath, use #fileID."
