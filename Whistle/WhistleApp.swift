@@ -23,7 +23,6 @@ struct WhistleApp: App {
 
   // MARK: Internal
 
-
   @StateObject var appleSignInViewModel = AppleSignInViewModel()
   @StateObject var userAuth = UserAuth()
   @State var testBool = false
