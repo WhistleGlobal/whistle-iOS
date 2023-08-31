@@ -18,6 +18,12 @@
 		1B39555D2A95098100BCB4DF /* VideoModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B39555C2A95098100BCB4DF /* VideoModel.swift */; };
 		1B39555F2A9509A700BCB4DF /* SubmitButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B39555E2A9509A700BCB4DF /* SubmitButton.swift */; };
 		1BB7A06A2A9514B4002DD86F /* .swiftlint.yml in Resources */ = {isa = PBXBuildFile; fileRef = 1BB7A0692A9514B4002DD86F /* .swiftlint.yml */; };
+		7801398A2AA127AE00D5FBDB /* SignInView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 780139892AA127AE00D5FBDB /* SignInView.swift */; };
+		786669472AA1282D00448EC7 /* AppleSignInViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 786669462AA1282D00448EC7 /* AppleSignInViewModel.swift */; };
+		786669492AA1284F00448EC7 /* UserAuth.swift in Sources */ = {isa = PBXBuildFile; fileRef = 786669482AA1284F00448EC7 /* UserAuth.swift */; };
+		7866694B2AA1287500448EC7 /* UserResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7866694A2AA1287500448EC7 /* UserResponse.swift */; };
+		7866694E2AA1289900448EC7 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 7866694D2AA1289900448EC7 /* Alamofire */; };
+		786669552AA12F7F00448EC7 /* KeychainSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 786669542AA12F7F00448EC7 /* KeychainSwift */; };
 		7874CB882AA0842D0081DE54 /* FontSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7874CB872AA0842D0081DE54 /* FontSystem.swift */; };
 		7874CB902AA0B5350081DE54 /* ProfileNotiView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7874CB8F2AA0B5350081DE54 /* ProfileNotiView.swift */; };
 		7874CB922AA0B53A0081DE54 /* ProfileInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7874CB912AA0B53A0081DE54 /* ProfileInfoView.swift */; };
@@ -53,6 +59,10 @@
 		1B39555C2A95098100BCB4DF /* VideoModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoModel.swift; sourceTree = "<group>"; };
 		1B39555E2A9509A700BCB4DF /* SubmitButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubmitButton.swift; sourceTree = "<group>"; };
 		1BB7A0692A9514B4002DD86F /* .swiftlint.yml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = .swiftlint.yml; sourceTree = "<group>"; };
+		780139892AA127AE00D5FBDB /* SignInView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInView.swift; sourceTree = "<group>"; };
+		786669462AA1282D00448EC7 /* AppleSignInViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppleSignInViewModel.swift; sourceTree = "<group>"; };
+		786669482AA1284F00448EC7 /* UserAuth.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserAuth.swift; sourceTree = "<group>"; };
+		7866694A2AA1287500448EC7 /* UserResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserResponse.swift; sourceTree = "<group>"; };
 		7874CB872AA0842D0081DE54 /* FontSystem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FontSystem.swift; sourceTree = "<group>"; };
 		7874CB8F2AA0B5350081DE54 /* ProfileNotiView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileNotiView.swift; sourceTree = "<group>"; };
 		7874CB912AA0B53A0081DE54 /* ProfileInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileInfoView.swift; sourceTree = "<group>"; };
@@ -79,6 +89,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				786669552AA12F7F00448EC7 /* KeychainSwift in Frameworks */,
+				7866694E2AA1289900448EC7 /* Alamofire in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -129,6 +141,7 @@
 		1B39554D2A9506B300BCB4DF /* Screens */ = {
 			isa = PBXGroup;
 			children = (
+				780139882AA1279600D5FBDB /* SignInView */,
 				78D148E12A9E132700DDCE48 /* Profile */,
 				1B3955412A95069C00BCB4DF /* ContentView.swift */,
 				78F980802A9F32C800AD542A /* TabbarView.swift */,
@@ -140,6 +153,8 @@
 			isa = PBXGroup;
 			children = (
 				1B39555C2A95098100BCB4DF /* VideoModel.swift */,
+				786669482AA1284F00448EC7 /* UserAuth.swift */,
+				7866694A2AA1287500448EC7 /* UserResponse.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -156,6 +171,7 @@
 			isa = PBXGroup;
 			children = (
 				1B3955562A95092A00BCB4DF /* VideoViewModel.swift */,
+				786669462AA1282D00448EC7 /* AppleSignInViewModel.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -211,6 +227,14 @@
 			path = Colors;
 			sourceTree = "<group>";
 		};
+		780139882AA1279600D5FBDB /* SignInView */ = {
+			isa = PBXGroup;
+			children = (
+				780139892AA127AE00D5FBDB /* SignInView.swift */,
+			);
+			path = SignInView;
+			sourceTree = "<group>";
+		};
 		78D148D12A9E0A2600DDCE48 /* Fonts */ = {
 			isa = PBXGroup;
 			children = (
@@ -261,6 +285,10 @@
 			dependencies = (
 			);
 			name = Whistle;
+			packageProductDependencies = (
+				7866694D2AA1289900448EC7 /* Alamofire */,
+				786669542AA12F7F00448EC7 /* KeychainSwift */,
+			);
 			productName = Whistle;
 			productReference = 1B39553C2A95069C00BCB4DF /* Whistle.app */;
 			productType = "com.apple.product-type.application";
@@ -289,6 +317,10 @@
 				Base,
 			);
 			mainGroup = 1B3955332A95069C00BCB4DF;
+			packageReferences = (
+				7866694C2AA1289900448EC7 /* XCRemoteSwiftPackageReference "Alamofire" */,
+				786669532AA12F7F00448EC7 /* XCRemoteSwiftPackageReference "keychain-swift" */,
+			);
 			productRefGroup = 1B39553D2A95069C00BCB4DF /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -363,15 +395,19 @@
 			buildActionMask = 2147483647;
 			files = (
 				1B3955422A95069C00BCB4DF /* ContentView.swift in Sources */,
+				7866694B2AA1287500448EC7 /* UserResponse.swift in Sources */,
 				78D148DD2A9E0CBA00DDCE48 /* Extension+View.swift in Sources */,
+				786669472AA1282D00448EC7 /* AppleSignInViewModel.swift in Sources */,
 				78D148E52A9E135F00DDCE48 /* Extension+UIView.swift in Sources */,
 				7874CB882AA0842D0081DE54 /* FontSystem.swift in Sources */,
 				7874CB942AA0B5430081DE54 /* ProfileReportView.swift in Sources */,
+				786669492AA1284F00448EC7 /* UserAuth.swift in Sources */,
 				1B39555D2A95098100BCB4DF /* VideoModel.swift in Sources */,
 				1B39555B2A95095500BCB4DF /* ColorManager.swift in Sources */,
 				1B3955532A9507E300BCB4DF /* Extension+UIScreen.swift in Sources */,
 				78D148E72A9E137100DDCE48 /* Extension+UIVisualEffectView.swift in Sources */,
 				78F980872A9F5AAC00AD542A /* GlassBottomSheet.swift in Sources */,
+				7801398A2AA127AE00D5FBDB /* SignInView.swift in Sources */,
 				78D148EB2A9E13CC00DDCE48 /* ProfileView.swift in Sources */,
 				78D148E32A9E134700DDCE48 /* Extension+NSObject.swift in Sources */,
 				1B39555F2A9509A700BCB4DF /* SubmitButton.swift in Sources */,
@@ -598,6 +634,38 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		7866694C2AA1289900448EC7 /* XCRemoteSwiftPackageReference "Alamofire" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Alamofire/Alamofire.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.7.1;
+			};
+		};
+		786669532AA12F7F00448EC7 /* XCRemoteSwiftPackageReference "keychain-swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/evgenyneu/keychain-swift.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 20.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		7866694D2AA1289900448EC7 /* Alamofire */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 7866694C2AA1289900448EC7 /* XCRemoteSwiftPackageReference "Alamofire" */;
+			productName = Alamofire;
+		};
+		786669542AA12F7F00448EC7 /* KeychainSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 786669532AA12F7F00448EC7 /* XCRemoteSwiftPackageReference "keychain-swift" */;
+			productName = KeychainSwift;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 1B3955342A95069C00BCB4DF /* Project object */;
 }

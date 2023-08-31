@@ -55,9 +55,3 @@ struct ProfileInfoView: View {
     }
   }
 }
-
-#Preview {
-  NavigationStack {
-    ProfileInfoView(isShowingBottomSheet: .constant(true))
-  }
-}
