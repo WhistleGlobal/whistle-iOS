@@ -32,8 +32,3 @@ struct ProfileNotiView: View {
   }
 }
 
-#Preview {
-  NavigationStack {
-    ProfileNotiView(isShowingBottomSheet: .constant(false))
-  }
-}

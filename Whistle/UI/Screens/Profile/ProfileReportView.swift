@@ -50,9 +50,3 @@ struct ProfileReportView: View {
     }
   }
 }
-
-#Preview {
-  NavigationStack {
-    ProfileReportView(isShowingBottomSheet: .constant(true))
-  }
-}
