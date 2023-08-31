@@ -23,6 +23,7 @@
 		786669492AA1284F00448EC7 /* UserAuth.swift in Sources */ = {isa = PBXBuildFile; fileRef = 786669482AA1284F00448EC7 /* UserAuth.swift */; };
 		7866694B2AA1287500448EC7 /* UserResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7866694A2AA1287500448EC7 /* UserResponse.swift */; };
 		7866694E2AA1289900448EC7 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 7866694D2AA1289900448EC7 /* Alamofire */; };
+		786669552AA12F7F00448EC7 /* KeychainSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 786669542AA12F7F00448EC7 /* KeychainSwift */; };
 		7874CB882AA0842D0081DE54 /* FontSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7874CB872AA0842D0081DE54 /* FontSystem.swift */; };
 		7874CB902AA0B5350081DE54 /* ProfileNotiView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7874CB8F2AA0B5350081DE54 /* ProfileNotiView.swift */; };
 		7874CB922AA0B53A0081DE54 /* ProfileInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7874CB912AA0B53A0081DE54 /* ProfileInfoView.swift */; };
@@ -88,6 +89,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				786669552AA12F7F00448EC7 /* KeychainSwift in Frameworks */,
 				7866694E2AA1289900448EC7 /* Alamofire in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -285,6 +287,7 @@
 			name = Whistle;
 			packageProductDependencies = (
 				7866694D2AA1289900448EC7 /* Alamofire */,
+				786669542AA12F7F00448EC7 /* KeychainSwift */,
 			);
 			productName = Whistle;
 			productReference = 1B39553C2A95069C00BCB4DF /* Whistle.app */;
@@ -316,6 +319,7 @@
 			mainGroup = 1B3955332A95069C00BCB4DF;
 			packageReferences = (
 				7866694C2AA1289900448EC7 /* XCRemoteSwiftPackageReference "Alamofire" */,
+				786669532AA12F7F00448EC7 /* XCRemoteSwiftPackageReference "keychain-swift" */,
 			);
 			productRefGroup = 1B39553D2A95069C00BCB4DF /* Products */;
 			projectDirPath = "";
@@ -640,6 +644,14 @@
 				minimumVersion = 5.7.1;
 			};
 		};
+		786669532AA12F7F00448EC7 /* XCRemoteSwiftPackageReference "keychain-swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/evgenyneu/keychain-swift.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 20.0.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -647,6 +659,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 7866694C2AA1289900448EC7 /* XCRemoteSwiftPackageReference "Alamofire" */;
 			productName = Alamofire;
+		};
+		786669542AA12F7F00448EC7 /* KeychainSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 786669532AA12F7F00448EC7 /* XCRemoteSwiftPackageReference "keychain-swift" */;
+			productName = KeychainSwift;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

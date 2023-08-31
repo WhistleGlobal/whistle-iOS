@@ -8,15 +8,15 @@
 import Alamofire
 import AuthenticationServices
 import Foundation
+import KeychainSwift
 import SwiftUI
 
 class AppleSignInViewModel: ObservableObject {
   @Published var userAuth = UserAuth()
   @Published var gotoTab = false
-  @AppStorage("idToken") var idToken: String?
-  @AppStorage("refreshToken") var refreshToken: String?
   @AppStorage("isAccess") var isAccess = false
   @AppStorage("provider") var provider: Provider = .apple
+  let keychain = KeychainSwift()
 
   // 밑으로는 사용 되는 함수들
   func configureRequest(_ request: ASAuthorizationAppleIDRequest) {
@@ -66,8 +66,8 @@ class AppleSignInViewModel: ObservableObject {
           {
             // 메인 스레드에서 UI 업데이트
             DispatchQueue.main.async {
-              self.idToken = id_token
-              self.refreshToken = refresh_token
+              self.keychain.set("\(id_token)", forKey: "id_token")
+              self.keychain.set("\(refresh_token)", forKey: "refresh_token")
               self.provider = .apple
               // 데이터를 다시 로드
               self.userAuth.loadData {

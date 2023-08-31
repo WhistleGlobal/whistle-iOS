@@ -8,6 +8,7 @@
 // import GoogleSignIn
 // import GoogleSignInSwift
 import Alamofire
+import KeychainSwift
 import SwiftUI
 
 // MARK: - Provider
@@ -33,8 +34,6 @@ class UserAuth: ObservableObject {
   }
 
 
-  @AppStorage("idToken") var idToken: String?
-  @AppStorage("refreshToken") var refreshToken: String?
   @AppStorage("isAccess") var isAccess = false
   @AppStorage("provider") var provider: Provider = .apple
 
@@ -42,6 +41,9 @@ class UserAuth: ObservableObject {
   var userName = ""
   var imageUrl: String? = ""
   var userResponse = UserResponse(email: "")
+
+  let keychain = KeychainSwift()
+
 
 
   var url: URL? {
@@ -53,9 +55,10 @@ class UserAuth: ObservableObject {
     }
   }
 
+
   // loadData 및 refreshToken 메서드를 이 클래스로 이동
   func loadData(completion: @escaping () -> Void?) {
-    guard let idToken else {
+    guard let idTokenKey = keychain.get("id_token") else {
       log("id_Token nil")
       return
     }
@@ -63,8 +66,8 @@ class UserAuth: ObservableObject {
       log("url nil")
       return
     }
-    log("idToken \(idToken)")
-    let headers: HTTPHeaders = ["Authorization": "Bearer \(idToken)"]
+    log("idToken \(idTokenKey)")
+    let headers: HTTPHeaders = ["Authorization": "Bearer \(idTokenKey)"]
     AF.request(url, method: .get, headers: headers).responseDecodable(of: UserResponse.self) { response in
       switch response.result {
       case .success(let value):
@@ -80,8 +83,8 @@ class UserAuth: ObservableObject {
   }
 
   func refresh() {
-    guard let refreshToken else {
-      log("refreshToken nil")
+    guard let refreshTokenKey = keychain.get("refresh_token") else {
+      log("refreshTokenKey nil")
       return
     }
     guard let url = URL(string: "https://madeuse.com/auth/apple/refresh") else {
@@ -89,7 +92,8 @@ class UserAuth: ObservableObject {
       return
     }
     let headers: HTTPHeaders = ["Content-Type": "application/x-www-form-urlencoded"]
-    let parameters: Parameters = ["refresh_token": refreshToken]
+
+    let parameters: Parameters = ["refresh_token": refreshTokenKey]
     AF.request(url, method: .post, parameters: parameters, headers: headers).response { response in
       if let error = response.error {
         log("\(error.localizedDescription)")
@@ -108,9 +112,7 @@ class UserAuth: ObservableObject {
           let jsonObject = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any],
           let idToken = jsonObject["id_token"] as? String
         {
-          self.idToken = idToken
-          print("New id_token: \(idToken)")
-          print("New refresh_token: \(refreshToken)")
+          self.keychain.set(idToken, forKey: "id_token")
           self.loadData { }
         }
       } catch {
