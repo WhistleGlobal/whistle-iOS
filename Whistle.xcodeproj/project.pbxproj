@@ -18,6 +18,7 @@
 		1B39555D2A95098100BCB4DF /* VideoModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B39555C2A95098100BCB4DF /* VideoModel.swift */; };
 		1B39555F2A9509A700BCB4DF /* SubmitButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B39555E2A9509A700BCB4DF /* SubmitButton.swift */; };
 		1BB7A06A2A9514B4002DD86F /* .swiftlint.yml in Resources */ = {isa = PBXBuildFile; fileRef = 1BB7A0692A9514B4002DD86F /* .swiftlint.yml */; };
+		780139752AA0E56400D5FBDB /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 780139742AA0E56400D5FBDB /* Info.plist */; };
 		7874CB882AA0842D0081DE54 /* FontSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7874CB872AA0842D0081DE54 /* FontSystem.swift */; };
 		7874CB902AA0B5350081DE54 /* ProfileNotiView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7874CB8F2AA0B5350081DE54 /* ProfileNotiView.swift */; };
 		7874CB922AA0B53A0081DE54 /* ProfileInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7874CB912AA0B53A0081DE54 /* ProfileInfoView.swift */; };
@@ -53,6 +54,7 @@
 		1B39555C2A95098100BCB4DF /* VideoModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoModel.swift; sourceTree = "<group>"; };
 		1B39555E2A9509A700BCB4DF /* SubmitButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubmitButton.swift; sourceTree = "<group>"; };
 		1BB7A0692A9514B4002DD86F /* .swiftlint.yml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = .swiftlint.yml; sourceTree = "<group>"; };
+		780139742AA0E56400D5FBDB /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		7874CB872AA0842D0081DE54 /* FontSystem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FontSystem.swift; sourceTree = "<group>"; };
 		7874CB8F2AA0B5350081DE54 /* ProfileNotiView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileNotiView.swift; sourceTree = "<group>"; };
 		7874CB912AA0B53A0081DE54 /* ProfileInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileInfoView.swift; sourceTree = "<group>"; };
@@ -106,6 +108,7 @@
 		1B39553E2A95069C00BCB4DF /* Whistle */ = {
 			isa = PBXGroup;
 			children = (
+				780139742AA0E56400D5FBDB /* Info.plist */,
 				1B21C9E82AA034500036158F /* Whistle.entitlements */,
 				1B3955582A95094200BCB4DF /* Resources */,
 				1B3955542A95080600BCB4DF /* UI */,
@@ -305,6 +308,7 @@
 			files = (
 				1B21C9ED2AA0AB8A0036158F /* .swiftformat in Resources */,
 				78D148D82A9E0A3600DDCE48 /* SF-Pro-Display-Semibold.otf in Resources */,
+				780139752AA0E56400D5FBDB /* Info.plist in Resources */,
 				1BB7A06A2A9514B4002DD86F /* .swiftlint.yml in Resources */,
 				78D148D72A9E0A3600DDCE48 /* SF-Pro-Text-Regular.otf in Resources */,
 				78D148D62A9E0A3600DDCE48 /* SF-Pro.ttf in Resources */,
