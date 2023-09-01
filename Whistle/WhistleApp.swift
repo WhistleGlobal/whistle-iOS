@@ -62,9 +62,3 @@ public func log<T>(
   }
   #endif
 }
-
-// MARK: - AppKeys
-
-enum AppKeys {
-  static let domainUrl = Bundle.main.object(forInfoDictionaryKey: "DomainUrl")
-}
