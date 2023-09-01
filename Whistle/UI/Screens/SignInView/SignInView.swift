@@ -22,15 +22,5 @@ struct SignInView: View {
         onCompletion: appleSignInViewModel.handleResult)
         .frame(maxWidth: 300, maxHeight: 45)
     }
-    .navigationDestination(isPresented: $appleSignInViewModel.gotoTab) {
-      TabbarView()
-    }
-    .onAppear {
-      if userAuth.isAccess {
-        userAuth.loadData {
-          appleSignInViewModel.gotoTab = true
-        }
-      }
-    }
   }
 }

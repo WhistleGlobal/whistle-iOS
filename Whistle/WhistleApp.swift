@@ -5,6 +5,7 @@
 //  Created by 박상원 on 2023/08/23.
 //
 
+import KeychainSwift
 import SwiftUI
 
 // MARK: - WhistleApp
@@ -26,6 +27,7 @@ struct WhistleApp: App {
   @StateObject var appleSignInViewModel = AppleSignInViewModel()
   @StateObject var userAuth = UserAuth()
   @State var testBool = false
+  let keychain = KeychainSwift()
 
   var body: some Scene {
     WindowGroup {

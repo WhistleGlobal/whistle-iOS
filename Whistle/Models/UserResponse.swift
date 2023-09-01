@@ -12,4 +12,3 @@ struct UserResponse: Decodable {
   var user_name: String?
   var profile_img: String?
 }
-
