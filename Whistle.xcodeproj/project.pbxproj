@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1B08DCC32AA1872200CA1DE1 /* MusicTrimView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B08DCC22AA1872200CA1DE1 /* MusicTrimView.swift */; };
+		1B08DCC52AA1873000CA1DE1 /* newjeans.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 1B08DCC42AA1873000CA1DE1 /* newjeans.mp3 */; };
 		1B21C9ED2AA0AB8A0036158F /* .swiftformat in Resources */ = {isa = PBXBuildFile; fileRef = 1B21C9EC2AA0AB8A0036158F /* .swiftformat */; };
 		1B3955402A95069C00BCB4DF /* WhistleApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B39553F2A95069C00BCB4DF /* WhistleApp.swift */; };
 		1B3955422A95069C00BCB4DF /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B3955412A95069C00BCB4DF /* ContentView.swift */; };
@@ -46,6 +48,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		1B08DCC02AA1804200CA1DE1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		1B08DCC22AA1872200CA1DE1 /* MusicTrimView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MusicTrimView.swift; sourceTree = "<group>"; };
+		1B08DCC42AA1873000CA1DE1 /* newjeans.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = newjeans.mp3; sourceTree = "<group>"; };
 		1B21C9E82AA034500036158F /* Whistle.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Whistle.entitlements; sourceTree = "<group>"; };
 		1B21C9EC2AA0AB8A0036158F /* .swiftformat */ = {isa = PBXFileReference; lastKnownFileType = text; path = .swiftformat; sourceTree = "<group>"; };
 		1B39553C2A95069C00BCB4DF /* Whistle.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Whistle.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -118,6 +123,7 @@
 		1B39553E2A95069C00BCB4DF /* Whistle */ = {
 			isa = PBXGroup;
 			children = (
+				1B08DCC02AA1804200CA1DE1 /* Info.plist */,
 				1B21C9E82AA034500036158F /* Whistle.entitlements */,
 				1B3955582A95094200BCB4DF /* Resources */,
 				1B3955542A95080600BCB4DF /* UI */,
@@ -145,6 +151,7 @@
 				78D148E12A9E132700DDCE48 /* Profile */,
 				1B3955412A95069C00BCB4DF /* ContentView.swift */,
 				78F980802A9F32C800AD542A /* TabbarView.swift */,
+				1B08DCC22AA1872200CA1DE1 /* MusicTrimView.swift */,
 			);
 			path = Screens;
 			sourceTree = "<group>";
@@ -212,6 +219,7 @@
 		1B3955582A95094200BCB4DF /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				1B08DCC42AA1873000CA1DE1 /* newjeans.mp3 */,
 				78D148D12A9E0A2600DDCE48 /* Fonts */,
 				1B3955432A95069D00BCB4DF /* Assets.xcassets */,
 				1B3955592A95094900BCB4DF /* Colors */,
@@ -338,6 +346,7 @@
 				1B21C9ED2AA0AB8A0036158F /* .swiftformat in Resources */,
 				78D148D82A9E0A3600DDCE48 /* SF-Pro-Display-Semibold.otf in Resources */,
 				1BB7A06A2A9514B4002DD86F /* .swiftlint.yml in Resources */,
+				1B08DCC52AA1873000CA1DE1 /* newjeans.mp3 in Resources */,
 				78D148D72A9E0A3600DDCE48 /* SF-Pro-Text-Regular.otf in Resources */,
 				78D148D62A9E0A3600DDCE48 /* SF-Pro.ttf in Resources */,
 				1B3955472A95069D00BCB4DF /* Preview Assets.xcassets in Resources */,
@@ -366,7 +375,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "export PATH=\"$PATH:/opt/homebrew/bin\"\n\nif which swiftformat > /dev/null; then\n  swiftformat .\nelse\n  echo \"warning: SwiftFormat not installed, download from https://github.com/nicklockwood/SwiftFormat\"\nfi\n";
+			shellScript = " export PATH=\"$PATH:/opt/homebrew/bin\"\n\nif which swiftformat > /dev/null; then\n  swiftformat .\nelse\n  echo \"warning: SwiftFormat not installed, download from https://github.com/nicklockwood/SwiftFormat\"\nfi\n";
 		};
 		1BB7A0682A95148B002DD86F /* SwiftLint Script */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -420,6 +429,7 @@
 				78F980892A9F5B2500AD542A /* RoundedCorners.swift in Sources */,
 				1B3955402A95069C00BCB4DF /* WhistleApp.swift in Sources */,
 				78D148E02A9E0D1B00DDCE48 /* AppleSDGothic.swift in Sources */,
+				1B08DCC32AA1872200CA1DE1 /* MusicTrimView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
