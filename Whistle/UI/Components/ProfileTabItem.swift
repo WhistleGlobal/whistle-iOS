@@ -10,6 +10,7 @@ import SwiftUI
 struct ProfileTabItem: ButtonStyle {
 
   // MARK: Lifecycle
+
   init(systemName: String, tab: String, selectedTab: Binding<ProfileView.profileTabCase>) {
     self.systemName = systemName
     self.tab = tab
@@ -17,6 +18,7 @@ struct ProfileTabItem: ButtonStyle {
   }
 
   // MARK: Internal
+
   let systemName: String
   let tab: String
   @Binding var selectedTab: ProfileView.profileTabCase
@@ -43,5 +45,6 @@ struct ProfileTabItem: ButtonStyle {
           .offset(y: 2.5)
       }
       .foregroundColor(tab == selectedTab.rawValue ? Color.White : Color.Gray30_Dark)
+      .background(.clear)
   }
 }

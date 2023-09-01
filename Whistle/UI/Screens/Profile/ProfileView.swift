@@ -48,7 +48,9 @@ struct ProfileView: View {
           Button {
             tabSelection = .myVideo
           } label: {
-            Text("")
+            Color.gray
+              .opacity(0.01)
+              .frame(maxWidth: .infinity, maxHeight: .infinity)
           }
           .buttonStyle(ProfileTabItem(
             systemName: "square.grid.2x2.fill",
@@ -57,7 +59,9 @@ struct ProfileView: View {
           Button {
             tabSelection = .favoriteVideo
           } label: {
-            Text("")
+            Color.gray
+              .opacity(0.01)
+              .frame(maxWidth: .infinity, maxHeight: .infinity)
           }
           .buttonStyle(ProfileTabItem(
             systemName: "bookmark.fill",
