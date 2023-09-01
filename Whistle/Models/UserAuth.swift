@@ -44,14 +44,18 @@ class UserAuth: ObservableObject {
 
   let keychain = KeychainSwift()
 
+  var domainUrl: String {
+    AppKeys.domainUrl as! String
+  }
+
 
 
   var url: URL? {
     switch provider {
     case .apple:
-      return URL(string: "https://readywhistle.com/user/profile?provider=Apple")
+      return URL(string: "\(domainUrl)/user/profile?provider=Apple")
     case .google:
-      return URL(string: "https://readywhistle.com/user/profile?provider=Google")
+      return URL(string: "\(domainUrl)/user/profile?provider=Google")
     }
   }
 
@@ -77,6 +81,7 @@ class UserAuth: ObservableObject {
         self.isAccess = true
         completion()
       case .failure(let error):
+        self.refresh()
         log(error)
       }
     }

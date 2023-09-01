@@ -18,6 +18,10 @@ class AppleSignInViewModel: ObservableObject {
   @AppStorage("provider") var provider: Provider = .apple
   let keychain = KeychainSwift()
 
+  var domainUrl: String {
+    AppKeys.domainUrl as! String
+  }
+
   // 밑으로는 사용 되는 함수들
   func configureRequest(_ request: ASAuthorizationAppleIDRequest) {
     log("")
@@ -42,12 +46,11 @@ class AppleSignInViewModel: ObservableObject {
   // 백엔드 서버에 인증 코드를 전송하는 함수
   func sendAuthCodeToBackend(authCode: String) {
     print("백엔드 서버로 인증 코드 전송 시작: \(authCode)")
-
-    let url = "https://readywhistle.com/auth/apple"
-    let parameters: [String: String] = [
+    let url = "\(domainUrl)/auth/apple"
+    let parameters: [String: Any] = [
       "authCode": authCode,
     ]
-
+    log(url)
     // Alamofire 사용하여 POST 요청
     AF.request(
       url,
@@ -56,6 +59,8 @@ class AppleSignInViewModel: ObservableObject {
       encoding: URLEncoding.default,
       headers: ["Content-Type": "application/x-www-form-urlencoded"])
       .responseJSON { response in
+        log("AFAFAF :\(response.result)")
+        log("AFAFAF :\(response.description)")
         switch response.result {
         case .success(let value):
           // JSON 데이터 파싱
@@ -64,19 +69,18 @@ class AppleSignInViewModel: ObservableObject {
             let id_token = jsonObject["id_token"] as? String,
             let refresh_token = jsonObject["refresh_token"] as? String
           {
-            // 메인 스레드에서 UI 업데이트
+            log(id_token)
+            log(refresh_token)
             DispatchQueue.main.async {
               self.keychain.set("\(id_token)", forKey: "id_token")
               self.keychain.set("\(refresh_token)", forKey: "refresh_token")
               self.provider = .apple
-              // 데이터를 다시 로드
               self.userAuth.loadData {
                 self.gotoTab = true
               }
             }
           }
         case .failure(let error):
-          // 오류 처리
           print("Error sending authCode to backend: \(error.localizedDescription)")
         }
       }

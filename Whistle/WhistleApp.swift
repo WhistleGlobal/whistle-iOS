@@ -5,6 +5,7 @@
 //  Created by 박상원 on 2023/08/23.
 //
 
+import KeychainSwift
 import SwiftUI
 
 // MARK: - WhistleApp
@@ -26,6 +27,7 @@ struct WhistleApp: App {
   @StateObject var appleSignInViewModel = AppleSignInViewModel()
   @StateObject var userAuth = UserAuth()
   @State var testBool = false
+  let keychain = KeychainSwift()
 
   var body: some Scene {
     WindowGroup {
@@ -38,6 +40,8 @@ struct WhistleApp: App {
       }
       .tint(.black)
       .onAppear {
+//          keychain.delete("id_token")
+//          keychain.delete("refresh_token")
         if userAuth.isAccess {
           userAuth.loadData { }
         }
@@ -59,4 +63,10 @@ public func log<T>(
     print("\(filename.components(separatedBy: "/").last ?? "")(\(line)) : \(funcName) : nil")
   }
   #endif
+}
+
+// MARK: - AppKeys
+
+enum AppKeys {
+  static let domainUrl = Bundle.main.object(forInfoDictionaryKey: "DomainUrl")
 }
