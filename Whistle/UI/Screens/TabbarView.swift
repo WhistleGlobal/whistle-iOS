@@ -58,7 +58,6 @@ extension TabbarView {
       .foregroundColor(.Primary_Default)
       .frame(width: (UIScreen.width - 32) / 3 - 6)
       .offset(x: tabSelection.rawValue * ((UIScreen.width - 32) / 3))
-      .animation(.easeInOut)
       .padding(3)
       .overlay(
         RoundedRectangle(cornerRadius: 100)
@@ -67,14 +66,15 @@ extension TabbarView {
             lineWidth: 2)
           .frame(width: (UIScreen.width - 32) / 3 - 6)
           .offset(x: tabSelection.rawValue * ((UIScreen.width - 32) / 3))
-          .animation(.easeInOut)
           .padding(4))
       .foregroundColor(.clear)
       .frame(height: 56)
       .frame(maxWidth: .infinity)
       .overlay {
         Button {
-          self.tabSelection = .main
+          withAnimation {
+            self.tabSelection = .main
+          }
         } label: {
           Color.clear.overlay {
             Image(systemName: "house.fill")
@@ -89,7 +89,10 @@ extension TabbarView {
         .offset(x: -1 * ((UIScreen.width - 32) / 3))
 
         Button {
-          self.tabSelection = .upload
+          withAnimation {
+            self.tabSelection = .upload
+          }
+
         } label: {
           Color.clear.overlay {
             Image(systemName: "plus")
@@ -103,7 +106,9 @@ extension TabbarView {
         .foregroundColor(.white)
         .padding(3)
         Button {
-          self.tabSelection = .profile
+          withAnimation {
+            self.tabSelection = .profile
+          }
         } label: {
           Color.clear.overlay {
             Image(systemName: "person")

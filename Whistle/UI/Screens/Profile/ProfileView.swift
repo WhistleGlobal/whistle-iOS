@@ -88,7 +88,6 @@ struct ProfileView: View {
       VStack {
         Spacer()
         GlassBottomSheet(isShowing: $isShowingBottomSheet, content: AnyView(Text("Hi")))
-          .animation(.easeIn(duration: 1.0), value: tabbarOpacity)
           .onChange(of: isShowingBottomSheet) { newValue in
             if !newValue {
               DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
@@ -101,7 +100,9 @@ struct ProfileView: View {
             DragGesture(minimumDistance: 20, coordinateSpace: .local)
               .onEnded { value in
                 if value.translation.height > 20 {
-                  isShowingBottomSheet = false
+                  withAnimation {
+                    isShowingBottomSheet = false
+                  }
                   DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
                     tabbarOpacity = 1
                   }
@@ -134,7 +135,9 @@ extension ProfileView {
         Spacer()
         Button {
           self.tabbarOpacity = 0
-          self.isShowingBottomSheet = true
+          withAnimation {
+            self.isShowingBottomSheet = true
+          }
         } label: {
           Circle()
             .foregroundColor(.Dim_Default)
