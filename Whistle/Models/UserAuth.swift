@@ -33,7 +33,6 @@ class UserAuth: ObservableObject {
     case userResponse
   }
 
-
   @AppStorage("isAccess") var isAccess = false
   @AppStorage("provider") var provider: Provider = .apple
 
@@ -48,8 +47,6 @@ class UserAuth: ObservableObject {
     AppKeys.domainUrl as! String
   }
 
-
-
   var url: URL? {
     switch provider {
     case .apple:
@@ -59,8 +56,6 @@ class UserAuth: ObservableObject {
     }
   }
 
-
-  // loadData 및 refreshToken 메서드를 이 클래스로 이동
   func loadData(completion: @escaping () -> Void?) {
     guard let idTokenKey = keychain.get("id_token") else {
       log("id_Token nil")

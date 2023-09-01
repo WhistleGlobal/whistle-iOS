@@ -40,8 +40,6 @@ struct WhistleApp: App {
       }
       .tint(.black)
       .onAppear {
-//          keychain.delete("id_token")
-//          keychain.delete("refresh_token")
         if userAuth.isAccess {
           userAuth.loadData { }
         }

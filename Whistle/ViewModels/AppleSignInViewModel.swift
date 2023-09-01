@@ -45,7 +45,7 @@ class AppleSignInViewModel: ObservableObject {
 
   // 백엔드 서버에 인증 코드를 전송하는 함수
   func sendAuthCodeToBackend(authCode: String) {
-    print("백엔드 서버로 인증 코드 전송 시작: \(authCode)")
+    log("sendAuthCodeToBackend authCode: \(authCode)")
     let url = "\(domainUrl)/auth/apple"
     let parameters: [String: Any] = [
       "authCode": authCode,
