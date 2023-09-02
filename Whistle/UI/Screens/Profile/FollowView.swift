@@ -93,5 +93,20 @@ extension FollowView {
     .frame(height: 72)
     .frame(maxWidth: .infinity)
   }
+    
+    @ViewBuilder
+    func followEmptyView() -> some View {
+        VStack(spacing: 24) {
+          Image(systemName: "person.fill")
+            .resizable()
+            .scaledToFit()
+            .frame(width: 48, height: 48)
+            .foregroundColor(.LabelColor_Primary)
+          Text("아직 회원님을 팔로우하는 사람이 없습니다")
+            .fontSystem(fontDesignSystem: .body1_KO)
+            .foregroundColor(.LabelColor_Secondary)
+        }
+        .frame(maxHeight: .infinity)
+    }
 }
 
