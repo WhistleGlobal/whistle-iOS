@@ -113,7 +113,7 @@ struct ProfileView: View {
 extension ProfileView {
   // FIXME: - 색상 적용 안됨
   @ViewBuilder
-  func glassView(width: CGFloat, height: CGFloat = 338) -> some View {
+  func glassView(width: CGFloat, height: CGFloat = 398) -> some View {
     glassMorphicCard(width: width, height: height)
       .overlay {
         RoundedRectangle(cornerRadius: 20)
@@ -135,39 +135,20 @@ extension ProfileView {
             self.isShowingBottomSheet = true
           }
         } label: {
-          Circle()
-            .foregroundColor(.Dim_Default)
+          Image(systemName: "ellipsis")
+            .foregroundColor(Color.White)
+            .fontWeight(.semibold)
             .frame(width: 48, height: 48)
-            .padding(16)
-            .overlay {
-              Image(systemName: "ellipsis")
-                .foregroundColor(Color.White)
-                .fontWeight(.semibold)
-            }
+            .background(
+              Circle()
+                .foregroundColor(.Dim_Default)
+                .frame(width: 48, height: 48))
         }
       }
+      .padding([.top, .horizontal], 16)
       // FIXME: - 프로필
       Circle()
         .frame(width: 100, height: 100)
-        .overlay {
-          VStack {
-            Spacer()
-            HStack {
-              Spacer()
-              RoundedRectangle(cornerRadius: 6)
-                .foregroundColor(.Primary_Default)
-                .frame(width: 24, height: 24)
-                .overlay {
-                  Image(systemName: "pencil.line")
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: 18, height: 20)
-                    .fontWeight(.semibold)
-                    .foregroundColor(.white)
-                }
-            }
-          }
-        }
         .padding(.bottom, 16)
       Text("UserName")
         .foregroundColor(Color.LabelColor_Primary_Dark)
@@ -176,6 +157,17 @@ extension ProfileView {
         .foregroundColor(Color.LabelColor_Secondary_Dark)
         .fontSystem(fontDesignSystem: .body2_KO)
         .padding(.bottom, 16)
+      NavigationLink {
+        EmptyView()
+      } label: {
+        Text("프로필 편집")
+          .fontSystem(fontDesignSystem: .subtitle2_KO)
+          .foregroundColor(Color.LabelColor_Primary_Dark)
+          .frame(width: 114, height: 36)
+      }
+      .frame(width: 114, height: 36)
+      .padding(.bottom, 24)
+      .buttonStyle(ProfileEditButtonStyle())
       HStack(spacing: 48) {
         VStack(spacing: 4) {
           Text("\(20)")
