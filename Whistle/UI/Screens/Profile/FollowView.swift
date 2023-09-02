@@ -61,12 +61,6 @@ struct FollowView: View {
   }
 }
 
-#Preview {
-  NavigationStack {
-    FollowView()
-  }
-}
-
 extension FollowView {
   @ViewBuilder
   func personRow(isFollow: Bool) -> some View {
