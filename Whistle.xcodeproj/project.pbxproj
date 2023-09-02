@@ -19,6 +19,11 @@
 		1B39555F2A9509A700BCB4DF /* SubmitButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B39555E2A9509A700BCB4DF /* SubmitButton.swift */; };
 		1BB7A06A2A9514B4002DD86F /* .swiftlint.yml in Resources */ = {isa = PBXBuildFile; fileRef = 1BB7A0692A9514B4002DD86F /* .swiftlint.yml */; };
 		7801398A2AA127AE00D5FBDB /* SignInView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 780139892AA127AE00D5FBDB /* SignInView.swift */; };
+		782DD4732AA30BDD006183D3 /* FollowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 782DD4722AA30BDD006183D3 /* FollowView.swift */; };
+		782DD4752AA30C22006183D3 /* FollowButtonStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 782DD4742AA30C22006183D3 /* FollowButtonStyle.swift */; };
+		782DD4772AA30C5C006183D3 /* FollowTabbarStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 782DD4762AA30C5C006183D3 /* FollowTabbarStyle.swift */; };
+		782DD47A2AA31F3C006183D3 /* ProfileEditButtonStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 782DD4792AA31F3C006183D3 /* ProfileEditButtonStyle.swift */; };
+		782DD47C2AA32448006183D3 /* Extension+UINavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 782DD47B2AA32448006183D3 /* Extension+UINavigationController.swift */; };
 		782F1B252AA1C566006831C8 /* ProfileTabItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 782F1B242AA1C566006831C8 /* ProfileTabItem.swift */; };
 		786669472AA1282D00448EC7 /* AppleSignInViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 786669462AA1282D00448EC7 /* AppleSignInViewModel.swift */; };
 		786669492AA1284F00448EC7 /* UserAuth.swift in Sources */ = {isa = PBXBuildFile; fileRef = 786669482AA1284F00448EC7 /* UserAuth.swift */; };
@@ -62,6 +67,11 @@
 		1B39555E2A9509A700BCB4DF /* SubmitButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubmitButton.swift; sourceTree = "<group>"; };
 		1BB7A0692A9514B4002DD86F /* .swiftlint.yml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = .swiftlint.yml; sourceTree = "<group>"; };
 		780139892AA127AE00D5FBDB /* SignInView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInView.swift; sourceTree = "<group>"; };
+		782DD4722AA30BDD006183D3 /* FollowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FollowView.swift; sourceTree = "<group>"; };
+		782DD4742AA30C22006183D3 /* FollowButtonStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FollowButtonStyle.swift; sourceTree = "<group>"; };
+		782DD4762AA30C5C006183D3 /* FollowTabbarStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FollowTabbarStyle.swift; sourceTree = "<group>"; };
+		782DD4792AA31F3C006183D3 /* ProfileEditButtonStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileEditButtonStyle.swift; sourceTree = "<group>"; };
+		782DD47B2AA32448006183D3 /* Extension+UINavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Extension+UINavigationController.swift"; sourceTree = "<group>"; };
 		782F1B242AA1C566006831C8 /* ProfileTabItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileTabItem.swift; sourceTree = "<group>"; };
 		786669462AA1282D00448EC7 /* AppleSignInViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppleSignInViewModel.swift; sourceTree = "<group>"; };
 		786669482AA1284F00448EC7 /* UserAuth.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserAuth.swift; sourceTree = "<group>"; };
@@ -192,6 +202,7 @@
 				78D148DC2A9E0CBA00DDCE48 /* Extension+View.swift */,
 				78D148E42A9E135F00DDCE48 /* Extension+UIView.swift */,
 				78D148E62A9E137100DDCE48 /* Extension+UIVisualEffectView.swift */,
+				782DD47B2AA32448006183D3 /* Extension+UINavigationController.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -212,7 +223,7 @@
 				1B39555E2A9509A700BCB4DF /* SubmitButton.swift */,
 				78D148E82A9E13A800DDCE48 /* CustomBlurView.swift */,
 				78F980882A9F5B2500AD542A /* RoundedCorners.swift */,
-				782F1B242AA1C566006831C8 /* ProfileTabItem.swift */,
+				782DD4782AA30CB8006183D3 /* Profile */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -243,6 +254,17 @@
 			path = SignInView;
 			sourceTree = "<group>";
 		};
+		782DD4782AA30CB8006183D3 /* Profile */ = {
+			isa = PBXGroup;
+			children = (
+				782F1B242AA1C566006831C8 /* ProfileTabItem.swift */,
+				782DD4742AA30C22006183D3 /* FollowButtonStyle.swift */,
+				782DD4762AA30C5C006183D3 /* FollowTabbarStyle.swift */,
+				782DD4792AA31F3C006183D3 /* ProfileEditButtonStyle.swift */,
+			);
+			path = Profile;
+			sourceTree = "<group>";
+		};
 		78D148D12A9E0A2600DDCE48 /* Fonts */ = {
 			isa = PBXGroup;
 			children = (
@@ -271,6 +293,7 @@
 				7874CB8F2AA0B5350081DE54 /* ProfileNotiView.swift */,
 				7874CB912AA0B53A0081DE54 /* ProfileInfoView.swift */,
 				7874CB932AA0B5430081DE54 /* ProfileReportView.swift */,
+				782DD4722AA30BDD006183D3 /* FollowView.swift */,
 			);
 			path = Profile;
 			sourceTree = "<group>";
@@ -402,8 +425,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				782DD4752AA30C22006183D3 /* FollowButtonStyle.swift in Sources */,
 				1B3955422A95069C00BCB4DF /* ContentView.swift in Sources */,
+				782DD47C2AA32448006183D3 /* Extension+UINavigationController.swift in Sources */,
 				7866694B2AA1287500448EC7 /* UserResponse.swift in Sources */,
+				782DD4732AA30BDD006183D3 /* FollowView.swift in Sources */,
 				78D148DD2A9E0CBA00DDCE48 /* Extension+View.swift in Sources */,
 				786669472AA1282D00448EC7 /* AppleSignInViewModel.swift in Sources */,
 				78D148E52A9E135F00DDCE48 /* Extension+UIView.swift in Sources */,
@@ -427,9 +453,11 @@
 				78D148DB2A9E0A5E00DDCE48 /* Extension+Font.swift in Sources */,
 				78F980892A9F5B2500AD542A /* RoundedCorners.swift in Sources */,
 				78DDADFA2AA1A37F00960552 /* AppKeys.swift in Sources */,
+				782DD47A2AA31F3C006183D3 /* ProfileEditButtonStyle.swift in Sources */,
 				1B3955402A95069C00BCB4DF /* WhistleApp.swift in Sources */,
 				782F1B252AA1C566006831C8 /* ProfileTabItem.swift in Sources */,
 				78D148E02A9E0D1B00DDCE48 /* AppleSDGothic.swift in Sources */,
+				782DD4772AA30C5C006183D3 /* FollowTabbarStyle.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

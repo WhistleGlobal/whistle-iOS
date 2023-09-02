@@ -48,10 +48,21 @@ struct ProfileInfoView: View {
       .listStyle(.plain)
       Spacer()
     }
+    .navigationBarBackButtonHidden()
     .navigationBarTitleDisplayMode(.inline)
     .navigationTitle("정보")
     .onAppear {
       isShowingBottomSheet = false
+    }
+    .toolbar {
+      ToolbarItem(placement: .cancellationAction) {
+        Button {
+          dismiss()
+        } label: {
+          Image(systemName: "chevron.backward")
+            .foregroundColor(.LabelColor_Primary)
+        }
+      }
     }
   }
 }
