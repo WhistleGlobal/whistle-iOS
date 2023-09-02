@@ -13,7 +13,6 @@ struct FollowView: View {
 
   // MARK: Public
 
-
   public enum profileTabStatus: String {
     case follower
     case following
@@ -21,13 +20,24 @@ struct FollowView: View {
 
   // MARK: Internal
 
-
   @Environment(\.dismiss) var dismiss
+  @State var tabStatus: profileTabStatus = .follower
 
   var body: some View {
     VStack(spacing: 0) {
-      Rectangle()
-        .frame(width: 361, height: 48)
+      HStack(spacing: 0) {
+        Button("") {
+          tabStatus = .follower
+        }
+        .buttonStyle(
+          FollowTabbarStyle(followNum: 9, tab: profileTabStatus.follower.rawValue, selectedTab: $tabStatus))
+        Button("") {
+          tabStatus = .following
+        }
+        .buttonStyle(
+          FollowTabbarStyle(followNum: 3, tab: profileTabStatus.following.rawValue, selectedTab: $tabStatus))
+      }
+      .frame(height: 48)
       personRow(isFollow: true)
       personRow(isFollow: false)
       Spacer()
