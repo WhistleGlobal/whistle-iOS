@@ -55,7 +55,7 @@ extension TabbarView {
   @ViewBuilder
   func tabItems() -> some View {
     RoundedRectangle(cornerRadius: 100)
-      .foregroundColor(.Primary_Default)
+      .foregroundColor(Color.Dim_Default)
       .frame(width: (UIScreen.width - 32) / 3 - 6)
       .offset(x: tabSelection.rawValue * ((UIScreen.width - 32) / 3))
       .padding(3)
