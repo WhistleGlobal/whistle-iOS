@@ -23,6 +23,7 @@
 		782DD4752AA30C22006183D3 /* FollowButtonStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 782DD4742AA30C22006183D3 /* FollowButtonStyle.swift */; };
 		782DD4772AA30C5C006183D3 /* FollowTabbarStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 782DD4762AA30C5C006183D3 /* FollowTabbarStyle.swift */; };
 		782DD47A2AA31F3C006183D3 /* ProfileEditButtonStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 782DD4792AA31F3C006183D3 /* ProfileEditButtonStyle.swift */; };
+		782DD47C2AA32448006183D3 /* Extension+UINavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 782DD47B2AA32448006183D3 /* Extension+UINavigationController.swift */; };
 		782F1B252AA1C566006831C8 /* ProfileTabItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 782F1B242AA1C566006831C8 /* ProfileTabItem.swift */; };
 		786669472AA1282D00448EC7 /* AppleSignInViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 786669462AA1282D00448EC7 /* AppleSignInViewModel.swift */; };
 		786669492AA1284F00448EC7 /* UserAuth.swift in Sources */ = {isa = PBXBuildFile; fileRef = 786669482AA1284F00448EC7 /* UserAuth.swift */; };
@@ -70,6 +71,7 @@
 		782DD4742AA30C22006183D3 /* FollowButtonStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FollowButtonStyle.swift; sourceTree = "<group>"; };
 		782DD4762AA30C5C006183D3 /* FollowTabbarStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FollowTabbarStyle.swift; sourceTree = "<group>"; };
 		782DD4792AA31F3C006183D3 /* ProfileEditButtonStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileEditButtonStyle.swift; sourceTree = "<group>"; };
+		782DD47B2AA32448006183D3 /* Extension+UINavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Extension+UINavigationController.swift"; sourceTree = "<group>"; };
 		782F1B242AA1C566006831C8 /* ProfileTabItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileTabItem.swift; sourceTree = "<group>"; };
 		786669462AA1282D00448EC7 /* AppleSignInViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppleSignInViewModel.swift; sourceTree = "<group>"; };
 		786669482AA1284F00448EC7 /* UserAuth.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserAuth.swift; sourceTree = "<group>"; };
@@ -200,6 +202,7 @@
 				78D148DC2A9E0CBA00DDCE48 /* Extension+View.swift */,
 				78D148E42A9E135F00DDCE48 /* Extension+UIView.swift */,
 				78D148E62A9E137100DDCE48 /* Extension+UIVisualEffectView.swift */,
+				782DD47B2AA32448006183D3 /* Extension+UINavigationController.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -424,6 +427,7 @@
 			files = (
 				782DD4752AA30C22006183D3 /* FollowButtonStyle.swift in Sources */,
 				1B3955422A95069C00BCB4DF /* ContentView.swift in Sources */,
+				782DD47C2AA32448006183D3 /* Extension+UINavigationController.swift in Sources */,
 				7866694B2AA1287500448EC7 /* UserResponse.swift in Sources */,
 				782DD4732AA30BDD006183D3 /* FollowView.swift in Sources */,
 				78D148DD2A9E0CBA00DDCE48 /* Extension+View.swift in Sources */,

@@ -12,7 +12,6 @@ struct ProfileReportView: View {
   @Environment(\.dismiss) var dismiss
   @Binding var isShowingBottomSheet: Bool
 
-
   var body: some View {
     List {
       reportRow()
@@ -21,10 +20,21 @@ struct ProfileReportView: View {
       reportRow()
     }
     .listStyle(.plain)
+    .navigationBarBackButtonHidden()
     .navigationBarTitleDisplayMode(.inline)
     .navigationTitle("신고")
     .onAppear {
       isShowingBottomSheet = false
+    }
+    .toolbar {
+      ToolbarItem(placement: .cancellationAction) {
+        Button {
+          dismiss()
+        } label: {
+          Image(systemName: "chevron.backward")
+            .foregroundColor(.LabelColor_Primary)
+        }
+      }
     }
   }
 
