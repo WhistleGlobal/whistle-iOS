@@ -43,6 +43,7 @@ struct FollowView: View {
       Spacer()
     }
     .padding(.horizontal, 16)
+    .navigationBarBackButtonHidden()
     .toolbar {
       ToolbarItem(placement: .cancellationAction) {
         Button {

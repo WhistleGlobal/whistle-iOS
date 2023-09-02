@@ -186,13 +186,17 @@ extension ProfileView {
             .fontSystem(fontDesignSystem: .caption_SemiBold)
         }
         Rectangle().frame(width: 1, height: 36).foregroundColor(.white)
-        VStack(spacing: 4) {
-          Text("\(100)")
-            .foregroundColor(Color.LabelColor_Primary_Dark)
-            .fontSystem(fontDesignSystem: .title2_Expanded)
-          Text("follower")
-            .foregroundColor(Color.LabelColor_Secondary_Dark)
-            .fontSystem(fontDesignSystem: .caption_SemiBold)
+        NavigationLink {
+          FollowView()
+        } label: {
+          VStack(spacing: 4) {
+            Text("\(100)")
+              .foregroundColor(Color.LabelColor_Primary_Dark)
+              .fontSystem(fontDesignSystem: .title2_Expanded)
+            Text("follower")
+              .foregroundColor(Color.LabelColor_Secondary_Dark)
+              .fontSystem(fontDesignSystem: .caption_SemiBold)
+          }
         }
       }
       Spacer()
@@ -227,3 +231,5 @@ extension ProfileView {
       }
   }
 }
+
+
