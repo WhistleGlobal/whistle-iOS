@@ -10,9 +10,20 @@ import SwiftUI
 // MARK: - ProfileView
 
 struct ProfileView: View {
+
+  // MARK: Public
+
+  public enum profileTabCase: String {
+    case myVideo
+    case favoriteVideo
+  }
+
+  // MARK: Internal
+
   let fontHeight = UIFont.preferredFont(forTextStyle: .title2).lineHeight
   @State var isShowingBottomSheet = false
   @State var tabbarDirection: CGFloat = -1.0
+  @State var tabSelection: profileTabCase = .myVideo
   @State var columns: [GridItem] = [
     GridItem(.flexible()),
     GridItem(.flexible()),
@@ -33,47 +44,32 @@ struct ProfileView: View {
         Spacer().frame(height: 64)
         glassView(width: UIScreen.width - 32)
           .padding(.bottom, 12)
-        HStack {
+        HStack(spacing: 0) {
           Button {
-            tabbarDirection = -1
+            tabSelection = .myVideo
           } label: {
-            VStack {
-              Spacer()
-              Image(systemName: "square.grid.2x2.fill")
-                .resizable()
-                .scaledToFit()
-                .frame(width: 24, height: 24)
-              Spacer()
-            }
-            .foregroundColor(tabbarDirection == -1 ? Color.White : Color.Gray30_Dark)
-            .frame(maxWidth: .infinity)
+            Color.gray
+              .opacity(0.01)
+              .frame(maxWidth: .infinity, maxHeight: .infinity)
           }
+          .buttonStyle(ProfileTabItem(
+            systemName: "square.grid.2x2.fill",
+            tab: profileTabCase.myVideo.rawValue,
+            selectedTab: $tabSelection))
           Button {
-            tabbarDirection = 1
+            tabSelection = .favoriteVideo
           } label: {
-            VStack {
-              Spacer()
-              Image(systemName: "bookmark.fill")
-                .resizable()
-                .scaledToFit()
-                .frame(width: 24, height: 24)
-              Spacer()
-            }
-            .foregroundColor(tabbarDirection == 1 ? Color.White : Color.Gray30_Dark)
-            .frame(maxWidth: .infinity)
+            Color.gray
+              .opacity(0.01)
+              .frame(maxWidth: .infinity, maxHeight: .infinity)
           }
+          .buttonStyle(ProfileTabItem(
+            systemName: "bookmark.fill",
+            tab: profileTabCase.favoriteVideo.rawValue,
+            selectedTab: $tabSelection))
         }
         .frame(height: 48)
-        Rectangle()
-          .foregroundColor(Color.Gray30_Dark)
-          .frame(height: 1)
-          .overlay {
-            Capsule()
-              .foregroundColor(Color.White)
-              .frame(width: (UIScreen.width - 32) / 2, height: 5)
-              .offset(x: tabbarDirection * (UIScreen.width - 32) / 4)
-          }
-          .padding(.bottom, 16)
+        .padding(.bottom, 16)
         ScrollView {
           LazyVGrid(columns: columns, spacing: 20) {
             ForEach(0 ..< 20) { _ in
@@ -88,7 +84,6 @@ struct ProfileView: View {
       VStack {
         Spacer()
         GlassBottomSheet(isShowing: $isShowingBottomSheet, content: AnyView(Text("Hi")))
-          .animation(.easeIn(duration: 1.0), value: tabbarOpacity)
           .onChange(of: isShowingBottomSheet) { newValue in
             if !newValue {
               DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
@@ -101,7 +96,9 @@ struct ProfileView: View {
             DragGesture(minimumDistance: 20, coordinateSpace: .local)
               .onEnded { value in
                 if value.translation.height > 20 {
-                  isShowingBottomSheet = false
+                  withAnimation {
+                    isShowingBottomSheet = false
+                  }
                   DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
                     tabbarOpacity = 1
                   }
@@ -134,7 +131,9 @@ extension ProfileView {
         Spacer()
         Button {
           self.tabbarOpacity = 0
-          self.isShowingBottomSheet = true
+          withAnimation {
+            self.isShowingBottomSheet = true
+          }
         } label: {
           Circle()
             .foregroundColor(.Dim_Default)
