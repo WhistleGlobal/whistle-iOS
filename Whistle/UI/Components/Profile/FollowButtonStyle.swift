@@ -30,24 +30,24 @@ struct FollowButtonStyle: ButtonStyle {
 
     func followButtonColor() -> Color {
       switch (isFollow, isEnabled, configuration.isPressed) {
-      // Follow
+      // Follow/Pressed
       case (true, true, true):
-        return .blue.opacity(0.5)
+        return .Blue_Pressed
       // Follow/Not pressed
       case (true, true, false):
-        return .red
+        return .Blue_Default
       // Follow/Disable
       case (true, false, _):
-        return .blue.opacity(0.1)
-      // Following
+        return .Blue_Disabled
+      // Following/Pressed
       case (false, true, true):
-        return .gray.opacity(0.7)
+        return .Gray_Pressed
       // Following/Not pressed
       case (false, true, false):
-        return .gray
+        return .Gray_Default
       // Following/Disable
       case (false, false, _):
-        return .green.opacity(0.2)
+        return .Gray_Disabled
       }
     }
   }
