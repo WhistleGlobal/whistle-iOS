@@ -55,7 +55,7 @@ struct ProfileEditView: View {
         Button {
           dismiss()
         } label: {
-          Image(systemName: "xmark")
+          Image(systemName: "chevron.backward")
             .foregroundColor(.LabelColor_Primary)
         }
       }
