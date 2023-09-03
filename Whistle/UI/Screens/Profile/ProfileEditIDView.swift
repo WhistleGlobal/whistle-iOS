@@ -23,7 +23,7 @@ struct ProfileEditIDView: View {
 
   @Environment(\.dismiss) var dismiss
   @State var inputID = ""
-  @State var inputValidationStatus: InputValidationStatus = .valid
+  @State var inputValidationStatus: InputValidationStatus = .none
   @Binding var showToast: Bool
 
 
@@ -35,7 +35,8 @@ struct ProfileEditIDView: View {
         .frame(maxWidth: .infinity)
         .modifier(ClearButton(text: $inputID))
         .background(.white)
-        .onReceive(Just(inputID).debounce(for: 0.5, scheduler: RunLoop.main)) { newText in
+        .onReceive(Just(inputID).delay(for: 0.5, scheduler: RunLoop.current)) { newText in
+          log(newText)
           inputValidationStatus = validateInput(newText)
         }
       Divider().frame(width: UIScreen.width)

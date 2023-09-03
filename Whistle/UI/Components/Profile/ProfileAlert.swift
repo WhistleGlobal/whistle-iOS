@@ -23,14 +23,14 @@ struct ProfileAlert: View {
             lineWidth: 2)
           .frame(width: 270, height: 195)
           .blur(radius: 0)
-          VStack(spacing: 0) {
+        VStack(spacing: 0) {
           Spacer().frame(height: 150)
-            Rectangle()
-              .frame(width: 270, height: 1)
-              .foregroundStyle(LinearGradient.Border_Glass)
-            Rectangle()
-              .frame(width: 1, height: 45)
-              .foregroundStyle(LinearGradient.Border_Glass)
+          Rectangle()
+            .frame(width: 270, height: 1)
+            .foregroundStyle(LinearGradient.Border_Glass)
+          Rectangle()
+            .frame(width: 1, height: 45)
+            .foregroundStyle(LinearGradient.Border_Glass)
         }
       }
       .frame(width: 270, height: 195)
@@ -93,8 +93,7 @@ extension ProfileAlert {
     .frame(width: 270, height: 151)
     .multilineTextAlignment(.center)
     .background(
-      glassAlertTop()
-    )
+      glassAlertTop())
     HStack(spacing: 0) {
       Button { } label: {
         glassAlertBottomLeft()
