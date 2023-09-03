@@ -13,6 +13,7 @@ struct ProfileEditView: View {
 
   @Environment(\.dismiss) var dismiss
   @State var editProfileImage = false
+  @State var showToast = false
 
   var body: some View {
     VStack(spacing: 0) {
@@ -31,11 +32,14 @@ struct ProfileEditView: View {
       }
       .padding(.bottom, 40)
       Divider()
-      profileEditLink(destination: ProfileEditIDView(), title: "사용자 ID", content: "East_Road")
+      profileEditLink(destination: ProfileEditIDView(showToast: $showToast), title: "사용자 ID", content: "East_Road")
       Divider().padding(.leading, 96)
-      profileEditLink(destination: ProfileEditIntroduceView(), title: "소개", content: "")
+      profileEditLink(destination: ProfileEditIntroduceView(showToast: $showToast), title: "소개", content: "")
       Divider()
       Spacer()
+    }
+    .overlay {
+      ProfileToastMessage(text: "This is a toast message", showToast: $showToast)
     }
     .padding(.horizontal, 16)
     .navigationBarBackButtonHidden()

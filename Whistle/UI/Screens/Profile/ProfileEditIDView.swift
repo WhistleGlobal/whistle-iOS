@@ -24,6 +24,8 @@ struct ProfileEditIDView: View {
   @Environment(\.dismiss) var dismiss
   @State var inputID = ""
   @State var inputValidationStatus: InputValidationStatus = .valid
+  @Binding var showToast: Bool
+
 
   var body: some View {
     VStack(spacing: 0) {
@@ -67,6 +69,7 @@ struct ProfileEditIDView: View {
         Button {
           log("Update Profile")
           dismiss()
+          showToast = true
         } label: {
           Text("완료")
             .foregroundColor(inputValidationStatus == .valid ? .Info : .Disable_Placeholder)
@@ -80,7 +83,7 @@ struct ProfileEditIDView: View {
 
 #Preview {
   NavigationStack {
-    ProfileEditIDView()
+    ProfileEditIDView(showToast: .constant(true))
   }
 }
 

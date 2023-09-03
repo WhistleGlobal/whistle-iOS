@@ -13,6 +13,8 @@ struct ProfileEditIntroduceView: View {
 
   @Environment(\.dismiss) var dismiss
   @State var inputIntroduce = ""
+  @Binding var showToast: Bool
+
 
   var body: some View {
     VStack(spacing: 0) {
@@ -44,6 +46,7 @@ struct ProfileEditIntroduceView: View {
         Button {
           log("Update Profile")
           dismiss()
+          showToast = true
         } label: {
           Text("완료")
             .foregroundColor(true ? .Info : .Disable_Placeholder)
@@ -57,7 +60,7 @@ struct ProfileEditIntroduceView: View {
 
 #Preview {
   NavigationStack {
-    ProfileEditIntroduceView()
+    ProfileEditIntroduceView(showToast: .constant(false))
   }
 }
 
