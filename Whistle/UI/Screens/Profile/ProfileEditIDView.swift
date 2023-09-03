@@ -23,11 +23,11 @@ struct ProfileEditIDView: View {
 
   @Environment(\.dismiss) var dismiss
   @State var inputID = ""
-  @State var inputValidationStatus: InputValidationStatus = .empty
+  @State var inputValidationStatus: InputValidationStatus = .valid
 
   var body: some View {
     VStack(spacing: 0) {
-      Divider()
+      Divider().frame(width: UIScreen.width)
       TextField("사용자 ID를 입력해주세요.", text: $inputID)
         .frame(height: 56)
         .frame(maxWidth: .infinity)
@@ -36,7 +36,7 @@ struct ProfileEditIDView: View {
         .onReceive(Just(inputID).debounce(for: 0.5, scheduler: RunLoop.main)) { newText in
           inputValidationStatus = validateInput(newText)
         }
-      Divider()
+      Divider().frame(width: UIScreen.width)
       if inputValidationStatus != .none {
         validationText()
       }
@@ -66,11 +66,13 @@ struct ProfileEditIDView: View {
       ToolbarItem(placement: .confirmationAction) {
         Button {
           log("Update Profile")
+          dismiss()
         } label: {
           Text("완료")
-            .foregroundColor(.Info)
+            .foregroundColor(inputValidationStatus == .valid ? .Info : .Disable_Placeholder)
             .fontSystem(fontDesignSystem: .subtitle2_KO)
         }
+        .disabled(inputValidationStatus != .valid)
       }
     }
   }

@@ -16,6 +16,9 @@ struct ProfileEditView: View {
 
   var body: some View {
     VStack(spacing: 0) {
+      Divider()
+        .frame(width: UIScreen.width)
+        .padding(.bottom, 36)
       Circle()
         .frame(width: 100, height: 100)
         .padding(.bottom, 16)
