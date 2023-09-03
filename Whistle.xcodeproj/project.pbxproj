@@ -32,6 +32,7 @@
 		7866694E2AA1289900448EC7 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 7866694D2AA1289900448EC7 /* Alamofire */; };
 		786669552AA12F7F00448EC7 /* KeychainSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 786669542AA12F7F00448EC7 /* KeychainSwift */; };
 		787173B42AA472070018CB14 /* ProfileToastMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 787173B32AA472070018CB14 /* ProfileToastMessage.swift */; };
+		787173B62AA47A510018CB14 /* ProfileAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 787173B52AA47A510018CB14 /* ProfileAlert.swift */; };
 		7874CB882AA0842D0081DE54 /* FontSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7874CB872AA0842D0081DE54 /* FontSystem.swift */; };
 		7874CB902AA0B5350081DE54 /* ProfileNotiView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7874CB8F2AA0B5350081DE54 /* ProfileNotiView.swift */; };
 		7874CB922AA0B53A0081DE54 /* ProfileInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7874CB912AA0B53A0081DE54 /* ProfileInfoView.swift */; };
@@ -82,6 +83,7 @@
 		786669482AA1284F00448EC7 /* UserAuth.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserAuth.swift; sourceTree = "<group>"; };
 		7866694A2AA1287500448EC7 /* UserResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserResponse.swift; sourceTree = "<group>"; };
 		787173B32AA472070018CB14 /* ProfileToastMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileToastMessage.swift; sourceTree = "<group>"; };
+		787173B52AA47A510018CB14 /* ProfileAlert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileAlert.swift; sourceTree = "<group>"; };
 		7874CB872AA0842D0081DE54 /* FontSystem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FontSystem.swift; sourceTree = "<group>"; };
 		7874CB8F2AA0B5350081DE54 /* ProfileNotiView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileNotiView.swift; sourceTree = "<group>"; };
 		7874CB912AA0B53A0081DE54 /* ProfileInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileInfoView.swift; sourceTree = "<group>"; };
@@ -270,6 +272,7 @@
 				782DD4762AA30C5C006183D3 /* FollowTabbarStyle.swift */,
 				782DD4792AA31F3C006183D3 /* ProfileEditButtonStyle.swift */,
 				787173B32AA472070018CB14 /* ProfileToastMessage.swift */,
+				787173B52AA47A510018CB14 /* ProfileAlert.swift */,
 			);
 			path = Profile;
 			sourceTree = "<group>";
@@ -473,6 +476,7 @@
 				1B3955402A95069C00BCB4DF /* WhistleApp.swift in Sources */,
 				782F1B252AA1C566006831C8 /* ProfileTabItem.swift in Sources */,
 				78D148E02A9E0D1B00DDCE48 /* AppleSDGothic.swift in Sources */,
+				787173B62AA47A510018CB14 /* ProfileAlert.swift in Sources */,
 				782DD4772AA30C5C006183D3 /* FollowTabbarStyle.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

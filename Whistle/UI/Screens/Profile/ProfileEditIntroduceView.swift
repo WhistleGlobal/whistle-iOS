@@ -5,6 +5,7 @@
 //  Created by ChoiYujin on 9/3/23.
 //
 
+import Combine
 import SwiftUI
 
 // MARK: - ProfileEditIntroduceView
@@ -15,15 +16,22 @@ struct ProfileEditIntroduceView: View {
   @State var inputIntroduce = ""
   @Binding var showToast: Bool
 
-
   var body: some View {
     VStack(spacing: 0) {
       Divider().frame(width: UIScreen.width)
-      TextField("소개글을 입력해주세요. (40자 내)", text: $inputIntroduce)
-        .frame(height: 56)
-        .frame(maxWidth: .infinity)
-        .modifier(ClearButton(text: $inputIntroduce))
+      TextField("소개글을 입력해주세요.", text: $inputIntroduce, axis: .vertical)
+        .fontSystem(fontDesignSystem: .body1_KO)
+        .frame(height: 100, alignment: .top)
+        .multilineTextAlignment(.leading)
         .background(.white)
+        .onReceive(Just(inputIntroduce)) { _ in limitText(40) }
+        .overlay(alignment: .bottom) {
+          Text("\(inputIntroduce.count)/40자")
+            .fontSystem(fontDesignSystem: .body1_KO)
+            .foregroundColor(.Disable_Placeholder)
+            .frame(maxWidth: .infinity, alignment: .trailing)
+        }
+        .padding(.vertical, 20)
       Divider().frame(width: UIScreen.width)
       Spacer()
     }
@@ -34,7 +42,7 @@ struct ProfileEditIntroduceView: View {
         Button {
           dismiss()
         } label: {
-          Image(systemName: "xmark")
+          Image(systemName: "chevron.backward")
             .foregroundColor(.LabelColor_Primary)
         }
       }
@@ -64,26 +72,13 @@ struct ProfileEditIntroduceView: View {
   }
 }
 
-// MARK: ProfileEditIntroduceView.ClearButton
-
 extension ProfileEditIntroduceView {
 
-  // MARK: - ClearButton
-
-  struct ClearButton: ViewModifier {
-    @Binding var text: String
-
-    public func body(content: Content) -> some View {
-      HStack {
-        content
-        Button(action: {
-          text = ""
-        }) {
-          Image(systemName: "multiply.circle.fill")
-            .foregroundColor(.Dim_Default)
-            .opacity(text.isEmpty ? 0 : 1)
-        }
-      }
+  // Function to keep text length in limits
+  func limitText(_ upper: Int) {
+    if inputIntroduce.count > upper {
+      inputIntroduce = String(inputIntroduce.prefix(upper))
     }
   }
+
 }

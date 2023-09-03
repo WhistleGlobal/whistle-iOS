@@ -39,7 +39,7 @@ struct ProfileEditView: View {
       Spacer()
     }
     .overlay {
-      ProfileToastMessage(text: "This is a toast message", showToast: $showToast)
+      ProfileToastMessage(text: "소개가 수정되었습니다.", showToast: $showToast)
     }
     .padding(.horizontal, 16)
     .navigationBarBackButtonHidden()
