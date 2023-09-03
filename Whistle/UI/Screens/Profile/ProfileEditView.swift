@@ -66,7 +66,7 @@ struct ProfileEditView: View {
       ToolbarItem(placement: .confirmationAction) {
         Button {
           log("Update Profile")
-            dismiss()
+          dismiss()
         } label: {
           Text("완료")
             .foregroundColor(.Info)

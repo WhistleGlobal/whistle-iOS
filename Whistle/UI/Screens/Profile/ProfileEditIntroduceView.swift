@@ -61,6 +61,8 @@ struct ProfileEditIntroduceView: View {
   }
 }
 
+// MARK: ProfileEditIntroduceView.ClearButton
+
 extension ProfileEditIntroduceView {
 
   // MARK: - ClearButton

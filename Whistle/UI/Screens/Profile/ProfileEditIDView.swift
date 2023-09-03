@@ -134,23 +134,23 @@ extension ProfileEditIDView {
       .frame(height: 42)
       .frame(maxWidth: .infinity, alignment: .leading)
   }
-    
-    func validationText() -> String {
-        switch inputValidationStatus {
-        case .valid:
-            return "사용할 수 있는 ID 입니다."
-        case .empty:
-            return "사용자 ID를 입력해주세요."
-        case .tooShort:
-            return "사용자 ID는 2자 이상 입력해주세요."
-        case .invalidCharacters:
-            return "영문, 숫자, 밑줄 또는 마침표만 허용됩니다."
-        case .invalidID:
-            return "이미 사용 중인 ID 입니다."
-        case .none:
-            return ""
-        }
+
+  func validationText() -> String {
+    switch inputValidationStatus {
+    case .valid:
+      return "사용할 수 있는 ID 입니다."
+    case .empty:
+      return "사용자 ID를 입력해주세요."
+    case .tooShort:
+      return "사용자 ID는 2자 이상 입력해주세요."
+    case .invalidCharacters:
+      return "영문, 숫자, 밑줄 또는 마침표만 허용됩니다."
+    case .invalidID:
+      return "이미 사용 중인 ID 입니다."
+    case .none:
+      return ""
     }
+  }
 
   func validationColor() -> Color {
     switch inputValidationStatus {
