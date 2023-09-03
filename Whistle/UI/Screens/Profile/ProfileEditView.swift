@@ -14,7 +14,6 @@ struct ProfileEditView: View {
   @Environment(\.dismiss) var dismiss
   @State var editProfileImage = false
 
-
   var body: some View {
     VStack(spacing: 0) {
       Circle()
@@ -29,10 +28,9 @@ struct ProfileEditView: View {
       }
       .padding(.bottom, 40)
       Divider()
-      profileEditLink(destination: EmptyView(), title: "사용자 ID", content: "East_Road")
-      Divider()
-        .padding(.leading, 96)
-      profileEditLink(destination: EmptyView(), title: "소개", content: "어쩌구 저쩌구")
+      profileEditLink(destination: ProfileEditIDView(), title: "사용자 ID", content: "East_Road")
+      Divider().padding(.leading, 96)
+      profileEditLink(destination: EmptyView(), title: "소개", content: "")
       Divider()
       Spacer()
     }
@@ -88,14 +86,13 @@ extension ProfileEditView {
     NavigationLink(destination: destination) {
       HStack(spacing: 0) {
         Text(title)
+          .fontSystem(fontDesignSystem: .subtitle1_KO)
+          .foregroundColor(.LabelColor_Primary)
           .frame(width: 96, height: 56, alignment: .leading)
-          .font(.system(size: 16))
-          .foregroundColor(.primary)
-
-        Text(content)
+        Text(content.isEmpty ? "소개" : content)
+          .fontSystem(fontDesignSystem: .body1_KO)
+          .foregroundColor(content.isEmpty ? .Disable_Placeholder : .LabelColor_Primary)
           .frame(maxWidth: .infinity, alignment: .leading)
-          .font(.body)
-          .foregroundColor(.primary)
 
         Image(systemName: "chevron.right")
           .resizable()
