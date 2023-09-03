@@ -12,15 +12,15 @@ import SwiftUI
 struct ProfileEditIntroduceView: View {
 
   @Environment(\.dismiss) var dismiss
-  @State var inputID = ""
+  @State var inputIntroduce = ""
 
   var body: some View {
     VStack(spacing: 0) {
       Divider().frame(width: UIScreen.width)
-      TextField("소개글을 입력해주세요. (40자 내)", text: $inputID)
+      TextField("소개글을 입력해주세요. (40자 내)", text: $inputIntroduce)
         .frame(height: 56)
         .frame(maxWidth: .infinity)
-        .modifier(ClearButton(text: $inputID))
+        .modifier(ClearButton(text: $inputIntroduce))
         .background(.white)
       Divider().frame(width: UIScreen.width)
       Spacer()

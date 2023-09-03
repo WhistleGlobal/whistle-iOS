@@ -33,7 +33,7 @@ struct ProfileEditView: View {
       Divider()
       profileEditLink(destination: ProfileEditIDView(), title: "사용자 ID", content: "East_Road")
       Divider().padding(.leading, 96)
-      profileEditLink(destination: EmptyView(), title: "소개", content: "")
+      profileEditLink(destination: ProfileEditIntroduceView(), title: "소개", content: "")
       Divider()
       Spacer()
     }
@@ -66,6 +66,7 @@ struct ProfileEditView: View {
       ToolbarItem(placement: .confirmationAction) {
         Button {
           log("Update Profile")
+            dismiss()
         } label: {
           Text("완료")
             .foregroundColor(.Info)
