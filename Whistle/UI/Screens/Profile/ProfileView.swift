@@ -158,7 +158,7 @@ extension ProfileView {
         .fontSystem(fontDesignSystem: .body2_KO)
         .padding(.bottom, 16)
       NavigationLink {
-        EmptyView()
+        ProfileEditView()
       } label: {
         Text("프로필 편집")
           .fontSystem(fontDesignSystem: .subtitle2_KO)
