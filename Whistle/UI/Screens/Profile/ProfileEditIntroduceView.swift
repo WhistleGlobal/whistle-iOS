@@ -66,12 +66,6 @@ struct ProfileEditIntroduceView: View {
   }
 }
 
-#Preview {
-  NavigationStack {
-    ProfileEditIntroduceView(showToast: .constant(false))
-  }
-}
-
 extension ProfileEditIntroduceView {
 
   // Function to keep text length in limits

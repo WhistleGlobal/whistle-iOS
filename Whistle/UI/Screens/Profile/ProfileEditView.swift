@@ -81,12 +81,6 @@ struct ProfileEditView: View {
   }
 }
 
-#Preview {
-  NavigationStack {
-    ProfileEditView()
-  }
-}
-
 extension ProfileEditView {
 
   @ViewBuilder

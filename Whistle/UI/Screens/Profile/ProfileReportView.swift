@@ -82,7 +82,3 @@ struct ProfileReportView: View {
     }
   }
 }
-
-#Preview {
-  ProfileReportView(isShowingBottomSheet: .constant(false))
-}
