@@ -23,14 +23,11 @@ struct ProfileInfoView: View {
         .foregroundColor(.LabelColor_Primary)
         .fontSystem(fontDesignSystem: .title2_Expanded)
       List {
-        LabeledContent {
-          Text("2019.11.12")
-            .fontSystem(fontDesignSystem: .body1)
-            .foregroundColor(Color.Disable_Placeholder)
+        NavigationLink {
+          EmptyView()
         } label: {
           Text("가입한 날짜")
-            .fontSystem(fontDesignSystem: .body1)
-            .foregroundColor(Color.LabelColor_Primary)
+            .listRowSeparator(.hidden)
         }
         NavigationLink {
           EmptyView()

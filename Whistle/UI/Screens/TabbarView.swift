@@ -39,7 +39,7 @@ struct TabbarView: View {
             RoundedRectangle(cornerRadius: 28)
               .stroke(
                 LinearGradient.Border_Glass,
-                lineWidth: 1.5)
+                lineWidth: 1.0)
           }
           .overlay {
             tabItems()

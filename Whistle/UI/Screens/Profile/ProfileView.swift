@@ -24,6 +24,8 @@ struct ProfileView: View {
   @State var isShowingBottomSheet = false
   @State var tabbarDirection: CGFloat = -1.0
   @State var tabSelection: profileTabCase = .myVideo
+  // FIXME: - video 모델 목록 불러오기 수정
+  @State var videos: [Any] = []
   @State var columns: [GridItem] = [
     GridItem(.flexible()),
     GridItem(.flexible()),
@@ -70,14 +72,32 @@ struct ProfileView: View {
         }
         .frame(height: 48)
         .padding(.bottom, 16)
-        ScrollView {
-          LazyVGrid(columns: columns, spacing: 20) {
-            ForEach(0 ..< 20) { _ in
-              videoThumbnailView()
+        if videos.isEmpty {
+          Spacer()
+          Text("공유하고 싶은 첫번째 게시물을 업로드해보세요")
+            .fontSystem(fontDesignSystem: .body1_KO)
+            .foregroundColor(.LabelColor_Primary_Dark)
+          Button {
+            log("dd")
+          } label: {
+            Text("업로드하러 가기")
+              .fontSystem(fontDesignSystem: .subtitle2_KO)
+              .foregroundColor(Color.LabelColor_Primary_Dark)
+              .frame(width: 142, height: 36)
+          }
+          .buttonStyle(ProfileEditButtonStyle())
+          .padding(.bottom, 76)
+          Spacer()
+        } else {
+          ScrollView {
+            LazyVGrid(columns: columns, spacing: 20) {
+              ForEach(0 ..< 20) { _ in
+                videoThumbnailView()
+              }
             }
           }
+          Spacer()
         }
-        Spacer()
       }
       .padding(.horizontal, 16)
       .ignoresSafeArea()
@@ -158,7 +178,7 @@ extension ProfileView {
         .fontSystem(fontDesignSystem: .body2_KO)
         .padding(.bottom, 16)
       NavigationLink {
-        EmptyView()
+        ProfileEditView()
       } label: {
         Text("프로필 편집")
           .fontSystem(fontDesignSystem: .subtitle2_KO)
