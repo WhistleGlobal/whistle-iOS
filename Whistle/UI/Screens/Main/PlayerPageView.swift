@@ -59,7 +59,7 @@ struct PlayerPageView: UIViewRepresentable {
 
   @Binding var videoIndex: Int
   @Binding var currnentVideoIndex: Int
-  @Binding var videoVM : VideoVM
+  @Binding var videoVM: VideoVM
 
   func makeCoordinator() -> Coordinator {
     PlayerPageView.Coordinator(parent1: self)

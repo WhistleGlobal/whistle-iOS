@@ -11,7 +11,6 @@ import SwiftUI
 
 struct FollowButtonStyle: ButtonStyle {
 
-
   struct FollowButton: View {
 
     let configuration: ButtonStyle.Configuration

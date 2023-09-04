@@ -58,7 +58,6 @@ struct ProfileReportView: View {
     }
   }
 
-
   @ViewBuilder
   func reportRow(title: String, dateString: String) -> some View {
     HStack {
