@@ -11,19 +11,23 @@ import SwiftUI
 // MARK: - MusicTrimView
 
 struct MusicTrimView: View {
+  // MARK: Private
+
+  @State private var audioURL: URL?
+  @State private var startTime: TimeInterval = 0
+  @State private var endTime: TimeInterval = 0
+  @State private var audioTrimRange: TimeInterval = 15
+  @State private var isTrimming = false
+  @State private var isPlaying = false
+  @State private var trimmedAudioURL: URL?
+  @State private var player: AVPlayer?
+  @State private var scrollOffset: CGFloat = 0
 
   // MARK: Internal
 
   var body: some View {
     VStack {
-      Text("Audio Trimmer")
-        .font(.title)
-        .padding()
-
       if let audioURL {
-        AudioPlayerView(audioURL: audioURL)
-          .padding()
-
         HStack {
           Text("Start Time: \(startTime, specifier: "%.2f")")
           Slider(value: $startTime, in: 0 ... endTime)
@@ -61,7 +65,6 @@ struct MusicTrimView: View {
           .cornerRadius(10)
       }
       .padding()
-      Spacer()
     }
     .onAppear {
       loadAudioFile()
@@ -75,6 +78,9 @@ struct MusicTrimView: View {
     }
   }
 
+  /// A Function that returns full audio duration.
+  /// - Parameter url: audio url
+  /// - Returns: audio duration
   func audioDuration(_ url: URL) -> TimeInterval {
     let asset = AVURLAsset(url: url)
     return TimeInterval(asset.duration.seconds)
@@ -136,72 +142,6 @@ struct MusicTrimView: View {
 
     isPlaying.toggle()
   }
-
-  // MARK: Private
-
-  @State private var audioURL: URL?
-  @State private var startTime: TimeInterval = 0
-  @State private var endTime: TimeInterval = 0
-  @State private var isTrimming = false
-  @State private var isPlaying = false
-  @State private var trimmedAudioURL: URL?
-  @State private var player: AVPlayer?
-
-}
-
-// MARK: - AudioPlayerView
-
-struct AudioPlayerView: View {
-
-  // MARK: Internal
-
-  var audioURL: URL
-
-  var body: some View {
-    VStack {
-      Text("Audio Player")
-        .font(.title)
-        .padding()
-
-      if let player {
-        Text(isPlaying ? "Playing" : "Paused")
-          .foregroundColor(isPlaying ? .green : .red)
-          .padding()
-
-        Button(action: {
-          if isPlaying {
-            player.pause()
-          } else {
-            player.play()
-          }
-          isPlaying.toggle()
-        }) {
-          Image(systemName: isPlaying ? "pause.circle.fill" : "play.circle.fill")
-            .font(.system(size: 50))
-            .foregroundColor(.blue)
-        }
-        .padding()
-      }
-    }
-    .onAppear {
-      setupPlayer()
-    }
-    .onDisappear {
-      player?.pause()
-    }
-  }
-
-  func setupPlayer() {
-    let playerItem = AVPlayerItem(url: audioURL)
-    player = AVPlayer(playerItem: playerItem)
-
-    // Add observers or additional setup if needed
-  }
-
-  // MARK: Private
-
-  @State private var player: AVPlayer?
-  @State private var isPlaying = false
 }
 
 // MARK: - MusicTrimView_Previews
