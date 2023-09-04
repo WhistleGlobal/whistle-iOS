@@ -20,7 +20,3 @@ struct MainView: View {
     .edgesIgnoringSafeArea(.all)
   }
 }
-
-#Preview {
-  MainView()
-}

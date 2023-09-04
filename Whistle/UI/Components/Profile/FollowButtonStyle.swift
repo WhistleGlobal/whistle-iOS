@@ -54,7 +54,6 @@ struct FollowButtonStyle: ButtonStyle {
 
   @State var isFollow: Bool
 
-
   func makeBody(configuration: Configuration) -> some View {
     FollowButton(configuration: configuration, isFollow: $isFollow)
   }

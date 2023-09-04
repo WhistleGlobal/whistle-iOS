@@ -9,7 +9,6 @@ import SwiftUI
 
 struct ProfileEditButtonStyle: ButtonStyle {
 
-
   struct ProfileEditButton: View {
 
     // MARK: Internal

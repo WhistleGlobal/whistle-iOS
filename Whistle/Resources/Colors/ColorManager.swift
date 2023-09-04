@@ -54,7 +54,6 @@ extension Color {
   static let Gray40 = Color("Gray40")
   static let Gray70_Dark = Color("Gray70_Dark")
 
-
   // MARK: - Button Blue Color
   static let Blue_Default = Color("Primary_Default")
   static let Blue_Pressed = Color("Primary_Lighten")

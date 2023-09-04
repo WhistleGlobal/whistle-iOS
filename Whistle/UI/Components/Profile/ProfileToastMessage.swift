@@ -51,4 +51,3 @@ struct ProfileToastMessage: View {
   @State private var toastOpacity = 0.0
 
 }
-

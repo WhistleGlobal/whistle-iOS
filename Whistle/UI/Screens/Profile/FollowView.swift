@@ -120,4 +120,3 @@ extension FollowView {
     .frame(maxHeight: .infinity)
   }
 }
-

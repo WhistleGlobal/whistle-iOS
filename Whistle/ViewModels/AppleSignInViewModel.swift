@@ -59,8 +59,6 @@ class AppleSignInViewModel: ObservableObject {
       encoding: URLEncoding.default,
       headers: ["Content-Type": "application/x-www-form-urlencoded"])
       .responseJSON { response in
-        log("AFAFAF :\(response.result)")
-        log("AFAFAF :\(response.description)")
         switch response.result {
         case .success(let value):
           // JSON 데이터 파싱
@@ -81,7 +79,7 @@ class AppleSignInViewModel: ObservableObject {
             }
           }
         case .failure(let error):
-          print("Error sending authCode to backend: \(error.localizedDescription)")
+          log("Error sending authCode to backend: \(error.localizedDescription)")
         }
       }
   }
