@@ -33,7 +33,6 @@ class UserAuth: ObservableObject {
     case userResponse
   }
 
-
   @AppStorage("isAccess") var isAccess = false
   @AppStorage("provider") var provider: Provider = .apple
 
@@ -44,19 +43,21 @@ class UserAuth: ObservableObject {
 
   let keychain = KeychainSwift()
 
-
+  var domainUrl: String {
+    AppKeys.domainUrl as! String
+  }
 
   var url: URL? {
     switch provider {
     case .apple:
-      return URL(string: "https://readywhistle.com/user/profile?provider=Apple")
+//      return URL(string: "\(domainUrl)/user/profile?provider=Apple")
+      return URL(string: "\(domainUrl)/user/profile")
     case .google:
-      return URL(string: "https://readywhistle.com/user/profile?provider=Google")
+//      return URL(string: "\(domainUrl)/user/profile?provider=Google")
+      return URL(string: "\(domainUrl)/user/profile")
     }
   }
 
-
-  // loadData 및 refreshToken 메서드를 이 클래스로 이동
   func loadData(completion: @escaping () -> Void?) {
     guard let idTokenKey = keychain.get("id_token") else {
       log("id_Token nil")
@@ -77,6 +78,7 @@ class UserAuth: ObservableObject {
         self.isAccess = true
         completion()
       case .failure(let error):
+        self.refresh()
         log(error)
       }
     }

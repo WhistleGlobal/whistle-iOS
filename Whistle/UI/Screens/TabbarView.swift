@@ -18,13 +18,7 @@ struct TabbarView: View {
       switch tabSelection {
       case .main:
         // FIXME: - MainView로 교체하기 blur 확인용 테스트 이미지입니다.
-        Color.clear.overlay {
-          Image("testCat")
-            .resizable()
-            .scaledToFill()
-            .ignoresSafeArea()
-            .blur(radius: 8)
-        }
+        MainView()
 
       case .upload:
         // FIXME: - uploadview로 교체하기
@@ -39,7 +33,7 @@ struct TabbarView: View {
             RoundedRectangle(cornerRadius: 28)
               .stroke(
                 LinearGradient.Border_Glass,
-                lineWidth: 1.5)
+                lineWidth: 1.0)
           }
           .overlay {
             tabItems()
@@ -55,10 +49,9 @@ extension TabbarView {
   @ViewBuilder
   func tabItems() -> some View {
     RoundedRectangle(cornerRadius: 100)
-      .foregroundColor(.Primary_Default)
+      .foregroundColor(Color.Dim_Default)
       .frame(width: (UIScreen.width - 32) / 3 - 6)
       .offset(x: tabSelection.rawValue * ((UIScreen.width - 32) / 3))
-      .animation(.easeInOut)
       .padding(3)
       .overlay(
         RoundedRectangle(cornerRadius: 100)
@@ -67,14 +60,15 @@ extension TabbarView {
             lineWidth: 2)
           .frame(width: (UIScreen.width - 32) / 3 - 6)
           .offset(x: tabSelection.rawValue * ((UIScreen.width - 32) / 3))
-          .animation(.easeInOut)
           .padding(4))
       .foregroundColor(.clear)
       .frame(height: 56)
       .frame(maxWidth: .infinity)
       .overlay {
         Button {
-          self.tabSelection = .main
+          withAnimation {
+            self.tabSelection = .main
+          }
         } label: {
           Color.clear.overlay {
             Image(systemName: "house.fill")
@@ -89,7 +83,10 @@ extension TabbarView {
         .offset(x: -1 * ((UIScreen.width - 32) / 3))
 
         Button {
-          self.tabSelection = .upload
+          withAnimation {
+            self.tabSelection = .upload
+          }
+
         } label: {
           Color.clear.overlay {
             Image(systemName: "plus")
@@ -103,7 +100,9 @@ extension TabbarView {
         .foregroundColor(.white)
         .padding(3)
         Button {
-          self.tabSelection = .profile
+          withAnimation {
+            self.tabSelection = .profile
+          }
         } label: {
           Color.clear.overlay {
             Image(systemName: "person")

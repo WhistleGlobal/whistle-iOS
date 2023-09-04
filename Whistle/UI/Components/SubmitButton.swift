@@ -12,7 +12,7 @@ import SwiftUI
 struct SubmitButton: View {
   var body: some View {
     Button {
-      print("Button Clicked")
+      log("Button Clicked")
     } label: {
       Text("Click me")
     }

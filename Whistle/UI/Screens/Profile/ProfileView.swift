@@ -10,9 +10,22 @@ import SwiftUI
 // MARK: - ProfileView
 
 struct ProfileView: View {
+
+  // MARK: Public
+
+  public enum profileTabCase: String {
+    case myVideo
+    case favoriteVideo
+  }
+
+  // MARK: Internal
+
   let fontHeight = UIFont.preferredFont(forTextStyle: .title2).lineHeight
   @State var isShowingBottomSheet = false
   @State var tabbarDirection: CGFloat = -1.0
+  @State var tabSelection: profileTabCase = .myVideo
+  // FIXME: - video 모델 목록 불러오기 수정
+  @State var videos: [Any] = []
   @State var columns: [GridItem] = [
     GridItem(.flexible()),
     GridItem(.flexible()),
@@ -33,62 +46,64 @@ struct ProfileView: View {
         Spacer().frame(height: 64)
         glassView(width: UIScreen.width - 32)
           .padding(.bottom, 12)
-        HStack {
+        HStack(spacing: 0) {
           Button {
-            tabbarDirection = -1
+            tabSelection = .myVideo
           } label: {
-            VStack {
-              Spacer()
-              Image(systemName: "square.grid.2x2.fill")
-                .resizable()
-                .scaledToFit()
-                .frame(width: 24, height: 24)
-              Spacer()
-            }
-            .foregroundColor(tabbarDirection == -1 ? Color.White : Color.Gray30_Dark)
-            .frame(maxWidth: .infinity)
+            Color.gray
+              .opacity(0.01)
+              .frame(maxWidth: .infinity, maxHeight: .infinity)
           }
+          .buttonStyle(ProfileTabItem(
+            systemName: "square.grid.2x2.fill",
+            tab: profileTabCase.myVideo.rawValue,
+            selectedTab: $tabSelection))
           Button {
-            tabbarDirection = 1
+            tabSelection = .favoriteVideo
           } label: {
-            VStack {
-              Spacer()
-              Image(systemName: "bookmark.fill")
-                .resizable()
-                .scaledToFit()
-                .frame(width: 24, height: 24)
-              Spacer()
-            }
-            .foregroundColor(tabbarDirection == 1 ? Color.White : Color.Gray30_Dark)
-            .frame(maxWidth: .infinity)
+            Color.gray
+              .opacity(0.01)
+              .frame(maxWidth: .infinity, maxHeight: .infinity)
           }
+          .buttonStyle(ProfileTabItem(
+            systemName: "bookmark.fill",
+            tab: profileTabCase.favoriteVideo.rawValue,
+            selectedTab: $tabSelection))
         }
         .frame(height: 48)
-        Rectangle()
-          .foregroundColor(Color.Gray30_Dark)
-          .frame(height: 1)
-          .overlay {
-            Capsule()
-              .foregroundColor(Color.White)
-              .frame(width: (UIScreen.width - 32) / 2, height: 5)
-              .offset(x: tabbarDirection * (UIScreen.width - 32) / 4)
+        .padding(.bottom, 16)
+        if videos.isEmpty {
+          Spacer()
+          Text("공유하고 싶은 첫번째 게시물을 업로드해보세요")
+            .fontSystem(fontDesignSystem: .body1_KO)
+            .foregroundColor(.LabelColor_Primary_Dark)
+          Button {
+            log("dd")
+          } label: {
+            Text("업로드하러 가기")
+              .fontSystem(fontDesignSystem: .subtitle2_KO)
+              .foregroundColor(Color.LabelColor_Primary_Dark)
+              .frame(width: 142, height: 36)
           }
-          .padding(.bottom, 16)
-        ScrollView {
-          LazyVGrid(columns: columns, spacing: 20) {
-            ForEach(0 ..< 20) { _ in
-              videoThumbnailView()
+          .buttonStyle(ProfileEditButtonStyle())
+          .padding(.bottom, 76)
+          Spacer()
+        } else {
+          ScrollView {
+            LazyVGrid(columns: columns, spacing: 20) {
+              ForEach(0 ..< 20) { _ in
+                videoThumbnailView()
+              }
             }
           }
+          Spacer()
         }
-        Spacer()
       }
       .padding(.horizontal, 16)
       .ignoresSafeArea()
       VStack {
         Spacer()
         GlassBottomSheet(isShowing: $isShowingBottomSheet, content: AnyView(Text("Hi")))
-          .animation(.easeIn(duration: 1.0), value: tabbarOpacity)
           .onChange(of: isShowingBottomSheet) { newValue in
             if !newValue {
               DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
@@ -101,7 +116,9 @@ struct ProfileView: View {
             DragGesture(minimumDistance: 20, coordinateSpace: .local)
               .onEnded { value in
                 if value.translation.height > 20 {
-                  isShowingBottomSheet = false
+                  withAnimation {
+                    isShowingBottomSheet = false
+                  }
                   DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
                     tabbarOpacity = 1
                   }
@@ -116,7 +133,7 @@ struct ProfileView: View {
 extension ProfileView {
   // FIXME: - 색상 적용 안됨
   @ViewBuilder
-  func glassView(width: CGFloat, height: CGFloat = 338) -> some View {
+  func glassView(width: CGFloat, height: CGFloat = 398) -> some View {
     glassMorphicCard(width: width, height: height)
       .overlay {
         RoundedRectangle(cornerRadius: 20)
@@ -134,41 +151,24 @@ extension ProfileView {
         Spacer()
         Button {
           self.tabbarOpacity = 0
-          self.isShowingBottomSheet = true
+          withAnimation {
+            self.isShowingBottomSheet = true
+          }
         } label: {
-          Circle()
-            .foregroundColor(.Dim_Default)
+          Image(systemName: "ellipsis")
+            .foregroundColor(Color.White)
+            .fontWeight(.semibold)
             .frame(width: 48, height: 48)
-            .padding(16)
-            .overlay {
-              Image(systemName: "ellipsis")
-                .foregroundColor(Color.White)
-                .fontWeight(.semibold)
-            }
+            .background(
+              Circle()
+                .foregroundColor(.Dim_Default)
+                .frame(width: 48, height: 48))
         }
       }
+      .padding([.top, .horizontal], 16)
       // FIXME: - 프로필
       Circle()
         .frame(width: 100, height: 100)
-        .overlay {
-          VStack {
-            Spacer()
-            HStack {
-              Spacer()
-              RoundedRectangle(cornerRadius: 6)
-                .foregroundColor(.Primary_Default)
-                .frame(width: 24, height: 24)
-                .overlay {
-                  Image(systemName: "pencil.line")
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: 18, height: 20)
-                    .fontWeight(.semibold)
-                    .foregroundColor(.white)
-                }
-            }
-          }
-        }
         .padding(.bottom, 16)
       Text("UserName")
         .foregroundColor(Color.LabelColor_Primary_Dark)
@@ -177,6 +177,17 @@ extension ProfileView {
         .foregroundColor(Color.LabelColor_Secondary_Dark)
         .fontSystem(fontDesignSystem: .body2_KO)
         .padding(.bottom, 16)
+      NavigationLink {
+        ProfileEditView()
+      } label: {
+        Text("프로필 편집")
+          .fontSystem(fontDesignSystem: .subtitle2_KO)
+          .foregroundColor(Color.LabelColor_Primary_Dark)
+          .frame(width: 114, height: 36)
+      }
+      .frame(width: 114, height: 36)
+      .padding(.bottom, 24)
+      .buttonStyle(ProfileEditButtonStyle())
       HStack(spacing: 48) {
         VStack(spacing: 4) {
           Text("\(20)")
@@ -187,13 +198,17 @@ extension ProfileView {
             .fontSystem(fontDesignSystem: .caption_SemiBold)
         }
         Rectangle().frame(width: 1, height: 36).foregroundColor(.white)
-        VStack(spacing: 4) {
-          Text("\(100)")
-            .foregroundColor(Color.LabelColor_Primary_Dark)
-            .fontSystem(fontDesignSystem: .title2_Expanded)
-          Text("follower")
-            .foregroundColor(Color.LabelColor_Secondary_Dark)
-            .fontSystem(fontDesignSystem: .caption_SemiBold)
+        NavigationLink {
+          FollowView()
+        } label: {
+          VStack(spacing: 4) {
+            Text("\(100)")
+              .foregroundColor(Color.LabelColor_Primary_Dark)
+              .fontSystem(fontDesignSystem: .title2_Expanded)
+            Text("follower")
+              .foregroundColor(Color.LabelColor_Secondary_Dark)
+              .fontSystem(fontDesignSystem: .caption_SemiBold)
+          }
         }
       }
       Spacer()

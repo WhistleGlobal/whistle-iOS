@@ -24,11 +24,21 @@ struct ProfileNotiView: View {
     .foregroundColor(.LabelColor_Primary)
     .tint(.Primary_Default)
     .listStyle(.plain)
+    .navigationBarBackButtonHidden()
     .navigationBarTitleDisplayMode(.inline)
     .navigationTitle("알림")
     .onAppear {
       isShowingBottomSheet = false
     }
+    .toolbar {
+      ToolbarItem(placement: .cancellationAction) {
+        Button {
+          dismiss()
+        } label: {
+          Image(systemName: "chevron.backward")
+            .foregroundColor(.LabelColor_Primary)
+        }
+      }
+    }
   }
 }
-

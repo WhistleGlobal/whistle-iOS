@@ -38,9 +38,9 @@ extension Color {
 
   // MARK: - Dim Color
 
-  static let Dim_Thick = Color("Gray80").opacity(0.75)
-  static let Dim_Default = Color("Gray80").opacity(0.50)
-  static let Dim_Thin = Color("Gray80").opacity(0.15)
+  static let Dim_Thick = Color("Gray80").opacity(0.56)
+  static let Dim_Default = Color("Gray80").opacity(0.36)
+  static let Dim_Thin = Color("Gray80").opacity(0.16)
 
   static let LabelColor_Primary_Dark: Color = .init("Gray10_Dark")
 
@@ -49,7 +49,20 @@ extension Color {
   // MARK: - etc
 
   static let White: Color = .init("White")
+  static let Gray10 = Color("Gray10")
   static let Gray30_Dark = Color("Gray30_Dark")
+  static let Gray40 = Color("Gray40")
+  static let Gray70_Dark = Color("Gray70_Dark")
+
+  // MARK: - Button Blue Color
+  static let Blue_Default = Color("Primary_Default")
+  static let Blue_Pressed = Color("Primary_Lighten")
+  static let Blue_Disabled = Color("Gray40")
+
+  // MARK: - Button Gray Color
+  static let Gray_Default = Color("Gray80").opacity(0.16)
+  static let Gray_Pressed = Color("Gray80").opacity(0.36)
+  static let Gray_Disabled = Color("Gray80").opacity(0.56)
 
   // 위 Alert color와 이름 동일
   // static let Success = Color("Success")
