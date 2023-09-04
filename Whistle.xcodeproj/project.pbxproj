@@ -37,6 +37,8 @@
 		7874CB902AA0B5350081DE54 /* ProfileNotiView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7874CB8F2AA0B5350081DE54 /* ProfileNotiView.swift */; };
 		7874CB922AA0B53A0081DE54 /* ProfileInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7874CB912AA0B53A0081DE54 /* ProfileInfoView.swift */; };
 		7874CB942AA0B5430081DE54 /* ProfileReportView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7874CB932AA0B5430081DE54 /* ProfileReportView.swift */; };
+		788F43F02AA5CD9F00718D38 /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 788F43EF2AA5CD9F00718D38 /* MainView.swift */; };
+		788F43F52AA5E95E00718D38 /* PlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 788F43F42AA5E95E00718D38 /* PlayerView.swift */; };
 		78D148D62A9E0A3600DDCE48 /* SF-Pro.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 78D148D22A9E0A3600DDCE48 /* SF-Pro.ttf */; };
 		78D148D72A9E0A3600DDCE48 /* SF-Pro-Text-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = 78D148D32A9E0A3600DDCE48 /* SF-Pro-Text-Regular.otf */; };
 		78D148D82A9E0A3600DDCE48 /* SF-Pro-Display-Semibold.otf in Resources */ = {isa = PBXBuildFile; fileRef = 78D148D42A9E0A3600DDCE48 /* SF-Pro-Display-Semibold.otf */; };
@@ -88,6 +90,8 @@
 		7874CB8F2AA0B5350081DE54 /* ProfileNotiView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileNotiView.swift; sourceTree = "<group>"; };
 		7874CB912AA0B53A0081DE54 /* ProfileInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileInfoView.swift; sourceTree = "<group>"; };
 		7874CB932AA0B5430081DE54 /* ProfileReportView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileReportView.swift; sourceTree = "<group>"; };
+		788F43EF2AA5CD9F00718D38 /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
+		788F43F42AA5E95E00718D38 /* PlayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerView.swift; sourceTree = "<group>"; };
 		78D148D22A9E0A3600DDCE48 /* SF-Pro.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SF-Pro.ttf"; sourceTree = "<group>"; };
 		78D148D32A9E0A3600DDCE48 /* SF-Pro-Text-Regular.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SF-Pro-Text-Regular.otf"; sourceTree = "<group>"; };
 		78D148D42A9E0A3600DDCE48 /* SF-Pro-Display-Semibold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SF-Pro-Display-Semibold.otf"; sourceTree = "<group>"; };
@@ -167,6 +171,7 @@
 		1B39554D2A9506B300BCB4DF /* Screens */ = {
 			isa = PBXGroup;
 			children = (
+				788F43EE2AA5CD9300718D38 /* Main */,
 				780139882AA1279600D5FBDB /* SignInView */,
 				78D148E12A9E132700DDCE48 /* Profile */,
 				1B3955412A95069C00BCB4DF /* ContentView.swift */,
@@ -275,6 +280,15 @@
 				787173B52AA47A510018CB14 /* ProfileAlert.swift */,
 			);
 			path = Profile;
+			sourceTree = "<group>";
+		};
+		788F43EE2AA5CD9300718D38 /* Main */ = {
+			isa = PBXGroup;
+			children = (
+				788F43EF2AA5CD9F00718D38 /* MainView.swift */,
+				788F43F42AA5E95E00718D38 /* PlayerView.swift */,
+			);
+			path = Main;
 			sourceTree = "<group>";
 		};
 		78D148D12A9E0A2600DDCE48 /* Fonts */ = {
@@ -441,7 +455,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				78DA58D52AA445E400F8D2F1 /* ProfileEditView.swift in Sources */,
+				788F43F02AA5CD9F00718D38 /* MainView.swift in Sources */,
 				782DD4752AA30C22006183D3 /* FollowButtonStyle.swift in Sources */,
+				788F43F52AA5E95E00718D38 /* PlayerView.swift in Sources */,
 				1B3955422A95069C00BCB4DF /* ContentView.swift in Sources */,
 				782DD47C2AA32448006183D3 /* Extension+UINavigationController.swift in Sources */,
 				787173B42AA472070018CB14 /* ProfileToastMessage.swift in Sources */,

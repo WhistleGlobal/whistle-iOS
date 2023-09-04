@@ -18,13 +18,7 @@ struct TabbarView: View {
       switch tabSelection {
       case .main:
         // FIXME: - MainView로 교체하기 blur 확인용 테스트 이미지입니다.
-        Color.clear.overlay {
-          Image("testCat")
-            .resizable()
-            .scaledToFill()
-            .ignoresSafeArea()
-            .blur(radius: 8)
-        }
+        MainView()
 
       case .upload:
         // FIXME: - uploadview로 교체하기
