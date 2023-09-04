@@ -7,15 +7,14 @@
 
 import _AVKit_SwiftUI
 import SwiftUI
-import VTabView
 
 struct MainView: View {
-
-  @State private var videos = MockData().videos
-
+  @State private var videoVm = VideoVM()
+  @State var videoIndex = 0
+  @State var currnentVideoIndex = 0
   var body: some View {
     ZStack {
-      PlayerPageView(videos: $videos)
+      PlayerPageView(videoIndex: $videoIndex, currnentVideoIndex: $currnentVideoIndex, videoVM: $videoVm)
     }
     .background(Color.black.edgesIgnoringSafeArea(.all))
     .edgesIgnoringSafeArea(.all)

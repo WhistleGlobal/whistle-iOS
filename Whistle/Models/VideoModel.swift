@@ -6,3 +6,14 @@
 //
 
 import Foundation
+import AVFoundation
+
+// MARK: - Video
+
+struct Video : Identifiable {
+    var id = UUID()
+    var player : AVPlayer
+    var likes: String
+    var comments: String
+    var url: String
+}

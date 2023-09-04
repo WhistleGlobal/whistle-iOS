@@ -32,11 +32,12 @@ struct WhistleApp: App {
   var body: some Scene {
     WindowGroup {
       NavigationStack {
-        if userAuth.isAccess {
-          TabbarView()
-        } else {
-          SignInView()
-        }
+//        if userAuth.isAccess {
+//          TabbarView()
+//        } else {
+//          SignInView()
+//        }
+        TabbarView()
       }
       .tint(.black)
       .onAppear {
