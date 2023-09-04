@@ -24,8 +24,8 @@ struct ProfileEditIDView: View {
   @Environment(\.dismiss) var dismiss
   @State var inputID = ""
   @State var inputValidationStatus: InputValidationStatus = .none
+  @State var isAlertActive = false
   @Binding var showToast: Bool
-
 
   var body: some View {
     VStack(spacing: 0) {
@@ -53,6 +53,15 @@ struct ProfileEditIDView: View {
     }
     .padding(.horizontal, 16)
     .navigationBarBackButtonHidden()
+    .overlay {
+      ProfileAlert(cancelAction: {
+        isAlertActive = false
+      }, updateAction: {
+        showToast = true
+        dismiss()
+      })
+      .opacity(isAlertActive ? 1 : 0)
+    }
     .toolbar {
       ToolbarItem(placement: .cancellationAction) {
         Button {
@@ -69,14 +78,14 @@ struct ProfileEditIDView: View {
       ToolbarItem(placement: .confirmationAction) {
         Button {
           log("Update Profile")
-          dismiss()
-          showToast = true
+          isAlertActive = true
         } label: {
           Text("완료")
             .foregroundColor(inputValidationStatus == .valid ? .Info : .Disable_Placeholder)
             .fontSystem(fontDesignSystem: .subtitle2_KO)
         }
-        .disabled(inputValidationStatus != .valid)
+        .disabled(inputValidationStatus != .valid && isAlertActive)
+        .opacity(isAlertActive ? 0 : 1)
       }
     }
   }

@@ -10,6 +10,11 @@ import SwiftUI
 // MARK: - ProfileAlert
 
 struct ProfileAlert: View {
+
+  let cancelAction: () -> Void
+  let updateAction: () -> Void
+
+
   var body: some View {
     VStack(spacing: 0) {
       Spacer()
@@ -40,11 +45,6 @@ struct ProfileAlert: View {
     .frame(maxWidth: .infinity)
     .background(Color.black.opacity(0.8))
   }
-}
-
-#Preview {
-  ProfileAlert()
-    .background(Image("testCat"))
 }
 
 extension ProfileAlert {
@@ -95,7 +95,9 @@ extension ProfileAlert {
     .background(
       glassAlertTop())
     HStack(spacing: 0) {
-      Button { } label: {
+      Button {
+        cancelAction()
+      } label: {
         glassAlertBottomLeft()
       }
       .overlay {
@@ -103,7 +105,9 @@ extension ProfileAlert {
           .fontSystem(fontDesignSystem: .body1_KO)
           .foregroundColor(.Primary_Default)
       }
-      Button { } label: {
+      Button {
+        updateAction()
+      } label: {
         glassAlertBottomRight()
       }
       .overlay {
