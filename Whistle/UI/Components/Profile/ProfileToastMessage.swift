@@ -52,6 +52,3 @@ struct ProfileToastMessage: View {
 
 }
 
-#Preview {
-  ProfileToastMessage(text: "Hello, World!", showToast: .constant(true))
-}

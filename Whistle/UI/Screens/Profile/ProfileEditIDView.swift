@@ -91,12 +91,6 @@ struct ProfileEditIDView: View {
   }
 }
 
-#Preview {
-  NavigationStack {
-    ProfileEditIDView(showToast: .constant(true))
-  }
-}
-
 extension ProfileEditIDView {
 
   // MARK: - ClearButton
