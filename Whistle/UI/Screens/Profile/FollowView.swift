@@ -22,6 +22,8 @@ struct FollowView: View {
 
   @Environment(\.dismiss) var dismiss
   @State var tabStatus: profileTabStatus = .follower
+  // FIXME: - 나중에 User Follower 모델 로 변경할 것
+  @State var followPeoples: [Any] = []
 
   var body: some View {
     VStack(spacing: 0) {
@@ -38,8 +40,23 @@ struct FollowView: View {
           FollowTabbarStyle(followNum: 3, tab: profileTabStatus.following.rawValue, selectedTab: $tabStatus))
       }
       .frame(height: 48)
-      personRow(isFollow: true)
-      personRow(isFollow: false)
+      if followPeoples.isEmpty {
+        Spacer()
+        Image(systemName: "person.fill")
+          .resizable()
+          .scaledToFit()
+          .foregroundColor(.LabelColor_Primary)
+          .frame(width: 48, height: 48)
+          .padding(.bottom, 32)
+        Text("아직 회원님\(tabStatus == .follower ? "이" : "을") 팔로우하는 사람이 없습니다")
+          .fontSystem(fontDesignSystem: .body1_KO)
+          .foregroundColor(.LabelColor_Secondary)
+
+      } else {
+        personRow(isFollow: true)
+        personRow(isFollow: false)
+      }
+
       Spacer()
     }
     .padding(.horizontal, 16)
