@@ -11,7 +11,6 @@ import SwiftUI
 
 struct FollowButtonStyle: ButtonStyle {
 
-
   struct FollowButton: View {
 
     let configuration: ButtonStyle.Configuration
@@ -53,7 +52,6 @@ struct FollowButtonStyle: ButtonStyle {
   }
 
   @State var isFollow: Bool
-
 
   func makeBody(configuration: Configuration) -> some View {
     FollowButton(configuration: configuration, isFollow: $isFollow)

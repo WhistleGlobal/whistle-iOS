@@ -12,7 +12,6 @@ struct ProfileInfoView: View {
   @Environment(\.dismiss) var dismiss
   @Binding var isShowingBottomSheet: Bool
 
-
   var body: some View {
     VStack(spacing: 0) {
       Circle()

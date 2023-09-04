@@ -14,8 +14,6 @@ struct ProfileReportView: View {
   // FIXME: - Report 관련 모델로 변경할 것
   @State var reports: [Any] = []
 
-
-
   var body: some View {
     VStack(spacing: 0) {
       if reports.isEmpty {
@@ -59,7 +57,6 @@ struct ProfileReportView: View {
       }
     }
   }
-
 
   @ViewBuilder
   func reportRow(title: String, dateString: String) -> some View {

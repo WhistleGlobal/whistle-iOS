@@ -14,7 +14,6 @@ struct ProfileAlert: View {
   let cancelAction: () -> Void
   let updateAction: () -> Void
 
-
   var body: some View {
     VStack(spacing: 0) {
       Spacer()
@@ -60,7 +59,6 @@ extension ProfileAlert {
     }
     .frame(width: width, height: height)
   }
-
 
   @ViewBuilder
   func glassAlertTop() -> some View {
