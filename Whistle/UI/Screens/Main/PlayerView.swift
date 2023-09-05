@@ -22,7 +22,6 @@ struct PlayerView: View {
   @Binding var videoVM: VideoVM
   let lifecycleDelegate: ViewLifecycleDelegate?
 
-
   var body: some View {
     VStack(spacing: 0) {
       ForEach(0..<$videoVM.videos.count) { i in

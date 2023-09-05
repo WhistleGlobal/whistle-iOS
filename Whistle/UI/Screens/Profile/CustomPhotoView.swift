@@ -62,10 +62,6 @@ struct CustomPhotoView: View {
   }
 }
 
-#Preview {
-  CustomPhotoView()
-}
-
 extension CustomPhotoView {
 
   @ViewBuilder

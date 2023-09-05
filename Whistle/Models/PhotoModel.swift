@@ -12,4 +12,3 @@ struct Photo: Identifiable {
   var id = UUID()
   var photo: Image
 }
-
