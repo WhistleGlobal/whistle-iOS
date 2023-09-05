@@ -9,8 +9,11 @@ import SwiftUI
 
 struct CustomPhotoView: View {
 
+  @Environment(\.dismiss) var dismiss
   @EnvironmentObject var photoViewModel: PhotoViewModel
+  @State var showAlbumList = false
   @State var selectedImage: Image?
+
   let columns = [
     GridItem(.flexible(minimum: 40), spacing: 0),
     GridItem(.flexible(minimum: 40), spacing: 0),
@@ -21,24 +24,35 @@ struct CustomPhotoView: View {
   var body: some View {
     VStack(spacing: 0) {
       HStack(spacing: 0) {
-        Image(systemName: "xmark")
+        Button {
+          dismiss()
+        } label: {
+          Image(systemName: "xmark")
+        }
         Spacer()
         Text("갤러리")
           .fontSystem(fontDesignSystem: .subtitle1_KO)
           .foregroundColor(.LabelColor_Primary)
         Spacer()
-        Text("완료")
-          .fontSystem(fontDesignSystem: .subtitle2_KO)
-          .foregroundColor(.Info)
+        Button {
+          dismiss()
+        } label: {
+          Text("완료")
+            .fontSystem(fontDesignSystem: .subtitle2_KO)
+            .foregroundColor(.Info)
+        }
       }
       .frame(height: 54)
       .frame(maxWidth: .infinity)
       .padding(.horizontal, 16)
+      .background(.white)
       if let selectedImage {
         Color.clear.overlay {
           selectedImage
             .resizable()
             .scaledToFill()
+            .frame(width: 393,height: 393)
+            .clipShape(Rectangle())
         }
         .frame(width: 393,height: 393)
       } else {
@@ -46,8 +60,13 @@ struct CustomPhotoView: View {
           .frame(width: 393,height: 393)
       }
       HStack(spacing: 8) {
-        Text("최근 항목")
-        Image(systemName: "chevron.down")
+        Button {
+          photoViewModel.listAlbums()
+          showAlbumList = true
+        } label: {
+          Text("최근 항목")
+          Image(systemName: "chevron.down")
+        }
         Spacer()
       }
       .frame(height: 54)
@@ -73,6 +92,10 @@ struct CustomPhotoView: View {
       }
     }
     .frame(maxWidth: .infinity, maxHeight: .infinity)
+    .fullScreenCover(isPresented: $showAlbumList) {
+      CustomAlbumListView()
+        .environmentObject(photoViewModel)
+    }
   }
 }
 

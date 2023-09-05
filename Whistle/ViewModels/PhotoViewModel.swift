@@ -18,12 +18,14 @@ class PhotoViewModel: ObservableObject {
 
 
   @Published var photos: [Photo] = []
+  @Published var albums: [AlbumModel] = []
   @Published var isPhotosEmpty = false
   @Published var selectedPhotos = SelectedPhotos.favorites
   @Published var isPhotoAccessAlertPresented = false
 
 
   func fetchFavorites() {
+    photos.removeAll()
     let fetchOptions = PHFetchOptions()
     let imgManager = PHImageManager.default()
     let requestOptions = PHImageRequestOptions()
@@ -31,7 +33,7 @@ class PhotoViewModel: ObservableObject {
     requestOptions.deliveryMode = .highQualityFormat
     fetchOptions.predicate = NSPredicate(format: "title = %@", "Favorites")
     fetchOptions.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: true)]
-    let favorites :PHFetchResult = PHAssetCollection.fetchAssetCollections(
+    let favorites: PHFetchResult = PHAssetCollection.fetchAssetCollections(
       with: .smartAlbum,
       subtype: .smartAlbumFavorites,
       options: nil)
@@ -60,6 +62,7 @@ class PhotoViewModel: ObservableObject {
   }
 
   func fetchPhotos() {
+    photos.removeAll()
     let imgManager = PHImageManager.default()
     let requestOptions = PHImageRequestOptions()
     requestOptions.isSynchronous = true
@@ -108,4 +111,81 @@ class PhotoViewModel: ObservableObject {
       }
     }
   }
+
+  //  func listAlbums() {
+  //    var album = [AlbumModel]()
+  //    // albums
+  //    let options = PHFetchOptions()
+  //    let userAlbums = PHAssetCollection.fetchAssetCollections(with: .album, subtype: .any, options: options)
+  //    userAlbums.enumerateObjects { (object: AnyObject!, _: Int, _: UnsafeMutablePointer) in
+  //      if object is PHAssetCollection {
+  //        let obj: PHAssetCollection = object as! PHAssetCollection
+  //
+  //        let fetchOptions = PHFetchOptions()
+  //        fetchOptions.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
+  //        fetchOptions.predicate = NSPredicate(format: "mediaType = %d", PHAssetMediaType.image.rawValue)
+  //
+  //        let newAlbum = AlbumModel(name: obj.localizedTitle!, count: obj.estimatedAssetCount, collection: obj)
+  //        album.append(newAlbum)
+  //      }
+  //    }
+  //    albums = album
+  //    for item in albums {
+  //      log(item.name)
+  //    }
+  //  }
+  func listAlbums() {
+    var albums = [AlbumModel]()
+
+    // Fetch user albums
+    let options = PHFetchOptions()
+    let userAlbums = PHAssetCollection.fetchAssetCollections(with: .album, subtype: .any, options: options)
+
+    userAlbums.enumerateObjects { object, _, _ in
+      if let albumCollection = object as? PHAssetCollection {
+        let fetchOptions = PHFetchOptions()
+        fetchOptions.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
+        fetchOptions.predicate = NSPredicate(format: "mediaType = %d", PHAssetMediaType.image.rawValue)
+
+        // Fetch the assets (images) for the album
+        let assets = PHAsset.fetchAssets(in: albumCollection, options: fetchOptions)
+
+        // Get the first asset (image) as a thumbnail
+        if let firstAsset = assets.firstObject {
+          let imageManager = PHImageManager.default()
+          let targetSize = CGSize(width: 100, height: 100) // Set your desired thumbnail size
+
+          // Request the thumbnail image
+          imageManager
+            .requestImage(for: firstAsset, targetSize: targetSize, contentMode: .aspectFit, options: nil) { image, _ in
+              if let thumbnailImage = image {
+                // Create an AlbumModel with the thumbnail image
+                let newAlbum = AlbumModel(
+                  name: albumCollection.localizedTitle ?? "",
+                  count: assets.count,
+                  collection: albumCollection,
+                  thumbnail: thumbnailImage)
+                albums.append(newAlbum)
+              }
+            }
+        } else {
+          // If the album has no images, create an AlbumModel without a thumbnail
+          let newAlbum = AlbumModel(
+            name: albumCollection.localizedTitle ?? "",
+            count: assets.count,
+            collection: albumCollection,
+            thumbnail: nil)
+          albums.append(newAlbum)
+        }
+      }
+    }
+
+    // Update your albums array
+    self.albums = albums
+
+    for item in albums {
+      log(item.name)
+    }
+  }
+
 }
