@@ -7,6 +7,8 @@
 
 import SwiftUI
 
+// MARK: - CustomPhotoView
+
 struct CustomPhotoView: View {
 
   @Environment(\.dismiss) var dismiss
@@ -20,6 +22,7 @@ struct CustomPhotoView: View {
     GridItem(.flexible(minimum: 40), spacing: 0),
     GridItem(.flexible(minimum: 40), spacing: 0),
   ]
+
 
   var body: some View {
     VStack(spacing: 0) {
@@ -46,59 +49,98 @@ struct CustomPhotoView: View {
       .frame(maxWidth: .infinity)
       .padding(.horizontal, 16)
       .background(.white)
-      if let selectedImage {
-        Color.clear.overlay {
-          selectedImage
-            .resizable()
-            .scaledToFill()
-            .frame(width: 393,height: 393)
-            .clipShape(Rectangle())
-        }
-        .frame(width: 393,height: 393)
-      } else {
-        Color.black
-          .frame(width: 393,height: 393)
-      }
-      HStack(spacing: 8) {
-        Button {
-          photoViewModel.listAlbums()
-          showAlbumList = true
-        } label: {
-          Text("최근 항목")
-          Image(systemName: "chevron.down")
-        }
-        Spacer()
-      }
-      .frame(height: 54)
-      .frame(maxWidth: .infinity)
-      .padding(.horizontal, 16)
-      .background(.white)
-      ScrollView {
-        LazyVGrid(columns: columns, spacing: 0) {
-          ForEach(photoViewModel.photos) { photo in
-            Button {
-              selectedImage = photo.photo
-            } label: {
-              Color.clear.overlay {
-                photo.photo
-                  .resizable()
-                  .scaledToFill()
-              }
-              .frame(height: UIScreen.width / 4)
-              .clipShape(Rectangle())
-            }
-          }
-        }
-      }
+      photoView()
     }
     .frame(maxWidth: .infinity, maxHeight: .infinity)
     .fullScreenCover(isPresented: $showAlbumList) {
       CustomAlbumListView()
-        .environmentObject(photoViewModel)
     }
   }
 }
 
 #Preview {
   CustomPhotoView()
+}
+
+extension CustomPhotoView {
+
+  @ViewBuilder
+  func photoView() -> some View {
+    // MARK: - Image & Image List
+    if let selectedImage {
+      Color.clear.overlay {
+        selectedImage
+          .resizable()
+          .scaledToFill()
+          .frame(width: 393,height: 393)
+          .clipShape(Rectangle())
+      }
+      .frame(width: 393,height: 393)
+    } else {
+      Color.black
+        .frame(width: 393,height: 393)
+    }
+    HStack(spacing: 8) {
+      Button {
+        photoViewModel.listAlbums()
+        showAlbumList = true
+      } label: {
+        Text("최근 항목")
+        Image(systemName: "chevron.down")
+      }
+      Spacer()
+    }
+    .frame(height: 54)
+    .frame(maxWidth: .infinity)
+    .background(.white)
+    .padding(.horizontal, 16)
+    ScrollView {
+      LazyVGrid(columns: columns, spacing: 0) {
+        ForEach(photoViewModel.photos) { photo in
+          Button {
+            selectedImage = photo.photo
+          } label: {
+            Color.clear.overlay {
+              photo.photo
+                .resizable()
+                .scaledToFill()
+            }
+            .frame(height: UIScreen.width / 4)
+            .clipShape(Rectangle())
+          }
+        }
+      }
+    }
+  }
+
+  @ViewBuilder
+  func albumList() -> some View {
+    List(photoViewModel.albums, id: \.name) { album in
+      HStack(spacing: 16) {
+        Image(uiImage: album.thumbnail ?? UIImage())
+          .resizable()
+          .frame(width: 64, height: 64)
+          .cornerRadius(8)
+          .overlay {
+            RoundedRectangle(cornerRadius: 8)
+              .stroke(lineWidth: 1)
+              .foregroundColor(.Border_Default)
+              .frame(width: 64, height: 64)
+          }
+        VStack(spacing: 0) {
+          Text("\(album.name)")
+            .fontSystem(fontDesignSystem: .subtitle1_KO)
+            .foregroundColor(.LabelColor_Primary)
+            .frame(maxWidth: .infinity, alignment: .leading)
+          Text("\(album.count)")
+            .fontSystem(fontDesignSystem: .body1)
+            .foregroundColor(.LabelColor_Secondary)
+            .frame(maxWidth: .infinity, alignment: .leading)
+        }
+      }
+      .listRowSeparator(.hidden)
+      .frame(height: 80)
+    }
+    .listStyle(.plain)
+  }
 }

@@ -112,28 +112,6 @@ class PhotoViewModel: ObservableObject {
     }
   }
 
-  //  func listAlbums() {
-  //    var album = [AlbumModel]()
-  //    // albums
-  //    let options = PHFetchOptions()
-  //    let userAlbums = PHAssetCollection.fetchAssetCollections(with: .album, subtype: .any, options: options)
-  //    userAlbums.enumerateObjects { (object: AnyObject!, _: Int, _: UnsafeMutablePointer) in
-  //      if object is PHAssetCollection {
-  //        let obj: PHAssetCollection = object as! PHAssetCollection
-  //
-  //        let fetchOptions = PHFetchOptions()
-  //        fetchOptions.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
-  //        fetchOptions.predicate = NSPredicate(format: "mediaType = %d", PHAssetMediaType.image.rawValue)
-  //
-  //        let newAlbum = AlbumModel(name: obj.localizedTitle!, count: obj.estimatedAssetCount, collection: obj)
-  //        album.append(newAlbum)
-  //      }
-  //    }
-  //    albums = album
-  //    for item in albums {
-  //      log(item.name)
-  //    }
-  //  }
   func listAlbums() {
     var albums = [AlbumModel]()
 
