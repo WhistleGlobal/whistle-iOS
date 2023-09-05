@@ -51,7 +51,7 @@ struct ProfileEditView: View {
     .navigationBarBackButtonHidden()
     .confirmationDialog("", isPresented: $editProfileImage) {
       Button("갤러리에서 사진 업로드", role: .none) {
-        photoViewModel.fetchFavorites()
+        photoViewModel.fetchPhotos()
         showGallery = true
       }
       Button("기본 이미지로 변경", role: .none) {

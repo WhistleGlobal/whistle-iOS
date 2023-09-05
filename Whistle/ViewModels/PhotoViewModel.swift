@@ -17,11 +17,13 @@ class PhotoViewModel: ObservableObject {
   }
 
 
+
   @Published var photos: [Photo] = []
   @Published var albums: [AlbumModel] = []
   @Published var isPhotosEmpty = false
   @Published var selectedPhotos = SelectedPhotos.favorites
   @Published var isPhotoAccessAlertPresented = false
+  @Published var fetchPhotosWorkItem: DispatchWorkItem?
 
 
   func fetchFavorites() {
@@ -62,36 +64,55 @@ class PhotoViewModel: ObservableObject {
   }
 
   func fetchPhotos() {
+    // Cancel any existing fetchPhotos task
+    fetchPhotosWorkItem?.cancel()
+
     photos.removeAll()
-    let imgManager = PHImageManager.default()
-    let requestOptions = PHImageRequestOptions()
-    requestOptions.isSynchronous = true
-    requestOptions.deliveryMode = .highQualityFormat
 
-    let fetchOptions = PHFetchOptions()
-    fetchOptions.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: true)]
+    // Create a new DispatchWorkItem
+    fetchPhotosWorkItem = DispatchWorkItem { [weak self] in
+      guard let self else { return }
 
-    let fetchResult: PHFetchResult = PHAsset.fetchAssets(with: .image, options: fetchOptions)
+      let imgManager = PHImageManager.default()
+      let requestOptions = PHImageRequestOptions()
+      requestOptions.deliveryMode = .highQualityFormat
 
-    if fetchResult.count > 0 {
-      for i in 0 ..< fetchResult.count {
-        imgManager.requestImage(
-          for: fetchResult.object(at: i), targetSize: CGSize(width: 100, height: 200),
-          contentMode: .aspectFit,
-          options: requestOptions)
-        { image, _ in
+      let fetchOptions = PHFetchOptions()
+      fetchOptions.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
+      let fetchResult: PHFetchResult = PHAsset.fetchAssets(with: .image, options: fetchOptions)
 
-          if let image {
-            let photo = Photo(photo: Image(uiImage: image))
-            self.photos.append(photo)
+      if fetchResult.count > 0 {
+        for i in 0 ..< fetchResult.count {
+          if fetchPhotosWorkItem?.isCancelled == true {
+            // The task was cancelled, exit the loop
+            return
+          }
+
+          imgManager.requestImage(
+            for: fetchResult.object(at: i), targetSize: CGSize(width: 800, height: 800),
+            contentMode: .aspectFit,
+            options: requestOptions)
+          { image, _ in
+
+            if let image {
+              let photo = Photo(photo: Image(uiImage: image))
+
+              // Append the photo to the array on the main queue
+              DispatchQueue.main.async {
+                self.photos.append(photo)
+              }
+            }
           }
         }
-      }
-    } else {
-      DispatchQueue.main.async {
-        self.isPhotosEmpty = true
+      } else {
+        DispatchQueue.main.async {
+          self.isPhotosEmpty = true
+        }
       }
     }
+
+    // Execute the work item on a background queue
+    DispatchQueue.global().async(execute: fetchPhotosWorkItem!)
   }
 
   func requestAuthorizationAndFetchPhotos(selectedPhotos: SelectedPhotos) {
@@ -135,17 +156,22 @@ class PhotoViewModel: ObservableObject {
 
           // Request the thumbnail image
           imageManager
-            .requestImage(for: firstAsset, targetSize: targetSize, contentMode: .aspectFit, options: nil) { image, _ in
-              if let thumbnailImage = image {
-                // Create an AlbumModel with the thumbnail image
-                let newAlbum = AlbumModel(
-                  name: albumCollection.localizedTitle ?? "",
-                  count: assets.count,
-                  collection: albumCollection,
-                  thumbnail: thumbnailImage)
-                albums.append(newAlbum)
-              }
+            .requestImage(
+              for: firstAsset,
+              targetSize: targetSize,
+              contentMode: .aspectFit,
+              options: nil)
+          { image, _ in
+            if let thumbnailImage = image {
+              // Create an AlbumModel with the thumbnail image
+              let newAlbum = AlbumModel(
+                name: albumCollection.localizedTitle ?? "",
+                count: assets.count,
+                collection: albumCollection,
+                thumbnail: thumbnailImage)
+              albums.append(newAlbum)
             }
+          }
         } else {
           // If the album has no images, create an AlbumModel without a thumbnail
           let newAlbum = AlbumModel(
@@ -164,6 +190,64 @@ class PhotoViewModel: ObservableObject {
     for item in albums {
       log(item.name)
     }
+  }
+
+  func fetchAlbumPhotos(albumName: String) {
+    // Cancel any existing fetchPhotos task
+    fetchPhotosWorkItem?.cancel()
+
+    photos.removeAll()
+
+    // Create a new DispatchWorkItem
+    fetchPhotosWorkItem = DispatchWorkItem { [weak self] in
+      guard let self else { return }
+
+      // Fetch the album with the given name
+      let fetchOptions = PHFetchOptions()
+      fetchOptions.predicate = NSPredicate(format: "title = %@", albumName)
+      let album = PHAssetCollection.fetchAssetCollections(with: .album, subtype: .any, options: fetchOptions).firstObject
+
+      // Check if the album exists
+      guard let targetAlbum = album else {
+        // Handle the case where the album with the given name doesn't exist
+        return
+      }
+
+      let imgManager = PHImageManager.default()
+      let requestOptions = PHImageRequestOptions()
+      requestOptions.deliveryMode = .highQualityFormat
+
+      let fetchResult: PHFetchResult = PHAsset.fetchAssets(in: targetAlbum, options: nil)
+
+      if fetchResult.count > 0 {
+        for i in 0 ..< fetchResult.count {
+          if fetchPhotosWorkItem?.isCancelled == true {
+            // The task was cancelled, exit the loop
+            return
+          }
+
+          imgManager.requestImage(
+            for: fetchResult.object(at: i), targetSize: CGSize(width: 800, height: 800),
+            contentMode: .aspectFit,
+            options: requestOptions)
+          { image, _ in
+            if let image {
+              let photo = Photo(photo: Image(uiImage: image))
+              DispatchQueue.main.async {
+                self.photos.append(photo)
+              }
+            }
+          }
+        }
+      } else {
+        DispatchQueue.main.async {
+          self.isPhotosEmpty = true
+        }
+      }
+    }
+
+    // Execute the work item on a background queue
+    DispatchQueue.global(qos: .background).async(execute: fetchPhotosWorkItem!)
   }
 
 }

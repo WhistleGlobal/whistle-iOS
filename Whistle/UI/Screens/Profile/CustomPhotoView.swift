@@ -15,6 +15,7 @@ struct CustomPhotoView: View {
   @EnvironmentObject var photoViewModel: PhotoViewModel
   @State var showAlbumList = false
   @State var selectedImage: Image?
+  @State var albumName = "최근 항목"
 
   let columns = [
     GridItem(.flexible(minimum: 40), spacing: 0),
@@ -27,6 +28,7 @@ struct CustomPhotoView: View {
     VStack(spacing: 0) {
       HStack(spacing: 0) {
         Button {
+          photoViewModel.fetchPhotosWorkItem?.cancel()
           dismiss()
         } label: {
           Image(systemName: "xmark")
@@ -37,6 +39,7 @@ struct CustomPhotoView: View {
           .foregroundColor(.LabelColor_Primary)
         Spacer()
         Button {
+          photoViewModel.fetchPhotosWorkItem?.cancel()
           dismiss()
         } label: {
           Text("완료")
@@ -53,7 +56,7 @@ struct CustomPhotoView: View {
     }
     .frame(maxWidth: .infinity, maxHeight: .infinity)
     .fullScreenCover(isPresented: $showAlbumList) {
-      CustomAlbumListView()
+      CustomAlbumListView(albumName: $albumName)
         .environmentObject(photoViewModel)
     }
   }
@@ -98,10 +101,13 @@ extension CustomPhotoView {
     // MARK: - Image & Image List
     HStack(spacing: 8) {
       Button {
+        photoViewModel.fetchPhotosWorkItem?.cancel()
         photoViewModel.listAlbums()
         showAlbumList = true
       } label: {
-        Text("최근 항목")
+        Text(albumName)
+          .fontSystem(fontDesignSystem: .subtitle2_KO)
+          .foregroundColor(.LabelColor_Primary)
         Image(systemName: "chevron.down")
       }
       Spacer()
