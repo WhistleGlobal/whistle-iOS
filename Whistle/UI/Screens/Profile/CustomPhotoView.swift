@@ -54,6 +54,7 @@ struct CustomPhotoView: View {
     .frame(maxWidth: .infinity, maxHeight: .infinity)
     .fullScreenCover(isPresented: $showAlbumList) {
       CustomAlbumListView()
+        .environmentObject(photoViewModel)
     }
   }
 }
