@@ -47,8 +47,9 @@ struct CustomPhotoView: View {
       }
       .frame(height: 54)
       .frame(maxWidth: .infinity)
-      .padding(.horizontal, 16)
       .background(.white)
+      .padding(.horizontal, 16)
+      invertedCircleMask()
       photoView()
     }
     .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -65,21 +66,35 @@ struct CustomPhotoView: View {
 extension CustomPhotoView {
 
   @ViewBuilder
-  func photoView() -> some View {
-    // MARK: - Image & Image List
+  func invertedCircleMask() -> some View {
     if let selectedImage {
       Color.clear.overlay {
         selectedImage
           .resizable()
           .scaledToFill()
           .frame(width: 393,height: 393)
-          .clipShape(Rectangle())
+          .opacity(0.4)
+        Circle()
+          .frame(width: 393,height: 393)
+          .blendMode(.destinationOut)
+        selectedImage
+          .resizable()
+          .scaledToFill()
+          .frame(width: 393,height: 393)
+          .clipShape(Circle())
       }
       .frame(width: 393,height: 393)
+      .clipShape(Rectangle())
+      .compositingGroup()
     } else {
       Color.black
         .frame(width: 393,height: 393)
     }
+  }
+
+  @ViewBuilder
+  func photoView() -> some View {
+    // MARK: - Image & Image List
     HStack(spacing: 8) {
       Button {
         photoViewModel.listAlbums()
