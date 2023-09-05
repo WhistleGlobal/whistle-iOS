@@ -56,6 +56,9 @@
 		78DA58D52AA445E400F8D2F1 /* ProfileEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78DA58D42AA445E400F8D2F1 /* ProfileEditView.swift */; };
 		78DA58D72AA448A100F8D2F1 /* ProfileEditIDView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78DA58D62AA448A100F8D2F1 /* ProfileEditIDView.swift */; };
 		78DDADFA2AA1A37F00960552 /* AppKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78DDADF92AA1A37F00960552 /* AppKeys.swift */; };
+		78F41A5D2AA70626004A7BFC /* PhotoModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78F41A5C2AA70626004A7BFC /* PhotoModel.swift */; };
+		78F41A5F2AA70639004A7BFC /* PhotoViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78F41A5E2AA70639004A7BFC /* PhotoViewModel.swift */; };
+		78F41A612AA707D2004A7BFC /* CustomPhotoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78F41A602AA707D2004A7BFC /* CustomPhotoView.swift */; };
 		78F980812A9F32C800AD542A /* TabbarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78F980802A9F32C800AD542A /* TabbarView.swift */; };
 		78F980872A9F5AAC00AD542A /* GlassBottomSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78F980862A9F5AAC00AD542A /* GlassBottomSheet.swift */; };
 		78F980892A9F5B2500AD542A /* RoundedCorners.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78F980882A9F5B2500AD542A /* RoundedCorners.swift */; };
@@ -112,6 +115,9 @@
 		78DA58D62AA448A100F8D2F1 /* ProfileEditIDView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileEditIDView.swift; sourceTree = "<group>"; };
 		78DDADF72AA1868D00960552 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		78DDADF92AA1A37F00960552 /* AppKeys.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppKeys.swift; sourceTree = "<group>"; };
+		78F41A5C2AA70626004A7BFC /* PhotoModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoModel.swift; sourceTree = "<group>"; };
+		78F41A5E2AA70639004A7BFC /* PhotoViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoViewModel.swift; sourceTree = "<group>"; };
+		78F41A602AA707D2004A7BFC /* CustomPhotoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomPhotoView.swift; sourceTree = "<group>"; };
 		78F980802A9F32C800AD542A /* TabbarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabbarView.swift; sourceTree = "<group>"; };
 		78F980862A9F5AAC00AD542A /* GlassBottomSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlassBottomSheet.swift; sourceTree = "<group>"; };
 		78F980882A9F5B2500AD542A /* RoundedCorners.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoundedCorners.swift; sourceTree = "<group>"; };
@@ -191,6 +197,7 @@
 				786669482AA1284F00448EC7 /* UserAuth.swift */,
 				7866694A2AA1287500448EC7 /* UserResponse.swift */,
 				78DDADF92AA1A37F00960552 /* AppKeys.swift */,
+				78F41A5C2AA70626004A7BFC /* PhotoModel.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -208,6 +215,7 @@
 			children = (
 				1B3955562A95092A00BCB4DF /* VideoViewModel.swift */,
 				786669462AA1282D00448EC7 /* AppleSignInViewModel.swift */,
+				78F41A5E2AA70639004A7BFC /* PhotoViewModel.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -329,6 +337,7 @@
 				78DA58D42AA445E400F8D2F1 /* ProfileEditView.swift */,
 				78DA58D62AA448A100F8D2F1 /* ProfileEditIDView.swift */,
 				786385732AA45ED4004F8EF4 /* ProfileEditIntroduceView.swift */,
+				78F41A602AA707D2004A7BFC /* CustomPhotoView.swift */,
 			);
 			path = Profile;
 			sourceTree = "<group>";
@@ -461,6 +470,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				78DA58D52AA445E400F8D2F1 /* ProfileEditView.swift in Sources */,
+				78F41A5F2AA70639004A7BFC /* PhotoViewModel.swift in Sources */,
 				788F43F02AA5CD9F00718D38 /* MainView.swift in Sources */,
 				782DD4752AA30C22006183D3 /* FollowButtonStyle.swift in Sources */,
 				788F43F52AA5E95E00718D38 /* PlayerView.swift in Sources */,
@@ -480,6 +490,7 @@
 				1B3955532A9507E300BCB4DF /* Extension+UIScreen.swift in Sources */,
 				78D148E72A9E137100DDCE48 /* Extension+UIVisualEffectView.swift in Sources */,
 				786385742AA45ED4004F8EF4 /* ProfileEditIntroduceView.swift in Sources */,
+				78F41A5D2AA70626004A7BFC /* PhotoModel.swift in Sources */,
 				78F980872A9F5AAC00AD542A /* GlassBottomSheet.swift in Sources */,
 				7801398A2AA127AE00D5FBDB /* SignInView.swift in Sources */,
 				78D148EB2A9E13CC00DDCE48 /* ProfileView.swift in Sources */,
@@ -495,6 +506,7 @@
 				78D148DB2A9E0A5E00DDCE48 /* Extension+Font.swift in Sources */,
 				78F980892A9F5B2500AD542A /* RoundedCorners.swift in Sources */,
 				78DDADFA2AA1A37F00960552 /* AppKeys.swift in Sources */,
+				78F41A612AA707D2004A7BFC /* CustomPhotoView.swift in Sources */,
 				782DD47A2AA31F3C006183D3 /* ProfileEditButtonStyle.swift in Sources */,
 				1B3955402A95069C00BCB4DF /* WhistleApp.swift in Sources */,
 				782F1B252AA1C566006831C8 /* ProfileTabItem.swift in Sources */,

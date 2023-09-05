@@ -14,6 +14,8 @@ struct ProfileEditView: View {
   @Environment(\.dismiss) var dismiss
   @State var editProfileImage = false
   @State var showToast = false
+  @State var showGallery = false
+  @StateObject var photoViewModel = PhotoViewModel()
 
   var body: some View {
     VStack(spacing: 0) {
@@ -41,11 +43,16 @@ struct ProfileEditView: View {
     .overlay {
       ProfileToastMessage(text: "소개가 수정되었습니다.", showToast: $showToast)
     }
+    .fullScreenCover(isPresented: $showGallery) {
+      CustomPhotoView()
+        .environmentObject(photoViewModel)
+    }
     .padding(.horizontal, 16)
     .navigationBarBackButtonHidden()
     .confirmationDialog("", isPresented: $editProfileImage) {
       Button("갤러리에서 사진 업로드", role: .none) {
-        log("Show photo ibrary")
+        photoViewModel.fetchFavorites()
+        showGallery = true
       }
       Button("기본 이미지로 변경", role: .none) {
         log("Set defaultImage")
