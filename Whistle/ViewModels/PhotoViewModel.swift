@@ -63,8 +63,11 @@ class PhotoViewModel: ObservableObject {
         }
       }
     }
-
-    DispatchQueue.global().async(execute: fetchPhotosWorkItem!)
+    guard let fetchPhotosWorkItem else {
+      log("guard")
+      return
+    }
+    DispatchQueue.global().async(execute: fetchPhotosWorkItem)
   }
 
   func requestAuthorizationAndFetchPhotos(selectedPhotos: SelectedPhotos) {
@@ -184,8 +187,11 @@ class PhotoViewModel: ObservableObject {
         }
       }
     }
-
-    DispatchQueue.global(qos: .background).async(execute: fetchPhotosWorkItem!)
+    guard let fetchPhotosWorkItem else {
+      log("guard")
+      return
+    }
+    DispatchQueue.global(qos: .background).async(execute: fetchPhotosWorkItem)
   }
 
 }

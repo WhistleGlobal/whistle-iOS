@@ -12,13 +12,12 @@ struct CustomAlbumListView: View {
   @Environment(\.dismiss) var dismiss
   @EnvironmentObject var photoViewModel: PhotoViewModel
 
-    @Binding var albumName: String
+  @Binding var albumName: String
 
   var body: some View {
     VStack(spacing: 0) {
       HStack(spacing: 0) {
         Button {
-            photoViewModel.fetchPhotosWorkItem?.cancel()
           dismiss()
         } label: {
           Image(systemName: "xmark")
@@ -29,7 +28,6 @@ struct CustomAlbumListView: View {
           .foregroundColor(.LabelColor_Primary)
         Spacer()
         Button {
-            photoViewModel.fetchPhotosWorkItem?.cancel()
           dismiss()
         } label: {
           Text("완료")
@@ -44,8 +42,7 @@ struct CustomAlbumListView: View {
       Divider().frame(width: UIScreen.width)
       List(photoViewModel.albums, id: \.name) { album in
         Button {
-            photoViewModel.fetchPhotosWorkItem?.cancel()
-            self.albumName = album.name
+          albumName = album.name
           photoViewModel.fetchAlbumPhotos(albumName: album.name)
           dismiss()
         } label: {
