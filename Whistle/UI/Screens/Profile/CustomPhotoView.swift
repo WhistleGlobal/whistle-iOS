@@ -23,7 +23,6 @@ struct CustomPhotoView: View {
     GridItem(.flexible(minimum: 40), spacing: 0),
   ]
 
-
   var body: some View {
     VStack(spacing: 0) {
       HStack(spacing: 0) {
@@ -87,6 +86,7 @@ extension CustomPhotoView {
       .clipShape(Rectangle())
       .compositingGroup()
     } else {
+      // 가장 최근 이미지로 대체하기
       Color.black
         .frame(width: 393,height: 393)
     }
