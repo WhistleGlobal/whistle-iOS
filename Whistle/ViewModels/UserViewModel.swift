@@ -10,11 +10,11 @@ import Foundation
 import KeychainSwift
 import SwiftyJSON
 
-// MARK: - ProfileViewModel
+// MARK: - UserViewModel
 
-class ProfileViewModel: ObservableObject {
+class UserViewModel: ObservableObject {
   let keychain = KeychainSwift()
-  @Published var myProfile = MyProfile()
+  @Published var myProfile = Profile()
   @Published var userProfile = UserProfile()
   @Published var myWhistleCount = 0
   @Published var userWhistleCount = 0
@@ -22,6 +22,8 @@ class ProfileViewModel: ObservableObject {
   @Published var userFollow = Follow()
   @Published var myPostFeed: [PostFeed] = []
   @Published var userPostFeed: [UserPostFeed] = []
+  @Published var bookmark: [Bookmark] = []
+  @Published var notiSetting: NotiSetting = .init()
   let decoder = JSONDecoder()
 
   var idToken: String {
@@ -38,7 +40,7 @@ class ProfileViewModel: ObservableObject {
 }
 
 // MARK: - 데이터 처리
-extension ProfileViewModel {
+extension UserViewModel {
 
   func requestMyProfile() async {
     let headers: HTTPHeaders = [
@@ -50,7 +52,7 @@ extension ProfileViewModel {
       method: .get,
       headers: headers)
       .validate(statusCode: 200...500)
-      .responseDecodable(of: MyProfile.self) { response in
+      .responseDecodable(of: Profile.self) { response in
         switch response.result {
         case .success(let success):
           self.myProfile = success
@@ -236,7 +238,7 @@ extension ProfileViewModel {
       }
   }
 
-    // FIXME: - 데이터가 없을 시 처리할 로직 생각할 것
+  // FIXME: - 데이터가 없을 시 처리할 로직 생각할 것
   func requestMyPostFeed() {
     let headers: HTTPHeaders = [
       "Authorization": "Bearer \(idToken)",
@@ -265,7 +267,8 @@ extension ProfileViewModel {
         }
       }
   }
-    // FIXME: - 데이터가 없을 시 처리할 로직 생각할 것
+
+  // FIXME: - 데이터가 없을 시 처리할 로직 생각할 것
   func requestUserPostFeed(userId: Int) {
     let headers: HTTPHeaders = [
       "Authorization": "Bearer \(idToken)",
@@ -287,6 +290,70 @@ extension ProfileViewModel {
           } catch {
             log("Error parsing JSON: \(error)")
             log("피드를 불러올 수 없습니다.")
+          }
+        case .failure(let error):
+          log("Error: \(error)")
+        }
+      }
+  }
+
+  // FIXME: - 더미 데이터를 넣어서 테스트할 것
+  func requestMyBookmark() {
+    let headers: HTTPHeaders = [
+      "Authorization": "Bearer \(idToken)",
+      "Content-Type": "application/json",
+    ]
+    AF.request(
+      "\(domainUrl)/user/post/bookmark",
+      method: .get,
+      headers: headers)
+      .validate(statusCode: 200...500)
+      .response { response in
+        switch response.result {
+        case .success(let data):
+          do {
+            guard let data else {
+              return
+            }
+            let json = try JSON(data: data)
+            log("\(json)")
+            let decoder = JSONDecoder()
+            self.bookmark = try decoder.decode([Bookmark].self, from: data)
+          } catch {
+            log("Error parsing JSON: \(error)")
+            log("북마크를 불러올 수 없습니다.")
+          }
+        case .failure(let error):
+          log("Error: \(error)")
+        }
+      }
+  }
+
+  // FIXME: - 더미 데이터를 넣어서 테스트할 것
+  func requestNotiSetting() {
+    let headers: HTTPHeaders = [
+      "Authorization": "Bearer \(idToken)",
+      "Content-Type": "application/json",
+    ]
+    AF.request(
+      "\(domainUrl)/user/notification/setting",
+      method: .get,
+      headers: headers)
+      .validate(statusCode: 200...500)
+      .response { response in
+        switch response.result {
+        case .success(let data):
+          do {
+            guard let data else {
+              return
+            }
+            let json = try JSON(data: data)
+            log("\(json)")
+            let decoder = JSONDecoder()
+            self.notiSetting = try decoder.decode(NotiSetting.self, from: data)
+          } catch {
+            log("Error parsing JSON: \(error)")
+            log("NotiSetting을 불러올 수 없습니다.")
           }
         case .failure(let error):
           log("Error: \(error)")

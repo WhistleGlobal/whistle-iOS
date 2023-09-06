@@ -37,8 +37,8 @@
 		7874CB902AA0B5350081DE54 /* ProfileNotiView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7874CB8F2AA0B5350081DE54 /* ProfileNotiView.swift */; };
 		7874CB922AA0B53A0081DE54 /* ProfileInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7874CB912AA0B53A0081DE54 /* ProfileInfoView.swift */; };
 		7874CB942AA0B5430081DE54 /* ProfileReportView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7874CB932AA0B5430081DE54 /* ProfileReportView.swift */; };
-		787AF5602AA85CBC00C190E6 /* MyProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 787AF55F2AA85CBC00C190E6 /* MyProfile.swift */; };
-		787AF5622AA85D0300C190E6 /* ProfileViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 787AF5612AA85D0300C190E6 /* ProfileViewModel.swift */; };
+		787AF5602AA85CBC00C190E6 /* Profile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 787AF55F2AA85CBC00C190E6 /* Profile.swift */; };
+		787AF5622AA85D0300C190E6 /* UserViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 787AF5612AA85D0300C190E6 /* UserViewModel.swift */; };
 		787AF5652AA85D2C00C190E6 /* SwiftyJSON in Frameworks */ = {isa = PBXBuildFile; productRef = 787AF5642AA85D2C00C190E6 /* SwiftyJSON */; };
 		787AF5672AA87D2E00C190E6 /* UserProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 787AF5662AA87D2E00C190E6 /* UserProfile.swift */; };
 		787AF56B2AA87EDB00C190E6 /* APITestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 787AF56A2AA87EDB00C190E6 /* APITestView.swift */; };
@@ -46,6 +46,8 @@
 		787AF56F2AA884B700C190E6 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 787AF56E2AA884B700C190E6 /* User.swift */; };
 		787AF5712AA887E600C190E6 /* PostFeed.swift in Sources */ = {isa = PBXBuildFile; fileRef = 787AF5702AA887E600C190E6 /* PostFeed.swift */; };
 		787AF5732AA888FC00C190E6 /* UserPostFeed.swift in Sources */ = {isa = PBXBuildFile; fileRef = 787AF5722AA888FC00C190E6 /* UserPostFeed.swift */; };
+		787AF5752AA88F4000C190E6 /* BookMark.swift in Sources */ = {isa = PBXBuildFile; fileRef = 787AF5742AA88F4000C190E6 /* BookMark.swift */; };
+		787AF5792AA8930700C190E6 /* NotiSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 787AF5782AA8930700C190E6 /* NotiSetting.swift */; };
 		788F43F02AA5CD9F00718D38 /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 788F43EF2AA5CD9F00718D38 /* MainView.swift */; };
 		788F43F52AA5E95E00718D38 /* PlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 788F43F42AA5E95E00718D38 /* PlayerView.swift */; };
 		788F43F72AA6136F00718D38 /* Player.swift in Sources */ = {isa = PBXBuildFile; fileRef = 788F43F62AA6136F00718D38 /* Player.swift */; };
@@ -106,14 +108,16 @@
 		7874CB8F2AA0B5350081DE54 /* ProfileNotiView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileNotiView.swift; sourceTree = "<group>"; };
 		7874CB912AA0B53A0081DE54 /* ProfileInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileInfoView.swift; sourceTree = "<group>"; };
 		7874CB932AA0B5430081DE54 /* ProfileReportView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileReportView.swift; sourceTree = "<group>"; };
-		787AF55F2AA85CBC00C190E6 /* MyProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyProfile.swift; sourceTree = "<group>"; };
-		787AF5612AA85D0300C190E6 /* ProfileViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewModel.swift; sourceTree = "<group>"; };
+		787AF55F2AA85CBC00C190E6 /* Profile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Profile.swift; sourceTree = "<group>"; };
+		787AF5612AA85D0300C190E6 /* UserViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserViewModel.swift; sourceTree = "<group>"; };
 		787AF5662AA87D2E00C190E6 /* UserProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfile.swift; sourceTree = "<group>"; };
 		787AF56A2AA87EDB00C190E6 /* APITestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APITestView.swift; sourceTree = "<group>"; };
 		787AF56C2AA8846100C190E6 /* Follow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Follow.swift; sourceTree = "<group>"; };
 		787AF56E2AA884B700C190E6 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		787AF5702AA887E600C190E6 /* PostFeed.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostFeed.swift; sourceTree = "<group>"; };
 		787AF5722AA888FC00C190E6 /* UserPostFeed.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserPostFeed.swift; sourceTree = "<group>"; };
+		787AF5742AA88F4000C190E6 /* BookMark.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookMark.swift; sourceTree = "<group>"; };
+		787AF5782AA8930700C190E6 /* NotiSetting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotiSetting.swift; sourceTree = "<group>"; };
 		788F43EF2AA5CD9F00718D38 /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
 		788F43F42AA5E95E00718D38 /* PlayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerView.swift; sourceTree = "<group>"; };
 		788F43F62AA6136F00718D38 /* Player.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Player.swift; sourceTree = "<group>"; };
@@ -240,7 +244,7 @@
 				1B3955562A95092A00BCB4DF /* VideoViewModel.swift */,
 				786669462AA1282D00448EC7 /* AppleSignInViewModel.swift */,
 				78F41A5E2AA70639004A7BFC /* PhotoViewModel.swift */,
-				787AF5612AA85D0300C190E6 /* ProfileViewModel.swift */,
+				787AF5612AA85D0300C190E6 /* UserViewModel.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -322,12 +326,14 @@
 		787AF55E2AA85CA800C190E6 /* Profile */ = {
 			isa = PBXGroup;
 			children = (
-				787AF55F2AA85CBC00C190E6 /* MyProfile.swift */,
+				787AF55F2AA85CBC00C190E6 /* Profile.swift */,
 				787AF5662AA87D2E00C190E6 /* UserProfile.swift */,
 				787AF56C2AA8846100C190E6 /* Follow.swift */,
 				787AF56E2AA884B700C190E6 /* User.swift */,
 				787AF5702AA887E600C190E6 /* PostFeed.swift */,
 				787AF5722AA888FC00C190E6 /* UserPostFeed.swift */,
+				787AF5742AA88F4000C190E6 /* BookMark.swift */,
+				787AF5782AA8930700C190E6 /* NotiSetting.swift */,
 			);
 			path = Profile;
 			sourceTree = "<group>";
@@ -513,7 +519,7 @@
 			files = (
 				78DA58D52AA445E400F8D2F1 /* ProfileEditView.swift in Sources */,
 				787AF5712AA887E600C190E6 /* PostFeed.swift in Sources */,
-				787AF5602AA85CBC00C190E6 /* MyProfile.swift in Sources */,
+				787AF5602AA85CBC00C190E6 /* Profile.swift in Sources */,
 				78B6FD2C2AA718A80043E461 /* CustomAlbumListView.swift in Sources */,
 				78F41A5F2AA70639004A7BFC /* PhotoViewModel.swift in Sources */,
 				788F43F02AA5CD9F00718D38 /* MainView.swift in Sources */,
@@ -550,6 +556,7 @@
 				1B3955572A95092A00BCB4DF /* VideoViewModel.swift in Sources */,
 				788F43F72AA6136F00718D38 /* Player.swift in Sources */,
 				78DA58D72AA448A100F8D2F1 /* ProfileEditIDView.swift in Sources */,
+				787AF5752AA88F4000C190E6 /* BookMark.swift in Sources */,
 				78F980812A9F32C800AD542A /* TabbarView.swift in Sources */,
 				7874CB902AA0B5350081DE54 /* ProfileNotiView.swift in Sources */,
 				78D148E92A9E13A800DDCE48 /* CustomBlurView.swift in Sources */,
@@ -557,13 +564,14 @@
 				78F980892A9F5B2500AD542A /* RoundedCorners.swift in Sources */,
 				78DDADFA2AA1A37F00960552 /* AppKeys.swift in Sources */,
 				78F41A612AA707D2004A7BFC /* CustomPhotoView.swift in Sources */,
-				787AF5622AA85D0300C190E6 /* ProfileViewModel.swift in Sources */,
+				787AF5622AA85D0300C190E6 /* UserViewModel.swift in Sources */,
 				782DD47A2AA31F3C006183D3 /* ProfileEditButtonStyle.swift in Sources */,
 				1B3955402A95069C00BCB4DF /* WhistleApp.swift in Sources */,
 				782F1B252AA1C566006831C8 /* ProfileTabItem.swift in Sources */,
 				788F43F92AA615AF00718D38 /* PlayerPageView.swift in Sources */,
 				78D148E02A9E0D1B00DDCE48 /* AppleSDGothic.swift in Sources */,
 				787173B62AA47A510018CB14 /* ProfileAlert.swift in Sources */,
+				787AF5792AA8930700C190E6 /* NotiSetting.swift in Sources */,
 				787AF56D2AA8846100C190E6 /* Follow.swift in Sources */,
 				782DD4772AA30C5C006183D3 /* FollowTabbarStyle.swift in Sources */,
 			);

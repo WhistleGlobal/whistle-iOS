@@ -32,7 +32,7 @@ struct ProfileView: View {
     GridItem(.flexible()),
   ]
   @Binding var tabbarOpacity: Double
-  @EnvironmentObject var profileViewModel: ProfileViewModel
+  @EnvironmentObject var profileViewModel: UserViewModel
 
   var body: some View {
     ZStack {

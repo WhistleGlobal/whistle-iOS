@@ -7,14 +7,14 @@
 
 import Foundation
 
-// MARK: - MyProfile
+// MARK: - Profile
 
-class MyProfile: ObservableObject, Decodable {
+class Profile: ObservableObject, Decodable {
 
   enum CodingKeys: String, CodingKey {
     case userName = "user_name"
     case email
-    case profileImage = "profile_img" // Corrected key name
+    case profileImage = "profile_img"
     case introduce
     case status
   }

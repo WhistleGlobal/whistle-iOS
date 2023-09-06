@@ -13,7 +13,7 @@ struct TabbarView: View {
 
   @State var tabSelection: TabSelection = .main
   @State var tabbarOpacity = 1.0
-  @StateObject var profileViewModel = ProfileViewModel()
+  @StateObject var profileViewModel = UserViewModel()
 
   var body: some View {
     ZStack {

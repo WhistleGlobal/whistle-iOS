@@ -9,7 +9,7 @@ import SwiftUI
 
 struct APITestView: View {
 
-  @StateObject var profileViewModel: ProfileViewModel = .init()
+  @StateObject var profileViewModel: UserViewModel = .init()
 
   var body: some View {
     Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
@@ -20,7 +20,7 @@ struct APITestView: View {
 //        await profileViewModel.requestMyFollow()
 //        profileViewModel.requestMyPostFeed()
 //        profileViewModel.requestUserPostFeed(userId: 3)
-          
+        profileViewModel.requestNotiSetting()
       }
   }
 }
