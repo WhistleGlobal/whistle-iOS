@@ -32,7 +32,7 @@ struct ProfileView: View {
     GridItem(.flexible()),
   ]
   @Binding var tabbarOpacity: Double
-  @EnvironmentObject var profileViewModel: UserViewModel
+  @EnvironmentObject var userViewModel: UserViewModel
 
   var body: some View {
     ZStack {
@@ -171,10 +171,10 @@ extension ProfileView {
       Circle()
         .frame(width: 100, height: 100)
         .padding(.bottom, 16)
-      Text(profileViewModel.myProfile.userName)
+      Text(userViewModel.myProfile.userName)
         .foregroundColor(Color.LabelColor_Primary_Dark)
         .fontSystem(fontDesignSystem: .title2_Expanded)
-      Text(profileViewModel.myProfile.introduce ?? "소개글 공란임")
+      Text(userViewModel.myProfile.introduce ?? "소개글 공란임")
         .foregroundColor(Color.LabelColor_Secondary_Dark)
         .fontSystem(fontDesignSystem: .body2_KO)
         .padding(.bottom, 16)
@@ -191,7 +191,7 @@ extension ProfileView {
       .buttonStyle(ProfileEditButtonStyle())
       HStack(spacing: 48) {
         VStack(spacing: 4) {
-          Text("\(20)")
+          Text("\(userViewModel.myFollow.followingCount)")
             .foregroundColor(Color.LabelColor_Primary_Dark)
             .fontSystem(fontDesignSystem: .title2_Expanded)
           Text("whistle")
@@ -203,7 +203,7 @@ extension ProfileView {
           FollowView()
         } label: {
           VStack(spacing: 4) {
-            Text("\(100)")
+            Text("\(userViewModel.myFollow.followingCount)")
               .foregroundColor(Color.LabelColor_Primary_Dark)
               .fontSystem(fontDesignSystem: .title2_Expanded)
             Text("follower")
