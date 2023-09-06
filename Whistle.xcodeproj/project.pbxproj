@@ -40,6 +40,12 @@
 		787AF5602AA85CBC00C190E6 /* MyProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 787AF55F2AA85CBC00C190E6 /* MyProfile.swift */; };
 		787AF5622AA85D0300C190E6 /* ProfileViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 787AF5612AA85D0300C190E6 /* ProfileViewModel.swift */; };
 		787AF5652AA85D2C00C190E6 /* SwiftyJSON in Frameworks */ = {isa = PBXBuildFile; productRef = 787AF5642AA85D2C00C190E6 /* SwiftyJSON */; };
+		787AF5672AA87D2E00C190E6 /* UserProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 787AF5662AA87D2E00C190E6 /* UserProfile.swift */; };
+		787AF56B2AA87EDB00C190E6 /* APITestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 787AF56A2AA87EDB00C190E6 /* APITestView.swift */; };
+		787AF56D2AA8846100C190E6 /* Follow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 787AF56C2AA8846100C190E6 /* Follow.swift */; };
+		787AF56F2AA884B700C190E6 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 787AF56E2AA884B700C190E6 /* User.swift */; };
+		787AF5712AA887E600C190E6 /* PostFeed.swift in Sources */ = {isa = PBXBuildFile; fileRef = 787AF5702AA887E600C190E6 /* PostFeed.swift */; };
+		787AF5732AA888FC00C190E6 /* UserPostFeed.swift in Sources */ = {isa = PBXBuildFile; fileRef = 787AF5722AA888FC00C190E6 /* UserPostFeed.swift */; };
 		788F43F02AA5CD9F00718D38 /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 788F43EF2AA5CD9F00718D38 /* MainView.swift */; };
 		788F43F52AA5E95E00718D38 /* PlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 788F43F42AA5E95E00718D38 /* PlayerView.swift */; };
 		788F43F72AA6136F00718D38 /* Player.swift in Sources */ = {isa = PBXBuildFile; fileRef = 788F43F62AA6136F00718D38 /* Player.swift */; };
@@ -102,6 +108,12 @@
 		7874CB932AA0B5430081DE54 /* ProfileReportView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileReportView.swift; sourceTree = "<group>"; };
 		787AF55F2AA85CBC00C190E6 /* MyProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyProfile.swift; sourceTree = "<group>"; };
 		787AF5612AA85D0300C190E6 /* ProfileViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewModel.swift; sourceTree = "<group>"; };
+		787AF5662AA87D2E00C190E6 /* UserProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfile.swift; sourceTree = "<group>"; };
+		787AF56A2AA87EDB00C190E6 /* APITestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APITestView.swift; sourceTree = "<group>"; };
+		787AF56C2AA8846100C190E6 /* Follow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Follow.swift; sourceTree = "<group>"; };
+		787AF56E2AA884B700C190E6 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
+		787AF5702AA887E600C190E6 /* PostFeed.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostFeed.swift; sourceTree = "<group>"; };
+		787AF5722AA888FC00C190E6 /* UserPostFeed.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserPostFeed.swift; sourceTree = "<group>"; };
 		788F43EF2AA5CD9F00718D38 /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
 		788F43F42AA5E95E00718D38 /* PlayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerView.swift; sourceTree = "<group>"; };
 		788F43F62AA6136F00718D38 /* Player.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Player.swift; sourceTree = "<group>"; };
@@ -311,6 +323,11 @@
 			isa = PBXGroup;
 			children = (
 				787AF55F2AA85CBC00C190E6 /* MyProfile.swift */,
+				787AF5662AA87D2E00C190E6 /* UserProfile.swift */,
+				787AF56C2AA8846100C190E6 /* Follow.swift */,
+				787AF56E2AA884B700C190E6 /* User.swift */,
+				787AF5702AA887E600C190E6 /* PostFeed.swift */,
+				787AF5722AA888FC00C190E6 /* UserPostFeed.swift */,
 			);
 			path = Profile;
 			sourceTree = "<group>";
@@ -360,6 +377,7 @@
 				786385732AA45ED4004F8EF4 /* ProfileEditIntroduceView.swift */,
 				78F41A602AA707D2004A7BFC /* CustomPhotoView.swift */,
 				78B6FD2B2AA718A80043E461 /* CustomAlbumListView.swift */,
+				787AF56A2AA87EDB00C190E6 /* APITestView.swift */,
 			);
 			path = Profile;
 			sourceTree = "<group>";
@@ -494,10 +512,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				78DA58D52AA445E400F8D2F1 /* ProfileEditView.swift in Sources */,
+				787AF5712AA887E600C190E6 /* PostFeed.swift in Sources */,
 				787AF5602AA85CBC00C190E6 /* MyProfile.swift in Sources */,
 				78B6FD2C2AA718A80043E461 /* CustomAlbumListView.swift in Sources */,
 				78F41A5F2AA70639004A7BFC /* PhotoViewModel.swift in Sources */,
 				788F43F02AA5CD9F00718D38 /* MainView.swift in Sources */,
+				787AF56B2AA87EDB00C190E6 /* APITestView.swift in Sources */,
 				782DD4752AA30C22006183D3 /* FollowButtonStyle.swift in Sources */,
 				788F43F52AA5E95E00718D38 /* PlayerView.swift in Sources */,
 				1B3955422A95069C00BCB4DF /* ContentView.swift in Sources */,
@@ -515,12 +535,15 @@
 				1B39555D2A95098100BCB4DF /* VideoModel.swift in Sources */,
 				1B39555B2A95095500BCB4DF /* ColorManager.swift in Sources */,
 				1B3955532A9507E300BCB4DF /* Extension+UIScreen.swift in Sources */,
+				787AF5672AA87D2E00C190E6 /* UserProfile.swift in Sources */,
 				78D148E72A9E137100DDCE48 /* Extension+UIVisualEffectView.swift in Sources */,
 				786385742AA45ED4004F8EF4 /* ProfileEditIntroduceView.swift in Sources */,
 				78F41A5D2AA70626004A7BFC /* PhotoModel.swift in Sources */,
 				78F980872A9F5AAC00AD542A /* GlassBottomSheet.swift in Sources */,
 				7801398A2AA127AE00D5FBDB /* SignInView.swift in Sources */,
 				78D148EB2A9E13CC00DDCE48 /* ProfileView.swift in Sources */,
+				787AF56F2AA884B700C190E6 /* User.swift in Sources */,
+				787AF5732AA888FC00C190E6 /* UserPostFeed.swift in Sources */,
 				78D148E32A9E134700DDCE48 /* Extension+NSObject.swift in Sources */,
 				1B39555F2A9509A700BCB4DF /* SubmitButton.swift in Sources */,
 				7874CB922AA0B53A0081DE54 /* ProfileInfoView.swift in Sources */,
@@ -541,6 +564,7 @@
 				788F43F92AA615AF00718D38 /* PlayerPageView.swift in Sources */,
 				78D148E02A9E0D1B00DDCE48 /* AppleSDGothic.swift in Sources */,
 				787173B62AA47A510018CB14 /* ProfileAlert.swift in Sources */,
+				787AF56D2AA8846100C190E6 /* Follow.swift in Sources */,
 				782DD4772AA30C5C006183D3 /* FollowTabbarStyle.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
