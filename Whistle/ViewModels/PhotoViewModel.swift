@@ -23,7 +23,7 @@ class PhotoViewModel: ObservableObject {
   @Published var fetchPhotosWorkItem: DispatchWorkItem?
 
   func fetchPhotos() {
-    fetchPhotosWorkItem?.cancel()
+    fetchPhotosWorkItemCancel()
     photos.removeAll()
     fetchPhotosWorkItem = DispatchWorkItem { [weak self] in
       guard let self else { return }
@@ -142,7 +142,7 @@ class PhotoViewModel: ObservableObject {
   }
 
   func fetchAlbumPhotos(albumName: String) {
-    fetchPhotosWorkItem?.cancel()
+    fetchPhotosWorkItemCancel()
 
     photos.removeAll()
     fetchPhotosWorkItem = DispatchWorkItem { [weak self] in
@@ -194,4 +194,9 @@ class PhotoViewModel: ObservableObject {
     DispatchQueue.global(qos: .background).async(execute: fetchPhotosWorkItem)
   }
 
+  func fetchPhotosWorkItemCancel() {
+    if let fetchPhotosWorkItem {
+      fetchPhotosWorkItem.cancel()
+    }
+  }
 }
