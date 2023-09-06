@@ -203,6 +203,7 @@ extension ProfileView {
         Rectangle().frame(width: 1, height: 36).foregroundColor(.white)
         NavigationLink {
           FollowView()
+            .environmentObject(userViewModel)
         } label: {
           VStack(spacing: 4) {
             Text("\(userViewModel.myFollow.followingCount)")
