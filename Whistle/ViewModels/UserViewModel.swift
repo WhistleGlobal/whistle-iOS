@@ -9,6 +9,7 @@ import Alamofire
 import Foundation
 import KeychainSwift
 import SwiftyJSON
+import UIKit
 
 // MARK: - UserViewModel
 
@@ -25,6 +26,7 @@ class UserViewModel: ObservableObject {
   @Published var bookmark: [Bookmark] = []
   @Published var notiSetting: NotiSetting = .init()
   let decoder = JSONDecoder()
+
 
   var idToken: String {
     guard let idTokenKey = keychain.get("id_token") else {
@@ -360,4 +362,35 @@ extension UserViewModel {
         }
       }
   }
+
+
+  func uploadPhoto(image: UIImage, completion: @escaping (String) -> Void) {
+    let headers: HTTPHeaders = [
+      "Authorization": "Bearer \(idToken)",
+      "Content-Type": "multipart/form-data",
+    ]
+    let uploadURL = "\(domainUrl)/user/profile/image"
+    guard let imageData = image.jpegData(compressionQuality: 0.8) else {
+      return
+    }
+    // id_token을 올바르게 얻어와서 변환
+    guard let idTokenData = "Bearer \(idToken)".data(using: .utf8) else {
+      return
+    }
+    log(idTokenData)
+    AF.upload(multipartFormData: { multipartFormData in
+      multipartFormData.append(imageData, withName: "image", fileName: "profile.jpg", mimeType: "image/jpeg")
+      multipartFormData.append(idTokenData, withName: "id_token")
+    }, to: uploadURL, method: .post,headers: headers)
+      .responseString { response in
+        switch response.result {
+        case .success(let url):
+          log(url)
+          completion(url)
+        case .failure(let error):
+          log(error)
+        }
+      }
+  }
+
 }

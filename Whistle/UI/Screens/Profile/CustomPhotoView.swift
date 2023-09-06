@@ -13,9 +13,12 @@ struct CustomPhotoView: View {
 
   @Environment(\.dismiss) var dismiss
   @EnvironmentObject var photoViewModel: PhotoViewModel
+  @EnvironmentObject var userViewModel: UserViewModel
   @State var showAlbumList = false
-  @State var selectedImage: Image?
+//  @State var selectedImage: Image?
+  @State var selectedImage: UIImage?
   @State var albumName = "최근 항목"
+
 
   let columns = [
     GridItem(.flexible(minimum: 40), spacing: 0),
@@ -40,6 +43,13 @@ struct CustomPhotoView: View {
         Spacer()
         Button {
           photoViewModel.fetchPhotosWorkItemCancel()
+          guard let selectedImage else {
+            dismiss()
+            return
+          }
+//          userViewModel.uploadPhoto(image: selectedImage) { url in
+//            log(url)
+//          }
           dismiss()
         } label: {
           Text("완료")
@@ -69,7 +79,7 @@ extension CustomPhotoView {
   func invertedCircleMask() -> some View {
     if let selectedImage {
       Color.clear.overlay {
-        selectedImage
+        Image(uiImage: selectedImage)
           .resizable()
           .scaledToFill()
           .frame(width: 393,height: 393)
@@ -77,7 +87,7 @@ extension CustomPhotoView {
         Circle()
           .frame(width: 393,height: 393)
           .blendMode(.destinationOut)
-        selectedImage
+        Image(uiImage: selectedImage)
           .resizable()
           .scaledToFill()
           .frame(width: 393,height: 393)
@@ -120,7 +130,7 @@ extension CustomPhotoView {
             selectedImage = photo.photo
           } label: {
             Color.clear.overlay {
-              photo.photo
+              Image(uiImage: photo.photo)
                 .resizable()
                 .scaledToFill()
             }

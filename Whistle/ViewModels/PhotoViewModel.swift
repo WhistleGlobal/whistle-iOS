@@ -49,7 +49,7 @@ class PhotoViewModel: ObservableObject {
           { image, _ in
 
             if let image {
-              let photo = Photo(photo: Image(uiImage: image))
+              let photo = Photo(photo: image)
 
               DispatchQueue.main.async {
                 self.photos.append(photo)
@@ -177,7 +177,7 @@ class PhotoViewModel: ObservableObject {
             options: requestOptions)
           { image, _ in
             if let image {
-              let photo = Photo(photo: Image(uiImage: image))
+              let photo = Photo(photo: image)
               DispatchQueue.main.async {
                 self.photos.append(photo)
               }

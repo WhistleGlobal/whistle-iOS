@@ -54,6 +54,7 @@ struct ProfileEditView: View {
     .fullScreenCover(isPresented: $showGallery) {
       CustomPhotoView()
         .environmentObject(photoViewModel)
+        .environmentObject(userViewModel)
     }
     .padding(.horizontal, 16)
     .navigationBarBackButtonHidden()

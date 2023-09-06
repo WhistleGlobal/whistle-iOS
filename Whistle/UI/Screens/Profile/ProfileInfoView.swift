@@ -11,6 +11,8 @@ struct ProfileInfoView: View {
 
   @Environment(\.dismiss) var dismiss
   @Binding var isShowingBottomSheet: Bool
+  @EnvironmentObject var userViewModel: UserViewModel
+
 
   var body: some View {
     VStack(spacing: 0) {
@@ -18,9 +20,10 @@ struct ProfileInfoView: View {
         .frame(width: 100, height: 100)
         .padding(.top, 36)
         .padding(.bottom, 16)
-      Text("UserName")
+      Text(userViewModel.myProfile.userName)
         .foregroundColor(.LabelColor_Primary)
         .fontSystem(fontDesignSystem: .title2_Expanded)
+        .padding(.bottom, 36)
       List {
         NavigationLink {
           EmptyView()

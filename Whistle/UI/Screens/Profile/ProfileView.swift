@@ -105,6 +105,7 @@ struct ProfileView: View {
       VStack {
         Spacer()
         GlassBottomSheet(isShowing: $isShowingBottomSheet, content: AnyView(Text("Hi")))
+          .environmentObject(userViewModel)
           .onChange(of: isShowingBottomSheet) { newValue in
             if !newValue {
               DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
@@ -192,7 +193,7 @@ extension ProfileView {
       .buttonStyle(ProfileEditButtonStyle())
       HStack(spacing: 48) {
         VStack(spacing: 4) {
-          Text("\(userViewModel.myFollow.followingCount)")
+          Text("\(userViewModel.myWhistleCount)")
             .foregroundColor(Color.LabelColor_Primary_Dark)
             .fontSystem(fontDesignSystem: .title2_Expanded)
           Text("whistle")
