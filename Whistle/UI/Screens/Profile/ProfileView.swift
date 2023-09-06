@@ -32,6 +32,7 @@ struct ProfileView: View {
     GridItem(.flexible()),
   ]
   @Binding var tabbarOpacity: Double
+  @EnvironmentObject var profileViewModel: ProfileViewModel
 
   var body: some View {
     ZStack {
@@ -170,10 +171,10 @@ extension ProfileView {
       Circle()
         .frame(width: 100, height: 100)
         .padding(.bottom, 16)
-      Text("UserName")
+      Text(profileViewModel.myProfile.userName)
         .foregroundColor(Color.LabelColor_Primary_Dark)
         .fontSystem(fontDesignSystem: .title2_Expanded)
-      Text("소개글 개글 개글 개구리")
+      Text(profileViewModel.myProfile.introduce ?? "소개글 공란임")
         .foregroundColor(Color.LabelColor_Secondary_Dark)
         .fontSystem(fontDesignSystem: .body2_KO)
         .padding(.bottom, 16)

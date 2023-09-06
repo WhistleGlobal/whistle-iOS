@@ -10,8 +10,10 @@ import SwiftUI
 // MARK: - TabbarView
 
 struct TabbarView: View {
+
   @State var tabSelection: TabSelection = .main
   @State var tabbarOpacity = 1.0
+  @StateObject var profileViewModel = ProfileViewModel()
 
   var body: some View {
     ZStack {
@@ -25,6 +27,7 @@ struct TabbarView: View {
         Color.pink.opacity(0.4).ignoresSafeArea()
       case .profile:
         ProfileView(tabbarOpacity: $tabbarOpacity)
+          .environmentObject(profileViewModel)
       }
       VStack {
         Spacer()
@@ -100,9 +103,7 @@ extension TabbarView {
         .foregroundColor(.white)
         .padding(3)
         Button {
-          withAnimation {
-            self.tabSelection = .profile
-          }
+          profileTabClicked()
         } label: {
           Color.clear.overlay {
             Image(systemName: "person")
@@ -119,6 +120,20 @@ extension TabbarView {
       }
       .frame(height: 56)
       .frame(maxWidth: .infinity)
+  }
+}
+
+// MARK: - TabClicked Actions
+extension TabbarView {
+  var profileTabClicked: () -> Void {
+    {
+      Task {
+        await profileViewModel.requestMyProfile()
+        withAnimation(.default) {
+          tabSelection = .profile
+        }
+      }
+    }
   }
 }
 

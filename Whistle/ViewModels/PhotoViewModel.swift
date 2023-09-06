@@ -150,7 +150,10 @@ class PhotoViewModel: ObservableObject {
 
       let fetchOptions = PHFetchOptions()
       fetchOptions.predicate = NSPredicate(format: "title = %@", albumName)
-      let album = PHAssetCollection.fetchAssetCollections(with: .album, subtype: .any, options: fetchOptions).firstObject
+      let album = PHAssetCollection.fetchAssetCollections(
+        with: .album,
+        subtype: .any,
+        options: fetchOptions).firstObject
 
       guard let targetAlbum = album else {
         return
