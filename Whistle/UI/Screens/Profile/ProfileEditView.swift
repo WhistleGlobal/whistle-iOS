@@ -16,6 +16,8 @@ struct ProfileEditView: View {
   @State var showToast = false
   @State var showGallery = false
   @StateObject var photoViewModel = PhotoViewModel()
+  @EnvironmentObject var userViewModel: UserViewModel
+
 
   var body: some View {
     VStack(spacing: 0) {
@@ -34,9 +36,15 @@ struct ProfileEditView: View {
       }
       .padding(.bottom, 40)
       Divider()
-      profileEditLink(destination: ProfileEditIDView(showToast: $showToast), title: "사용자 ID", content: "East_Road")
+      profileEditLink(
+        destination: ProfileEditIDView(showToast: $showToast).environmentObject(userViewModel),
+        title: "사용자 ID",
+        content: userViewModel.myProfile.userName)
       Divider().padding(.leading, 96)
-      profileEditLink(destination: ProfileEditIntroduceView(showToast: $showToast), title: "소개", content: "")
+      profileEditLink(
+        destination: ProfileEditIntroduceView(showToast: $showToast).environmentObject(userViewModel),
+        title: "소개",
+        content: userViewModel.myProfile.introduce ?? "")
       Divider()
       Spacer()
     }

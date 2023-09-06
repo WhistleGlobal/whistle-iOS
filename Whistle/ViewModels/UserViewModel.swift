@@ -68,8 +68,8 @@ extension UserViewModel {
       "Content-Type": "application/x-www-form-urlencoded",
     ]
     let params = [
-      "user_name" : "최유진(Eugene)",
-      "introduce" : "나는 최유진(Eugene)",
+      "user_name" : myProfile.userName,
+      "introduce" : myProfile.introduce,
       "country" : "Korea(Korea)",
     ]
     AF.request(

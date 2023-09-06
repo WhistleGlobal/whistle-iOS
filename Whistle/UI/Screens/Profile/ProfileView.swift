@@ -180,6 +180,7 @@ extension ProfileView {
         .padding(.bottom, 16)
       NavigationLink {
         ProfileEditView()
+          .environmentObject(userViewModel)
       } label: {
         Text("프로필 편집")
           .fontSystem(fontDesignSystem: .subtitle2_KO)

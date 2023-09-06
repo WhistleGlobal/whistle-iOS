@@ -22,22 +22,22 @@ struct ProfileEditIDView: View {
   }
 
   @Environment(\.dismiss) var dismiss
-  @State var inputID = ""
   @State var inputValidationStatus: InputValidationStatus = .none
   @State var isAlertActive = false
   @Binding var showToast: Bool
+  @EnvironmentObject var userViewModel: UserViewModel
 
   var body: some View {
     VStack(spacing: 0) {
       Divider().frame(width: UIScreen.width)
-      TextField("사용자 ID를 입력해주세요.", text: $inputID)
+      TextField("사용자 ID를 입력해주세요.", text: $userViewModel.myProfile.userName)
         .frame(height: 56)
         .frame(maxWidth: .infinity)
-        .modifier(ClearButton(text: $inputID))
+        .modifier(ClearButton(text: $userViewModel.myProfile.userName))
         .background(.white)
-        .onReceive(Just(inputID).delay(for: 0.5, scheduler: RunLoop.current)) { newText in
+        .onReceive(Just(userViewModel.myProfile.userName).delay(for: 0.5, scheduler: RunLoop.current)) { newText in
           log(newText)
-          inputValidationStatus = validateInput(newText)
+          inputValidationStatus = validateInput(userViewModel.myProfile.userName)
         }
       Divider().frame(width: UIScreen.width)
       if inputValidationStatus != .none {
@@ -77,7 +77,7 @@ struct ProfileEditIDView: View {
       }
       ToolbarItem(placement: .confirmationAction) {
         Button {
-          log("Update Profile")
+          userViewModel.updateMyProfile()
           isAlertActive = true
         } label: {
           Text("완료")
