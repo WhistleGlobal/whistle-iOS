@@ -13,20 +13,20 @@ import SwiftUI
 struct ProfileEditIntroduceView: View {
 
   @Environment(\.dismiss) var dismiss
-  @State var inputIntroduce = ""
   @Binding var showToast: Bool
+  @EnvironmentObject var userViewModel: UserViewModel
 
   var body: some View {
     VStack(spacing: 0) {
       Divider().frame(width: UIScreen.width)
-      TextField("소개글을 입력해주세요.", text: $inputIntroduce, axis: .vertical)
+      TextField("소개글을 입력해주세요.", text: $userViewModel.myProfile.introduce, axis: .vertical)
         .fontSystem(fontDesignSystem: .body1_KO)
         .frame(height: 100, alignment: .top)
         .multilineTextAlignment(.leading)
         .background(.white)
-        .onReceive(Just(inputIntroduce)) { _ in limitText(40) }
+        .onReceive(Just(userViewModel.myProfile.introduce)) { _ in limitText(40) }
         .overlay(alignment: .bottom) {
-          Text("\(inputIntroduce.count)/40자")
+          Text("\(userViewModel.myProfile.introduce.count)/40자")
             .fontSystem(fontDesignSystem: .body1_KO)
             .foregroundColor(.Disable_Placeholder)
             .frame(maxWidth: .infinity, alignment: .trailing)
@@ -52,7 +52,7 @@ struct ProfileEditIntroduceView: View {
       }
       ToolbarItem(placement: .confirmationAction) {
         Button {
-          log("Update Profile")
+          userViewModel.updateMyProfile()
           dismiss()
           showToast = true
         } label: {
@@ -70,8 +70,8 @@ extension ProfileEditIntroduceView {
 
   // Function to keep text length in limits
   func limitText(_ upper: Int) {
-    if inputIntroduce.count > upper {
-      inputIntroduce = String(inputIntroduce.prefix(upper))
+    if userViewModel.myProfile.introduce.count > upper {
+      userViewModel.myProfile.introduce = String(userViewModel.myProfile.introduce.prefix(upper))
     }
   }
 
