@@ -198,8 +198,8 @@ class PhotoViewModel: ObservableObject {
   }
 
   func fetchPhotosWorkItemCancel() {
-    if let fetchPhotosWorkItem {
-      fetchPhotosWorkItem.cancel()
+    if fetchPhotosWorkItem != nil {
+      fetchPhotosWorkItem?.cancel()
     }
   }
 }

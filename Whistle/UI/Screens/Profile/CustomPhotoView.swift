@@ -52,6 +52,7 @@ struct CustomPhotoView: View {
       .background(.white)
       .padding(.horizontal, 16)
       invertedCircleMask()
+        .allowsHitTesting(false)
       photoView()
     }
     .frame(maxWidth: .infinity, maxHeight: .infinity)
