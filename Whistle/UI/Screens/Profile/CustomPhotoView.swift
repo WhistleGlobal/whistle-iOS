@@ -28,7 +28,7 @@ struct CustomPhotoView: View {
     VStack(spacing: 0) {
       HStack(spacing: 0) {
         Button {
-          photoViewModel.fetchPhotosWorkItem?.cancel()
+          photoViewModel.fetchPhotosWorkItemCancel()
           dismiss()
         } label: {
           Image(systemName: "xmark")
@@ -39,7 +39,7 @@ struct CustomPhotoView: View {
           .foregroundColor(.LabelColor_Primary)
         Spacer()
         Button {
-          photoViewModel.fetchPhotosWorkItem?.cancel()
+          photoViewModel.fetchPhotosWorkItemCancel()
           dismiss()
         } label: {
           Text("완료")
@@ -97,7 +97,7 @@ extension CustomPhotoView {
     // MARK: - Image & Image List
     HStack(spacing: 8) {
       Button {
-        photoViewModel.fetchPhotosWorkItem?.cancel()
+        photoViewModel.fetchPhotosWorkItemCancel()
         photoViewModel.listAlbums()
         showAlbumList = true
       } label: {
