@@ -5,6 +5,7 @@
 //  Created by ChoiYujin on 9/3/23.
 //
 
+import Kingfisher
 import SwiftUI
 
 // MARK: - ProfileEditView
@@ -24,8 +25,16 @@ struct ProfileEditView: View {
       Divider()
         .frame(width: UIScreen.width)
         .padding(.bottom, 36)
-      Circle()
+      KFImage.url(URL(string: userViewModel.myProfile.profileImage))
+        .placeholder { // 플레이스 홀더 설정
+          Circle().frame(width: 100, height: 100)
+        }.retry(maxCount: 3, interval: .seconds(5)) // 재시도
+        .loadDiskFileSynchronously()
+        .cacheMemoryOnly()
+        .resizable()
+        .scaledToFill()
         .frame(width: 100, height: 100)
+        .clipShape(Circle())
         .padding(.bottom, 16)
       Button {
         editProfileImage = true
