@@ -64,7 +64,7 @@ struct FollowView: View {
         } else {
           ForEach(userViewModel.myFollow.followerList, id: \.userName) { follower in
             personRow(
-              isFollow: true,
+              isFollow: follower.isFollowed == 1,
               userName: follower.userName,
               description: follower.userName)
           }
@@ -82,12 +82,12 @@ struct FollowView: View {
             .fontSystem(fontDesignSystem: .body1_KO)
             .foregroundColor(.LabelColor_Secondary)
         } else {
-            ForEach(userViewModel.myFollow.followingList, id: \.userName) { follower in
-              personRow(
-                isFollow: true,
-                userName: follower.userName,
-                description: follower.userName)
-            }
+          ForEach(userViewModel.myFollow.followingList, id: \.userName) { following in
+            personRow(
+              isFollow: false,
+              userName: following.userName,
+              description: following.userName)
+          }
         }
       }
 
