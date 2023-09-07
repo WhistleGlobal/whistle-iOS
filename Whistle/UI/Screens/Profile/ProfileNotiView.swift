@@ -45,14 +45,16 @@ struct ProfileNotiView: View {
       }
     }
     .onChange(of: userViewModel.notiSetting.whistleEnabled) { newValue in
-      log(newValue)
       userViewModel.updateSettingWhistle(newSetting: newValue)
     }
-    .onChange(of: userViewModel.notiSetting.followEnabled) { _ in
+    .onChange(of: userViewModel.notiSetting.followEnabled) { newValue in
+      userViewModel.updateSettingFollow(newSetting: newValue)
     }
-    .onChange(of: userViewModel.notiSetting.infoEnabled) { _ in
+    .onChange(of: userViewModel.notiSetting.infoEnabled) { newValue in
+      userViewModel.updateSettingInfo(newSetting: newValue)
     }
-    .onChange(of: userViewModel.notiSetting.adEnabled) { _ in
+    .onChange(of: userViewModel.notiSetting.adEnabled) { newValue in
+      userViewModel.updateSettingAd(newSetting: newValue)
     }
   }
 }

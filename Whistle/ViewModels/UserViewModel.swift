@@ -377,6 +377,7 @@ extension UserViewModel {
       }
   }
 
+  // FIXME: - 코드 리팩토링이 필요함 (URL 뻬고 모든 코드가 중복)
   func updateSettingWhistle(newSetting: Bool) {
     let headers: HTTPHeaders = [
       "Authorization": "Bearer \(idToken)",
@@ -387,6 +388,90 @@ extension UserViewModel {
     ]
     AF.request(
       "\(domainUrl)/user/notification/setting/whistle",
+      method: .patch,
+      parameters: params,
+      headers: headers)
+      .validate(statusCode: 200...500)
+      .response { response in
+        switch response.result {
+        case .success(let data):
+          if let responseData = data {
+            log("Success: \(responseData.base64EncodedString())")
+          } else {
+            log("Success with no data")
+          }
+        case .failure(let error):
+          log("Error: \(error)")
+        }
+      }
+  }
+
+  func updateSettingFollow(newSetting: Bool) {
+    let headers: HTTPHeaders = [
+      "Authorization": "Bearer \(idToken)",
+      "Content-Type": "application/x-www-form-urlencoded",
+    ]
+    let params = [
+      "newSetting" : newSetting ? 1 : 0,
+    ]
+    AF.request(
+      "\(domainUrl)/user/notification/setting/follow",
+      method: .patch,
+      parameters: params,
+      headers: headers)
+      .validate(statusCode: 200...500)
+      .response { response in
+        switch response.result {
+        case .success(let data):
+          if let responseData = data {
+            log("Success: \(responseData.base64EncodedString())")
+          } else {
+            log("Success with no data")
+          }
+        case .failure(let error):
+          log("Error: \(error)")
+        }
+      }
+  }
+
+  func updateSettingInfo(newSetting: Bool) {
+    let headers: HTTPHeaders = [
+      "Authorization": "Bearer \(idToken)",
+      "Content-Type": "application/x-www-form-urlencoded",
+    ]
+    let params = [
+      "newSetting" : newSetting ? 1 : 0,
+    ]
+    AF.request(
+      "\(domainUrl)/user/notification/setting/info",
+      method: .patch,
+      parameters: params,
+      headers: headers)
+      .validate(statusCode: 200...500)
+      .response { response in
+        switch response.result {
+        case .success(let data):
+          if let responseData = data {
+            log("Success: \(responseData.base64EncodedString())")
+          } else {
+            log("Success with no data")
+          }
+        case .failure(let error):
+          log("Error: \(error)")
+        }
+      }
+  }
+
+  func updateSettingAd(newSetting: Bool) {
+    let headers: HTTPHeaders = [
+      "Authorization": "Bearer \(idToken)",
+      "Content-Type": "application/x-www-form-urlencoded",
+    ]
+    let params = [
+      "newSetting" : newSetting ? 1 : 0,
+    ]
+    AF.request(
+      "\(domainUrl)/user/notification/setting/ad",
       method: .patch,
       parameters: params,
       headers: headers)
