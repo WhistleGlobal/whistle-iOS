@@ -42,7 +42,8 @@ struct ProfileEditView: View {
         content: userViewModel.myProfile.userName)
       Divider().padding(.leading, 96)
       profileEditLink(
-        destination: ProfileEditIntroduceView(showToast: $showToast).environmentObject(userViewModel),
+        destination: ProfileEditIntroduceView(showToast: $showToast, introduce: $userViewModel.myProfile.introduce)
+          .environmentObject(userViewModel),
         title: "소개",
         content: userViewModel.myProfile.introduce ?? "")
       Divider()

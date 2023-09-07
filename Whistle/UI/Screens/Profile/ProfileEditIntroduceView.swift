@@ -15,6 +15,7 @@ struct ProfileEditIntroduceView: View {
   @Environment(\.dismiss) var dismiss
   @Binding var showToast: Bool
   @EnvironmentObject var userViewModel: UserViewModel
+  @Binding var introduce: String
 
   var body: some View {
     VStack(spacing: 0) {
@@ -24,9 +25,9 @@ struct ProfileEditIntroduceView: View {
         .frame(height: 100, alignment: .top)
         .multilineTextAlignment(.leading)
         .background(.white)
-        .onReceive(Just(userViewModel.myProfile.introduce)) { _ in limitText(40) }
+        .onReceive(Just(introduce)) { _ in limitText(40) }
         .overlay(alignment: .bottom) {
-          Text("\(userViewModel.myProfile.introduce.count)/40자")
+          Text("\(introduce.count)/40자")
             .fontSystem(fontDesignSystem: .body1_KO)
             .foregroundColor(.Disable_Placeholder)
             .frame(maxWidth: .infinity, alignment: .trailing)
@@ -40,7 +41,10 @@ struct ProfileEditIntroduceView: View {
     .toolbar {
       ToolbarItem(placement: .cancellationAction) {
         Button {
-          dismiss()
+          Task {
+            await userViewModel.requestMyProfile()
+            dismiss()
+          }
         } label: {
           Image(systemName: "chevron.backward")
             .foregroundColor(.LabelColor_Primary)
@@ -70,8 +74,8 @@ extension ProfileEditIntroduceView {
 
   // Function to keep text length in limits
   func limitText(_ upper: Int) {
-    if userViewModel.myProfile.introduce.count > upper {
-      userViewModel.myProfile.introduce = String(userViewModel.myProfile.introduce.prefix(upper))
+    if introduce.count > upper {
+      introduce = String(introduce.prefix(upper))
     }
   }
 

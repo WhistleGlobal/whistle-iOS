@@ -176,13 +176,8 @@ extension ProfileView {
         .placeholder { // 플레이스 홀더 설정
           Circle().frame(width: 100, height: 100)
         }.retry(maxCount: 3, interval: .seconds(5)) // 재시도
-        .onSuccess { _ in }
         .loadDiskFileSynchronously()
         .cacheMemoryOnly()
-        .fade(duration: 0.25)
-        .onProgress { _, _ in }
-        .onSuccess { _ in }
-        .onFailure { _ in }
         .resizable()
         .scaledToFill()
         .frame(width: 100, height: 100)
