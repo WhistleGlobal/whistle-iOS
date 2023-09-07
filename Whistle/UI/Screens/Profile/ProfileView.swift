@@ -5,6 +5,7 @@
 //  Created by ChoiYujin on 8/29/23.
 //
 
+import Kingfisher
 import SwiftUI
 
 // MARK: - ProfileView
@@ -33,6 +34,7 @@ struct ProfileView: View {
   ]
   @Binding var tabbarOpacity: Double
   @EnvironmentObject var userViewModel: UserViewModel
+
 
   var body: some View {
     ZStack {
@@ -169,8 +171,22 @@ extension ProfileView {
       }
       .padding([.top, .horizontal], 16)
       // FIXME: - 프로필
-      Circle()
+
+      KFImage.url(URL(string: userViewModel.myProfile.profileImage))
+        .placeholder { // 플레이스 홀더 설정
+          Circle().frame(width: 100, height: 100)
+        }.retry(maxCount: 3, interval: .seconds(5)) // 재시도
+        .onSuccess { _ in }
+        .loadDiskFileSynchronously()
+        .cacheMemoryOnly()
+        .fade(duration: 0.25)
+        .onProgress { _, _ in }
+        .onSuccess { _ in }
+        .onFailure { _ in }
+        .resizable()
+        .scaledToFill()
         .frame(width: 100, height: 100)
+        .clipShape(Circle())
         .padding(.bottom, 16)
       Text(userViewModel.myProfile.userName)
         .foregroundColor(Color.LabelColor_Primary_Dark)
