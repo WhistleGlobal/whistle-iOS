@@ -11,11 +11,11 @@ struct ProfileNotiView: View {
   @Environment(\.dismiss) var dismiss
   @EnvironmentObject var userViewModel: UserViewModel
   @Binding var isShowingBottomSheet: Bool
-  @State var isOn = true
+  @State var isAllOff = true
 
   var body: some View {
     List {
-      Toggle("모두 일시 중단", isOn: $isOn)
+      Toggle("모두 일시 중단", isOn: $isAllOff)
       Toggle("게시글 휘슬 알림", isOn: $userViewModel.notiSetting.whistleEnabled)
       Toggle("팔로워 알림", isOn: $userViewModel.notiSetting.followEnabled)
       Toggle("Whistle에서 보내는 알림", isOn: $userViewModel.notiSetting.infoEnabled)
@@ -42,6 +42,14 @@ struct ProfileNotiView: View {
           Image(systemName: "chevron.backward")
             .foregroundColor(.LabelColor_Primary)
         }
+      }
+    }
+    .onChange(of: isAllOff) { newValue in
+      if newValue {
+        userViewModel.updateSettingWhistle(newSetting: false)
+        userViewModel.updateSettingWhistle(newSetting: false)
+        userViewModel.updateSettingFollow(newSetting: false)
+        userViewModel.updateSettingInfo(newSetting: false)
       }
     }
     .onChange(of: userViewModel.notiSetting.whistleEnabled) { newValue in

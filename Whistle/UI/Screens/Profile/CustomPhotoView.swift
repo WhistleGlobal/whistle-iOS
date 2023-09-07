@@ -47,9 +47,9 @@ struct CustomPhotoView: View {
             dismiss()
             return
           }
-//          userViewModel.uploadPhoto(image: selectedImage) { url in
-//            log(url)
-//          }
+          userViewModel.uploadPhoto(image: selectedImage) { url in
+            log(url)
+          }
           dismiss()
         } label: {
           Text("완료")

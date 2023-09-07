@@ -28,6 +28,7 @@ class UserViewModel: ObservableObject {
   let decoder = JSONDecoder()
 
 
+
   var idToken: String {
     guard let idTokenKey = keychain.get("id_token") else {
       log("id_Token nil")
@@ -490,34 +491,28 @@ extension UserViewModel {
       }
   }
 
-
   func uploadPhoto(image: UIImage, completion: @escaping (String) -> Void) {
+    guard let image = image.jpegData(compressionQuality: 0.5) else {
+      return
+    }
     let headers: HTTPHeaders = [
       "Authorization": "Bearer \(idToken)",
       "Content-Type": "multipart/form-data",
     ]
-    let uploadURL = "\(domainUrl)/user/profile/image"
-    guard let imageData = image.jpegData(compressionQuality: 0.8) else {
-      return
-    }
-    // id_token을 올바르게 얻어와서 변환
-    guard let idTokenData = "Bearer \(idToken)".data(using: .utf8) else {
-      return
-    }
-    log(idTokenData)
     AF.upload(multipartFormData: { multipartFormData in
-      multipartFormData.append(imageData, withName: "image", fileName: "profile.jpg", mimeType: "image/jpeg")
-      multipartFormData.append(idTokenData, withName: "id_token")
-    }, to: uploadURL, method: .post,headers: headers)
-      .responseString { response in
+      multipartFormData.append(image, withName: "image", fileName: "image.jpg", mimeType: "image/jpeg")
+    }, to: "\(domainUrl)/user/profile/image", headers: headers)
+      .validate(statusCode: 200..<300)
+      .response { response in
         switch response.result {
-        case .success(let url):
-          log(url)
-          completion(url)
+        case .success(let data):
+          if let imageUrl = String(data: data!, encoding: .utf8) {
+            log("URL: \(imageUrl)")
+            completion(imageUrl)
+          }
         case .failure(let error):
-          log(error)
+          log("업로드 실패:, \(error)")
         }
       }
   }
-
 }
