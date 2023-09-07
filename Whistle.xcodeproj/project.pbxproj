@@ -70,6 +70,7 @@
 		78DA58D72AA448A100F8D2F1 /* ProfileEditIDView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78DA58D62AA448A100F8D2F1 /* ProfileEditIDView.swift */; };
 		78DDADFA2AA1A37F00960552 /* AppKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78DDADF92AA1A37F00960552 /* AppKeys.swift */; };
 		78E738CA2AA9A90F00480046 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = 78E738C92AA9A90F00480046 /* Kingfisher */; };
+		78E738CC2AAA1B1300480046 /* FollowUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78E738CB2AAA1B1300480046 /* FollowUser.swift */; };
 		78F41A5D2AA70626004A7BFC /* PhotoModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78F41A5C2AA70626004A7BFC /* PhotoModel.swift */; };
 		78F41A5F2AA70639004A7BFC /* PhotoViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78F41A5E2AA70639004A7BFC /* PhotoViewModel.swift */; };
 		78F41A612AA707D2004A7BFC /* CustomPhotoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78F41A602AA707D2004A7BFC /* CustomPhotoView.swift */; };
@@ -141,6 +142,7 @@
 		78DA58D62AA448A100F8D2F1 /* ProfileEditIDView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileEditIDView.swift; sourceTree = "<group>"; };
 		78DDADF72AA1868D00960552 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		78DDADF92AA1A37F00960552 /* AppKeys.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppKeys.swift; sourceTree = "<group>"; };
+		78E738CB2AAA1B1300480046 /* FollowUser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FollowUser.swift; sourceTree = "<group>"; };
 		78F41A5C2AA70626004A7BFC /* PhotoModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoModel.swift; sourceTree = "<group>"; };
 		78F41A5E2AA70639004A7BFC /* PhotoViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoViewModel.swift; sourceTree = "<group>"; };
 		78F41A602AA707D2004A7BFC /* CustomPhotoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomPhotoView.swift; sourceTree = "<group>"; };
@@ -336,6 +338,7 @@
 				787AF5722AA888FC00C190E6 /* UserPostFeed.swift */,
 				787AF5742AA88F4000C190E6 /* BookMark.swift */,
 				787AF5782AA8930700C190E6 /* NotiSetting.swift */,
+				78E738CB2AAA1B1300480046 /* FollowUser.swift */,
 			);
 			path = Profile;
 			sourceTree = "<group>";
@@ -524,6 +527,7 @@
 				78DA58D52AA445E400F8D2F1 /* ProfileEditView.swift in Sources */,
 				787AF5712AA887E600C190E6 /* PostFeed.swift in Sources */,
 				787AF5602AA85CBC00C190E6 /* Profile.swift in Sources */,
+				78E738CC2AAA1B1300480046 /* FollowUser.swift in Sources */,
 				78B6FD2C2AA718A80043E461 /* CustomAlbumListView.swift in Sources */,
 				78F41A5F2AA70639004A7BFC /* PhotoViewModel.swift in Sources */,
 				788F43F02AA5CD9F00718D38 /* MainView.swift in Sources */,

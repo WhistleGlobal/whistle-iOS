@@ -62,11 +62,11 @@ struct FollowView: View {
             .foregroundColor(.LabelColor_Secondary)
 
         } else {
-          ForEach(userViewModel.myFollow.followers, id: \.self) { follower in
+          ForEach(userViewModel.myFollow.followerList, id: \.userName) { follower in
             personRow(
               isFollow: true,
-              userName: follower.userName ?? "username",
-              description: follower.introduce ?? "introduce")
+              userName: follower.userName,
+              description: follower.userName)
           }
         }
       } else {
@@ -82,16 +82,12 @@ struct FollowView: View {
             .fontSystem(fontDesignSystem: .body1_KO)
             .foregroundColor(.LabelColor_Secondary)
         } else {
-          Spacer()
-          Image(systemName: "person.fill")
-            .resizable()
-            .scaledToFit()
-            .foregroundColor(.LabelColor_Primary)
-            .frame(width: 48, height: 48)
-            .padding(.bottom, 32)
-          Text("아직 회원님\(tabStatus == .follower ? "이" : "을") 팔로우하는 사람이 없습니다")
-            .fontSystem(fontDesignSystem: .body1_KO)
-            .foregroundColor(.LabelColor_Secondary)
+            ForEach(userViewModel.myFollow.followingList, id: \.userName) { follower in
+              personRow(
+                isFollow: true,
+                userName: follower.userName,
+                description: follower.userName)
+            }
         }
       }
 

@@ -205,12 +205,12 @@ extension UserViewModel {
         case .success(let data):
           do {
             self.myFollow = try self.decoder.decode(Follow.self, from: data)
-            for myFollower in self.myFollow.followers {
-              log(myFollower.userId)
+            for myFollower in self.myFollow.followerList {
+              log(myFollower.userName)
             }
             log(self.myFollow.followerCount)
-            for myFollowing in self.myFollow.following {
-              log(myFollowing.userId)
+            for myFollowing in self.myFollow.followingList {
+              log(myFollowing.userName)
             }
             log(self.myFollow.followingCount)
           } catch {
@@ -238,12 +238,12 @@ extension UserViewModel {
         case .success(let data):
           do {
             self.userFollow = try self.decoder.decode(Follow.self, from: data)
-            for follower in self.userFollow.followers {
-              log(follower.userId)
+            for follower in self.userFollow.followerList {
+              log(follower.userName)
             }
             log(self.userFollow.followerCount)
-            for following in self.userFollow.following {
-              log(following.userId)
+            for following in self.userFollow.followingList {
+              log(following.userName)
             }
             log(self.userFollow.followingCount)
           } catch {
