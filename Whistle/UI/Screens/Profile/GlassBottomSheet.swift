@@ -48,6 +48,7 @@ struct GlassBottomSheet: View {
                 .padding(.bottom, 20)
               NavigationLink {
                 ProfileNotiView(isShowingBottomSheet: $isShowing)
+                  .environmentObject(userViewModel)
               } label: {
                 bottomSheetRowWithIcon(systemName: "bell", iconWidth: 23, iconHeight: 24, text: "알림")
               }

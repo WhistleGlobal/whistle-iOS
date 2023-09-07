@@ -119,22 +119,29 @@ extension UserViewModel {
       "Authorization": "Bearer \(idToken)",
       "Content-Type": "application/json",
     ]
+
     AF.request(
       "\(domainUrl)/user/whistle/count",
       method: .get,
       headers: headers)
-      .validate(statusCode: 200...500)
+      .validate(statusCode: 200..<300) // Validate success status codes
       .response { response in
         switch response.result {
         case .success(let data):
+          guard let responseData = data else {
+            return
+          }
           do {
-            guard let data else {
-              return
+            if
+              let jsonArray = try JSONSerialization.jsonObject(with: responseData, options: []) as? [[String: Any]],
+              let firstObject = jsonArray.first,
+              let count = firstObject["whistle_all_count"] as? Int
+            {
+              self.myWhistleCount = count
+              log("/whistle/count response \(count)")
+            } else {
+              log("Invalid JSON format or missing 'whistle_all_count' key")
             }
-            let json = try JSON(data: data)
-            let count = json["whistle_all_count"].intValue
-            log("/whistle/count response \(count)")
-            self.myWhistleCount = count
           } catch {
             log("Error parsing JSON: \(error)")
           }
@@ -143,6 +150,7 @@ extension UserViewModel {
         }
       }
   }
+
 
   func requestUserWhistlesCount(userId: Int) async {
     let headers: HTTPHeaders = [
@@ -153,18 +161,24 @@ extension UserViewModel {
       "\(domainUrl)/user/\(userId)/whistle/count",
       method: .get,
       headers: headers)
-      .validate(statusCode: 200...500)
+      .validate(statusCode: 200..<300) // Validate success status codes
       .response { response in
         switch response.result {
         case .success(let data):
+          guard let responseData = data else {
+            return
+          }
           do {
-            guard let data else {
-              return
+            if
+              let jsonArray = try JSONSerialization.jsonObject(with: responseData, options: []) as? [[String: Any]],
+              let firstObject = jsonArray.first,
+              let count = firstObject["whistle_all_count"] as? Int
+            {
+              self.userWhistleCount = count
+              log("/whistle/count response \(count)")
+            } else {
+              log("Invalid JSON format or missing 'whistle_all_count' key")
             }
-            let json = try JSON(data: data)
-            let count = json["whistle_all_count"].intValue
-            log("/whistle/count response \(count)")
-            self.userWhistleCount = count
           } catch {
             log("Error parsing JSON: \(error)")
           }
@@ -356,6 +370,34 @@ extension UserViewModel {
           } catch {
             log("Error parsing JSON: \(error)")
             log("NotiSetting을 불러올 수 없습니다.")
+          }
+        case .failure(let error):
+          log("Error: \(error)")
+        }
+      }
+  }
+
+  func updateSettingWhistle(newSetting: Bool) {
+    let headers: HTTPHeaders = [
+      "Authorization": "Bearer \(idToken)",
+      "Content-Type": "application/x-www-form-urlencoded",
+    ]
+    let params = [
+      "newSetting" : newSetting ? 1 : 0,
+    ]
+    AF.request(
+      "\(domainUrl)/user/notification/setting/whistle",
+      method: .patch,
+      parameters: params,
+      headers: headers)
+      .validate(statusCode: 200...500)
+      .response { response in
+        switch response.result {
+        case .success(let data):
+          if let responseData = data {
+            log("Success: \(responseData.base64EncodedString())")
+          } else {
+            log("Success with no data")
           }
         case .failure(let error):
           log("Error: \(error)")
