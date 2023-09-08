@@ -47,8 +47,9 @@ struct CustomPhotoView: View {
           }
           Task {
             await apiViewModel.uploadPhoto(image: selectedImage) { url in log(url) }
+            await apiViewModel.requestMyProfile()
+            dismiss()
           }
-          dismiss()
         } label: {
           Text("완료")
             .fontSystem(fontDesignSystem: .subtitle2_KO)
