@@ -21,6 +21,7 @@ struct FollowView: View {
   // MARK: Internal
 
   @Environment(\.dismiss) var dismiss
+  @EnvironmentObject var userViewModel: UserViewModel
   @State var tabStatus: profileTabStatus = .follower
   // FIXME: - 나중에 User Follower 모델 로 변경할 것
   @State var followPeoples: [Any] = []
@@ -32,29 +33,62 @@ struct FollowView: View {
           tabStatus = .follower
         }
         .buttonStyle(
-          FollowTabbarStyle(followNum: 9, tab: profileTabStatus.follower.rawValue, selectedTab: $tabStatus))
+          FollowTabbarStyle(
+            followNum: userViewModel.myFollow.followerCount,
+            tab: profileTabStatus.follower.rawValue,
+            selectedTab: $tabStatus))
         Button("") {
           tabStatus = .following
         }
         .buttonStyle(
-          FollowTabbarStyle(followNum: 3, tab: profileTabStatus.following.rawValue, selectedTab: $tabStatus))
+          FollowTabbarStyle(
+            followNum: userViewModel.myFollow.followingCount,
+            tab: profileTabStatus.following.rawValue,
+            selectedTab: $tabStatus))
       }
       .frame(height: 48)
-      if followPeoples.isEmpty {
-        Spacer()
-        Image(systemName: "person.fill")
-          .resizable()
-          .scaledToFit()
-          .foregroundColor(.LabelColor_Primary)
-          .frame(width: 48, height: 48)
-          .padding(.bottom, 32)
-        Text("아직 회원님\(tabStatus == .follower ? "이" : "을") 팔로우하는 사람이 없습니다")
-          .fontSystem(fontDesignSystem: .body1_KO)
-          .foregroundColor(.LabelColor_Secondary)
 
+      if tabStatus == .follower {
+        if userViewModel.myFollow.followerCount == 0 {
+          Spacer()
+          Image(systemName: "person.fill")
+            .resizable()
+            .scaledToFit()
+            .foregroundColor(.LabelColor_Primary)
+            .frame(width: 48, height: 48)
+            .padding(.bottom, 32)
+          Text("아직 회원님\(tabStatus == .follower ? "이" : "을") 팔로우하는 사람이 없습니다")
+            .fontSystem(fontDesignSystem: .body1_KO)
+            .foregroundColor(.LabelColor_Secondary)
+
+        } else {
+          ForEach(userViewModel.myFollow.followerList, id: \.userName) { follower in
+            personRow(
+              isFollow: follower.isFollowed == 1,
+              userName: follower.userName,
+              description: follower.userName)
+          }
+        }
       } else {
-        personRow(isFollow: true)
-        personRow(isFollow: false)
+        if userViewModel.myFollow.followingCount == 0 {
+          Spacer()
+          Image(systemName: "person.fill")
+            .resizable()
+            .scaledToFit()
+            .foregroundColor(.LabelColor_Primary)
+            .frame(width: 48, height: 48)
+            .padding(.bottom, 32)
+          Text("아직 회원님\(tabStatus == .follower ? "이" : "을") 팔로우하는 사람이 없습니다")
+            .fontSystem(fontDesignSystem: .body1_KO)
+            .foregroundColor(.LabelColor_Secondary)
+        } else {
+          ForEach(userViewModel.myFollow.followingList, id: \.userName) { following in
+            personRow(
+              isFollow: false,
+              userName: following.userName,
+              description: following.userName)
+          }
+        }
       }
 
       Spacer()
@@ -75,21 +109,24 @@ struct FollowView: View {
           .fontSystem(fontDesignSystem: .subtitle2_KO)
       }
     }
+    .task {
+      userViewModel.requestMyFollow()
+    }
   }
 }
 
 extension FollowView {
   @ViewBuilder
-  func personRow(isFollow: Bool) -> some View {
+  func personRow(isFollow: Bool, userName: String, description: String) -> some View {
     HStack(spacing: 0) {
       Circle()
         .frame(width: 48, height: 48)
       VStack(spacing: 0) {
-        Text("UserName")
+        Text(userName)
           .fontSystem(fontDesignSystem: .subtitle2_KO)
           .foregroundColor(.LabelColor_Primary)
           .frame(maxWidth: .infinity, alignment: .leading)
-        Text("Description")
+        Text(description)
           .fontSystem(fontDesignSystem: .body2_KO)
           .foregroundColor(.LabelColor_Secondary)
           .frame(maxWidth: .infinity, alignment: .leading)

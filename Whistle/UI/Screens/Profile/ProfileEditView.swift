@@ -5,6 +5,7 @@
 //  Created by ChoiYujin on 9/3/23.
 //
 
+import Kingfisher
 import SwiftUI
 
 // MARK: - ProfileEditView
@@ -16,14 +17,24 @@ struct ProfileEditView: View {
   @State var showToast = false
   @State var showGallery = false
   @StateObject var photoViewModel = PhotoViewModel()
+  @EnvironmentObject var userViewModel: UserViewModel
+
 
   var body: some View {
     VStack(spacing: 0) {
       Divider()
         .frame(width: UIScreen.width)
         .padding(.bottom, 36)
-      Circle()
+      KFImage.url(URL(string: userViewModel.myProfile.profileImage))
+        .placeholder { // 플레이스 홀더 설정
+          Circle().frame(width: 100, height: 100)
+        }.retry(maxCount: 3, interval: .seconds(5)) // 재시도
+        .loadDiskFileSynchronously()
+        .cacheMemoryOnly()
+        .resizable()
+        .scaledToFill()
         .frame(width: 100, height: 100)
+        .clipShape(Circle())
         .padding(.bottom, 16)
       Button {
         editProfileImage = true
@@ -34,9 +45,16 @@ struct ProfileEditView: View {
       }
       .padding(.bottom, 40)
       Divider()
-      profileEditLink(destination: ProfileEditIDView(showToast: $showToast), title: "사용자 ID", content: "East_Road")
+      profileEditLink(
+        destination: ProfileEditIDView(showToast: $showToast).environmentObject(userViewModel),
+        title: "사용자 ID",
+        content: userViewModel.myProfile.userName)
       Divider().padding(.leading, 96)
-      profileEditLink(destination: ProfileEditIntroduceView(showToast: $showToast), title: "소개", content: "")
+      profileEditLink(
+        destination: ProfileEditIntroduceView(showToast: $showToast, introduce: $userViewModel.myProfile.introduce)
+          .environmentObject(userViewModel),
+        title: "소개",
+        content: userViewModel.myProfile.introduce ?? "")
       Divider()
       Spacer()
     }
@@ -46,6 +64,7 @@ struct ProfileEditView: View {
     .fullScreenCover(isPresented: $showGallery) {
       CustomPhotoView()
         .environmentObject(photoViewModel)
+        .environmentObject(userViewModel)
     }
     .padding(.horizontal, 16)
     .navigationBarBackButtonHidden()

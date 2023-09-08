@@ -37,7 +37,6 @@ struct WhistleApp: App {
         } else {
           SignInView()
         }
-//          TabbarView()
       }
       .tint(.black)
       .onAppear {

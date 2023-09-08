@@ -10,5 +10,5 @@ import SwiftUI
 
 struct Photo: Identifiable {
   var id = UUID()
-  var photo: Image
+  var photo: UIImage
 }

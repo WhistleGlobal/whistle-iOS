@@ -10,8 +10,10 @@ import SwiftUI
 // MARK: - TabbarView
 
 struct TabbarView: View {
+
   @State var tabSelection: TabSelection = .main
   @State var tabbarOpacity = 1.0
+  @StateObject var userViewModel = UserViewModel()
 
   var body: some View {
     ZStack {
@@ -19,12 +21,12 @@ struct TabbarView: View {
       case .main:
         // FIXME: - MainView로 교체하기 blur 확인용 테스트 이미지입니다.
         MainView()
-
       case .upload:
         // FIXME: - uploadview로 교체하기
         Color.pink.opacity(0.4).ignoresSafeArea()
       case .profile:
         ProfileView(tabbarOpacity: $tabbarOpacity)
+          .environmentObject(userViewModel)
       }
       VStack {
         Spacer()
@@ -100,9 +102,7 @@ extension TabbarView {
         .foregroundColor(.white)
         .padding(3)
         Button {
-          withAnimation {
-            self.tabSelection = .profile
-          }
+          profileTabClicked()
         } label: {
           Color.clear.overlay {
             Image(systemName: "person")
@@ -119,6 +119,22 @@ extension TabbarView {
       }
       .frame(height: 56)
       .frame(maxWidth: .infinity)
+  }
+}
+
+// MARK: - TabClicked Actions
+extension TabbarView {
+  var profileTabClicked: () -> Void {
+    {
+      Task {
+        await userViewModel.requestMyProfile()
+        userViewModel.requestMyFollow()
+        await userViewModel.requestMyWhistlesCount()
+        withAnimation(.default) {
+          tabSelection = .profile
+        }
+      }
+    }
   }
 }
 

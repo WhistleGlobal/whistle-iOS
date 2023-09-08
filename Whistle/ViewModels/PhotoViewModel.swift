@@ -49,7 +49,7 @@ class PhotoViewModel: ObservableObject {
           { image, _ in
 
             if let image {
-              let photo = Photo(photo: Image(uiImage: image))
+              let photo = Photo(photo: image)
 
               DispatchQueue.main.async {
                 self.photos.append(photo)
@@ -150,7 +150,10 @@ class PhotoViewModel: ObservableObject {
 
       let fetchOptions = PHFetchOptions()
       fetchOptions.predicate = NSPredicate(format: "title = %@", albumName)
-      let album = PHAssetCollection.fetchAssetCollections(with: .album, subtype: .any, options: fetchOptions).firstObject
+      let album = PHAssetCollection.fetchAssetCollections(
+        with: .album,
+        subtype: .any,
+        options: fetchOptions).firstObject
 
       guard let targetAlbum = album else {
         return
@@ -174,7 +177,7 @@ class PhotoViewModel: ObservableObject {
             options: requestOptions)
           { image, _ in
             if let image {
-              let photo = Photo(photo: Image(uiImage: image))
+              let photo = Photo(photo: image)
               DispatchQueue.main.async {
                 self.photos.append(photo)
               }
@@ -195,8 +198,8 @@ class PhotoViewModel: ObservableObject {
   }
 
   func fetchPhotosWorkItemCancel() {
-    if let fetchPhotosWorkItem {
-      fetchPhotosWorkItem.cancel()
+    if fetchPhotosWorkItem != nil {
+      fetchPhotosWorkItem?.cancel()
     }
   }
 }
