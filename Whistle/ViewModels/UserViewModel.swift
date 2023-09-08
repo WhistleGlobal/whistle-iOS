@@ -27,14 +27,33 @@ class UserViewModel: ObservableObject {
   @Published var notiSetting: NotiSetting = .init()
   let decoder = JSONDecoder()
 
-
-
   var idToken: String {
     guard let idTokenKey = keychain.get("id_token") else {
       log("id_Token nil")
       return ""
     }
     return idTokenKey
+  }
+
+  var contentTypeJson: HTTPHeaders {
+    [
+      "Authorization": "Bearer \(idToken)",
+      "Content-Type": "application/json",
+    ]
+  }
+
+  var contentTypeXwwwForm: HTTPHeaders {
+    [
+      "Authorization": "Bearer \(idToken)",
+      "Content-Type": "application/x-www-form-urlencoded",
+    ]
+  }
+
+  var contentTypeMultipart: HTTPHeaders {
+    [
+      "Authorization": "Bearer \(idToken)",
+      "Content-Type": "multipart/form-data",
+    ]
   }
 
   var domainUrl: String {
@@ -46,14 +65,10 @@ class UserViewModel: ObservableObject {
 extension UserViewModel {
 
   func requestMyProfile() async {
-    let headers: HTTPHeaders = [
-      "Authorization": "Bearer \(idToken)",
-      "Content-Type": "application/json",
-    ]
     AF.request(
       "\(domainUrl)/user/profile",
       method: .get,
-      headers: headers)
+      headers: contentTypeJson)
       .validate(statusCode: 200...500)
       .responseDecodable(of: Profile.self) { response in
         switch response.result {
@@ -66,10 +81,6 @@ extension UserViewModel {
   }
 
   func updateMyProfile() {
-    let headers: HTTPHeaders = [
-      "Authorization": "Bearer \(idToken)",
-      "Content-Type": "application/x-www-form-urlencoded",
-    ]
     let params = [
       "user_name" : myProfile.userName,
       "introduce" : myProfile.introduce,
@@ -79,7 +90,7 @@ extension UserViewModel {
       "\(domainUrl)/user/profile",
       method: .put,
       parameters: params,
-      headers: headers)
+      headers: contentTypeXwwwForm)
       .validate(statusCode: 200...500)
       .response { response in
         switch response.result {
@@ -96,14 +107,10 @@ extension UserViewModel {
   }
 
   func requestUserProfile(userId: Int) async {
-    let headers: HTTPHeaders = [
-      "Authorization": "Bearer \(idToken)",
-      "Content-Type": "application/json",
-    ]
     AF.request(
       "\(domainUrl)/user/\(userId)/profile",
       method: .get,
-      headers: headers)
+      headers: contentTypeJson)
       .validate(statusCode: 200...500)
       .responseDecodable(of: UserProfile.self) { response in
         switch response.result {
@@ -116,15 +123,10 @@ extension UserViewModel {
   }
 
   func requestMyWhistlesCount() async {
-    let headers: HTTPHeaders = [
-      "Authorization": "Bearer \(idToken)",
-      "Content-Type": "application/json",
-    ]
-
     AF.request(
       "\(domainUrl)/user/whistle/count",
       method: .get,
-      headers: headers)
+      headers: contentTypeJson)
       .validate(statusCode: 200..<300) // Validate success status codes
       .response { response in
         switch response.result {
@@ -154,14 +156,10 @@ extension UserViewModel {
 
 
   func requestUserWhistlesCount(userId: Int) async {
-    let headers: HTTPHeaders = [
-      "Authorization": "Bearer \(idToken)",
-      "Content-Type": "application/json",
-    ]
     AF.request(
       "\(domainUrl)/user/\(userId)/whistle/count",
       method: .get,
-      headers: headers)
+      headers: contentTypeJson)
       .validate(statusCode: 200..<300) // Validate success status codes
       .response { response in
         switch response.result {
@@ -191,14 +189,10 @@ extension UserViewModel {
 
   // FIXME: - Following Follower가 더미데이터상 없어서 Following Follower 데이터가 있을때 다시 한번 테스트 할 것
   func requestMyFollow() {
-    let headers: HTTPHeaders = [
-      "Authorization": "Bearer \(idToken)",
-      "Content-Type": "application/json",
-    ]
     AF.request(
       "\(domainUrl)/user/follow-list",
       method: .get,
-      headers: headers)
+      headers: contentTypeJson)
       .validate(statusCode: 200...500)
       .responseData { response in
         switch response.result {
@@ -224,14 +218,10 @@ extension UserViewModel {
 
   // FIXME: - Following Follower가 더미데이터상 없어서 Following Follower 데이터가 있을때 다시 한번 테스트 할 것
   func requestUserFollow(userId: Int) {
-    let headers: HTTPHeaders = [
-      "Authorization": "Bearer \(idToken)",
-      "Content-Type": "application/json",
-    ]
     AF.request(
       "\(domainUrl)/user/\(userId)/follow-list",
       method: .get,
-      headers: headers)
+      headers: contentTypeJson)
       .validate(statusCode: 200...500)
       .responseData { response in
         switch response.result {
@@ -257,14 +247,10 @@ extension UserViewModel {
 
   // FIXME: - 데이터가 없을 시 처리할 로직 생각할 것
   func requestMyPostFeed() {
-    let headers: HTTPHeaders = [
-      "Authorization": "Bearer \(idToken)",
-      "Content-Type": "application/json",
-    ]
     AF.request(
       "\(domainUrl)/user/post/feed",
       method: .get,
-      headers: headers)
+      headers: contentTypeJson)
       .validate(statusCode: 200...500)
       .response { response in
         switch response.result {
@@ -287,14 +273,10 @@ extension UserViewModel {
 
   // FIXME: - 데이터가 없을 시 처리할 로직 생각할 것
   func requestUserPostFeed(userId: Int) {
-    let headers: HTTPHeaders = [
-      "Authorization": "Bearer \(idToken)",
-      "Content-Type": "application/json",
-    ]
     AF.request(
       "\(domainUrl)/user/\(userId)/post/feed",
       method: .get,
-      headers: headers)
+      headers: contentTypeJson)
       .validate(statusCode: 200...500)
       .response { response in
         switch response.result {
@@ -316,14 +298,10 @@ extension UserViewModel {
 
   // FIXME: - 더미 데이터를 넣어서 테스트할 것
   func requestMyBookmark() {
-    let headers: HTTPHeaders = [
-      "Authorization": "Bearer \(idToken)",
-      "Content-Type": "application/json",
-    ]
     AF.request(
       "\(domainUrl)/user/post/bookmark",
       method: .get,
-      headers: headers)
+      headers: contentTypeJson)
       .validate(statusCode: 200...500)
       .response { response in
         switch response.result {
@@ -348,15 +326,11 @@ extension UserViewModel {
 
   // FIXME: - 더미 데이터를 넣어서 테스트할 것
   func requestNotiSetting() async {
-    let headers: HTTPHeaders = [
-      "Authorization": "Bearer \(idToken)",
-      "Content-Type": "application/json",
-    ]
-    return await withCheckedContinuation { continuation in
+    await withCheckedContinuation { continuation in
       AF.request(
         "\(domainUrl)/user/notification/setting",
         method: .get,
-        headers: headers)
+        headers: contentTypeJson)
         .validate(statusCode: 200...500)
         .response { response in
           switch response.result {
@@ -386,45 +360,39 @@ extension UserViewModel {
   // FIXME: - 코드 리팩토링이 필요함 (URL 뻬고 모든 코드가 중복)
 
   func updateSettingWhistle(newSetting: Bool) async {
-    let headers: HTTPHeaders = [
-      "Authorization": "Bearer \(idToken)",
-      "Content-Type": "application/x-www-form-urlencoded",
-    ]
     let params = ["newSetting" : newSetting ? 1 : 0]
     return await withCheckedContinuation { continuation in
       AF.request(
         "\(domainUrl)/user/notification/setting/whistle",
         method: .patch,
         parameters: params,
-        headers: headers).validate(statusCode: 200...300).response { response in
-        switch response.result {
-        case .success(let data):
-          guard let data else {
-            return
+        headers: contentTypeXwwwForm)
+        .validate(statusCode: 200...300)
+        .response { response in
+          switch response.result {
+          case .success(let data):
+            guard let data else {
+              return
+            }
+            log("Success: \(data)")
+            continuation.resume()
+          case .failure(let error):
+            log("\(error)")
+            continuation.resume()
           }
-          log("Success: \(data)")
-          continuation.resume()
-        case .failure(let error):
-          log("\(error)")
-          continuation.resume()
         }
-      }
     }
   }
 
 
   func updateSettingFollow(newSetting: Bool) async {
-    let headers: HTTPHeaders = [
-      "Authorization": "Bearer \(idToken)",
-      "Content-Type": "application/x-www-form-urlencoded",
-    ]
     let params = ["newSetting" : newSetting ? 1 : 0]
     return await withCheckedContinuation { continuation in
       AF.request(
         "\(domainUrl)/user/notification/setting/follow",
         method: .patch,
         parameters: params,
-        headers: headers).validate(statusCode: 200...300).response { response in
+        headers: contentTypeXwwwForm).validate(statusCode: 200...300).response { response in
         switch response.result {
         case .success(let data):
           guard let data else {
@@ -441,56 +409,52 @@ extension UserViewModel {
   }
 
   func updateSettingInfo(newSetting: Bool) async {
-    let headers: HTTPHeaders = [
-      "Authorization": "Bearer \(idToken)",
-      "Content-Type": "application/x-www-form-urlencoded",
-    ]
     let params = ["newSetting" : newSetting ? 1 : 0]
     return await withCheckedContinuation { continuation in
       AF.request(
         "\(domainUrl)/user/notification/setting/info",
         method: .patch,
         parameters: params,
-        headers: headers).validate(statusCode: 200...300).response { response in
-        switch response.result {
-        case .success(let data):
-          guard let data else {
-            return
+        headers: contentTypeXwwwForm)
+        .validate(statusCode: 200...300)
+        .response { response in
+          switch response.result {
+          case .success(let data):
+            guard let data else {
+              return
+            }
+            log("Success: \(data)")
+            continuation.resume()
+          case .failure(let error):
+            log("\(error)")
+            continuation.resume()
           }
-          log("Success: \(data)")
-          continuation.resume()
-        case .failure(let error):
-          log("\(error)")
-          continuation.resume()
         }
-      }
     }
   }
 
   func updateSettingAd(newSetting: Bool) async {
-    let headers: HTTPHeaders = [
-      "Authorization": "Bearer \(idToken)",
-      "Content-Type": "application/x-www-form-urlencoded",
-    ]
     let params = ["newSetting" : newSetting ? 1 : 0]
     return await withCheckedContinuation { continuation in
       AF.request(
         "\(domainUrl)/user/notification/setting/ad",
         method: .patch,
         parameters: params,
-        headers: headers).validate(statusCode: 200...300).response { response in
-        switch response.result {
-        case .success(let data):
-          guard let data else {
-            return
+        headers: contentTypeXwwwForm)
+        .validate(statusCode: 200...300)
+        .response { response in
+          switch response.result {
+          case .success(let data):
+            guard let data else {
+              return
+            }
+            log("Success: \(data)")
+            continuation.resume()
+          case .failure(let error):
+            log("\(error)")
+            continuation.resume()
           }
-          log("Success: \(data)")
-          continuation.resume()
-        case .failure(let error):
-          log("\(error)")
-          continuation.resume()
         }
-      }
     }
   }
 
@@ -498,13 +462,9 @@ extension UserViewModel {
     guard let image = image.jpegData(compressionQuality: 0.5) else {
       return
     }
-    let headers: HTTPHeaders = [
-      "Authorization": "Bearer \(idToken)",
-      "Content-Type": "multipart/form-data",
-    ]
     AF.upload(multipartFormData: { multipartFormData in
       multipartFormData.append(image, withName: "image", fileName: "image.jpg", mimeType: "image/jpeg")
-    }, to: "\(domainUrl)/user/profile/image", headers: headers)
+    }, to: "\(domainUrl)/user/profile/image", headers: contentTypeMultipart)
       .validate(statusCode: 200..<300)
       .response { response in
         switch response.result {
