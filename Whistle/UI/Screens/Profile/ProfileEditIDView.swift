@@ -21,11 +21,13 @@ struct ProfileEditIDView: View {
     case none
   }
 
+
   @Environment(\.dismiss) var dismiss
   @State var inputValidationStatus: InputValidationStatus = .none
   @State var isAlertActive = false
   @Binding var showToast: Bool
   @EnvironmentObject var apiViewModel: APIViewModel
+
 
   var body: some View {
     VStack(spacing: 0) {
@@ -35,9 +37,10 @@ struct ProfileEditIDView: View {
         .frame(maxWidth: .infinity)
         .modifier(ClearButton(text: $apiViewModel.myProfile.userName))
         .background(.white)
-        .onReceive(Just(apiViewModel.myProfile.userName).delay(for: 0.5, scheduler: RunLoop.current)) { newText in
-          log(newText)
-          inputValidationStatus = validateInput(apiViewModel.myProfile.userName)
+        .onReceive(Just(apiViewModel.myProfile.userName).delay(for: 0.5, scheduler: RunLoop.current)) { _ in
+          Task {
+            inputValidationStatus = await validateInput(apiViewModel.myProfile.userName)
+          }
         }
       Divider().frame(width: UIScreen.width)
       if inputValidationStatus != .none {
@@ -114,26 +117,30 @@ extension ProfileEditIDView {
     }
   }
 
-  func validateInput(_ input: String) -> InputValidationStatus {
+
+  func validateInput(_ input: String) async -> InputValidationStatus {
     if input.isEmpty {
-      return .empty
+      return InputValidationStatus.empty
     }
     if input.count < 3 {
-      return .tooShort
+      return InputValidationStatus.tooShort
     }
 
     let allowedCharacterSet = CharacterSet(charactersIn: "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789._")
     let inputCharacterSet = CharacterSet(charactersIn: input)
     if !allowedCharacterSet.isSuperset(of: inputCharacterSet) {
-      return .invalidCharacters
+      return InputValidationStatus.invalidCharacters
     }
-    // TODO: - 중복 아이디 조건
-    //        if false {
-    //            return .invalidID
-    //        }
 
-    return .valid
+    // TODO: - 중복 아이디 조건
+
+    if await apiViewModel.isAvailableUsername() {
+      return InputValidationStatus.valid
+    } else {
+      return InputValidationStatus.invalidID
+    }
   }
+
 
   @ViewBuilder
   func validationLabel() -> some View {

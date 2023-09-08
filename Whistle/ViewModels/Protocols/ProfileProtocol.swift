@@ -16,4 +16,5 @@ protocol ProfileProtocol {
   func requestUserWhistlesCount(userId: Int) async
   func requestMyFollow() async
   func requestUserFollow(userId: Int) async
+  func isAvailableUsername() async -> Bool
 }

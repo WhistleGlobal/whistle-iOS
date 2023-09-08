@@ -204,4 +204,27 @@ extension APIViewModel: ProfileProtocol {
         }
     }
   }
+
+  func isAvailableUsername() async -> Bool {
+    let params = ["user_name" : myProfile.userName]
+    return await withUnsafeContinuation { continuation in
+      AF.request(
+        "\(domainUrl)/user/check-username",
+        method: .get,
+        parameters: params,
+        headers: contentTypeJson)
+        .validate(statusCode: 200...300)
+        .response { response in
+          switch response.result {
+          case .success:
+            log("Success")
+            continuation.resume(returning: true)
+          case .failure:
+            log("Failure")
+            continuation.resume(returning: false)
+          }
+        }
+    }
+  }
+
 }
