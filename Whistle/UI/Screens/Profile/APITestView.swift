@@ -9,7 +9,7 @@ import SwiftUI
 
 struct APITestView: View {
 
-  @StateObject var profileViewModel: UserViewModel = .init()
+  @StateObject var profileViewModel: APIViewModel = .init()
 
   var body: some View {
     Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)

@@ -17,7 +17,7 @@ struct ProfileEditView: View {
   @State var showToast = false
   @State var showGallery = false
   @StateObject var photoViewModel = PhotoViewModel()
-  @EnvironmentObject var userViewModel: UserViewModel
+  @EnvironmentObject var apiViewModel: APIViewModel
 
 
   var body: some View {
@@ -25,7 +25,7 @@ struct ProfileEditView: View {
       Divider()
         .frame(width: UIScreen.width)
         .padding(.bottom, 36)
-      KFImage.url(URL(string: userViewModel.myProfile.profileImage))
+      KFImage.url(URL(string: apiViewModel.myProfile.profileImage))
         .placeholder { // 플레이스 홀더 설정
           Circle().frame(width: 100, height: 100)
         }.retry(maxCount: 3, interval: .seconds(5)) // 재시도
@@ -46,15 +46,15 @@ struct ProfileEditView: View {
       .padding(.bottom, 40)
       Divider()
       profileEditLink(
-        destination: ProfileEditIDView(showToast: $showToast).environmentObject(userViewModel),
+        destination: ProfileEditIDView(showToast: $showToast).environmentObject(apiViewModel),
         title: "사용자 ID",
-        content: userViewModel.myProfile.userName)
+        content: apiViewModel.myProfile.userName)
       Divider().padding(.leading, 96)
       profileEditLink(
-        destination: ProfileEditIntroduceView(showToast: $showToast, introduce: $userViewModel.myProfile.introduce)
-          .environmentObject(userViewModel),
+        destination: ProfileEditIntroduceView(showToast: $showToast, introduce: $apiViewModel.myProfile.introduce)
+          .environmentObject(apiViewModel),
         title: "소개",
-        content: userViewModel.myProfile.introduce ?? "")
+        content: apiViewModel.myProfile.introduce ?? "")
       Divider()
       Spacer()
     }
@@ -64,7 +64,7 @@ struct ProfileEditView: View {
     .fullScreenCover(isPresented: $showGallery) {
       CustomPhotoView()
         .environmentObject(photoViewModel)
-        .environmentObject(userViewModel)
+        .environmentObject(apiViewModel)
     }
     .padding(.horizontal, 16)
     .navigationBarBackButtonHidden()
@@ -103,6 +103,9 @@ struct ProfileEditView: View {
             .fontSystem(fontDesignSystem: .subtitle2_KO)
         }
       }
+    }
+    .task {
+      await apiViewModel.requestMyProfile()
     }
   }
 }

@@ -13,7 +13,7 @@ struct TabbarView: View {
 
   @State var tabSelection: TabSelection = .main
   @State var tabbarOpacity = 1.0
-  @StateObject var userViewModel = UserViewModel()
+  @StateObject var apiViewModel = APIViewModel()
 
   var body: some View {
     ZStack {
@@ -26,7 +26,7 @@ struct TabbarView: View {
         Color.pink.opacity(0.4).ignoresSafeArea()
       case .profile:
         ProfileView(tabbarOpacity: $tabbarOpacity)
-          .environmentObject(userViewModel)
+          .environmentObject(apiViewModel)
       }
       VStack {
         Spacer()
@@ -127,9 +127,9 @@ extension TabbarView {
   var profileTabClicked: () -> Void {
     {
       Task {
-        await userViewModel.requestMyProfile()
-        userViewModel.requestMyFollow()
-        await userViewModel.requestMyWhistlesCount()
+        await apiViewModel.requestMyProfile()
+        await apiViewModel.requestMyFollow()
+        await apiViewModel.requestMyWhistlesCount()
         withAnimation(.default) {
           tabSelection = .profile
         }
