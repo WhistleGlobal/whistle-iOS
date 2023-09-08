@@ -65,263 +65,294 @@ class UserViewModel: ObservableObject {
 extension UserViewModel {
 
   func requestMyProfile() async {
-    AF.request(
-      "\(domainUrl)/user/profile",
-      method: .get,
-      headers: contentTypeJson)
-      .validate(statusCode: 200...500)
-      .responseDecodable(of: Profile.self) { response in
-        switch response.result {
-        case .success(let success):
-          self.myProfile = success
-        case .failure(let failure):
-          log(failure)
+    await withCheckedContinuation { continuation in
+      AF.request(
+        "\(domainUrl)/user/profile",
+        method: .get,
+        headers: contentTypeJson)
+        .validate(statusCode: 200...500)
+        .responseDecodable(of: Profile.self) { response in
+          switch response.result {
+          case .success(let success):
+            self.myProfile = success
+            continuation.resume()
+          case .failure(let failure):
+            log(failure)
+            continuation.resume()
+          }
         }
-      }
+    }
   }
 
-  func updateMyProfile() {
+  func updateMyProfile() async {
     let params = [
       "user_name" : myProfile.userName,
       "introduce" : myProfile.introduce,
       "country" : "Korea(Korea)",
     ]
-    AF.request(
-      "\(domainUrl)/user/profile",
-      method: .put,
-      parameters: params,
-      headers: contentTypeXwwwForm)
-      .validate(statusCode: 200...500)
-      .response { response in
-        switch response.result {
-        case .success(let data):
-          if let responseData = data {
-            log("Success: \(responseData)")
-          } else {
-            log("Success with no data")
+    return await withCheckedContinuation { continuation in
+      AF.request(
+        "\(domainUrl)/user/profile",
+        method: .put,
+        parameters: params,
+        headers: contentTypeXwwwForm)
+        .validate(statusCode: 200...500)
+        .response { response in
+          switch response.result {
+          case .success(let data):
+            if let responseData = data {
+              log("Success: \(responseData)")
+            } else {
+              log("Success with no data")
+            }
+            continuation.resume()
+          case .failure(let error):
+            log("Error: \(error)")
+            continuation.resume()
           }
-        case .failure(let error):
-          log("Error: \(error)")
         }
-      }
+    }
   }
 
   func requestUserProfile(userId: Int) async {
-    AF.request(
-      "\(domainUrl)/user/\(userId)/profile",
-      method: .get,
-      headers: contentTypeJson)
-      .validate(statusCode: 200...500)
-      .responseDecodable(of: UserProfile.self) { response in
-        switch response.result {
-        case .success(let success):
-          self.userProfile = success
-        case .failure(let failure):
-          log(failure)
+    await withCheckedContinuation { continuation in
+      AF.request(
+        "\(domainUrl)/user/\(userId)/profile",
+        method: .get,
+        headers: contentTypeJson)
+        .validate(statusCode: 200...500)
+        .responseDecodable(of: UserProfile.self) { response in
+          switch response.result {
+          case .success(let success):
+            self.userProfile = success
+            continuation.resume()
+          case .failure(let failure):
+            log(failure)
+            continuation.resume()
+          }
         }
-      }
+    }
   }
 
   func requestMyWhistlesCount() async {
-    AF.request(
-      "\(domainUrl)/user/whistle/count",
-      method: .get,
-      headers: contentTypeJson)
-      .validate(statusCode: 200..<300) // Validate success status codes
-      .response { response in
-        switch response.result {
-        case .success(let data):
-          guard let responseData = data else {
-            return
-          }
-          do {
-            if
-              let jsonArray = try JSONSerialization.jsonObject(with: responseData, options: []) as? [[String: Any]],
-              let firstObject = jsonArray.first,
-              let count = firstObject["whistle_all_count"] as? Int
-            {
-              self.myWhistleCount = count
-              log("/whistle/count response \(count)")
-            } else {
-              log("Invalid JSON format or missing 'whistle_all_count' key")
+    await withCheckedContinuation { continuation in
+      AF.request(
+        "\(domainUrl)/user/whistle/count",
+        method: .get,
+        headers: contentTypeJson)
+        .validate(statusCode: 200..<300) // Validate success status codes
+        .response { response in
+          switch response.result {
+          case .success(let data):
+            guard let responseData = data else {
+              return
             }
-          } catch {
-            log("Error parsing JSON: \(error)")
+            do {
+              if
+                let jsonArray = try JSONSerialization.jsonObject(with: responseData, options: []) as? [[String: Any]],
+                let firstObject = jsonArray.first,
+                let count = firstObject["whistle_all_count"] as? Int
+              {
+                self.myWhistleCount = count
+                log("/whistle/count response \(count)")
+                continuation.resume()
+              } else {
+                log("Invalid JSON format or missing 'whistle_all_count' key")
+                continuation.resume()
+              }
+            } catch {
+              log("Error parsing JSON: \(error)")
+              continuation.resume()
+            }
+          case .failure(let error):
+            log("Error: \(error)")
+            continuation.resume()
           }
-        case .failure(let error):
-          log("Error: \(error)")
         }
-      }
+    }
   }
 
 
   func requestUserWhistlesCount(userId: Int) async {
-    AF.request(
-      "\(domainUrl)/user/\(userId)/whistle/count",
-      method: .get,
-      headers: contentTypeJson)
-      .validate(statusCode: 200..<300) // Validate success status codes
-      .response { response in
-        switch response.result {
-        case .success(let data):
-          guard let responseData = data else {
-            return
-          }
-          do {
-            if
-              let jsonArray = try JSONSerialization.jsonObject(with: responseData, options: []) as? [[String: Any]],
-              let firstObject = jsonArray.first,
-              let count = firstObject["whistle_all_count"] as? Int
-            {
-              self.userWhistleCount = count
-              log("/whistle/count response \(count)")
-            } else {
-              log("Invalid JSON format or missing 'whistle_all_count' key")
+    await withCheckedContinuation { continuation in
+      AF.request(
+        "\(domainUrl)/user/\(userId)/whistle/count",
+        method: .get,
+        headers: contentTypeJson)
+        .validate(statusCode: 200..<300) // Validate success status codes
+        .response { response in
+          switch response.result {
+          case .success(let data):
+            guard let responseData = data else {
+              return
             }
-          } catch {
-            log("Error parsing JSON: \(error)")
+            do {
+              if
+                let jsonArray = try JSONSerialization.jsonObject(with: responseData, options: []) as? [[String: Any]],
+                let firstObject = jsonArray.first,
+                let count = firstObject["whistle_all_count"] as? Int
+              {
+                self.userWhistleCount = count
+                log("/whistle/count response \(count)")
+                continuation.resume()
+              } else {
+                log("Invalid JSON format or missing 'whistle_all_count' key")
+              }
+            } catch {
+              log("Error parsing JSON: \(error)")
+              continuation.resume()
+            }
+          case .failure(let error):
+            log("Error: \(error)")
           }
-        case .failure(let error):
-          log("Error: \(error)")
         }
-      }
+    }
   }
 
   // FIXME: - Following Follower가 더미데이터상 없어서 Following Follower 데이터가 있을때 다시 한번 테스트 할 것
-  func requestMyFollow() {
-    AF.request(
-      "\(domainUrl)/user/follow-list",
-      method: .get,
-      headers: contentTypeJson)
-      .validate(statusCode: 200...500)
-      .responseData { response in
-        switch response.result {
-        case .success(let data):
-          do {
-            self.myFollow = try self.decoder.decode(Follow.self, from: data)
-            for myFollower in self.myFollow.followerList {
-              log(myFollower.userName)
+  func requestMyFollow() async {
+    await withCheckedContinuation { continuation in
+      AF.request(
+        "\(domainUrl)/user/follow-list",
+        method: .get,
+        headers: contentTypeJson)
+        .validate(statusCode: 200...500)
+        .responseData { response in
+          switch response.result {
+          case .success(let data):
+            do {
+              self.myFollow = try self.decoder.decode(Follow.self, from: data)
+              continuation.resume()
+            } catch {
+              log("Error decoding JSON: \(error)")
+              continuation.resume()
             }
-            log(self.myFollow.followerCount)
-            for myFollowing in self.myFollow.followingList {
-              log(myFollowing.userName)
-            }
-            log(self.myFollow.followingCount)
-          } catch {
-            log("Error decoding JSON: \(error)")
+          case .failure(let error):
+            log("Request failed with error: \(error)")
+            continuation.resume()
           }
-        case .failure(let error):
-          log("Request failed with error: \(error)")
         }
-      }
+    }
   }
 
   // FIXME: - Following Follower가 더미데이터상 없어서 Following Follower 데이터가 있을때 다시 한번 테스트 할 것
-  func requestUserFollow(userId: Int) {
-    AF.request(
-      "\(domainUrl)/user/\(userId)/follow-list",
-      method: .get,
-      headers: contentTypeJson)
-      .validate(statusCode: 200...500)
-      .responseData { response in
-        switch response.result {
-        case .success(let data):
-          do {
-            self.userFollow = try self.decoder.decode(Follow.self, from: data)
-            for follower in self.userFollow.followerList {
-              log(follower.userName)
+  func requestUserFollow(userId: Int) async {
+    await withCheckedContinuation { continuation in
+      AF.request(
+        "\(domainUrl)/user/\(userId)/follow-list",
+        method: .get,
+        headers: contentTypeJson)
+        .validate(statusCode: 200...500)
+        .responseData { response in
+          switch response.result {
+          case .success(let data):
+            do {
+              self.userFollow = try self.decoder.decode(Follow.self, from: data)
+              continuation.resume()
+            } catch {
+              log("Error decoding JSON: \(error)")
+              continuation.resume()
             }
-            log(self.userFollow.followerCount)
-            for following in self.userFollow.followingList {
-              log(following.userName)
-            }
-            log(self.userFollow.followingCount)
-          } catch {
-            log("Error decoding JSON: \(error)")
+          case .failure(let error):
+            log("Request failed with error: \(error)")
+            continuation.resume()
           }
-        case .failure(let error):
-          log("Request failed with error: \(error)")
         }
-      }
+    }
   }
 
   // FIXME: - 데이터가 없을 시 처리할 로직 생각할 것
-  func requestMyPostFeed() {
-    AF.request(
-      "\(domainUrl)/user/post/feed",
-      method: .get,
-      headers: contentTypeJson)
-      .validate(statusCode: 200...500)
-      .response { response in
-        switch response.result {
-        case .success(let data):
-          do {
-            guard let data else {
-              return
+  func requestMyPostFeed() async {
+    await withCheckedContinuation { continuation in
+      AF.request(
+        "\(domainUrl)/user/post/feed",
+        method: .get,
+        headers: contentTypeJson)
+        .validate(statusCode: 200...500)
+        .response { response in
+          switch response.result {
+          case .success(let data):
+            do {
+              guard let data else {
+                return
+              }
+              let decoder = JSONDecoder()
+              self.myPostFeed = try decoder.decode([PostFeed].self, from: data)
+              continuation.resume()
+            } catch {
+              log("Error parsing JSON: \(error)")
+              log("피드를 불러올 수 없습니다.")
+              continuation.resume()
             }
-            let decoder = JSONDecoder()
-            self.myPostFeed = try decoder.decode([PostFeed].self, from: data)
-          } catch {
-            log("Error parsing JSON: \(error)")
-            log("피드를 불러올 수 없습니다.")
+          case .failure(let error):
+            log("Error: \(error)")
+            continuation.resume()
           }
-        case .failure(let error):
-          log("Error: \(error)")
         }
-      }
+    }
   }
 
   // FIXME: - 데이터가 없을 시 처리할 로직 생각할 것
-  func requestUserPostFeed(userId: Int) {
-    AF.request(
-      "\(domainUrl)/user/\(userId)/post/feed",
-      method: .get,
-      headers: contentTypeJson)
-      .validate(statusCode: 200...500)
-      .response { response in
-        switch response.result {
-        case .success(let data):
-          do {
-            guard let data else {
-              return
+  func requestUserPostFeed(userId: Int) async {
+    await withCheckedContinuation { continuation in
+      AF.request(
+        "\(domainUrl)/user/\(userId)/post/feed",
+        method: .get,
+        headers: contentTypeJson)
+        .validate(statusCode: 200...500)
+        .response { response in
+          switch response.result {
+          case .success(let data):
+            do {
+              guard let data else {
+                return
+              }
+              self.userPostFeed = try self.decoder.decode([UserPostFeed].self, from: data)
+              continuation.resume()
+            } catch {
+              log("Error parsing JSON: \(error)")
+              log("피드를 불러올 수 없습니다.")
+              continuation.resume()
             }
-            self.userPostFeed = try self.decoder.decode([UserPostFeed].self, from: data)
-          } catch {
-            log("Error parsing JSON: \(error)")
-            log("피드를 불러올 수 없습니다.")
+          case .failure(let error):
+            log("Error: \(error)")
+            continuation.resume()
           }
-        case .failure(let error):
-          log("Error: \(error)")
         }
-      }
+    }
   }
 
   // FIXME: - 더미 데이터를 넣어서 테스트할 것
-  func requestMyBookmark() {
-    AF.request(
-      "\(domainUrl)/user/post/bookmark",
-      method: .get,
-      headers: contentTypeJson)
-      .validate(statusCode: 200...500)
-      .response { response in
-        switch response.result {
-        case .success(let data):
-          do {
-            guard let data else {
-              return
+  func requestMyBookmark() async {
+    await withCheckedContinuation { continuation in
+      AF.request(
+        "\(domainUrl)/user/post/bookmark",
+        method: .get,
+        headers: contentTypeJson)
+        .validate(statusCode: 200...500)
+        .response { response in
+          switch response.result {
+          case .success(let data):
+            do {
+              guard let data else {
+                return
+              }
+              let json = try JSON(data: data)
+              log("\(json)")
+              let decoder = JSONDecoder()
+              self.bookmark = try decoder.decode([Bookmark].self, from: data)
+              continuation.resume()
+            } catch {
+              log("Error parsing JSON: \(error)")
+              log("북마크를 불러올 수 없습니다.")
+              continuation.resume()
             }
-            let json = try JSON(data: data)
-            log("\(json)")
-            let decoder = JSONDecoder()
-            self.bookmark = try decoder.decode([Bookmark].self, from: data)
-          } catch {
-            log("Error parsing JSON: \(error)")
-            log("북마크를 불러올 수 없습니다.")
+          case .failure(let error):
+            log("Error: \(error)")
+            continuation.resume()
           }
-        case .failure(let error):
-          log("Error: \(error)")
         }
-      }
+    }
   }
 
   // FIXME: - 더미 데이터를 넣어서 테스트할 것
@@ -458,24 +489,28 @@ extension UserViewModel {
     }
   }
 
-  func uploadPhoto(image: UIImage, completion: @escaping (String) -> Void) {
+  func uploadPhoto(image: UIImage, completion: @escaping (String) -> Void) async {
     guard let image = image.jpegData(compressionQuality: 0.5) else {
       return
     }
-    AF.upload(multipartFormData: { multipartFormData in
-      multipartFormData.append(image, withName: "image", fileName: "image.jpg", mimeType: "image/jpeg")
-    }, to: "\(domainUrl)/user/profile/image", headers: contentTypeMultipart)
-      .validate(statusCode: 200..<300)
-      .response { response in
-        switch response.result {
-        case .success(let data):
-          if let imageUrl = String(data: data!, encoding: .utf8) {
-            log("URL: \(imageUrl)")
-            completion(imageUrl)
+    return await withCheckedContinuation { continuation in
+      AF.upload(multipartFormData: { multipartFormData in
+        multipartFormData.append(image, withName: "image", fileName: "image.jpg", mimeType: "image/jpeg")
+      }, to: "\(domainUrl)/user/profile/image", headers: contentTypeMultipart)
+        .validate(statusCode: 200..<300)
+        .response { response in
+          switch response.result {
+          case .success(let data):
+            if let imageUrl = String(data: data!, encoding: .utf8) {
+              log("URL: \(imageUrl)")
+              completion(imageUrl)
+              continuation.resume()
+            }
+          case .failure(let error):
+            log("업로드 실패:, \(error)")
+            continuation.resume()
           }
-        case .failure(let error):
-          log("업로드 실패:, \(error)")
         }
-      }
+    }
   }
 }

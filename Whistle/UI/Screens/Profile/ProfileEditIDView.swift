@@ -77,8 +77,10 @@ struct ProfileEditIDView: View {
       }
       ToolbarItem(placement: .confirmationAction) {
         Button {
-          userViewModel.updateMyProfile()
-          isAlertActive = true
+          Task {
+            await userViewModel.updateMyProfile()
+            isAlertActive = true
+          }
         } label: {
           Text("완료")
             .foregroundColor(inputValidationStatus == .valid ? .Info : .Disable_Placeholder)

@@ -15,10 +15,8 @@ struct CustomPhotoView: View {
   @EnvironmentObject var photoViewModel: PhotoViewModel
   @EnvironmentObject var userViewModel: UserViewModel
   @State var showAlbumList = false
-//  @State var selectedImage: Image?
   @State var selectedImage: UIImage?
   @State var albumName = "최근 항목"
-
 
   let columns = [
     GridItem(.flexible(minimum: 40), spacing: 0),
@@ -47,8 +45,8 @@ struct CustomPhotoView: View {
             dismiss()
             return
           }
-          userViewModel.uploadPhoto(image: selectedImage) { url in
-            log(url)
+          Task {
+            await userViewModel.uploadPhoto(image: selectedImage) { url in log(url) }
           }
           dismiss()
         } label: {

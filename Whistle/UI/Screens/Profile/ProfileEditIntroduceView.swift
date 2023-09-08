@@ -56,9 +56,11 @@ struct ProfileEditIntroduceView: View {
       }
       ToolbarItem(placement: .confirmationAction) {
         Button {
-          userViewModel.updateMyProfile()
-          dismiss()
-          showToast = true
+          Task {
+            await userViewModel.updateMyProfile()
+            dismiss()
+            showToast = true
+          }
         } label: {
           Text("완료")
             .foregroundColor(true ? .Info : .Disable_Placeholder)

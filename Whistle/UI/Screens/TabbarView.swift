@@ -128,7 +128,7 @@ extension TabbarView {
     {
       Task {
         await userViewModel.requestMyProfile()
-        userViewModel.requestMyFollow()
+        await userViewModel.requestMyFollow()
         await userViewModel.requestMyWhistlesCount()
         withAnimation(.default) {
           tabSelection = .profile

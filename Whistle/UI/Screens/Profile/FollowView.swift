@@ -110,7 +110,7 @@ struct FollowView: View {
       }
     }
     .task {
-      userViewModel.requestMyFollow()
+      await userViewModel.requestMyFollow()
     }
   }
 }
