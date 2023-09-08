@@ -20,7 +20,7 @@ struct APITestView: View {
 //        await profileViewModel.requestMyFollow()
 //        profileViewModel.requestMyPostFeed()
 //        profileViewModel.requestUserPostFeed(userId: 3)
-        profileViewModel.requestNotiSetting()
+        await profileViewModel.requestNotiSetting()
       }
   }
 }

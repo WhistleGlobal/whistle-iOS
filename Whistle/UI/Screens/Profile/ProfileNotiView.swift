@@ -11,7 +11,7 @@ struct ProfileNotiView: View {
   @Environment(\.dismiss) var dismiss
   @EnvironmentObject var userViewModel: UserViewModel
   @Binding var isShowingBottomSheet: Bool
-  @State var isAllOff = true
+  @AppStorage("isAllOff") var isAllOff = false
 
   var body: some View {
     List {
@@ -32,7 +32,7 @@ struct ProfileNotiView: View {
       isShowingBottomSheet = false
     }
     .task {
-      userViewModel.requestNotiSetting()
+      await userViewModel.requestNotiSetting()
     }
     .toolbar {
       ToolbarItem(placement: .cancellationAction) {
@@ -45,24 +45,35 @@ struct ProfileNotiView: View {
       }
     }
     .onChange(of: isAllOff) { newValue in
-      if newValue {
-        userViewModel.updateSettingWhistle(newSetting: false)
-        userViewModel.updateSettingWhistle(newSetting: false)
-        userViewModel.updateSettingFollow(newSetting: false)
-        userViewModel.updateSettingInfo(newSetting: false)
+      if !newValue {
+        Task {
+          await userViewModel.updateSettingWhistle(newSetting: false)
+          await userViewModel.updateSettingFollow(newSetting: false)
+          await userViewModel.updateSettingInfo(newSetting: false)
+          await userViewModel.updateSettingAd(newSetting: false)
+          await userViewModel.requestNotiSetting()
+        }
       }
     }
     .onChange(of: userViewModel.notiSetting.whistleEnabled) { newValue in
-      userViewModel.updateSettingWhistle(newSetting: newValue)
+      Task {
+        await userViewModel.updateSettingWhistle(newSetting: newValue)
+      }
     }
     .onChange(of: userViewModel.notiSetting.followEnabled) { newValue in
-      userViewModel.updateSettingFollow(newSetting: newValue)
+      Task {
+        await userViewModel.updateSettingFollow(newSetting: newValue)
+      }
     }
     .onChange(of: userViewModel.notiSetting.infoEnabled) { newValue in
-      userViewModel.updateSettingInfo(newSetting: newValue)
+      Task {
+        await userViewModel.updateSettingInfo(newSetting: newValue)
+      }
     }
     .onChange(of: userViewModel.notiSetting.adEnabled) { newValue in
-      userViewModel.updateSettingAd(newSetting: newValue)
+      Task {
+        await userViewModel.updateSettingAd(newSetting: newValue)
+      }
     }
   }
 }

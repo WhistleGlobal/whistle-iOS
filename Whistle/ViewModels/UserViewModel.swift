@@ -347,148 +347,151 @@ extension UserViewModel {
   }
 
   // FIXME: - 더미 데이터를 넣어서 테스트할 것
-  func requestNotiSetting() {
+  func requestNotiSetting() async {
     let headers: HTTPHeaders = [
       "Authorization": "Bearer \(idToken)",
       "Content-Type": "application/json",
     ]
-    AF.request(
-      "\(domainUrl)/user/notification/setting",
-      method: .get,
-      headers: headers)
-      .validate(statusCode: 200...500)
-      .response { response in
-        switch response.result {
-        case .success(let data):
-          do {
-            guard let data else {
-              return
+    return await withCheckedContinuation { continuation in
+      AF.request(
+        "\(domainUrl)/user/notification/setting",
+        method: .get,
+        headers: headers)
+        .validate(statusCode: 200...500)
+        .response { response in
+          switch response.result {
+          case .success(let data):
+            do {
+              guard let data else {
+                return
+              }
+              let json = try JSON(data: data)
+              log("\(json)")
+              let decoder = JSONDecoder()
+              self.notiSetting = try decoder.decode(NotiSetting.self, from: data)
+              continuation.resume()
+            } catch {
+              log("Error parsing JSON: \(error)")
+              log("NotiSetting을 불러올 수 없습니다.")
+              continuation.resume()
             }
-            let json = try JSON(data: data)
-            log("\(json)")
-            let decoder = JSONDecoder()
-            self.notiSetting = try decoder.decode(NotiSetting.self, from: data)
-          } catch {
-            log("Error parsing JSON: \(error)")
-            log("NotiSetting을 불러올 수 없습니다.")
+          case .failure(let error):
+            log("Error: \(error)")
+            continuation.resume()
           }
-        case .failure(let error):
-          log("Error: \(error)")
         }
-      }
+    }
   }
 
   // FIXME: - 코드 리팩토링이 필요함 (URL 뻬고 모든 코드가 중복)
-  func updateSettingWhistle(newSetting: Bool) {
+
+  func updateSettingWhistle(newSetting: Bool) async {
     let headers: HTTPHeaders = [
       "Authorization": "Bearer \(idToken)",
       "Content-Type": "application/x-www-form-urlencoded",
     ]
-    let params = [
-      "newSetting" : newSetting ? 1 : 0,
-    ]
-    AF.request(
-      "\(domainUrl)/user/notification/setting/whistle",
-      method: .patch,
-      parameters: params,
-      headers: headers)
-      .validate(statusCode: 200...500)
-      .response { response in
+    let params = ["newSetting" : newSetting ? 1 : 0]
+    return await withCheckedContinuation { continuation in
+      AF.request(
+        "\(domainUrl)/user/notification/setting/whistle",
+        method: .patch,
+        parameters: params,
+        headers: headers).validate(statusCode: 200...300).response { response in
         switch response.result {
         case .success(let data):
-          if let responseData = data {
-            log("Success: \(responseData.base64EncodedString())")
-          } else {
-            log("Success with no data")
+          guard let data else {
+            return
           }
+          log("Success: \(data)")
+          continuation.resume()
         case .failure(let error):
-          log("Error: \(error)")
+          log("\(error)")
+          continuation.resume()
         }
       }
+    }
   }
 
-  func updateSettingFollow(newSetting: Bool) {
+
+  func updateSettingFollow(newSetting: Bool) async {
     let headers: HTTPHeaders = [
       "Authorization": "Bearer \(idToken)",
       "Content-Type": "application/x-www-form-urlencoded",
     ]
-    let params = [
-      "newSetting" : newSetting ? 1 : 0,
-    ]
-    AF.request(
-      "\(domainUrl)/user/notification/setting/follow",
-      method: .patch,
-      parameters: params,
-      headers: headers)
-      .validate(statusCode: 200...500)
-      .response { response in
+    let params = ["newSetting" : newSetting ? 1 : 0]
+    return await withCheckedContinuation { continuation in
+      AF.request(
+        "\(domainUrl)/user/notification/setting/follow",
+        method: .patch,
+        parameters: params,
+        headers: headers).validate(statusCode: 200...300).response { response in
         switch response.result {
         case .success(let data):
-          if let responseData = data {
-            log("Success: \(responseData.base64EncodedString())")
-          } else {
-            log("Success with no data")
+          guard let data else {
+            return
           }
+          log("Success: \(data)")
+          continuation.resume()
         case .failure(let error):
-          log("Error: \(error)")
+          log("\(error)")
+          continuation.resume()
         }
       }
+    }
   }
 
-  func updateSettingInfo(newSetting: Bool) {
+  func updateSettingInfo(newSetting: Bool) async {
     let headers: HTTPHeaders = [
       "Authorization": "Bearer \(idToken)",
       "Content-Type": "application/x-www-form-urlencoded",
     ]
-    let params = [
-      "newSetting" : newSetting ? 1 : 0,
-    ]
-    AF.request(
-      "\(domainUrl)/user/notification/setting/info",
-      method: .patch,
-      parameters: params,
-      headers: headers)
-      .validate(statusCode: 200...500)
-      .response { response in
+    let params = ["newSetting" : newSetting ? 1 : 0]
+    return await withCheckedContinuation { continuation in
+      AF.request(
+        "\(domainUrl)/user/notification/setting/info",
+        method: .patch,
+        parameters: params,
+        headers: headers).validate(statusCode: 200...300).response { response in
         switch response.result {
         case .success(let data):
-          if let responseData = data {
-            log("Success: \(responseData.base64EncodedString())")
-          } else {
-            log("Success with no data")
+          guard let data else {
+            return
           }
+          log("Success: \(data)")
+          continuation.resume()
         case .failure(let error):
-          log("Error: \(error)")
+          log("\(error)")
+          continuation.resume()
         }
       }
+    }
   }
 
-  func updateSettingAd(newSetting: Bool) {
+  func updateSettingAd(newSetting: Bool) async {
     let headers: HTTPHeaders = [
       "Authorization": "Bearer \(idToken)",
       "Content-Type": "application/x-www-form-urlencoded",
     ]
-    let params = [
-      "newSetting" : newSetting ? 1 : 0,
-    ]
-    AF.request(
-      "\(domainUrl)/user/notification/setting/ad",
-      method: .patch,
-      parameters: params,
-      headers: headers)
-      .validate(statusCode: 200...500)
-      .response { response in
+    let params = ["newSetting" : newSetting ? 1 : 0]
+    return await withCheckedContinuation { continuation in
+      AF.request(
+        "\(domainUrl)/user/notification/setting/ad",
+        method: .patch,
+        parameters: params,
+        headers: headers).validate(statusCode: 200...300).response { response in
         switch response.result {
         case .success(let data):
-          if let responseData = data {
-            log("Success: \(responseData.base64EncodedString())")
-          } else {
-            log("Success with no data")
+          guard let data else {
+            return
           }
+          log("Success: \(data)")
+          continuation.resume()
         case .failure(let error):
-          log("Error: \(error)")
+          log("\(error)")
+          continuation.resume()
         }
       }
+    }
   }
 
   func uploadPhoto(image: UIImage, completion: @escaping (String) -> Void) {
