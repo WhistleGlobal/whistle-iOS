@@ -11,9 +11,9 @@ import KeychainSwift
 import SwiftyJSON
 import UIKit
 
-// MARK: - UserViewModel
+// MARK: - APIViewModel
 
-class UserViewModel: ObservableObject {
+class APIViewModel: ObservableObject {
   let keychain = KeychainSwift()
   @Published var myProfile = Profile()
   @Published var userProfile = UserProfile()
@@ -31,7 +31,7 @@ class UserViewModel: ObservableObject {
 
 // MARK: - Computed Property
 
-extension UserViewModel {
+extension APIViewModel {
 
   var idToken: String {
     guard let idTokenKey = keychain.get("id_token") else {

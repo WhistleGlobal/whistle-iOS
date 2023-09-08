@@ -12,12 +12,12 @@ struct ProfileInfoView: View {
 
   @Environment(\.dismiss) var dismiss
   @Binding var isShowingBottomSheet: Bool
-  @EnvironmentObject var userViewModel: UserViewModel
+  @EnvironmentObject var apiViewModel: APIViewModel
 
 
   var body: some View {
     VStack(spacing: 0) {
-      KFImage.url(URL(string: userViewModel.myProfile.profileImage))
+      KFImage.url(URL(string: apiViewModel.myProfile.profileImage))
         .placeholder { // 플레이스 홀더 설정
           Circle().frame(width: 100, height: 100)
         }.retry(maxCount: 3, interval: .seconds(5)) // 재시도
@@ -29,7 +29,7 @@ struct ProfileInfoView: View {
         .clipShape(Circle())
         .padding(.top, 36)
         .padding(.bottom, 16)
-      Text(userViewModel.myProfile.userName)
+      Text(apiViewModel.myProfile.userName)
         .foregroundColor(.LabelColor_Primary)
         .fontSystem(fontDesignSystem: .title2_Expanded)
         .padding(.bottom, 36)

@@ -11,7 +11,7 @@ import SwiftUI
 
 struct GlassBottomSheet: View {
   @Binding var isShowing: Bool
-  @EnvironmentObject var userViewModel: UserViewModel
+  @EnvironmentObject var apiViewModel: APIViewModel
   var content: AnyView
 
   var body: some View {
@@ -48,13 +48,13 @@ struct GlassBottomSheet: View {
                 .padding(.bottom, 20)
               NavigationLink {
                 ProfileNotiView(isShowingBottomSheet: $isShowing)
-                  .environmentObject(userViewModel)
+                  .environmentObject(apiViewModel)
               } label: {
                 bottomSheetRowWithIcon(systemName: "bell", iconWidth: 23, iconHeight: 24, text: "알림")
               }
               NavigationLink {
                 ProfileInfoView(isShowingBottomSheet: $isShowing)
-                  .environmentObject(userViewModel)
+                  .environmentObject(apiViewModel)
               } label: {
                 bottomSheetRowWithIcon(systemName: "info.circle", iconWidth: 24, iconHeight: 24, text: "정보")
               }

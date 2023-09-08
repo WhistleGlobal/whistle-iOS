@@ -1,5 +1,5 @@
 //
-//  UserViewModel+Upload.swift
+//  APIViewModel+Upload.swift
 //  Whistle
 //
 //  Created by ChoiYujin on 9/8/23.
@@ -9,7 +9,7 @@ import Alamofire
 import Foundation
 import UIKit
 
-extension UserViewModel: UploadProtocol {
+extension APIViewModel: UploadProtocol {
   func uploadPhoto(image: UIImage, completion: @escaping (String) -> Void) async {
     guard let image = image.jpegData(compressionQuality: 0.5) else {
       return

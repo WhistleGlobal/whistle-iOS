@@ -21,7 +21,7 @@ struct FollowView: View {
   // MARK: Internal
 
   @Environment(\.dismiss) var dismiss
-  @EnvironmentObject var userViewModel: UserViewModel
+  @EnvironmentObject var apiViewModel: APIViewModel
   @State var tabStatus: profileTabStatus = .follower
   // FIXME: - 나중에 User Follower 모델 로 변경할 것
   @State var followPeoples: [Any] = []
@@ -34,7 +34,7 @@ struct FollowView: View {
         }
         .buttonStyle(
           FollowTabbarStyle(
-            followNum: userViewModel.myFollow.followerCount,
+            followNum: apiViewModel.myFollow.followerCount,
             tab: profileTabStatus.follower.rawValue,
             selectedTab: $tabStatus))
         Button("") {
@@ -42,14 +42,14 @@ struct FollowView: View {
         }
         .buttonStyle(
           FollowTabbarStyle(
-            followNum: userViewModel.myFollow.followingCount,
+            followNum: apiViewModel.myFollow.followingCount,
             tab: profileTabStatus.following.rawValue,
             selectedTab: $tabStatus))
       }
       .frame(height: 48)
 
       if tabStatus == .follower {
-        if userViewModel.myFollow.followerCount == 0 {
+        if apiViewModel.myFollow.followerCount == 0 {
           Spacer()
           Image(systemName: "person.fill")
             .resizable()
@@ -62,7 +62,7 @@ struct FollowView: View {
             .foregroundColor(.LabelColor_Secondary)
 
         } else {
-          ForEach(userViewModel.myFollow.followerList, id: \.userName) { follower in
+          ForEach(apiViewModel.myFollow.followerList, id: \.userName) { follower in
             personRow(
               isFollow: follower.isFollowed == 1,
               userName: follower.userName,
@@ -70,7 +70,7 @@ struct FollowView: View {
           }
         }
       } else {
-        if userViewModel.myFollow.followingCount == 0 {
+        if apiViewModel.myFollow.followingCount == 0 {
           Spacer()
           Image(systemName: "person.fill")
             .resizable()
@@ -82,7 +82,7 @@ struct FollowView: View {
             .fontSystem(fontDesignSystem: .body1_KO)
             .foregroundColor(.LabelColor_Secondary)
         } else {
-          ForEach(userViewModel.myFollow.followingList, id: \.userName) { following in
+          ForEach(apiViewModel.myFollow.followingList, id: \.userName) { following in
             personRow(
               isFollow: false,
               userName: following.userName,
@@ -110,7 +110,7 @@ struct FollowView: View {
       }
     }
     .task {
-      await userViewModel.requestMyFollow()
+      await apiViewModel.requestMyFollow()
     }
   }
 }

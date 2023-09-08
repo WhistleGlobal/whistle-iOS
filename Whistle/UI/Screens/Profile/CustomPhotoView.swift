@@ -13,7 +13,7 @@ struct CustomPhotoView: View {
 
   @Environment(\.dismiss) var dismiss
   @EnvironmentObject var photoViewModel: PhotoViewModel
-  @EnvironmentObject var userViewModel: UserViewModel
+  @EnvironmentObject var apiViewModel: APIViewModel
   @State var showAlbumList = false
   @State var selectedImage: UIImage?
   @State var albumName = "최근 항목"
@@ -46,7 +46,7 @@ struct CustomPhotoView: View {
             return
           }
           Task {
-            await userViewModel.uploadPhoto(image: selectedImage) { url in log(url) }
+            await apiViewModel.uploadPhoto(image: selectedImage) { url in log(url) }
           }
           dismiss()
         } label: {

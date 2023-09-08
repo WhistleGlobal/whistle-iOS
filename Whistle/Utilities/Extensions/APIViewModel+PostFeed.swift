@@ -1,5 +1,5 @@
 //
-//  UserViewModel+PostFeed.swift
+//  APIViewModel+PostFeed.swift
 //  Whistle
 //
 //  Created by ChoiYujin on 9/8/23.
@@ -10,7 +10,7 @@ import Foundation
 import Alamofire
 import SwiftyJSON
 
-extension UserViewModel: PostFeedProtocol {
+extension APIViewModel: PostFeedProtocol {
   // FIXME: - 데이터가 없을 시 처리할 로직 생각할 것
   func requestMyPostFeed() async {
     await withCheckedContinuation { continuation in

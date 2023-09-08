@@ -14,13 +14,13 @@ struct ProfileEditIntroduceView: View {
 
   @Environment(\.dismiss) var dismiss
   @Binding var showToast: Bool
-  @EnvironmentObject var userViewModel: UserViewModel
+  @EnvironmentObject var apiViewModel: APIViewModel
   @Binding var introduce: String
 
   var body: some View {
     VStack(spacing: 0) {
       Divider().frame(width: UIScreen.width)
-      TextField("소개글을 입력해주세요.", text: $userViewModel.myProfile.introduce, axis: .vertical)
+      TextField("소개글을 입력해주세요.", text: $apiViewModel.myProfile.introduce, axis: .vertical)
         .fontSystem(fontDesignSystem: .body1_KO)
         .frame(height: 100, alignment: .top)
         .multilineTextAlignment(.leading)
@@ -42,7 +42,7 @@ struct ProfileEditIntroduceView: View {
       ToolbarItem(placement: .cancellationAction) {
         Button {
           Task {
-            await userViewModel.requestMyProfile()
+            await apiViewModel.requestMyProfile()
             dismiss()
           }
         } label: {
@@ -57,7 +57,7 @@ struct ProfileEditIntroduceView: View {
       ToolbarItem(placement: .confirmationAction) {
         Button {
           Task {
-            await userViewModel.updateMyProfile()
+            await apiViewModel.updateMyProfile()
             dismiss()
             showToast = true
           }

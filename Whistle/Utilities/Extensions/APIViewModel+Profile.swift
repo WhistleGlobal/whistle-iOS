@@ -1,5 +1,5 @@
 //
-//  UserViewModel+ProfileProtocol.swift
+//  APIViewModel+ProfileProtocol.swift
 //  Whistle
 //
 //  Created by ChoiYujin on 9/8/23.
@@ -8,7 +8,7 @@
 import Alamofire
 import Foundation
 
-extension UserViewModel: ProfileProtocol {
+extension APIViewModel: ProfileProtocol {
   func requestMyProfile() async {
     await withCheckedContinuation { continuation in
       AF.request(

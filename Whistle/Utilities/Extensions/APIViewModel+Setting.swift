@@ -1,5 +1,5 @@
 //
-//  UserViewModel+Setting.swift
+//  APIViewModel+Setting.swift
 //  Whistle
 //
 //  Created by ChoiYujin on 9/8/23.
@@ -9,7 +9,7 @@ import Alamofire
 import Foundation
 import SwiftyJSON
 
-extension UserViewModel: SettingProtocol {
+extension APIViewModel: SettingProtocol {
   func requestNotiSetting() async {
     await withCheckedContinuation { continuation in
       AF.request(
