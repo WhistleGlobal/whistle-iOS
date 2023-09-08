@@ -41,10 +41,13 @@ extension APIViewModel: ProfileProtocol {
         method: .put,
         parameters: params,
         headers: contentTypeXwwwForm)
-        .validate(statusCode: 200...500)
+        .validate(statusCode: 200..<500)
         .response { response in
           switch response.result {
           case .success(let data):
+              if response.response?.statusCode == 403 {
+                  
+              }
             if let responseData = data {
               log("Success: \(responseData)")
             } else {
