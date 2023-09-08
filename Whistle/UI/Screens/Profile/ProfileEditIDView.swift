@@ -12,22 +12,27 @@ import SwiftUI
 
 struct ProfileEditIDView: View {
 
-  enum InputValidationStatus: String {
+  // MARK: Public
+
+  public enum InputValidationStatus: String {
     case valid
     case empty
     case tooShort
     case invalidCharacters
     case invalidID
+    case updateFailed
     case none
   }
 
+
+  // MARK: Internal
 
   @Environment(\.dismiss) var dismiss
   @State var inputValidationStatus: InputValidationStatus = .none
   @State var isAlertActive = false
   @Binding var showToast: Bool
+  @State var originalUsername = ""
   @EnvironmentObject var apiViewModel: APIViewModel
-
 
   var body: some View {
     VStack(spacing: 0) {
@@ -39,7 +44,9 @@ struct ProfileEditIDView: View {
         .background(.white)
         .onReceive(Just(apiViewModel.myProfile.userName).delay(for: 0.5, scheduler: RunLoop.current)) { _ in
           Task {
-            inputValidationStatus = await validateInput(apiViewModel.myProfile.userName)
+            if originalUsername != apiViewModel.myProfile.userName {
+              inputValidationStatus = await validateInput(apiViewModel.myProfile.userName)
+            }
           }
         }
       Divider().frame(width: UIScreen.width)
@@ -52,6 +59,7 @@ struct ProfileEditIDView: View {
         .frame(maxWidth: .infinity)
         .multilineTextAlignment(.leading)
         .lineLimit(4)
+        .padding(.vertical, 12)
       Spacer()
     }
     .padding(.horizontal, 16)
@@ -60,15 +68,27 @@ struct ProfileEditIDView: View {
       ProfileAlert(cancelAction: {
         isAlertActive = false
       }, updateAction: {
-        showToast = true
-        dismiss()
+        Task {
+          let updateStatus = await apiViewModel.updateMyProfile()
+          if updateStatus == .valid {
+            showToast = true
+            dismiss()
+          } else {
+            inputValidationStatus = updateStatus
+            isAlertActive = false
+            originalUsername = apiViewModel.myProfile.userName
+          }
+        }
       })
       .opacity(isAlertActive ? 1 : 0)
     }
     .toolbar {
       ToolbarItem(placement: .cancellationAction) {
         Button {
-          dismiss()
+          Task {
+            await apiViewModel.requestMyProfile()
+            dismiss()
+          }
         } label: {
           Image(systemName: "chevron.backward")
             .foregroundColor(.LabelColor_Primary)
@@ -81,7 +101,6 @@ struct ProfileEditIDView: View {
       ToolbarItem(placement: .confirmationAction) {
         Button {
           Task {
-            await apiViewModel.updateMyProfile()
             isAlertActive = true
           }
         } label: {
@@ -92,6 +111,9 @@ struct ProfileEditIDView: View {
         .disabled(inputValidationStatus != .valid && isAlertActive)
         .opacity(isAlertActive ? 0 : 1)
       }
+    }
+    .onAppear {
+      originalUsername = apiViewModel.myProfile.userName
     }
   }
 }
@@ -132,8 +154,6 @@ extension ProfileEditIDView {
       return InputValidationStatus.invalidCharacters
     }
 
-    // TODO: - 중복 아이디 조건
-
     if await apiViewModel.isAvailableUsername() {
       return InputValidationStatus.valid
     } else {
@@ -165,6 +185,8 @@ extension ProfileEditIDView {
       return "이미 사용 중인 ID 입니다."
     case .none:
       return ""
+    case .updateFailed:
+      return "사용자 이름은 14일에 한번만 업데이트할 수 있습니다."
     }
   }
 
@@ -172,7 +194,7 @@ extension ProfileEditIDView {
     switch inputValidationStatus {
     case .valid, .none:
       return .Success
-    case .empty, .tooShort, .invalidCharacters, .invalidID:
+    case .empty, .tooShort, .invalidCharacters, .invalidID, .updateFailed:
       return .Danger
     }
   }
@@ -181,7 +203,7 @@ extension ProfileEditIDView {
     switch inputValidationStatus {
     case .valid, .none:
       return "checkmark.circle"
-    case .empty, .tooShort, .invalidCharacters, .invalidID:
+    case .empty, .tooShort, .invalidCharacters, .invalidID, .updateFailed:
       return "exclamationmark.triangle.fill"
     }
   }

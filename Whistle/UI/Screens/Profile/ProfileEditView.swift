@@ -104,6 +104,9 @@ struct ProfileEditView: View {
         }
       }
     }
+    .task {
+      await apiViewModel.requestMyProfile()
+    }
   }
 }
 

@@ -10,7 +10,7 @@ import Alamofire
 protocol ProfileProtocol {
 
   func requestMyProfile() async
-  func updateMyProfile() async
+  func updateMyProfile() async -> ProfileEditIDView.InputValidationStatus
   func requestUserProfile(userId: Int) async
   func requestMyWhistlesCount() async
   func requestUserWhistlesCount(userId: Int) async

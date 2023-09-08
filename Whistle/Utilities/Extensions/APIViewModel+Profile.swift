@@ -29,7 +29,7 @@ extension APIViewModel: ProfileProtocol {
     }
   }
 
-  func updateMyProfile() async {
+  func updateMyProfile() async -> ProfileEditIDView.InputValidationStatus {
     let params = [
       "user_name" : myProfile.userName,
       "introduce" : myProfile.introduce,
@@ -44,19 +44,15 @@ extension APIViewModel: ProfileProtocol {
         .validate(statusCode: 200..<500)
         .response { response in
           switch response.result {
-          case .success(let data):
-              if response.response?.statusCode == 403 {
-                  
-              }
-            if let responseData = data {
-              log("Success: \(responseData)")
-            } else {
-              log("Success with no data")
+          case .success:
+            if response.response?.statusCode == 403 {
+              continuation.resume(returning: .updateFailed)
+            } else if response.response?.statusCode == 200 {
+              continuation.resume(returning: .valid)
             }
-            continuation.resume()
           case .failure(let error):
             log("Error: \(error)")
-            continuation.resume()
+            continuation.resume(returning: .invalidID)
           }
         }
     }
