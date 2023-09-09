@@ -5,6 +5,7 @@
 //  Created by ChoiYujin on 9/3/23.
 //
 
+import Kingfisher
 import SwiftUI
 
 // MARK: - ProfileEditView
@@ -14,14 +15,29 @@ struct ProfileEditView: View {
   @Environment(\.dismiss) var dismiss
   @State var editProfileImage = false
   @State var showToast = false
+  @State var showGallery = false
+  @StateObject var photoViewModel = PhotoViewModel()
+  @EnvironmentObject var apiViewModel: APIViewModel
+
 
   var body: some View {
     VStack(spacing: 0) {
       Divider()
         .frame(width: UIScreen.width)
         .padding(.bottom, 36)
-      Circle()
+      KFImage.url(URL(string: apiViewModel.myProfile.profileImage))
+        .placeholder { // 플레이스 홀더 설정
+          Image("ProfileDefault")
+            .resizable()
+            .scaledToFit()
+            .frame(width: 100, height: 100)
+        }.retry(maxCount: 3, interval: .seconds(5)) // 재시도
+        .loadDiskFileSynchronously()
+        .cacheMemoryOnly()
+        .resizable()
+        .scaledToFill()
         .frame(width: 100, height: 100)
+        .clipShape(Circle())
         .padding(.bottom, 16)
       Button {
         editProfileImage = true
@@ -32,20 +48,33 @@ struct ProfileEditView: View {
       }
       .padding(.bottom, 40)
       Divider()
-      profileEditLink(destination: ProfileEditIDView(showToast: $showToast), title: "사용자 ID", content: "East_Road")
+      profileEditLink(
+        destination: ProfileEditIDView(showToast: $showToast).environmentObject(apiViewModel),
+        title: "사용자 ID",
+        content: apiViewModel.myProfile.userName)
       Divider().padding(.leading, 96)
-      profileEditLink(destination: ProfileEditIntroduceView(showToast: $showToast), title: "소개", content: "")
+      profileEditLink(
+        destination: ProfileEditIntroduceView(showToast: $showToast, introduce: $apiViewModel.myProfile.introduce)
+          .environmentObject(apiViewModel),
+        title: "소개",
+        content: apiViewModel.myProfile.introduce ?? "")
       Divider()
       Spacer()
     }
     .overlay {
       ProfileToastMessage(text: "소개가 수정되었습니다.", showToast: $showToast)
     }
+    .fullScreenCover(isPresented: $showGallery) {
+      CustomPhotoView()
+        .environmentObject(photoViewModel)
+        .environmentObject(apiViewModel)
+    }
     .padding(.horizontal, 16)
     .navigationBarBackButtonHidden()
     .confirmationDialog("", isPresented: $editProfileImage) {
       Button("갤러리에서 사진 업로드", role: .none) {
-        log("Show photo ibrary")
+        photoViewModel.fetchPhotos()
+        showGallery = true
       }
       Button("기본 이미지로 변경", role: .none) {
         log("Set defaultImage")
@@ -77,6 +106,9 @@ struct ProfileEditView: View {
             .fontSystem(fontDesignSystem: .subtitle2_KO)
         }
       }
+    }
+    .task {
+      await apiViewModel.requestMyProfile()
     }
   }
 }

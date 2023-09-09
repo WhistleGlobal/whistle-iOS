@@ -5,22 +5,37 @@
 //  Created by ChoiYujin on 8/31/23.
 //
 
+import Kingfisher
 import SwiftUI
 
 struct ProfileInfoView: View {
 
   @Environment(\.dismiss) var dismiss
   @Binding var isShowingBottomSheet: Bool
+  @EnvironmentObject var apiViewModel: APIViewModel
+
 
   var body: some View {
     VStack(spacing: 0) {
-      Circle()
+      KFImage.url(URL(string: apiViewModel.myProfile.profileImage))
+        .placeholder { // 플레이스 홀더 설정
+          Image("ProfileDefault")
+            .resizable()
+            .scaledToFit()
+            .frame(width: 100, height: 100)
+        }.retry(maxCount: 3, interval: .seconds(5)) // 재시도
+        .loadDiskFileSynchronously()
+        .cacheMemoryOnly()
+        .resizable()
+        .scaledToFill()
         .frame(width: 100, height: 100)
+        .clipShape(Circle())
         .padding(.top, 36)
         .padding(.bottom, 16)
-      Text("UserName")
+      Text(apiViewModel.myProfile.userName)
         .foregroundColor(.LabelColor_Primary)
         .fontSystem(fontDesignSystem: .title2_Expanded)
+        .padding(.bottom, 36)
       List {
         NavigationLink {
           EmptyView()

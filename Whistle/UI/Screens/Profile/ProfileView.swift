@@ -5,6 +5,7 @@
 //  Created by ChoiYujin on 8/29/23.
 //
 
+import Kingfisher
 import SwiftUI
 
 // MARK: - ProfileView
@@ -32,6 +33,8 @@ struct ProfileView: View {
     GridItem(.flexible()),
   ]
   @Binding var tabbarOpacity: Double
+  @EnvironmentObject var apiViewModel: APIViewModel
+
 
   var body: some View {
     ZStack {
@@ -104,6 +107,7 @@ struct ProfileView: View {
       VStack {
         Spacer()
         GlassBottomSheet(isShowing: $isShowingBottomSheet, content: AnyView(Text("Hi")))
+          .environmentObject(apiViewModel)
           .onChange(of: isShowingBottomSheet) { newValue in
             if !newValue {
               DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
@@ -167,18 +171,31 @@ extension ProfileView {
       }
       .padding([.top, .horizontal], 16)
       // FIXME: - 프로필
-      Circle()
+
+      KFImage.url(URL(string: apiViewModel.myProfile.profileImage))
+        .placeholder { // 플레이스 홀더 설정
+          Image("ProfileDefault")
+            .resizable()
+            .scaledToFit()
+            .frame(width: 100, height: 100)
+        }.retry(maxCount: 3, interval: .seconds(5)) // 재시도
+        .loadDiskFileSynchronously()
+        .cacheMemoryOnly()
+        .resizable()
+        .scaledToFill()
         .frame(width: 100, height: 100)
+        .clipShape(Circle())
         .padding(.bottom, 16)
-      Text("UserName")
+      Text(apiViewModel.myProfile.userName)
         .foregroundColor(Color.LabelColor_Primary_Dark)
         .fontSystem(fontDesignSystem: .title2_Expanded)
-      Text("소개글 개글 개글 개구리")
+      Text(apiViewModel.myProfile.introduce ?? "소개글 공란임")
         .foregroundColor(Color.LabelColor_Secondary_Dark)
         .fontSystem(fontDesignSystem: .body2_KO)
         .padding(.bottom, 16)
       NavigationLink {
         ProfileEditView()
+          .environmentObject(apiViewModel)
       } label: {
         Text("프로필 편집")
           .fontSystem(fontDesignSystem: .subtitle2_KO)
@@ -190,7 +207,7 @@ extension ProfileView {
       .buttonStyle(ProfileEditButtonStyle())
       HStack(spacing: 48) {
         VStack(spacing: 4) {
-          Text("\(20)")
+          Text("\(apiViewModel.myWhistleCount)")
             .foregroundColor(Color.LabelColor_Primary_Dark)
             .fontSystem(fontDesignSystem: .title2_Expanded)
           Text("whistle")
@@ -200,9 +217,10 @@ extension ProfileView {
         Rectangle().frame(width: 1, height: 36).foregroundColor(.white)
         NavigationLink {
           FollowView()
+            .environmentObject(apiViewModel)
         } label: {
           VStack(spacing: 4) {
-            Text("\(100)")
+            Text("\(apiViewModel.myFollow.followingCount)")
               .foregroundColor(Color.LabelColor_Primary_Dark)
               .fontSystem(fontDesignSystem: .title2_Expanded)
             Text("follower")
