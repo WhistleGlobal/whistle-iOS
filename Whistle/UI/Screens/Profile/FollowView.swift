@@ -64,10 +64,14 @@ struct FollowView: View {
 
         } else {
           ForEach(apiViewModel.myFollow.followerList, id: \.userName) { follower in
-            personRow(
-              isFollow: follower.isFollowed == 1,
-              userName: follower.userName,
-              description: follower.userName, profileImage: follower.profileImg ?? "")
+            NavigationLink {
+              EmptyView()
+            } label: {
+              personRow(
+                isFollow: follower.isFollowed == 1,
+                userName: follower.userName,
+                description: follower.userName, profileImage: follower.profileImg ?? "")
+            }
           }
         }
       } else {
@@ -84,10 +88,14 @@ struct FollowView: View {
             .foregroundColor(.LabelColor_Secondary)
         } else {
           ForEach(apiViewModel.myFollow.followingList, id: \.userName) { following in
-            personRow(
-              isFollow: false,
-              userName: following.userName,
-              description: following.userName, profileImage: following.profileImg ?? "")
+            NavigationLink {
+              EmptyView()
+            } label: {
+              personRow(
+                isFollow: false,
+                userName: following.userName,
+                description: following.userName, profileImage: following.profileImg ?? "")
+            }
           }
         }
       }
