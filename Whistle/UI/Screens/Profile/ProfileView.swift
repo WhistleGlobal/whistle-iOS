@@ -69,35 +69,35 @@ struct ProfileView: View {
         }
         .frame(height: 48)
         .padding(.bottom, 16)
-          switch (tabSelection, apiViewModel.myPostFeed.isEmpty, apiViewModel.bookmark.isEmpty) {
-              // 내 비디오 탭 & 올린 컨텐츠 있음
-          case (.myVideo, false, _):
-              ScrollView {
-                LazyVGrid(columns: [
-                  GridItem(.flexible()),
-                  GridItem(.flexible()),
-                  GridItem(.flexible()),
-                ], spacing: 20) {
-                  ForEach(apiViewModel.myPostFeed, id: \.self) { content in
-                    Button {
-                      log("video clicked")
-                    } label: {
-                      videoThumbnailView(url: content.videoUrl ?? "", viewCount: content.contentViewCount ?? 0)
-                    }
-                  }
+        switch (tabSelection, apiViewModel.myPostFeed.isEmpty, apiViewModel.bookmark.isEmpty) {
+        // 내 비디오 탭 & 올린 컨텐츠 있음
+        case (.myVideo, false, _):
+          ScrollView {
+            LazyVGrid(columns: [
+              GridItem(.flexible()),
+              GridItem(.flexible()),
+              GridItem(.flexible()),
+            ], spacing: 20) {
+              ForEach(apiViewModel.myPostFeed, id: \.self) { content in
+                Button {
+                  log("video clicked")
+                } label: {
+                  videoThumbnailView(url: content.videoUrl ?? "", viewCount: content.contentViewCount ?? 0)
                 }
               }
-              Spacer()
-              // 북마크 탭 & 올린 컨텐츠 있음
-          case (.bookmark, _, false):
-              Spacer()
-              // 내 비디오 탭 & 올린 컨텐츠 없음
-          case (.myVideo, true, _):
-              listEmptyView()
-              // 북마크 탭 & 올린 컨텐츠 없음
-          case (.bookmark, _, true):
-              listEmptyView()
+            }
           }
+          Spacer()
+        // 북마크 탭 & 올린 컨텐츠 있음
+        case (.bookmark, _, false):
+          Spacer()
+        // 내 비디오 탭 & 올린 컨텐츠 없음
+        case (.myVideo, true, _):
+          listEmptyView()
+        // 북마크 탭 & 올린 컨텐츠 없음
+        case (.bookmark, _, true):
+          listEmptyView()
+        }
       }
       .padding(.horizontal, 16)
       .ignoresSafeArea()
