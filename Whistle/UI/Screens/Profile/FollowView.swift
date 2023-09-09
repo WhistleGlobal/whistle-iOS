@@ -5,6 +5,7 @@
 //  Created by ChoiYujin on 9/2/23.
 //
 
+import Kingfisher
 import SwiftUI
 
 // MARK: - FollowView
@@ -66,7 +67,7 @@ struct FollowView: View {
             personRow(
               isFollow: follower.isFollowed == 1,
               userName: follower.userName,
-              description: follower.userName)
+              description: follower.userName, profileImage: follower.profileImg ?? "")
           }
         }
       } else {
@@ -86,7 +87,7 @@ struct FollowView: View {
             personRow(
               isFollow: false,
               userName: following.userName,
-              description: following.userName)
+              description: following.userName, profileImage: following.profileImg ?? "")
           }
         }
       }
@@ -117,9 +118,20 @@ struct FollowView: View {
 
 extension FollowView {
   @ViewBuilder
-  func personRow(isFollow: Bool, userName: String, description: String) -> some View {
+  func personRow(isFollow: Bool, userName: String, description: String, profileImage: String) -> some View {
     HStack(spacing: 0) {
-      Circle()
+      KFImage.url(URL(string: profileImage))
+        .placeholder {
+          Image("ProfileDefault")
+            .resizable()
+            .scaledToFit()
+            .frame(width: 48, height: 48)
+        }
+        .retry(maxCount: 3, interval: .seconds(5))
+        .loadDiskFileSynchronously()
+        .cacheMemoryOnly()
+        .resizable()
+        .scaledToFill()
         .frame(width: 48, height: 48)
       VStack(spacing: 0) {
         Text(userName)
