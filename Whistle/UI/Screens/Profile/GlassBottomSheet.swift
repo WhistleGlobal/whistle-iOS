@@ -27,18 +27,15 @@ struct GlassBottomSheet: View {
       VStack {
         Spacer()
         content
-          .frame(height: 386)
+          .frame(height: 450)
           .transition(.move(edge: .bottom))
           .background(.clear)
           .overlay {
-            glassMorphicCard(width: UIScreen.width, height: 386)
-              .cornerRadius(24, corners: [.topLeft, .topRight])
+            glassMorphicCard(width: UIScreen.width, height: 450)
               .offset(y: 20)
-            RoundedRectangle(cornerRadius: 24)
-              .stroke(
-                Color.Border_Default,
-                lineWidth: 1.5)
-              .frame(height: 386)
+            Image("SheetBorder")
+              .resizable()
+              .frame(maxWidth: .infinity, maxHeight: .infinity)
               .offset(y: 20)
             VStack(spacing: 0) {
               Capsule()
@@ -74,7 +71,7 @@ struct GlassBottomSheet: View {
             }
             .offset(y: 20)
           }
-          .offset(y: isShowing ? 0 : 386)
+          .offset(y: isShowing ? 0 : 450)
       }
       .ignoresSafeArea()
       .frame(maxWidth: .infinity)
@@ -86,6 +83,20 @@ struct GlassBottomSheet: View {
 }
 
 extension GlassBottomSheet {
+
+  // FIXME: - Glass morphism 코드들은 전체적으로 컴포넌트화가 필요합니다! 중복이 많음, -> 추후 수정 예정
+  @ViewBuilder
+  func glassMorphicCard(width: CGFloat, height: CGFloat) -> some View {
+    ZStack {
+      CustomBlurView(effect: .systemUltraThinMaterialLight) { view in
+        // FIXME: - 피그마와 비슷하도록 값 고치기
+        view.gaussianBlurRadius = 30
+      }
+      .clipShape(RoundedRectangle(cornerRadius: 24, style: .continuous))
+    }
+    .frame(width: width, height: height)
+  }
+
   @ViewBuilder
   func bottomSheetRowWithIcon(
     systemName: String,

@@ -35,7 +35,6 @@ struct ProfileView: View {
   @Binding var tabbarOpacity: Double
   @EnvironmentObject var apiViewModel: APIViewModel
 
-
   var body: some View {
     ZStack {
       Color.clear.overlay {
