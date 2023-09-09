@@ -5,6 +5,7 @@
 //  Created by ChoiYujin on 9/2/23.
 //
 
+import Kingfisher
 import SwiftUI
 
 // MARK: - FollowView
@@ -25,6 +26,8 @@ struct FollowView: View {
   @State var tabStatus: profileTabStatus = .follower
   // FIXME: - 나중에 User Follower 모델 로 변경할 것
   @State var followPeoples: [Any] = []
+  @State var showOtherProfile = false
+  @State var selectedId: Int?
 
   var body: some View {
     VStack(spacing: 0) {
@@ -63,10 +66,15 @@ struct FollowView: View {
 
         } else {
           ForEach(apiViewModel.myFollow.followerList, id: \.userName) { follower in
-            personRow(
-              isFollow: follower.isFollowed == 1,
-              userName: follower.userName,
-              description: follower.userName)
+            NavigationLink {
+              UserProfileView(userId: follower.followerId)
+                .environmentObject(apiViewModel)
+            } label: {
+              personRow(
+                isFollow: follower.isFollowed == 1,
+                userName: follower.userName,
+                description: follower.userName, profileImage: follower.profileImg ?? "")
+            }
           }
         }
       } else {
@@ -83,10 +91,15 @@ struct FollowView: View {
             .foregroundColor(.LabelColor_Secondary)
         } else {
           ForEach(apiViewModel.myFollow.followingList, id: \.userName) { following in
-            personRow(
-              isFollow: false,
-              userName: following.userName,
-              description: following.userName)
+            NavigationLink {
+              UserProfileView(userId: following.followingId)
+                .environmentObject(apiViewModel)
+            } label: {
+              personRow(
+                isFollow: false,
+                userName: following.userName,
+                description: following.userName, profileImage: following.profileImg ?? "")
+            }
           }
         }
       }
@@ -117,9 +130,17 @@ struct FollowView: View {
 
 extension FollowView {
   @ViewBuilder
-  func personRow(isFollow: Bool, userName: String, description: String) -> some View {
+  func personRow(isFollow: Bool, userName: String, description: String, profileImage: String) -> some View {
     HStack(spacing: 0) {
-      Circle()
+      KFImage.url(URL(string: profileImage))
+        .placeholder {
+          Image("ProfileDefault")
+            .resizable()
+            .scaledToFit()
+            .frame(width: 48, height: 48)
+        }
+        .resizable()
+        .scaledToFill()
         .frame(width: 48, height: 48)
       VStack(spacing: 0) {
         Text(userName)

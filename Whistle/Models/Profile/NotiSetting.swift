@@ -20,7 +20,6 @@ class NotiSetting: ObservableObject, Codable {
     adEnabled = try container.decodeIfPresent(Int.self, forKey: .adEnabled) == 1
   }
 
-
   init() {
     whistleEnabled = false
     followEnabled = false

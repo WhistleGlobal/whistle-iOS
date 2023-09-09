@@ -41,6 +41,39 @@ class Follow: Codable {
 
 }
 
+// MARK: - UserFollow
+
+class UserFollow: Codable {
+
+  // MARK: Lifecycle
+
+  init(
+    followingList: [FollowingData] = [],
+    followingCount: Int = 0,
+    followerList: [FollowerData] = [],
+    followerCount: Int = 0)
+  {
+    self.followingList = followingList
+    self.followingCount = followingCount
+    self.followerList = followerList
+    self.followerCount = followerCount
+  }
+
+  // MARK: Internal
+
+  enum CodingKeys: String, CodingKey {
+    case followingList = "following"
+    case followingCount = "following_count"
+    case followerList = "followers"
+    case followerCount = "follower_count"
+  }
+
+  var followingList: [FollowingData]
+  var followingCount: Int
+  var followerList: [FollowerData]
+  var followerCount: Int
+}
+
 // MARK: - FollowingData
 
 class FollowingData: Codable {

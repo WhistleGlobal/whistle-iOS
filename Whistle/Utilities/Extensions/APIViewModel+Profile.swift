@@ -64,7 +64,7 @@ extension APIViewModel: ProfileProtocol {
         "\(domainUrl)/user/\(userId)/profile",
         method: .get,
         headers: contentTypeJson)
-        .validate(statusCode: 200...500)
+        .validate(statusCode: 200...300)
         .responseDecodable(of: UserProfile.self) { response in
           switch response.result {
           case .success(let success):
@@ -116,6 +116,9 @@ extension APIViewModel: ProfileProtocol {
     }
   }
 
+  // {
+  //    "whistle_all_count": 0
+  // }
   func requestUserWhistlesCount(userId: Int) async {
     await withCheckedContinuation { continuation in
       AF.request(
@@ -131,9 +134,8 @@ extension APIViewModel: ProfileProtocol {
             }
             do {
               if
-                let jsonArray = try JSONSerialization.jsonObject(with: responseData, options: []) as? [[String: Any]],
-                let firstObject = jsonArray.first,
-                let count = firstObject["whistle_all_count"] as? Int
+                let jsonObject = try JSONSerialization.jsonObject(with: responseData, options: []) as? [String: Any],
+                let count = jsonObject["whistle_all_count"] as? Int
               {
                 self.userWhistleCount = count
                 log("/whistle/count response \(count)")
@@ -185,12 +187,12 @@ extension APIViewModel: ProfileProtocol {
         "\(domainUrl)/user/\(userId)/follow-list",
         method: .get,
         headers: contentTypeJson)
-        .validate(statusCode: 200...500)
+        .validate(statusCode: 200...300)
         .responseData { response in
           switch response.result {
           case .success(let data):
             do {
-              self.userFollow = try self.decoder.decode(Follow.self, from: data)
+              self.userFollow = try self.decoder.decode(UserFollow.self, from: data)
               continuation.resume()
             } catch {
               log("Error decoding JSON: \(error)")
