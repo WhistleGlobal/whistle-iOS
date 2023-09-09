@@ -5,6 +5,7 @@
 //  Created by ChoiYujin on 8/29/23.
 //
 
+import AVKit
 import Kingfisher
 import SwiftUI
 
@@ -16,7 +17,7 @@ struct ProfileView: View {
 
   public enum profileTabCase: String {
     case myVideo
-    case favoriteVideo
+    case bookmark
   }
 
   // MARK: Internal
@@ -25,9 +26,8 @@ struct ProfileView: View {
   @State var isShowingBottomSheet = false
   @State var tabbarDirection: CGFloat = -1.0
   @State var tabSelection: profileTabCase = .myVideo
-  // FIXME: - video 모델 목록 불러오기 수정
-  @State var videos: [Any] = []
   @Binding var tabbarOpacity: Double
+  @Binding var tabBarSelection: TabSelection
   @EnvironmentObject var apiViewModel: APIViewModel
 
   var body: some View {
@@ -56,7 +56,7 @@ struct ProfileView: View {
             tab: profileTabCase.myVideo.rawValue,
             selectedTab: $tabSelection))
           Button {
-            tabSelection = .favoriteVideo
+            tabSelection = .bookmark
           } label: {
             Color.gray
               .opacity(0.01)
@@ -64,40 +64,39 @@ struct ProfileView: View {
           }
           .buttonStyle(ProfileTabItem(
             systemName: "bookmark.fill",
-            tab: profileTabCase.favoriteVideo.rawValue,
+            tab: profileTabCase.bookmark.rawValue,
             selectedTab: $tabSelection))
         }
         .frame(height: 48)
         .padding(.bottom, 16)
-        if videos.isEmpty {
-          Spacer()
-          Text("공유하고 싶은 첫번째 게시물을 업로드해보세요")
-            .fontSystem(fontDesignSystem: .body1_KO)
-            .foregroundColor(.LabelColor_Primary_Dark)
-          Button {
-            log("dd")
-          } label: {
-            Text("업로드하러 가기")
-              .fontSystem(fontDesignSystem: .subtitle2_KO)
-              .foregroundColor(Color.LabelColor_Primary_Dark)
-              .frame(width: 142, height: 36)
-          }
-          .buttonStyle(ProfileEditButtonStyle())
-          .padding(.bottom, 76)
-          Spacer()
-        } else {
+        switch (tabSelection, apiViewModel.myPostFeed.isEmpty, apiViewModel.bookmark.isEmpty) {
+        // 내 비디오 탭 & 올린 컨텐츠 있음
+        case (.myVideo, false, _):
           ScrollView {
             LazyVGrid(columns: [
               GridItem(.flexible()),
               GridItem(.flexible()),
               GridItem(.flexible()),
             ], spacing: 20) {
-              ForEach(0 ..< 20) { _ in
-                videoThumbnailView()
+              ForEach(apiViewModel.myPostFeed, id: \.self) { content in
+                Button {
+                  log("video clicked")
+                } label: {
+                  videoThumbnailView(url: content.videoUrl ?? "", viewCount: content.contentViewCount ?? 0)
+                }
               }
             }
           }
           Spacer()
+        // 북마크 탭 & 올린 컨텐츠 있음
+        case (.bookmark, _, false):
+          Spacer()
+        // 내 비디오 탭 & 올린 컨텐츠 없음
+        case (.myVideo, true, _):
+          listEmptyView()
+        // 북마크 탭 & 올린 컨텐츠 없음
+        case (.bookmark, _, true):
+          listEmptyView()
         }
       }
       .padding(.horizontal, 16)
@@ -128,6 +127,9 @@ struct ProfileView: View {
               })
       }
       .ignoresSafeArea()
+    }
+    .task {
+      await apiViewModel.requestMyPostFeed()
     }
   }
 }
@@ -233,10 +235,11 @@ extension ProfileView {
   }
 
   @ViewBuilder
-  func videoThumbnailView() -> some View {
-    Rectangle()
+  func videoThumbnailView(url: String, viewCount: Int) -> some View {
+    VideoPlayer(
+      player: AVPlayer(url: URL(string: url)!))
+      .disabled(true)
       .frame(height: 204)
-      .foregroundColor(.black)
       .cornerRadius(12)
       .overlay {
         VStack {
@@ -247,7 +250,7 @@ extension ProfileView {
               .scaledToFit()
               .frame(width: 17, height: 17)
               .foregroundColor(.Primary_Default)
-            Text("367.5K")
+            Text("\(viewCount)")
               .fontSystem(fontDesignSystem: .caption_KO_Semibold)
               .foregroundColor(Color.LabelColor_Primary_Dark)
           }
@@ -256,5 +259,26 @@ extension ProfileView {
           .frame(maxWidth: .infinity, alignment: .leading)
         }
       }
+  }
+
+  @ViewBuilder
+  func listEmptyView() -> some View {
+    Spacer()
+    Text("공유하고 싶은 첫번째 게시물을 업로드해보세요")
+      .fontSystem(fontDesignSystem: .body1_KO)
+      .foregroundColor(.LabelColor_Primary_Dark)
+    Button {
+      withAnimation {
+        tabBarSelection = .upload
+      }
+    } label: {
+      Text("업로드하러 가기")
+        .fontSystem(fontDesignSystem: .subtitle2_KO)
+        .foregroundColor(Color.LabelColor_Primary_Dark)
+        .frame(width: 142, height: 36)
+    }
+    .buttonStyle(ProfileEditButtonStyle())
+    .padding(.bottom, 76)
+    Spacer()
   }
 }

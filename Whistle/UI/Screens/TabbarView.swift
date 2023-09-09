@@ -26,7 +26,7 @@ struct TabbarView: View {
         // FIXME: - uploadview로 교체하기
         Color.pink.opacity(0.4).ignoresSafeArea()
       case .profile:
-        ProfileView(tabbarOpacity: $tabbarOpacity)
+        ProfileView(tabbarOpacity: $tabbarOpacity, tabBarSelection: $tabSelection)
           .environmentObject(apiViewModel)
       }
       VStack {

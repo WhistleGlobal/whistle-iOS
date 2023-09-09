@@ -10,6 +10,7 @@ import Foundation
 import Alamofire
 import AVFoundation
 import SwiftyJSON
+import UIKit
 
 extension APIViewModel: PostFeedProtocol {
   // FIXME: - 데이터가 없을 시 처리할 로직 생각할 것
@@ -19,7 +20,7 @@ extension APIViewModel: PostFeedProtocol {
         "\(domainUrl)/user/post/feed",
         method: .get,
         headers: contentTypeJson)
-        .validate(statusCode: 200...500)
+        .validate(statusCode: 200...300)
         .response { response in
           switch response.result {
           case .success(let data):
@@ -50,7 +51,7 @@ extension APIViewModel: PostFeedProtocol {
         "\(domainUrl)/user/\(userId)/post/feed",
         method: .get,
         headers: contentTypeJson)
-        .validate(statusCode: 200...500)
+        .validate(statusCode: 200...300)
         .response { response in
           switch response.result {
           case .success(let data):
@@ -80,7 +81,7 @@ extension APIViewModel: PostFeedProtocol {
         "\(domainUrl)/user/post/bookmark",
         method: .get,
         headers: contentTypeJson)
-        .validate(statusCode: 200...500)
+        .validate(statusCode: 200...300)
         .response { response in
           switch response.result {
           case .success(let data):
