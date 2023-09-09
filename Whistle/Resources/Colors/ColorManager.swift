@@ -55,11 +55,13 @@ extension Color {
   static let Gray70_Dark = Color("Gray70_Dark")
 
   // MARK: - Button Blue Color
+
   static let Blue_Default = Color("Primary_Default")
   static let Blue_Pressed = Color("Primary_Lighten")
   static let Blue_Disabled = Color("Gray40")
 
   // MARK: - Button Gray Color
+
   static let Gray_Default = Color("Gray80").opacity(0.16)
   static let Gray_Pressed = Color("Gray80").opacity(0.36)
   static let Gray_Disabled = Color("Gray80").opacity(0.56)
@@ -119,6 +121,11 @@ extension LinearGradient {
   static var Border_Glass = LinearGradient(
     gradient: Gradient(colors: [Color("White").opacity(0.36), Color("White").opacity(0.24)]),
     startPoint: .top, endPoint: .bottom)
+
+  static var primaryGradient = LinearGradient(
+    colors: [.Primary_Default, .Secondary_Default],
+    startPoint: .leading,
+    endPoint: .trailing)
 }
 
 extension Color {
