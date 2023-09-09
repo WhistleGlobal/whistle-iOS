@@ -28,6 +28,7 @@ struct ProfileView: View {
   // FIXME: - video 모델 목록 불러오기 수정
   @State var videos: [Any] = []
   @Binding var tabbarOpacity: Double
+  @Binding var tabBarSelection: TabSelection
   @EnvironmentObject var apiViewModel: APIViewModel
 
   var body: some View {
@@ -75,7 +76,9 @@ struct ProfileView: View {
             .fontSystem(fontDesignSystem: .body1_KO)
             .foregroundColor(.LabelColor_Primary_Dark)
           Button {
-            log("dd")
+            withAnimation {
+              tabBarSelection = .upload
+            }
           } label: {
             Text("업로드하러 가기")
               .fontSystem(fontDesignSystem: .subtitle2_KO)
