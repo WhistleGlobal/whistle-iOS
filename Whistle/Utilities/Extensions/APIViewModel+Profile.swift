@@ -116,16 +116,13 @@ extension APIViewModel: ProfileProtocol {
     }
   }
 
-  // {
-  //    "whistle_all_count": 0
-  // }
   func requestUserWhistlesCount(userId: Int) async {
     await withCheckedContinuation { continuation in
       AF.request(
         "\(domainUrl)/user/\(userId)/whistle/count",
         method: .get,
         headers: contentTypeJson)
-        .validate(statusCode: 200..<300) // Validate success status codes
+        .validate(statusCode: 200..<300)
         .response { response in
           switch response.result {
           case .success(let data):
@@ -154,7 +151,6 @@ extension APIViewModel: ProfileProtocol {
     }
   }
 
-  // FIXME: - Following Follower가 더미데이터상 없어서 Following Follower 데이터가 있을때 다시 한번 테스트 할 것
   func requestMyFollow() async {
     await withCheckedContinuation { continuation in
       AF.request(
@@ -180,7 +176,6 @@ extension APIViewModel: ProfileProtocol {
     }
   }
 
-  // FIXME: - Following Follower가 더미데이터상 없어서 Following Follower 데이터가 있을때 다시 한번 테스트 할 것
   func requestUserFollow(userId: Int) async {
     await withCheckedContinuation { continuation in
       AF.request(
@@ -223,6 +218,26 @@ extension APIViewModel: ProfileProtocol {
           case .failure:
             log("Failure")
             continuation.resume(returning: false)
+          }
+        }
+    }
+  }
+
+  func deleteProfileImage() async {
+    await withCheckedContinuation { continuation in
+      AF.request(
+        "\(domainUrl)/user/profile/image",
+        method: .delete,
+        headers: contentTypeXwwwForm)
+        .validate(statusCode: 200...300)
+        .responseData { response in
+          switch response.result {
+          case .success(let data):
+            log("success")
+            continuation.resume()
+          case .failure(let error):
+            log("Request failed with error: \(error)")
+            continuation.resume()
           }
         }
     }

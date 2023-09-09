@@ -11,14 +11,12 @@ class ReportedContent: Hashable, Decodable {
 
   // MARK: Public
 
-
   public enum ConentStatus: String, Codable {
     case active = "활성화"
     case inactive = "비활성화"
     case removed = "삭제"
 
     // MARK: Lifecycle
-
 
     public init(from decoder: Decoder) throws {
       let container = try decoder.singleValueContainer()
@@ -39,7 +37,6 @@ class ReportedContent: Hashable, Decodable {
   }
 
   // MARK: Internal
-
 
   enum CodingKeys: String, CodingKey {
     case userId = "user_id"

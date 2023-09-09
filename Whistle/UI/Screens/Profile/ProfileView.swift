@@ -15,7 +15,6 @@ struct ProfileView: View {
 
   // MARK: Public
 
-
   public enum profileTabCase: String {
     case myVideo
     case bookmark
@@ -191,10 +190,9 @@ extension ProfileView {
         }
       }
       .padding([.top, .horizontal], 16)
-      // FIXME: - 프로필
 
-      KFImage.url(URL(string: apiViewModel.myProfile.profileImage))
-        .placeholder { // 플레이스 홀더 설정
+      KFImage.url(URL(string: apiViewModel.myProfile.profileImage ?? ""))
+        .placeholder {
           Image("ProfileDefault")
             .resizable()
             .scaledToFit()

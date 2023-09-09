@@ -16,8 +16,8 @@ struct ProfileInfoView: View {
 
   var body: some View {
     VStack(spacing: 0) {
-      KFImage.url(URL(string: apiViewModel.myProfile.profileImage))
-        .placeholder { // 플레이스 홀더 설정
+      KFImage.url(URL(string: apiViewModel.myProfile.profileImage ?? ""))
+        .placeholder {
           Image("ProfileDefault")
             .resizable()
             .scaledToFit()
