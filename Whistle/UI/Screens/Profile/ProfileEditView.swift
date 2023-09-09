@@ -27,7 +27,10 @@ struct ProfileEditView: View {
         .padding(.bottom, 36)
       KFImage.url(URL(string: apiViewModel.myProfile.profileImage))
         .placeholder { // 플레이스 홀더 설정
-          Circle().frame(width: 100, height: 100)
+          Image("ProfileDefault")
+            .resizable()
+            .scaledToFit()
+            .frame(width: 100, height: 100)
         }.retry(maxCount: 3, interval: .seconds(5)) // 재시도
         .loadDiskFileSynchronously()
         .cacheMemoryOnly()
