@@ -19,16 +19,20 @@ protocol ViewLifecycleDelegate {
 // MARK: - PlayerView
 
 struct PlayerView: View {
-  @Binding var videoVM: VideoVM
+  @EnvironmentObject var apiViewModel: APIViewModel
   let lifecycleDelegate: ViewLifecycleDelegate?
 
   var body: some View {
     VStack(spacing: 0) {
-      ForEach(0..<$videoVM.videos.count) { i in
+      ForEach(0..<$apiViewModel.contentList.count) { i in
         ZStack {
           Color.clear.overlay {
-            Player(player: videoVM.videos[i].player)
-              .frame(maxWidth: .infinity, maxHeight: .infinity)
+            if let player = apiViewModel.contentList[i].player {
+              Player(player: player)
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+            } else {
+              Color.black.frame(maxWidth: .infinity, maxHeight: .infinity)
+            }
           }
           userInfo()
         }

@@ -9,12 +9,15 @@ import _AVKit_SwiftUI
 import SwiftUI
 
 struct MainView: View {
-  @State private var videoVm = VideoVM()
+
+  @EnvironmentObject var apiViewModel: APIViewModel
+
   @State var videoIndex = 0
   @State var currnentVideoIndex = 0
   var body: some View {
     ZStack {
-      PlayerPageView(videoIndex: $videoIndex, currnentVideoIndex: $currnentVideoIndex, videoVM: $videoVm)
+      PlayerPageView(videoIndex: $videoIndex, currnentVideoIndex: $currnentVideoIndex)
+        .environmentObject(apiViewModel)
     }
     .background(Color.black.edgesIgnoringSafeArea(.all))
     .edgesIgnoringSafeArea(.all)

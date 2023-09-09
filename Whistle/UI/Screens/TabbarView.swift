@@ -13,7 +13,7 @@ struct TabbarView: View {
 
   @State var tabSelection: TabSelection = .main
   @State var tabbarOpacity = 1.0
-  @StateObject var apiViewModel = APIViewModel()
+  @EnvironmentObject var apiViewModel: APIViewModel
 
   var body: some View {
     ZStack {
@@ -21,6 +21,7 @@ struct TabbarView: View {
       case .main:
         // FIXME: - MainView로 교체하기 blur 확인용 테스트 이미지입니다.
         MainView()
+          .environmentObject(apiViewModel)
       case .upload:
         // FIXME: - uploadview로 교체하기
         Color.pink.opacity(0.4).ignoresSafeArea()
