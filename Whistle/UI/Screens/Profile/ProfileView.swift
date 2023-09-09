@@ -15,6 +15,7 @@ struct ProfileView: View {
 
   // MARK: Public
 
+
   public enum profileTabCase: String {
     case myVideo
     case bookmark
@@ -29,6 +30,7 @@ struct ProfileView: View {
   @Binding var tabbarOpacity: Double
   @Binding var tabBarSelection: TabSelection
   @EnvironmentObject var apiViewModel: APIViewModel
+
 
   var body: some View {
     ZStack {
@@ -90,6 +92,21 @@ struct ProfileView: View {
           Spacer()
         // 북마크 탭 & 올린 컨텐츠 있음
         case (.bookmark, _, false):
+          ScrollView {
+            LazyVGrid(columns: [
+              GridItem(.flexible()),
+              GridItem(.flexible()),
+              GridItem(.flexible()),
+            ], spacing: 20) {
+              ForEach(apiViewModel.bookmark, id: \.self) { content in
+                Button {
+                  log("video clicked")
+                } label: {
+                  videoThumbnailView(url: content.videoUrl, viewCount: content.viewCount)
+                }
+              }
+            }
+          }
           Spacer()
         // 내 비디오 탭 & 올린 컨텐츠 없음
         case (.myVideo, true, _):
@@ -129,6 +146,9 @@ struct ProfileView: View {
       .ignoresSafeArea()
     }
     .task {
+      await apiViewModel.requestMyBookmark()
+    }
+    .task {
       await apiViewModel.requestMyPostFeed()
     }
   }
@@ -140,8 +160,10 @@ extension ProfileView {
   func glassView(width: CGFloat, height: CGFloat = 398) -> some View {
     glassMorphicCard(width: width, height: height)
       .overlay {
-        Image("ProfileBorder")
-          .resizable()
+        RoundedRectangle(cornerRadius: 32)
+          .stroke(lineWidth: 1)
+          .foregroundStyle(
+            LinearGradient.Border_Glass)
           .frame(width: .infinity, height: .infinity)
         profileInfo(height: height)
       }

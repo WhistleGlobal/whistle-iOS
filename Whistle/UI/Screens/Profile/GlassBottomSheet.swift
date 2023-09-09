@@ -33,8 +33,10 @@ struct GlassBottomSheet: View {
           .overlay {
             glassMorphicCard(width: UIScreen.width, height: 450)
               .offset(y: 20)
-            Image("SheetBorder")
-              .resizable()
+            RoundedRectangle(cornerRadius: 24)
+              .stroke(lineWidth: 1)
+              .foregroundStyle(
+                LinearGradient.Border_Glass)
               .frame(maxWidth: .infinity, maxHeight: .infinity)
               .offset(y: 20)
             VStack(spacing: 0) {
@@ -42,7 +44,14 @@ struct GlassBottomSheet: View {
                 .frame(width: 36, height: 5)
                 .foregroundColor(Color.Border_Default_Dark)
                 .padding(.top, 5)
-                .padding(.bottom, 20)
+                .padding(.bottom, 4)
+              HStack {
+                Text("설정")
+                  .fontSystem(fontDesignSystem: .subtitle1_KO)
+                  .foregroundColor(.White)
+              }
+              .frame(height: 52)
+              Divider().background(Color("Gray10"))
               NavigationLink {
                 ProfileNotiView(isShowingBottomSheet: $isShowing)
                   .environmentObject(apiViewModel)
