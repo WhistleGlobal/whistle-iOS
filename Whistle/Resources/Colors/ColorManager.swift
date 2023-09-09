@@ -64,6 +64,8 @@ extension Color {
   static let Gray_Pressed = Color("Gray80").opacity(0.36)
   static let Gray_Disabled = Color("Gray80").opacity(0.56)
 
+  static var Border_Default_Dark = Color("Gray40").opacity(0.36)
+
   // 위 Alert color와 이름 동일
   // static let Success = Color("Success")
   // static let Info = Color("Info")

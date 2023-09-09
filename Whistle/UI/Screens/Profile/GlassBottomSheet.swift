@@ -40,7 +40,7 @@ struct GlassBottomSheet: View {
             VStack(spacing: 0) {
               Capsule()
                 .frame(width: 36, height: 5)
-                .foregroundColor(Color.Dim_Thin)
+                .foregroundColor(Color.Border_Default_Dark)
                 .padding(.top, 5)
                 .padding(.bottom, 20)
               NavigationLink {
@@ -53,7 +53,12 @@ struct GlassBottomSheet: View {
                 ProfileInfoView(isShowingBottomSheet: $isShowing)
                   .environmentObject(apiViewModel)
               } label: {
-                bottomSheetRowWithIcon(systemName: "info.circle", iconWidth: 24, iconHeight: 24, text: "정보")
+                bottomSheetRowWithIcon(systemName: "info.circle", iconWidth: 24, iconHeight: 24, text: "약관 및 정책")
+              }
+              Button {
+                log("공유")
+              } label: {
+                bottomSheetRowWithIcon(systemName: "square.and.arrow.up", iconWidth: 24, iconHeight: 24, text: "프로필 공유")
               }
               NavigationLink {
                 ProfileReportView(isShowingBottomSheet: $isShowing)
@@ -65,8 +70,16 @@ struct GlassBottomSheet: View {
                   text: "신고")
               }
               Divider().background(Color("Gray10"))
-              bottomSheetRow(text: "로그아웃", color: Color.Primary_Default)
-              bottomSheetRow(text: "계정삭제", color: Color.Danger)
+              Button {
+                log("로그아웃")
+              } label: {
+                bottomSheetRow(text: "로그아웃", color: Color.Info)
+              }
+              Button {
+                log("계정삭제")
+              } label: {
+                bottomSheetRow(text: "계정삭제", color: Color.Danger)
+              }
               Spacer()
             }
             .offset(y: 20)
