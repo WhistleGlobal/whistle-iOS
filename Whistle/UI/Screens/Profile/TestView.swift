@@ -1,34 +1,22 @@
 //
-//  ProfileView.swift
+//  TestView.swift
 //  Whistle
 //
-//  Created by ChoiYujin on 8/29/23.
+//  Created by ChoiYujin on 9/9/23.
 //
 
 import Kingfisher
 import SwiftUI
 
-// MARK: - ProfileView
+// MARK: - UserProfileView
 
-struct ProfileView: View {
+struct UserProfileView: View {
 
-  // MARK: Public
-
-  public enum profileTabCase: String {
-    case myVideo
-    case favoriteVideo
-  }
-
-  // MARK: Internal
-
-  let fontHeight = UIFont.preferredFont(forTextStyle: .title2).lineHeight
-  @State var isShowingBottomSheet = false
-  @State var tabbarDirection: CGFloat = -1.0
-  @State var tabSelection: profileTabCase = .myVideo
-  // FIXME: - video 모델 목록 불러오기 수정
+  @Environment(\.dismiss) var dismiss
+  @EnvironmentObject var apiViewModel :APIViewModel
   @State var videos: [Any] = []
-  @Binding var tabbarOpacity: Double
-  @EnvironmentObject var apiViewModel: APIViewModel
+  @State var isFollow = true
+  let userId: Int
 
   var body: some View {
     ZStack {
@@ -43,47 +31,18 @@ struct ProfileView: View {
         Spacer().frame(height: 64)
         glassView(width: UIScreen.width - 32)
           .padding(.bottom, 12)
-        HStack(spacing: 0) {
-          Button {
-            tabSelection = .myVideo
-          } label: {
-            Color.gray
-              .opacity(0.01)
-              .frame(maxWidth: .infinity, maxHeight: .infinity)
-          }
-          .buttonStyle(ProfileTabItem(
-            systemName: "square.grid.2x2.fill",
-            tab: profileTabCase.myVideo.rawValue,
-            selectedTab: $tabSelection))
-          Button {
-            tabSelection = .favoriteVideo
-          } label: {
-            Color.gray
-              .opacity(0.01)
-              .frame(maxWidth: .infinity, maxHeight: .infinity)
-          }
-          .buttonStyle(ProfileTabItem(
-            systemName: "bookmark.fill",
-            tab: profileTabCase.favoriteVideo.rawValue,
-            selectedTab: $tabSelection))
-        }
-        .frame(height: 48)
-        .padding(.bottom, 16)
         if videos.isEmpty {
           Spacer()
-          Text("공유하고 싶은 첫번째 게시물을 업로드해보세요")
+          Image(systemName: "photo.fill")
+            .resizable()
+            .scaledToFit()
+            .frame(width: 48, height: 48)
+            .foregroundColor(.LabelColor_Primary_Dark)
+            .padding(.bottom, 24)
+          Text("아직 게시물이 없습니다.")
             .fontSystem(fontDesignSystem: .body1_KO)
             .foregroundColor(.LabelColor_Primary_Dark)
-          Button {
-            log("dd")
-          } label: {
-            Text("업로드하러 가기")
-              .fontSystem(fontDesignSystem: .subtitle2_KO)
-              .foregroundColor(Color.LabelColor_Primary_Dark)
-              .frame(width: 142, height: 36)
-          }
-          .buttonStyle(ProfileEditButtonStyle())
-          .padding(.bottom, 76)
+            .padding(.bottom, 76)
           Spacer()
         } else {
           ScrollView {
@@ -92,7 +51,7 @@ struct ProfileView: View {
               GridItem(.flexible()),
               GridItem(.flexible()),
             ], spacing: 20) {
-              ForEach(0 ..< 20) { _ in
+              ForEach(0 ..< videos.count) { _ in
                 videoThumbnailView()
               }
             }
@@ -102,37 +61,17 @@ struct ProfileView: View {
       }
       .padding(.horizontal, 16)
       .ignoresSafeArea()
-      VStack {
-        Spacer()
-        GlassBottomSheet(isShowing: $isShowingBottomSheet, content: AnyView(Text("Hi")))
-          .environmentObject(apiViewModel)
-          .onChange(of: isShowingBottomSheet) { newValue in
-            if !newValue {
-              DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-                tabbarOpacity = 1
-              }
-            }
-          }
-          // FIXME: - 기존 BottomSheet 처럼의 제스처 느낌이 아님
-          .gesture(
-            DragGesture(minimumDistance: 20, coordinateSpace: .local)
-              .onEnded { value in
-                if value.translation.height > 20 {
-                  withAnimation {
-                    isShowingBottomSheet = false
-                  }
-                  DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-                    tabbarOpacity = 1
-                  }
-                }
-              })
-      }
-      .ignoresSafeArea()
+    }
+    .navigationBarBackButtonHidden()
+    .task {
+      await apiViewModel.requestUserProfile(userId: userId)
+      await apiViewModel.requestUserFollow(userId: userId)
+      await apiViewModel.requestUserWhistlesCount(userId: userId)
     }
   }
 }
 
-extension ProfileView {
+extension UserProfileView {
   // FIXME: - 색상 적용 안됨
   @ViewBuilder
   func glassView(width: CGFloat, height: CGFloat = 398) -> some View {
@@ -150,12 +89,22 @@ extension ProfileView {
   func profileInfo(height: CGFloat) -> some View {
     VStack(spacing: 0) {
       HStack {
+        Button {
+          dismiss()
+        } label: {
+          Image(systemName: "chevron.left")
+            .foregroundColor(Color.White)
+            .fontWeight(.semibold)
+            .frame(width: 48, height: 48)
+            .background(
+              Circle()
+                .foregroundColor(.Gray_Default)
+                .frame(width: 48, height: 48))
+        }
         Spacer()
         Button {
-          self.tabbarOpacity = 0
-          withAnimation {
-            self.isShowingBottomSheet = true
-          }
+          // FIXME: - 신고 동작 추가
+
         } label: {
           Image(systemName: "ellipsis")
             .foregroundColor(Color.White)
@@ -163,14 +112,12 @@ extension ProfileView {
             .frame(width: 48, height: 48)
             .background(
               Circle()
-                .foregroundColor(.Dim_Default)
+                .foregroundColor(.Gray_Default)
                 .frame(width: 48, height: 48))
         }
       }
       .padding([.top, .horizontal], 16)
-      // FIXME: - 프로필
-
-      KFImage.url(URL(string: apiViewModel.myProfile.profileImage))
+      KFImage.url(URL(string: apiViewModel.userProfile.profileImg))
         .placeholder { // 플레이스 홀더 설정
           Image("ProfileDefault")
             .resizable()
@@ -182,28 +129,33 @@ extension ProfileView {
         .frame(width: 100, height: 100)
         .clipShape(Circle())
         .padding(.bottom, 16)
-      Text(apiViewModel.myProfile.userName)
+      Text(apiViewModel.userProfile.userName)
         .foregroundColor(Color.LabelColor_Primary_Dark)
         .fontSystem(fontDesignSystem: .title2_Expanded)
-      Text(apiViewModel.myProfile.introduce)
+      Text(apiViewModel.userProfile.introduce ?? "")
         .foregroundColor(Color.LabelColor_Secondary_Dark)
         .fontSystem(fontDesignSystem: .body2_KO)
         .padding(.bottom, 16)
-      NavigationLink {
-        ProfileEditView()
-          .environmentObject(apiViewModel)
-      } label: {
-        Text("프로필 편집")
-          .fontSystem(fontDesignSystem: .subtitle2_KO)
-          .foregroundColor(Color.LabelColor_Primary_Dark)
-          .frame(width: 114, height: 36)
+      // FIXME: - 팔로잉 팔로워 버튼으로 만들기
+      if isFollow {
+        Button("") {
+          log("Button pressed")
+          isFollow.toggle()
+        }
+        .buttonStyle(FollowButtonStyle(isFollow: isFollow))
+        .padding(.bottom, 24)
+      } else {
+        Button("") {
+          log("Button pressed")
+          isFollow.toggle()
+        }
+        .buttonStyle(FollowButtonStyle(isFollow: isFollow))
+        .padding(.bottom, 24)
       }
-      .frame(width: 114, height: 36)
-      .padding(.bottom, 24)
-      .buttonStyle(ProfileEditButtonStyle())
+
       HStack(spacing: 48) {
         VStack(spacing: 4) {
-          Text("\(apiViewModel.myWhistleCount)")
+          Text("\(apiViewModel.userWhistleCount)")
             .foregroundColor(Color.LabelColor_Primary_Dark)
             .fontSystem(fontDesignSystem: .title2_Expanded)
           Text("whistle")
@@ -216,7 +168,7 @@ extension ProfileView {
             .environmentObject(apiViewModel)
         } label: {
           VStack(spacing: 4) {
-            Text("\(apiViewModel.myFollow.followingCount)")
+            Text("\(apiViewModel.userFollow.followingCount)")
               .foregroundColor(Color.LabelColor_Primary_Dark)
               .fontSystem(fontDesignSystem: .title2_Expanded)
             Text("follower")

@@ -26,6 +26,8 @@ struct FollowView: View {
   @State var tabStatus: profileTabStatus = .follower
   // FIXME: - 나중에 User Follower 모델 로 변경할 것
   @State var followPeoples: [Any] = []
+  @State var showOtherProfile = false
+  @State var selectedId: Int?
 
   var body: some View {
     VStack(spacing: 0) {
@@ -65,7 +67,8 @@ struct FollowView: View {
         } else {
           ForEach(apiViewModel.myFollow.followerList, id: \.userName) { follower in
             NavigationLink {
-              EmptyView()
+              UserProfileView(userId: follower.followerId)
+                .environmentObject(apiViewModel)
             } label: {
               personRow(
                 isFollow: follower.isFollowed == 1,
@@ -89,7 +92,8 @@ struct FollowView: View {
         } else {
           ForEach(apiViewModel.myFollow.followingList, id: \.userName) { following in
             NavigationLink {
-              EmptyView()
+              UserProfileView(userId: following.followingId)
+                .environmentObject(apiViewModel)
             } label: {
               personRow(
                 isFollow: false,
@@ -135,9 +139,6 @@ extension FollowView {
             .scaledToFit()
             .frame(width: 48, height: 48)
         }
-        .retry(maxCount: 3, interval: .seconds(5))
-        .loadDiskFileSynchronously()
-        .cacheMemoryOnly()
         .resizable()
         .scaledToFill()
         .frame(width: 48, height: 48)

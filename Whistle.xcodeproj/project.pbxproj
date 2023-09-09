@@ -31,6 +31,7 @@
 		7866694B2AA1287500448EC7 /* UserResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7866694A2AA1287500448EC7 /* UserResponse.swift */; };
 		7866694E2AA1289900448EC7 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 7866694D2AA1289900448EC7 /* Alamofire */; };
 		786669552AA12F7F00448EC7 /* KeychainSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 786669542AA12F7F00448EC7 /* KeychainSwift */; };
+		786CFEAF2AAC4DCF00DB2ADD /* TestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 786CFEAE2AAC4DCF00DB2ADD /* TestView.swift */; };
 		787173B42AA472070018CB14 /* ProfileToastMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 787173B32AA472070018CB14 /* ProfileToastMessage.swift */; };
 		787173B62AA47A510018CB14 /* ProfileAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 787173B52AA47A510018CB14 /* ProfileAlert.swift */; };
 		7874CB882AA0842D0081DE54 /* FontSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7874CB872AA0842D0081DE54 /* FontSystem.swift */; };
@@ -111,6 +112,7 @@
 		786669462AA1282D00448EC7 /* AppleSignInViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppleSignInViewModel.swift; sourceTree = "<group>"; };
 		786669482AA1284F00448EC7 /* UserAuth.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserAuth.swift; sourceTree = "<group>"; };
 		7866694A2AA1287500448EC7 /* UserResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserResponse.swift; sourceTree = "<group>"; };
+		786CFEAE2AAC4DCF00DB2ADD /* TestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestView.swift; sourceTree = "<group>"; };
 		787173B32AA472070018CB14 /* ProfileToastMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileToastMessage.swift; sourceTree = "<group>"; };
 		787173B52AA47A510018CB14 /* ProfileAlert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileAlert.swift; sourceTree = "<group>"; };
 		7874CB872AA0842D0081DE54 /* FontSystem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FontSystem.swift; sourceTree = "<group>"; };
@@ -418,6 +420,7 @@
 				786385732AA45ED4004F8EF4 /* ProfileEditIntroduceView.swift */,
 				78F41A602AA707D2004A7BFC /* CustomPhotoView.swift */,
 				78B6FD2B2AA718A80043E461 /* CustomAlbumListView.swift */,
+				786CFEAE2AAC4DCF00DB2ADD /* TestView.swift */,
 			);
 			path = Profile;
 			sourceTree = "<group>";
@@ -577,6 +580,7 @@
 				786669492AA1284F00448EC7 /* UserAuth.swift in Sources */,
 				1B39555D2A95098100BCB4DF /* VideoModel.swift in Sources */,
 				1B39555B2A95095500BCB4DF /* ColorManager.swift in Sources */,
+				786CFEAF2AAC4DCF00DB2ADD /* TestView.swift in Sources */,
 				1B3955532A9507E300BCB4DF /* Extension+UIScreen.swift in Sources */,
 				787AF5672AA87D2E00C190E6 /* UserProfile.swift in Sources */,
 				78BECCD72AAAE169003FA7B5 /* ProfileProtocol.swift in Sources */,

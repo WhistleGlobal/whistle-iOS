@@ -20,7 +20,6 @@ class FollowUser: ObservableObject, Codable, Hashable {
   var userName = ""
   var profileImg = ""
 
-
   static func == (lhs: FollowUser, rhs: FollowUser) -> Bool {
     lhs.uuid == rhs.uuid
   }
@@ -29,47 +28,3 @@ class FollowUser: ObservableObject, Codable, Hashable {
     hasher.combine(uuid)
   }
 }
-
-
-// {
-// "following": [
-// {
-// "following_id": 2,
-// "user_name": "유저네임1",
-// "profile_img": "프로필이미지_URL1"
-// },
-// ...
-// ],
-// "following_count": 10,
-// "followers": [
-// {
-// "follower_id": 3,
-// "user_name": "유저네임2",
-// "profile_img": "프로필이미지_URL2",
-// "is_followed": false
-// },
-// ...
-// ],
-// "follower_count": 12
-// }
-
-// let uuid = UUID()
-// var userId = 0
-// var userName = ""
-// var email = ""
-// var profileImg = ""
-// var introduce: String?
-// var country: String?
-// var createdAt = Date()
-// var status: UserStatus = .active
-// var quitAt: Date?
-//
-// // Equatable conformance for completeness (optional but recommended)
-// static func == (lhs: User, rhs: User) -> Bool {
-//  lhs.uuid == rhs.uuid
-// }
-//
-// // Implementing the hash(into:) method to make User hashable
-// func hash(into hasher: inout Hasher) {
-//  hasher.combine(uuid)
-// }
