@@ -16,7 +16,8 @@ struct UserProfileView: View {
   @EnvironmentObject var apiViewModel: APIViewModel
   @State var videos: [Any] = []
   @State var isFollow = true
-  @State var showReport = false
+  @State var showDialog = false
+  @State var goReport = false
   let userId: Int
 
   var body: some View {
@@ -64,11 +65,16 @@ struct UserProfileView: View {
       .ignoresSafeArea()
     }
     .navigationBarBackButtonHidden()
-    .confirmationDialog("", isPresented: $showReport) {
-      Button("신고", role: .destructive) { }
+    .confirmationDialog("", isPresented: $showDialog) {
+      Button("신고", role: .destructive) {
+        goReport = true
+      }
       Button("취소", role: .cancel) {
         log("Cancel")
       }
+    }
+    .navigationDestination(isPresented: $goReport) {
+      ReportUserView()
     }
     .task {
       await apiViewModel.requestUserProfile(userId: userId)
@@ -111,7 +117,7 @@ extension UserProfileView {
         Spacer()
         Button {
           // FIXME: - 신고 동작 추가
-          showReport = true
+          showDialog = true
         } label: {
           Image(systemName: "ellipsis")
             .foregroundColor(Color.White)
