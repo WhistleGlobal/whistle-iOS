@@ -23,7 +23,7 @@ extension View {
         // FIXME: - 피그마와 비슷하도록 값 고치기
         view.gaussianBlurRadius = 30
       }
-      .clipShape(RoundedRectangle(cornerRadius: 20, style: .continuous))
+      .clipShape(RoundedRectangle(cornerRadius: 32, style: .continuous))
     }
     .frame(width: width, height: height)
   }

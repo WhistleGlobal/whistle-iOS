@@ -138,10 +138,9 @@ extension ProfileView {
   func glassView(width: CGFloat, height: CGFloat = 398) -> some View {
     glassMorphicCard(width: width, height: height)
       .overlay {
-        RoundedRectangle(cornerRadius: 20)
-          .stroke(
-            LinearGradient.Border_Glass,
-            lineWidth: 2)
+        Image("ProfileBorder")
+          .resizable()
+          .frame(width: .infinity, height: .infinity)
         profileInfo(height: height)
       }
   }
@@ -163,7 +162,7 @@ extension ProfileView {
             .frame(width: 48, height: 48)
             .background(
               Circle()
-                .foregroundColor(.Dim_Default)
+                .foregroundColor(.Gray_Default)
                 .frame(width: 48, height: 48))
         }
       }
@@ -185,6 +184,8 @@ extension ProfileView {
       Text(apiViewModel.myProfile.userName)
         .foregroundColor(Color.LabelColor_Primary_Dark)
         .fontSystem(fontDesignSystem: .title2_Expanded)
+        .padding(.bottom, 4)
+
       Text(apiViewModel.myProfile.introduce)
         .foregroundColor(Color.LabelColor_Secondary_Dark)
         .fontSystem(fontDesignSystem: .body2_KO)
