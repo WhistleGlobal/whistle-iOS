@@ -32,10 +32,9 @@ struct TabbarView: View {
         Spacer()
         glassMorphicTab()
           .overlay {
-            RoundedRectangle(cornerRadius: 28)
-              .stroke(
-                LinearGradient.Border_Glass,
-                lineWidth: 1.0)
+            Image("TabBarBorder")
+              .resizable()
+              .frame(maxWidth: .infinity, maxHeight: .infinity)
           }
           .overlay {
             tabItems()
@@ -56,13 +55,11 @@ extension TabbarView {
       .offset(x: tabSelection.rawValue * ((UIScreen.width - 32) / 3))
       .padding(3)
       .overlay(
-        RoundedRectangle(cornerRadius: 100)
-          .stroke(
-            LinearGradient.Border_Glass,
-            lineWidth: 2)
-          .frame(width: (UIScreen.width - 32) / 3 - 6)
-          .offset(x: tabSelection.rawValue * ((UIScreen.width - 32) / 3))
-          .padding(4))
+        Image("TabButtonBorder")
+          .resizable()
+          .frame(maxWidth: .infinity, maxHeight: .infinity)
+          .padding(3)
+          .offset(x: tabSelection.rawValue * ((UIScreen.width - 32) / 3)))
       .foregroundColor(.clear)
       .frame(height: 56)
       .frame(maxWidth: .infinity)

@@ -140,10 +140,9 @@ extension ProfileView {
   func glassView(width: CGFloat, height: CGFloat = 398) -> some View {
     glassMorphicCard(width: width, height: height)
       .overlay {
-        RoundedRectangle(cornerRadius: 20)
-          .stroke(
-            LinearGradient.Border_Glass,
-            lineWidth: 2)
+        Image("ProfileBorder")
+          .resizable()
+          .frame(width: .infinity, height: .infinity)
         profileInfo(height: height)
       }
   }
