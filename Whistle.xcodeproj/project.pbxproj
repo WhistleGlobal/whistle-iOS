@@ -31,7 +31,7 @@
 		7866694B2AA1287500448EC7 /* UserResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7866694A2AA1287500448EC7 /* UserResponse.swift */; };
 		7866694E2AA1289900448EC7 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 7866694D2AA1289900448EC7 /* Alamofire */; };
 		786669552AA12F7F00448EC7 /* KeychainSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 786669542AA12F7F00448EC7 /* KeychainSwift */; };
-		786CFEAF2AAC4DCF00DB2ADD /* TestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 786CFEAE2AAC4DCF00DB2ADD /* TestView.swift */; };
+		786CFEAF2AAC4DCF00DB2ADD /* UserProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 786CFEAE2AAC4DCF00DB2ADD /* UserProfileView.swift */; };
 		787173B42AA472070018CB14 /* ProfileToastMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 787173B32AA472070018CB14 /* ProfileToastMessage.swift */; };
 		787173B62AA47A510018CB14 /* ProfileAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 787173B52AA47A510018CB14 /* ProfileAlert.swift */; };
 		7874CB882AA0842D0081DE54 /* FontSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7874CB872AA0842D0081DE54 /* FontSystem.swift */; };
@@ -78,7 +78,6 @@
 		78DA58D72AA448A100F8D2F1 /* ProfileEditIDView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78DA58D62AA448A100F8D2F1 /* ProfileEditIDView.swift */; };
 		78DDADFA2AA1A37F00960552 /* AppKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78DDADF92AA1A37F00960552 /* AppKeys.swift */; };
 		78E738CA2AA9A90F00480046 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = 78E738C92AA9A90F00480046 /* Kingfisher */; };
-		78E738CC2AAA1B1300480046 /* FollowUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78E738CB2AAA1B1300480046 /* FollowUser.swift */; };
 		78F41A5D2AA70626004A7BFC /* PhotoModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78F41A5C2AA70626004A7BFC /* PhotoModel.swift */; };
 		78F41A5F2AA70639004A7BFC /* PhotoViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78F41A5E2AA70639004A7BFC /* PhotoViewModel.swift */; };
 		78F41A612AA707D2004A7BFC /* CustomPhotoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78F41A602AA707D2004A7BFC /* CustomPhotoView.swift */; };
@@ -112,7 +111,7 @@
 		786669462AA1282D00448EC7 /* AppleSignInViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppleSignInViewModel.swift; sourceTree = "<group>"; };
 		786669482AA1284F00448EC7 /* UserAuth.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserAuth.swift; sourceTree = "<group>"; };
 		7866694A2AA1287500448EC7 /* UserResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserResponse.swift; sourceTree = "<group>"; };
-		786CFEAE2AAC4DCF00DB2ADD /* TestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestView.swift; sourceTree = "<group>"; };
+		786CFEAE2AAC4DCF00DB2ADD /* UserProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfileView.swift; sourceTree = "<group>"; };
 		787173B32AA472070018CB14 /* ProfileToastMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileToastMessage.swift; sourceTree = "<group>"; };
 		787173B52AA47A510018CB14 /* ProfileAlert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileAlert.swift; sourceTree = "<group>"; };
 		7874CB872AA0842D0081DE54 /* FontSystem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FontSystem.swift; sourceTree = "<group>"; };
@@ -158,7 +157,6 @@
 		78DA58D62AA448A100F8D2F1 /* ProfileEditIDView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileEditIDView.swift; sourceTree = "<group>"; };
 		78DDADF72AA1868D00960552 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		78DDADF92AA1A37F00960552 /* AppKeys.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppKeys.swift; sourceTree = "<group>"; };
-		78E738CB2AAA1B1300480046 /* FollowUser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FollowUser.swift; sourceTree = "<group>"; };
 		78F41A5C2AA70626004A7BFC /* PhotoModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoModel.swift; sourceTree = "<group>"; };
 		78F41A5E2AA70639004A7BFC /* PhotoViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoViewModel.swift; sourceTree = "<group>"; };
 		78F41A602AA707D2004A7BFC /* CustomPhotoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomPhotoView.swift; sourceTree = "<group>"; };
@@ -359,7 +357,6 @@
 				787AF5722AA888FC00C190E6 /* UserPostFeed.swift */,
 				787AF5742AA88F4000C190E6 /* BookMark.swift */,
 				787AF5782AA8930700C190E6 /* NotiSetting.swift */,
-				78E738CB2AAA1B1300480046 /* FollowUser.swift */,
 			);
 			path = Profile;
 			sourceTree = "<group>";
@@ -420,7 +417,7 @@
 				786385732AA45ED4004F8EF4 /* ProfileEditIntroduceView.swift */,
 				78F41A602AA707D2004A7BFC /* CustomPhotoView.swift */,
 				78B6FD2B2AA718A80043E461 /* CustomAlbumListView.swift */,
-				786CFEAE2AAC4DCF00DB2ADD /* TestView.swift */,
+				786CFEAE2AAC4DCF00DB2ADD /* UserProfileView.swift */,
 			);
 			path = Profile;
 			sourceTree = "<group>";
@@ -559,7 +556,6 @@
 				78DA58D52AA445E400F8D2F1 /* ProfileEditView.swift in Sources */,
 				787AF5712AA887E600C190E6 /* PostFeed.swift in Sources */,
 				787AF5602AA85CBC00C190E6 /* Profile.swift in Sources */,
-				78E738CC2AAA1B1300480046 /* FollowUser.swift in Sources */,
 				78B6FD2C2AA718A80043E461 /* CustomAlbumListView.swift in Sources */,
 				78F41A5F2AA70639004A7BFC /* PhotoViewModel.swift in Sources */,
 				788F43F02AA5CD9F00718D38 /* MainView.swift in Sources */,
@@ -580,7 +576,7 @@
 				786669492AA1284F00448EC7 /* UserAuth.swift in Sources */,
 				1B39555D2A95098100BCB4DF /* VideoModel.swift in Sources */,
 				1B39555B2A95095500BCB4DF /* ColorManager.swift in Sources */,
-				786CFEAF2AAC4DCF00DB2ADD /* TestView.swift in Sources */,
+				786CFEAF2AAC4DCF00DB2ADD /* UserProfileView.swift in Sources */,
 				1B3955532A9507E300BCB4DF /* Extension+UIScreen.swift in Sources */,
 				787AF5672AA87D2E00C190E6 /* UserProfile.swift in Sources */,
 				78BECCD72AAAE169003FA7B5 /* ProfileProtocol.swift in Sources */,

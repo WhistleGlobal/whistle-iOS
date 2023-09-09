@@ -1,5 +1,5 @@
 //
-//  TestView.swift
+//  UserProfileView.swift
 //  Whistle
 //
 //  Created by ChoiYujin on 9/9/23.
@@ -13,9 +13,10 @@ import SwiftUI
 struct UserProfileView: View {
 
   @Environment(\.dismiss) var dismiss
-  @EnvironmentObject var apiViewModel :APIViewModel
+  @EnvironmentObject var apiViewModel: APIViewModel
   @State var videos: [Any] = []
   @State var isFollow = true
+  @State var showReport = false
   let userId: Int
 
   var body: some View {
@@ -63,6 +64,12 @@ struct UserProfileView: View {
       .ignoresSafeArea()
     }
     .navigationBarBackButtonHidden()
+    .confirmationDialog("", isPresented: $showReport) {
+      Button("신고", role: .destructive) { }
+      Button("취소", role: .cancel) {
+        log("Cancel")
+      }
+    }
     .task {
       await apiViewModel.requestUserProfile(userId: userId)
       await apiViewModel.requestUserFollow(userId: userId)
@@ -104,7 +111,7 @@ extension UserProfileView {
         Spacer()
         Button {
           // FIXME: - 신고 동작 추가
-
+          showReport = true
         } label: {
           Image(systemName: "ellipsis")
             .foregroundColor(Color.White)
@@ -118,7 +125,7 @@ extension UserProfileView {
       }
       .padding([.top, .horizontal], 16)
       KFImage.url(URL(string: apiViewModel.userProfile.profileImg))
-        .placeholder { // 플레이스 홀더 설정
+        .placeholder {
           Image("ProfileDefault")
             .resizable()
             .scaledToFit()
