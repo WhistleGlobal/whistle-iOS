@@ -43,11 +43,7 @@ struct WhistleApp: App {
       .tint(.black)
       .task {
         if userAuth.isAccess {
-          userAuth.loadData {
-            Task {
-              await apiViewModel.requestContentList()
-            }
-          }
+          userAuth.loadData { }
         }
       }
     }

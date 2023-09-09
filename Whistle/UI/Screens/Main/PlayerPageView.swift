@@ -47,17 +47,8 @@ struct PlayerPageView: UIViewRepresentable {
     }
 
     func onAppear() {
-      Task {
-        if parent.apiViewModel.contentList.isEmpty {
-          await parent.apiViewModel.requestContentList()
-          await parent.apiViewModel.contentList[index].player?.seek(to: .zero)
-          parent.apiViewModel.contentList[index].player?.play()
-
-        } else {
-          await parent.apiViewModel.contentList[index].player?.seek(to: .zero)
-          parent.apiViewModel.contentList[index].player?.play()
-        }
-      }
+      parent.apiViewModel.contentList[index].player?.seek(to: .zero)
+      parent.apiViewModel.contentList[index].player?.play()
     }
 
     func onDisappear() {

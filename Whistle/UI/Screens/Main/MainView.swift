@@ -16,10 +16,17 @@ struct MainView: View {
   @State var currnentVideoIndex = 0
   var body: some View {
     ZStack {
-      PlayerPageView(videoIndex: $videoIndex, currnentVideoIndex: $currnentVideoIndex)
-        .environmentObject(apiViewModel)
+      if apiViewModel.contentList.isEmpty {
+        Color.white
+      } else {
+        PlayerPageView(videoIndex: $videoIndex, currnentVideoIndex: $currnentVideoIndex)
+          .environmentObject(apiViewModel)
+      }
     }
     .background(Color.black.edgesIgnoringSafeArea(.all))
     .edgesIgnoringSafeArea(.all)
+    .task {
+      await apiViewModel.requestContentList()
+    }
   }
 }
