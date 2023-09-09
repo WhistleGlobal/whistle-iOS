@@ -52,10 +52,6 @@ struct ReportUserView: View {
   }
 }
 
-#Preview {
-  ReportUserView()
-}
-
 extension ReportUserView {
 
   @ViewBuilder
