@@ -41,4 +41,3 @@ class Bookmark: ObservableObject, Codable {
   var isBookmarked = 0
   var isHated = 0
 }
-

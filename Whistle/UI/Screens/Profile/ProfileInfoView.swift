@@ -14,7 +14,6 @@ struct ProfileInfoView: View {
   @Binding var isShowingBottomSheet: Bool
   @EnvironmentObject var apiViewModel: APIViewModel
 
-
   var body: some View {
     VStack(spacing: 0) {
       KFImage.url(URL(string: apiViewModel.myProfile.profileImage))
@@ -23,9 +22,7 @@ struct ProfileInfoView: View {
             .resizable()
             .scaledToFit()
             .frame(width: 100, height: 100)
-        }.retry(maxCount: 3, interval: .seconds(5)) // 재시도
-        .loadDiskFileSynchronously()
-        .cacheMemoryOnly()
+        }
         .resizable()
         .scaledToFill()
         .frame(width: 100, height: 100)

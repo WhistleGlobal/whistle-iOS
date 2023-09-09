@@ -20,7 +20,7 @@ class APIViewModel: ObservableObject {
   @Published var myWhistleCount = 0
   @Published var userWhistleCount = 0
   @Published var myFollow = Follow()
-  @Published var userFollow = Follow()
+  @Published var userFollow = UserFollow()
   @Published var myPostFeed: [PostFeed] = []
   @Published var userPostFeed: [UserPostFeed] = []
   @Published var bookmark: [Bookmark] = []
