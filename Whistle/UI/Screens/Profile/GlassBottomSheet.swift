@@ -71,6 +71,7 @@ struct GlassBottomSheet: View {
               }
               NavigationLink {
                 ProfileReportView(isShowingBottomSheet: $isShowing)
+                  .environmentObject(apiViewModel)
               } label: {
                 bottomSheetRowWithIcon(
                   systemName: "exclamationmark.triangle.fill",

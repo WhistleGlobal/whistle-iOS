@@ -86,7 +86,6 @@ struct UserProfileView: View {
 
 extension UserProfileView {
 
-
   // FIXME: - 색상 적용 안됨
   @ViewBuilder
   func glassView(width: CGFloat, height: CGFloat = 398) -> some View {
