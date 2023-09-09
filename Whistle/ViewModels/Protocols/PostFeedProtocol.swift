@@ -6,10 +6,12 @@
 //
 
 import Foundation
+import UIKit
 
 protocol PostFeedProtocol {
 
   func requestMyPostFeed() async
   func requestUserPostFeed(userId: Int) async
   func requestMyBookmark() async
+  func requestContentList() async
 }

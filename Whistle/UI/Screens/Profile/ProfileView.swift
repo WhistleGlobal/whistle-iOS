@@ -5,6 +5,7 @@
 //  Created by ChoiYujin on 8/29/23.
 //
 
+import AVKit
 import Kingfisher
 import SwiftUI
 
@@ -25,8 +26,6 @@ struct ProfileView: View {
   @State var isShowingBottomSheet = false
   @State var tabbarDirection: CGFloat = -1.0
   @State var tabSelection: profileTabCase = .myVideo
-  // FIXME: - video 모델 목록 불러오기 수정
-  @State var videos: [Any] = []
   @Binding var tabbarOpacity: Double
   @Binding var tabBarSelection: TabSelection
   @EnvironmentObject var apiViewModel: APIViewModel
@@ -70,7 +69,7 @@ struct ProfileView: View {
         }
         .frame(height: 48)
         .padding(.bottom, 16)
-        if videos.isEmpty {
+        if apiViewModel.myPostFeed.isEmpty {
           Spacer()
           Text("공유하고 싶은 첫번째 게시물을 업로드해보세요")
             .fontSystem(fontDesignSystem: .body1_KO)
@@ -95,8 +94,12 @@ struct ProfileView: View {
               GridItem(.flexible()),
               GridItem(.flexible()),
             ], spacing: 20) {
-              ForEach(0 ..< 20) { _ in
-                videoThumbnailView()
+              ForEach(apiViewModel.myPostFeed, id: \.self) { content in
+                Button {
+                  log("video clicked")
+                } label: {
+                  videoThumbnailView(url: content.videoUrl ?? "", viewCount: content.contentViewCount ?? 0)
+                }
               }
             }
           }
@@ -131,6 +134,9 @@ struct ProfileView: View {
               })
       }
       .ignoresSafeArea()
+    }
+    .task {
+      await apiViewModel.requestMyPostFeed()
     }
   }
 }
@@ -236,10 +242,11 @@ extension ProfileView {
   }
 
   @ViewBuilder
-  func videoThumbnailView() -> some View {
-    Rectangle()
+  func videoThumbnailView(url: String, viewCount: Int) -> some View {
+    VideoPlayer(
+      player: AVPlayer(url: URL(string: url)!))
+      .disabled(true)
       .frame(height: 204)
-      .foregroundColor(.black)
       .cornerRadius(12)
       .overlay {
         VStack {
@@ -250,7 +257,7 @@ extension ProfileView {
               .scaledToFit()
               .frame(width: 17, height: 17)
               .foregroundColor(.Primary_Default)
-            Text("367.5K")
+            Text("\(viewCount)")
               .fontSystem(fontDesignSystem: .caption_KO_Semibold)
               .foregroundColor(Color.LabelColor_Primary_Dark)
           }
