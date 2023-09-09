@@ -30,36 +30,36 @@ struct PlayerPageView: UIViewRepresentable {
       let currentindex = Int(scrollView.contentOffset.y / UIScreen.main.bounds.height)
 
       if index != currentindex {
-        parent.videoVM.videos[index].player.seek(to: .zero)
-        parent.videoVM.videos[index].player.pause()
+        parent.apiViewModel.contentList[index].player?.seek(to: .zero)
+        parent.apiViewModel.contentList[index].player?.pause()
         index = currentindex
-        parent.videoVM.videos[index].player.play()
-        parent.videoVM.videos[index].player.actionAtItemEnd = .none
+        parent.apiViewModel.contentList[index].player?.play()
+        parent.apiViewModel.contentList[index].player?.actionAtItemEnd = .none
         NotificationCenter.default.addObserver(
           forName: NSNotification.Name.AVPlayerItemDidPlayToEndTime,
-          object: parent.videoVM.videos[index].player.currentItem,
+          object: parent.apiViewModel.contentList[index].player?.currentItem,
           queue: .main)
         { _ in
-          self.parent.videoVM.videos[self.index].player.seek(to: .zero)
-          self.parent.videoVM.videos[self.index].player.play()
+          self.parent.apiViewModel.contentList[self.index].player?.seek(to: .zero)
+          self.parent.apiViewModel.contentList[self.index].player?.play()
         }
       }
     }
 
     func onAppear() {
-      parent.videoVM.videos[index].player.seek(to: .zero)
-      parent.videoVM.videos[index].player.play()
+      parent.apiViewModel.contentList[index].player?.seek(to: .zero)
+      parent.apiViewModel.contentList[index].player?.play()
     }
 
     func onDisappear() {
-      parent.videoVM.videos[index].player.seek(to: .zero)
-      parent.videoVM.videos[index].player.pause()
+      parent.apiViewModel.contentList[index].player?.seek(to: .zero)
+      parent.apiViewModel.contentList[index].player?.pause()
     }
   }
 
+  @EnvironmentObject var apiViewModel: APIViewModel
   @Binding var videoIndex: Int
   @Binding var currnentVideoIndex: Int
-  @Binding var videoVM: VideoVM
 
   func makeCoordinator() -> Coordinator {
     PlayerPageView.Coordinator(parent1: self)
@@ -68,15 +68,17 @@ struct PlayerPageView: UIViewRepresentable {
   func makeUIView(context: Context) -> UIScrollView {
     let view = UIScrollView()
 
-    let childView = UIHostingController(rootView: PlayerView(videoVM: $videoVM, lifecycleDelegate: context.coordinator))
+    let childView = UIHostingController(
+      rootView: PlayerView(lifecycleDelegate: context.coordinator)
+        .environmentObject(apiViewModel))
     childView.view.frame = CGRect(
       x: 0,
       y: 0,
       width: UIScreen.main.bounds.width,
-      height: UIScreen.main.bounds.height * CGFloat(videoVM.videos.count))
+      height: UIScreen.main.bounds.height * CGFloat(apiViewModel.contentList.count))
     view.contentSize = CGSize(
       width: UIScreen.main.bounds.width,
-      height: UIScreen.main.bounds.height * CGFloat(videoVM.videos.count))
+      height: UIScreen.main.bounds.height * CGFloat(apiViewModel.contentList.count))
 
     view.addSubview(childView.view)
     view.showsVerticalScrollIndicator = false
@@ -90,14 +92,14 @@ struct PlayerPageView: UIViewRepresentable {
   func updateUIView(_ uiView: UIScrollView, context _: Context) {
     uiView.contentSize = CGSize(
       width: UIScreen.main.bounds.width,
-      height: UIScreen.main.bounds.height * CGFloat(videoVM.videos.count))
+      height: UIScreen.main.bounds.height * CGFloat(apiViewModel.contentList.count))
 
     for i in 0..<uiView.subviews.count {
       uiView.subviews[i].frame = CGRect(
         x: 0,
         y: 0,
         width: UIScreen.main.bounds.width,
-        height: UIScreen.main.bounds.height * CGFloat(videoVM.videos.count))
+        height: UIScreen.main.bounds.height * CGFloat(apiViewModel.contentList.count))
     }
   }
 }

@@ -9,14 +9,24 @@ import _AVKit_SwiftUI
 import SwiftUI
 
 struct MainView: View {
-  @State private var videoVm = VideoVM()
+
+  @EnvironmentObject var apiViewModel: APIViewModel
+
   @State var videoIndex = 0
   @State var currnentVideoIndex = 0
   var body: some View {
     ZStack {
-      PlayerPageView(videoIndex: $videoIndex, currnentVideoIndex: $currnentVideoIndex, videoVM: $videoVm)
+      if apiViewModel.contentList.isEmpty {
+        Color.white
+      } else {
+        PlayerPageView(videoIndex: $videoIndex, currnentVideoIndex: $currnentVideoIndex)
+          .environmentObject(apiViewModel)
+      }
     }
     .background(Color.black.edgesIgnoringSafeArea(.all))
     .edgesIgnoringSafeArea(.all)
+    .task {
+      await apiViewModel.requestContentList()
+    }
   }
 }

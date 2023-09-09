@@ -25,6 +25,7 @@
 		782DD47A2AA31F3C006183D3 /* ProfileEditButtonStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 782DD4792AA31F3C006183D3 /* ProfileEditButtonStyle.swift */; };
 		782DD47C2AA32448006183D3 /* Extension+UINavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 782DD47B2AA32448006183D3 /* Extension+UINavigationController.swift */; };
 		782F1B252AA1C566006831C8 /* ProfileTabItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 782F1B242AA1C566006831C8 /* ProfileTabItem.swift */; };
+		785E82722AAC8FDD00EF3576 /* MainContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 785E82712AAC8FDD00EF3576 /* MainContent.swift */; };
 		786385742AA45ED4004F8EF4 /* ProfileEditIntroduceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 786385732AA45ED4004F8EF4 /* ProfileEditIntroduceView.swift */; };
 		786669472AA1282D00448EC7 /* AppleSignInViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 786669462AA1282D00448EC7 /* AppleSignInViewModel.swift */; };
 		786669492AA1284F00448EC7 /* UserAuth.swift in Sources */ = {isa = PBXBuildFile; fileRef = 786669482AA1284F00448EC7 /* UserAuth.swift */; };
@@ -108,6 +109,7 @@
 		782DD4792AA31F3C006183D3 /* ProfileEditButtonStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileEditButtonStyle.swift; sourceTree = "<group>"; };
 		782DD47B2AA32448006183D3 /* Extension+UINavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Extension+UINavigationController.swift"; sourceTree = "<group>"; };
 		782F1B242AA1C566006831C8 /* ProfileTabItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileTabItem.swift; sourceTree = "<group>"; };
+		785E82712AAC8FDD00EF3576 /* MainContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainContent.swift; sourceTree = "<group>"; };
 		786385732AA45ED4004F8EF4 /* ProfileEditIntroduceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileEditIntroduceView.swift; sourceTree = "<group>"; };
 		786669462AA1282D00448EC7 /* AppleSignInViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppleSignInViewModel.swift; sourceTree = "<group>"; };
 		786669482AA1284F00448EC7 /* UserAuth.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserAuth.swift; sourceTree = "<group>"; };
@@ -359,6 +361,7 @@
 				787AF5722AA888FC00C190E6 /* UserPostFeed.swift */,
 				787AF5742AA88F4000C190E6 /* BookMark.swift */,
 				787AF5782AA8930700C190E6 /* NotiSetting.swift */,
+				785E82712AAC8FDD00EF3576 /* MainContent.swift */,
 			);
 			path = Profile;
 			sourceTree = "<group>";
@@ -604,6 +607,7 @@
 				78DA58D72AA448A100F8D2F1 /* ProfileEditIDView.swift in Sources */,
 				787AF5752AA88F4000C190E6 /* BookMark.swift in Sources */,
 				78F980812A9F32C800AD542A /* TabbarView.swift in Sources */,
+				785E82722AAC8FDD00EF3576 /* MainContent.swift in Sources */,
 				7874CB902AA0B5350081DE54 /* ProfileNotiView.swift in Sources */,
 				78D148E92A9E13A800DDCE48 /* CustomBlurView.swift in Sources */,
 				78D148DB2A9E0A5E00DDCE48 /* Extension+Font.swift in Sources */,

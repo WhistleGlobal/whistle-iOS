@@ -19,18 +19,27 @@ protocol ViewLifecycleDelegate {
 // MARK: - PlayerView
 
 struct PlayerView: View {
-  @Binding var videoVM: VideoVM
+  @EnvironmentObject var apiViewModel: APIViewModel
   let lifecycleDelegate: ViewLifecycleDelegate?
 
   var body: some View {
     VStack(spacing: 0) {
-      ForEach(0..<$videoVM.videos.count) { i in
+      ForEach(apiViewModel.contentList, id: \.self) { content in
         ZStack {
           Color.clear.overlay {
-            Player(player: videoVM.videos[i].player)
-              .frame(maxWidth: .infinity, maxHeight: .infinity)
+            if let player = content.player {
+              Player(player: player)
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+            } else {
+              Color.black.frame(maxWidth: .infinity, maxHeight: .infinity)
+            }
           }
-          userInfo()
+          userInfo(
+            userName: content.userName ?? "",
+            isFollowed: content.isFollowed ?? false,
+            caption: content.caption ?? "",
+            musicTitle: content.musicTitle ?? "",
+            whistleCount: content.whistleCount ?? 0)
         }
       }
     }
@@ -47,7 +56,7 @@ struct PlayerView: View {
 extension PlayerView {
 
   @ViewBuilder
-  func userInfo() -> some View {
+  func userInfo(userName: String, isFollowed _: Bool, caption: String, musicTitle: String, whistleCount: Int) -> some View {
     VStack(spacing: 0) {
       Spacer()
       HStack(spacing: 0) {
@@ -57,7 +66,7 @@ extension PlayerView {
             Circle()
               .frame(width: 36, height: 36)
               .padding(.trailing, 12)
-            Text("aewol")
+            Text(userName)
               .foregroundColor(.white)
               .fontSystem(fontDesignSystem: .subtitle1)
               .padding(.trailing, 16)
@@ -74,11 +83,11 @@ extension PlayerView {
               .frame(width: 50, height: 26)
           }
           HStack(spacing: 0) {
-            Text("오늘 친구들이랑 강인리 경기 봤는데 경기 수준 실화냐;;")
+            Text(caption)
               .fontSystem(fontDesignSystem: .body2_KO)
               .foregroundColor(.white)
           }
-          Label("사용된 음악 출처", systemImage: "music.quarternote.3")
+          Label(musicTitle, systemImage: "music.quarternote.3")
             .fontSystem(fontDesignSystem: .body2_KO)
             .foregroundColor(.white)
         }
@@ -91,7 +100,7 @@ extension PlayerView {
             .frame(width: 36, height: 36)
             .foregroundColor(.Gray10)
             .padding(.bottom, 2)
-          Text("400")
+          Text("\(whistleCount)")
             .foregroundColor(.Gray10)
             .fontSystem(fontDesignSystem: .caption_Regular)
             .padding(.bottom, 24)
