@@ -163,7 +163,7 @@ extension ProfileView {
             .frame(width: 48, height: 48)
             .background(
               Circle()
-                .foregroundColor(.Dim_Default)
+                .foregroundColor(.Gray_Default)
                 .frame(width: 48, height: 48))
         }
       }
