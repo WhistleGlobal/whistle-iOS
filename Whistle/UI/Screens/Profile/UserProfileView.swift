@@ -85,15 +85,16 @@ struct UserProfileView: View {
 }
 
 extension UserProfileView {
+
+
   // FIXME: - 색상 적용 안됨
   @ViewBuilder
   func glassView(width: CGFloat, height: CGFloat = 398) -> some View {
     glassMorphicCard(width: width, height: height)
       .overlay {
-        RoundedRectangle(cornerRadius: 20)
-          .stroke(
-            LinearGradient.Border_Glass,
-            lineWidth: 2)
+        Image("ProfileBorder")
+          .resizable()
+          .frame(maxWidth: .infinity, maxHeight: .infinity)
         profileInfo(height: height)
       }
   }
