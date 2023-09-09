@@ -51,7 +51,7 @@ extension APIViewModel: PostFeedProtocol {
         "\(domainUrl)/user/\(userId)/post/feed",
         method: .get,
         headers: contentTypeJson)
-        .validate(statusCode: 200...500)
+        .validate(statusCode: 200...300)
         .response { response in
           switch response.result {
           case .success(let data):
@@ -81,7 +81,7 @@ extension APIViewModel: PostFeedProtocol {
         "\(domainUrl)/user/post/bookmark",
         method: .get,
         headers: contentTypeJson)
-        .validate(statusCode: 200...500)
+        .validate(statusCode: 200...300)
         .response { response in
           switch response.result {
           case .success(let data):
