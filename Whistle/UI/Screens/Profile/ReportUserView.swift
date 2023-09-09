@@ -13,7 +13,6 @@ struct ReportUserView: View {
 
   @Environment(\.dismiss) var dismiss
 
-
   var body: some View {
     VStack(spacing: 0) {
       Divider().frame(width: UIScreen.width)
