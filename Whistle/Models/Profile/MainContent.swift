@@ -8,7 +8,7 @@
 import AVFoundation
 import Foundation
 
-class MainContent: Identifiable {
+class MainContent: Hashable {
 
   // MARK: Lifecycle
 
@@ -60,6 +60,17 @@ class MainContent: Identifiable {
   var isWhistled: Bool?
   var isFollowed: Bool?
   var isBookmarked: Bool?
+
+
+  // Equatable conformance for completeness (optional but recommended)
+  static func == (lhs: MainContent, rhs: MainContent) -> Bool {
+    lhs.id == rhs.id
+  }
+
+  // Implementing the hash(into:) method to make User hashable
+  func hash(into hasher: inout Hasher) {
+    hasher.combine(id)
+  }
 }
 
 // {
