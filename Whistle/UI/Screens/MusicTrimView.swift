@@ -14,7 +14,9 @@ import SwiftUI
 struct MusicTrimView: View {
   // MARK: Private
 
-  @StateObject private var audioVM: AudioPlayViewModel
+  @StateObject var apiViewModel = APIViewModel()
+
+  @StateObject private var musicVM: MusicViewModel
   @State private var audioURL: URL?
   @State private var startTime: TimeInterval = 0
   @State private var endTime: TimeInterval = 0
@@ -32,10 +34,12 @@ struct MusicTrimView: View {
   @State var accumulatedOffset: Double = 0
   var length = 1
 
-  init(audio: String) {
+  init(audio _: String) {
     let length = Int(AVURLAsset(url: Bundle.main.url(forResource: "newjeans", withExtension: "mp3")!).duration.seconds)
     self.length = length
-    _audioVM = StateObject(wrappedValue: AudioPlayViewModel(url: URL(string: audio)!, sampels_count: length))
+    _musicVM = StateObject(wrappedValue: MusicViewModel(
+      url: URL(string: "http://commondatastorage.googleapis.com/codeskulptor-demos/DDR_assets/Sevish_-__nbsp_.mp3")!,
+      samples_count: length))
   }
 
   // MARK: Internal
@@ -75,6 +79,12 @@ struct MusicTrimView: View {
                 })
         }
         .padding(.bottom, UIScreen.getHeight(40))
+        .onAppear {
+          print(apiViewModel.idToken)
+          Task {
+            print(await apiViewModel.requestMusicList())
+          }
+        }
 
         // MARK: - Audio Timeline
 
@@ -103,11 +113,11 @@ struct MusicTrimView: View {
           ScrollViewReader { scrollProxy in
             ScrollView(.horizontal, showsIndicators: false) {
               HStack(spacing: 0) {
-                if audioVM.soundSamples.isEmpty {
+                if musicVM.soundSamples.isEmpty {
                   ProgressView()
                 } else {
-                  ForEach(audioVM.soundSamples, id: \.self) { model in
-                    BarView(value: normalizeSoundLevel(level: model.magnitude), color: model.color)
+                  ForEach(musicVM.soundSamples, id: \.self) { model in
+                    BarView(value: normalizeSoundLevel(level: model.magnitude))
                       .id(model.index)
                   }
                 }
@@ -155,7 +165,9 @@ struct MusicTrimView: View {
               .onAppear {
                 timer = Timer.publish(every: 0.1, on: .main, in: .common).autoconnect()
                 isAnimated = true
-                audioVM.playAudio(startTime: offset / 16.4, endTime: offset / 16.4 + 15)
+                Task {
+                  await musicVM.playAudio(startTime: offset / 16.4, endTime: offset / 16.4 + 15)
+                }
               }
           } else {
             Color.clear
@@ -163,7 +175,7 @@ struct MusicTrimView: View {
                 timer.upstream.connect().cancel()
                 audioTime = 15
                 isAnimated = false
-                audioVM.stopAudio()
+                musicVM.stopAudio()
               }
           }
         }
@@ -272,18 +284,16 @@ struct ViewOffsetKey: PreferenceKey {
 
 struct BarView: View {
   let value: CGFloat
-  var color: Color = .white
 
   var body: some View {
     ZStack {
       Rectangle()
-//        .fill(color)
         .fill(Color.white)
         .cornerRadius(15)
-        .frame(width: UIScreen.getWidth(6), height: value * 2.5)
+        .frame(width: UIScreen.getWidth(6), height: abs(value))
         .padding(.trailing, UIScreen.getWidth(10))
     }
-    .frame(height: UIScreen.height * 0.1)
+//    .frame(height: UIScreen.height * 0.1)
   }
 }
 
@@ -293,179 +303,4 @@ struct MusicTrimView_Previews: PreviewProvider {
   static var previews: some View {
     MusicTrimView(audio: "newjeans.mp3")
   }
-}
-
-extension View {
-  @ViewBuilder
-  public func scrollStatusMonitor(_ isScrolling: Binding<Bool>, monitorMode: ScrollStatusMonitorMode) -> some View {
-    switch monitorMode {
-    case .common:
-      modifier(ScrollStatusMonitorCommonModifier(isScrolling: isScrolling))
-    #if !os(macOS) && !targetEnvironment(macCatalyst)
-    case .exclusion:
-      modifier(ScrollStatusMonitorExclusionModifier(isScrolling: isScrolling))
-    #endif
-    }
-  }
-
-  public func scrollSensor() -> some View {
-    overlay(
-      GeometryReader { proxy in
-        Color.clear
-          .preference(
-            key: MinValueKey.self,
-            value: proxy.frame(in: .global))
-      })
-  }
-}
-
-// MARK: - IsScrollingValueKey
-
-struct IsScrollingValueKey: EnvironmentKey {
-  static var defaultValue = false
-}
-
-extension EnvironmentValues {
-  public var isScrolling: Bool {
-    get { self[IsScrollingValueKey.self] }
-    set { self[IsScrollingValueKey.self] = newValue }
-  }
-}
-
-// MARK: - MinValueKey
-
-public struct MinValueKey: PreferenceKey {
-  public static var defaultValue: CGRect = .zero
-  public static func reduce(value: inout CGRect, nextValue: () -> CGRect) {
-    value = nextValue()
-  }
-}
-
-#if !os(macOS) && !targetEnvironment(macCatalyst)
-struct ScrollStatusMonitorExclusionModifier: ViewModifier {
-  @StateObject private var store = ExclusionStore()
-  @Binding var isScrolling: Bool
-  func body(content: Content) -> some View {
-    content
-      .environment(\.isScrolling, store.isScrolling)
-      .onChange(of: store.isScrolling) { value in
-        isScrolling = value
-      }
-      .onDisappear {
-        store.cancellable = nil
-      }
-  }
-}
-
-final class ExclusionStore: ObservableObject {
-  @Published var isScrolling = false
-
-  private let idlePublisher = Timer.publish(every: 0.1, on: .main, in: .default).autoconnect()
-  private let scrollingPublisher = Timer.publish(every: 0.1, on: .main, in: .tracking).autoconnect()
-
-  private var publisher: some Publisher {
-    scrollingPublisher
-      .map { _ in 1 }
-      .merge(
-        with:
-        idlePublisher
-          .map { _ in 0 })
-  }
-
-  var cancellable: AnyCancellable?
-
-  init() {
-    cancellable = publisher
-      .receive(on: DispatchQueue.main)
-      .sink(receiveCompletion: { _ in }, receiveValue: { output in
-        guard let value = output as? Int else { return }
-        if value == 1,!self.isScrolling {
-          self.isScrolling = true
-        }
-        if value == 0, self.isScrolling {
-          self.isScrolling = false
-        }
-      })
-  }
-}
-#endif
-
-// MARK: - ScrollStatusMonitorCommonModifier
-
-struct ScrollStatusMonitorCommonModifier: ViewModifier {
-  @StateObject private var store = CommonStore()
-  @Binding var isScrolling: Bool
-  func body(content: Content) -> some View {
-    content
-      .environment(\.isScrolling, store.isScrolling)
-      .onChange(of: store.isScrolling) { value in
-        isScrolling = value
-      }
-      .onPreferenceChange(MinValueKey.self) { _ in
-        store.preferencePublisher.send(1)
-      }
-      .onDisappear {
-        store.cancellable = nil
-      }
-  }
-}
-
-// MARK: - CommonStore
-
-final class CommonStore: ObservableObject {
-  @Published var isScrolling = false
-  private var timestamp = Date()
-
-  let preferencePublisher = PassthroughSubject<Int, Never>()
-  let timeoutPublisher = PassthroughSubject<Int, Never>()
-
-  private var publisher: some Publisher {
-    preferencePublisher
-      .dropFirst(2)
-      .handleEvents(
-        receiveOutput: { _ in
-          // Ensure that when multiple scrolling components are scrolling at the same time,
-          // the stop state of each can still be obtained individually
-          self.timestamp = Date()
-          DispatchQueue.main.asyncAfter(deadline: .now() + 0.15) {
-            if Date().timeIntervalSince(self.timestamp) > 0.1 {
-              self.timeoutPublisher.send(0)
-            }
-          }
-        })
-      .merge(with: timeoutPublisher)
-  }
-
-  var cancellable: AnyCancellable?
-
-  init() {
-    cancellable = publisher
-      .receive(on: DispatchQueue.main)
-      .sink(receiveCompletion: { _ in }, receiveValue: { output in
-        guard let value = output as? Int else { return }
-        if value == 1,!self.isScrolling {
-          self.isScrolling = true
-        }
-        if value == 0, self.isScrolling {
-          self.isScrolling = false
-        }
-      })
-  }
-}
-
-// MARK: - ScrollStatusMonitorMode
-
-/// Monitoring mode for scroll status
-public enum ScrollStatusMonitorMode {
-  #if !os(macOS) && !targetEnvironment(macCatalyst)
-  /// The judgment of the start and end of scrolling is more accurate and timely. ( iOS only )
-  ///
-  /// But only for scenarios where there is only one scrollable component in the screen
-  case exclusion
-  #endif
-  /// This mode should be used when there are multiple scrollable parts in the scene.
-  ///
-  /// * The accuracy and timeliness are slightly inferior to the exclusion mode.
-  /// * When using this mode, a **scroll sensor** must be added to the subview of the scroll widget.
-  case common
 }
