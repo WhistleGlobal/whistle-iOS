@@ -24,7 +24,6 @@ struct ProfileEditIDView: View {
     case none
   }
 
-
   // MARK: Internal
 
   @Environment(\.dismiss) var dismiss
@@ -139,7 +138,6 @@ extension ProfileEditIDView {
     }
   }
 
-
   func validateInput(_ input: String) async -> InputValidationStatus {
     if input.isEmpty {
       return InputValidationStatus.empty
@@ -160,7 +158,6 @@ extension ProfileEditIDView {
       return InputValidationStatus.invalidID
     }
   }
-
 
   @ViewBuilder
   func validationLabel() -> some View {

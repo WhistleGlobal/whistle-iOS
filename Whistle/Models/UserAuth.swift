@@ -89,8 +89,7 @@ class UserAuth: ObservableObject {
       log("refreshTokenKey nil")
       return
     }
-    guard let url = URL(string: "https://madeuse.com/auth/apple/refresh") else {
-      log("url nil")
+    guard let url = URL(string: "\(domainUrl)/auth/apple/refresh") else {
       return
     }
     let headers: HTTPHeaders = ["Content-Type": "application/x-www-form-urlencoded"]

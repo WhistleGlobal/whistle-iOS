@@ -9,7 +9,7 @@ import Foundation
 
 class User: ObservableObject, Codable, Hashable {
 
-  let uuid = UUID()
+  var uuid = UUID()
   var userId = 0
   var userName = ""
   var email = ""
@@ -31,5 +31,3 @@ class User: ObservableObject, Codable, Hashable {
   }
 
 }
-
-

@@ -57,7 +57,7 @@ struct ProfileEditIntroduceView: View {
       ToolbarItem(placement: .confirmationAction) {
         Button {
           Task {
-            await apiViewModel.updateMyProfile()
+            _ = await apiViewModel.updateMyProfile()
             dismiss()
             showToast = true
           }

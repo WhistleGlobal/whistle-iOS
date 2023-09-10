@@ -19,7 +19,6 @@ struct ProfileEditView: View {
   @StateObject var photoViewModel = PhotoViewModel()
   @EnvironmentObject var apiViewModel: APIViewModel
 
-
   var body: some View {
     VStack(spacing: 0) {
       Divider()
@@ -31,9 +30,7 @@ struct ProfileEditView: View {
             .resizable()
             .scaledToFit()
             .frame(width: 100, height: 100)
-        }.retry(maxCount: 3, interval: .seconds(5)) // 재시도
-        .loadDiskFileSynchronously()
-        .cacheMemoryOnly()
+        }
         .resizable()
         .scaledToFill()
         .frame(width: 100, height: 100)
@@ -57,7 +54,7 @@ struct ProfileEditView: View {
         destination: ProfileEditIntroduceView(showToast: $showToast, introduce: $apiViewModel.myProfile.introduce)
           .environmentObject(apiViewModel),
         title: "소개",
-        content: apiViewModel.myProfile.introduce ?? "")
+        content: apiViewModel.myProfile.introduce)
       Divider()
       Spacer()
     }

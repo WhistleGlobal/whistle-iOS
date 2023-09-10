@@ -13,7 +13,7 @@ struct TabbarView: View {
 
   @State var tabSelection: TabSelection = .main
   @State var tabbarOpacity = 1.0
-  @StateObject var apiViewModel = APIViewModel()
+  @EnvironmentObject var apiViewModel: APIViewModel
 
   var body: some View {
     ZStack {
@@ -21,21 +21,21 @@ struct TabbarView: View {
       case .main:
         // FIXME: - MainView로 교체하기 blur 확인용 테스트 이미지입니다.
         MainView()
+          .environmentObject(apiViewModel)
       case .upload:
         // FIXME: - uploadview로 교체하기
         Color.pink.opacity(0.4).ignoresSafeArea()
       case .profile:
-        ProfileView(tabbarOpacity: $tabbarOpacity)
+        ProfileView(tabbarOpacity: $tabbarOpacity, tabBarSelection: $tabSelection)
           .environmentObject(apiViewModel)
       }
       VStack {
         Spacer()
         glassMorphicTab()
           .overlay {
-            RoundedRectangle(cornerRadius: 28)
-              .stroke(
-                LinearGradient.Border_Glass,
-                lineWidth: 1.0)
+            Image("TabBarBorder")
+              .resizable()
+              .frame(maxWidth: .infinity, maxHeight: .infinity)
           }
           .overlay {
             tabItems()
@@ -56,13 +56,11 @@ extension TabbarView {
       .offset(x: tabSelection.rawValue * ((UIScreen.width - 32) / 3))
       .padding(3)
       .overlay(
-        RoundedRectangle(cornerRadius: 100)
-          .stroke(
-            LinearGradient.Border_Glass,
-            lineWidth: 2)
-          .frame(width: (UIScreen.width - 32) / 3 - 6)
-          .offset(x: tabSelection.rawValue * ((UIScreen.width - 32) / 3))
-          .padding(4))
+        Image("TabButtonBorder")
+          .resizable()
+          .frame(maxWidth: .infinity, maxHeight: .infinity)
+          .padding(3)
+          .offset(x: tabSelection.rawValue * ((UIScreen.width - 32) / 3)))
       .foregroundColor(.clear)
       .frame(height: 56)
       .frame(maxWidth: .infinity)
