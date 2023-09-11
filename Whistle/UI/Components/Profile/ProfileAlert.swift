@@ -21,10 +21,12 @@ struct ProfileAlert: View {
         VStack(spacing: 0) {
           profileAlertView()
         }
-        Image("AlertBorder_UpdateID")
-          .resizable()
+        RoundedRectangle(cornerRadius: 14)
+          .stroke(lineWidth: 1)
+          .foregroundStyle(
+            LinearGradient.Border_Glass)
           .frame(maxWidth: .infinity, maxHeight: .infinity)
-          .allowsHitTesting(false)
+
         VStack(spacing: 0) {
           Spacer().frame(height: 150)
           Rectangle()

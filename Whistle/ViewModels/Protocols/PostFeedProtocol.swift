@@ -14,4 +14,5 @@ protocol PostFeedProtocol {
   func requestUserPostFeed(userId: Int) async
   func requestMyBookmark() async
   func requestContentList() async
+  func requestReportedConent() async
 }

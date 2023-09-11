@@ -156,4 +156,34 @@ extension APIViewModel: PostFeedProtocol {
         }
     }
   }
+
+  // /user/post/suspend-list
+  func requestReportedConent() async {
+    await withCheckedContinuation { continuation in
+      AF.request(
+        "\(domainUrl)/user/post/suspend-list",
+        method: .get,
+        headers: contentTypeJson)
+        .validate(statusCode: 200...300)
+        .response { response in
+          switch response.result {
+          case .success(let data):
+            do {
+              guard let data else { return }
+              let json = try JSON(data: data)
+              log("\(json)")
+              let decoder = JSONDecoder()
+              self.reportedContent = try decoder.decode([ReportedContent].self, from: data)
+              continuation.resume()
+            } catch {
+              log("Error parsing JSON: \(error)")
+              continuation.resume()
+            }
+          case .failure(let error):
+            log("Error: \(error)")
+            continuation.resume()
+          }
+        }
+    }
+  }
 }

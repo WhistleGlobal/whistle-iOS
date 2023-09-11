@@ -35,13 +35,10 @@ class PostFeed: ObservableObject, Codable, Hashable {
   var contentViewCount: Int?
   var isWhistled: Int?
 
-
-  // Equatable conformance for completeness (optional but recommended)
   static func == (lhs: PostFeed, rhs: PostFeed) -> Bool {
     lhs.videoUrl == rhs.videoUrl
   }
 
-  // Implementing the hash(into:) method to make User hashable
   func hash(into hasher: inout Hasher) {
     hasher.combine(videoUrl)
   }
