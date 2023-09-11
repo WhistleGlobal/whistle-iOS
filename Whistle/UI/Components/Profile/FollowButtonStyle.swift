@@ -15,10 +15,10 @@ struct FollowButtonStyle: ButtonStyle {
 
     let configuration: ButtonStyle.Configuration
     @Environment(\.isEnabled) private var isEnabled: Bool
-    @Binding var isFollow: Bool
+    @Binding var isFollowed: Bool
 
     var body: some View {
-      Text(isFollow ? "Follow" : "Following")
+      Text(isFollowed ? "following" : "follow")
         .frame(width: 112, height: 36)
         .foregroundColor(.LabelColor_Primary_Dark)
         .background(
@@ -28,32 +28,32 @@ struct FollowButtonStyle: ButtonStyle {
     }
 
     func followButtonColor() -> Color {
-      switch (isFollow, isEnabled, configuration.isPressed) {
+      switch (isFollowed, isEnabled, configuration.isPressed) {
       // Follow/Pressed
-      case (true, true, true):
+      case (false, true, true):
         return .Blue_Pressed
       // Follow/Not pressed
-      case (true, true, false):
+      case (false, true, false):
         return .Blue_Default
       // Follow/Disable
-      case (true, false, _):
+      case (false, false, _):
         return .Blue_Disabled
       // Following/Pressed
-      case (false, true, true):
+      case (true, true, true):
         return .Gray_Pressed
       // Following/Not pressed
-      case (false, true, false):
+      case (true, true, false):
         return .Gray_Default
       // Following/Disable
-      case (false, false, _):
+      case (true, false, _):
         return .Gray_Disabled
       }
     }
   }
 
-  @State var isFollow: Bool
+  @Binding var isFollowed: Bool
 
   func makeBody(configuration: Configuration) -> some View {
-    FollowButton(configuration: configuration, isFollow: $isFollow)
+    FollowButton(configuration: configuration, isFollowed: $isFollowed)
   }
 }

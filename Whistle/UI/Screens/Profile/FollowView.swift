@@ -24,10 +24,9 @@ struct FollowView: View {
   @Environment(\.dismiss) var dismiss
   @EnvironmentObject var apiViewModel: APIViewModel
   @State var tabStatus: profileTabStatus = .follower
-  // FIXME: - 나중에 User Follower 모델 로 변경할 것
-  @State var followPeoples: [Any] = []
   @State var showOtherProfile = false
   @State var selectedId: Int?
+  @State var userId: Int?
 
   var body: some View {
     VStack(spacing: 0) {
@@ -37,7 +36,7 @@ struct FollowView: View {
         }
         .buttonStyle(
           FollowTabbarStyle(
-            followNum: apiViewModel.myFollow.followerCount,
+            followNum: userId == nil ? apiViewModel.myFollow.followerCount : apiViewModel.userFollow.followerCount,
             tab: profileTabStatus.follower.rawValue,
             selectedTab: $tabStatus))
         Button("") {
@@ -45,61 +44,34 @@ struct FollowView: View {
         }
         .buttonStyle(
           FollowTabbarStyle(
-            followNum: apiViewModel.myFollow.followingCount,
+            followNum: userId == nil
+              ? apiViewModel.myFollow.followingCount
+              : apiViewModel.userFollow.followingCount,
             tab: profileTabStatus.following.rawValue,
             selectedTab: $tabStatus))
       }
       .frame(height: 48)
-
+      // FIXME: - 코드 리팩 필요
       if tabStatus == .follower {
         if apiViewModel.myFollow.followerCount == 0 {
           Spacer()
-          Image(systemName: "person.fill")
-            .resizable()
-            .scaledToFit()
-            .foregroundColor(.LabelColor_Primary)
-            .frame(width: 48, height: 48)
-            .padding(.bottom, 32)
-          Text("아직 회원님\(tabStatus == .follower ? "이" : "을") 팔로우하는 사람이 없습니다")
-            .fontSystem(fontDesignSystem: .body1_KO)
-            .foregroundColor(.LabelColor_Secondary)
-
+          followEmptyView()
         } else {
-          ForEach(apiViewModel.myFollow.followerList, id: \.userName) { follower in
-            NavigationLink {
-              UserProfileView(userId: follower.followerId)
-                .environmentObject(apiViewModel)
-            } label: {
-              personRow(
-                isFollow: follower.isFollowed == 1,
-                userName: follower.userName,
-                description: follower.userName, profileImage: follower.profileImg ?? "")
-            }
+          if let userId {
+            userFollowerList()
+          } else {
+            myFollowerList()
           }
         }
       } else {
         if apiViewModel.myFollow.followingCount == 0 {
           Spacer()
-          Image(systemName: "person.fill")
-            .resizable()
-            .scaledToFit()
-            .foregroundColor(.LabelColor_Primary)
-            .frame(width: 48, height: 48)
-            .padding(.bottom, 32)
-          Text("아직 회원님\(tabStatus == .follower ? "이" : "을") 팔로우하는 사람이 없습니다")
-            .fontSystem(fontDesignSystem: .body1_KO)
-            .foregroundColor(.LabelColor_Secondary)
+          followEmptyView()
         } else {
-          ForEach(apiViewModel.myFollow.followingList, id: \.userName) { following in
-            NavigationLink {
-              UserProfileView(userId: following.followingId)
-                .environmentObject(apiViewModel)
-            } label: {
-              personRow(
-                isFollow: false,
-                userName: following.userName,
-                description: following.userName, profileImage: following.profileImg ?? "")
-            }
+          if let userId {
+            userFollowingList()
+          } else {
+            myFollowingList()
           }
         }
       }
@@ -123,14 +95,25 @@ struct FollowView: View {
       }
     }
     .task {
-      await apiViewModel.requestMyFollow()
+      if let userId {
+        await apiViewModel.requestUserFollow(userId: userId)
+      } else {
+        await apiViewModel.requestMyFollow()
+      }
     }
   }
 }
 
 extension FollowView {
   @ViewBuilder
-  func personRow(isFollow: Bool, userName: String, description: String, profileImage: String) -> some View {
+  func personRow(
+    isFollowed: Binding<Bool>,
+    userName: String,
+    description: String,
+    profileImage: String,
+    userId: Int)
+    -> some View
+  {
     HStack(spacing: 0) {
       KFImage.url(URL(string: profileImage))
         .placeholder {
@@ -142,6 +125,7 @@ extension FollowView {
         .resizable()
         .scaledToFill()
         .frame(width: 48, height: 48)
+        .clipShape(Circle())
       VStack(spacing: 0) {
         Text(userName)
           .fontSystem(fontDesignSystem: .subtitle2_KO)
@@ -154,9 +138,18 @@ extension FollowView {
       }
       .padding(.leading, 16)
       Button("") {
-        log("Button pressed")
+        Task {
+          log("Button pressed")
+          log(userId)
+          log(isFollowed.wrappedValue)
+          if isFollowed.wrappedValue {
+            await apiViewModel.unfollowUser(userId: userId)
+          } else {
+            await apiViewModel.followUser(userId: userId)
+          }
+        }
       }
-      .buttonStyle(FollowButtonStyle(isFollow: isFollow))
+      .buttonStyle(FollowButtonStyle(isFollowed: isFollowed))
       Spacer()
     }
     .frame(height: 72)
@@ -165,16 +158,91 @@ extension FollowView {
 
   @ViewBuilder
   func followEmptyView() -> some View {
-    VStack(spacing: 24) {
-      Image(systemName: "person.fill")
-        .resizable()
-        .scaledToFit()
-        .frame(width: 48, height: 48)
-        .foregroundColor(.LabelColor_Primary)
-      Text("아직 회원님을 팔로우하는 사람이 없습니다")
-        .fontSystem(fontDesignSystem: .body1_KO)
-        .foregroundColor(.LabelColor_Secondary)
+    Image(systemName: "person.fill")
+      .resizable()
+      .scaledToFit()
+      .frame(width: 48, height: 48)
+      .foregroundColor(.LabelColor_Primary)
+      .padding(.bottom, 32)
+    Text("아직 회원님을 팔로우하는 사람이 없습니다")
+      .fontSystem(fontDesignSystem: .body1_KO)
+      .foregroundColor(.LabelColor_Secondary)
+      .padding(.bottom, 64)
+  }
+
+  @ViewBuilder
+  func myFollowerList() -> some View {
+    ForEach(apiViewModel.myFollow.followerList, id: \.userName) { follower in
+      NavigationLink {
+        UserProfileView(userId: follower.followerId)
+          .environmentObject(apiViewModel)
+      } label: {
+        personRow(
+          isFollowed: Binding(get: {
+            follower.isFollowed
+          }, set: { newValue in
+            follower.isFollowed = newValue
+          }),
+          userName: follower.userName,
+          description: follower.userName,
+          profileImage: follower.profileImg ?? "",
+          userId: follower.followerId)
+      }
     }
-    .frame(maxHeight: .infinity)
+  }
+
+  @ViewBuilder
+  func myFollowingList() -> some View {
+    ForEach(apiViewModel.myFollow.followingList, id: \.userName) { following in
+      NavigationLink {
+        UserProfileView(userId: following.followingId)
+          .environmentObject(apiViewModel)
+      } label: {
+        personRow(
+          isFollowed: .constant(true),
+          userName: following.userName,
+          description: following.userName,
+          profileImage: following.profileImg ?? "",
+          userId: following.followingId)
+      }
+    }
+  }
+
+  @ViewBuilder
+  func userFollowerList() -> some View {
+    ForEach(apiViewModel.userFollow.followerList, id: \.userName) { follower in
+      NavigationLink {
+        UserProfileView(userId: follower.followerId)
+          .environmentObject(apiViewModel)
+      } label: {
+        personRow(
+          isFollowed: Binding(get: {
+            follower.isFollowed
+          }, set: { newValue in
+            follower.isFollowed = newValue
+          }),
+          userName: follower.userName,
+          description: follower.userName,
+          profileImage: follower.profileImg ?? "",
+          userId: follower.followerId)
+      }
+    }
+  }
+
+  @ViewBuilder
+  func userFollowingList() -> some View {
+    ForEach(apiViewModel.userFollow.followingList, id: \.userName) { following in
+      NavigationLink {
+        UserProfileView(userId: following.followingId)
+          .environmentObject(apiViewModel)
+      } label: {
+        personRow(
+          isFollowed: .constant(true),
+          userName: following.userName,
+          description: following.userName,
+          profileImage: following.profileImg ?? "",
+          userId: following.followingId)
+      }
+    }
   }
 }
