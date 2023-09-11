@@ -70,8 +70,11 @@ extension TabbarView {
       .frame(maxWidth: .infinity)
       .overlay {
         Button {
-          withAnimation {
-            self.tabSelection = .main
+          Task {
+            withAnimation {
+              self.tabSelection = .main
+            }
+            await apiViewModel.requestContentList()
           }
         } label: {
           Color.clear.overlay {
@@ -130,11 +133,15 @@ extension TabbarView {
     {
       Task {
         await apiViewModel.requestMyProfile()
-        await apiViewModel.requestMyFollow()
-        await apiViewModel.requestMyWhistlesCount()
         withAnimation(.default) {
           tabSelection = .profile
         }
+      }
+      Task {
+        await apiViewModel.requestMyFollow()
+      }
+      Task {
+        await apiViewModel.requestMyWhistlesCount()
       }
     }
   }
