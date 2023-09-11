@@ -232,7 +232,7 @@ extension APIViewModel: ProfileProtocol {
         .validate(statusCode: 200...300)
         .responseData { response in
           switch response.result {
-          case .success(let data):
+          case .success:
             log("success")
             continuation.resume()
           case .failure(let error):
@@ -243,4 +243,43 @@ extension APIViewModel: ProfileProtocol {
     }
   }
 
+  func followUser(userId: Int) async {
+    await withCheckedContinuation { continuation in
+      AF.request(
+        "\(domainUrl)/action/\(userId)/follow",
+        method: .post,
+        headers: contentTypeXwwwForm)
+        .validate(statusCode: 200...300)
+        .responseData { response in
+          switch response.result {
+          case .success:
+            log("success")
+            continuation.resume()
+          case .failure(let error):
+            log("Request failed with error: \(error)")
+            continuation.resume()
+          }
+        }
+    }
+  }
+
+  func unfollowUser(userId: Int) async {
+    await withCheckedContinuation { continuation in
+      AF.request(
+        "\(domainUrl)/action/\(userId)/follow",
+        method: .delete,
+        headers: contentTypeXwwwForm)
+        .validate(statusCode: 200...300)
+        .responseData { response in
+          switch response.result {
+          case .success:
+            log("success")
+            continuation.resume()
+          case .failure(let error):
+            log("Request failed with error: \(error)")
+            continuation.resume()
+          }
+        }
+    }
+  }
 }

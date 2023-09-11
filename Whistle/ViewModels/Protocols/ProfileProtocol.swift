@@ -17,4 +17,8 @@ protocol ProfileProtocol {
   func requestMyFollow() async
   func requestUserFollow(userId: Int) async
   func isAvailableUsername() async -> Bool
+  func deleteProfileImage() async
+  func followUser(userId: Int) async
+  func unfollowUser(userId: Int) async
+
 }
