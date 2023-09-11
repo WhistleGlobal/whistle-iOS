@@ -161,7 +161,7 @@ extension UserProfileView {
       // FIXME: - 팔로잉 팔로워 버튼으로 만들기
       Button("") {
         Task {
-          if !isFollow {
+          if isFollow {
             isFollow.toggle()
             await apiViewModel.unfollowUser(userId: userId)
           } else {
