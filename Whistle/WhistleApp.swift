@@ -45,7 +45,9 @@ struct WhistleApp: App {
       .tint(.black)
       .task {
         if userAuth.isAccess {
-          userAuth.loadData { }
+          userAuth.loadData {
+            log("after Login")
+          }
         }
       }
     }
@@ -55,6 +57,8 @@ struct WhistleApp: App {
 // MARK: - AppDelegate
 
 class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterDelegate {
+
+  @AppStorage("deviceToken") var deviceToken: String?
 
   func application(
     _ application: UIApplication,
@@ -68,7 +72,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         [weak self] granted, _ in
         log("Permission granted: \(granted)")
       }
-
     // APNS 등록
     application.registerForRemoteNotifications()
     return true
@@ -83,6 +86,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     let tokenParts = deviceToken.map { data in String(format: "%02.2hhx", data) }
     let token = tokenParts.joined()
     log("Device Token: \(token)")
+    self.deviceToken = token
+    log("Device Token in appstorage: \(self.deviceToken)")
   }
 }
 
