@@ -183,7 +183,7 @@ extension UserProfileView {
         }
         Rectangle().frame(width: 1, height: 36).foregroundColor(.white)
         NavigationLink {
-          FollowView()
+          FollowView(userId: userId)
             .environmentObject(apiViewModel)
         } label: {
           VStack(spacing: 4) {
