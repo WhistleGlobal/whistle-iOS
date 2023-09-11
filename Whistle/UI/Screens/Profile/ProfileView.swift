@@ -239,7 +239,7 @@ extension ProfileView {
             .environmentObject(apiViewModel)
         } label: {
           VStack(spacing: 4) {
-            Text("\(apiViewModel.myFollow.followingCount)")
+            Text("\(apiViewModel.myFollow.followerCount)")
               .foregroundColor(Color.LabelColor_Primary_Dark)
               .fontSystem(fontDesignSystem: .title2_Expanded)
             Text("follower")
