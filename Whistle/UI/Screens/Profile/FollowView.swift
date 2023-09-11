@@ -24,8 +24,6 @@ struct FollowView: View {
   @Environment(\.dismiss) var dismiss
   @EnvironmentObject var apiViewModel: APIViewModel
   @State var tabStatus: profileTabStatus = .follower
-  // FIXME: - 나중에 User Follower 모델 로 변경할 것
-  @State var followPeoples: [Any] = []
   @State var showOtherProfile = false
   @State var selectedId: Int?
   @State var userId: Int?
@@ -108,7 +106,14 @@ struct FollowView: View {
 
 extension FollowView {
   @ViewBuilder
-  func personRow(isFollowed: Binding<Bool>, userName: String, description: String, profileImage: String) -> some View {
+  func personRow(
+    isFollowed: Binding<Bool>,
+    userName: String,
+    description: String,
+    profileImage: String,
+    userId: Int)
+    -> some View
+  {
     HStack(spacing: 0) {
       KFImage.url(URL(string: profileImage))
         .placeholder {
@@ -133,7 +138,16 @@ extension FollowView {
       }
       .padding(.leading, 16)
       Button("") {
-        log("Button pressed")
+        Task {
+          log("Button pressed")
+          log(userId)
+          log(isFollowed.wrappedValue)
+          if isFollowed.wrappedValue {
+            await apiViewModel.unfollowUser(userId: userId)
+          } else {
+            await apiViewModel.followUser(userId: userId)
+          }
+        }
       }
       .buttonStyle(FollowButtonStyle(isFollowed: isFollowed))
       Spacer()
@@ -170,7 +184,9 @@ extension FollowView {
             follower.isFollowed = newValue
           }),
           userName: follower.userName,
-          description: follower.userName, profileImage: follower.profileImg ?? "")
+          description: follower.userName,
+          profileImage: follower.profileImg ?? "",
+          userId: follower.followerId)
       }
     }
   }
@@ -185,7 +201,9 @@ extension FollowView {
         personRow(
           isFollowed: .constant(true),
           userName: following.userName,
-          description: following.userName, profileImage: following.profileImg ?? "")
+          description: following.userName,
+          profileImage: following.profileImg ?? "",
+          userId: following.followingId)
       }
     }
   }
@@ -204,7 +222,9 @@ extension FollowView {
             follower.isFollowed = newValue
           }),
           userName: follower.userName,
-          description: follower.userName, profileImage: follower.profileImg ?? "")
+          description: follower.userName,
+          profileImage: follower.profileImg ?? "",
+          userId: follower.followerId)
       }
     }
   }
@@ -219,7 +239,9 @@ extension FollowView {
         personRow(
           isFollowed: .constant(true),
           userName: following.userName,
-          description: following.userName, profileImage: following.profileImg ?? "")
+          description: following.userName,
+          profileImage: following.profileImg ?? "",
+          userId: following.followingId)
       }
     }
   }
