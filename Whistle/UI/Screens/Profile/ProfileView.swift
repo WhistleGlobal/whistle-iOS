@@ -163,7 +163,6 @@ extension ProfileView {
           .stroke(lineWidth: 1)
           .foregroundStyle(
             LinearGradient.Border_Glass)
-          .frame(width: .infinity, height: .infinity)
         profileInfo(height: height)
       }
   }
