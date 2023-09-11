@@ -71,7 +71,11 @@ struct FollowView: View {
                 .environmentObject(apiViewModel)
             } label: {
               personRow(
-                isFollow: follower.isFollowed == 1,
+                isFollowed: Binding(get: {
+                  follower.isFollowed
+                }, set: { newValue in
+                  follower.isFollowed = newValue
+                }),
                 userName: follower.userName,
                 description: follower.userName, profileImage: follower.profileImg ?? "")
             }
@@ -96,7 +100,7 @@ struct FollowView: View {
                 .environmentObject(apiViewModel)
             } label: {
               personRow(
-                isFollow: false,
+                isFollowed: .constant(true),
                 userName: following.userName,
                 description: following.userName, profileImage: following.profileImg ?? "")
             }
@@ -130,7 +134,7 @@ struct FollowView: View {
 
 extension FollowView {
   @ViewBuilder
-  func personRow(isFollow: Bool, userName: String, description: String, profileImage: String) -> some View {
+  func personRow(isFollowed: Binding<Bool>, userName: String, description: String, profileImage: String) -> some View {
     HStack(spacing: 0) {
       KFImage.url(URL(string: profileImage))
         .placeholder {
@@ -156,7 +160,7 @@ extension FollowView {
       Button("") {
         log("Button pressed")
       }
-      .buttonStyle(FollowButtonStyle(isFollow: isFollow))
+      .buttonStyle(FollowButtonStyle(isFollowed: isFollowed))
       Spacer()
     }
     .frame(height: 72)

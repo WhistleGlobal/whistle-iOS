@@ -15,7 +15,7 @@ struct UserProfileView: View {
 
   @Environment(\.dismiss) var dismiss
   @EnvironmentObject var apiViewModel: APIViewModel
-  @State var isFollow = true
+  @State var isFollow = false
   @State var showDialog = false
   @State var goReport = false
   let userId: Int
@@ -82,6 +82,8 @@ struct UserProfileView: View {
       await apiViewModel.requestUserProfile(userId: userId)
       await apiViewModel.requestUserFollow(userId: userId)
       await apiViewModel.requestUserWhistlesCount(userId: userId)
+      isFollow = apiViewModel.userProfile.isFollowed == 1 ? true : false
+      log(isFollow)
     }
     .task {
       await apiViewModel.requestUserPostFeed(userId: userId)
@@ -157,22 +159,19 @@ extension UserProfileView {
         .fontSystem(fontDesignSystem: .body2_KO)
         .padding(.bottom, 16)
       // FIXME: - 팔로잉 팔로워 버튼으로 만들기
-      if isFollow {
-        Button("") {
-          log("Button pressed")
-          isFollow.toggle()
+      Button("") {
+        Task {
+          if !isFollow {
+            isFollow.toggle()
+            await apiViewModel.unfollowUser(userId: userId)
+          } else {
+            isFollow.toggle()
+            await apiViewModel.followUser(userId: userId)
+          }
         }
-        .buttonStyle(FollowButtonStyle(isFollow: isFollow))
-        .padding(.bottom, 24)
-      } else {
-        Button("") {
-          log("Button pressed")
-          isFollow.toggle()
-        }
-        .buttonStyle(FollowButtonStyle(isFollow: isFollow))
-        .padding(.bottom, 24)
       }
-
+      .buttonStyle(FollowButtonStyle(isFollowed: $isFollow))
+      .padding(.bottom, 24)
       HStack(spacing: 48) {
         VStack(spacing: 4) {
           Text("\(apiViewModel.userWhistleCount)")
