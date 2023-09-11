@@ -12,6 +12,8 @@ import Combine
 import Foundation
 import SwiftUI
 
+// MARK: - MusicViewModel
+
 class MusicViewModel: ObservableObject {
   private var timer: Timer?
   private var downloadedAudioURL: URL?
@@ -32,7 +34,6 @@ class MusicViewModel: ObservableObject {
   @Published var session: AVAudioSession!
 
   init(url _: URL, samples_count: Int, dataManager: MusicServiceProtocol = MusicService.shared) {
-//    url = Bundle.main.url(forResource: "newjeans", withExtension: "mp3")!
     url = URL(string: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3")!
     sample_count = samples_count
     self.dataManager = dataManager
@@ -84,7 +85,9 @@ class MusicViewModel: ObservableObject {
 
     player = AVPlayer(url: downloadedAudioURL!)
   }
+}
 
+extension MusicViewModel {
   func startTimer() {
     count_duration { duration in
       let time_interval = duration / Double(self.sample_count)
@@ -100,19 +103,30 @@ class MusicViewModel: ObservableObject {
     }
   }
 
-  @objc
-  func playerDidFinishPlaying(note _: NSNotification) {
-    player?.pause()
-    player?.seek(to: .zero)
-    timer?.invalidate()
-    DispatchQueue.main.async {
-      self.isPlaying = false
+  /// 오디오 파일의 총 시간을 계산합니다. 백그라운드에서 동작합니다.
+  /// - Parameter completion: 오디오 파일 재생 시간을 알아내고, 해당 재생 시간을 콜백으로 전달합니다.
+  func count_duration(completion: @escaping (Float64) -> Void) {
+    DispatchQueue.global(qos: .background).async {
+      Task {
+        if let duration = try await self.player?.currentItem?.asset.load(.duration) {
+          let seconds = CMTimeGetSeconds(duration)
+          DispatchQueue.main.async {
+            completion(seconds)
+          }
+          return
+        }
+
+        DispatchQueue.main.async {
+          completion(1)
+        }
+      }
     }
-    index = 0
-    soundSamples = soundSamples.map { tmp -> MusicNote in
-      var cur = tmp
-      cur.color = Color.gray
-      return cur
+  }
+
+  func visualizeAudio() async {
+    let results = try? await dataManager.buffer(url: url, samplesCount: sample_count)
+    DispatchQueue.main.async {
+      self.soundSamples = results ?? []
     }
   }
 
@@ -168,37 +182,19 @@ class MusicViewModel: ObservableObject {
     player = nil
   }
 
-  /// 오디오 파일의 총 시간을 계산합니다. 백그라운드에서 동작합니다.
-  /// - Parameter completion: 오디오 파일 재생 시간을 알아내고, 해당 재생 시간을 콜백으로 전달합니다.
-  func count_duration(completion: @escaping (Float64) -> Void) {
-    DispatchQueue.global(qos: .background).async {
-      Task {
-        if let duration = try await self.player?.currentItem?.asset.load(.duration) {
-          let seconds = CMTimeGetSeconds(duration)
-          DispatchQueue.main.async {
-            completion(seconds)
-          }
-          return
-        }
-
-        DispatchQueue.main.async {
-          completion(1)
-        }
-      }
-    }
-  }
-
-//
-//  func visualizeAudio() {
-//    dataManager.buffer(url: url, samplesCount: sample_count) { results in
-//      self.soundSamples = results
-//    }
-//  }
-
-  func visualizeAudio() async {
-    let results = try? await dataManager.buffer(url: url, samplesCount: sample_count)
+  @objc
+  func playerDidFinishPlaying(note _: NSNotification) {
+    player?.pause()
+    player?.seek(to: .zero)
+    timer?.invalidate()
     DispatchQueue.main.async {
-      self.soundSamples = results ?? []
+      self.isPlaying = false
+    }
+    index = 0
+    soundSamples = soundSamples.map { tmp -> MusicNote in
+      var cur = tmp
+      cur.color = Color.gray
+      return cur
     }
   }
 

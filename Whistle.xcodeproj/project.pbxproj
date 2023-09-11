@@ -652,7 +652,6 @@
 				78BECCE12AAAE539003FA7B5 /* APIViewModel+PostFeed.swift in Sources */,
 				7874CB922AA0B53A0081DE54 /* ProfileInfoView.swift in Sources */,
 				78BECCDD2AAAE204003FA7B5 /* UploadProtocol.swift in Sources */,
-				1B3955572A95092A00BCB4DF /* VideoViewModel.swift in Sources */,
 				1BE8EA032AAE321200EB0A55 /* MusicProtocol.swift in Sources */,
 				788F43F72AA6136F00718D38 /* Player.swift in Sources */,
 				78DA58D72AA448A100F8D2F1 /* ProfileEditIDView.swift in Sources */,

@@ -10,23 +10,36 @@ import SwiftUI
 // MARK: - MusicListView
 
 struct MusicListView: View {
+  @State var searchQueryString = ""
   @State var musicList: [Music] = []
-  @StateObject var apiViewModel = APIViewModel()
-  @State var searchText = ""
-  var body: some View {
-    NavigationStack {
-      List(musicList, id: \.musicID) { music in
-        HStack{
-          NavigationLink(destination: Text(music.musicTitle)) {
-            // 각 Music 항목을 텍스트로 표시합니다.
-            Text("\(music.musicTitle) - \(music.musicArtist ?? "Unknown Artist")")
-          }
-          
-        }
-      }
-      .navigationTitle("Music List")
+  var filteredMusicList: [Music] {
+    if searchQueryString.isEmpty {
+      return musicList
+    } else {
+      return musicList.filter { $0.musicTitle.localizedStandardContains(searchQueryString) }
     }
-    .searchable(text: $searchText, prompt: Text("Search"))
+  }
+
+  @StateObject var apiViewModel = APIViewModel()
+  var body: some View {
+    NavigationView {
+      List(filteredMusicList, id: \.musicID) { music in
+        NavigationLink(destination: Text(music.musicTitle)) {
+          HStack {
+            Text("\(music.musicTitle)")
+            Spacer()
+            Image(systemName: "play.fill")
+              .padding(UIScreen.getWidth(12))
+          }
+        }
+//        .foregroundColor(.White)
+//        .onTapGesture { }
+        .listRowSeparator(.hidden)
+      }
+      .padding(.horizontal, UIScreen.getWidth(16))
+      .listStyle(.inset)
+    }
+    .searchable(text: $searchQueryString)
     .onAppear {
       // Music 목록을 가져오는 함수를 호출하고 musicList 배열을 업데이트합니다.
       Task {

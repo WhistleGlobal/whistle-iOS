@@ -34,8 +34,9 @@ struct WhistleApp: App {
     WindowGroup {
       NavigationStack {
         if userAuth.isAccess {
-          TabbarView()
-            .environmentObject(apiViewModel)
+          MusicListView()
+//          TabbarView()
+//            .environmentObject(apiViewModel)
         } else {
           SignInView()
         }
