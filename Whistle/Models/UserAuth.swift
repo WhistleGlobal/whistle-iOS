@@ -35,7 +35,10 @@ class UserAuth: ObservableObject {
 
   @AppStorage("isAccess") var isAccess = false
   @AppStorage("provider") var provider: Provider = .apple
+  @AppStorage("deviceToken") var deviceToken: String?
 
+
+  var apiViewModel = APIViewModel()
   var email: String? = ""
   var userName = ""
   var imageUrl: String? = ""
@@ -76,6 +79,13 @@ class UserAuth: ObservableObject {
         self.userName = value.user_name ?? ""
         self.imageUrl = value.profile_img ?? ""
         self.isAccess = true
+        guard let deviceToken = self.deviceToken else {
+          log("device token nil")
+          return
+        }
+        self.apiViewModel.uploadDeviceToken(deviceToken: deviceToken) {
+          log("success upload device token")
+        }
         completion()
       case .failure(let error):
         self.refresh()
