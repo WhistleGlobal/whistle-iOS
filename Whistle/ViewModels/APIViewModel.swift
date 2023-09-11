@@ -26,6 +26,7 @@ class APIViewModel: ObservableObject {
   @Published var bookmark: [Bookmark] = []
   @Published var notiSetting: NotiSetting = .init()
   @Published var contentList: [MainContent] = []
+  @Published var reportedContent: [ReportedContent] = []
 
   let decoder = JSONDecoder()
 }

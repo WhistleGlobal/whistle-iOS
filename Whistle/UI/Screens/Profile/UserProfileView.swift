@@ -5,6 +5,7 @@
 //  Created by ChoiYujin on 9/9/23.
 //
 
+import _AVKit_SwiftUI
 import Kingfisher
 import SwiftUI
 
@@ -14,7 +15,6 @@ struct UserProfileView: View {
 
   @Environment(\.dismiss) var dismiss
   @EnvironmentObject var apiViewModel: APIViewModel
-  @State var videos: [Any] = []
   @State var isFollow = true
   @State var showDialog = false
   @State var goReport = false
@@ -33,7 +33,7 @@ struct UserProfileView: View {
         Spacer().frame(height: 64)
         glassView(width: UIScreen.width - 32)
           .padding(.bottom, 12)
-        if videos.isEmpty {
+        if apiViewModel.userPostFeed.isEmpty {
           Spacer()
           Image(systemName: "photo.fill")
             .resizable()
@@ -53,8 +53,10 @@ struct UserProfileView: View {
               GridItem(.flexible()),
               GridItem(.flexible()),
             ], spacing: 20) {
-              ForEach(0 ..< videos.count) { _ in
-                videoThumbnailView()
+              ForEach(apiViewModel.userPostFeed, id: \.self) { content in
+                videoThumbnailView(
+                  url: content.videoUrl ?? "",
+                  viewCount: content.contentViewCount ?? 0)
               }
             }
           }
@@ -81,20 +83,24 @@ struct UserProfileView: View {
       await apiViewModel.requestUserFollow(userId: userId)
       await apiViewModel.requestUserWhistlesCount(userId: userId)
     }
+    .task {
+      await apiViewModel.requestUserPostFeed(userId: userId)
+    }
   }
 }
 
 extension UserProfileView {
-
 
   // FIXME: - 색상 적용 안됨
   @ViewBuilder
   func glassView(width: CGFloat, height: CGFloat = 398) -> some View {
     glassMorphicCard(width: width, height: height)
       .overlay {
-        Image("ProfileBorder")
-          .resizable()
-          .frame(maxWidth: .infinity, maxHeight: .infinity)
+        RoundedRectangle(cornerRadius: 32)
+          .stroke(lineWidth: 1)
+          .foregroundStyle(
+            LinearGradient.Border_Glass)
+          .frame(width: .infinity, height: .infinity)
         profileInfo(height: height)
       }
   }
@@ -198,10 +204,11 @@ extension UserProfileView {
   }
 
   @ViewBuilder
-  func videoThumbnailView() -> some View {
-    Rectangle()
+  func videoThumbnailView(url: String, viewCount: Int) -> some View {
+    VideoPlayer(
+      player: AVPlayer(url: URL(string: url)!))
+      .disabled(true)
       .frame(height: 204)
-      .foregroundColor(.black)
       .cornerRadius(12)
       .overlay {
         VStack {
@@ -212,7 +219,7 @@ extension UserProfileView {
               .scaledToFit()
               .frame(width: 17, height: 17)
               .foregroundColor(.Primary_Default)
-            Text("367.5K")
+            Text("\(viewCount)")
               .fontSystem(fontDesignSystem: .caption_KO_Semibold)
               .foregroundColor(Color.LabelColor_Primary_Dark)
           }

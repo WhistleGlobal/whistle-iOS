@@ -21,7 +21,7 @@ class Profile: ObservableObject, Decodable {
 
   var userName = "UserName_Default"
   var email = ""
-  var profileImage = ""
+  var profileImage: String?
   var introduce = ""
   var status: UserStatus = .active
 }

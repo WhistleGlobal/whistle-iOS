@@ -24,7 +24,7 @@ struct ProfileEditView: View {
       Divider()
         .frame(width: UIScreen.width)
         .padding(.bottom, 36)
-      KFImage.url(URL(string: apiViewModel.myProfile.profileImage))
+      KFImage.url(URL(string: apiViewModel.myProfile.profileImage ?? ""))
         .placeholder { // 플레이스 홀더 설정
           Image("ProfileDefault")
             .resizable()
@@ -74,7 +74,10 @@ struct ProfileEditView: View {
         showGallery = true
       }
       Button("기본 이미지로 변경", role: .none) {
-        log("Set defaultImage")
+        Task {
+          await apiViewModel.deleteProfileImage()
+          await apiViewModel.requestMyProfile()
+        }
       }
       Button("취소", role: .cancel) {
         log("Cancel")

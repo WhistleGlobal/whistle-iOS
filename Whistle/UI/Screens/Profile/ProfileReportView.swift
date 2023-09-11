@@ -10,6 +10,7 @@ import SwiftUI
 struct ProfileReportView: View {
 
   @Environment(\.dismiss) var dismiss
+  @EnvironmentObject var apiViewModel: APIViewModel
   @Binding var isShowingBottomSheet: Bool
   // FIXME: - Report 관련 모델로 변경할 것
   @State var reports: [Any] = []
@@ -45,6 +46,9 @@ struct ProfileReportView: View {
     .navigationTitle("신고")
     .onAppear {
       isShowingBottomSheet = false
+    }
+    .task {
+      await apiViewModel.requestReportedConent()
     }
     .toolbar {
       ToolbarItem(placement: .cancellationAction) {
