@@ -8,6 +8,7 @@
 import Alamofire
 import Foundation
 import SwiftyJSON
+import UIKit
 
 extension APIViewModel: SettingProtocol {
   func requestNotiSetting() async {
@@ -143,7 +144,12 @@ extension APIViewModel: SettingProtocol {
   }
 
   func uploadDeviceToken(deviceToken: String, completion: @escaping ()->Void) {
-    let params = ["device_token" : "\(deviceToken)"]
+    let params = [
+      "device_token" : "\(deviceToken)",
+      "system_name" : "\(UIDevice.current.systemName)",
+      "system_version" : "\(UIDevice.current.systemVersion)",
+      "device_model" : "\(UIDevice.current.name)",
+    ]
 
     AF.request(
       "\(domainUrl)/auth/device-token",
