@@ -129,16 +129,22 @@ extension TabbarView {
   var profileTabClicked: () -> Void {
     {
       Task {
-        await apiViewModel.requestMyProfile()
+          if apiViewModel.myProfile.userName.isEmpty {
+              await apiViewModel.requestMyProfile()
+          }
         withAnimation(.default) {
           tabSelection = .profile
         }
       }
       Task {
-        await apiViewModel.requestMyFollow()
+          if apiViewModel.myProfile.userName.isEmpty {
+              await apiViewModel.requestMyFollow()
+          }
       }
       Task {
-        await apiViewModel.requestMyWhistlesCount()
+          if apiViewModel.myProfile.userName.isEmpty {
+              await apiViewModel.requestMyWhistlesCount()
+          }
       }
     }
   }
