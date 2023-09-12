@@ -38,7 +38,7 @@ class PhotoViewModel: ObservableObject {
 
       if fetchResult.count > 0 {
         for i in 0 ..< fetchResult.count {
-          if fetchPhotosWorkItem?.isCancelled == true {
+          if self.fetchPhotosWorkItem?.isCancelled == true {
             return
           }
 
@@ -167,7 +167,7 @@ class PhotoViewModel: ObservableObject {
 
       if fetchResult.count > 0 {
         for i in 0 ..< fetchResult.count {
-          if fetchPhotosWorkItem?.isCancelled == true {
+          if self.fetchPhotosWorkItem?.isCancelled == true {
             return
           }
 
