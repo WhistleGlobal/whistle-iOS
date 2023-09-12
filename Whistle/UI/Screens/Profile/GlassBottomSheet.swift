@@ -79,7 +79,7 @@ struct GlassBottomSheet: View {
                   iconHeight: 24,
                   text: "신고")
               }
-              Divider().background(Color("Gray10"))
+//              Divider().background(Color("Gray10"))
               Button {
                 log("로그아웃")
               } label: {

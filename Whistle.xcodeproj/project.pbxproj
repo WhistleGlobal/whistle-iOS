@@ -230,8 +230,8 @@
 		1B39553E2A95069C00BCB4DF /* Whistle */ = {
 			isa = PBXGroup;
 			children = (
-				1B0A29AF2AA75087009077A1 /* WhistleDebug.entitlements */,
 				78DDADF72AA1868D00960552 /* Info.plist */,
+				1B0A29AF2AA75087009077A1 /* WhistleDebug.entitlements */,
 				1B21C9E82AA034500036158F /* Whistle.entitlements */,
 				1B3955582A95094200BCB4DF /* Resources */,
 				1B3955542A95080600BCB4DF /* UI */,
