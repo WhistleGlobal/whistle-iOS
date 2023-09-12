@@ -24,17 +24,7 @@ struct ProfileEditView: View {
       Divider()
         .frame(width: UIScreen.width)
         .padding(.bottom, 36)
-      KFImage.url(URL(string: apiViewModel.myProfile.profileImage ?? ""))
-        .placeholder { // 플레이스 홀더 설정
-          Image("ProfileDefault")
-            .resizable()
-            .scaledToFit()
-            .frame(width: 100, height: 100)
-        }
-        .resizable()
-        .scaledToFill()
-        .frame(width: 100, height: 100)
-        .clipShape(Circle())
+      profileImageView(url: apiViewModel.myProfile.profileImage, size: 100)
         .padding(.bottom, 16)
       Button {
         editProfileImage = true

@@ -138,17 +138,7 @@ extension UserProfileView {
         }
       }
       .padding([.top, .horizontal], 16)
-      KFImage.url(URL(string: apiViewModel.userProfile.profileImg))
-        .placeholder {
-          Image("ProfileDefault")
-            .resizable()
-            .scaledToFit()
-            .frame(width: 100, height: 100)
-        }
-        .resizable()
-        .scaledToFill()
-        .frame(width: 100, height: 100)
-        .clipShape(Circle())
+      profileImageView(url: apiViewModel.userProfile.profileImg, size: 100)
         .padding(.bottom, 16)
       Text(apiViewModel.userProfile.userName)
         .foregroundColor(Color.LabelColor_Primary_Dark)

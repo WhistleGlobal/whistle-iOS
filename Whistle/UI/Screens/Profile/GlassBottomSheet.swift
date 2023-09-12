@@ -80,15 +80,17 @@ struct GlassBottomSheet: View {
                   text: "신고")
               }
               Divider().background(Color("Gray10"))
-              Button {
-                log("로그아웃")
-              } label: {
-                bottomSheetRow(text: "로그아웃", color: Color.Info)
-              }
-              Button {
-                log("계정삭제")
-              } label: {
-                bottomSheetRow(text: "계정삭제", color: Color.Danger)
+              Group {
+                Button {
+                  log("로그아웃")
+                } label: {
+                  bottomSheetRow(text: "로그아웃", color: Color.Info)
+                }
+                Button {
+                  log("계정삭제")
+                } label: {
+                  bottomSheetRow(text: "계정삭제", color: Color.Danger)
+                }
               }
               Spacer()
             }

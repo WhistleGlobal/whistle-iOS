@@ -115,17 +115,7 @@ extension FollowView {
     -> some View
   {
     HStack(spacing: 0) {
-      KFImage.url(URL(string: profileImage))
-        .placeholder {
-          Image("ProfileDefault")
-            .resizable()
-            .scaledToFit()
-            .frame(width: 48, height: 48)
-        }
-        .resizable()
-        .scaledToFill()
-        .frame(width: 48, height: 48)
-        .clipShape(Circle())
+      profileImageView(url: profileImage, size: 48)
       VStack(spacing: 0) {
         Text(userName)
           .fontSystem(fontDesignSystem: .subtitle2_KO)
