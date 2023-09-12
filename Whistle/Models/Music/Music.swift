@@ -14,10 +14,12 @@ class Music: ObservableObject, Codable {
     case musicArtist = "music_artist"
     case musicTitle = "music_title"
     case musicURL = "music_url"
+    case albumCover = "album_cover"
   }
 
   var musicID: Int
   var musicArtist: String?
   var musicTitle: String
   var musicURL: String
+  var albumCover: String
 }

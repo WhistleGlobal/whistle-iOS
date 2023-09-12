@@ -261,6 +261,7 @@
 				1B3955412A95069C00BCB4DF /* ContentView.swift */,
 				78F980802A9F32C800AD542A /* TabbarView.swift */,
 				1B08DCC22AA1872200CA1DE1 /* MusicTrimView.swift */,
+				1BE8EA072AAE595000EB0A55 /* MusicListView.swift */,
 			);
 			path = Screens;
 			sourceTree = "<group>";
@@ -327,7 +328,6 @@
 				78D148DE2A9E0CEE00DDCE48 /* Modifier */,
 				1B3955552A95081400BCB4DF /* Components */,
 				1B39554D2A9506B300BCB4DF /* Screens */,
-				1BE8EA072AAE595000EB0A55 /* MusicListView.swift */,
 			);
 			path = UI;
 			sourceTree = "<group>";
