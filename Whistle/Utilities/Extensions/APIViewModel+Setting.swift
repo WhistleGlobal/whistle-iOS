@@ -145,10 +145,10 @@ extension APIViewModel: SettingProtocol {
 
   func uploadDeviceToken(deviceToken: String, completion: @escaping ()->Void) {
     let params = [
-        "device_token" : "\(deviceToken)",
-        "system_name" : "\(UIDevice.current.systemName)",
-        "system_version" : "\(UIDevice.current.systemVersion)",
-        "device_model" :  "\(UIDevice.current.name)" 
+      "device_token" : "\(deviceToken)",
+      "system_name" : "\(UIDevice.current.systemName)",
+      "system_version" : "\(UIDevice.current.systemVersion)",
+      "device_model" : "\(UIDevice.current.name)",
     ]
 
     AF.request(
