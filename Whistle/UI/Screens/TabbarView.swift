@@ -71,7 +71,7 @@ extension TabbarView {
             withAnimation {
               self.tabSelection = .main
             }
-            await apiViewModel.requestContentList()
+//            await apiViewModel.requestContentList()
           }
         } label: {
           Color.clear.overlay {
