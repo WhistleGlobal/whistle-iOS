@@ -17,6 +17,8 @@ struct CustomPhotoView: View {
   @State var showAlbumList = false
   @State var selectedImage: UIImage?
   @State var albumName = "최근 항목"
+  @State var offsetY = 0.0
+    @State var page = 1
 
   let columns = [
     GridItem(.flexible(minimum: 40), spacing: 0),
@@ -29,7 +31,6 @@ struct CustomPhotoView: View {
     VStack(spacing: 0) {
       HStack(spacing: 0) {
         Button {
-          photoViewModel.fetchPhotosWorkItemCancel()
           dismiss()
         } label: {
           Image(systemName: "xmark")
@@ -40,7 +41,6 @@ struct CustomPhotoView: View {
           .foregroundColor(.LabelColor_Primary)
         Spacer()
         Button {
-          photoViewModel.fetchPhotosWorkItemCancel()
           guard let selectedImage else {
             dismiss()
             return
@@ -107,7 +107,6 @@ extension CustomPhotoView {
     // MARK: - Image & Image List
     HStack(spacing: 8) {
       Button {
-        photoViewModel.fetchPhotosWorkItemCancel()
         photoViewModel.listAlbums()
         showAlbumList = true
       } label: {
@@ -138,6 +137,13 @@ extension CustomPhotoView {
           }
         }
       }
+      .offset(coordinateSpace: .named("photoscroll")) { offset in
+        offsetY = offset
+      }
+    }
+    .coordinateSpace(name: "photoscroll")
+    .onChange(of: offsetY) { newValue in
+      log(newValue)
     }
   }
 

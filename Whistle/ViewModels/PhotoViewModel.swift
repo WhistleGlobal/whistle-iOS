@@ -20,82 +20,48 @@ class PhotoViewModel: ObservableObject {
   @Published var albums: [AlbumModel] = []
   @Published var isPhotosEmpty = false
   @Published var isPhotoAccessAlertPresented = false
-  @Published var fetchPhotosWorkItem: DispatchWorkItem?
 
   func fetchPhotos() {
-    fetchPhotosWorkItemCancel()
     photos.removeAll()
-    fetchPhotosWorkItem = DispatchWorkItem { [weak self] in
-      guard let self else { return }
+    let imgManager = PHImageManager.default()
+    let requestOptions = PHImageRequestOptions()
+    requestOptions.deliveryMode = .highQualityFormat
 
-      let imgManager = PHImageManager.default()
-      let requestOptions = PHImageRequestOptions()
-      requestOptions.deliveryMode = .highQualityFormat
+    let fetchOptions = PHFetchOptions()
+    fetchOptions.fetchLimit = 100
+    fetchOptions.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
+    let fetchResult: PHFetchResult = PHAsset.fetchAssets(with: .image, options: fetchOptions)
 
-      let fetchOptions = PHFetchOptions()
-      fetchOptions.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
-      let fetchResult: PHFetchResult = PHAsset.fetchAssets(with: .image, options: fetchOptions)
+    if fetchResult.count > 0 {
+      for i in 0 ..< fetchResult.count {
+        imgManager.requestImage(
+          for: fetchResult.object(at: i),
+          targetSize: CGSize(width: 400, height: 400),
+          contentMode: .aspectFit,
+          options: requestOptions)
+        { image, _ in
 
-      if fetchResult.count > 0 {
-        for i in 0 ..< fetchResult.count {
-          if self.fetchPhotosWorkItem?.isCancelled == true {
-            return
-          }
+          if let image {
+            let photo = Photo(photo: image)
 
-          imgManager.requestImage(
-            for: fetchResult.object(at: i),
-            targetSize: CGSize(width: 400, height: 400),
-            contentMode: .aspectFit,
-            options: requestOptions)
-          { image, _ in
-
-            if let image {
-              let photo = Photo(photo: image)
-
-              DispatchQueue.main.async {
-                self.photos.append(photo)
-              }
+            DispatchQueue.main.async {
+              self.photos.append(photo)
             }
           }
         }
-      } else {
-        DispatchQueue.main.async {
-          self.isPhotosEmpty = true
-        }
       }
-    }
-    guard let fetchPhotosWorkItem else {
-      log("guard")
-      return
-    }
-    DispatchQueue.global().async(execute: fetchPhotosWorkItem)
-  }
-
-  func requestAuthorizationAndFetchPhotos(selectedPhotos: SelectedPhotos) {
-    PHPhotoLibrary.requestAuthorization { status in
-      switch status {
-      case .authorized:
-        DispatchQueue.main.async {
-          switch selectedPhotos {
-          case .all:
-            self.fetchPhotos()
-          case .favorites:
-            self.fetchPhotos()
-          }
-        }
-      default:
-        self.isPhotoAccessAlertPresented = true
+    } else {
+      DispatchQueue.main.async {
+        self.isPhotosEmpty = true
       }
     }
   }
-
+    
   func listAlbums() {
-    fetchPhotosWorkItem?.cancel()
+    photos.removeAll()
     var albums = [AlbumModel]()
-
     let options = PHFetchOptions()
     let userAlbums = PHAssetCollection.fetchAssetCollections(with: .album, subtype: .any, options: options)
-
     userAlbums.enumerateObjects { object, _, _ in
       if let albumCollection = object as? PHAssetCollection {
         let fetchOptions = PHFetchOptions()
@@ -136,78 +102,55 @@ class PhotoViewModel: ObservableObject {
     }
 
     self.albums = albums
-
-    for item in albums {
-      log(item.name)
-    }
   }
 
   func fetchAlbumPhotos(albumName: String) {
-    fetchPhotosWorkItemCancel()
-
     photos.removeAll()
-    fetchPhotosWorkItem = DispatchWorkItem { [weak self] in
-      guard let self else { return }
 
-      let fetchOptions = PHFetchOptions()
-      fetchOptions.predicate = NSPredicate(format: "title = %@", albumName)
-      let album = PHAssetCollection.fetchAssetCollections(
-        with: .album,
-        subtype: .any,
-        options: fetchOptions).firstObject
 
-      guard let targetAlbum = album else {
-        return
-      }
+    let fetchOptions = PHFetchOptions()
+    fetchOptions.predicate = NSPredicate(format: "title = %@", albumName)
+    let album = PHAssetCollection.fetchAssetCollections(
+      with: .album,
+      subtype: .any,
+      options: fetchOptions).firstObject
 
-      let imgManager = PHImageManager.default()
-      let requestOptions = PHImageRequestOptions()
-      requestOptions.deliveryMode = .highQualityFormat
+    guard let targetAlbum = album else {
+      return
+    }
 
-      let fetchResult: PHFetchResult = PHAsset.fetchAssets(in: targetAlbum, options: nil)
+    let imgManager = PHImageManager.default()
+    let requestOptions = PHImageRequestOptions()
+    requestOptions.deliveryMode = .highQualityFormat
 
-      if fetchResult.count > 0 {
-        for i in 0 ..< fetchResult.count {
-          if self.fetchPhotosWorkItem?.isCancelled == true {
-            return
-          }
+    let fetchResult: PHFetchResult = PHAsset.fetchAssets(in: targetAlbum, options: nil)
 
-          imgManager.requestImage(
-            for: fetchResult.object(at: i),
-            targetSize: CGSize(width: 400, height: 400),
-            contentMode: .aspectFit,
-            options: requestOptions)
-          { image, _ in
-            if let image {
-              let photo = Photo(photo: image)
-              DispatchQueue.main.async {
-                self.photos.append(photo)
-              }
+    if fetchResult.count > 0 {
+      for i in 0 ..< fetchResult.count {
+        imgManager.requestImage(
+          for: fetchResult.object(at: i),
+          targetSize: CGSize(width: 400, height: 400),
+          contentMode: .aspectFit,
+          options: requestOptions)
+        { image, _ in
+          if let image {
+            let photo = Photo(photo: image)
+            DispatchQueue.main.async {
+              self.photos.append(photo)
             }
           }
         }
-      } else {
-        DispatchQueue.main.async {
-          self.isPhotosEmpty = true
-        }
+      }
+    } else {
+      DispatchQueue.main.async {
+        self.isPhotosEmpty = true
       }
     }
-    guard let fetchPhotosWorkItem else {
-      log("guard")
-      return
-    }
-    DispatchQueue.global(qos: .background).async(execute: fetchPhotosWorkItem)
   }
 
   func fetchPhotoByUUID(uuid: UUID) -> Photo? {
     photos.first { photo in
       photo.id == uuid
-    }
-  }
-
-  func fetchPhotosWorkItemCancel() {
-    if fetchPhotosWorkItem != nil {
-      fetchPhotosWorkItem?.cancel()
     }
   }
 }
