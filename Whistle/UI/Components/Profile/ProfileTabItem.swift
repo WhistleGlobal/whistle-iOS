@@ -30,7 +30,7 @@ struct ProfileTabItem: ButtonStyle {
         Image(systemName: systemName)
           .resizable()
           .scaledToFit()
-          .frame(width: 24, height: 24)
+          .frame(width: 20, height: 20)
       }
       .overlay(alignment: .bottom) {
         Rectangle()

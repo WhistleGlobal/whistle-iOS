@@ -171,18 +171,20 @@ extension ProfileView {
             self.isShowingBottomSheet = true
           }
         } label: {
-          Image(systemName: "ellipsis")
-            .foregroundColor(Color.White)
-            .fontWeight(.semibold)
+          Circle()
+            .foregroundColor(.Gray_Default)
             .frame(width: 48, height: 48)
-            .background(
-              Circle()
-                .foregroundColor(.Gray_Default)
-                .frame(width: 48, height: 48))
+            .overlay {
+              Image(systemName: "ellipsis")
+                .resizable()
+                .scaledToFit()
+                .foregroundColor(Color.White)
+                .fontWeight(.semibold)
+                .frame(width: 20, height: 20)
+            }
         }
       }
       .padding([.top, .horizontal], 16)
-
       profileImageView(url: apiViewModel.myProfile.profileImage, size: 100)
         .padding(.bottom, 16)
       Text(apiViewModel.myProfile.userName)

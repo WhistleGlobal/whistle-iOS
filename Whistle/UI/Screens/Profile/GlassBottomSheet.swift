@@ -56,18 +56,18 @@ struct GlassBottomSheet: View {
                 ProfileNotiView(isShowingBottomSheet: $isShowing)
                   .environmentObject(apiViewModel)
               } label: {
-                bottomSheetRowWithIcon(systemName: "bell", iconWidth: 23, iconHeight: 24, text: "알림")
+                bottomSheetRowWithIcon(systemName: "bell", iconWidth: 22, iconHeight: 20, text: "알림")
               }
               NavigationLink {
                 ProfileInfoView(isShowingBottomSheet: $isShowing)
                   .environmentObject(apiViewModel)
               } label: {
-                bottomSheetRowWithIcon(systemName: "info.circle", iconWidth: 24, iconHeight: 24, text: "약관 및 정책")
+                bottomSheetRowWithIcon(systemName: "info.circle", iconWidth: 22, iconHeight: 20, text: "약관 및 정책")
               }
               Button {
                 log("공유")
               } label: {
-                bottomSheetRowWithIcon(systemName: "square.and.arrow.up", iconWidth: 24, iconHeight: 24, text: "프로필 공유")
+                bottomSheetRowWithIcon(systemName: "square.and.arrow.up", iconWidth: 22, iconHeight: 20, text: "프로필 공유")
               }
               NavigationLink {
                 ProfileReportView(isShowingBottomSheet: $isShowing)
@@ -75,8 +75,8 @@ struct GlassBottomSheet: View {
               } label: {
                 bottomSheetRowWithIcon(
                   systemName: "exclamationmark.triangle.fill",
-                  iconWidth: 24,
-                  iconHeight: 24,
+                  iconWidth: 22,
+                  iconHeight: 20,
                   text: "신고")
               }
               Divider().background(Color("Gray10"))
