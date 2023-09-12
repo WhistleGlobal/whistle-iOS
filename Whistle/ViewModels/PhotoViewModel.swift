@@ -21,19 +21,20 @@ class PhotoViewModel: ObservableObject {
   @Published var isPhotosEmpty = false
   @Published var isPhotoAccessAlertPresented = false
 
-  func fetchPhotos() {
-    photos.removeAll()
+  func fetchPhotos(startIndex: Int, endIndex: Int) {
     let imgManager = PHImageManager.default()
     let requestOptions = PHImageRequestOptions()
     requestOptions.deliveryMode = .highQualityFormat
 
     let fetchOptions = PHFetchOptions()
-    fetchOptions.fetchLimit = 100
     fetchOptions.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
     let fetchResult: PHFetchResult = PHAsset.fetchAssets(with: .image, options: fetchOptions)
 
-    if fetchResult.count > 0 {
-      for i in 0 ..< fetchResult.count {
+    let startIndex = max(0, min(startIndex, fetchResult.count - 1))
+    let endIndex = max(0, min(endIndex, fetchResult.count - 1))
+
+    if fetchResult.count > 0, startIndex <= endIndex {
+      for i in startIndex ... endIndex {
         imgManager.requestImage(
           for: fetchResult.object(at: i),
           targetSize: CGSize(width: 400, height: 400),
@@ -56,7 +57,8 @@ class PhotoViewModel: ObservableObject {
       }
     }
   }
-    
+
+
   func listAlbums() {
     photos.removeAll()
     var albums = [AlbumModel]()
@@ -106,7 +108,6 @@ class PhotoViewModel: ObservableObject {
 
   func fetchAlbumPhotos(albumName: String) {
     photos.removeAll()
-
 
     let fetchOptions = PHFetchOptions()
     fetchOptions.predicate = NSPredicate(format: "title = %@", albumName)

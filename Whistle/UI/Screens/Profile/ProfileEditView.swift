@@ -75,7 +75,7 @@ struct ProfileEditView: View {
           case .notDetermined, .restricted, .denied:
             showAuthAlert = true
           case .authorized, .limited:
-            photoViewModel.fetchPhotos()
+            photoViewModel.fetchPhotos(startIndex: 0, endIndex: 100)
             showGallery = true
           @unknown default:
             break

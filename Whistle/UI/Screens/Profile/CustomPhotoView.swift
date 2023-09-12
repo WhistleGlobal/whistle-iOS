@@ -18,7 +18,7 @@ struct CustomPhotoView: View {
   @State var selectedImage: UIImage?
   @State var albumName = "최근 항목"
   @State var offsetY = 0.0
-    @State var page = 1
+  @State var page = 1
 
   let columns = [
     GridItem(.flexible(minimum: 40), spacing: 0),
@@ -139,6 +139,12 @@ extension CustomPhotoView {
       }
       .offset(coordinateSpace: .named("photoscroll")) { offset in
         offsetY = offset
+        if page < Int(offset / 1000) * -1 {
+          log("page : \(page)")
+          log("Int() \(Int(offset / 1000) * -1)")
+          photoViewModel.fetchPhotos(startIndex: page * 100 + 1, endIndex: (page + 1) * 100)
+          page = Int(offset / 1000) * -1
+        }
       }
     }
     .coordinateSpace(name: "photoscroll")
