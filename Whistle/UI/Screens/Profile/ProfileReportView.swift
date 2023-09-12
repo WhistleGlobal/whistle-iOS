@@ -48,7 +48,9 @@ struct ProfileReportView: View {
       isShowingBottomSheet = false
     }
     .task {
-      await apiViewModel.requestReportedConent()
+        if apiViewModel.reportedContent.isEmpty {
+            await apiViewModel.requestReportedConent()
+        }
     }
     .toolbar {
       ToolbarItem(placement: .cancellationAction) {

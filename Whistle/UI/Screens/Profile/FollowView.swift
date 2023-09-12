@@ -57,7 +57,7 @@ struct FollowView: View {
           Spacer()
           followEmptyView()
         } else {
-          if let userId {
+            if userId != nil {
             userFollowerList()
           } else {
             myFollowerList()
@@ -68,7 +68,7 @@ struct FollowView: View {
           Spacer()
           followEmptyView()
         } else {
-          if let userId {
+            if userId != nil {
             userFollowingList()
           } else {
             myFollowingList()

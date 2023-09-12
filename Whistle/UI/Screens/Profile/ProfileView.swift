@@ -143,12 +143,6 @@ struct ProfileView: View {
       }
       .ignoresSafeArea()
     }
-    .task {
-      await apiViewModel.requestMyBookmark()
-    }
-    .task {
-      await apiViewModel.requestMyPostFeed()
-    }
   }
 }
 
