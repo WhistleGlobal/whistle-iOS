@@ -29,7 +29,7 @@ struct GlassBottomSheet: View {
         content
           .frame(height: 450)
           .transition(.move(edge: .bottom))
-          .background(.clear)
+          .background(Color.clear)
           .overlay {
             glassMorphicCard(width: UIScreen.width, height: 450)
               .offset(y: 20)

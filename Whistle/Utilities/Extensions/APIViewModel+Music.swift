@@ -28,7 +28,6 @@ extension APIViewModel: MusicProtocol {
               log("\(json)")
               let decoder = JSONDecoder()
               let musicList = try decoder.decode([Music].self, from: data)
-              print("musicList: \(musicList[0].musicURL)")
 
               continuation.resume(returning: musicList)
             } catch {
