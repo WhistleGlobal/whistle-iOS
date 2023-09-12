@@ -30,7 +30,6 @@ struct ProfileView: View {
   @Binding var tabBarSelection: TabSelection
   @EnvironmentObject var apiViewModel: APIViewModel
 
-
   var body: some View {
     ZStack {
       Color.clear.overlay {
@@ -144,12 +143,6 @@ struct ProfileView: View {
       }
       .ignoresSafeArea()
     }
-    .task {
-      await apiViewModel.requestMyBookmark()
-    }
-    .task {
-      await apiViewModel.requestMyPostFeed()
-    }
   }
 }
 
@@ -190,17 +183,7 @@ extension ProfileView {
       }
       .padding([.top, .horizontal], 16)
 
-      KFImage.url(URL(string: apiViewModel.myProfile.profileImage ?? ""))
-        .placeholder {
-          Image("ProfileDefault")
-            .resizable()
-            .scaledToFit()
-            .frame(width: 100, height: 100)
-        }
-        .resizable()
-        .scaledToFill()
-        .frame(width: 100, height: 100)
-        .clipShape(Circle())
+      profileImageView(url: apiViewModel.myProfile.profileImage, size: 100)
         .padding(.bottom, 16)
       Text(apiViewModel.myProfile.userName)
         .foregroundColor(Color.LabelColor_Primary_Dark)

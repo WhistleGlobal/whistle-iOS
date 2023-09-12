@@ -71,7 +71,7 @@ extension TabbarView {
             withAnimation {
               self.tabSelection = .main
             }
-            await apiViewModel.requestContentList()
+//            await apiViewModel.requestContentList()
           }
         } label: {
           Color.clear.overlay {
@@ -128,17 +128,25 @@ extension TabbarView {
 extension TabbarView {
   var profileTabClicked: () -> Void {
     {
-      Task {
-        await apiViewModel.requestMyProfile()
-        withAnimation(.default) {
-          tabSelection = .profile
+      withAnimation(.default) {
+        tabSelection = .profile
+      }
+      if apiViewModel.myProfile.userName.isEmpty {
+        Task {
+          await apiViewModel.requestMyProfile()
         }
-      }
-      Task {
-        await apiViewModel.requestMyFollow()
-      }
-      Task {
-        await apiViewModel.requestMyWhistlesCount()
+        Task {
+          await apiViewModel.requestMyFollow()
+        }
+        Task {
+          await apiViewModel.requestMyWhistlesCount()
+        }
+        Task {
+          await apiViewModel.requestMyBookmark()
+        }
+        Task {
+          await apiViewModel.requestMyPostFeed()
+        }
       }
     }
   }

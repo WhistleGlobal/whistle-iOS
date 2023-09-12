@@ -26,7 +26,9 @@ struct MainView: View {
     .background(Color.black.edgesIgnoringSafeArea(.all))
     .edgesIgnoringSafeArea(.all)
     .task {
-      await apiViewModel.requestContentList()
+      if apiViewModel.contentList.isEmpty {
+        await apiViewModel.requestContentList()
+      }
     }
   }
 }
