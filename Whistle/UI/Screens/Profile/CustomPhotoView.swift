@@ -126,7 +126,7 @@ extension CustomPhotoView {
       LazyVGrid(columns: columns, spacing: 0) {
         ForEach(photoViewModel.photos) { photo in
           Button {
-            selectedImage = photo.photo
+            selectedImage = photoViewModel.fetchPhotoByUUID(uuid: photo.id)?.photo
           } label: {
             Color.clear.overlay {
               Image(uiImage: photo.photo)

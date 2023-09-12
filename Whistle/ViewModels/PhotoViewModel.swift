@@ -43,7 +43,8 @@ class PhotoViewModel: ObservableObject {
           }
 
           imgManager.requestImage(
-            for: fetchResult.object(at: i), targetSize: CGSize(width: 800, height: 800),
+            for: fetchResult.object(at: i),
+            targetSize: CGSize(width: 400, height: 400),
             contentMode: .aspectFit,
             options: requestOptions)
           { image, _ in
@@ -172,7 +173,8 @@ class PhotoViewModel: ObservableObject {
           }
 
           imgManager.requestImage(
-            for: fetchResult.object(at: i), targetSize: CGSize(width: 800, height: 800),
+            for: fetchResult.object(at: i),
+            targetSize: CGSize(width: 400, height: 400),
             contentMode: .aspectFit,
             options: requestOptions)
           { image, _ in
@@ -195,6 +197,12 @@ class PhotoViewModel: ObservableObject {
       return
     }
     DispatchQueue.global(qos: .background).async(execute: fetchPhotosWorkItem)
+  }
+
+  func fetchPhotoByUUID(uuid: UUID) -> Photo? {
+    photos.first { photo in
+      photo.id == uuid
+    }
   }
 
   func fetchPhotosWorkItemCancel() {
