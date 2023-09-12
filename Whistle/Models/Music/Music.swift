@@ -7,7 +7,14 @@
 
 import Foundation
 
-class Music: ObservableObject, Codable {
+class Music: ObservableObject, Codable, Identifiable, Hashable {
+  static func == (lhs: Music, rhs: Music) -> Bool {
+    lhs.musicID == rhs.musicID
+  }
+
+  func hash(into hasher: inout Hasher) {
+    hasher.combine(musicID)
+  }
 
   enum CodingKeys: String, CodingKey {
     case musicID = "music_id"
