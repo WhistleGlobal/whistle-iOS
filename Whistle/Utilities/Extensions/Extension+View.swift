@@ -17,6 +17,23 @@ extension View {
   }
 }
 
+// MARK: - 추후 Sticky header
+extension View {
+  @ViewBuilder
+  func offset(coordinateSpace: CoordinateSpace, completion: @escaping (CGFloat) -> ()) -> some View {
+    overlay {
+      GeometryReader { proxy in
+        let minY = proxy.frame(in: coordinateSpace).minY
+        Color.clear
+          .preference(key: OffsetKey.self, value: minY)
+          .onPreferenceChange(OffsetKey.self) { value in
+            completion(value)
+          }
+      }
+    }
+  }
+}
+
 extension View {
   @ViewBuilder
   func profileImageView(url: String?, size: CGFloat) -> some View {
