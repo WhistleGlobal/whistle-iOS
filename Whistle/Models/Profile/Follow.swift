@@ -9,7 +9,7 @@ import Foundation
 
 // MARK: - Follow
 
-class Follow: Codable {
+class Follow: Decodable {
 
   // MARK: Lifecycle
 
@@ -34,16 +34,23 @@ class Follow: Codable {
     case followerCount = "follower_count"
   }
 
-  var followingList: [FollowingData]
-  var followingCount: Int
-  var followerList: [FollowerData]
-  var followerCount: Int
+  @Published var followingList: [FollowingData]
+  @Published var followingCount: Int
+  @Published var followerList: [FollowerData]
+  @Published var followerCount: Int
 
+  required init(from decoder: Decoder) throws {
+    let container = try decoder.container(keyedBy: CodingKeys.self)
+    followingList = try container.decode([FollowingData].self, forKey: .followingList)
+    followingCount = try container.decode(Int.self, forKey: .followingCount)
+    followerList = try container.decode([FollowerData].self, forKey: .followerList)
+    followerCount = try container.decode(Int.self, forKey: .followerCount)
+  }
 }
 
 // MARK: - UserFollow
 
-class UserFollow: Codable {
+class UserFollow: Decodable {
 
   // MARK: Lifecycle
 
@@ -76,7 +83,7 @@ class UserFollow: Codable {
 
 // MARK: - FollowingData
 
-class FollowingData: Codable {
+class FollowingData: Decodable {
 
   enum CodingKeys: String, CodingKey {
     case followingId = "following_id"
@@ -91,11 +98,11 @@ class FollowingData: Codable {
 
 // MARK: - FollowerData
 
-class FollowerData: Codable {
+class FollowerData: Decodable {
 
   // MARK: Lifecycle
 
-  init(followerId: Int, userName: String, profileImg: String? = nil, isFollowed: Int) {
+  init(followerId: Int, userName: String, profileImg: String? = nil, isFollowed: Bool) {
     self.followerId = followerId
     self.userName = userName
     self.profileImg = profileImg
@@ -114,5 +121,13 @@ class FollowerData: Codable {
   var followerId: Int
   var userName: String
   var profileImg: String?
-  var isFollowed: Int
+  var isFollowed: Bool
+
+  required init(from decoder: Decoder) throws {
+    let container = try decoder.container(keyedBy: CodingKeys.self)
+    followerId = try container.decode(Int.self, forKey: .followerId)
+    userName = try container.decode(String.self, forKey: .userName)
+    profileImg = try container.decode(String.self, forKey: .profileImg)
+    isFollowed = try container.decode(Int.self, forKey: .isFollowed) == 1 ? true : false
+  }
 }

@@ -6,6 +6,7 @@
 //
 
 import Combine
+import Kingfisher
 import SwiftUI
 
 // MARK: - font 관련 코드
@@ -13,6 +14,31 @@ import SwiftUI
 extension View {
   func fontSystem(fontDesignSystem: FontSystem.FontDesignSystem) -> some View {
     modifier(FontSystem(fontDesignSystem: fontDesignSystem))
+  }
+}
+
+extension View {
+  @ViewBuilder
+  func profileImageView(url: String?, size: CGFloat) -> some View {
+    if let url {
+      KFImage.url(URL(string: url))
+        .placeholder { // 플레이스 홀더 설정
+          Image("ProfileDefault")
+            .resizable()
+            .scaledToFit()
+            .frame(width: size, height: size)
+        }
+        .resizable()
+        .scaledToFill()
+        .frame(width: size, height: size)
+        .clipShape(Circle())
+    } else {
+      Image("ProfileDefault")
+        .resizable()
+        .scaledToFit()
+        .frame(width: size, height: size)
+        .clipShape(Circle())
+    }
   }
 }
 

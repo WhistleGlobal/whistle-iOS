@@ -24,6 +24,7 @@ struct WhistleApp: App {
 
   // MARK: Internal
 
+  @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
   @StateObject var appleSignInViewModel = AppleSignInViewModel()
   @StateObject var userAuth = UserAuth()
   @StateObject var apiViewModel = APIViewModel()
@@ -44,10 +45,49 @@ struct WhistleApp: App {
       .tint(.black)
       .task {
         if userAuth.isAccess {
-          userAuth.loadData { }
+          userAuth.loadData {
+            log("after Login")
+          }
         }
       }
     }
+  }
+}
+
+// MARK: - AppDelegate
+
+class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterDelegate {
+
+  @AppStorage("deviceToken") var deviceToken: String?
+
+  func application(
+    _ application: UIApplication,
+    didFinishLaunchingWithOptions _: [UIApplication.LaunchOptionsKey: Any]?)
+    -> Bool
+  {
+    // APNS 설정
+    UNUserNotificationCenter.current().delegate = self
+    UNUserNotificationCenter.current()
+      .requestAuthorization(options: [.alert, .sound, .badge]) {
+        [weak self] granted, _ in
+        log("Permission granted: \(granted)")
+      }
+    // APNS 등록
+    application.registerForRemoteNotifications()
+    return true
+  }
+
+  func application(_: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: Error) {
+    log("Failed to register for notifications: \(error.localizedDescription)")
+  }
+
+  // 성공시
+  func application(_: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
+    let tokenParts = deviceToken.map { data in String(format: "%02.2hhx", data) }
+    let token = tokenParts.joined()
+    log("Device Token: \(token)")
+    self.deviceToken = token
+    log("Device Token in appstorage: \(self.deviceToken)")
   }
 }
 

@@ -19,7 +19,7 @@ class Profile: ObservableObject, Decodable {
     case status
   }
 
-  var userName = "UserName_Default"
+  var userName = ""
   var email = ""
   var profileImage: String?
   var introduce = ""

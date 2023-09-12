@@ -37,7 +37,6 @@ struct TabbarView: View {
               .stroke(lineWidth: 1)
               .foregroundStyle(
                 LinearGradient.Border_Glass)
-              .frame(width: .infinity, height: .infinity)
           }
           .overlay {
             tabItems()
@@ -60,9 +59,7 @@ extension TabbarView {
       .overlay(
         Capsule()
           .stroke(lineWidth: 1)
-          .foregroundStyle(
-            LinearGradient.Border_Glass)
-          .frame(width: .infinity, height: .infinity)
+          .foregroundStyle(LinearGradient.Border_Glass)
           .padding(3)
           .offset(x: tabSelection.rawValue * ((UIScreen.width - 32) / 3)))
       .foregroundColor(.clear)
@@ -70,8 +67,11 @@ extension TabbarView {
       .frame(maxWidth: .infinity)
       .overlay {
         Button {
-          withAnimation {
-            self.tabSelection = .main
+          Task {
+            withAnimation {
+              self.tabSelection = .main
+            }
+//            await apiViewModel.requestContentList()
           }
         } label: {
           Color.clear.overlay {
@@ -128,12 +128,24 @@ extension TabbarView {
 extension TabbarView {
   var profileTabClicked: () -> Void {
     {
-      Task {
-        await apiViewModel.requestMyProfile()
-        await apiViewModel.requestMyFollow()
-        await apiViewModel.requestMyWhistlesCount()
-        withAnimation(.default) {
-          tabSelection = .profile
+      withAnimation(.default) {
+        tabSelection = .profile
+      }
+      if apiViewModel.myProfile.userName.isEmpty {
+        Task {
+          await apiViewModel.requestMyProfile()
+        }
+        Task {
+          await apiViewModel.requestMyFollow()
+        }
+        Task {
+          await apiViewModel.requestMyWhistlesCount()
+        }
+        Task {
+          await apiViewModel.requestMyBookmark()
+        }
+        Task {
+          await apiViewModel.requestMyPostFeed()
         }
       }
     }

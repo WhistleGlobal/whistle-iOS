@@ -16,17 +16,7 @@ struct ProfileInfoView: View {
 
   var body: some View {
     VStack(spacing: 0) {
-      KFImage.url(URL(string: apiViewModel.myProfile.profileImage ?? ""))
-        .placeholder {
-          Image("ProfileDefault")
-            .resizable()
-            .scaledToFit()
-            .frame(width: 100, height: 100)
-        }
-        .resizable()
-        .scaledToFill()
-        .frame(width: 100, height: 100)
-        .clipShape(Circle())
+      profileImageView(url: apiViewModel.myProfile.profileImage, size: 100)
         .padding(.top, 36)
         .padding(.bottom, 16)
       Text(apiViewModel.myProfile.userName)
