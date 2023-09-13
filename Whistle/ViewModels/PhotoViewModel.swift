@@ -43,8 +43,7 @@ class PhotoViewModel: ObservableObject {
         { image, _ in
 
           if let image {
-            let photo = Photo(photo: image)
-
+            let photo = Photo(localIdentifier: fetchResult[i].localIdentifier, photo: image)
             DispatchQueue.main.async {
               self.photos.append(photo)
             }
@@ -57,7 +56,6 @@ class PhotoViewModel: ObservableObject {
       }
     }
   }
-
 
   func listAlbums() {
     photos.removeAll()
@@ -135,7 +133,7 @@ class PhotoViewModel: ObservableObject {
           options: requestOptions)
         { image, _ in
           if let image {
-            let photo = Photo(photo: image)
+            let photo = Photo(localIdentifier: fetchResult[i].localIdentifier, photo: image)
             DispatchQueue.main.async {
               self.photos.append(photo)
             }
@@ -148,6 +146,35 @@ class PhotoViewModel: ObservableObject {
       }
     }
   }
+
+  func fetchPhotoByLocalIdentifier(localIdentifier: String, completion: @escaping (Photo?) -> Void) {
+    let fetchResult: PHFetchResult = PHAsset.fetchAssets(withLocalIdentifiers: [localIdentifier], options: nil)
+
+    if fetchResult.count > 0 {
+      let asset = fetchResult.object(at: 0)
+      let imgManager = PHImageManager.default()
+      let requestOptions = PHImageRequestOptions()
+      requestOptions.deliveryMode = .highQualityFormat
+
+      imgManager.requestImage(
+        for: asset, targetSize: CGSize(width: 800, height: 800),
+        contentMode: .aspectFit,
+        options: requestOptions)
+      { image, _ in
+        if let image {
+          let photo = Photo(localIdentifier: localIdentifier, photo: image)
+          DispatchQueue.main.async {
+            completion(photo)
+          }
+        } else {
+          completion(nil)
+        }
+      }
+    } else {
+      completion(nil)
+    }
+  }
+
 
   func fetchPhotoByUUID(uuid: UUID) -> Photo? {
     photos.first { photo in
