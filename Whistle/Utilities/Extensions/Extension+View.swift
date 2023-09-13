@@ -253,3 +253,38 @@ public enum ScrollStatusMonitorMode {
   /// * When using this mode, a **scroll sensor** must be added to the subview of the scroll widget.
   case common
 }
+
+extension View {
+  func blurredSheet(
+    _ style: AnyShapeStyle,
+    show: Binding<Bool>,
+    onDismiss: @escaping () -> Void,
+    @ViewBuilder content: @escaping () -> some View)
+    -> some View
+  {
+    sheet(isPresented: show, onDismiss: onDismiss) {
+      content()
+        .background(Removebackgroundcolor())
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .background {
+          Rectangle()
+            .fill(style)
+            .ignoresSafeArea(.container, edges: .all)
+        }
+    }
+  }
+}
+
+// MARK: - Removebackgroundcolor
+
+fileprivate struct Removebackgroundcolor: UIViewRepresentable {
+  func makeUIView(context _: Context) -> UIView {
+    UIView()
+  }
+
+  func updateUIView(_ uiView: UIViewType, context _: Context) {
+    DispatchQueue.main.async {
+      uiView.superview?.superview?.backgroundColor = .clear
+    }
+  }
+}

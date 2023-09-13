@@ -5,8 +5,10 @@
 //  Created by 박상원 on 2023/09/13.
 //
 
-import UIKit
 import SwiftUI
+import UIKit
+
+// MARK: - SearchBarViewController
 
 class SearchBarViewController<Content: View>: UIViewController {
   let searchController: UISearchController
