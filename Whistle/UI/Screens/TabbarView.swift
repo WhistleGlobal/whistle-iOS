@@ -78,7 +78,7 @@ extension TabbarView {
             Image(systemName: "house.fill")
               .resizable()
               .scaledToFit()
-              .frame(width: 29, height: 24)
+              .frame(width: 24, height: 24)
           }
           .frame(width: (UIScreen.width - 32) / 3, height: 56)
         }
@@ -96,7 +96,7 @@ extension TabbarView {
             Image(systemName: "plus")
               .resizable()
               .scaledToFit()
-              .frame(width: 24, height: 24)
+              .frame(width: 20, height: 20)
               .foregroundColor(.white)
           }
           .frame(width: (UIScreen.width - 32) / 3, height: 56)
@@ -107,10 +107,10 @@ extension TabbarView {
           profileTabClicked()
         } label: {
           Color.clear.overlay {
-            Image(systemName: "person")
+            Image(systemName: "person.fill")
               .resizable()
               .scaledToFit()
-              .frame(width: 26, height: 29)
+              .frame(width: 20, height: 20)
               .foregroundColor(.white)
           }
           .frame(width: (UIScreen.width - 32) / 3, height: 56)

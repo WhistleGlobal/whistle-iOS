@@ -17,6 +17,23 @@ extension View {
   }
 }
 
+// MARK: - 추후 Sticky header
+extension View {
+  @ViewBuilder
+  func offset(coordinateSpace: CoordinateSpace, completion: @escaping (CGFloat) -> ()) -> some View {
+    overlay {
+      GeometryReader { proxy in
+        let minY = proxy.frame(in: coordinateSpace).minY
+        Color.clear
+          .preference(key: OffsetKey.self, value: minY)
+          .onPreferenceChange(OffsetKey.self) { value in
+            completion(value)
+          }
+      }
+    }
+  }
+}
+
 extension View {
   @ViewBuilder
   func profileImageView(url: String?, size: CGFloat) -> some View {
@@ -45,29 +62,47 @@ extension View {
 // MARK: - GlassMorphism 관련 코드
 
 extension View {
-  @ViewBuilder
-  func glassMorphicCard(width: CGFloat, height: CGFloat) -> some View {
-    ZStack {
-      CustomBlurView(effect: .systemUltraThinMaterialLight) { view in
-        // FIXME: - 피그마와 비슷하도록 값 고치기
-        view.gaussianBlurRadius = 30
-      }
-      .clipShape(RoundedRectangle(cornerRadius: 32, style: .continuous))
-    }
-    .frame(width: width, height: height)
-  }
 
   @ViewBuilder
   func glassMorphicTab() -> some View {
     ZStack {
+      RoundedRectangle(cornerRadius: 32, style: .continuous)
+        .fill(Color.black.opacity(0.3))
       CustomBlurView(effect: .systemUltraThinMaterial) { view in
-        // FIXME: - 피그마와 비슷하도록 값 고치기
-        view.gaussianBlurRadius = 30
+        view.saturationAmout = 2.2
+        view.gaussianBlurRadius = 36
       }
       .clipShape(RoundedRectangle(cornerRadius: 28, style: .continuous))
     }
     .frame(height: 56)
     .frame(maxWidth: .infinity)
+  }
+
+  @ViewBuilder
+  func glassMoriphicView(width: CGFloat, height: CGFloat, cornerRadius: CGFloat) -> some View {
+    ZStack {
+      RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
+        .fill(Color.black.opacity(0.3))
+      CustomBlurView(effect: .systemUltraThinMaterialLight) { view in
+        // FIXME: - 피그마와 비슷하도록 값 고치기
+        view.saturationAmout = 2.2
+        view.gaussianBlurRadius = 36
+      }
+      .clipShape(RoundedRectangle(cornerRadius: cornerRadius, style: .continuous))
+    }
+    .frame(width: width, height: height)
+  }
+
+  @ViewBuilder
+  func glassProfile(width: CGFloat, height: CGFloat, cornerRadius: CGFloat, overlayed: some View) -> some View {
+    glassMoriphicView(width: width, height: height, cornerRadius: cornerRadius)
+      .overlay {
+        RoundedRectangle(cornerRadius: cornerRadius)
+          .stroke(lineWidth: 1)
+          .foregroundStyle(
+            LinearGradient.Border_Glass)
+        overlayed
+      }
   }
 }
 

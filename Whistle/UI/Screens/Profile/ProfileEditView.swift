@@ -6,6 +6,7 @@
 //
 
 import Kingfisher
+import Photos
 import SwiftUI
 
 // MARK: - ProfileEditView
@@ -16,6 +17,7 @@ struct ProfileEditView: View {
   @State var editProfileImage = false
   @State var showToast = false
   @State var showGallery = false
+  @State var showAuthAlert = false
   @StateObject var photoViewModel = PhotoViewModel()
   @EnvironmentObject var apiViewModel: APIViewModel
 
@@ -60,8 +62,17 @@ struct ProfileEditView: View {
     .navigationBarBackButtonHidden()
     .confirmationDialog("", isPresented: $editProfileImage) {
       Button("갤러리에서 사진 업로드", role: .none) {
-        photoViewModel.fetchPhotos()
-        showGallery = true
+        PHPhotoLibrary.requestAuthorization(for: .readWrite) { status in
+          switch status {
+          case .notDetermined, .restricted, .denied:
+            break
+          case .authorized, .limited:
+            photoViewModel.fetchPhotos(startIndex: 0, endIndex: 100)
+            showGallery = true
+          @unknown default:
+            break
+          }
+        }
       }
       Button("기본 이미지로 변경", role: .none) {
         Task {

@@ -51,10 +51,12 @@ extension ProfileAlert {
   @ViewBuilder
   func glassMorphicCard(width: CGFloat, height: CGFloat) -> some View {
     ZStack {
+      RoundedRectangle(cornerRadius: 32, style: .continuous)
+        .fill(Color.black.opacity(0.3))
       CustomBlurView(effect: .systemUltraThinMaterialLight) { view in
         // FIXME: - 피그마와 비슷하도록 값 고치기
-        view.saturationAmout = 0
-        view.gaussianBlurRadius = 40
+        view.saturationAmout = 2.2
+        view.gaussianBlurRadius = 36
       }
     }
     .frame(width: width, height: height)

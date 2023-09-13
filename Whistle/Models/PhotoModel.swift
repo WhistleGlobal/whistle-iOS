@@ -10,5 +10,6 @@ import SwiftUI
 
 struct Photo: Identifiable {
   var id = UUID()
+  var localIdentifier: String
   var photo: UIImage
 }
