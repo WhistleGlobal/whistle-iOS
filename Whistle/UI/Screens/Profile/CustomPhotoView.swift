@@ -19,6 +19,15 @@ struct CustomPhotoView: View {
   @State var albumName = "최근 항목"
   @State var offsetY = 0.0
   @State var page = 1
+  // Image crop properties
+
+  var crop: Crop = .circle
+
+  @State private var scale: CGFloat = 1
+  @State private var lastScale: CGFloat = 0
+  @State private var offset: CGSize = .zero
+  @State private var lastStoredOffset: CGSize = .zero
+  @GestureState private var isInteracting = false
 
   let columns = [
     GridItem(.flexible(minimum: 40), spacing: 0),
@@ -46,7 +55,14 @@ struct CustomPhotoView: View {
             return
           }
           Task {
-            await apiViewModel.uploadPhoto(image: selectedImage) { url in log(url) }
+            let renderer = ImageRenderer(content: cropImageView(true))
+            renderer.scale = 0.5
+            renderer.proposedSize = .init(crop.size())
+            guard let image = renderer.uiImage else {
+              log("Fail to render image")
+              return
+            }
+            await apiViewModel.uploadPhoto(image: image) { url in log(url) }
             await apiViewModel.requestMyProfile()
             dismiss()
           }
@@ -60,8 +76,11 @@ struct CustomPhotoView: View {
       .frame(maxWidth: .infinity)
       .background(.white)
       .padding(.horizontal, 16)
-      invertedCircleMask()
-        .allowsHitTesting(false)
+      .zIndex(1)
+
+      cropImageView()
+        .frame(width: UIScreen.width, height: UIScreen.width)
+        .zIndex(0)
       photoView()
     }
     .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -73,34 +92,6 @@ struct CustomPhotoView: View {
 }
 
 extension CustomPhotoView {
-
-  @ViewBuilder
-  func invertedCircleMask() -> some View {
-    if let selectedImage {
-      Color.clear.overlay {
-        Image(uiImage: selectedImage)
-          .resizable()
-          .scaledToFill()
-          .frame(width: 393,height: 393)
-          .opacity(0.4)
-        Circle()
-          .frame(width: 393,height: 393)
-          .blendMode(.destinationOut)
-        Image(uiImage: selectedImage)
-          .resizable()
-          .scaledToFill()
-          .frame(width: 393,height: 393)
-          .clipShape(Circle())
-      }
-      .frame(width: 393,height: 393)
-      .clipShape(Rectangle())
-      .compositingGroup()
-    } else {
-      // 가장 최근 이미지로 대체하기
-      Color.black
-        .frame(width: 393,height: 393)
-    }
-  }
 
   @ViewBuilder
   func photoView() -> some View {
@@ -184,5 +175,129 @@ extension CustomPhotoView {
       .frame(height: 80)
     }
     .listStyle(.plain)
+  }
+}
+
+// MARK: - Crop
+
+enum Crop: Equatable {
+  case circle
+  case square
+  case custom(CGSize)
+
+  func name() -> String {
+    switch self {
+    case .circle:
+      return "Circle"
+    case .square:
+      return "Square"
+    case .custom(let cGSize):
+      return "Custom \(Int(cGSize.width))x\(Int(cGSize.height))"
+    }
+  }
+
+  func size() -> CGSize {
+    switch self {
+    case .circle:
+      return .init(width: UIScreen.width, height: UIScreen.width)
+    case .square:
+      return .init(width: UIScreen.width, height: UIScreen.width)
+    case .custom(let cGSzie):
+      return cGSzie
+    }
+  }
+}
+
+extension CustomPhotoView {
+  @ViewBuilder
+  func cropImageView(_: Bool = true) -> some View {
+    let cropSize = crop.size()
+    GeometryReader {
+      let size = $0.size
+
+      if let selectedImage {
+        Image(uiImage: selectedImage)
+          .resizable()
+          .aspectRatio(contentMode: .fill)
+          .overlay {
+            GeometryReader { proxy in
+              let rect = proxy.frame(in: .named("CROPVIEW"))
+              Color.clear
+                .onChange(of: isInteracting) { newValue in
+
+                  withAnimation(.easeInOut(duration: 0.2)) {
+                    if rect.minX > 0 {
+                      offset.width = (offset.width - rect.minX)
+                      haptics(.medium)
+                    }
+                    if rect.minY > 0 {
+                      offset.height = (offset.height - rect.minY)
+                      haptics(.medium)
+                    }
+                    if rect.maxX < size.width {
+                      offset.width = (rect.minX - offset.width)
+                      haptics(.medium)
+                    }
+                    if rect.maxY < size.height {
+                      offset.height = (rect.minY - offset.height)
+                      haptics(.medium)
+                    }
+                  }
+
+                  if !newValue {
+                    lastStoredOffset = offset
+                  }
+                }
+            }
+          }
+          .frame(size)
+      }
+    }
+    .offset(offset)
+    .scaleEffect(scale)
+    .coordinateSpace(name: "CROPVIEW")
+    .gesture(
+      DragGesture()
+        .updating($isInteracting, body: { _, out, _ in
+          out = true
+        })
+        .onChanged { value in
+          let translation = value.translation
+          offset = CGSize(
+            width: translation.width + lastStoredOffset.width,
+            height: translation.height + lastStoredOffset.height)
+        })
+    .gesture(
+      MagnificationGesture()
+        .updating($isInteracting, body: { _, out, _ in
+          out = true
+        })
+        .onChanged { value in
+          let updatedScale = value + lastScale
+          scale = (updatedScale < 1 ? 1 : updatedScale)
+        }
+        .onEnded { _ in
+          withAnimation(.easeInOut(duration: 0.2)) {
+            if scale < 1 {
+              scale = 1
+              lastScale = 0
+            } else {
+              lastScale = scale - 1
+            }
+          }
+        })
+    .frame(cropSize)
+    .cornerRadius(crop == .circle ? cropSize.height / 2 : 0)
+  }
+
+  func haptics(_ style: UIImpactFeedbackGenerator.FeedbackStyle) {
+    UIImpactFeedbackGenerator(style: style).impactOccurred()
+  }
+}
+
+extension View {
+  @ViewBuilder
+  func frame(_ size: CGSize) -> some View {
+    frame(width: size.width, height: size.height)
   }
 }
