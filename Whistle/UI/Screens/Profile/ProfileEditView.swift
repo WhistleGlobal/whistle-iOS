@@ -60,20 +60,12 @@ struct ProfileEditView: View {
     }
     .padding(.horizontal, 16)
     .navigationBarBackButtonHidden()
-    .alert(isPresented: $showAuthAlert) {
-      Alert(
-        title: Text("프로필 사진 변경 기능을 이용하시려면\n포토 라이브러리 권한을 허용해야 합니다."),
-        primaryButton: .cancel(Text("취소")),
-        secondaryButton: .default(Text("설정"), action: {
-          UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!)
-        }))
-    }
     .confirmationDialog("", isPresented: $editProfileImage) {
       Button("갤러리에서 사진 업로드", role: .none) {
         PHPhotoLibrary.requestAuthorization(for: .readWrite) { status in
           switch status {
           case .notDetermined, .restricted, .denied:
-            showAuthAlert = true
+            break
           case .authorized, .limited:
             photoViewModel.fetchPhotos(startIndex: 0, endIndex: 100)
             showGallery = true
