@@ -12,7 +12,6 @@ import SwiftUI
 
 @main
 struct WhistleApp: App {
-
   // MARK: Lifecycle
 
   init() {
@@ -57,7 +56,6 @@ struct WhistleApp: App {
 // MARK: - AppDelegate
 
 class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterDelegate {
-
   @AppStorage("deviceToken") var deviceToken: String?
 
   func application(

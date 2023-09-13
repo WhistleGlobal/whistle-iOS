@@ -40,9 +40,10 @@ struct CircularProgressBar: View {
     }
   }
 }
+
 //
-//struct CircularProgressBar_Previews: PreviewProvider {
+// struct CircularProgressBar_Previews: PreviewProvider {
 //  static var previews: some View {
 //    CircularProgressBar()
 //  }
-//}
+// }
