@@ -41,7 +41,7 @@ struct ProfileView: View {
       }
       VStack {
         Spacer().frame(height: 64)
-        glassView(width: UIScreen.width - 32)
+        glassProfile(width: UIScreen.width - 32, height: 398, cornerRadius: 32, overlayed: profileInfo(height: 398))
           .padding(.bottom, 12)
         HStack(spacing: 0) {
           Button {
@@ -147,18 +147,6 @@ struct ProfileView: View {
 }
 
 extension ProfileView {
-  // FIXME: - 색상 적용 안됨
-  @ViewBuilder
-  func glassView(width: CGFloat, height: CGFloat = 398) -> some View {
-    glassMorphicCard(width: width, height: height)
-      .overlay {
-        RoundedRectangle(cornerRadius: 32)
-          .stroke(lineWidth: 1)
-          .foregroundStyle(
-            LinearGradient.Border_Glass)
-        profileInfo(height: height)
-      }
-  }
 
   @ViewBuilder
   func profileInfo(height: CGFloat) -> some View {
