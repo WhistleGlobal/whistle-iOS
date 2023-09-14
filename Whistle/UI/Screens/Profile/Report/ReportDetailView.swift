@@ -51,7 +51,7 @@ struct ReportDetailView: View {
         Text("신고")
           .fontSystem(fontDesignSystem: .subtitle2_KO)
       }
-      ToolbarItem(placement: .principal) {
+      ToolbarItem(placement: .confirmationAction) {
         Button {
           goReport = false
         } label: {

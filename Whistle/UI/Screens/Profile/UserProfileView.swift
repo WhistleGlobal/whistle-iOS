@@ -75,7 +75,7 @@ struct UserProfileView: View {
         log("Cancel")
       }
     }
-    .navigationDestination(isPresented: $goReport) {
+    .fullScreenCover(isPresented: $goReport) {
       ReportUserView(goReport: $goReport, userId: userId)
         .environmentObject(apiViewModel)
     }
