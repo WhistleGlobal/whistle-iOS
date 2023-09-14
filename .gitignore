@@ -89,3 +89,5 @@ iOSInjectionProject/
 
 *.DS_Store
 Whistle/Info.plist
+Whistle/WhistleDebug.entitlements
+Whistle/Whistle.entitlements

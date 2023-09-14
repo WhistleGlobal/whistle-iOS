@@ -75,10 +75,11 @@ struct MusicListView: View {
           handleDownloadButton(for: music)
         }
         .listRowSeparator(.hidden)
+//          .listRowBackground(Color.clear)
       }
       .padding(.top, 80)
     }
-    .listStyle(.inset)
+    .listStyle(.plain)
     .navigationTitle("")
     .onAppear {
       let fileManager = FileManager.default
@@ -273,7 +274,6 @@ extension MusicListView {
     }
   }
 }
-
 
 // MARK: - MusicListView_Previews
 
