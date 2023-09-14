@@ -93,6 +93,7 @@
 		78D148EB2A9E13CC00DDCE48 /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78D148EA2A9E13CC00DDCE48 /* ProfileView.swift */; };
 		78D85E4F2AB2B52C00B3AD6E /* SignoutAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78D85E4E2AB2B52C00B3AD6E /* SignoutAlert.swift */; };
 		78D85E522AB2D9F800B3AD6E /* ReportReasonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78D85E512AB2D9F800B3AD6E /* ReportReasonView.swift */; };
+		78D85E542AB2DF1000B3AD6E /* ReportPostView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78D85E532AB2DF1000B3AD6E /* ReportPostView.swift */; };
 		78DA58D52AA445E400F8D2F1 /* ProfileEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78DA58D42AA445E400F8D2F1 /* ProfileEditView.swift */; };
 		78DA58D72AA448A100F8D2F1 /* ProfileEditIDView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78DA58D62AA448A100F8D2F1 /* ProfileEditIDView.swift */; };
 		78DDADFA2AA1A37F00960552 /* AppKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78DDADF92AA1A37F00960552 /* AppKeys.swift */; };
@@ -193,6 +194,7 @@
 		78D148EA2A9E13CC00DDCE48 /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
 		78D85E4E2AB2B52C00B3AD6E /* SignoutAlert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignoutAlert.swift; sourceTree = "<group>"; };
 		78D85E512AB2D9F800B3AD6E /* ReportReasonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportReasonView.swift; sourceTree = "<group>"; };
+		78D85E532AB2DF1000B3AD6E /* ReportPostView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportPostView.swift; sourceTree = "<group>"; };
 		78DA58D42AA445E400F8D2F1 /* ProfileEditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileEditView.swift; sourceTree = "<group>"; };
 		78DA58D62AA448A100F8D2F1 /* ProfileEditIDView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileEditIDView.swift; sourceTree = "<group>"; };
 		78DDADF72AA1868D00960552 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -504,6 +506,7 @@
 			children = (
 				786CFEB02AAC5D5100DB2ADD /* ReportUserView.swift */,
 				78D85E512AB2D9F800B3AD6E /* ReportReasonView.swift */,
+				78D85E532AB2DF1000B3AD6E /* ReportPostView.swift */,
 			);
 			path = Report;
 			sourceTree = "<group>";
@@ -690,6 +693,7 @@
 				78D148E32A9E134700DDCE48 /* Extension+NSObject.swift in Sources */,
 				1B0A29AA2AA64ADC009077A1 /* MusicService.swift in Sources */,
 				1B39555F2A9509A700BCB4DF /* SubmitButton.swift in Sources */,
+				78D85E542AB2DF1000B3AD6E /* ReportPostView.swift in Sources */,
 				78BECCE12AAAE539003FA7B5 /* APIViewModel+PostFeed.swift in Sources */,
 				7874CB922AA0B53A0081DE54 /* ProfileInfoView.swift in Sources */,
 				78BECCDD2AAAE204003FA7B5 /* UploadProtocol.swift in Sources */,

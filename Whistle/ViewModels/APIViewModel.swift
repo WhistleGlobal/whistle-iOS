@@ -27,6 +27,7 @@ class APIViewModel: ObservableObject {
   @Published var notiSetting: NotiSetting = .init()
   @Published var contentList: [MainContent] = []
   @Published var reportedContent: [ReportedContent] = []
+  @Published var userCreatedDate = ""
 
   let decoder = JSONDecoder()
 }

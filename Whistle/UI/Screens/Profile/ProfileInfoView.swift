@@ -27,7 +27,7 @@ struct ProfileInfoView: View {
         HStack {
           Text("가입한 날짜")
           Spacer()
-          Text("2019.11.12")
+          Text("\(apiViewModel.userCreatedDate)")
             .fontSystem(fontDesignSystem: .body1_KO)
             .foregroundColor(.Disable_Placeholder)
         }
@@ -51,6 +51,9 @@ struct ProfileInfoView: View {
     .navigationBarBackButtonHidden()
     .navigationBarTitleDisplayMode(.inline)
     .navigationTitle("정보")
+    .task {
+      apiViewModel.requestUserCreateDate()
+    }
     .onAppear {
       isShowingBottomSheet = false
     }
