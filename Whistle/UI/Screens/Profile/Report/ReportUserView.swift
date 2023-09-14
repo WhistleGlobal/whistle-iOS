@@ -28,8 +28,16 @@ struct ReportUserView: View {
         .foregroundColor(.LabelColor_Secondary)
         .padding(.bottom, 16)
       Divider().frame(width: UIScreen.width)
-      reportRow(text: "특정 게시물")
-      reportRow(text: "이 계정에 관한 문제")
+      NavigationLink {
+        EmptyView()
+      } label: {
+        reportRow(text: "특정 게시물")
+      }
+      NavigationLink {
+        ReportReasonView()
+      } label: {
+        reportRow(text: "이 계정에 관한 문제")
+      }
       Spacer()
     }
     .padding(.horizontal, 16)
