@@ -23,15 +23,15 @@ struct ProfileInfoView: View {
         .foregroundColor(.LabelColor_Primary)
         .fontSystem(fontDesignSystem: .title2_Expanded)
         .padding(.bottom, 36)
-        List {
-            HStack {
-                Text("가입한 날짜")
-                    Spacer()
-                Text("2019.11.12")
-                    .fontSystem(fontDesignSystem: .body1_KO)
-                    .foregroundColor(.Disable_Placeholder)
-            }
-            .listRowSeparator(.hidden)
+      List {
+        HStack {
+          Text("가입한 날짜")
+          Spacer()
+          Text("2019.11.12")
+            .fontSystem(fontDesignSystem: .body1_KO)
+            .foregroundColor(.Disable_Placeholder)
+        }
+        .listRowSeparator(.hidden)
         NavigationLink {
           EmptyView()
         } label: {

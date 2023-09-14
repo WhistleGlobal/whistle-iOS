@@ -131,4 +131,8 @@ class UserAuth: ObservableObject {
       }
     }
   }
+
+  func appleSignout() {
+    isAccess = false
+  }
 }

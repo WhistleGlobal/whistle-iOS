@@ -37,8 +37,10 @@ struct WhistleApp: App {
 //        MusicListView()
           TabbarView()
             .environmentObject(apiViewModel)
+            .environmentObject(userAuth)
         } else {
           SignInView()
+            .environmentObject(userAuth)
         }
       }
       .tint(.black)

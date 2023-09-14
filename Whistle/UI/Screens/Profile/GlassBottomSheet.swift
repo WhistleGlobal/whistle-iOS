@@ -12,6 +12,7 @@ import SwiftUI
 struct GlassBottomSheet: View {
   @Binding var isShowing: Bool
   @EnvironmentObject var apiViewModel: APIViewModel
+  @EnvironmentObject var userAuth: UserAuth
   var content: AnyView
 
   var body: some View {
@@ -83,6 +84,7 @@ struct GlassBottomSheet: View {
               Group {
                 Button {
                   log("로그아웃")
+                  userAuth.appleSignout()
                 } label: {
                   bottomSheetRow(text: "로그아웃", color: Color.Info)
                 }

@@ -14,6 +14,7 @@ struct TabbarView: View {
   @State var tabSelection: TabSelection = .main
   @State var tabbarOpacity = 1.0
   @EnvironmentObject var apiViewModel: APIViewModel
+  @EnvironmentObject var userAuth: UserAuth
 
   var body: some View {
     ZStack {
@@ -28,6 +29,7 @@ struct TabbarView: View {
       case .profile:
         ProfileView(tabbarOpacity: $tabbarOpacity, tabBarSelection: $tabSelection)
           .environmentObject(apiViewModel)
+          .environmentObject(userAuth)
       }
       VStack {
         Spacer()

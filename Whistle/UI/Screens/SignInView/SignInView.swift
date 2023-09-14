@@ -13,7 +13,8 @@ import SwiftUI
 struct SignInView: View {
 
   @StateObject var appleSignInViewModel = AppleSignInViewModel()
-  @StateObject var userAuth = UserAuth()
+//  @StateObject var userAuth = UserAuth()
+  @EnvironmentObject var userAuth: UserAuth
 
   var body: some View {
     VStack {

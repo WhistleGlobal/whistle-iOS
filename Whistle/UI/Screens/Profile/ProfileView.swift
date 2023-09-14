@@ -29,6 +29,7 @@ struct ProfileView: View {
   @Binding var tabbarOpacity: Double
   @Binding var tabBarSelection: TabSelection
   @EnvironmentObject var apiViewModel: APIViewModel
+  @EnvironmentObject var userAuth: UserAuth
 
   var body: some View {
     ZStack {
@@ -120,6 +121,7 @@ struct ProfileView: View {
         Spacer()
         GlassBottomSheet(isShowing: $isShowingBottomSheet, content: AnyView(Text("Hi")))
           .environmentObject(apiViewModel)
+          .environmentObject(userAuth)
           .onChange(of: isShowingBottomSheet) { newValue in
             if !newValue {
               DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
