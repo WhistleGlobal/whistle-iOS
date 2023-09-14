@@ -43,10 +43,10 @@ struct ProfileEditView: View {
         content: apiViewModel.myProfile.userName)
       Divider().padding(.leading, 96)
       profileEditLink(
-        destination: ProfileEditIntroduceView(showToast: $showToast, introduce: $apiViewModel.myProfile.introduce)
+        destination: ProfileEditIntroduceView(showToast: $showToast, introduce: apiViewModel.myProfile.introduce ?? " ")
           .environmentObject(apiViewModel),
         title: "소개",
-        content: apiViewModel.myProfile.introduce)
+        content: apiViewModel.myProfile.introduce ?? " ")
       Divider()
       Spacer()
     }

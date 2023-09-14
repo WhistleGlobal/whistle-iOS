@@ -192,7 +192,7 @@ extension ProfileView {
         .fontSystem(fontDesignSystem: .title2_Expanded)
         .padding(.bottom, 4)
 
-      Text(apiViewModel.myProfile.introduce)
+      Text(apiViewModel.myProfile.introduce ?? " ")
         .foregroundColor(Color.LabelColor_Secondary_Dark)
         .fontSystem(fontDesignSystem: .body2_KO)
         .padding(.bottom, 16)
