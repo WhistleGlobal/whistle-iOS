@@ -31,6 +31,7 @@
 		1BE8EA082AAE595000EB0A55 /* MusicListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BE8EA072AAE595000EB0A55 /* MusicListView.swift */; };
 		1BE8EA102AB0F7B100EB0A55 /* SearchBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BE8EA0F2AB0F7B100EB0A55 /* SearchBar.swift */; };
 		1BE8EA122AB0F7E800EB0A55 /* CircularProgressBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BE8EA112AB0F7E800EB0A55 /* CircularProgressBar.swift */; };
+		1BE8EA1A2AB205EA00EB0A55 /* VideoEditorMainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BE8EA192AB205EA00EB0A55 /* VideoEditorMainView.swift */; };
 		7801398A2AA127AE00D5FBDB /* SignInView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 780139892AA127AE00D5FBDB /* SignInView.swift */; };
 		782DD4732AA30BDD006183D3 /* FollowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 782DD4722AA30BDD006183D3 /* FollowView.swift */; };
 		782DD4752AA30C22006183D3 /* FollowButtonStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 782DD4742AA30C22006183D3 /* FollowButtonStyle.swift */; };
@@ -130,6 +131,7 @@
 		1BE8EA072AAE595000EB0A55 /* MusicListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MusicListView.swift; sourceTree = "<group>"; };
 		1BE8EA0F2AB0F7B100EB0A55 /* SearchBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchBar.swift; sourceTree = "<group>"; };
 		1BE8EA112AB0F7E800EB0A55 /* CircularProgressBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircularProgressBar.swift; sourceTree = "<group>"; };
+		1BE8EA192AB205EA00EB0A55 /* VideoEditorMainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoEditorMainView.swift; sourceTree = "<group>"; };
 		780139892AA127AE00D5FBDB /* SignInView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInView.swift; sourceTree = "<group>"; };
 		782DD4722AA30BDD006183D3 /* FollowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FollowView.swift; sourceTree = "<group>"; };
 		782DD4742AA30C22006183D3 /* FollowButtonStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FollowButtonStyle.swift; sourceTree = "<group>"; };
@@ -259,6 +261,7 @@
 		1B39554D2A9506B300BCB4DF /* Screens */ = {
 			isa = PBXGroup;
 			children = (
+				1BE8EA182AB205CE00EB0A55 /* VideoEditor */,
 				788F43EE2AA5CD9300718D38 /* Main */,
 				780139882AA1279600D5FBDB /* SignInView */,
 				78D148E12A9E132700DDCE48 /* Profile */,
@@ -376,6 +379,14 @@
 				1B0A29A92AA64ADC009077A1 /* MusicService.swift */,
 			);
 			path = Music;
+			sourceTree = "<group>";
+		};
+		1BE8EA182AB205CE00EB0A55 /* VideoEditor */ = {
+			isa = PBXGroup;
+			children = (
+				1BE8EA192AB205EA00EB0A55 /* VideoEditorMainView.swift */,
+			);
+			path = VideoEditor;
 			sourceTree = "<group>";
 		};
 		780139882AA1279600D5FBDB /* SignInView */ = {
@@ -652,6 +663,7 @@
 				78F980872A9F5AAC00AD542A /* GlassBottomSheet.swift in Sources */,
 				7801398A2AA127AE00D5FBDB /* SignInView.swift in Sources */,
 				78D148EB2A9E13CC00DDCE48 /* ProfileView.swift in Sources */,
+				1BE8EA1A2AB205EA00EB0A55 /* VideoEditorMainView.swift in Sources */,
 				78BECCE52AAAE597003FA7B5 /* APIViewModel+Upload.swift in Sources */,
 				787AF56F2AA884B700C190E6 /* User.swift in Sources */,
 				787AF5732AA888FC00C190E6 /* UserPostFeed.swift in Sources */,

@@ -34,13 +34,14 @@ struct WhistleApp: App {
     WindowGroup {
       NavigationStack {
         if userAuth.isAccess {
-//        MusicListView()
+//          MusicListView()
           TabbarView()
-            .environmentObject(apiViewModel)
+//            .environmentObject(apiViewModel)
         } else {
           SignInView()
         }
       }
+      .environmentObject(apiViewModel)
       .tint(.black)
       .task {
         if userAuth.isAccess {
