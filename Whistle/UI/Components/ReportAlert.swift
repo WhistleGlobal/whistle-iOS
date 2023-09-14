@@ -1,5 +1,5 @@
 //
-//  SignoutAlert.swift
+//  ReportAlert.swift
 //  Whistle
 //
 //  Created by ChoiYujin on 9/14/23.
@@ -7,19 +7,19 @@
 
 import SwiftUI
 
-// MARK: - SignoutAlert
+// MARK: - ReportAlert
 
-struct SignoutAlert: View {
+struct ReportAlert: View {
 
   let cancelAction: () -> Void
-  let signOutAction: () -> Void
+  let reportAction: () -> Void
 
   var body: some View {
     VStack(spacing: 0) {
       Spacer()
       ZStack {
         VStack(spacing: 0) {
-          signoutAlertView()
+          reportAlertView()
         }
         .overlay {
           RoundedRectangle(cornerRadius: 14)
@@ -44,7 +44,7 @@ struct SignoutAlert: View {
   }
 }
 
-extension SignoutAlert {
+extension ReportAlert {
   @ViewBuilder
   func glassMorphicAlert(width: CGFloat, height: CGFloat) -> some View {
     ZStack {
@@ -77,9 +77,9 @@ extension SignoutAlert {
   }
 
   @ViewBuilder
-  func signoutAlertView() -> some View {
+  func reportAlertView() -> some View {
     VStack {
-      Text("정말 로그아웃하시겠어요?")
+      Text("정말 신고하시겠습니까?")
     }
     .foregroundColor(.LabelColor_Primary_Dark)
     .frame(width: 270, height: 114)
@@ -97,15 +97,16 @@ extension SignoutAlert {
           .foregroundColor(.Info)
       }
       Button {
-        signOutAction()
+        reportAction()
       } label: {
         glassAlertBottomRight()
       }
       .overlay {
-        Text("로그아웃")
+        Text("신고")
           .fontSystem(fontDesignSystem: .subtitle2_KO)
           .foregroundColor(.Danger)
       }
     }
   }
 }
+

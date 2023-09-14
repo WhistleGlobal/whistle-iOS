@@ -11,6 +11,8 @@ struct ReportDetailView: View {
 
   @Environment(\.dismiss) var dismiss
   @Binding var goReport: Bool
+  @State var goComplete = false
+  @State var showAlert = false
   @State var inputReportDetail = ""
 
   var body: some View {
@@ -38,6 +40,18 @@ struct ReportDetailView: View {
     }
     .padding(.horizontal, 16)
     .navigationBarBackButtonHidden()
+    .navigationDestination(isPresented: $goComplete) {
+      ReportCompleteView(goReport: $goReport)
+    }
+    .overlay {
+      if showAlert {
+        ReportAlert {
+          showAlert = false
+        } reportAction: {
+          goComplete = true
+        }
+      }
+    }
     .toolbar {
       ToolbarItem(placement: .cancellationAction) {
         Button {
@@ -53,7 +67,7 @@ struct ReportDetailView: View {
       }
       ToolbarItem(placement: .confirmationAction) {
         Button {
-          goReport = false
+          showAlert = true
         } label: {
           Text("제출")
             .foregroundColor(.Info)
