@@ -26,6 +26,7 @@ struct ProfileView: View {
   @State var isShowingBottomSheet = false
   @State var tabbarDirection: CGFloat = -1.0
   @State var tabSelection: profileTabCase = .myVideo
+  @State var showSignoutAlert = false
   @Binding var tabbarOpacity: Double
   @Binding var tabBarSelection: TabSelection
   @EnvironmentObject var apiViewModel: APIViewModel
@@ -119,7 +120,7 @@ struct ProfileView: View {
       .ignoresSafeArea()
       VStack {
         Spacer()
-        GlassBottomSheet(isShowing: $isShowingBottomSheet, content: AnyView(Text("Hi")))
+        GlassBottomSheet(isShowing: $isShowingBottomSheet, showSignoutAlert: $showSignoutAlert, content: AnyView(Text("Hi")))
           .environmentObject(apiViewModel)
           .environmentObject(userAuth)
           .onChange(of: isShowingBottomSheet) { newValue in
@@ -144,6 +145,15 @@ struct ProfileView: View {
               })
       }
       .ignoresSafeArea()
+    }
+    .overlay {
+      if showSignoutAlert {
+        SignoutAlert {
+          showSignoutAlert = false
+        } signOutAction: {
+          userAuth.appleSignout()
+        }
+      }
     }
   }
 }
