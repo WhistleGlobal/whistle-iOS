@@ -28,12 +28,13 @@ struct WhistleApp: App {
   @StateObject var userAuth = UserAuth()
   @StateObject var apiViewModel = APIViewModel()
   @State var testBool = false
+  @AppStorage("isAccess") var isAccess = false
   let keychain = KeychainSwift()
 
   var body: some Scene {
     WindowGroup {
       NavigationStack {
-        if userAuth.isAccess {
+        if isAccess {
 //        MusicListView()
           TabbarView()
             .environmentObject(apiViewModel)
@@ -45,8 +46,8 @@ struct WhistleApp: App {
       }
       .tint(.black)
       .task {
-        if userAuth.isAccess {
-          userAuth.loadData {
+        if isAccess {
+          appleSignInViewModel.userAuth.loadData {
             log("after Login")
           }
         }
