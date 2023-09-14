@@ -36,8 +36,10 @@ struct ReportReasonView: View {
     }
   }
 
-
   @Environment(\.dismiss) var dismiss
+  @EnvironmentObject var apiViewModel: APIViewModel
+  @Binding var goReport: Bool
+  let userId: Int
 
   var body: some View {
     VStack(spacing: 0) {
@@ -55,8 +57,9 @@ struct ReportReasonView: View {
         .padding(.bottom, 16)
       Divider().frame(width: UIScreen.width)
       ForEach(UserReportReason.allCases, id: \.self) { reason in
-        Button {
-          log("reason \(reason.numericValue)")
+        NavigationLink {
+          ReportPostView(goReport: $goReport, userId: userId)
+            .environmentObject(apiViewModel)
         } label: {
           reportRow(text: reason.rawValue)
         }
@@ -80,10 +83,6 @@ struct ReportReasonView: View {
       }
     }
   }
-}
-
-#Preview {
-  ReportReasonView()
 }
 
 extension ReportReasonView {

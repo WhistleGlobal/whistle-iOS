@@ -12,7 +12,12 @@ import SwiftUI
 struct ReportPostView: View {
 
   @Environment(\.dismiss) var dismiss
+  @EnvironmentObject var apiViewModel: APIViewModel
   @State var isSelected = false
+  @State var selectedIndex = 0
+  @State var dummySet: [Color] = [Color.blue, Color.red, Color.green, Color.Blue_Pressed]
+  @Binding var goReport: Bool
+  let userId: Int
 
   var body: some View {
     VStack(spacing: 0) {
@@ -22,19 +27,23 @@ struct ReportPostView: View {
           GridItem(.flexible()),
           GridItem(.flexible()),
         ], spacing: 20) {
-          ForEach([Color.blue, Color.red, Color.green], id: \.self) { content in
-            Button {
-              log("video clicked")
-            } label: {
-//                    videoThumbnailView(url: content.videoUrl ?? "", viewCount: content.contentViewCount ?? 0)
-              Rectangle()
-                .fill(content)
+          ForEach(Array(apiViewModel.userPostFeed.enumerated()), id: \.element) { index, content in
+            if let url = content.videoUrl {
+              Button {
+                selectedIndex = index
+              } label: {
+                videoThumbnail(url: url, index: index)
+                  .onAppear {
+                    log(url)
+                  }
+              }
             }
           }
         }
       }
     }
     .padding(.horizontal, 16)
+    .navigationBarBackButtonHidden()
     .toolbar {
       ToolbarItem(placement: .cancellationAction) {
         Button {
@@ -49,8 +58,8 @@ struct ReportPostView: View {
           .fontSystem(fontDesignSystem: .subtitle2_KO)
       }
       ToolbarItem(placement: .confirmationAction) {
-        Button {
-          log("다음")
+        NavigationLink {
+          ReportDetailView(goReport: $goReport)
         } label: {
           Text("다음")
             .fontSystem(fontDesignSystem: .subtitle2_KO)
@@ -59,11 +68,36 @@ struct ReportPostView: View {
         .disabled(isSelected)
       }
     }
+    .task {
+      await apiViewModel.requestUserPostFeed(userId: userId)
+    }
+    .navigationDestination(isPresented: .constant(false)) {
+      ReportDetailView(goReport: $goReport)
+    }
   }
 }
 
-#Preview {
-  ReportPostView()
-}
+extension ReportPostView {
 
-extension ReportPostView { }
+  @ViewBuilder
+  func videoThumbnail(url _: String, index: Int) -> some View {
+    ZStack {
+      RoundedRectangle(cornerRadius: 12)
+        .fill(.black)
+      VStack {
+        HStack {
+          Spacer()
+          Image(systemName: index == selectedIndex ? "checkmark.circle.fill" : "circle")
+            .resizable()
+            .scaledToFit()
+            .foregroundColor(index == selectedIndex ? .Primary_Default : .White)
+            .frame(width: 22, height: 22)
+            .padding(6)
+        }
+        Spacer()
+      }
+    }
+    .frame(height: 204)
+    .frame(maxWidth: .infinity)
+  }
+}

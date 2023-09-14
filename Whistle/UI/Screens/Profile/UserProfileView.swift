@@ -76,7 +76,8 @@ struct UserProfileView: View {
       }
     }
     .navigationDestination(isPresented: $goReport) {
-      ReportUserView()
+      ReportUserView(goReport: $goReport, userId: userId)
+        .environmentObject(apiViewModel)
     }
     .task {
       await apiViewModel.requestUserProfile(userId: userId)

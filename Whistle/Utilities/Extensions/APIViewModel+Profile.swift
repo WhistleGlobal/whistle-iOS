@@ -294,7 +294,7 @@ extension APIViewModel: ProfileProtocol {
         switch response.result {
         case .success(let data):
           let json = JSON(data)
-            let dateString = json["created_at"]
+          let dateString = json["created_at"]
           log(dateString.type)
           log(dateString.string)
           let inputDateString = dateString.string
