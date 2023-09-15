@@ -11,6 +11,11 @@ import SwiftUI
 
 struct ReportUserView: View {
 
+  public enum ReportCategory {
+    case post
+    case user
+  }
+
   @Environment(\.dismiss) var dismiss
   @EnvironmentObject var apiViewModel: APIViewModel
   @Binding var goReport: Bool
@@ -53,13 +58,13 @@ struct ReportUserView: View {
           .padding(.horizontal, 16)
         Divider().frame(width: UIScreen.width)
         NavigationLink {
-          EmptyView()
+          ReportPostView(goReport: $goReport, userId: userId, reportCategory: .post)
         } label: {
           reportRow(text: "특정 게시물")
         }
         .padding(.horizontal, 16)
         NavigationLink {
-          ReportReasonView(goReport: $goReport, userId: userId)
+          ReportReasonView(goReport: $goReport, userId: userId, reportCategory: .user)
             .environmentObject(apiViewModel)
         } label: {
           reportRow(text: "이 계정에 관한 문제")

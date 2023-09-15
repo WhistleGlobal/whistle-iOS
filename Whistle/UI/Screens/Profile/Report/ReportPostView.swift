@@ -18,6 +18,7 @@ struct ReportPostView: View {
   @State var dummySet: [Color] = [Color.blue, Color.red, Color.green, Color.Blue_Pressed]
   @Binding var goReport: Bool
   let userId: Int
+  let reportCategory: ReportUserView.ReportCategory
 
   var body: some View {
     VStack(spacing: 0) {
@@ -59,7 +60,12 @@ struct ReportPostView: View {
       }
       ToolbarItem(placement: .confirmationAction) {
         NavigationLink {
-          ReportDetailView(goReport: $goReport)
+          switch reportCategory {
+          case .post:
+            ReportReasonView(goReport: $goReport, userId: userId, reportCategory: .post)
+          case .user:
+            ReportDetailView(goReport: $goReport)
+          }
         } label: {
           Text("다음")
             .fontSystem(fontDesignSystem: .subtitle2_KO)

@@ -11,7 +11,7 @@ import SwiftUI
 
 struct ReportReasonView: View {
 
-  enum UserReportReason: String, CaseIterable {
+  public enum UserReportReason: String, CaseIterable {
 
     case cyberbullying = "권리 침해 또는 사이버 괴롭힘"
     case identityTheft = "명의 도용"
@@ -36,10 +36,34 @@ struct ReportReasonView: View {
     }
   }
 
+  public enum PostReportReason: String, CaseIterable {
+
+    case none = "해당 문제 없음"
+    case hatredOrAbuse = "증오 또는 학대하는 콘텐츠"
+    case harmfulBehavior = "유해하거나 위험한 행위"
+    case spamOrConfusion = "스팸 또는 혼동을 야기하는 콘텐츠"
+    case violentOrHatefulContent = "폭력적 또는 혐오스러운 콘텐츠"
+    case sexualContent = "성적인 콘텐츠"
+
+    var description: Int {
+      switch self {
+      case .none: return 200
+      case .hatredOrAbuse: return 201
+      case .harmfulBehavior: return 202
+      case .spamOrConfusion: return 203
+      case .violentOrHatefulContent: return 204
+      case .sexualContent: return 205
+      }
+    }
+  }
+
   @Environment(\.dismiss) var dismiss
   @EnvironmentObject var apiViewModel: APIViewModel
   @Binding var goReport: Bool
+  @State var showAlert = false
+  @State var goComplete = false
   let userId: Int
+  let reportCategory: ReportUserView.ReportCategory
 
   var body: some View {
     VStack(spacing: 0) {
@@ -56,18 +80,40 @@ struct ReportReasonView: View {
         .foregroundColor(.LabelColor_Secondary)
         .padding(.bottom, 16)
       Divider().frame(width: UIScreen.width)
-      ForEach(UserReportReason.allCases, id: \.self) { reason in
-        NavigationLink {
-          ReportPostView(goReport: $goReport, userId: userId)
-            .environmentObject(apiViewModel)
-        } label: {
-          reportRow(text: reason.rawValue)
+      if reportCategory == .post {
+        ForEach(PostReportReason.allCases, id: \.self) { reason in
+          Button {
+            showAlert = true
+          } label: {
+            reportRow(text: reason.rawValue)
+          }
+        }
+      } else {
+        ForEach(UserReportReason.allCases, id: \.self) { reason in
+          NavigationLink {
+            ReportPostView(goReport: $goReport, userId: userId, reportCategory: .user)
+              .environmentObject(apiViewModel)
+          } label: {
+            reportRow(text: reason.rawValue)
+          }
         }
       }
       Spacer()
     }
     .padding(.horizontal, 16)
     .navigationBarBackButtonHidden()
+    .overlay {
+      if showAlert {
+        ReportAlert {
+          showAlert = false
+        } reportAction: {
+          goComplete = true
+        }
+      }
+    }
+    .navigationDestination(isPresented: $goComplete) {
+      ReportCompleteView(goReport: $goReport)
+    }
     .toolbar {
       ToolbarItem(placement: .cancellationAction) {
         Button {

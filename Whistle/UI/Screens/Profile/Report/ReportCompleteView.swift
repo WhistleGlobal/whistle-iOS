@@ -13,7 +13,22 @@ struct ReportCompleteView: View {
 
   var body: some View {
     VStack {
+      HStack {
+        Button {
+          goReport = false
+        } label: {
+          Image(systemName: "xmark")
+            .resizable()
+            .scaledToFit()
+            .frame(width: 16, height: 16)
+            .foregroundColor(.LabelColor_Primary)
+        }
+        Spacer()
+      }
+      .padding(.vertical, 14)
+      .padding(.horizontal, 16)
       Spacer()
+
       Image(systemName: "checkmark.circle")
         .resizable()
         .scaledToFit()
