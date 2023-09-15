@@ -5,6 +5,7 @@
 //  Created by 박상원 on 2023/08/23.
 //
 
+import GoogleSignIn
 import KeychainSwift
 import SwiftUI
 
@@ -35,7 +36,7 @@ struct WhistleApp: App {
     WindowGroup {
       NavigationStack {
         if isAccess {
-//        MusicListView()
+          //        MusicListView()
           TabbarView()
             .environmentObject(apiViewModel)
             .environmentObject(userAuth)
@@ -59,7 +60,7 @@ struct WhistleApp: App {
 // MARK: - AppDelegate
 
 class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterDelegate {
-  @AppStorage("deviceToken") var deviceToken: String?
+  @AppStorage("deviceToken") var deviceToken = ""
 
   func application(
     _ application: UIApplication,
