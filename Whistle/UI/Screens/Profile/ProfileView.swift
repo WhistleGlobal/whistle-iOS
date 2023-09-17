@@ -6,6 +6,8 @@
 //
 
 import AVKit
+import GoogleSignIn
+import GoogleSignInSwift
 import Kingfisher
 import SwiftUI
 
@@ -151,6 +153,7 @@ struct ProfileView: View {
         SignoutAlert {
           showSignoutAlert = false
         } signOutAction: {
+          GIDSignIn.sharedInstance.signOut()
           userAuth.appleSignout()
         }
       }
