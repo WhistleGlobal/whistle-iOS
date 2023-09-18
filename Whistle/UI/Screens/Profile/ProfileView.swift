@@ -45,7 +45,11 @@ struct ProfileView: View {
       }
       VStack {
         Spacer().frame(height: 64)
-        glassProfile(width: UIScreen.width - 32, height: 398, cornerRadius: 32, overlayed: profileInfo(height: 398))
+        glassProfile(
+          width: UIScreen.width - 32,
+          height: 418,
+          cornerRadius: 32,
+          overlayed: profileInfo(minHeight: 398, maxHeight: 418))
           .padding(.bottom, 12)
         HStack(spacing: 0) {
           Button {
@@ -132,7 +136,6 @@ struct ProfileView: View {
               }
             }
           }
-          // FIXME: - 기존 BottomSheet 처럼의 제스처 느낌이 아님
           .gesture(
             DragGesture(minimumDistance: 20, coordinateSpace: .local)
               .onEnded { value in
@@ -153,6 +156,7 @@ struct ProfileView: View {
         SignoutAlert {
           showSignoutAlert = false
         } signOutAction: {
+          apiViewModel.myProfile.userName.removeAll()
           GIDSignIn.sharedInstance.signOut()
           userAuth.appleSignout()
         }
@@ -164,7 +168,7 @@ struct ProfileView: View {
 extension ProfileView {
 
   @ViewBuilder
-  func profileInfo(height: CGFloat) -> some View {
+  func profileInfo(minHeight _: CGFloat, maxHeight _: CGFloat) -> some View {
     VStack(spacing: 0) {
       HStack {
         Spacer()
@@ -194,11 +198,15 @@ extension ProfileView {
         .foregroundColor(Color.LabelColor_Primary_Dark)
         .fontSystem(fontDesignSystem: .title2_Expanded)
         .padding(.bottom, 4)
-
       Text(apiViewModel.myProfile.introduce ?? " ")
         .foregroundColor(Color.LabelColor_Secondary_Dark)
         .fontSystem(fontDesignSystem: .body2_KO)
+        .lineLimit(nil)
+        .multilineTextAlignment(.center)
+        .fixedSize(horizontal: false, vertical: true)
+        .padding(.horizontal, 48)
         .padding(.bottom, 16)
+      Spacer()
       NavigationLink {
         ProfileEditView()
           .environmentObject(apiViewModel)
@@ -235,9 +243,10 @@ extension ProfileView {
           }
         }
       }
-      Spacer()
+      .padding(.bottom, 32)
     }
-    .frame(height: height)
+//    .frame(maxWidth: .infinity, minHeight: minHeight, maxHeight: maxHeight)
+    .frame(height: 418)
     .frame(maxWidth: .infinity)
   }
 
