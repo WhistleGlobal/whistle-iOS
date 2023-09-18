@@ -53,6 +53,12 @@ struct PlayerView: View {
             newId = id
           }
           .id(newId)
+          LinearGradient(
+            colors: [.clear, .black.opacity(0.24)],
+            startPoint: .center,
+            endPoint: .bottom)
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .allowsHitTesting(false)
           userInfo(
             userName: content.userName ?? "",
             isFollowed: content.isFollowed ?? false,
