@@ -123,6 +123,7 @@ extension APIViewModel: PostFeedProtocol {
                 return
               }
               let jsonArray = try JSONSerialization.jsonObject(with: data, options: []) as? [[String: Any]]
+
               for jsonObject in jsonArray ?? [] {
                 let tempContent: MainContent = .init()
                 tempContent.userId = jsonObject["user_id"] as? Int
@@ -139,8 +140,9 @@ extension APIViewModel: PostFeedProtocol {
                 tempContent.isWhistled = (jsonObject["is_whistled"] as? Int) == 0 ? false : true
                 tempContent.isFollowed = (jsonObject["is_followed"] as? Int) == 0 ? false : true
                 tempContent.isBookmarked = (jsonObject["is_bookmarked"] as? Int) == 0 ? false : true
-                tempContent.player = AVPlayer(url: URL(string: tempContent.videoUrl ?? "")!)
-                log("content url : \(tempContent.videoUrl ?? "url invalid")")
+                if self.contentList.isEmpty {
+                  tempContent.player = AVPlayer(url: URL(string: tempContent.videoUrl ?? "")!)
+                }
                 self.contentList.append(tempContent)
               }
               continuation.resume()
@@ -185,5 +187,9 @@ extension APIViewModel: PostFeedProtocol {
           }
         }
     }
+  }
+
+  func postFeedPlayerChanged() {
+    publisher.send(UUID())
   }
 }
