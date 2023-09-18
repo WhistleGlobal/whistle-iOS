@@ -71,6 +71,7 @@ struct PlayerView: View {
               .allowsHitTesting(false)
             userInfo(
               userName: content.userName ?? "",
+              profileImg: content.profileImg ?? "",
               isFollowed: content.isFollowed ?? false,
               caption: content.caption ?? "",
               musicTitle: content.musicTitle ?? "",
@@ -105,6 +106,7 @@ extension PlayerView {
   @ViewBuilder
   func userInfo(
     userName: String,
+    profileImg: String,
     isFollowed _: Bool,
     caption: String,
     musicTitle: String,
@@ -118,13 +120,19 @@ extension PlayerView {
         VStack(alignment: .leading, spacing: 12) {
           Spacer()
           HStack(spacing: 0) {
-            Circle()
-              .frame(width: 36, height: 36)
-              .padding(.trailing, 12)
-            Text(userName)
-              .foregroundColor(.white)
-              .fontSystem(fontDesignSystem: .subtitle1)
-              .padding(.trailing, 16)
+            NavigationLink {
+              UserProfileView(userId: currentVideoUserId, mainVideoTabSelection: .constant(2))
+                .environmentObject(apiViewModel)
+            } label: {
+              Group {
+                profileImageView(url: profileImg, size: 36)
+                  .padding(.trailing, 12)
+                Text(userName)
+                  .foregroundColor(.white)
+                  .fontSystem(fontDesignSystem: .subtitle1)
+                  .padding(.trailing, 16)
+              }
+            }
             Text("팔로우")
               .fontSystem(fontDesignSystem: .caption_SemiBold)
               .foregroundColor(.Gray10)
