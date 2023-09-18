@@ -55,7 +55,7 @@ struct UserProfileView: View {
             ], spacing: 20) {
               ForEach(apiViewModel.userPostFeed, id: \.self) { content in
                 videoThumbnailView(
-                  url: content.videoUrl ?? "",
+                  thumbnailUrl: content.thumbnailUrl ?? "",
                   viewCount: content.contentViewCount ?? 0)
               }
             }
@@ -180,29 +180,32 @@ extension UserProfileView {
   }
 
   @ViewBuilder
-  func videoThumbnailView(url: String, viewCount: Int) -> some View {
-    VideoPlayer(
-      player: AVPlayer(url: URL(string: url)!))
-      .disabled(true)
-      .frame(height: 204)
-      .cornerRadius(12)
-      .overlay {
-        VStack {
-          Spacer()
-          HStack(spacing: 4) {
-            Image(systemName: "play.circle.fill")
-              .resizable()
-              .scaledToFit()
-              .frame(width: 17, height: 17)
-              .foregroundColor(.Primary_Default)
-            Text("\(viewCount)")
-              .fontSystem(fontDesignSystem: .caption_KO_Semibold)
-              .foregroundColor(Color.LabelColor_Primary_Dark)
-          }
-          .padding(.bottom, 8.5)
-          .padding(.leading, 8)
-          .frame(maxWidth: .infinity, alignment: .leading)
+  func videoThumbnailView(thumbnailUrl: String, viewCount: Int) -> some View {
+    Color.black.overlay {
+      KFImage.url(URL(string: thumbnailUrl))
+        .placeholder { // 플레이스 홀더 설정
+          Color.black
         }
+        .resizable()
+        .scaledToFit()
+      VStack {
+        Spacer()
+        HStack(spacing: 4) {
+          Image(systemName: "play.circle.fill")
+            .resizable()
+            .scaledToFit()
+            .frame(width: 17, height: 17)
+            .foregroundColor(.Primary_Default)
+          Text("\(viewCount)")
+            .fontSystem(fontDesignSystem: .caption_KO_Semibold)
+            .foregroundColor(Color.LabelColor_Primary_Dark)
+        }
+        .padding(.bottom, 8.5)
+        .padding(.leading, 8)
+        .frame(maxWidth: .infinity, alignment: .leading)
       }
+    }
+    .frame(height: 204)
+    .cornerRadius(12)
   }
 }
