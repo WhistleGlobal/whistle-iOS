@@ -126,7 +126,7 @@ struct ProfileView: View {
       .ignoresSafeArea()
       VStack {
         Spacer()
-        GlassBottomSheet(isShowing: $isShowingBottomSheet, showSignoutAlert: $showSignoutAlert, content: AnyView(Text("Hi")))
+        GlassBottomSheet(isShowing: $isShowingBottomSheet, showSignoutAlert: $showSignoutAlert, content: AnyView(Text("")))
           .environmentObject(apiViewModel)
           .environmentObject(userAuth)
           .onChange(of: isShowingBottomSheet) { newValue in

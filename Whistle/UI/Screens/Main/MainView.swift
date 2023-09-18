@@ -17,6 +17,8 @@ struct MainView: View {
   @State var showDialog = false
   @State var showToast = false
   @State var currentVideoUserId = 0
+  @State var isShowingBottomSheet = false
+  @Binding var tabbarOpacity: Double
 
   var body: some View {
     ZStack {
@@ -30,6 +32,30 @@ struct MainView: View {
           showToast: $showToast,
           currentVideoUserId: $currentVideoUserId)
           .environmentObject(apiViewModel)
+      }
+      VStack {
+        Spacer()
+        MainReportBottomSheet(isShowing: $isShowingBottomSheet, content: AnyView(Text("")))
+          .environmentObject(apiViewModel)
+          .onChange(of: isShowingBottomSheet) { newValue in
+            if !newValue {
+              DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                tabbarOpacity = 1
+              }
+            }
+          }
+          .gesture(
+            DragGesture(minimumDistance: 20, coordinateSpace: .local)
+              .onEnded { value in
+                if value.translation.height > 20 {
+                  withAnimation {
+                    isShowingBottomSheet = false
+                  }
+                  DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                    tabbarOpacity = 1
+                  }
+                }
+              })
       }
     }
     .background(Color.black.edgesIgnoringSafeArea(.all))
@@ -47,7 +73,12 @@ struct MainView: View {
     .confirmationDialog("", isPresented: $showDialog) {
       Button("저장하기", role: .none) { }
       Button("관심없음", role: .none) { }
-      Button("신고", role: .destructive) { }
+      Button("신고", role: .destructive) {
+        tabbarOpacity = 0
+        withAnimation {
+          isShowingBottomSheet = true
+        }
+      }
       Button("닫기", role: .cancel) {
         log("Cancel")
       }

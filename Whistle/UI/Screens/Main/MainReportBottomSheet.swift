@@ -41,15 +41,15 @@ struct MainReportBottomSheet: View {
               .offset(y: 20)
             VStack(spacing: 0) {
               HStack {
-                  Color.clear
-                      .frame(width: 25, height: 29)
-                      .overlay {
-                          Image(systemName: "xmark")
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: 19, height: 19)
-                            .foregroundColor(.Gray10)
-                      }
+                Color.clear
+                  .frame(width: 25, height: 29)
+                  .overlay {
+                    Image(systemName: "xmark")
+                      .resizable()
+                      .scaledToFit()
+                      .frame(width: 19, height: 19)
+                      .foregroundColor(.Gray10)
+                  }
                 Spacer()
                 Text("신고")
                   .fontSystem(fontDesignSystem: .subtitle2_KO)
@@ -87,6 +87,7 @@ struct MainReportBottomSheet: View {
             .frame(height: UIScreen.height - 48)
             .offset(y: 20)
           }
+          .offset(y: isShowing ? 0 : UIScreen.height - 48)
       }
     }
   }
