@@ -19,6 +19,7 @@ struct UserProfileView: View {
   @State var showDialog = false
   @State var goReport = false
   let userId: Int
+  @Binding var mainVideoTabSelection: Int
 
   var body: some View {
     ZStack {
@@ -99,7 +100,13 @@ extension UserProfileView {
     VStack(spacing: 0) {
       HStack {
         Button {
-          dismiss()
+          if mainVideoTabSelection == 2 {
+            dismiss()
+          } else {
+            withAnimation {
+              mainVideoTabSelection = 0
+            }
+          }
         } label: {
           Image(systemName: "chevron.left")
             .foregroundColor(Color.White)

@@ -25,52 +25,61 @@ struct PlayerView: View {
   @EnvironmentObject var apiViewModel: APIViewModel
   let lifecycleDelegate: ViewLifecycleDelegate?
   @State var newId = UUID()
+  @State var mainVideoTabSelection = 0
   @Binding var showDialog: Bool
   @Binding var showToast: Bool
 
   var body: some View {
     VStack(spacing: 0) {
       ForEach(apiViewModel.contentList, id: \.self) { content in
-        ZStack {
-          Color.clear.overlay {
-            if let url = content.thumbnailUrl {
-              KFImage.url(URL(string: url))
-                .placeholder {
-                  Color.black
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
-                }
-                .cacheMemoryOnly()
-                .resizable()
-                .scaledToFill()
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
+        TabView(selection: $mainVideoTabSelection) {
+          ZStack {
+            Color.clear.overlay {
+              if let url = content.thumbnailUrl {
+                KFImage.url(URL(string: url))
+                  .placeholder {
+                    Color.black
+                      .frame(maxWidth: .infinity, maxHeight: .infinity)
+                  }
+                  .cacheMemoryOnly()
+                  .resizable()
+                  .scaledToFill()
+                  .frame(maxWidth: .infinity, maxHeight: .infinity)
+              }
+              if let player = content.player {
+                Player(player: player)
+                  .frame(maxWidth: .infinity, maxHeight: .infinity)
+              }
             }
-            if let player = content.player {
-              Player(player: player)
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .onReceive(apiViewModel.publisher) { id in
+              newId = id
             }
+            .id(newId)
+            LinearGradient(
+              colors: [.clear, .black.opacity(0.24)],
+              startPoint: .center,
+              endPoint: .bottom)
+              .frame(maxWidth: .infinity, maxHeight: .infinity)
+              .allowsHitTesting(false)
+            userInfo(
+              userName: content.userName ?? "",
+              isFollowed: content.isFollowed ?? false,
+              caption: content.caption ?? "",
+              musicTitle: content.musicTitle ?? "",
+              isWhistled: Binding(get: {
+                content.isWhistled
+              }, set: { newValue in
+                content.isWhistled = newValue
+              }),
+              whistleCount: content.whistleCount ?? 0)
           }
-          .onReceive(apiViewModel.publisher) { id in
-            newId = id
-          }
-          .id(newId)
-          LinearGradient(
-            colors: [.clear, .black.opacity(0.24)],
-            startPoint: .center,
-            endPoint: .bottom)
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
-            .allowsHitTesting(false)
-          userInfo(
-            userName: content.userName ?? "",
-            isFollowed: content.isFollowed ?? false,
-            caption: content.caption ?? "",
-            musicTitle: content.musicTitle ?? "",
-            isWhistled: Binding(get: {
-              content.isWhistled
-            }, set: { newValue in
-              content.isWhistled = newValue
-            }),
-            whistleCount: content.whistleCount ?? 0)
+          .ignoresSafeArea()
+          .tag(0)
+          UserProfileView(userId: content.userId!, mainVideoTabSelection: $mainVideoTabSelection)
+            .environmentObject(apiViewModel)
+            .tag(1)
         }
+        .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
       }
     }
     .ignoresSafeArea()
@@ -137,7 +146,7 @@ extension PlayerView {
             apiViewModel.postFeedPlayerChanged()
           } label: {
             VStack(spacing: 0) {
-              Image(systemName: "music.note")
+              Image(systemName: "flame.fill")
                 .resizable()
                 .scaledToFit()
                 .frame(width: 36, height: 36)
