@@ -14,12 +14,14 @@ struct MainView: View {
 
   @State var videoIndex = 0
   @State var currnentVideoIndex = 0
+  @State var showDialog = false
+
   var body: some View {
     ZStack {
       if apiViewModel.contentList.isEmpty {
         Color.white
       } else {
-        PlayerPageView(videoIndex: $videoIndex, currnentVideoIndex: $currnentVideoIndex)
+        PlayerPageView(videoIndex: $videoIndex, currnentVideoIndex: $currnentVideoIndex, showDialog: $showDialog)
           .environmentObject(apiViewModel)
       }
     }
@@ -28,6 +30,14 @@ struct MainView: View {
     .task {
       if apiViewModel.contentList.isEmpty {
         await apiViewModel.requestContentList()
+      }
+    }
+    .confirmationDialog("", isPresented: $showDialog) {
+      Button("저장하기", role: .none) { }
+      Button("관심없음", role: .none) { }
+      Button("신고", role: .destructive) { }
+      Button("닫기", role: .cancel) {
+        log("Cancel")
       }
     }
   }

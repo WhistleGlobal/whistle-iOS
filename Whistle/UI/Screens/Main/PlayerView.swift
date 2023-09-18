@@ -9,7 +9,7 @@ import AVKit
 import Foundation
 import Kingfisher
 import SwiftUI
-
+import UniformTypeIdentifiers
 
 // MARK: - ViewLifecycleDelegate
 
@@ -24,6 +24,7 @@ struct PlayerView: View {
   @EnvironmentObject var apiViewModel: APIViewModel
   let lifecycleDelegate: ViewLifecycleDelegate?
   @State var newId = UUID()
+  @Binding var showDialog: Bool
 
   var body: some View {
     VStack(spacing: 0) {
@@ -72,7 +73,14 @@ struct PlayerView: View {
 extension PlayerView {
 
   @ViewBuilder
-  func userInfo(userName: String, isFollowed _: Bool, caption: String, musicTitle: String, whistleCount: Int) -> some View {
+  func userInfo(
+    userName: String,
+    isFollowed _: Bool,
+    caption: String,
+    musicTitle: String,
+    whistleCount: Int)
+    -> some View
+  {
     VStack(spacing: 0) {
       Spacer()
       HStack(spacing: 0) {
@@ -120,25 +128,41 @@ extension PlayerView {
             .foregroundColor(.Gray10)
             .fontSystem(fontDesignSystem: .caption_Regular)
             .padding(.bottom, 24)
-          Image(systemName: "square.and.arrow.up")
-            .resizable()
-            .scaledToFit()
-            .frame(width: 36, height: 38)
-            .foregroundColor(.Gray10)
-            .padding(.bottom, 2)
-          Text("공유")
-            .foregroundColor(.Gray10)
-            .padding(.bottom, 24)
-            .fontSystem(fontDesignSystem: .caption_Regular)
-          Image(systemName: "ellipsis")
-            .resizable()
-            .scaledToFit()
-            .frame(width: 36, height: 38)
-            .foregroundColor(.Gray10)
-            .padding(.bottom, 2)
-          Text("더보기")
-            .foregroundColor(.Gray10)
-            .fontSystem(fontDesignSystem: .caption_Regular)
+
+          Button {
+            UIPasteboard.general.setValue(
+              "복사할 링크입니다.",
+              forPasteboardType: UTType.plainText.identifier)
+          } label: {
+            VStack(spacing: 0) {
+              Image(systemName: "square.and.arrow.up")
+                .resizable()
+                .scaledToFit()
+                .frame(width: 36, height: 38)
+                .foregroundColor(.Gray10)
+                .padding(.bottom, 2)
+              Text("공유")
+                .foregroundColor(.Gray10)
+                .padding(.bottom, 24)
+                .fontSystem(fontDesignSystem: .caption_Regular)
+            }
+          }
+          .fontSystem(fontDesignSystem: .caption_Regular)
+          Button {
+            showDialog = true
+          } label: {
+            VStack(spacing: 0) {
+              Image(systemName: "ellipsis")
+                .resizable()
+                .scaledToFit()
+                .frame(width: 36, height: 38)
+                .foregroundColor(.Gray10)
+                .padding(.bottom, 2)
+              Text("더보기")
+                .foregroundColor(.Gray10)
+                .fontSystem(fontDesignSystem: .caption_Regular)
+            }
+          }
         }
       }
     }
