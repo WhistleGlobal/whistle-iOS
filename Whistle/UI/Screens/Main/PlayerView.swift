@@ -25,6 +25,7 @@ struct PlayerView: View {
   let lifecycleDelegate: ViewLifecycleDelegate?
   @State var newId = UUID()
   @Binding var showDialog: Bool
+  @Binding var showToast: Bool
 
   var body: some View {
     VStack(spacing: 0) {
@@ -130,6 +131,7 @@ extension PlayerView {
             .padding(.bottom, 24)
 
           Button {
+            showToast = true
             UIPasteboard.general.setValue(
               "복사할 링크입니다.",
               forPasteboardType: UTType.plainText.identifier)

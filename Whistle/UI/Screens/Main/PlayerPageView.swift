@@ -85,6 +85,7 @@ struct PlayerPageView: UIViewRepresentable {
   @Binding var videoIndex: Int
   @Binding var currnentVideoIndex: Int
   @Binding var showDialog: Bool
+  @Binding var showToast: Bool
 
   func makeCoordinator() -> Coordinator {
     PlayerPageView.Coordinator(parent1: self)
@@ -94,7 +95,10 @@ struct PlayerPageView: UIViewRepresentable {
     let view = UIScrollView()
 
     let childView = UIHostingController(
-      rootView: PlayerView(lifecycleDelegate: context.coordinator, showDialog: $showDialog)
+      rootView: PlayerView(
+        lifecycleDelegate: context.coordinator,
+        showDialog: $showDialog,
+        showToast: $showToast)
         .environmentObject(apiViewModel))
     childView.view.frame = CGRect(
       x: 0,

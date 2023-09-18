@@ -15,13 +15,18 @@ struct MainView: View {
   @State var videoIndex = 0
   @State var currnentVideoIndex = 0
   @State var showDialog = false
+  @State var showToast = false
 
   var body: some View {
     ZStack {
       if apiViewModel.contentList.isEmpty {
         Color.white
       } else {
-        PlayerPageView(videoIndex: $videoIndex, currnentVideoIndex: $currnentVideoIndex, showDialog: $showDialog)
+        PlayerPageView(
+          videoIndex: $videoIndex,
+          currnentVideoIndex: $currnentVideoIndex,
+          showDialog: $showDialog,
+          showToast: $showToast)
           .environmentObject(apiViewModel)
       }
     }
@@ -30,6 +35,11 @@ struct MainView: View {
     .task {
       if apiViewModel.contentList.isEmpty {
         await apiViewModel.requestContentList()
+      }
+    }
+    .overlay {
+      if showToast {
+        ProfileToastMessage(text: "클립보드에 복사되었어요", paddingBottom: 78, showToast: $showToast)
       }
     }
     .confirmationDialog("", isPresented: $showDialog) {
