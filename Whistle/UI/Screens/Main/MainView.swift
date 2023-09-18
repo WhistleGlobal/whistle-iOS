@@ -16,6 +16,7 @@ struct MainView: View {
   @State var currnentVideoIndex = 0
   @State var showDialog = false
   @State var showToast = false
+  @State var currentVideoUserId = 0
 
   var body: some View {
     ZStack {
@@ -26,7 +27,8 @@ struct MainView: View {
           videoIndex: $videoIndex,
           currnentVideoIndex: $currnentVideoIndex,
           showDialog: $showDialog,
-          showToast: $showToast)
+          showToast: $showToast,
+          currentVideoUserId: $currentVideoUserId)
           .environmentObject(apiViewModel)
       }
     }

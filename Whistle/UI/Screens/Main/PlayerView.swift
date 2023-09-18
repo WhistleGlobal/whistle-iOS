@@ -28,6 +28,7 @@ struct PlayerView: View {
   @State var mainVideoTabSelection = 0
   @Binding var showDialog: Bool
   @Binding var showToast: Bool
+  @Binding var currentVideoUserId: Int
 
   var body: some View {
     VStack(spacing: 0) {
@@ -75,7 +76,7 @@ struct PlayerView: View {
           }
           .ignoresSafeArea()
           .tag(0)
-          UserProfileView(userId: content.userId!, mainVideoTabSelection: $mainVideoTabSelection)
+          UserProfileView(userId: currentVideoUserId, mainVideoTabSelection: $mainVideoTabSelection)
             .environmentObject(apiViewModel)
             .tag(1)
         }

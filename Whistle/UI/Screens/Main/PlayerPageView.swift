@@ -54,6 +54,7 @@ struct PlayerPageView: UIViewRepresentable {
         }
         parent.apiViewModel.postFeedPlayerChanged()
         index = currentindex
+        parent.currentVideoUserId = parent.apiViewModel.contentList[currentindex].userId ?? 0
         parent.apiViewModel.contentList[index].player?.play()
         parent.apiViewModel.contentList[index].player?.actionAtItemEnd = .none
         for i in 0..<parent.apiViewModel.contentList.count {
@@ -73,6 +74,7 @@ struct PlayerPageView: UIViewRepresentable {
     func onAppear() {
       parent.apiViewModel.contentList[index].player?.seek(to: .zero)
       parent.apiViewModel.contentList[index].player?.play()
+      parent.currentVideoUserId = parent.apiViewModel.contentList[index].userId ?? 0
     }
 
     func onDisappear() {
@@ -86,6 +88,7 @@ struct PlayerPageView: UIViewRepresentable {
   @Binding var currnentVideoIndex: Int
   @Binding var showDialog: Bool
   @Binding var showToast: Bool
+  @Binding var currentVideoUserId: Int
 
   func makeCoordinator() -> Coordinator {
     PlayerPageView.Coordinator(parent1: self)
@@ -98,7 +101,8 @@ struct PlayerPageView: UIViewRepresentable {
       rootView: PlayerView(
         lifecycleDelegate: context.coordinator,
         showDialog: $showDialog,
-        showToast: $showToast)
+        showToast: $showToast,
+        currentVideoUserId: $currentVideoUserId)
         .environmentObject(apiViewModel))
     childView.view.frame = CGRect(
       x: 0,
