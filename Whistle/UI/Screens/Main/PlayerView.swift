@@ -107,7 +107,7 @@ extension PlayerView {
   func userInfo(
     userName: String,
     profileImg: String,
-    isFollowed _: Bool,
+    isFollowed: Bool,
     caption: String,
     musicTitle: String,
     isWhistled: Binding<Bool>,
@@ -133,17 +133,29 @@ extension PlayerView {
                   .padding(.trailing, 16)
               }
             }
-            Text("팔로우")
-              .fontSystem(fontDesignSystem: .caption_SemiBold)
-              .foregroundColor(.Gray10)
-              .background {
-                RoundedRectangle(cornerRadius: 6)
-                  .stroke(
-                    Color.Border_Default,
-                    lineWidth: 1)
+            if userName != apiViewModel.myProfile.userName {
+              Button {
+                Task {
+                  if isFollowed {
+//                    await apiViewModel.unfollowUser(userId: currentVideoUserId)
+                  } else {
+//                    await apiViewModel.followUser(userId: currentVideoUserId)
+                  }
+                }
+              } label: {
+                Text("팔로우")
+                  .fontSystem(fontDesignSystem: .caption_SemiBold)
+                  .foregroundColor(.Gray10)
+                  .background {
+                    RoundedRectangle(cornerRadius: 6)
+                      .stroke(
+                        Color.Border_Default,
+                        lineWidth: 1)
+                      .frame(width: 50, height: 26)
+                  }
                   .frame(width: 50, height: 26)
               }
-              .frame(width: 50, height: 26)
+            }
           }
           HStack(spacing: 0) {
             Text(caption)

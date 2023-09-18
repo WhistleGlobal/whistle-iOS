@@ -13,6 +13,7 @@ struct TabbarView: View {
 
   @State var tabSelection: TabSelection = .main
   @State var tabbarOpacity = 1.0
+  @State var isFirstProfileLoaded = true
   @EnvironmentObject var apiViewModel: APIViewModel
   @EnvironmentObject var userAuth: UserAuth
 
@@ -132,7 +133,7 @@ extension TabbarView {
       withAnimation(.default) {
         tabSelection = .profile
       }
-      if apiViewModel.myProfile.userName.isEmpty {
+      if isFirstProfileLoaded {
         Task {
           await apiViewModel.requestMyFollow()
         }
@@ -145,6 +146,7 @@ extension TabbarView {
         Task {
           await apiViewModel.requestMyPostFeed()
         }
+        isFirstProfileLoaded = false
       }
     }
   }
