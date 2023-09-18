@@ -65,6 +65,9 @@ struct MainView: View {
         await apiViewModel.requestContentList()
       }
     }
+    .task {
+      await apiViewModel.requestMyProfile()
+    }
     .overlay {
       if showToast {
         ProfileToastMessage(text: "클립보드에 복사되었어요", paddingBottom: 78, showToast: $showToast)

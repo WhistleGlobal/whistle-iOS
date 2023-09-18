@@ -127,19 +127,21 @@ extension FollowView {
           .frame(maxWidth: .infinity, alignment: .leading)
       }
       .padding(.leading, 16)
-      Button("") {
-        Task {
-          log("Button pressed")
-          log(userId)
-          log(isFollowed.wrappedValue)
-          if isFollowed.wrappedValue {
-            await apiViewModel.unfollowUser(userId: userId)
-          } else {
-            await apiViewModel.followUser(userId: userId)
+      if userName != apiViewModel.myProfile.userName {
+        Button("") {
+          Task {
+            log("Button pressed")
+            log(userId)
+            log(isFollowed.wrappedValue)
+            if isFollowed.wrappedValue {
+              await apiViewModel.unfollowUser(userId: userId)
+            } else {
+              await apiViewModel.followUser(userId: userId)
+            }
           }
         }
+        .buttonStyle(FollowButtonStyle(isFollowed: isFollowed))
       }
-      .buttonStyle(FollowButtonStyle(isFollowed: isFollowed))
       Spacer()
     }
     .frame(height: 72)

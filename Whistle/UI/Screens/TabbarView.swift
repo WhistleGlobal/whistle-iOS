@@ -134,9 +134,6 @@ extension TabbarView {
       }
       if apiViewModel.myProfile.userName.isEmpty {
         Task {
-          await apiViewModel.requestMyProfile()
-        }
-        Task {
           await apiViewModel.requestMyFollow()
         }
         Task {
