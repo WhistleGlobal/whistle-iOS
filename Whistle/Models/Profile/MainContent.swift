@@ -20,6 +20,7 @@ class MainContent: Hashable {
     profileImg: String? = nil,
     caption: String? = nil,
     videoUrl: String? = nil,
+    thumbnailUrl: String? = nil,
     musicArtist: String? = nil,
     musicTitle: String? = nil,
     hashtags: String? = nil,
@@ -35,6 +36,7 @@ class MainContent: Hashable {
     self.profileImg = profileImg
     self.caption = caption
     self.videoUrl = videoUrl
+    self.thumbnailUrl = thumbnailUrl
     self.musicArtist = musicArtist
     self.musicTitle = musicTitle
     self.hashtags = hashtags
@@ -53,6 +55,7 @@ class MainContent: Hashable {
   var profileImg: String?
   var caption: String?
   var videoUrl: String?
+  var thumbnailUrl: String?
   var musicArtist: String?
   var musicTitle: String?
   var hashtags: String?

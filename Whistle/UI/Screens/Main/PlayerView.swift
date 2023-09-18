@@ -7,7 +7,9 @@
 
 import AVKit
 import Foundation
+import Kingfisher
 import SwiftUI
+
 
 // MARK: - ViewLifecycleDelegate
 
@@ -28,11 +30,20 @@ struct PlayerView: View {
       ForEach(apiViewModel.contentList, id: \.self) { content in
         ZStack {
           Color.clear.overlay {
+            if let url = content.thumbnailUrl {
+              KFImage.url(URL(string: url))
+                .placeholder {
+                  Color.black
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                }
+                .cacheMemoryOnly()
+                .resizable()
+                .scaledToFill()
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+            }
             if let player = content.player {
               Player(player: player)
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
-            } else {
-              Color.black.frame(maxWidth: .infinity, maxHeight: .infinity)
             }
           }
           .onReceive(apiViewModel.publisher) { id in

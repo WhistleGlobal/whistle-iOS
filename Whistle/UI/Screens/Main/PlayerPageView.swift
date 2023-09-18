@@ -29,16 +29,25 @@ struct PlayerPageView: UIViewRepresentable {
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
       // 새로 이동한 인덱스
       let currentindex = Int(scrollView.contentOffset.y / UIScreen.main.bounds.height)
-
       if index != currentindex {
         parent.apiViewModel.contentList[index].player?.seek(to: .zero)
         parent.apiViewModel.contentList[index].player?.pause()
-        parent.apiViewModel.contentList[index].player = nil
-        let url = parent.apiViewModel.contentList[currentindex].videoUrl
-        parent.apiViewModel.contentList[currentindex].player = AVPlayer(url: URL(string: url ?? "")!)
-        parent.apiViewModel.postFeedPlayerChanged()
-        for i in 0..<parent.apiViewModel.contentList.count {
-          print("player : \(parent.apiViewModel.contentList[i].player)")
+        if currentindex != 0, currentindex != parent.apiViewModel.contentList.count - 1 {
+          let urlNext = parent.apiViewModel.contentList[currentindex + 1].videoUrl
+          let urlPrev = parent.apiViewModel.contentList[currentindex - 1].videoUrl
+          // 위(이전) 컨텐츠 확인
+          if index > currentindex {
+            if index != parent.apiViewModel.contentList.count - 1 {
+              parent.apiViewModel.contentList[index + 1].player = nil
+            }
+          } else { // 아래의 컨텐츠 확인
+            if index != 0 {
+              parent.apiViewModel.contentList[index - 1].player = nil
+            }
+          }
+          parent.apiViewModel.contentList[currentindex + 1].player = AVPlayer(url: URL(string: urlNext ?? "")!)
+          parent.apiViewModel.contentList[currentindex - 1].player = AVPlayer(url: URL(string: urlPrev ?? "")!)
+          parent.apiViewModel.postFeedPlayerChanged()
         }
         index = currentindex
         parent.apiViewModel.contentList[index].player?.play()
