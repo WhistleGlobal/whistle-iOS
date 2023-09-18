@@ -50,6 +50,13 @@ struct PlayerView: View {
               if let player = content.player {
                 Player(player: player)
                   .frame(maxWidth: .infinity, maxHeight: .infinity)
+                  .onChange(of: mainVideoTabSelection) { _ in
+                    if player.rate != 0.0 {
+                      player.pause()
+                    } else {
+                      player.play()
+                    }
+                  }
               }
             }
             .onReceive(apiViewModel.publisher) { id in
