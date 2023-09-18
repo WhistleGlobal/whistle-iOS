@@ -6,6 +6,8 @@
 //
 
 import AVKit
+import GoogleSignIn
+import GoogleSignInSwift
 import Kingfisher
 import SwiftUI
 
@@ -26,9 +28,11 @@ struct ProfileView: View {
   @State var isShowingBottomSheet = false
   @State var tabbarDirection: CGFloat = -1.0
   @State var tabSelection: profileTabCase = .myVideo
+  @State var showSignoutAlert = false
   @Binding var tabbarOpacity: Double
   @Binding var tabBarSelection: TabSelection
   @EnvironmentObject var apiViewModel: APIViewModel
+  @EnvironmentObject var userAuth: UserAuth
 
   var body: some View {
     ZStack {
@@ -118,8 +122,9 @@ struct ProfileView: View {
       .ignoresSafeArea()
       VStack {
         Spacer()
-        GlassBottomSheet(isShowing: $isShowingBottomSheet, content: AnyView(Text("Hi")))
+        GlassBottomSheet(isShowing: $isShowingBottomSheet, showSignoutAlert: $showSignoutAlert, content: AnyView(Text("Hi")))
           .environmentObject(apiViewModel)
+          .environmentObject(userAuth)
           .onChange(of: isShowingBottomSheet) { newValue in
             if !newValue {
               DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
@@ -142,6 +147,16 @@ struct ProfileView: View {
               })
       }
       .ignoresSafeArea()
+    }
+    .overlay {
+      if showSignoutAlert {
+        SignoutAlert {
+          showSignoutAlert = false
+        } signOutAction: {
+          GIDSignIn.sharedInstance.signOut()
+          userAuth.appleSignout()
+        }
+      }
     }
   }
 }
@@ -180,7 +195,7 @@ extension ProfileView {
         .fontSystem(fontDesignSystem: .title2_Expanded)
         .padding(.bottom, 4)
 
-      Text(apiViewModel.myProfile.introduce)
+      Text(apiViewModel.myProfile.introduce ?? " ")
         .foregroundColor(Color.LabelColor_Secondary_Dark)
         .fontSystem(fontDesignSystem: .body2_KO)
         .padding(.bottom, 16)

@@ -24,12 +24,14 @@ struct ProfileInfoView: View {
         .fontSystem(fontDesignSystem: .title2_Expanded)
         .padding(.bottom, 36)
       List {
-        NavigationLink {
-          EmptyView()
-        } label: {
+        HStack {
           Text("가입한 날짜")
-            .listRowSeparator(.hidden)
+          Spacer()
+          Text("\(apiViewModel.userCreatedDate)")
+            .fontSystem(fontDesignSystem: .body1_KO)
+            .foregroundColor(.Disable_Placeholder)
         }
+        .listRowSeparator(.hidden)
         NavigationLink {
           EmptyView()
         } label: {
@@ -49,6 +51,9 @@ struct ProfileInfoView: View {
     .navigationBarBackButtonHidden()
     .navigationBarTitleDisplayMode(.inline)
     .navigationTitle("정보")
+    .task {
+      apiViewModel.requestUserCreateDate()
+    }
     .onAppear {
       isShowingBottomSheet = false
     }

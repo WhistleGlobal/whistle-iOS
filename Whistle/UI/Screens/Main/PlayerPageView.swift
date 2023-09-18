@@ -5,6 +5,7 @@
 //  Created by ChoiYujin on 9/4/23.
 //
 
+import AVFoundation
 import Foundation
 import SwiftUI
 
@@ -32,6 +33,13 @@ struct PlayerPageView: UIViewRepresentable {
       if index != currentindex {
         parent.apiViewModel.contentList[index].player?.seek(to: .zero)
         parent.apiViewModel.contentList[index].player?.pause()
+        parent.apiViewModel.contentList[index].player = nil
+        let url = parent.apiViewModel.contentList[currentindex].videoUrl
+        parent.apiViewModel.contentList[currentindex].player = AVPlayer(url: URL(string: url ?? "")!)
+        parent.apiViewModel.postFeedPlayerChanged()
+        for i in 0..<parent.apiViewModel.contentList.count {
+          print("player : \(parent.apiViewModel.contentList[i].player)")
+        }
         index = currentindex
         parent.apiViewModel.contentList[index].player?.play()
         parent.apiViewModel.contentList[index].player?.actionAtItemEnd = .none

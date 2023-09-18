@@ -1,34 +1,34 @@
 //
-//  ProfileAlert.swift
+//  ReportAlert.swift
 //  Whistle
 //
-//  Created by ChoiYujin on 9/3/23.
+//  Created by ChoiYujin on 9/14/23.
 //
 
 import SwiftUI
 
-// MARK: - ProfileAlert
+// MARK: - ReportAlert
 
-struct ProfileAlert: View {
+struct ReportAlert: View {
 
   let cancelAction: () -> Void
-  let updateAction: () -> Void
+  let reportAction: () -> Void
 
   var body: some View {
     VStack(spacing: 0) {
       Spacer()
       ZStack {
         VStack(spacing: 0) {
-          profileAlertView()
+          reportAlertView()
         }
-        RoundedRectangle(cornerRadius: 14)
-          .stroke(lineWidth: 1)
-          .foregroundStyle(
-            LinearGradient.Border_Glass)
-          .frame(maxWidth: .infinity, maxHeight: .infinity)
-
+        .overlay {
+          RoundedRectangle(cornerRadius: 14)
+            .stroke(lineWidth: 1)
+            .foregroundStyle(
+              LinearGradient.Border_Glass)
+        }
         VStack(spacing: 0) {
-          Spacer().frame(height: 150)
+          Spacer().frame(height: 114)
           Rectangle()
             .frame(width: 270, height: 1)
             .foregroundStyle(LinearGradient.Border_Glass)
@@ -37,8 +37,6 @@ struct ProfileAlert: View {
             .foregroundStyle(LinearGradient.Border_Glass)
         }
       }
-      .frame(width: 270, height: 195)
-
       Spacer()
     }
     .frame(maxWidth: .infinity)
@@ -46,15 +44,13 @@ struct ProfileAlert: View {
   }
 }
 
-extension ProfileAlert {
-
+extension ReportAlert {
   @ViewBuilder
-  func glassMorphicCard(width: CGFloat, height: CGFloat) -> some View {
+  func glassMorphicAlert(width: CGFloat, height: CGFloat) -> some View {
     ZStack {
       RoundedRectangle(cornerRadius: 32, style: .continuous)
         .fill(Color.black.opacity(0.3))
       CustomBlurView(effect: .systemUltraThinMaterialLight) { view in
-        // FIXME: - 피그마와 비슷하도록 값 고치기
         view.saturationAmout = 2.2
         view.gaussianBlurRadius = 36
       }
@@ -64,34 +60,29 @@ extension ProfileAlert {
 
   @ViewBuilder
   func glassAlertTop() -> some View {
-    glassMorphicCard(width: 270, height: 151)
+    glassMorphicAlert(width: 270, height: 114)
       .cornerRadius(14, corners: [.topLeft, .topRight])
   }
 
   @ViewBuilder
   func glassAlertBottomRight() -> some View {
-    glassMorphicCard(width: 135, height: 45)
+    glassMorphicAlert(width: 135, height: 45)
       .cornerRadius(14, corners: [.bottomRight])
   }
 
   @ViewBuilder
   func glassAlertBottomLeft() -> some View {
-    glassMorphicCard(width: 135, height: 45)
+    glassMorphicAlert(width: 135, height: 45)
       .cornerRadius(14, corners: [.bottomLeft])
   }
 
   @ViewBuilder
-  func profileAlertView() -> some View {
-    VStack(spacing: 16) {
-      Text("정말 사용자 ID를\n 변경하시겠습니까?")
-        .fontSystem(fontDesignSystem: .subtitle2_KO)
-        .foregroundColor(.LabelColor_Primary_Dark)
-      Text("30일마다 한 번씩 사용자 ID를\n 변경할 수 있습니다.")
-        .fontSystem(fontDesignSystem: .body2_KO)
-        .foregroundColor(.LabelColor_Secondary_Dark)
+  func reportAlertView() -> some View {
+    VStack {
+      Text("정말 신고하시겠습니까?")
     }
-    .frame(width: 270, height: 151)
-    .multilineTextAlignment(.center)
+    .foregroundColor(.LabelColor_Primary_Dark)
+    .frame(width: 270, height: 114)
     .background(
       glassAlertTop())
     HStack(spacing: 0) {
@@ -106,15 +97,16 @@ extension ProfileAlert {
           .foregroundColor(.Info)
       }
       Button {
-        updateAction()
+        reportAction()
       } label: {
         glassAlertBottomRight()
       }
       .overlay {
-        Text("변경")
+        Text("신고")
           .fontSystem(fontDesignSystem: .subtitle2_KO)
           .foregroundColor(.Danger)
       }
     }
   }
 }
+

@@ -6,6 +6,7 @@
 //
 
 import Alamofire
+import Combine
 import Foundation
 import KeychainSwift
 import SwiftyJSON
@@ -15,6 +16,7 @@ import UIKit
 
 class APIViewModel: ObservableObject {
   let keychain = KeychainSwift()
+  let publisher: PassthroughSubject<UUID, Never> = PassthroughSubject()
   @Published var myProfile = Profile()
   @Published var userProfile = UserProfile()
   @Published var myWhistleCount = 0
@@ -27,8 +29,10 @@ class APIViewModel: ObservableObject {
   @Published var notiSetting: NotiSetting = .init()
   @Published var contentList: [MainContent] = []
   @Published var reportedContent: [ReportedContent] = []
+  @Published var userCreatedDate = ""
 
   let decoder = JSONDecoder()
+
 }
 
 // MARK: - Computed Property

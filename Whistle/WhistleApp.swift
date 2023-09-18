@@ -5,6 +5,7 @@
 //  Created by 박상원 on 2023/08/23.
 //
 
+import GoogleSignIn
 import KeychainSwift
 import SwiftUI
 
@@ -28,24 +29,26 @@ struct WhistleApp: App {
   @StateObject var userAuth = UserAuth()
   @StateObject var apiViewModel = APIViewModel()
   @State var testBool = false
+  @AppStorage("isAccess") var isAccess = false
   let keychain = KeychainSwift()
 
   var body: some Scene {
     WindowGroup {
       NavigationStack {
-        if userAuth.isAccess {
-//          MusicListView()
+        if isAccess {
+          //        MusicListView()
           TabbarView()
-//            .environmentObject(apiViewModel)
+            .environmentObject(apiViewModel)
+            .environmentObject(userAuth)
         } else {
           SignInView()
+            .environmentObject(userAuth)
         }
       }
-      .environmentObject(apiViewModel)
       .tint(.black)
       .task {
-        if userAuth.isAccess {
-          userAuth.loadData {
+        if isAccess {
+          appleSignInViewModel.userAuth.loadData {
             log("after Login")
           }
         }
@@ -57,7 +60,7 @@ struct WhistleApp: App {
 // MARK: - AppDelegate
 
 class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterDelegate {
-  @AppStorage("deviceToken") var deviceToken: String?
+  @AppStorage("deviceToken") var deviceToken = ""
 
   func application(
     _ application: UIApplication,

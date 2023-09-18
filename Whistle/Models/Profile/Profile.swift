@@ -22,7 +22,7 @@ class Profile: ObservableObject, Decodable {
   var userName = ""
   var email = ""
   var profileImage: String?
-  var introduce = ""
+  var introduce: String?
   var status: UserStatus = .active
 }
 

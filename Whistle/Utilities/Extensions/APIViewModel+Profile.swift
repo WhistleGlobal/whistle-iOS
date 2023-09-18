@@ -7,6 +7,7 @@
 
 import Alamofire
 import Foundation
+import SwiftyJSON
 
 extension APIViewModel: ProfileProtocol {
   func requestMyProfile() async {
@@ -281,5 +282,37 @@ extension APIViewModel: ProfileProtocol {
           }
         }
     }
+  }
+
+  func requestUserCreateDate() {
+    AF.request(
+      "\(domainUrl)/user/created-at",
+      method: .get,
+      headers: contentTypeXwwwForm)
+      .validate(statusCode: 200...300)
+      .responseData { response in
+        switch response.result {
+        case .success(let data):
+          let json = JSON(data)
+          let dateString = json["created_at"]
+          log(dateString.type)
+          log(dateString.string)
+          let inputDateString = dateString.string
+          let inputDateFormatter = DateFormatter()
+          inputDateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
+          if let date = inputDateFormatter.date(from: inputDateString ?? "") {
+            let outputDateFormatter = DateFormatter()
+            outputDateFormatter.dateFormat = "yyyy.MM.dd"
+            let formattedDateString = outputDateFormatter.string(from: date)
+            log(formattedDateString)
+            self.userCreatedDate = formattedDateString
+          } else {
+            log("Failed to parse the date string")
+          }
+          log("success")
+        case .failure(let error):
+          log(error)
+        }
+      }
   }
 }

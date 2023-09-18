@@ -21,6 +21,7 @@ protocol ViewLifecycleDelegate {
 struct PlayerView: View {
   @EnvironmentObject var apiViewModel: APIViewModel
   let lifecycleDelegate: ViewLifecycleDelegate?
+  @State var newId = UUID()
 
   var body: some View {
     VStack(spacing: 0) {
@@ -34,6 +35,10 @@ struct PlayerView: View {
               Color.black.frame(maxWidth: .infinity, maxHeight: .infinity)
             }
           }
+          .onReceive(apiViewModel.publisher) { id in
+            newId = id
+          }
+          .id(newId)
           userInfo(
             userName: content.userName ?? "",
             isFollowed: content.isFollowed ?? false,
