@@ -39,6 +39,8 @@
 		782DD47A2AA31F3C006183D3 /* ProfileEditButtonStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 782DD4792AA31F3C006183D3 /* ProfileEditButtonStyle.swift */; };
 		782DD47C2AA32448006183D3 /* Extension+UINavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 782DD47B2AA32448006183D3 /* Extension+UINavigationController.swift */; };
 		782F1B252AA1C566006831C8 /* ProfileTabItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 782F1B242AA1C566006831C8 /* ProfileTabItem.swift */; };
+		78370B892AB874CD00090522 /* MainReportBottomSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78370B882AB874CD00090522 /* MainReportBottomSheet.swift */; };
+		78370B8B2AB87C7D00090522 /* Enums.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78370B8A2AB87C7D00090522 /* Enums.swift */; };
 		785E82722AAC8FDD00EF3576 /* MainContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 785E82712AAC8FDD00EF3576 /* MainContent.swift */; };
 		7860FC232AB04A2F007C5C79 /* OffsetKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7860FC222AB04A2F007C5C79 /* OffsetKey.swift */; };
 		786385742AA45ED4004F8EF4 /* ProfileEditIntroduceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 786385732AA45ED4004F8EF4 /* ProfileEditIntroduceView.swift */; };
@@ -148,6 +150,8 @@
 		782DD4792AA31F3C006183D3 /* ProfileEditButtonStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileEditButtonStyle.swift; sourceTree = "<group>"; };
 		782DD47B2AA32448006183D3 /* Extension+UINavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Extension+UINavigationController.swift"; sourceTree = "<group>"; };
 		782F1B242AA1C566006831C8 /* ProfileTabItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileTabItem.swift; sourceTree = "<group>"; };
+		78370B882AB874CD00090522 /* MainReportBottomSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainReportBottomSheet.swift; sourceTree = "<group>"; };
+		78370B8A2AB87C7D00090522 /* Enums.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Enums.swift; sourceTree = "<group>"; };
 		785E82712AAC8FDD00EF3576 /* MainContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainContent.swift; sourceTree = "<group>"; };
 		7860FC222AB04A2F007C5C79 /* OffsetKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OffsetKey.swift; sourceTree = "<group>"; };
 		786385732AA45ED4004F8EF4 /* ProfileEditIntroduceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileEditIntroduceView.swift; sourceTree = "<group>"; };
@@ -304,6 +308,7 @@
 				78F41A5C2AA70626004A7BFC /* PhotoModel.swift */,
 				78B6FD2D2AA719190043E461 /* AlbumModel.swift */,
 				7860FC222AB04A2F007C5C79 /* OffsetKey.swift */,
+				78370B8A2AB87C7D00090522 /* Enums.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -455,6 +460,7 @@
 				788F43F42AA5E95E00718D38 /* PlayerView.swift */,
 				788F43F62AA6136F00718D38 /* Player.swift */,
 				788F43F82AA615AF00718D38 /* PlayerPageView.swift */,
+				78370B882AB874CD00090522 /* MainReportBottomSheet.swift */,
 			);
 			path = Main;
 			sourceTree = "<group>";
@@ -667,6 +673,7 @@
 				78F41A5F2AA70639004A7BFC /* PhotoViewModel.swift in Sources */,
 				788F43F02AA5CD9F00718D38 /* MainView.swift in Sources */,
 				782DD4752AA30C22006183D3 /* FollowButtonStyle.swift in Sources */,
+				78370B892AB874CD00090522 /* MainReportBottomSheet.swift in Sources */,
 				78BECCD92AAAE1E6003FA7B5 /* PostFeedProtocol.swift in Sources */,
 				788F43F52AA5E95E00718D38 /* PlayerView.swift in Sources */,
 				1B3955422A95069C00BCB4DF /* ContentView.swift in Sources */,
@@ -710,6 +717,7 @@
 				78BECCDB2AAAE1F5003FA7B5 /* SettingProtocol.swift in Sources */,
 				78D148E32A9E134700DDCE48 /* Extension+NSObject.swift in Sources */,
 				1B0A29AA2AA64ADC009077A1 /* MusicService.swift in Sources */,
+				78370B8B2AB87C7D00090522 /* Enums.swift in Sources */,
 				1B39555F2A9509A700BCB4DF /* SubmitButton.swift in Sources */,
 				78D85E542AB2DF1000B3AD6E /* ReportPostView.swift in Sources */,
 				78BECCE12AAAE539003FA7B5 /* APIViewModel+PostFeed.swift in Sources */,
