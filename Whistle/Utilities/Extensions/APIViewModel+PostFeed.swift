@@ -193,4 +193,8 @@ extension APIViewModel: PostFeedProtocol {
   func postFeedPlayerChanged() {
     publisher.send(UUID())
   }
+
+  func postWhistled() {
+    publisher.send(UUID())
+  }
 }

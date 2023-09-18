@@ -6,6 +6,7 @@
 //
 
 import AVKit
+import Combine
 import Foundation
 import Kingfisher
 import SwiftUI
@@ -57,6 +58,11 @@ struct PlayerView: View {
             isFollowed: content.isFollowed ?? false,
             caption: content.caption ?? "",
             musicTitle: content.musicTitle ?? "",
+            isWhistled: Binding(get: {
+              content.isWhistled
+            }, set: { newValue in
+              content.isWhistled = newValue
+            }),
             whistleCount: content.whistleCount ?? 0)
         }
       }
@@ -79,6 +85,7 @@ extension PlayerView {
     isFollowed _: Bool,
     caption: String,
     musicTitle: String,
+    isWhistled: Binding<Bool>,
     whistleCount: Int)
     -> some View
   {
@@ -119,16 +126,23 @@ extension PlayerView {
         Spacer()
         VStack(spacing: 0) {
           Spacer()
-          Image(systemName: "music.note")
-            .resizable()
-            .scaledToFit()
-            .frame(width: 36, height: 36)
-            .foregroundColor(.Gray10)
-            .padding(.bottom, 2)
-          Text("\(whistleCount)")
-            .foregroundColor(.Gray10)
-            .fontSystem(fontDesignSystem: .caption_Regular)
-            .padding(.bottom, 24)
+          Button {
+            isWhistled.wrappedValue.toggle()
+            apiViewModel.postFeedPlayerChanged()
+          } label: {
+            VStack(spacing: 0) {
+              Image(systemName: "music.note")
+                .resizable()
+                .scaledToFit()
+                .frame(width: 36, height: 36)
+                .foregroundColor(isWhistled.wrappedValue ? .red : .Gray10)
+                .padding(.bottom, 2)
+              Text("\(whistleCount)")
+                .foregroundColor(.Gray10)
+                .fontSystem(fontDesignSystem: .caption_Regular)
+                .padding(.bottom, 24)
+            }
+          }
 
           Button {
             showToast = true

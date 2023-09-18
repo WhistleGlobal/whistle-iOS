@@ -8,7 +8,7 @@
 import AVFoundation
 import Foundation
 
-class MainContent: Hashable {
+class MainContent: Hashable, ObservableObject {
 
   // MARK: Lifecycle
 
@@ -25,7 +25,7 @@ class MainContent: Hashable {
     musicTitle: String? = nil,
     hashtags: String? = nil,
     whistleCount: Int? = nil,
-    isWhistled: Bool? = nil,
+    isWhistled: Bool = false,
     isFollowed: Bool? = nil,
     isBookmarked: Bool? = nil)
   {
@@ -59,11 +59,10 @@ class MainContent: Hashable {
   var musicArtist: String?
   var musicTitle: String?
   var hashtags: String?
-  var whistleCount: Int?
-  var isWhistled: Bool?
+  @Published var whistleCount: Int?
+  @Published var isWhistled: Bool
   var isFollowed: Bool?
   var isBookmarked: Bool?
-
 
   // Equatable conformance for completeness (optional but recommended)
   static func == (lhs: MainContent, rhs: MainContent) -> Bool {
