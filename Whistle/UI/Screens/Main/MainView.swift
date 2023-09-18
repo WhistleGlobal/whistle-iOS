@@ -74,10 +74,10 @@ struct MainView: View {
       Button("저장하기", role: .none) { }
       Button("관심없음", role: .none) { }
       Button("신고", role: .destructive) {
-          tabbarOpacity = 0
-          withAnimation {
-              isShowingBottomSheet = true
-          }
+        tabbarOpacity = 0
+        withAnimation {
+          isShowingBottomSheet = true
+        }
       }
       Button("닫기", role: .cancel) {
         log("Cancel")

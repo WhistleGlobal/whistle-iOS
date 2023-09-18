@@ -39,6 +39,7 @@
 		782DD47A2AA31F3C006183D3 /* ProfileEditButtonStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 782DD4792AA31F3C006183D3 /* ProfileEditButtonStyle.swift */; };
 		782DD47C2AA32448006183D3 /* Extension+UINavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 782DD47B2AA32448006183D3 /* Extension+UINavigationController.swift */; };
 		782F1B252AA1C566006831C8 /* ProfileTabItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 782F1B242AA1C566006831C8 /* ProfileTabItem.swift */; };
+		7830281B2AB8918B00127D76 /* DeleteAccountAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7830281A2AB8918B00127D76 /* DeleteAccountAlert.swift */; };
 		78370B892AB874CD00090522 /* MainReportBottomSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78370B882AB874CD00090522 /* MainReportBottomSheet.swift */; };
 		78370B8B2AB87C7D00090522 /* Enums.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78370B8A2AB87C7D00090522 /* Enums.swift */; };
 		785E82722AAC8FDD00EF3576 /* MainContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 785E82712AAC8FDD00EF3576 /* MainContent.swift */; };
@@ -150,6 +151,7 @@
 		782DD4792AA31F3C006183D3 /* ProfileEditButtonStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileEditButtonStyle.swift; sourceTree = "<group>"; };
 		782DD47B2AA32448006183D3 /* Extension+UINavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Extension+UINavigationController.swift"; sourceTree = "<group>"; };
 		782F1B242AA1C566006831C8 /* ProfileTabItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileTabItem.swift; sourceTree = "<group>"; };
+		7830281A2AB8918B00127D76 /* DeleteAccountAlert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteAccountAlert.swift; sourceTree = "<group>"; };
 		78370B882AB874CD00090522 /* MainReportBottomSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainReportBottomSheet.swift; sourceTree = "<group>"; };
 		78370B8A2AB87C7D00090522 /* Enums.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Enums.swift; sourceTree = "<group>"; };
 		785E82712AAC8FDD00EF3576 /* MainContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainContent.swift; sourceTree = "<group>"; };
@@ -432,6 +434,7 @@
 				782DD4792AA31F3C006183D3 /* ProfileEditButtonStyle.swift */,
 				787173B32AA472070018CB14 /* ProfileToastMessage.swift */,
 				787173B52AA47A510018CB14 /* ProfileAlert.swift */,
+				7830281A2AB8918B00127D76 /* DeleteAccountAlert.swift */,
 			);
 			path = Profile;
 			sourceTree = "<group>";
@@ -692,6 +695,7 @@
 				786CFEB12AAC5D5100DB2ADD /* ReportUserView.swift in Sources */,
 				7874CB942AA0B5430081DE54 /* ProfileReportView.swift in Sources */,
 				78D85E4F2AB2B52C00B3AD6E /* SignoutAlert.swift in Sources */,
+				7830281B2AB8918B00127D76 /* DeleteAccountAlert.swift in Sources */,
 				786669492AA1284F00448EC7 /* UserAuth.swift in Sources */,
 				1B0A29A62AA64A67009077A1 /* Extension+Array.swift in Sources */,
 				1B0A29A82AA64AA2009077A1 /* MusicViewModel.swift in Sources */,

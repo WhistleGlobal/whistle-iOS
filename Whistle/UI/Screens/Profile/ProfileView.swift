@@ -29,6 +29,7 @@ struct ProfileView: View {
   @State var tabbarDirection: CGFloat = -1.0
   @State var tabSelection: profileTabCase = .myVideo
   @State var showSignoutAlert = false
+  @State var showDeleteAlert = false
   @Binding var tabbarOpacity: Double
   @Binding var tabBarSelection: TabSelection
   @EnvironmentObject var apiViewModel: APIViewModel
@@ -126,7 +127,11 @@ struct ProfileView: View {
       .ignoresSafeArea()
       VStack {
         Spacer()
-        GlassBottomSheet(isShowing: $isShowingBottomSheet, showSignoutAlert: $showSignoutAlert, content: AnyView(Text("")))
+        GlassBottomSheet(
+          isShowing: $isShowingBottomSheet,
+          showSignoutAlert: $showSignoutAlert,
+          showDeleteAlert: $showDeleteAlert,
+          content: AnyView(Text("")))
           .environmentObject(apiViewModel)
           .environmentObject(userAuth)
           .onChange(of: isShowingBottomSheet) { newValue in
@@ -159,6 +164,18 @@ struct ProfileView: View {
           apiViewModel.myProfile.userName.removeAll()
           GIDSignIn.sharedInstance.signOut()
           userAuth.appleSignout()
+        }
+      }
+      if showDeleteAlert {
+        DeleteAccountAlert {
+          showDeleteAlert = false
+        } deleteAction: {
+          Task {
+//                    apiViewModel.myProfile.userName.removeAll()
+            await apiViewModel.deleteUser()
+//                    GIDSignIn.sharedInstance.signOut()
+//                    userAuth.appleSignout()
+          }
         }
       }
     }
