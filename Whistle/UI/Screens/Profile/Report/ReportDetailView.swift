@@ -14,15 +14,17 @@ struct ReportDetailView: View {
   @State var goComplete = false
   @State var showAlert = false
   @State var inputReportDetail = ""
+  let reportCategory: ReportUserView.ReportCategory
+  let reportReason: Int
 
   var body: some View {
     VStack(spacing: 0) {
       Divider().frame(width: UIScreen.width)
-      Text("이 계정을 신고하는 이유는 무엇인가요?")
+      Text("이 \(reportCategory == .post ? "콘텐츠를" : "계정을") 신고하는 이유는 무엇인가요?")
         .fontSystem(fontDesignSystem: .subtitle2_KO)
         .foregroundColor(.LabelColor_Primary)
         .padding(.bottom, 4)
-      Text("이 계정을 신고하는 이유에 대해 추가적인 내용을 알려주세요.")
+      Text("이 \(reportCategory == .post ? "콘텐츠를" : "계정을") 신고하는 이유에 대해 추가적인 내용을 알려주세요.")
         .fontSystem(fontDesignSystem: .caption_Regular)
         .foregroundColor(.LabelColor_Secondary)
       TextField("기타 참고사항을 알려주세요 (선택사항)", text: $inputReportDetail)
@@ -48,6 +50,11 @@ struct ReportDetailView: View {
         ReportAlert {
           showAlert = false
         } reportAction: {
+          if reportCategory == .post {
+            log("콘텐츠 신고 : \(reportReason)")
+          } else {
+            log("계정 신고 : \(reportReason)")
+          }
           goComplete = true
         }
       }

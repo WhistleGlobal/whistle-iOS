@@ -69,7 +69,7 @@ struct MainReportBottomSheet: View {
               Divider().frame(maxWidth: .infinity)
                 .padding(.bottom, 4)
               VStack(spacing: 10) {
-                Text("이 게시물을 신고하는 이유")
+                Text("이 콘텐츠를 신고하는 이유")
                   .fontSystem(fontDesignSystem: .subtitle2_KO)
                   .foregroundColor(.Gray10)
                   .frame(maxWidth: .infinity, alignment: .leading)

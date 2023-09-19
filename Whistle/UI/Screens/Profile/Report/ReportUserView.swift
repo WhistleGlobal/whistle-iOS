@@ -60,9 +60,9 @@ struct ReportUserView: View {
           .padding(.horizontal, 16)
         Divider().frame(width: UIScreen.width)
         NavigationLink {
-          ReportPostView(goReport: $goReport, userId: userId, reportCategory: .post)
+          ReportPostView(goReport: $goReport, userId: userId, reportCategory: .post, reportReason: 0)
         } label: {
-          reportRow(text: "특정 게시물")
+          reportRow(text: "특정 콘텐츠")
         }
         .padding(.horizontal, 16)
         NavigationLink {

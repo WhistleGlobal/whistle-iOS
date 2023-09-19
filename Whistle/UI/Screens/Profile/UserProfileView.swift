@@ -42,7 +42,7 @@ struct UserProfileView: View {
             .frame(width: 48, height: 48)
             .foregroundColor(.LabelColor_Primary_Dark)
             .padding(.bottom, 24)
-          Text("아직 게시물이 없습니다.")
+          Text("아직 콘텐츠가 없습니다.")
             .fontSystem(fontDesignSystem: .body1_KO)
             .foregroundColor(.LabelColor_Primary_Dark)
             .padding(.bottom, 76)

@@ -19,6 +19,7 @@ struct ReportPostView: View {
   @Binding var goReport: Bool
   let userId: Int
   let reportCategory: ReportUserView.ReportCategory
+  let reportReason: Int?
 
   var body: some View {
     VStack(spacing: 0) {
@@ -55,7 +56,7 @@ struct ReportPostView: View {
         }
       }
       ToolbarItem(placement: .principal) {
-        Text("게시물 선택")
+        Text("콘텐츠 선택")
           .fontSystem(fontDesignSystem: .subtitle2_KO)
       }
       ToolbarItem(placement: .confirmationAction) {
@@ -64,7 +65,7 @@ struct ReportPostView: View {
           case .post:
             ReportReasonView(goReport: $goReport, userId: userId, reportCategory: .post)
           case .user:
-            ReportDetailView(goReport: $goReport)
+            ReportDetailView(goReport: $goReport, reportCategory: .post, reportReason: reportReason ?? 0)
           }
         } label: {
           Text("다음")
@@ -78,7 +79,7 @@ struct ReportPostView: View {
       await apiViewModel.requestUserPostFeed(userId: userId)
     }
     .navigationDestination(isPresented: .constant(false)) {
-      ReportDetailView(goReport: $goReport)
+      ReportDetailView(goReport: $goReport, reportCategory: .user, reportReason: reportReason ?? 0)
     }
   }
 }

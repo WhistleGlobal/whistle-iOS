@@ -302,7 +302,7 @@ extension ProfileView {
   @ViewBuilder
   func listEmptyView() -> some View {
     Spacer()
-    Text("공유하고 싶은 첫번째 게시물을 업로드해보세요")
+    Text("공유하고 싶은 첫번째 콘텐츠를 업로드해보세요")
       .fontSystem(fontDesignSystem: .body1_KO)
       .foregroundColor(.LabelColor_Primary_Dark)
     Button {
