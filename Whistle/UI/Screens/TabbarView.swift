@@ -31,7 +31,10 @@ struct TabbarView: View {
         // FIXME: - uploadview로 교체하기
         Color.pink.opacity(0.4).ignoresSafeArea()
       case .profile:
-        ProfileView(tabbarOpacity: $tabbarOpacity, tabBarSelection: $tabSelection)
+        ProfileView(
+          tabbarOpacity: $tabbarOpacity,
+          tabBarSelection: $tabSelection,
+          isFirstProfileLoaded: $isFirstProfileLoaded)
           .environmentObject(apiViewModel)
           .environmentObject(userAuth)
       }

@@ -18,6 +18,8 @@ struct ReportUserView: View {
 
   @Environment(\.dismiss) var dismiss
   @EnvironmentObject var apiViewModel: APIViewModel
+  // TODO: - 리포트 타입 저장해서 뒷 화면에 넘겨주기
+  @State var reportType = 0
   @Binding var goReport: Bool
   let userId: Int
 

@@ -32,6 +32,7 @@ struct ProfileView: View {
   @State var showDeleteAlert = false
   @Binding var tabbarOpacity: Double
   @Binding var tabBarSelection: TabSelection
+  @Binding var isFirstProfileLoaded: Bool
   @EnvironmentObject var apiViewModel: APIViewModel
   @EnvironmentObject var userAuth: UserAuth
 
@@ -164,6 +165,7 @@ struct ProfileView: View {
           apiViewModel.myProfile.userName.removeAll()
           GIDSignIn.sharedInstance.signOut()
           userAuth.appleSignout()
+          isFirstProfileLoaded = true
         }
       }
       if showDeleteAlert {
@@ -171,10 +173,11 @@ struct ProfileView: View {
           showDeleteAlert = false
         } deleteAction: {
           Task {
-//                    apiViewModel.myProfile.userName.removeAll()
-            await apiViewModel.deleteUser()
-//                    GIDSignIn.sharedInstance.signOut()
-//                    userAuth.appleSignout()
+            apiViewModel.myProfile.userName.removeAll()
+            await apiViewModel.rebokeAppleToken()
+            GIDSignIn.sharedInstance.signOut()
+            userAuth.appleSignout()
+            isFirstProfileLoaded = true
           }
         }
       }
