@@ -29,6 +29,7 @@ struct ProfileView: View {
   @State var tabbarDirection: CGFloat = -1.0
   @State var tabSelection: profileTabCase = .myVideo
   @State var showSignoutAlert = false
+  @State var showDeleteAlert = false
   @Binding var tabbarOpacity: Double
   @Binding var tabBarSelection: TabSelection
   @EnvironmentObject var apiViewModel: APIViewModel
@@ -45,7 +46,11 @@ struct ProfileView: View {
       }
       VStack {
         Spacer().frame(height: 64)
-        glassProfile(width: UIScreen.width - 32, height: 398, cornerRadius: 32, overlayed: profileInfo(height: 398))
+        glassProfile(
+          width: UIScreen.width - 32,
+          height: 418,
+          cornerRadius: 32,
+          overlayed: profileInfo(minHeight: 398, maxHeight: 418))
           .padding(.bottom, 12)
         HStack(spacing: 0) {
           Button {
@@ -86,7 +91,7 @@ struct ProfileView: View {
                 Button {
                   log("video clicked")
                 } label: {
-                  videoThumbnailView(url: content.videoUrl ?? "", viewCount: content.contentViewCount ?? 0)
+                  videoThumbnailView(thumbnailUrl: content.thumbnailUrl ?? "", viewCount: content.contentViewCount ?? 0)
                 }
               }
             }
@@ -104,7 +109,7 @@ struct ProfileView: View {
                 Button {
                   log("video clicked")
                 } label: {
-                  videoThumbnailView(url: content.videoUrl, viewCount: content.viewCount)
+                  videoThumbnailView(thumbnailUrl: content.thumbnailUrl, viewCount: content.viewCount)
                 }
               }
             }
@@ -122,7 +127,11 @@ struct ProfileView: View {
       .ignoresSafeArea()
       VStack {
         Spacer()
-        GlassBottomSheet(isShowing: $isShowingBottomSheet, showSignoutAlert: $showSignoutAlert, content: AnyView(Text("Hi")))
+        GlassBottomSheet(
+          isShowing: $isShowingBottomSheet,
+          showSignoutAlert: $showSignoutAlert,
+          showDeleteAlert: $showDeleteAlert,
+          content: AnyView(Text("")))
           .environmentObject(apiViewModel)
           .environmentObject(userAuth)
           .onChange(of: isShowingBottomSheet) { newValue in
@@ -132,7 +141,6 @@ struct ProfileView: View {
               }
             }
           }
-          // FIXME: - 기존 BottomSheet 처럼의 제스처 느낌이 아님
           .gesture(
             DragGesture(minimumDistance: 20, coordinateSpace: .local)
               .onEnded { value in
@@ -153,8 +161,21 @@ struct ProfileView: View {
         SignoutAlert {
           showSignoutAlert = false
         } signOutAction: {
+          apiViewModel.myProfile.userName.removeAll()
           GIDSignIn.sharedInstance.signOut()
           userAuth.appleSignout()
+        }
+      }
+      if showDeleteAlert {
+        DeleteAccountAlert {
+          showDeleteAlert = false
+        } deleteAction: {
+          Task {
+//                    apiViewModel.myProfile.userName.removeAll()
+            await apiViewModel.deleteUser()
+//                    GIDSignIn.sharedInstance.signOut()
+//                    userAuth.appleSignout()
+          }
         }
       }
     }
@@ -164,7 +185,7 @@ struct ProfileView: View {
 extension ProfileView {
 
   @ViewBuilder
-  func profileInfo(height: CGFloat) -> some View {
+  func profileInfo(minHeight _: CGFloat, maxHeight _: CGFloat) -> some View {
     VStack(spacing: 0) {
       HStack {
         Spacer()
@@ -194,11 +215,15 @@ extension ProfileView {
         .foregroundColor(Color.LabelColor_Primary_Dark)
         .fontSystem(fontDesignSystem: .title2_Expanded)
         .padding(.bottom, 4)
-
       Text(apiViewModel.myProfile.introduce ?? " ")
         .foregroundColor(Color.LabelColor_Secondary_Dark)
         .fontSystem(fontDesignSystem: .body2_KO)
+        .lineLimit(nil)
+        .multilineTextAlignment(.center)
+        .fixedSize(horizontal: false, vertical: true)
+        .padding(.horizontal, 48)
         .padding(.bottom, 16)
+      Spacer()
       NavigationLink {
         ProfileEditView()
           .environmentObject(apiViewModel)
@@ -235,37 +260,40 @@ extension ProfileView {
           }
         }
       }
-      Spacer()
+      .padding(.bottom, 32)
     }
-    .frame(height: height)
+    .frame(height: 418)
     .frame(maxWidth: .infinity)
   }
 
   @ViewBuilder
-  func videoThumbnailView(url: String, viewCount: Int) -> some View {
-    VideoPlayer(
-      player: AVPlayer(url: URL(string: url)!))
-      .disabled(true)
-      .frame(height: 204)
-      .cornerRadius(12)
-      .overlay {
-        VStack {
-          Spacer()
-          HStack(spacing: 4) {
-            Image(systemName: "play.circle.fill")
-              .resizable()
-              .scaledToFit()
-              .frame(width: 17, height: 17)
-              .foregroundColor(.Primary_Default)
-            Text("\(viewCount)")
-              .fontSystem(fontDesignSystem: .caption_KO_Semibold)
-              .foregroundColor(Color.LabelColor_Primary_Dark)
-          }
-          .padding(.bottom, 8.5)
-          .padding(.leading, 8)
-          .frame(maxWidth: .infinity, alignment: .leading)
+  func videoThumbnailView(thumbnailUrl: String, viewCount: Int) -> some View {
+    Color.black.overlay {
+      KFImage.url(URL(string: thumbnailUrl))
+        .placeholder { // 플레이스 홀더 설정
+          Color.black
         }
+        .resizable()
+        .scaledToFit()
+      VStack {
+        Spacer()
+        HStack(spacing: 4) {
+          Image(systemName: "play.circle.fill")
+            .resizable()
+            .scaledToFit()
+            .frame(width: 17, height: 17)
+            .foregroundColor(.Primary_Default)
+          Text("\(viewCount)")
+            .fontSystem(fontDesignSystem: .caption_KO_Semibold)
+            .foregroundColor(Color.LabelColor_Primary_Dark)
+        }
+        .padding(.bottom, 8.5)
+        .padding(.leading, 8)
+        .frame(maxWidth: .infinity, alignment: .leading)
       }
+    }
+    .frame(height: 204)
+    .cornerRadius(12)
   }
 
   @ViewBuilder

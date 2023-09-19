@@ -14,6 +14,7 @@ struct ProfileToastMessage: View {
   // MARK: Internal
 
   let text: String
+  let paddingBottom: CGFloat
   @Binding var showToast: Bool
 
   var body: some View {
@@ -29,7 +30,7 @@ struct ProfileToastMessage: View {
         .opacity(toastOpacity)
     }
     .padding(.horizontal, 16)
-    .padding(.bottom, 32)
+    .padding(.bottom, paddingBottom)
     .onAppear {
       // showToast가 true로 설정되면 토스트 메시지를 표시하도록 설정
       if showToast {
@@ -39,7 +40,6 @@ struct ProfileToastMessage: View {
           withAnimation {
             toastOpacity = 0.0
           }
-          // showToast를 false로 설정하여 다음에 토스트 메시지가 나타나지 않도록 함
           showToast = false
         }
       }

@@ -13,6 +13,7 @@ struct TabbarView: View {
 
   @State var tabSelection: TabSelection = .main
   @State var tabbarOpacity = 1.0
+  @State var isFirstProfileLoaded = true
   @EnvironmentObject var apiViewModel: APIViewModel
   @EnvironmentObject var userAuth: UserAuth
 
@@ -21,7 +22,7 @@ struct TabbarView: View {
       switch tabSelection {
       case .main:
         // FIXME: - MainView로 교체하기 blur 확인용 테스트 이미지입니다.
-        MainView()
+        MainView(tabbarOpacity: $tabbarOpacity)
           .environmentObject(apiViewModel)
       case .upload:
         // FIXME: - uploadview로 교체하기
@@ -73,7 +74,6 @@ extension TabbarView {
             withAnimation {
               self.tabSelection = .main
             }
-//            await apiViewModel.requestContentList()
           }
         } label: {
           Color.clear.overlay {
@@ -133,10 +133,7 @@ extension TabbarView {
       withAnimation(.default) {
         tabSelection = .profile
       }
-      if apiViewModel.myProfile.userName.isEmpty {
-        Task {
-          await apiViewModel.requestMyProfile()
-        }
+      if isFirstProfileLoaded {
         Task {
           await apiViewModel.requestMyFollow()
         }
@@ -149,6 +146,7 @@ extension TabbarView {
         Task {
           await apiViewModel.requestMyPostFeed()
         }
+        isFirstProfileLoaded = false
       }
     }
   }

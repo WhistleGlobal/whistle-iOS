@@ -12,6 +12,7 @@ import SwiftUI
 struct GlassBottomSheet: View {
   @Binding var isShowing: Bool
   @Binding var showSignoutAlert: Bool
+  @Binding var showDeleteAlert: Bool
   @EnvironmentObject var apiViewModel: APIViewModel
   @EnvironmentObject var userAuth: UserAuth
   var content: AnyView
@@ -89,7 +90,7 @@ struct GlassBottomSheet: View {
                   bottomSheetRow(text: "로그아웃", color: Color.Info)
                 }
                 Button {
-                  log("계정삭제")
+                  showDeleteAlert = true
                 } label: {
                   bottomSheetRow(text: "계정삭제", color: Color.Danger)
                 }

@@ -29,20 +29,37 @@ struct PlayerPageView: UIViewRepresentable {
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
       // 새로 이동한 인덱스
       let currentindex = Int(scrollView.contentOffset.y / UIScreen.main.bounds.height)
-
+      log(currentindex)
+      parent.apiViewModel.contentList[index].player?.seek(to: .zero)
+      parent.apiViewModel.contentList[index].player?.pause()
       if index != currentindex {
-        parent.apiViewModel.contentList[index].player?.seek(to: .zero)
-        parent.apiViewModel.contentList[index].player?.pause()
-        parent.apiViewModel.contentList[index].player = nil
-        let url = parent.apiViewModel.contentList[currentindex].videoUrl
-        parent.apiViewModel.contentList[currentindex].player = AVPlayer(url: URL(string: url ?? "")!)
-        parent.apiViewModel.postFeedPlayerChanged()
-        for i in 0..<parent.apiViewModel.contentList.count {
-          print("player : \(parent.apiViewModel.contentList[i].player)")
+        if currentindex == 0 {
+          parent.apiViewModel.contentList[index + 1].player = nil
+        } else if currentindex == parent.apiViewModel.contentList.count - 1 {
+          parent.apiViewModel.contentList[index - 1].player = nil
+        } else if index < currentindex {
+          let urlNext = parent.apiViewModel.contentList[currentindex + 1].videoUrl
+          parent.apiViewModel.contentList[currentindex + 1].player = AVPlayer(url: URL(string: urlNext ?? "")!)
+          if index != 0 {
+            parent.apiViewModel.contentList[index - 1].player = nil
+          }
+        } else if index > currentindex {
+          let urlPrev = parent.apiViewModel.contentList[currentindex - 1].videoUrl
+          parent.apiViewModel.contentList[currentindex - 1].player = AVPlayer(url: URL(string: urlPrev ?? "")!)
+          if index != parent.apiViewModel.contentList.count - 1 {
+            parent.apiViewModel.contentList[index + 1].player = nil
+          }
+        } else {
+          log("unknown")
         }
+        parent.apiViewModel.postFeedPlayerChanged()
         index = currentindex
+        parent.currentVideoUserId = parent.apiViewModel.contentList[currentindex].userId ?? 0
         parent.apiViewModel.contentList[index].player?.play()
         parent.apiViewModel.contentList[index].player?.actionAtItemEnd = .none
+        for i in 0..<parent.apiViewModel.contentList.count {
+          log(parent.apiViewModel.contentList[i].player)
+        }
         NotificationCenter.default.addObserver(
           forName: NSNotification.Name.AVPlayerItemDidPlayToEndTime,
           object: parent.apiViewModel.contentList[index].player?.currentItem,
@@ -57,6 +74,7 @@ struct PlayerPageView: UIViewRepresentable {
     func onAppear() {
       parent.apiViewModel.contentList[index].player?.seek(to: .zero)
       parent.apiViewModel.contentList[index].player?.play()
+      parent.currentVideoUserId = parent.apiViewModel.contentList[index].userId ?? 0
     }
 
     func onDisappear() {
@@ -68,6 +86,9 @@ struct PlayerPageView: UIViewRepresentable {
   @EnvironmentObject var apiViewModel: APIViewModel
   @Binding var videoIndex: Int
   @Binding var currnentVideoIndex: Int
+  @Binding var showDialog: Bool
+  @Binding var showToast: Bool
+  @Binding var currentVideoUserId: Int
 
   func makeCoordinator() -> Coordinator {
     PlayerPageView.Coordinator(parent1: self)
@@ -77,7 +98,11 @@ struct PlayerPageView: UIViewRepresentable {
     let view = UIScrollView()
 
     let childView = UIHostingController(
-      rootView: PlayerView(lifecycleDelegate: context.coordinator)
+      rootView: PlayerView(
+        lifecycleDelegate: context.coordinator,
+        showDialog: $showDialog,
+        showToast: $showToast,
+        currentVideoUserId: $currentVideoUserId)
         .environmentObject(apiViewModel))
     childView.view.frame = CGRect(
       x: 0,

@@ -104,6 +104,42 @@ extension View {
         overlayed
       }
   }
+
+  // min max version
+  @ViewBuilder
+  func glassMoriphicView(width: CGFloat, minHeight: CGFloat, maxHeight: CGFloat, cornerRadius: CGFloat) -> some View {
+    ZStack {
+      RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
+        .fill(Color.black.opacity(0.3))
+      CustomBlurView(effect: .systemUltraThinMaterialLight) { view in
+        // FIXME: - 피그마와 비슷하도록 값 고치기
+        view.saturationAmout = 2.2
+        view.gaussianBlurRadius = 36
+      }
+      .clipShape(RoundedRectangle(cornerRadius: cornerRadius, style: .continuous))
+    }
+    .frame(width: width)
+    .frame(minHeight: minHeight, maxHeight: maxHeight)
+  }
+
+  @ViewBuilder
+  func glassProfile(
+    width: CGFloat,
+    minHeight: CGFloat,
+    maxHeight: CGFloat,
+    cornerRadius: CGFloat,
+    overlayed: some View)
+    -> some View
+  {
+    glassMoriphicView(width: width, minHeight: minHeight, maxHeight: maxHeight, cornerRadius: cornerRadius)
+      .overlay {
+        RoundedRectangle(cornerRadius: cornerRadius)
+          .stroke(lineWidth: 1)
+          .foregroundStyle(
+            LinearGradient.Border_Glass)
+        overlayed
+      }
+  }
 }
 
 extension View {

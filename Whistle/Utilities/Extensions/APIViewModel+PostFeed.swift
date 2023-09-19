@@ -131,6 +131,7 @@ extension APIViewModel: PostFeedProtocol {
                 tempContent.profileImg = jsonObject["profile_img"] as? String
                 tempContent.caption = jsonObject["caption"] as? String
                 tempContent.videoUrl = jsonObject["video_url"] as? String
+                tempContent.thumbnailUrl = jsonObject["thumbnail_url"] as? String
                 tempContent.musicArtist = jsonObject["music_artist"] as? String
                 tempContent.musicTitle = jsonObject["music_title"] as? String
                 tempContent.musicTitle = jsonObject["music_title"] as? String
@@ -140,7 +141,7 @@ extension APIViewModel: PostFeedProtocol {
                 tempContent.isWhistled = (jsonObject["is_whistled"] as? Int) == 0 ? false : true
                 tempContent.isFollowed = (jsonObject["is_followed"] as? Int) == 0 ? false : true
                 tempContent.isBookmarked = (jsonObject["is_bookmarked"] as? Int) == 0 ? false : true
-                if self.contentList.isEmpty {
+                if self.contentList.count < 2 {
                   tempContent.player = AVPlayer(url: URL(string: tempContent.videoUrl ?? "")!)
                 }
                 self.contentList.append(tempContent)
@@ -190,6 +191,10 @@ extension APIViewModel: PostFeedProtocol {
   }
 
   func postFeedPlayerChanged() {
+    publisher.send(UUID())
+  }
+
+  func postWhistled() {
     publisher.send(UUID())
   }
 }

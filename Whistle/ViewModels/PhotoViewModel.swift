@@ -37,8 +37,8 @@ class PhotoViewModel: ObservableObject {
       for i in startIndex ... endIndex {
         imgManager.requestImage(
           for: fetchResult.object(at: i),
-          targetSize: CGSize(width: 400, height: 400),
-          contentMode: .aspectFit,
+          targetSize: CGSize(width: 400, height: 400), contentMode: .aspectFit,
+
           options: requestOptions)
         { image, _ in
 

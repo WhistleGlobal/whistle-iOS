@@ -51,7 +51,7 @@ struct ProfileEditView: View {
       Spacer()
     }
     .overlay {
-      ProfileToastMessage(text: "소개가 수정되었습니다.", showToast: $showToast)
+      ProfileToastMessage(text: "소개가 수정되었습니다.", paddingBottom: 32, showToast: $showToast)
     }
     .fullScreenCover(isPresented: $showGallery) {
       CustomPhotoView()

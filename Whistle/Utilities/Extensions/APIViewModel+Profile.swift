@@ -315,4 +315,8 @@ extension APIViewModel: ProfileProtocol {
         }
       }
   }
+
+  func deleteUser() async {
+    // TODO: - 함수 작성할 것
+  }
 }
