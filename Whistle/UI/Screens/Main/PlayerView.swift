@@ -77,7 +77,12 @@ struct PlayerView: View {
                 contentId: content.contentId ?? 0,
                 userName: content.userName ?? "",
                 profileImg: content.profileImg ?? "",
-                isFollowed: content.isFollowed ?? false,
+                isFollowed:
+                Binding(get: {
+                  content.isFollowed
+                }, set: { newValue in
+                  content.isFollowed = newValue
+                }),
                 caption: content.caption ?? "",
                 musicTitle: content.musicTitle ?? "",
                 isWhistled: Binding(get: {
@@ -119,7 +124,7 @@ extension PlayerView {
     contentId: Int,
     userName: String,
     profileImg: String,
-    isFollowed: Bool,
+    isFollowed: Binding<Bool>,
     caption: String,
     musicTitle: String,
     isWhistled: Binding<Bool>,
@@ -148,24 +153,31 @@ extension PlayerView {
             if userName != apiViewModel.myProfile.userName {
               Button {
                 Task {
-                  if isFollowed {
-//                    await apiViewModel.unfollowUser(userId: currentVideoUserId)
+                  if isFollowed.wrappedValue {
+                    await apiViewModel.unfollowUser(userId: currentVideoUserId)
                   } else {
-//                    await apiViewModel.followUser(userId: currentVideoUserId)
+                    await apiViewModel.followUser(userId: currentVideoUserId)
                   }
+                  isFollowed.wrappedValue.toggle()
+                  apiViewModel.contentList = apiViewModel.contentList.map { item in
+                    var mutableItem = item
+                    if mutableItem.userId == currentVideoUserId {
+                      mutableItem.isFollowed = isFollowed.wrappedValue
+                    }
+                    return mutableItem
+                  }
+                  apiViewModel.postFeedPlayerChanged()
                 }
               } label: {
-                Text("팔로우")
+                Text(isFollowed.wrappedValue ? "following" : "follow")
                   .fontSystem(fontDesignSystem: .caption_SemiBold)
                   .foregroundColor(.Gray10)
                   .background {
-                    RoundedRectangle(cornerRadius: 6)
-                      .stroke(
-                        Color.Border_Default,
-                        lineWidth: 1)
-                      .frame(width: 50, height: 26)
+                    Capsule()
+                      .stroke(Color.Border_Default, lineWidth: 1)
+                      .frame(width: isFollowed.wrappedValue ? 78 : 60, height: 26)
                   }
-                  .frame(width: 50, height: 26)
+                  .frame(width: isFollowed.wrappedValue ? 78 : 60, height: 26)
               }
             }
           }

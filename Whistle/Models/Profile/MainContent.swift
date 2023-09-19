@@ -27,7 +27,7 @@ class MainContent: Hashable, ObservableObject {
     hashtags: String? = nil,
     whistleCount: Int? = nil,
     isWhistled: Bool = false,
-    isFollowed: Bool? = nil,
+    isFollowed: Bool = false,
     isBookmarked: Bool? = nil)
   {
     self.id = id
@@ -64,7 +64,7 @@ class MainContent: Hashable, ObservableObject {
   var hashtags: String?
   @Published var whistleCount: Int?
   @Published var isWhistled: Bool
-  var isFollowed: Bool?
+  var isFollowed = false
   var isBookmarked: Bool?
 
   // Equatable conformance for completeness (optional but recommended)
