@@ -43,6 +43,7 @@
 		78370B892AB874CD00090522 /* MainReportBottomSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78370B882AB874CD00090522 /* MainReportBottomSheet.swift */; };
 		78370B8B2AB87C7D00090522 /* Enums.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78370B8A2AB87C7D00090522 /* Enums.swift */; };
 		785E82722AAC8FDD00EF3576 /* MainContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 785E82712AAC8FDD00EF3576 /* MainContent.swift */; };
+		785E9E6A2AB9DCB1003A93E8 /* CancelableToastMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 785E9E692AB9DCB1003A93E8 /* CancelableToastMessage.swift */; };
 		7860FC232AB04A2F007C5C79 /* OffsetKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7860FC222AB04A2F007C5C79 /* OffsetKey.swift */; };
 		786385742AA45ED4004F8EF4 /* ProfileEditIntroduceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 786385732AA45ED4004F8EF4 /* ProfileEditIntroduceView.swift */; };
 		786669472AA1282D00448EC7 /* AppleSignInViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 786669462AA1282D00448EC7 /* AppleSignInViewModel.swift */; };
@@ -52,7 +53,7 @@
 		786669552AA12F7F00448EC7 /* KeychainSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 786669542AA12F7F00448EC7 /* KeychainSwift */; };
 		786CFEAF2AAC4DCF00DB2ADD /* UserProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 786CFEAE2AAC4DCF00DB2ADD /* UserProfileView.swift */; };
 		786CFEB12AAC5D5100DB2ADD /* ReportUserView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 786CFEB02AAC5D5100DB2ADD /* ReportUserView.swift */; };
-		787173B42AA472070018CB14 /* ProfileToastMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 787173B32AA472070018CB14 /* ProfileToastMessage.swift */; };
+		787173B42AA472070018CB14 /* ToastMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 787173B32AA472070018CB14 /* ToastMessage.swift */; };
 		787173B62AA47A510018CB14 /* ProfileAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 787173B52AA47A510018CB14 /* ProfileAlert.swift */; };
 		7874CB882AA0842D0081DE54 /* FontSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7874CB872AA0842D0081DE54 /* FontSystem.swift */; };
 		7874CB902AA0B5350081DE54 /* ProfileNotiView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7874CB8F2AA0B5350081DE54 /* ProfileNotiView.swift */; };
@@ -155,6 +156,7 @@
 		78370B882AB874CD00090522 /* MainReportBottomSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainReportBottomSheet.swift; sourceTree = "<group>"; };
 		78370B8A2AB87C7D00090522 /* Enums.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Enums.swift; sourceTree = "<group>"; };
 		785E82712AAC8FDD00EF3576 /* MainContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainContent.swift; sourceTree = "<group>"; };
+		785E9E692AB9DCB1003A93E8 /* CancelableToastMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CancelableToastMessage.swift; sourceTree = "<group>"; };
 		7860FC222AB04A2F007C5C79 /* OffsetKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OffsetKey.swift; sourceTree = "<group>"; };
 		786385732AA45ED4004F8EF4 /* ProfileEditIntroduceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileEditIntroduceView.swift; sourceTree = "<group>"; };
 		786669462AA1282D00448EC7 /* AppleSignInViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppleSignInViewModel.swift; sourceTree = "<group>"; };
@@ -162,7 +164,7 @@
 		7866694A2AA1287500448EC7 /* UserResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserResponse.swift; sourceTree = "<group>"; };
 		786CFEAE2AAC4DCF00DB2ADD /* UserProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfileView.swift; sourceTree = "<group>"; };
 		786CFEB02AAC5D5100DB2ADD /* ReportUserView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportUserView.swift; sourceTree = "<group>"; };
-		787173B32AA472070018CB14 /* ProfileToastMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileToastMessage.swift; sourceTree = "<group>"; };
+		787173B32AA472070018CB14 /* ToastMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToastMessage.swift; sourceTree = "<group>"; };
 		787173B52AA47A510018CB14 /* ProfileAlert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileAlert.swift; sourceTree = "<group>"; };
 		7874CB872AA0842D0081DE54 /* FontSystem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FontSystem.swift; sourceTree = "<group>"; };
 		7874CB8F2AA0B5350081DE54 /* ProfileNotiView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileNotiView.swift; sourceTree = "<group>"; };
@@ -376,6 +378,7 @@
 				1BE8EA112AB0F7E800EB0A55 /* CircularProgressBar.swift */,
 				78D85E4E2AB2B52C00B3AD6E /* SignoutAlert.swift */,
 				787C8B172AB33FC000723085 /* ReportAlert.swift */,
+				785E9E692AB9DCB1003A93E8 /* CancelableToastMessage.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -432,7 +435,7 @@
 				782DD4742AA30C22006183D3 /* FollowButtonStyle.swift */,
 				782DD4762AA30C5C006183D3 /* FollowTabbarStyle.swift */,
 				782DD4792AA31F3C006183D3 /* ProfileEditButtonStyle.swift */,
-				787173B32AA472070018CB14 /* ProfileToastMessage.swift */,
+				787173B32AA472070018CB14 /* ToastMessage.swift */,
 				787173B52AA47A510018CB14 /* ProfileAlert.swift */,
 				7830281A2AB8918B00127D76 /* DeleteAccountAlert.swift */,
 			);
@@ -669,6 +672,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				78DA58D52AA445E400F8D2F1 /* ProfileEditView.swift in Sources */,
+				785E9E6A2AB9DCB1003A93E8 /* CancelableToastMessage.swift in Sources */,
 				787AF5712AA887E600C190E6 /* PostFeed.swift in Sources */,
 				787AF5602AA85CBC00C190E6 /* Profile.swift in Sources */,
 				787C8B1A2AB340E500723085 /* ReportCompleteView.swift in Sources */,
@@ -682,7 +686,7 @@
 				1B3955422A95069C00BCB4DF /* ContentView.swift in Sources */,
 				782DD47C2AA32448006183D3 /* Extension+UINavigationController.swift in Sources */,
 				1B0A29AE2AA662CB009077A1 /* HapticsManager.swift in Sources */,
-				787173B42AA472070018CB14 /* ProfileToastMessage.swift in Sources */,
+				787173B42AA472070018CB14 /* ToastMessage.swift in Sources */,
 				7866694B2AA1287500448EC7 /* UserResponse.swift in Sources */,
 				782DD4732AA30BDD006183D3 /* FollowView.swift in Sources */,
 				78D148DD2A9E0CBA00DDCE48 /* Extension+View.swift in Sources */,

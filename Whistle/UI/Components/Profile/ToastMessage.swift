@@ -9,7 +9,7 @@ import SwiftUI
 
 // MARK: - ProfileToastMessage
 
-struct ProfileToastMessage: View {
+struct ToastMessage: View {
 
   // MARK: Internal
 

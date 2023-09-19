@@ -77,12 +77,12 @@ struct MainView: View {
     }
     .overlay {
       if showPasteToast {
-        ProfileToastMessage(text: "클립보드에 복사되었어요", paddingBottom: 78, showToast: $showPasteToast)
+        ToastMessage(text: "클립보드에 복사되었어요", paddingBottom: 78, showToast: $showPasteToast)
       }
     }
     .overlay {
       if showBookmarkToast {
-        ProfileToastMessage(text: "저장되었습니다!", paddingBottom: 78, showToast: $showBookmarkToast)
+        ToastMessage(text: "저장되었습니다!", paddingBottom: 78, showToast: $showBookmarkToast)
       }
     }
     .confirmationDialog("", isPresented: $showDialog) {
@@ -91,7 +91,9 @@ struct MainView: View {
           showBookmarkToast = await apiViewModel.actionBookmark(contentId: currentVideoContentId)
         }
       }
-      Button("관심없음", role: .none) { }
+      Button("관심없음", role: .none) {
+        log("관심없음 클릭")
+      }
       Button("신고", role: .destructive) {
         tabbarOpacity = 0
         withAnimation {
