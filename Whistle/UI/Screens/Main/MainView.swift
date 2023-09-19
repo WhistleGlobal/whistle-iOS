@@ -19,6 +19,7 @@ struct MainView: View {
   @State var currentVideoUserId = 0
   @State var isShowingBottomSheet = false
   @Binding var tabbarOpacity: Double
+  @Binding var tabWidth: CGFloat
 
   var body: some View {
     ZStack {
@@ -30,7 +31,8 @@ struct MainView: View {
           currnentVideoIndex: $currnentVideoIndex,
           showDialog: $showDialog,
           showToast: $showToast,
-          currentVideoUserId: $currentVideoUserId)
+          currentVideoUserId: $currentVideoUserId,
+          tabWidth: $tabWidth)
           .environmentObject(apiViewModel)
       }
       Color.clear.overlay {

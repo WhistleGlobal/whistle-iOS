@@ -89,6 +89,7 @@ struct PlayerPageView: UIViewRepresentable {
   @Binding var showDialog: Bool
   @Binding var showToast: Bool
   @Binding var currentVideoUserId: Int
+  @Binding var tabWidth: CGFloat
 
   func makeCoordinator() -> Coordinator {
     PlayerPageView.Coordinator(parent1: self)
@@ -102,7 +103,8 @@ struct PlayerPageView: UIViewRepresentable {
         lifecycleDelegate: context.coordinator,
         showDialog: $showDialog,
         showToast: $showToast,
-        currentVideoUserId: $currentVideoUserId)
+        currentVideoUserId: $currentVideoUserId,
+        tabWidth: $tabWidth)
         .environmentObject(apiViewModel))
     childView.view.frame = CGRect(
       x: 0,

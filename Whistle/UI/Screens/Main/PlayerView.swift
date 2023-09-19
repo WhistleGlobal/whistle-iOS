@@ -29,6 +29,7 @@ struct PlayerView: View {
   @Binding var showDialog: Bool
   @Binding var showToast: Bool
   @Binding var currentVideoUserId: Int
+  @Binding var tabWidth: CGFloat
 
   var body: some View {
     VStack(spacing: 0) {
@@ -69,18 +70,20 @@ struct PlayerView: View {
               endPoint: .bottom)
               .frame(maxWidth: .infinity, maxHeight: .infinity)
               .allowsHitTesting(false)
-            userInfo(
-              userName: content.userName ?? "",
-              profileImg: content.profileImg ?? "",
-              isFollowed: content.isFollowed ?? false,
-              caption: content.caption ?? "",
-              musicTitle: content.musicTitle ?? "",
-              isWhistled: Binding(get: {
-                content.isWhistled
-              }, set: { newValue in
-                content.isWhistled = newValue
-              }),
-              whistleCount: content.whistleCount ?? 0)
+            if tabWidth != 56 {
+              userInfo(
+                userName: content.userName ?? "",
+                profileImg: content.profileImg ?? "",
+                isFollowed: content.isFollowed ?? false,
+                caption: content.caption ?? "",
+                musicTitle: content.musicTitle ?? "",
+                isWhistled: Binding(get: {
+                  content.isWhistled
+                }, set: { newValue in
+                  content.isWhistled = newValue
+                }),
+                whistleCount: content.whistleCount ?? 0)
+            }
           }
           .ignoresSafeArea()
           .tag(0)
