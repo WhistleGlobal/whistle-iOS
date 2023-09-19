@@ -211,6 +211,46 @@ extension APIViewModel: PostFeedProtocol {
     }
   }
 
+  func actionWhistle(contentId: Int) async {
+    await withCheckedContinuation { continuation in
+      AF.request(
+        "\(domainUrl)/action/\(contentId)/whistle",
+        method: .post,
+        headers: contentTypeXwwwForm)
+        .validate(statusCode: 200...300)
+        .response { response in
+          switch response.result {
+          case .success(let data):
+            log(data)
+            continuation.resume()
+          case .failure(let error):
+            log(error)
+            continuation.resume()
+          }
+        }
+    }
+  }
+
+  func actionWhistleCancel(contentId: Int) async {
+    await withCheckedContinuation { continuation in
+      AF.request(
+        "\(domainUrl)/action/\(contentId)/whistle",
+        method: .delete,
+        headers: contentTypeXwwwForm)
+        .validate(statusCode: 200...300)
+        .response { response in
+          switch response.result {
+          case .success(let data):
+            log(data)
+            continuation.resume()
+          case .failure(let error):
+            log(error)
+            continuation.resume()
+          }
+        }
+    }
+  }
+
   func postFeedPlayerChanged() {
     publisher.send(UUID())
   }

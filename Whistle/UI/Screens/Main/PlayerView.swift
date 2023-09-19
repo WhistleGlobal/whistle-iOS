@@ -85,7 +85,12 @@ struct PlayerView: View {
                 }, set: { newValue in
                   content.isWhistled = newValue
                 }),
-                whistleCount: content.whistleCount ?? 0)
+                whistleCount:
+                Binding(get: {
+                  content.whistleCount ?? 0
+                }, set: { newValue in
+                  content.whistleCount = newValue
+                }))
             }
           }
           .ignoresSafeArea()
@@ -111,14 +116,14 @@ extension PlayerView {
 
   @ViewBuilder
   func userInfo(
-    contentId _: Int,
+    contentId: Int,
     userName: String,
     profileImg: String,
     isFollowed: Bool,
     caption: String,
     musicTitle: String,
     isWhistled: Binding<Bool>,
-    whistleCount: Int)
+    whistleCount: Binding<Int>)
     -> some View
   {
     VStack(spacing: 0) {
@@ -177,8 +182,17 @@ extension PlayerView {
         VStack(spacing: 0) {
           Spacer()
           Button {
-            isWhistled.wrappedValue.toggle()
-            apiViewModel.postFeedPlayerChanged()
+            Task {
+              if isWhistled.wrappedValue {
+                await apiViewModel.actionWhistleCancel(contentId: contentId)
+              } else {
+                await apiViewModel.actionWhistle(contentId: contentId)
+                whistleCount.wrappedValue += 1
+              }
+              isWhistled.wrappedValue.toggle()
+              apiViewModel.postFeedPlayerChanged()
+            }
+
           } label: {
             VStack(spacing: 0) {
               Image(systemName: "flame.fill")
@@ -187,7 +201,7 @@ extension PlayerView {
                 .frame(width: 36, height: 36)
                 .foregroundColor(isWhistled.wrappedValue ? .red : .Gray10)
                 .padding(.bottom, 2)
-              Text("\(whistleCount)")
+              Text("\(whistleCount.wrappedValue)")
                 .foregroundColor(.Gray10)
                 .fontSystem(fontDesignSystem: .caption_Regular)
                 .padding(.bottom, 24)
