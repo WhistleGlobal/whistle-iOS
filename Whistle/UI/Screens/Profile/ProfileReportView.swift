@@ -5,6 +5,7 @@
 //  Created by ChoiYujin on 8/31/23.
 //
 
+import Kingfisher
 import SwiftUI
 
 struct ProfileReportView: View {
@@ -17,7 +18,7 @@ struct ProfileReportView: View {
 
   var body: some View {
     VStack(spacing: 0) {
-      if reports.isEmpty {
+      if apiViewModel.reportedContent.isEmpty {
         Text("회원님의 콘텐츠는\n 현재 영향을 받지 않습니다.")
           .fontSystem(fontDesignSystem: .subtitle1_KO)
           .foregroundColor(.LabelColor_Primary)
@@ -34,9 +35,10 @@ struct ProfileReportView: View {
           .frame(height: 60)
         Divider()
         List {
-          reportRow(title: "폭력적 위협", dateString: "34분 전")
-          reportRow(title: "사생활 침해", dateString: "2022. 1. 5. 오후 5:38")
-          reportRow(title: "권리 침해 또는 사이버 괴롭힘", dateString: "2020. 3. 15. 오후 8:40")
+          ForEach(apiViewModel.reportedContent, id: \.self) { content in
+            reportRow(title: content.userName, dateString: content.caption, imageUrl: content.thumbnailUrl)
+              .listRowSeparator(.hidden)
+          }
         }
         .listStyle(.plain)
       }
@@ -65,12 +67,20 @@ struct ProfileReportView: View {
   }
 
   @ViewBuilder
-  func reportRow(title: String, dateString: String) -> some View {
+  func reportRow(title: String, dateString: String, imageUrl: String) -> some View {
     HStack {
-      Rectangle()
-        .foregroundColor(.black)
+      KFImage.url(URL(string: imageUrl)!)
+        .placeholder { // 플레이스 홀더 설정
+          Rectangle()
+            .foregroundColor(.black)
+            .frame(width: 60, height: 60)
+            .cornerRadius(8)
+        }
+        .resizable()
+        .scaledToFill()
         .frame(width: 60, height: 60)
         .cornerRadius(8)
+
       VStack(spacing: 4) {
         Text(title)
           .frame(maxWidth: .infinity, alignment: .leading)
