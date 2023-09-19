@@ -210,11 +210,11 @@ extension PlayerView {
             }
           } label: {
             VStack(spacing: 0) {
-              Image(systemName: "heart")
+              Image(systemName: isWhistled.wrappedValue ? "heart.fill" : "heart")
                 .resizable()
                 .scaledToFit()
                 .frame(width: 28, height: 26)
-                .foregroundColor(isWhistled.wrappedValue ? .red : .Gray10)
+                .foregroundColor(.Gray10)
                 .padding(.bottom, 2)
               Text("\(whistleCount.wrappedValue)")
                 .foregroundColor(.Gray10)
