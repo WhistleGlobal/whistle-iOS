@@ -47,8 +47,8 @@ extension APIViewModel {
     return idTokenKey
   }
 
-  var domainUrl: String {
-    AppKeys.domainUrl as! String
+  var domainURL: String {
+    AppKeys.domainURL as! String
   }
 
   var contentTypeJson: HTTPHeaders {

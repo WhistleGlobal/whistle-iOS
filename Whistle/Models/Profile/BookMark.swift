@@ -15,6 +15,7 @@ class Bookmark: ObservableObject, Codable, Hashable {
     case profileImg = "profile_img"
     case caption
     case videoUrl = "video_url"
+    case thumbnailUrl = "thumbnail_url"
     case musicArtist = "music_artist"
     case musicTitle = "music_title"
     case hashtags = "content_hashtags"
@@ -30,6 +31,7 @@ class Bookmark: ObservableObject, Codable, Hashable {
   var profileImg: String?
   var caption: String?
   var videoUrl = ""
+  var thumbnailUrl = ""
   var musicArtist: String?
   var musicTitle: String?
   var hashtags: String?

@@ -10,7 +10,6 @@ import Photos
 import SwiftUI
 
 class PhotoViewModel: ObservableObject {
-
   enum SelectedPhotos: Int {
     case all = 1
     case favorites = 0
@@ -37,8 +36,8 @@ class PhotoViewModel: ObservableObject {
       for i in startIndex ... endIndex {
         imgManager.requestImage(
           for: fetchResult.object(at: i),
-          targetSize: CGSize(width: 400, height: 400),
-          contentMode: .aspectFit,
+          targetSize: CGSize(width: 400, height: 400), contentMode: .aspectFit,
+
           options: requestOptions)
         { image, _ in
 
@@ -174,7 +173,6 @@ class PhotoViewModel: ObservableObject {
       completion(nil)
     }
   }
-
 
   func fetchPhotoByUUID(uuid: UUID) -> Photo? {
     photos.first { photo in

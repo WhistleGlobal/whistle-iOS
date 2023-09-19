@@ -14,7 +14,7 @@ extension APIViewModel: SettingProtocol {
   func requestNotiSetting() async {
     await withCheckedContinuation { continuation in
       AF.request(
-        "\(domainUrl)/user/notification/setting",
+        "\(domainURL)/user/notification/setting",
         method: .get,
         headers: contentTypeJson)
         .validate(statusCode: 200...500)
@@ -49,7 +49,7 @@ extension APIViewModel: SettingProtocol {
     let params = ["newSetting" : newSetting ? 1 : 0]
     return await withCheckedContinuation { continuation in
       AF.request(
-        "\(domainUrl)/user/notification/setting/whistle",
+        "\(domainURL)/user/notification/setting/whistle",
         method: .patch,
         parameters: params,
         headers: contentTypeXwwwForm)
@@ -74,7 +74,7 @@ extension APIViewModel: SettingProtocol {
     let params = ["newSetting" : newSetting ? 1 : 0]
     return await withCheckedContinuation { continuation in
       AF.request(
-        "\(domainUrl)/user/notification/setting/follow",
+        "\(domainURL)/user/notification/setting/follow",
         method: .patch,
         parameters: params,
         headers: contentTypeXwwwForm).validate(statusCode: 200...300).response { response in
@@ -97,7 +97,7 @@ extension APIViewModel: SettingProtocol {
     let params = ["newSetting" : newSetting ? 1 : 0]
     return await withCheckedContinuation { continuation in
       AF.request(
-        "\(domainUrl)/user/notification/setting/info",
+        "\(domainURL)/user/notification/setting/info",
         method: .patch,
         parameters: params,
         headers: contentTypeXwwwForm)
@@ -122,7 +122,7 @@ extension APIViewModel: SettingProtocol {
     let params = ["newSetting" : newSetting ? 1 : 0]
     return await withCheckedContinuation { continuation in
       AF.request(
-        "\(domainUrl)/user/notification/setting/ad",
+        "\(domainURL)/user/notification/setting/ad",
         method: .patch,
         parameters: params,
         headers: contentTypeXwwwForm)
@@ -152,7 +152,7 @@ extension APIViewModel: SettingProtocol {
     ]
 
     AF.request(
-      "\(domainUrl)/auth/device-token",
+      "\(domainURL)/auth/device-token",
       method: .post,
       parameters: params,
       headers: contentTypeXwwwForm)

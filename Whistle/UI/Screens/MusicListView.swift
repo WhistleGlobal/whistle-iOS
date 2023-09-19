@@ -216,7 +216,7 @@ extension MusicListView {
   }
 
   func cancelDownload(for music: Music) {
-    guard let index = musicList.firstIndex(where: { $0.id == music.id }) else { return }
+    guard musicList.firstIndex(where: { $0.id == music.id }) != nil else { return }
     downloadRequests[music]?.cancel()
     downloadStatus[music] = .beforeDownload
   }

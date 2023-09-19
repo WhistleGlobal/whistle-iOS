@@ -14,5 +14,5 @@ protocol SettingProtocol {
   func updateSettingFollow(newSetting: Bool) async
   func updateSettingInfo(newSetting: Bool) async
   func updateSettingAd(newSetting: Bool) async
-  func uploadDeviceToken(deviceToken: String, completion: @escaping ()->Void)
+  func uploadDeviceToken(deviceToken: String, completion: @escaping () -> Void)
 }

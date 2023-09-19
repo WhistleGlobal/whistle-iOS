@@ -17,7 +17,7 @@ extension APIViewModel: PostFeedProtocol {
   func requestMyPostFeed() async {
     await withCheckedContinuation { continuation in
       AF.request(
-        "\(domainUrl)/user/post/feed",
+        "\(domainURL)/user/post/feed",
         method: .get,
         headers: contentTypeJson)
         .validate(statusCode: 200...300)
@@ -48,7 +48,7 @@ extension APIViewModel: PostFeedProtocol {
   func requestUserPostFeed(userId: Int) async {
     await withCheckedContinuation { continuation in
       AF.request(
-        "\(domainUrl)/user/\(userId)/post/feed",
+        "\(domainURL)/user/\(userId)/post/feed",
         method: .get,
         headers: contentTypeJson)
         .validate(statusCode: 200...300)
@@ -78,7 +78,7 @@ extension APIViewModel: PostFeedProtocol {
   func requestMyBookmark() async {
     await withCheckedContinuation { continuation in
       AF.request(
-        "\(domainUrl)/user/post/bookmark",
+        "\(domainURL)/user/post/bookmark",
         method: .get,
         headers: contentTypeJson)
         .validate(statusCode: 200...300)
@@ -111,7 +111,7 @@ extension APIViewModel: PostFeedProtocol {
   func requestContentList() async {
     await withCheckedContinuation { continuation in
       AF.request(
-        "\(domainUrl)/content/content-list",
+        "\(domainURL)/content/content-list",
         method: .get,
         headers: contentTypeJson)
         .validate(statusCode: 200...300)
@@ -131,6 +131,7 @@ extension APIViewModel: PostFeedProtocol {
                 tempContent.profileImg = jsonObject["profile_img"] as? String
                 tempContent.caption = jsonObject["caption"] as? String
                 tempContent.videoUrl = jsonObject["video_url"] as? String
+                tempContent.thumbnailUrl = jsonObject["thumbnail_url"] as? String
                 tempContent.musicArtist = jsonObject["music_artist"] as? String
                 tempContent.musicTitle = jsonObject["music_title"] as? String
                 tempContent.musicTitle = jsonObject["music_title"] as? String
@@ -140,7 +141,7 @@ extension APIViewModel: PostFeedProtocol {
                 tempContent.isWhistled = (jsonObject["is_whistled"] as? Int) == 0 ? false : true
                 tempContent.isFollowed = (jsonObject["is_followed"] as? Int) == 0 ? false : true
                 tempContent.isBookmarked = (jsonObject["is_bookmarked"] as? Int) == 0 ? false : true
-                if self.contentList.isEmpty {
+                if self.contentList.count < 2 {
                   tempContent.player = AVPlayer(url: URL(string: tempContent.videoUrl ?? "")!)
                 }
                 self.contentList.append(tempContent)
@@ -163,7 +164,7 @@ extension APIViewModel: PostFeedProtocol {
   func requestReportedConent() async {
     await withCheckedContinuation { continuation in
       AF.request(
-        "\(domainUrl)/user/post/suspend-list",
+        "\(domainURL)/user/post/suspend-list",
         method: .get,
         headers: contentTypeJson)
         .validate(statusCode: 200...300)
@@ -190,6 +191,10 @@ extension APIViewModel: PostFeedProtocol {
   }
 
   func postFeedPlayerChanged() {
+    publisher.send(UUID())
+  }
+
+  func postWhistled() {
     publisher.send(UUID())
   }
 }

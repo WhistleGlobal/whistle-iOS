@@ -8,6 +8,7 @@
 import GoogleSignIn
 import KeychainSwift
 import SwiftUI
+import VideoPicker
 
 // MARK: - WhistleApp
 
@@ -25,18 +26,27 @@ struct WhistleApp: App {
   // MARK: Internal
 
   @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
+  @StateObject var rootVM = RootViewModel(mainContext: PersistenceController.shared.viewContext)
   @StateObject var appleSignInViewModel = AppleSignInViewModel()
   @StateObject var userAuth = UserAuth()
   @StateObject var apiViewModel = APIViewModel()
   @State var testBool = false
   @AppStorage("isAccess") var isAccess = false
   let keychain = KeychainSwift()
-
+  @State private var pickerOptions = PickerOptionsInfo()
   var body: some Scene {
     WindowGroup {
       NavigationStack {
         if isAccess {
-          //        MusicListView()
+//          ZStack {
+//            Image("testCat")
+//              .resizable()
+//              .scaledToFill()
+//              .ignoresSafeArea()
+//            PickerConfigViewControllerWrapper(
+//              options: $pickerOptions)
+//              .frame(width: UIScreen.width, height: UIScreen.height)
+//          }
           TabbarView()
             .environmentObject(apiViewModel)
             .environmentObject(userAuth)

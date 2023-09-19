@@ -127,19 +127,21 @@ extension FollowView {
           .frame(maxWidth: .infinity, alignment: .leading)
       }
       .padding(.leading, 16)
-      Button("") {
-        Task {
-          log("Button pressed")
-          log(userId)
-          log(isFollowed.wrappedValue)
-          if isFollowed.wrappedValue {
-            await apiViewModel.unfollowUser(userId: userId)
-          } else {
-            await apiViewModel.followUser(userId: userId)
+      if userName != apiViewModel.myProfile.userName {
+        Button("") {
+          Task {
+            log("Button pressed")
+            log(userId)
+            log(isFollowed.wrappedValue)
+            if isFollowed.wrappedValue {
+              await apiViewModel.unfollowUser(userId: userId)
+            } else {
+              await apiViewModel.followUser(userId: userId)
+            }
           }
         }
+        .buttonStyle(FollowButtonStyle(isFollowed: isFollowed))
       }
-      .buttonStyle(FollowButtonStyle(isFollowed: isFollowed))
       Spacer()
     }
     .frame(height: 72)
@@ -164,7 +166,7 @@ extension FollowView {
   func myFollowerList() -> some View {
     ForEach(apiViewModel.myFollow.followerList, id: \.userName) { follower in
       NavigationLink {
-        UserProfileView(userId: follower.followerId)
+        UserProfileView(userId: follower.followerId, mainVideoTabSelection: .constant(2))
           .environmentObject(apiViewModel)
       } label: {
         personRow(
@@ -185,7 +187,7 @@ extension FollowView {
   func myFollowingList() -> some View {
     ForEach(apiViewModel.myFollow.followingList, id: \.userName) { following in
       NavigationLink {
-        UserProfileView(userId: following.followingId)
+        UserProfileView(userId: following.followingId, mainVideoTabSelection: .constant(2))
           .environmentObject(apiViewModel)
       } label: {
         personRow(
@@ -202,7 +204,7 @@ extension FollowView {
   func userFollowerList() -> some View {
     ForEach(apiViewModel.userFollow.followerList, id: \.userName) { follower in
       NavigationLink {
-        UserProfileView(userId: follower.followerId)
+        UserProfileView(userId: follower.followerId, mainVideoTabSelection: .constant(2))
           .environmentObject(apiViewModel)
       } label: {
         personRow(
@@ -223,7 +225,7 @@ extension FollowView {
   func userFollowingList() -> some View {
     ForEach(apiViewModel.userFollow.followingList, id: \.userName) { following in
       NavigationLink {
-        UserProfileView(userId: following.followingId)
+        UserProfileView(userId: following.followingId, mainVideoTabSelection: .constant(2))
           .environmentObject(apiViewModel)
       } label: {
         personRow(
