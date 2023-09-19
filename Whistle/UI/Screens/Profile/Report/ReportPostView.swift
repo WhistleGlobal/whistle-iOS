@@ -5,6 +5,7 @@
 //  Created by ChoiYujin on 9/14/23.
 //
 
+import Kingfisher
 import SwiftUI
 
 // MARK: - ReportPostView
@@ -30,7 +31,7 @@ struct ReportPostView: View {
           GridItem(.flexible()),
         ], spacing: 20) {
           ForEach(Array(apiViewModel.userPostFeed.enumerated()), id: \.element) { index, content in
-            if let url = content.videoUrl {
+            if let url = content.thumbnailUrl {
               Button {
                 selectedIndex = index
               } label: {
@@ -87,10 +88,14 @@ struct ReportPostView: View {
 extension ReportPostView {
 
   @ViewBuilder
-  func videoThumbnail(url _: String, index: Int) -> some View {
-    ZStack {
-      RoundedRectangle(cornerRadius: 12)
-        .fill(.black)
+  func videoThumbnail(url: String, index: Int) -> some View {
+    Color.black.overlay {
+      KFImage.url(URL(string: url))
+        .placeholder { // 플레이스 홀더 설정
+          Color.black
+        }
+        .resizable()
+        .scaledToFit()
       VStack {
         HStack {
           Spacer()
@@ -105,6 +110,7 @@ extension ReportPostView {
       }
     }
     .frame(height: 204)
-    .frame(maxWidth: .infinity)
+    .cornerRadius(12)
   }
+
 }
