@@ -16,5 +16,5 @@ protocol PostFeedProtocol {
   func requestContentList() async
   func requestReportedConent() async
   func postFeedPlayerChanged()
-  func actionBookmark(contentId: Int) async
+  func actionBookmark(contentId: Int) async -> Bool
 }

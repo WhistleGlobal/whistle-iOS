@@ -15,7 +15,8 @@ struct MainView: View {
   @State var videoIndex = 0
   @State var currnentVideoIndex = 0
   @State var showDialog = false
-  @State var showToast = false
+  @State var showPasteToast = false
+  @State var showBookmarkToast = false
   @State var currentVideoUserId = 0
   @State var currentVideoContentId = 0
   @State var isShowingBottomSheet = false
@@ -31,7 +32,8 @@ struct MainView: View {
           videoIndex: $videoIndex,
           currnentVideoIndex: $currnentVideoIndex,
           currentVideoContentId: $currentVideoContentId, showDialog: $showDialog,
-          showToast: $showToast,
+          showPasteToast: $showPasteToast,
+          showBookmarkToast: $showBookmarkToast,
           currentVideoUserId: $currentVideoUserId,
           tabWidth: $tabWidth)
           .environmentObject(apiViewModel)
@@ -74,14 +76,19 @@ struct MainView: View {
       await apiViewModel.requestMyProfile()
     }
     .overlay {
-      if showToast {
-        ProfileToastMessage(text: "클립보드에 복사되었어요", paddingBottom: 78, showToast: $showToast)
+      if showPasteToast {
+        ProfileToastMessage(text: "클립보드에 복사되었어요", paddingBottom: 78, showToast: $showPasteToast)
+      }
+    }
+    .overlay {
+      if showBookmarkToast {
+        ProfileToastMessage(text: "저장되었습니다!", paddingBottom: 78, showToast: $showBookmarkToast)
       }
     }
     .confirmationDialog("", isPresented: $showDialog) {
       Button("저장하기", role: .none) {
         Task {
-          await apiViewModel.actionBookmark(contentId: currentVideoContentId)
+          showBookmarkToast = await apiViewModel.actionBookmark(contentId: currentVideoContentId)
         }
       }
       Button("관심없음", role: .none) { }

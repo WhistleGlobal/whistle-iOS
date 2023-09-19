@@ -191,7 +191,7 @@ extension APIViewModel: PostFeedProtocol {
     }
   }
 
-  func actionBookmark(contentId: Int) async {
+  func actionBookmark(contentId: Int) async -> Bool {
     await withCheckedContinuation { continuation in
       AF.request(
         "\(domainUrl)/action/\(contentId)/bookmark",
@@ -202,10 +202,10 @@ extension APIViewModel: PostFeedProtocol {
           switch response.result {
           case .success(let data):
             log(data)
-            continuation.resume()
+            continuation.resume(returning: true)
           case .failure(let error):
             log(error)
-            continuation.resume()
+            continuation.resume(returning: false)
           }
         }
     }

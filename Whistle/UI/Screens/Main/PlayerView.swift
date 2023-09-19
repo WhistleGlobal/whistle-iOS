@@ -27,7 +27,8 @@ struct PlayerView: View {
   @State var newId = UUID()
   @State var mainVideoTabSelection = 0
   @Binding var showDialog: Bool
-  @Binding var showToast: Bool
+  @Binding var showPasteToast: Bool
+  @Binding var showBookmarkToast: Bool
   @Binding var currentVideoUserId: Int
   @Binding var currentVideoContentId: Int
   @Binding var tabWidth: CGFloat
@@ -192,9 +193,8 @@ extension PlayerView {
                 .padding(.bottom, 24)
             }
           }
-
           Button {
-            showToast = true
+            showPasteToast = true
             UIPasteboard.general.setValue(
               "복사할 링크입니다.",
               forPasteboardType: UTType.plainText.identifier)
