@@ -14,36 +14,75 @@ struct TabbarView: View {
   @State var tabSelection: TabSelection = .main
   @State var tabbarOpacity = 1.0
   @State var isFirstProfileLoaded = true
+  @State var tabWidth = UIScreen.width - 32
   @EnvironmentObject var apiViewModel: APIViewModel
   @EnvironmentObject var userAuth: UserAuth
 
   var body: some View {
     ZStack {
+      MainView(
+        tabSelection: $tabSelection,
+        tabbarOpacity: $tabbarOpacity,
+        tabWidth: $tabWidth)
+        .environmentObject(apiViewModel)
+        .opacity(tabSelection == .main ? 1 : 0)
       switch tabSelection {
       case .main:
-        // FIXME: - MainView로 교체하기 blur 확인용 테스트 이미지입니다.
-        MainView(tabbarOpacity: $tabbarOpacity)
-          .environmentObject(apiViewModel)
+        Color.clear
       case .upload:
         // FIXME: - uploadview로 교체하기
         Color.pink.opacity(0.4).ignoresSafeArea()
       case .profile:
-        ProfileView(tabbarOpacity: $tabbarOpacity, tabBarSelection: $tabSelection)
+        ProfileView(
+          tabbarOpacity: $tabbarOpacity,
+          tabBarSelection: $tabSelection,
+          tabWidth: $tabWidth,
+          isFirstProfileLoaded: $isFirstProfileLoaded)
           .environmentObject(apiViewModel)
           .environmentObject(userAuth)
       }
       VStack {
         Spacer()
-        glassMorphicTab()
+        glassMorphicTab(width: tabWidth)
           .overlay {
-            Capsule()
-              .stroke(lineWidth: 1)
-              .foregroundStyle(
-                LinearGradient.Border_Glass)
+            if tabWidth != 56 {
+              tabItems()
+            } else {
+              HStack(spacing: 0) {
+                Spacer().frame(minWidth: 0)
+                Button {
+                  withAnimation {
+                    tabWidth = UIScreen.width - 32
+                  }
+                } label: {
+                  Circle()
+                    .foregroundColor(.Dim_Default)
+                    .frame(width: 48, height: 48)
+                    .overlay {
+                      Circle()
+                        .stroke(lineWidth: 1)
+                        .foregroundStyle(LinearGradient.Border_Glass)
+                    }
+                    .padding(4)
+                    .overlay {
+                      Image(systemName: "arrow.up.left.and.arrow.down.right")
+                        .foregroundColor(.White)
+                        .frame(width: 20, height: 20)
+                    }
+                }
+              }
+            }
           }
-          .overlay {
-            tabItems()
-          }
+          .gesture(
+            DragGesture(minimumDistance: 0, coordinateSpace: .local)
+              .onEnded { value in
+                if value.translation.width > 50 {
+                  log("right swipe")
+                  withAnimation {
+                    tabWidth = 56
+                  }
+                }
+              })
       }
       .padding(.horizontal, 16)
       .opacity(tabbarOpacity)

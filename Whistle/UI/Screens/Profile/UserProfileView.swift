@@ -8,6 +8,7 @@
 import _AVKit_SwiftUI
 import Kingfisher
 import SwiftUI
+import UniformTypeIdentifiers
 
 // MARK: - UserProfileView
 
@@ -18,6 +19,7 @@ struct UserProfileView: View {
   @State var isFollow = false
   @State var showDialog = false
   @State var goReport = false
+  @State var showPasteToast = false
   let userId: Int
   @Binding var mainVideoTabSelection: Int
 
@@ -42,7 +44,7 @@ struct UserProfileView: View {
             .frame(width: 48, height: 48)
             .foregroundColor(.LabelColor_Primary_Dark)
             .padding(.bottom, 24)
-          Text("아직 게시물이 없습니다.")
+          Text("아직 콘텐츠가 없습니다.")
             .fontSystem(fontDesignSystem: .body1_KO)
             .foregroundColor(.LabelColor_Primary_Dark)
             .padding(.bottom, 76)
@@ -69,6 +71,12 @@ struct UserProfileView: View {
     }
     .navigationBarBackButtonHidden()
     .confirmationDialog("", isPresented: $showDialog) {
+      Button("프로필 URL 복사", role: .none) {
+        UIPasteboard.general.setValue(
+          "다른 유저 프로필 링크입니다.",
+          forPasteboardType: UTType.plainText.identifier)
+        showPasteToast = true
+      }
       Button("신고", role: .destructive) {
         goReport = true
       }
@@ -89,6 +97,11 @@ struct UserProfileView: View {
     }
     .task {
       await apiViewModel.requestUserPostFeed(userId: userId)
+    }
+    .overlay {
+      if showPasteToast {
+        ToastMessage(text: "클립보드에 복사되었어요", paddingBottom: 0, showToast: $showPasteToast)
+      }
     }
   }
 }

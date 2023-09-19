@@ -14,6 +14,7 @@ class MainContent: Hashable, ObservableObject {
 
   init(
     id: UUID = UUID(),
+    contentId: Int? = nil,
     player: AVPlayer? = nil,
     userId: Int? = nil,
     userName: String? = nil,
@@ -26,10 +27,11 @@ class MainContent: Hashable, ObservableObject {
     hashtags: String? = nil,
     whistleCount: Int? = nil,
     isWhistled: Bool = false,
-    isFollowed: Bool? = nil,
+    isFollowed: Bool = false,
     isBookmarked: Bool? = nil)
   {
     self.id = id
+    self.contentId = contentId
     self.player = player
     self.userId = userId
     self.userName = userName
@@ -49,6 +51,7 @@ class MainContent: Hashable, ObservableObject {
   // MARK: Internal
 
   var id = UUID()
+  var contentId: Int?
   var player: AVPlayer?
   var userId: Int?
   var userName: String?
@@ -61,7 +64,7 @@ class MainContent: Hashable, ObservableObject {
   var hashtags: String?
   @Published var whistleCount: Int?
   @Published var isWhistled: Bool
-  var isFollowed: Bool?
+  var isFollowed = false
   var isBookmarked: Bool?
 
   // Equatable conformance for completeness (optional but recommended)

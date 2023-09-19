@@ -14,7 +14,6 @@ struct ReportReasonView: View {
   @Environment(\.dismiss) var dismiss
   @EnvironmentObject var apiViewModel: APIViewModel
   @Binding var goReport: Bool
-  @State var showAlert = false
   @State var goComplete = false
   let userId: Int
   let reportCategory: ReportUserView.ReportCategory
@@ -36,8 +35,8 @@ struct ReportReasonView: View {
       Divider().frame(width: UIScreen.width)
       if reportCategory == .post {
         ForEach(PostReportReason.allCases, id: \.self) { reason in
-          Button {
-            showAlert = true
+          NavigationLink {
+            ReportDetailView(goReport: $goReport, reportCategory: .post, reportReason: reason.numericValue)
           } label: {
             reportRow(text: reason.rawValue)
           }
@@ -45,7 +44,7 @@ struct ReportReasonView: View {
       } else {
         ForEach(UserReportReason.allCases, id: \.self) { reason in
           NavigationLink {
-            ReportPostView(goReport: $goReport, userId: userId, reportCategory: .user)
+            ReportPostView(goReport: $goReport, userId: userId, reportCategory: .user, reportReason: reason.numericValue)
               .environmentObject(apiViewModel)
           } label: {
             reportRow(text: reason.rawValue)
@@ -56,15 +55,6 @@ struct ReportReasonView: View {
     }
     .padding(.horizontal, 16)
     .navigationBarBackButtonHidden()
-    .overlay {
-      if showAlert {
-        ReportAlert {
-          showAlert = false
-        } reportAction: {
-          goComplete = true
-        }
-      }
-    }
     .navigationDestination(isPresented: $goComplete) {
       ReportCompleteView(goReport: $goReport)
     }

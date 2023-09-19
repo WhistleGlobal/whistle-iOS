@@ -34,7 +34,7 @@ extension APIViewModel: ProfileProtocol {
     let params = [
       "user_name" : myProfile.userName,
       "introduce" : myProfile.introduce,
-      "country" : "Korea(Korea)",
+      "country" : "\(Locale.current.region?.identifier ?? "KR")",
     ]
     return await withCheckedContinuation { continuation in
       AF.request(
@@ -316,7 +316,28 @@ extension APIViewModel: ProfileProtocol {
       }
   }
 
-  func deleteUser() async {
-    // TODO: - 함수 작성할 것
+  func rebokeAppleToken() async {
+    let params = [
+      "refresh_token" : "\(keychain.get("refresh_token") ?? "")",
+    ]
+    log("\(keychain.get("refresh_token") ?? "")")
+    return await withCheckedContinuation { continuation in
+      AF.request(
+        "\(domainUrl)/apple/logout",
+        method: .post,
+        parameters: params,
+        headers: contentTypeXwwwForm)
+        .validate(statusCode: 200...300)
+        .response { response in
+          switch response.result {
+          case .success(let data):
+            log(data)
+            continuation.resume()
+          case .failure(let error):
+            log(error)
+            continuation.resume()
+          }
+        }
+    }
   }
 }

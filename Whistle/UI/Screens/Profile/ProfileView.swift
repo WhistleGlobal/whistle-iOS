@@ -32,6 +32,8 @@ struct ProfileView: View {
   @State var showDeleteAlert = false
   @Binding var tabbarOpacity: Double
   @Binding var tabBarSelection: TabSelection
+  @Binding var tabWidth: CGFloat
+  @Binding var isFirstProfileLoaded: Bool
   @EnvironmentObject var apiViewModel: APIViewModel
   @EnvironmentObject var userAuth: UserAuth
 
@@ -87,9 +89,14 @@ struct ProfileView: View {
               GridItem(.flexible()),
               GridItem(.flexible()),
             ], spacing: 20) {
-              ForEach(apiViewModel.myPostFeed, id: \.self) { content in
-                Button {
-                  log("video clicked")
+              ForEach(Array(apiViewModel.myPostFeed.enumerated()), id: \.element) { index, content in
+                NavigationLink {
+                  MyContentListView(
+                    currentIndex: index,
+                    tabSelection: $tabBarSelection,
+                    tabbarOpacity: $tabbarOpacity,
+                    tabWidth: $tabWidth)
+                    .environmentObject(apiViewModel)
                 } label: {
                   videoThumbnailView(thumbnailUrl: content.thumbnailUrl ?? "", viewCount: content.contentViewCount ?? 0)
                 }
@@ -164,6 +171,7 @@ struct ProfileView: View {
           apiViewModel.myProfile.userName.removeAll()
           GIDSignIn.sharedInstance.signOut()
           userAuth.appleSignout()
+          isFirstProfileLoaded = true
         }
       }
       if showDeleteAlert {
@@ -171,10 +179,11 @@ struct ProfileView: View {
           showDeleteAlert = false
         } deleteAction: {
           Task {
-//                    apiViewModel.myProfile.userName.removeAll()
-            await apiViewModel.deleteUser()
-//                    GIDSignIn.sharedInstance.signOut()
-//                    userAuth.appleSignout()
+            apiViewModel.myProfile.userName.removeAll()
+            await apiViewModel.rebokeAppleToken()
+            GIDSignIn.sharedInstance.signOut()
+            userAuth.appleSignout()
+            isFirstProfileLoaded = true
           }
         }
       }
@@ -299,7 +308,7 @@ extension ProfileView {
   @ViewBuilder
   func listEmptyView() -> some View {
     Spacer()
-    Text("공유하고 싶은 첫번째 게시물을 업로드해보세요")
+    Text("공유하고 싶은 첫번째 콘텐츠를 업로드해보세요")
       .fontSystem(fontDesignSystem: .body1_KO)
       .foregroundColor(.LabelColor_Primary_Dark)
     Button {

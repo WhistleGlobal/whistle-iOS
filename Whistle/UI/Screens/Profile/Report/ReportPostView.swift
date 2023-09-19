@@ -5,6 +5,7 @@
 //  Created by ChoiYujin on 9/14/23.
 //
 
+import Kingfisher
 import SwiftUI
 
 // MARK: - ReportPostView
@@ -19,6 +20,7 @@ struct ReportPostView: View {
   @Binding var goReport: Bool
   let userId: Int
   let reportCategory: ReportUserView.ReportCategory
+  let reportReason: Int?
 
   var body: some View {
     VStack(spacing: 0) {
@@ -29,7 +31,7 @@ struct ReportPostView: View {
           GridItem(.flexible()),
         ], spacing: 20) {
           ForEach(Array(apiViewModel.userPostFeed.enumerated()), id: \.element) { index, content in
-            if let url = content.videoUrl {
+            if let url = content.thumbnailUrl {
               Button {
                 selectedIndex = index
               } label: {
@@ -55,7 +57,7 @@ struct ReportPostView: View {
         }
       }
       ToolbarItem(placement: .principal) {
-        Text("게시물 선택")
+        Text("콘텐츠 선택")
           .fontSystem(fontDesignSystem: .subtitle2_KO)
       }
       ToolbarItem(placement: .confirmationAction) {
@@ -64,7 +66,7 @@ struct ReportPostView: View {
           case .post:
             ReportReasonView(goReport: $goReport, userId: userId, reportCategory: .post)
           case .user:
-            ReportDetailView(goReport: $goReport)
+            ReportDetailView(goReport: $goReport, reportCategory: .post, reportReason: reportReason ?? 0)
           }
         } label: {
           Text("다음")
@@ -78,7 +80,7 @@ struct ReportPostView: View {
       await apiViewModel.requestUserPostFeed(userId: userId)
     }
     .navigationDestination(isPresented: .constant(false)) {
-      ReportDetailView(goReport: $goReport)
+      ReportDetailView(goReport: $goReport, reportCategory: .user, reportReason: reportReason ?? 0)
     }
   }
 }
@@ -86,10 +88,14 @@ struct ReportPostView: View {
 extension ReportPostView {
 
   @ViewBuilder
-  func videoThumbnail(url _: String, index: Int) -> some View {
-    ZStack {
-      RoundedRectangle(cornerRadius: 12)
-        .fill(.black)
+  func videoThumbnail(url: String, index: Int) -> some View {
+    Color.black.overlay {
+      KFImage.url(URL(string: url))
+        .placeholder { // 플레이스 홀더 설정
+          Color.black
+        }
+        .resizable()
+        .scaledToFit()
       VStack {
         HStack {
           Spacer()
@@ -104,6 +110,7 @@ extension ReportPostView {
       }
     }
     .frame(height: 204)
-    .frame(maxWidth: .infinity)
+    .cornerRadius(12)
   }
+
 }
