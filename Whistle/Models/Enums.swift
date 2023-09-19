@@ -45,7 +45,7 @@ enum PostReportReason: String, CaseIterable {
   case sexualContent = "성적인 콘텐츠"
   case none = "해당 문제 없음"
 
-  var description: Int {
+  var numericValue: Int {
     switch self {
     case .none: return 200
     case .hatredOrAbuse: return 201

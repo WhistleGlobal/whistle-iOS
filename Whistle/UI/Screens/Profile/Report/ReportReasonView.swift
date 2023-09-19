@@ -36,7 +36,7 @@ struct ReportReasonView: View {
       if reportCategory == .post {
         ForEach(PostReportReason.allCases, id: \.self) { reason in
           NavigationLink {
-            ReportDetailView(goReport: $goReport, reportCategory: .post, reportReason: reason.description)
+            ReportDetailView(goReport: $goReport, reportCategory: .post, reportReason: reason.numericValue)
           } label: {
             reportRow(text: reason.rawValue)
           }

@@ -20,13 +20,15 @@ struct TabbarView: View {
 
   var body: some View {
     ZStack {
+      MainView(
+        tabSelection: $tabSelection,
+        tabbarOpacity: $tabbarOpacity,
+        tabWidth: $tabWidth)
+        .environmentObject(apiViewModel)
+        .opacity(tabSelection == .main ? 1 : 0)
       switch tabSelection {
       case .main:
-        // FIXME: - MainView로 교체하기 blur 확인용 테스트 이미지입니다.
-        MainView(
-          tabbarOpacity: $tabbarOpacity,
-          tabWidth: $tabWidth)
-          .environmentObject(apiViewModel)
+        Color.clear
       case .upload:
         // FIXME: - uploadview로 교체하기
         Color.pink.opacity(0.4).ignoresSafeArea()

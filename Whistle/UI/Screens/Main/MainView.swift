@@ -22,6 +22,7 @@ struct MainView: View {
   @State var currentVideoUserId = 0
   @State var currentVideoContentId = 0
   @State var isShowingBottomSheet = false
+  @Binding var tabSelection: TabSelection
   @Binding var tabbarOpacity: Double
   @Binding var tabWidth: CGFloat
 
@@ -71,6 +72,15 @@ struct MainView: View {
     }
     .background(Color.black.edgesIgnoringSafeArea(.all))
     .edgesIgnoringSafeArea(.all)
+    .onChange(of: tabSelection) { newValue in
+      if newValue != .main {
+        log("pause")
+        apiViewModel.contentList[currentVideoIndex].player?.pause()
+      } else {
+        log("pause")
+        apiViewModel.contentList[currentVideoIndex].player?.play()
+      }
+    }
     .task {
       if apiViewModel.contentList.isEmpty {
         await apiViewModel.requestContentList()

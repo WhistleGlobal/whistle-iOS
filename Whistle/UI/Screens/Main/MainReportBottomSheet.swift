@@ -83,7 +83,7 @@ struct MainReportBottomSheet: View {
               Divider().frame(maxWidth: .infinity)
               ForEach(PostReportReason.allCases, id: \.rawValue) { reasonType in
                 Button {
-                  log("reportType : \(reasonType.description)")
+                  log("reportType : \(reasonType.numericValue)")
                 } label: {
                   listRow(reportType: reasonType)
                 }

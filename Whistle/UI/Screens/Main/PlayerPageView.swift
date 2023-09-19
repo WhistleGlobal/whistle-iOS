@@ -28,24 +28,24 @@ struct PlayerPageView: UIViewRepresentable {
 
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
       // 새로 이동한 인덱스
-      let currentindex = Int(scrollView.contentOffset.y / UIScreen.main.bounds.height)
-      log(currentindex)
+      parent.currentVideoIndex = Int(scrollView.contentOffset.y / UIScreen.main.bounds.height)
+      log(parent.currentVideoIndex)
       parent.apiViewModel.contentList[index].player?.seek(to: .zero)
       parent.apiViewModel.contentList[index].player?.pause()
-      if index != currentindex {
-        if currentindex == 0 {
+      if index != parent.currentVideoIndex {
+        if parent.currentVideoIndex == 0 {
           parent.apiViewModel.contentList[index + 1].player = nil
-        } else if currentindex == parent.apiViewModel.contentList.count - 1 {
+        } else if parent.currentVideoIndex == parent.apiViewModel.contentList.count - 1 {
           parent.apiViewModel.contentList[index - 1].player = nil
-        } else if index < currentindex {
-          let urlNext = parent.apiViewModel.contentList[currentindex + 1].videoUrl
-          parent.apiViewModel.contentList[currentindex + 1].player = AVPlayer(url: URL(string: urlNext ?? "")!)
+        } else if index < parent.currentVideoIndex {
+          let urlNext = parent.apiViewModel.contentList[parent.currentVideoIndex + 1].videoUrl
+          parent.apiViewModel.contentList[parent.currentVideoIndex + 1].player = AVPlayer(url: URL(string: urlNext ?? "")!)
           if index != 0 {
             parent.apiViewModel.contentList[index - 1].player = nil
           }
-        } else if index > currentindex {
-          let urlPrev = parent.apiViewModel.contentList[currentindex - 1].videoUrl
-          parent.apiViewModel.contentList[currentindex - 1].player = AVPlayer(url: URL(string: urlPrev ?? "")!)
+        } else if index > parent.currentVideoIndex {
+          let urlPrev = parent.apiViewModel.contentList[parent.currentVideoIndex - 1].videoUrl
+          parent.apiViewModel.contentList[parent.currentVideoIndex - 1].player = AVPlayer(url: URL(string: urlPrev ?? "")!)
           if index != parent.apiViewModel.contentList.count - 1 {
             parent.apiViewModel.contentList[index + 1].player = nil
           }
@@ -53,9 +53,9 @@ struct PlayerPageView: UIViewRepresentable {
           log("unknown")
         }
         parent.apiViewModel.postFeedPlayerChanged()
-        index = currentindex
-        parent.currentVideoUserId = parent.apiViewModel.contentList[currentindex].userId ?? 0
-        parent.currentVideoContentId = parent.apiViewModel.contentList[currentindex].contentId ?? 0
+        index = parent.currentVideoIndex
+        parent.currentVideoUserId = parent.apiViewModel.contentList[parent.currentVideoIndex].userId ?? 0
+        parent.currentVideoContentId = parent.apiViewModel.contentList[parent.currentVideoIndex].contentId ?? 0
         parent.apiViewModel.contentList[index].player?.play()
         parent.apiViewModel.contentList[index].player?.actionAtItemEnd = .none
         for i in 0..<parent.apiViewModel.contentList.count {
