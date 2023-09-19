@@ -64,8 +64,3 @@ struct CancelableToastMessage: View {
   @State private var isExecutable = true
 }
 
-#Preview {
-  CancelableToastMessage(text: "텍스트", paddingBottom: 40, action: {
-    log("action execute")
-  }, showToast: .constant(true))
-}

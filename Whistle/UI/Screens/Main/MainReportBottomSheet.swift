@@ -123,12 +123,3 @@ extension MainReportBottomSheet {
     .frame(height: 56)
   }
 }
-
-#Preview {
-  MainReportBottomSheet(isShowing: .constant(true), content: AnyView(Text("")))
-    .background {
-      Image("testCat")
-        .resizable()
-        .scaledToFit()
-    }
-}
