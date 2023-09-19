@@ -17,6 +17,8 @@ struct MyContentListView: View {
   @State var currentIndex = 0
   @State var newId = UUID()
   @State var playerIndex = 0
+  @State var showDialog = false
+  @State var showPasteToast = false
   @EnvironmentObject var apiViewModel: APIViewModel
   @State var players: [AVPlayer?] = []
   @Binding var tabSelection: TabSelection
@@ -157,6 +159,21 @@ struct MyContentListView: View {
       .padding(.horizontal, 16)
       .opacity(tabbarOpacity)
     }
+    .overlay {
+      if showPasteToast {
+        ToastMessage(text: "클립보드에 복사되었어요", paddingBottom: 78, showToast: $showPasteToast)
+      }
+    }
+    .confirmationDialog("", isPresented: $showDialog) {
+      Button("삭제하기", role: .destructive) {
+        Task {
+          log("삭제하기")
+        }
+      }
+      Button("닫기", role: .cancel) {
+        log("Cancel")
+      }
+    }
   }
 }
 
@@ -244,7 +261,7 @@ extension MyContentListView {
             }
           }
           Button {
-//               showPasteToast = true
+            showPasteToast = true
             UIPasteboard.general.setValue(
               "복사할 링크입니다.",
               forPasteboardType: UTType.plainText.identifier)
@@ -258,7 +275,7 @@ extension MyContentListView {
           }
           .fontSystem(fontDesignSystem: .caption_Regular)
           Button {
-//               showDialog = true
+            showDialog = true
           } label: {
             Image(systemName: "ellipsis")
               .resizable()
