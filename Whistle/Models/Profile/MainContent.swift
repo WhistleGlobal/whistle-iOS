@@ -14,6 +14,7 @@ class MainContent: Hashable, ObservableObject {
 
   init(
     id: UUID = UUID(),
+    contentId: Int? = nil,
     player: AVPlayer? = nil,
     userId: Int? = nil,
     userName: String? = nil,
@@ -30,6 +31,7 @@ class MainContent: Hashable, ObservableObject {
     isBookmarked: Bool? = nil)
   {
     self.id = id
+    self.contentId = contentId
     self.player = player
     self.userId = userId
     self.userName = userName
@@ -49,6 +51,7 @@ class MainContent: Hashable, ObservableObject {
   // MARK: Internal
 
   var id = UUID()
+  var contentId: Int?
   var player: AVPlayer?
   var userId: Int?
   var userName: String?

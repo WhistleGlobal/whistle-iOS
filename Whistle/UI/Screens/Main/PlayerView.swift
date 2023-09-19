@@ -29,6 +29,7 @@ struct PlayerView: View {
   @Binding var showDialog: Bool
   @Binding var showToast: Bool
   @Binding var currentVideoUserId: Int
+  @Binding var currentVideoContentId: Int
   @Binding var tabWidth: CGFloat
 
   var body: some View {
@@ -72,6 +73,7 @@ struct PlayerView: View {
               .allowsHitTesting(false)
             if tabWidth != 56 {
               userInfo(
+                contentId: content.contentId ?? 0,
                 userName: content.userName ?? "",
                 profileImg: content.profileImg ?? "",
                 isFollowed: content.isFollowed ?? false,
@@ -108,6 +110,7 @@ extension PlayerView {
 
   @ViewBuilder
   func userInfo(
+    contentId _: Int,
     userName: String,
     profileImg: String,
     isFollowed: Bool,

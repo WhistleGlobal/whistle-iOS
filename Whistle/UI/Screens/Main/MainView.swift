@@ -17,6 +17,7 @@ struct MainView: View {
   @State var showDialog = false
   @State var showToast = false
   @State var currentVideoUserId = 0
+  @State var currentVideoContentId = 0
   @State var isShowingBottomSheet = false
   @Binding var tabbarOpacity: Double
   @Binding var tabWidth: CGFloat
@@ -29,7 +30,7 @@ struct MainView: View {
         PlayerPageView(
           videoIndex: $videoIndex,
           currnentVideoIndex: $currnentVideoIndex,
-          showDialog: $showDialog,
+          currentVideoContentId: $currentVideoContentId, showDialog: $showDialog,
           showToast: $showToast,
           currentVideoUserId: $currentVideoUserId,
           tabWidth: $tabWidth)
@@ -78,7 +79,11 @@ struct MainView: View {
       }
     }
     .confirmationDialog("", isPresented: $showDialog) {
-      Button("저장하기", role: .none) { }
+      Button("저장하기", role: .none) {
+        Task {
+          await apiViewModel.actionBookmark(contentId: currentVideoContentId)
+        }
+      }
       Button("관심없음", role: .none) { }
       Button("신고", role: .destructive) {
         tabbarOpacity = 0

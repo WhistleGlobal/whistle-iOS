@@ -126,6 +126,7 @@ extension APIViewModel: PostFeedProtocol {
 
               for jsonObject in jsonArray ?? [] {
                 let tempContent: MainContent = .init()
+                tempContent.contentId = jsonObject["content_id"] as? Int
                 tempContent.userId = jsonObject["user_id"] as? Int
                 tempContent.userName = jsonObject["user_name"] as? String
                 tempContent.profileImg = jsonObject["profile_img"] as? String
@@ -184,6 +185,26 @@ extension APIViewModel: PostFeedProtocol {
             }
           case .failure(let error):
             log("Error: \(error)")
+            continuation.resume()
+          }
+        }
+    }
+  }
+
+  func actionBookmark(contentId: Int) async {
+    await withCheckedContinuation { continuation in
+      AF.request(
+        "\(domainUrl)/action/\(contentId)/bookmark",
+        method: .post,
+        headers: contentTypeXwwwForm)
+        .validate(statusCode: 200...300)
+        .response { response in
+          switch response.result {
+          case .success(let data):
+            log(data)
+            continuation.resume()
+          case .failure(let error):
+            log(error)
             continuation.resume()
           }
         }
