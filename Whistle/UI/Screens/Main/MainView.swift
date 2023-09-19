@@ -13,10 +13,11 @@ struct MainView: View {
   @EnvironmentObject var apiViewModel: APIViewModel
 
   @State var videoIndex = 0
-  @State var currnentVideoIndex = 0
+  @State var currentVideoIndex = 0
   @State var showDialog = false
   @State var showPasteToast = false
   @State var showBookmarkToast = false
+  @State var showHideContentToast = false
   @State var currentVideoUserId = 0
   @State var currentVideoContentId = 0
   @State var isShowingBottomSheet = false
@@ -30,8 +31,9 @@ struct MainView: View {
       } else {
         PlayerPageView(
           videoIndex: $videoIndex,
-          currnentVideoIndex: $currnentVideoIndex,
-          currentVideoContentId: $currentVideoContentId, showDialog: $showDialog,
+          currentVideoIndex: $currentVideoIndex,
+          currentVideoContentId: $currentVideoContentId,
+          showDialog: $showDialog,
           showPasteToast: $showPasteToast,
           showBookmarkToast: $showBookmarkToast,
           currentVideoUserId: $currentVideoUserId,
@@ -79,10 +81,23 @@ struct MainView: View {
       if showPasteToast {
         ToastMessage(text: "클립보드에 복사되었어요", paddingBottom: 78, showToast: $showPasteToast)
       }
-    }
-    .overlay {
       if showBookmarkToast {
         ToastMessage(text: "저장되었습니다!", paddingBottom: 78, showToast: $showBookmarkToast)
+      }
+      if showHideContentToast {
+        CancelableToastMessage(text: "해당 콘텐츠를 숨겼습니다", paddingBottom: 78, action: {
+          Task {
+            await apiViewModel.actionContentHate(contentId: currentVideoContentId)
+            apiViewModel.contentList.remove(at: currentVideoIndex)
+            guard let url = apiViewModel.contentList[currentVideoIndex + 1].videoUrl else {
+              return
+            }
+            apiViewModel.contentList[currentVideoIndex + 1].player = AVPlayer(url: URL(string: url)!)
+            await apiViewModel.contentList[currentVideoIndex].player?.seek(to: .zero)
+            apiViewModel.contentList[currentVideoIndex].player?.play()
+            apiViewModel.postFeedPlayerChanged()
+          }
+        }, showToast: $showHideContentToast)
       }
     }
     .confirmationDialog("", isPresented: $showDialog) {
@@ -92,7 +107,7 @@ struct MainView: View {
         }
       }
       Button("관심없음", role: .none) {
-        log("관심없음 클릭")
+        showHideContentToast = true
       }
       Button("신고", role: .destructive) {
         tabbarOpacity = 0

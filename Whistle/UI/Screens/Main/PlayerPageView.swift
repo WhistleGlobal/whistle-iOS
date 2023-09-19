@@ -87,7 +87,7 @@ struct PlayerPageView: UIViewRepresentable {
 
   @EnvironmentObject var apiViewModel: APIViewModel
   @Binding var videoIndex: Int
-  @Binding var currnentVideoIndex: Int
+  @Binding var currentVideoIndex: Int
   @Binding var currentVideoContentId: Int
   @Binding var showDialog: Bool
   @Binding var showPasteToast: Bool

@@ -251,6 +251,26 @@ extension APIViewModel: PostFeedProtocol {
     }
   }
 
+  func actionContentHate(contentId: Int) async {
+    await withCheckedContinuation { continuation in
+      AF.request(
+        "\(domainUrl)/action/\(contentId)/hate",
+        method: .post,
+        headers: contentTypeXwwwForm)
+        .validate(statusCode: 200...300)
+        .response { response in
+          switch response.result {
+          case .success(let data):
+            log(data)
+            continuation.resume()
+          case .failure(let error):
+            log(error)
+            continuation.resume()
+          }
+        }
+    }
+  }
+
   func postFeedPlayerChanged() {
     publisher.send(UUID())
   }

@@ -22,9 +22,10 @@ struct CancelableToastMessage: View {
           .fontSystem(fontDesignSystem: .body1_KO)
           .foregroundColor(.Gray10)
           .padding(.horizontal, 24)
-          Spacer()
+        Spacer()
         Button("실행 취소") {
           isExecutable = false
+          showToast = false
         }
         .fontSystem(fontDesignSystem: .body2_KO)
         .foregroundColor(.Info)
@@ -32,9 +33,13 @@ struct CancelableToastMessage: View {
       }
       .frame(height: 56)
       .frame(maxWidth: .infinity)
-      
       .background(Color.Gray70_Dark)
       .cornerRadius(8)
+      .overlay {
+        RoundedRectangle(cornerRadius: 8)
+          .stroke(lineWidth: 1)
+          .foregroundColor(.Border_Default_Dark)
+      }
       .opacity(toastOpacity)
     }
     .padding(.horizontal, 16)
