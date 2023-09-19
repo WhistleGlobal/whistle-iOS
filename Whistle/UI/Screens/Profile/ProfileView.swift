@@ -32,6 +32,7 @@ struct ProfileView: View {
   @State var showDeleteAlert = false
   @Binding var tabbarOpacity: Double
   @Binding var tabBarSelection: TabSelection
+  @Binding var tabWidth: CGFloat
   @Binding var isFirstProfileLoaded: Bool
   @EnvironmentObject var apiViewModel: APIViewModel
   @EnvironmentObject var userAuth: UserAuth
@@ -88,9 +89,14 @@ struct ProfileView: View {
               GridItem(.flexible()),
               GridItem(.flexible()),
             ], spacing: 20) {
-              ForEach(apiViewModel.myPostFeed, id: \.self) { content in
-                Button {
-                  log("video clicked")
+              ForEach(Array(apiViewModel.myPostFeed.enumerated()), id: \.element) { index, content in
+                NavigationLink {
+                  MyContentListView(
+                    currentIndex: index,
+                    tabSelection: $tabBarSelection,
+                    tabbarOpacity: $tabbarOpacity,
+                    tabWidth: $tabWidth)
+                    .environmentObject(apiViewModel)
                 } label: {
                   videoThumbnailView(thumbnailUrl: content.thumbnailUrl ?? "", viewCount: content.contentViewCount ?? 0)
                 }

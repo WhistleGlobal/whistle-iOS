@@ -36,6 +36,7 @@ struct TabbarView: View {
         ProfileView(
           tabbarOpacity: $tabbarOpacity,
           tabBarSelection: $tabSelection,
+          tabWidth: $tabWidth,
           isFirstProfileLoaded: $isFirstProfileLoaded)
           .environmentObject(apiViewModel)
           .environmentObject(userAuth)
