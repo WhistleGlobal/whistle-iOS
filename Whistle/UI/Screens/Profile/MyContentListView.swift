@@ -81,6 +81,7 @@ struct MyContentListView: View {
       .frame(maxWidth: proxy.size.width)
     }
     .ignoresSafeArea(.all, edges: .top)
+    .navigationBarBackButtonHidden()
     .background(.black)
     .onAppear {
       players.append(AVPlayer(url: URL(string: apiViewModel.myPostFeed[currentIndex].videoUrl ?? "")!))
@@ -171,6 +172,25 @@ extension MyContentListView {
     -> some View
   {
     VStack(spacing: 0) {
+      HStack(spacing: 0) {
+        Button {
+          dismiss()
+        } label: {
+          Color.clear
+            .frame(width: 24, height: 24)
+            .overlay {
+              Image(systemName: "chevron.backward")
+                .resizable()
+                .scaledToFit()
+                .frame(width: 24, height: 20)
+                .foregroundColor(.white)
+            }
+        }
+        Spacer()
+      }
+      .frame(height: 52)
+      .padding(.top, 54)
+
       Spacer()
       HStack(spacing: 0) {
         VStack(alignment: .leading, spacing: 12) {
