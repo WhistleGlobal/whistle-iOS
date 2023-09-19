@@ -34,7 +34,7 @@ extension APIViewModel: ProfileProtocol {
     let params = [
       "user_name" : myProfile.userName,
       "introduce" : myProfile.introduce,
-      "country" : "Korea(Korea)",
+      "country" : "\(Locale.current.region?.identifier ?? "KR")",
     ]
     return await withCheckedContinuation { continuation in
       AF.request(
