@@ -33,29 +33,31 @@ struct MainView: View {
           currentVideoUserId: $currentVideoUserId)
           .environmentObject(apiViewModel)
       }
-      VStack {
-        Spacer()
-        MainReportBottomSheet(isShowing: $isShowingBottomSheet, content: AnyView(Text("")))
-          .environmentObject(apiViewModel)
-          .onChange(of: isShowingBottomSheet) { newValue in
-            if !newValue {
-              DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-                tabbarOpacity = 1
+      Color.clear.overlay {
+        VStack {
+          Spacer()
+          MainReportBottomSheet(isShowing: $isShowingBottomSheet, content: AnyView(Text("")))
+            .environmentObject(apiViewModel)
+            .onChange(of: isShowingBottomSheet) { newValue in
+              if !newValue {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                  tabbarOpacity = 1
+                }
               }
             }
-          }
-          .gesture(
-            DragGesture(minimumDistance: 20, coordinateSpace: .local)
-              .onEnded { value in
-                if value.translation.height > 20 {
-                  withAnimation {
-                    isShowingBottomSheet = false
+            .gesture(
+              DragGesture(minimumDistance: 20, coordinateSpace: .local)
+                .onEnded { value in
+                  if value.translation.height > 20 {
+                    withAnimation {
+                      isShowingBottomSheet = false
+                    }
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                      tabbarOpacity = 1
+                    }
                   }
-                  DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-                    tabbarOpacity = 1
-                  }
-                }
-              })
+                })
+        }
       }
     }
     .background(Color.black.edgesIgnoringSafeArea(.all))
