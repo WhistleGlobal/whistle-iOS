@@ -18,6 +18,7 @@ struct MainView: View {
   @State var showPasteToast = false
   @State var showBookmarkToast = false
   @State var showHideContentToast = false
+  @State var showFollowToast = false
   @State var currentVideoUserId = 0
   @State var currentVideoContentId = 0
   @State var isShowingBottomSheet = false
@@ -83,6 +84,9 @@ struct MainView: View {
       }
       if showBookmarkToast {
         ToastMessage(text: "저장되었습니다!", paddingBottom: 78, showToast: $showBookmarkToast)
+      }
+      if showFollowToast {
+        ToastMessage(text: "ddd", paddingBottom: 78, showToast: $showFollowToast)
       }
       if showHideContentToast {
         CancelableToastMessage(text: "해당 콘텐츠를 숨겼습니다", paddingBottom: 78, action: {

@@ -204,13 +204,12 @@ extension PlayerView {
               isWhistled.wrappedValue.toggle()
               apiViewModel.postFeedPlayerChanged()
             }
-
           } label: {
             VStack(spacing: 0) {
-              Image(systemName: "flame.fill")
+              Image(systemName: "heart")
                 .resizable()
                 .scaledToFit()
-                .frame(width: 36, height: 36)
+                .frame(width: 28, height: 26)
                 .foregroundColor(isWhistled.wrappedValue ? .red : .Gray10)
                 .padding(.bottom, 2)
               Text("\(whistleCount.wrappedValue)")
@@ -225,34 +224,22 @@ extension PlayerView {
               "복사할 링크입니다.",
               forPasteboardType: UTType.plainText.identifier)
           } label: {
-            VStack(spacing: 0) {
-              Image(systemName: "square.and.arrow.up")
-                .resizable()
-                .scaledToFit()
-                .frame(width: 36, height: 38)
-                .foregroundColor(.Gray10)
-                .padding(.bottom, 2)
-              Text("공유")
-                .foregroundColor(.Gray10)
-                .padding(.bottom, 24)
-                .fontSystem(fontDesignSystem: .caption_Regular)
-            }
+            Image(systemName: "square.and.arrow.up")
+              .resizable()
+              .scaledToFit()
+              .frame(width: 25, height: 32)
+              .foregroundColor(.Gray10)
+              .padding(.bottom, 24)
           }
           .fontSystem(fontDesignSystem: .caption_Regular)
           Button {
             showDialog = true
           } label: {
-            VStack(spacing: 0) {
-              Image(systemName: "ellipsis")
-                .resizable()
-                .scaledToFit()
-                .frame(width: 36, height: 38)
-                .foregroundColor(.Gray10)
-                .padding(.bottom, 2)
-              Text("더보기")
-                .foregroundColor(.Gray10)
-                .fontSystem(fontDesignSystem: .caption_Regular)
-            }
+            Image(systemName: "ellipsis")
+              .resizable()
+              .scaledToFit()
+              .frame(width: 30, height: 25)
+              .foregroundColor(.Gray10)
           }
         }
       }
