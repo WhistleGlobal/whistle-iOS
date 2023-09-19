@@ -92,6 +92,7 @@ struct PlayerPageView: UIViewRepresentable {
   @Binding var showDialog: Bool
   @Binding var showPasteToast: Bool
   @Binding var showBookmarkToast: Bool
+  @Binding var showFollowToast: (Bool, String)
   @Binding var currentVideoUserId: Int
   @Binding var tabWidth: CGFloat
 
@@ -108,6 +109,7 @@ struct PlayerPageView: UIViewRepresentable {
         showDialog: $showDialog,
         showPasteToast: $showPasteToast,
         showBookmarkToast: $showBookmarkToast,
+        showFollowToast: $showFollowToast,
         currentVideoUserId: $currentVideoUserId,
         currentVideoContentId: $currentVideoContentId,
         tabWidth: $tabWidth)

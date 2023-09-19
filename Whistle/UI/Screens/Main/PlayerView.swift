@@ -29,6 +29,7 @@ struct PlayerView: View {
   @Binding var showDialog: Bool
   @Binding var showPasteToast: Bool
   @Binding var showBookmarkToast: Bool
+  @Binding var showFollowToast: (Bool, String)
   @Binding var currentVideoUserId: Int
   @Binding var currentVideoContentId: Int
   @Binding var tabWidth: CGFloat
@@ -155,12 +156,14 @@ extension PlayerView {
                 Task {
                   if isFollowed.wrappedValue {
                     await apiViewModel.unfollowUser(userId: currentVideoUserId)
+                    showFollowToast = (true, "\(userName)님을 팔로우 취소함")
                   } else {
                     await apiViewModel.followUser(userId: currentVideoUserId)
+                    showFollowToast = (true, "\(userName)님을 팔로우 중")
                   }
                   isFollowed.wrappedValue.toggle()
                   apiViewModel.contentList = apiViewModel.contentList.map { item in
-                    var mutableItem = item
+                    let mutableItem = item
                     if mutableItem.userId == currentVideoUserId {
                       mutableItem.isFollowed = isFollowed.wrappedValue
                     }
@@ -186,7 +189,7 @@ extension PlayerView {
               .fontSystem(fontDesignSystem: .body2_KO)
               .foregroundColor(.white)
           }
-          Label(musicTitle, systemImage: "music.quarternote.3")
+          Label(musicTitle, systemImage: "music.note")
             .fontSystem(fontDesignSystem: .body2_KO)
             .foregroundColor(.white)
         }
@@ -197,6 +200,7 @@ extension PlayerView {
             Task {
               if isWhistled.wrappedValue {
                 await apiViewModel.actionWhistleCancel(contentId: contentId)
+                whistleCount.wrappedValue -= 1
               } else {
                 await apiViewModel.actionWhistle(contentId: contentId)
                 whistleCount.wrappedValue += 1
