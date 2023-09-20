@@ -36,7 +36,7 @@ struct MyContentListView: View {
                 .overlay {
                   // TODO: - contentId 백엔드 수정 필요, contentId & whistleCount
                   userInfo(
-                    contentId: 0,
+                    contentId: content.contentId ?? 0,
                     caption: content.caption ?? "",
                     musicTitle: content.musicTitle ?? "",
                     isWhistled:
@@ -47,9 +47,9 @@ struct MyContentListView: View {
                     }),
                     whistleCount:
                     Binding(get: {
-                      0
-                    }, set: { _ in
-                      0
+                      content.contentWhistleCount ?? 0
+                    }, set: { newValue in
+                      content.contentWhistleCount = newValue
                     }))
                 }
                 .padding()
@@ -181,7 +181,7 @@ extension MyContentListView {
 
   @ViewBuilder
   func userInfo(
-    contentId: Int,
+    contentId: Int?,
     caption: String,
     musicTitle: String,
     isWhistled: Binding<Bool>,
@@ -237,9 +237,11 @@ extension MyContentListView {
           Button {
             Task {
               if isWhistled.wrappedValue {
+                guard let contentId else { return }
                 await apiViewModel.actionWhistleCancel(contentId: contentId)
                 whistleCount.wrappedValue -= 1
               } else {
+                guard let contentId else { return }
                 await apiViewModel.actionWhistle(contentId: contentId)
                 whistleCount.wrappedValue += 1
               }
