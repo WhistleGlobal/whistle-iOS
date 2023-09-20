@@ -158,7 +158,7 @@ extension APIViewModel: ProfileProtocol {
         "\(domainUrl)/user/follow-list",
         method: .get,
         headers: contentTypeJson)
-        .validate(statusCode: 200...500)
+        .validate(statusCode: 200...300)
         .responseData { response in
           switch response.result {
           case .success(let data):

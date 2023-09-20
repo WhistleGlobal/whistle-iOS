@@ -102,7 +102,7 @@ class FollowerData: Decodable {
 
   // MARK: Lifecycle
 
-  init(followerId: Int, userName: String, profileImg: String? = nil, isFollowed: Bool) {
+  init(followerId: Int, userName: String, profileImg: String?, isFollowed: Bool) {
     self.followerId = followerId
     self.userName = userName
     self.profileImg = profileImg
@@ -127,7 +127,7 @@ class FollowerData: Decodable {
     let container = try decoder.container(keyedBy: CodingKeys.self)
     followerId = try container.decode(Int.self, forKey: .followerId)
     userName = try container.decode(String.self, forKey: .userName)
-    profileImg = try container.decode(String.self, forKey: .profileImg)
+    profileImg = try container.decodeIfPresent(String.self, forKey: .profileImg)
     isFollowed = try container.decode(Int.self, forKey: .isFollowed) == 1 ? true : false
   }
 }
