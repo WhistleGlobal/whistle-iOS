@@ -33,13 +33,13 @@ struct ProfileInfoView: View {
         }
         .listRowSeparator(.hidden)
         NavigationLink {
-          EmptyView()
+          PrivacyPolicyView()
         } label: {
           Text("개인정보처리방침")
             .listRowSeparator(.hidden)
         }
         NavigationLink {
-          EmptyView()
+          TermsOfServiceView()
         } label: {
           Text("이용약관")
             .listRowSeparator(.hidden)
