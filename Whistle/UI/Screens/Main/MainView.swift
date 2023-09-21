@@ -36,8 +36,7 @@ struct MainView: View {
           showPasteToast: $showPasteToast,
           showBookmarkToast: $showBookmarkToast,
           showFollowToast: $showFollowToast,
-          currentVideoUserId: $currentVideoUserId,
-          tabWidth: $tabbarModel.tabWidth)
+          currentVideoUserId: $currentVideoUserId)
           .environmentObject(apiViewModel)
           .environmentObject(tabbarModel)
       }

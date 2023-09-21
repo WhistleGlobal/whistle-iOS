@@ -34,6 +34,7 @@ struct PlayerPageView: UIViewRepresentable {
       parent.apiViewModel.contentList[index].player?.pause()
       if index != parent.currentVideoIndex {
         if parent.currentVideoIndex == 0 {
+          // TODO: - 인덱스 0이하일때 처리
           parent.apiViewModel.contentList[index + 1].player = nil
         } else if parent.currentVideoIndex == parent.apiViewModel.contentList.count - 1 {
           parent.apiViewModel.contentList[index - 1].player = nil
@@ -95,7 +96,6 @@ struct PlayerPageView: UIViewRepresentable {
   @Binding var showBookmarkToast: Bool
   @Binding var showFollowToast: (Bool, String)
   @Binding var currentVideoUserId: Int
-  @Binding var tabWidth: CGFloat
 
   func makeCoordinator() -> Coordinator {
     PlayerPageView.Coordinator(parent1: self)

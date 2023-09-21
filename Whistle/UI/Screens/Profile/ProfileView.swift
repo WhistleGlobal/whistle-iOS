@@ -24,7 +24,6 @@ struct ProfileView: View {
 
   // MARK: Internal
 
-  let fontHeight = UIFont.preferredFont(forTextStyle: .title2).lineHeight
   @State var isShowingBottomSheet = false
   @State var tabbarDirection: CGFloat = -1.0
   @State var tabSelection: profileTabCase = .myVideo
@@ -91,10 +90,8 @@ struct ProfileView: View {
                 NavigationLink {
                   MyContentListView(currentIndex: index)
                     .environmentObject(apiViewModel)
-                    .environmentObject(tabbarModel)
                 } label: {
                   videoThumbnailView(thumbnailUrl: content.thumbnailUrl ?? "", viewCount: content.contentViewCount ?? 0)
-                    .environmentObject(tabbarModel)
                 }
               }
             }
@@ -113,7 +110,6 @@ struct ProfileView: View {
                   log("video clicked")
                 } label: {
                   videoThumbnailView(thumbnailUrl: content.thumbnailUrl, viewCount: content.viewCount)
-                    .environmentObject(tabbarModel)
                 }
               }
             }

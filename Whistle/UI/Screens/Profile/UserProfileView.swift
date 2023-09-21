@@ -16,6 +16,7 @@ struct UserProfileView: View {
 
   @Environment(\.dismiss) var dismiss
   @EnvironmentObject var apiViewModel: APIViewModel
+  @EnvironmentObject var tabbarModel: TabbarModel
   @State var isFollow = false
   @State var showDialog = false
   @State var goReport = false
@@ -59,6 +60,7 @@ struct UserProfileView: View {
                 NavigationLink {
                   UserContentListView(currentIndex: index)
                     .environmentObject(apiViewModel)
+                    .environmentObject(tabbarModel)
                 } label: {
                   videoThumbnailView(
                     thumbnailUrl: content.thumbnailUrl ?? "",
@@ -180,6 +182,7 @@ extension UserProfileView {
         NavigationLink {
           FollowView(userId: userId)
             .environmentObject(apiViewModel)
+            .environmentObject(tabbarModel)
         } label: {
           VStack(spacing: 4) {
             Text("\(apiViewModel.userFollow.followerCount)")

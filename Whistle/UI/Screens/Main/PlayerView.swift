@@ -19,6 +19,13 @@ protocol ViewLifecycleDelegate {
   func onDisappear()
 }
 
+// MARK: - MaintabSelection
+
+enum MaintabSelection: String {
+  case left
+  case right
+}
+
 // MARK: - PlayerView
 
 struct PlayerView: View {
@@ -26,7 +33,7 @@ struct PlayerView: View {
   @EnvironmentObject var tabbarModel: TabbarModel
   let lifecycleDelegate: ViewLifecycleDelegate?
   @State var newId = UUID()
-  @State var mainVideoTabSelection = 0
+  @State var mainTabSelection: MaintabSelection = .left
   @Binding var showDialog: Bool
   @Binding var showPasteToast: Bool
   @Binding var showBookmarkToast: Bool
@@ -37,7 +44,7 @@ struct PlayerView: View {
   var body: some View {
     VStack(spacing: 0) {
       ForEach(apiViewModel.contentList, id: \.self) { content in
-        TabView {
+        TabView(selection: $mainTabSelection) {
           ZStack {
             Color.clear.overlay {
               if let url = content.thumbnailUrl {
@@ -54,7 +61,7 @@ struct PlayerView: View {
               if let player = content.player {
                 Player(player: player)
                   .frame(maxWidth: .infinity, maxHeight: .infinity)
-                  .onChange(of: mainVideoTabSelection) { _ in
+                  .onChange(of: mainTabSelection) { _ in
                     if player.rate != 0.0 {
                       player.pause()
                     } else {
@@ -100,8 +107,11 @@ struct PlayerView: View {
             }
           }
           .ignoresSafeArea()
+          .tag(MaintabSelection.left)
           UserProfileView(userId: currentVideoUserId)
             .environmentObject(apiViewModel)
+            .environmentObject(tabbarModel)
+            .tag(MaintabSelection.right)
         }
         .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
       }
@@ -139,6 +149,7 @@ extension PlayerView {
             NavigationLink {
               UserProfileView(userId: currentVideoUserId)
                 .environmentObject(apiViewModel)
+                .environmentObject(tabbarModel)
             } label: {
               Group {
                 profileImageView(url: profileImg, size: 36)

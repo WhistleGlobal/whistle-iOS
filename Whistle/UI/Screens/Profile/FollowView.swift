@@ -23,6 +23,7 @@ struct FollowView: View {
 
   @Environment(\.dismiss) var dismiss
   @EnvironmentObject var apiViewModel: APIViewModel
+  @EnvironmentObject var tabbarModel: TabbarModel
   @State var tabStatus: profileTabStatus = .follower
   @State var showOtherProfile = false
   @State var selectedId: Int?
@@ -83,6 +84,7 @@ struct FollowView: View {
     .toolbar {
       ToolbarItem(placement: .cancellationAction) {
         Button {
+          log("dismiss")
           dismiss()
         } label: {
           Image(systemName: "chevron.backward")
@@ -168,6 +170,7 @@ extension FollowView {
       NavigationLink {
         UserProfileView(userId: follower.followerId)
           .environmentObject(apiViewModel)
+          .environmentObject(tabbarModel)
       } label: {
         personRow(
           isFollowed: Binding(get: {
@@ -189,6 +192,7 @@ extension FollowView {
       NavigationLink {
         UserProfileView(userId: following.followingId)
           .environmentObject(apiViewModel)
+          .environmentObject(tabbarModel)
       } label: {
         personRow(
           isFollowed: .constant(true),
@@ -206,6 +210,7 @@ extension FollowView {
       NavigationLink {
         UserProfileView(userId: follower.followerId)
           .environmentObject(apiViewModel)
+          .environmentObject(tabbarModel)
       } label: {
         personRow(
           isFollowed: Binding(get: {
@@ -227,6 +232,7 @@ extension FollowView {
       NavigationLink {
         UserProfileView(userId: following.followingId)
           .environmentObject(apiViewModel)
+          .environmentObject(tabbarModel)
       } label: {
         personRow(
           isFollowed: Binding(get: {

@@ -38,6 +38,7 @@ struct TabbarView: View {
             .environmentObject(tabbarModel)
             .environmentObject(userAuth)
         }
+        .tint(.black)
       }
       VStack {
         Spacer()

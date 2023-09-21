@@ -96,14 +96,13 @@ struct UserContentListView: View {
       players[currentIndex] = AVPlayer(url: URL(string: apiViewModel.userPostFeed[currentIndex].videoUrl ?? "")!)
       log("players : \(players)")
       playerIndex = currentIndex
-      guard let player = players[currentIndex] else {
-        return
-      }
-      player.seek(to: .zero)
-      player.play()
+      players[currentIndex]?.seek(to: .zero)
+      players[currentIndex]?.play()
       apiViewModel.postFeedPlayerChanged()
+      log("onchange end")
     }
     .onChange(of: currentIndex) { newValue in
+      log("실행")
       log(playerIndex)
       log(newValue)
       log(currentIndex)
