@@ -21,6 +21,7 @@ struct MainView: View {
   @State var showPasteToast = false
   @State var showBookmarkToast = false
   @State var showHideContentToast = false
+  @State var showReport = false
   @State var showFollowToast = (false, "")
   @State var showUserProfile = false
   @State var currentVideoUserId = 0
@@ -172,10 +173,8 @@ struct MainView: View {
         showHideContentToast = true
       }
       Button("신고", role: .destructive) {
-        tabbarModel.tabbarOpacity = 0
-        withAnimation {
-          isShowingBottomSheet = true
-        }
+        log(currentVideoContentId)
+        showReport = true
       }
       Button("닫기", role: .cancel) {
         log("Cancel")
@@ -185,6 +184,9 @@ struct MainView: View {
       UserProfileView(userId: currentVideoUserId)
         .environmentObject(apiViewModel)
         .environmentObject(tabbarModel)
+    }
+    .fullScreenCover(isPresented: $showReport) {
+      MainReportReasonView(goReport: $showReport, contentId: currentVideoContentId)
     }
   }
 }

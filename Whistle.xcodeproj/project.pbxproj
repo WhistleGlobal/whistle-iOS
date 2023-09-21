@@ -74,6 +74,8 @@
 		787C8B182AB33FC000723085 /* ReportAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 787C8B172AB33FC000723085 /* ReportAlert.swift */; };
 		787C8B1A2AB340E500723085 /* ReportCompleteView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 787C8B192AB340E500723085 /* ReportCompleteView.swift */; };
 		788010872ABC7EF800116FD5 /* UserFollowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 788010862ABC7EF800116FD5 /* UserFollowView.swift */; };
+		7880108A2ABC82FC00116FD5 /* MainReportReasonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 788010892ABC82FC00116FD5 /* MainReportReasonView.swift */; };
+		7880108C2ABC837A00116FD5 /* MainReportDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7880108B2ABC837A00116FD5 /* MainReportDetailView.swift */; };
 		788F43F02AA5CD9F00718D38 /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 788F43EF2AA5CD9F00718D38 /* MainView.swift */; };
 		788F43F52AA5E95E00718D38 /* PlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 788F43F42AA5E95E00718D38 /* PlayerView.swift */; };
 		788F43F72AA6136F00718D38 /* Player.swift in Sources */ = {isa = PBXBuildFile; fileRef = 788F43F62AA6136F00718D38 /* Player.swift */; };
@@ -192,6 +194,8 @@
 		787C8B172AB33FC000723085 /* ReportAlert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportAlert.swift; sourceTree = "<group>"; };
 		787C8B192AB340E500723085 /* ReportCompleteView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportCompleteView.swift; sourceTree = "<group>"; };
 		788010862ABC7EF800116FD5 /* UserFollowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserFollowView.swift; sourceTree = "<group>"; };
+		788010892ABC82FC00116FD5 /* MainReportReasonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainReportReasonView.swift; sourceTree = "<group>"; };
+		7880108B2ABC837A00116FD5 /* MainReportDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainReportDetailView.swift; sourceTree = "<group>"; };
 		788F43EF2AA5CD9F00718D38 /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
 		788F43F42AA5E95E00718D38 /* PlayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerView.swift; sourceTree = "<group>"; };
 		788F43F62AA6136F00718D38 /* Player.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Player.swift; sourceTree = "<group>"; };
@@ -477,6 +481,15 @@
 			path = Profile;
 			sourceTree = "<group>";
 		};
+		788010882ABC82D500116FD5 /* MainReport */ = {
+			isa = PBXGroup;
+			children = (
+				788010892ABC82FC00116FD5 /* MainReportReasonView.swift */,
+				7880108B2ABC837A00116FD5 /* MainReportDetailView.swift */,
+			);
+			path = MainReport;
+			sourceTree = "<group>";
+		};
 		788F43EE2AA5CD9300718D38 /* Main */ = {
 			isa = PBXGroup;
 			children = (
@@ -525,6 +538,7 @@
 		78D148E12A9E132700DDCE48 /* Profile */ = {
 			isa = PBXGroup;
 			children = (
+				788010882ABC82D500116FD5 /* MainReport */,
 				78D85E502AB2D9AA00B3AD6E /* Report */,
 				78D148EA2A9E13CC00DDCE48 /* ProfileView.swift */,
 				78F980862A9F5AAC00AD542A /* GlassBottomSheet.swift */,
@@ -729,11 +743,13 @@
 				78D85E4F2AB2B52C00B3AD6E /* SignoutAlert.swift in Sources */,
 				7830281B2AB8918B00127D76 /* DeleteAccountAlert.swift in Sources */,
 				786669492AA1284F00448EC7 /* UserAuth.swift in Sources */,
+				7880108C2ABC837A00116FD5 /* MainReportDetailView.swift in Sources */,
 				1B0A29A62AA64A67009077A1 /* Extension+Array.swift in Sources */,
 				1B0A29A82AA64AA2009077A1 /* MusicViewModel.swift in Sources */,
 				78D85E522AB2D9F800B3AD6E /* ReportReasonView.swift in Sources */,
 				1BE8EA082AAE595000EB0A55 /* MusicListView.swift in Sources */,
 				788010872ABC7EF800116FD5 /* UserFollowView.swift in Sources */,
+				7880108A2ABC82FC00116FD5 /* MainReportReasonView.swift in Sources */,
 				1B39555D2A95098100BCB4DF /* VideoModel.swift in Sources */,
 				78E175642ABBEF4500731259 /* SignInPlayerView.swift in Sources */,
 				1B39555B2A95095500BCB4DF /* ColorManager.swift in Sources */,
