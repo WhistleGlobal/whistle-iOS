@@ -19,6 +19,7 @@ struct MyContentListView: View {
   @State var playerIndex = 0
   @State var showDialog = false
   @State var showPasteToast = false
+  @State var showDeleteToast = false
   @EnvironmentObject var apiViewModel: APIViewModel
   @State var players: [AVPlayer?] = []
   @Binding var tabSelection: TabSelection
@@ -163,12 +164,33 @@ struct MyContentListView: View {
       if showPasteToast {
         ToastMessage(text: "클립보드에 복사되었어요", paddingBottom: 78, showToast: $showPasteToast)
       }
+      if showDeleteToast {
+        CancelableToastMessage(text: "삭제되었습니다", paddingBottom: 78, action: {
+          Task {
+            guard let contentId = apiViewModel.myPostFeed[currentIndex].contentId else { return }
+            log("contentId: \(contentId)")
+            log("currentIndex: \(currentIndex)")
+            log("playerIndex: \(playerIndex)")
+            apiViewModel.myPostFeed.remove(at: currentIndex)
+            players[currentIndex]?.pause()
+            players.remove(at: currentIndex)
+            if !players.isEmpty {
+              players[currentIndex] = AVPlayer(url: URL(string: apiViewModel.myPostFeed[currentIndex].videoUrl ?? "")!)
+              await players[currentIndex]?.seek(to: .zero)
+              players[currentIndex]?.play()
+            }
+            apiViewModel.postFeedPlayerChanged()
+            log("contentId: \(contentId)")
+            log("currentIndex: \(currentIndex)")
+            log("playerIndex: \(currentIndex)")
+//            await apiViewModel.deleteContent(contentId: contentId)
+          }
+        }, showToast: $showDeleteToast)
+      }
     }
     .confirmationDialog("", isPresented: $showDialog) {
       Button("삭제하기", role: .destructive) {
-        Task {
-          log("삭제하기")
-        }
+        showDeleteToast = true
       }
       Button("닫기", role: .cancel) {
         log("Cancel")

@@ -271,6 +271,26 @@ extension APIViewModel: PostFeedProtocol {
     }
   }
 
+  func deleteContent(contentId: Int) async {
+    await withCheckedContinuation { continuation in
+      AF.request(
+        "\(domainUrl)/content/\(contentId)",
+        method: .delete,
+        headers: contentTypeXwwwForm)
+        .validate(statusCode: 200...300)
+        .response { response in
+          switch response.result {
+          case .success(let data):
+            log(data)
+            continuation.resume()
+          case .failure(let error):
+            log(error)
+            continuation.resume()
+          }
+        }
+    }
+  }
+
   func postFeedPlayerChanged() {
     publisher.send(UUID())
   }
