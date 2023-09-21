@@ -23,11 +23,10 @@ struct FollowView: View {
 
   @Environment(\.dismiss) var dismiss
   @EnvironmentObject var apiViewModel: APIViewModel
-  @EnvironmentObject var tabbarModel: TabbarModel
   @State var tabStatus: profileTabStatus = .follower
   @State var showOtherProfile = false
   @State var selectedId: Int?
-  @State var userId: Int?
+  let userId: Int?
 
   var body: some View {
     VStack(spacing: 0) {
@@ -167,9 +166,8 @@ extension FollowView {
   func myFollowerList() -> some View {
     ForEach(apiViewModel.myFollow.followerList, id: \.userName) { follower in
       NavigationLink {
-        UserProfileView(userId: follower.followerId, mainVideoTabSelection: .constant(2))
+        UserProfileView(userId: follower.followerId)
           .environmentObject(apiViewModel)
-          .environmentObject(tabbarModel)
       } label: {
         personRow(
           isFollowed: Binding(get: {
@@ -189,9 +187,8 @@ extension FollowView {
   func myFollowingList() -> some View {
     ForEach(apiViewModel.myFollow.followingList, id: \.userName) { following in
       NavigationLink {
-        UserProfileView(userId: following.followingId, mainVideoTabSelection: .constant(2))
+        UserProfileView(userId: following.followingId)
           .environmentObject(apiViewModel)
-          .environmentObject(tabbarModel)
       } label: {
         personRow(
           isFollowed: .constant(true),
@@ -207,9 +204,8 @@ extension FollowView {
   func userFollowerList() -> some View {
     ForEach(apiViewModel.userFollow.followerList, id: \.userName) { follower in
       NavigationLink {
-        UserProfileView(userId: follower.followerId, mainVideoTabSelection: .constant(2))
+        UserProfileView(userId: follower.followerId)
           .environmentObject(apiViewModel)
-          .environmentObject(tabbarModel)
       } label: {
         personRow(
           isFollowed: Binding(get: {
@@ -229,12 +225,15 @@ extension FollowView {
   func userFollowingList() -> some View {
     ForEach(apiViewModel.userFollow.followingList, id: \.userName) { following in
       NavigationLink {
-        UserProfileView(userId: following.followingId, mainVideoTabSelection: .constant(2))
+        UserProfileView(userId: following.followingId)
           .environmentObject(apiViewModel)
-          .environmentObject(tabbarModel)
       } label: {
         personRow(
-          isFollowed: .constant(true),
+          isFollowed: Binding(get: {
+            following.isFollowed
+          }, set: { newValue in
+            following.isFollowed = newValue
+          }),
           userName: following.userName,
           description: following.userName,
           profileImage: following.profileImg ?? "",

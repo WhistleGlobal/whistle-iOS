@@ -18,10 +18,13 @@ struct TabbarView: View {
 
   var body: some View {
     ZStack {
-      MainView()
-        .environmentObject(apiViewModel)
-        .environmentObject(tabbarModel)
-        .opacity(tabbarModel.tabSelection == .main ? 1 : 0)
+      NavigationStack {
+        MainView()
+          .environmentObject(apiViewModel)
+          .environmentObject(tabbarModel)
+          .opacity(tabbarModel.tabSelection == .main ? 1 : 0)
+      }
+      .tint(.black)
       switch tabbarModel.tabSelection {
       case .main:
         Color.clear
@@ -29,10 +32,12 @@ struct TabbarView: View {
         // FIXME: - uploadview로 교체하기
         Color.pink.opacity(0.4).ignoresSafeArea()
       case .profile:
-        ProfileView(isFirstProfileLoaded: $isFirstProfileLoaded)
-          .environmentObject(apiViewModel)
-          .environmentObject(tabbarModel)
-          .environmentObject(userAuth)
+        NavigationStack {
+          ProfileView(isFirstProfileLoaded: $isFirstProfileLoaded)
+            .environmentObject(apiViewModel)
+            .environmentObject(tabbarModel)
+            .environmentObject(userAuth)
+        }
       }
       VStack {
         Spacer()

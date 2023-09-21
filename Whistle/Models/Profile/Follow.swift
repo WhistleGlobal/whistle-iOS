@@ -93,7 +93,14 @@ class FollowingData: Decodable {
 
   var followingId: Int
   var userName: String
-  var profileImg: String?
+  var profileImg: String
+
+  required init(from decoder: Decoder) throws {
+    let container = try decoder.container(keyedBy: CodingKeys.self)
+    followingId = try container.decode(Int.self, forKey: .followingId)
+    userName = try container.decode(String.self, forKey: .userName)
+    profileImg = try container.decodeIfPresent(String.self, forKey: .profileImg) ?? ""
+  }
 }
 
 // MARK: - FollowerData

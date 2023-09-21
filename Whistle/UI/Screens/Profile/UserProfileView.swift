@@ -16,13 +16,11 @@ struct UserProfileView: View {
 
   @Environment(\.dismiss) var dismiss
   @EnvironmentObject var apiViewModel: APIViewModel
-    @EnvironmentObject var tabbarModel: TabbarModel
   @State var isFollow = false
   @State var showDialog = false
   @State var goReport = false
   @State var showPasteToast = false
   let userId: Int
-  @Binding var mainVideoTabSelection: Int
 
   var body: some View {
     ZStack {
@@ -61,7 +59,6 @@ struct UserProfileView: View {
                 NavigationLink {
                   UserContentListView(currentIndex: index)
                     .environmentObject(apiViewModel)
-                    .environmentObject(tabbarModel)
                 } label: {
                   videoThumbnailView(
                     thumbnailUrl: content.thumbnailUrl ?? "",
@@ -120,13 +117,7 @@ extension UserProfileView {
     VStack(spacing: 0) {
       HStack {
         Button {
-          if mainVideoTabSelection == 2 {
-            dismiss()
-          } else {
-            withAnimation {
-              mainVideoTabSelection = 0
-            }
-          }
+          dismiss()
         } label: {
           Image(systemName: "chevron.left")
             .foregroundColor(Color.White)

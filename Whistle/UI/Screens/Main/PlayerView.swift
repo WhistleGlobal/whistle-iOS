@@ -37,7 +37,7 @@ struct PlayerView: View {
   var body: some View {
     VStack(spacing: 0) {
       ForEach(apiViewModel.contentList, id: \.self) { content in
-        TabView(selection: $mainVideoTabSelection) {
+        TabView {
           ZStack {
             Color.clear.overlay {
               if let url = content.thumbnailUrl {
@@ -100,11 +100,8 @@ struct PlayerView: View {
             }
           }
           .ignoresSafeArea()
-          .tag(0)
-          UserProfileView(userId: currentVideoUserId, mainVideoTabSelection: $mainVideoTabSelection)
+          UserProfileView(userId: currentVideoUserId)
             .environmentObject(apiViewModel)
-            .environmentObject(tabbarModel)
-            .tag(1)
         }
         .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
       }
@@ -140,9 +137,8 @@ extension PlayerView {
           Spacer()
           HStack(spacing: 0) {
             NavigationLink {
-              UserProfileView(userId: currentVideoUserId, mainVideoTabSelection: .constant(2))
+              UserProfileView(userId: currentVideoUserId)
                 .environmentObject(apiViewModel)
-                .environmentObject(tabbarModel)
             } label: {
               Group {
                 profileImageView(url: profileImg, size: 36)

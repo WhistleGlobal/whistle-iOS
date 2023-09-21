@@ -253,7 +253,7 @@ extension ProfileView {
         }
         Rectangle().frame(width: 1, height: 36).foregroundColor(.white)
         NavigationLink {
-          FollowView()
+          FollowView(userId: nil)
             .environmentObject(apiViewModel)
             .environmentObject(tabbarModel)
         } label: {
