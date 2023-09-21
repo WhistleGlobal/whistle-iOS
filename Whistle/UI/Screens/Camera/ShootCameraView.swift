@@ -15,9 +15,9 @@ struct ShootCameraView: View {
   @StateObject var viewModel = ShootCameraViewModel()
   @State private var buttonState: CameraButtonState = .idle
   @State private var recordedVideoURL: URL?
-  @State private var recordingDuration: TimeInterval = 0.0 // 녹화 시간을 나타내는 변수
-  @State private var recordingTimer: Timer? // 녹화 시간을 갱신하는 타이머
-  private var maxRecordingDuration: TimeInterval = 15.0 // 최대 녹화 시간 (15초)
+  @State private var recordingDuration: TimeInterval = 0
+  @State private var recordingTimer: Timer?
+  private let maxRecordingDuration: TimeInterval = 15 // 최대 녹화 시간 (15초)
 
   var body: some View {
     ZStack {
@@ -51,8 +51,8 @@ struct ShootCameraView: View {
                 .frame(width: 72, height: 72, alignment: .center)
 
               Image(systemName: "checkmark")
+                .font(.custom("SFCompactText-Regular", size: 44))
                 .foregroundColor(.White)
-                .frame(width: 48, height: 48)
             }
           }
 
@@ -75,7 +75,8 @@ struct ShootCameraView: View {
               resetRecordedVideoURL()
             }
           }) {
-            CameraButtonView(state: buttonState)
+            // 시간을 표시할 버튼
+            CameraButtonView(state: buttonState, timerText: timeStringFromTimeInterval(recordingDuration))
           }
           .padding()
         }
@@ -89,7 +90,6 @@ struct ShootCameraView: View {
     recordedVideoURL = nil
   }
 
-  // 녹화 타이머 시작
   private func startRecordingTimer() {
     recordingTimer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { _ in
       recordingDuration += 1
@@ -103,10 +103,16 @@ struct ShootCameraView: View {
     }
   }
 
-  // 녹화 타이머 중지
   private func stopRecordingTimer() {
     recordingTimer?.invalidate()
     recordingTimer = nil
+  }
+
+  // 시간을 TimeInterval에서 "00:00" 형식의 문자열로 변환
+  private func timeStringFromTimeInterval(_ interval: TimeInterval) -> String {
+    let minutes = Int(interval) / 60
+    let seconds = Int(interval) % 60
+    return String(format: "%02d:%02d", minutes, seconds)
   }
 }
 
@@ -144,6 +150,7 @@ enum CameraButtonState {
 
 struct CameraButtonView: View {
   let state: CameraButtonState
+  let timerText: String
 
   var body: some View {
     ZStack {
@@ -164,15 +171,23 @@ struct CameraButtonView: View {
         }
 
       case .recording:
-        ZStack {
-          Circle()
-            .foregroundColor(.Dim_Thick)
-            .frame(width: 114, height: 114, alignment: .center)
 
-          Rectangle()
-            .foregroundColor(.White)
-            .cornerRadius(8)
-            .frame(width: 36, height: 36, alignment: .center)
+        VStack {
+          // 시간을 표시할 텍스트
+          Text(timerText)
+            .font(.custom("SFProText-Semibold", size: 16))
+            .foregroundColor(.Gray10)
+
+          ZStack {
+            Circle()
+              .foregroundColor(.Dim_Thick)
+              .frame(width: 114, height: 114, alignment: .center)
+
+            Rectangle()
+              .foregroundColor(.White)
+              .cornerRadius(8)
+              .frame(width: 36, height: 36, alignment: .center)
+          }
         }
 
       case .completed:

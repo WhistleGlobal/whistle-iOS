@@ -120,6 +120,7 @@
 		9985996F2ABC0C2B00FB6213 /* AuthorizationChecker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9985996A2ABC0C2B00FB6213 /* AuthorizationChecker.swift */; };
 		998599702ABC0C2B00FB6213 /* Preview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9985996B2ABC0C2B00FB6213 /* Preview.swift */; };
 		998599712ABC0C2B00FB6213 /* ShootCameraViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9985996C2ABC0C2B00FB6213 /* ShootCameraViewModel.swift */; };
+		99AFC04E2ABC6D3D00C6F74E /* AccessView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99AFC04D2ABC6D3D00C6F74E /* AccessView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -234,6 +235,7 @@
 		9985996A2ABC0C2B00FB6213 /* AuthorizationChecker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuthorizationChecker.swift; sourceTree = "<group>"; };
 		9985996B2ABC0C2B00FB6213 /* Preview.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Preview.swift; sourceTree = "<group>"; };
 		9985996C2ABC0C2B00FB6213 /* ShootCameraViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ShootCameraViewModel.swift; sourceTree = "<group>"; };
+		99AFC04D2ABC6D3D00C6F74E /* AccessView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccessView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -558,6 +560,7 @@
 				998599692ABC0C2B00FB6213 /* ShootCameraView.swift */,
 				9985996C2ABC0C2B00FB6213 /* ShootCameraViewModel.swift */,
 				998599682ABC0C2B00FB6213 /* VideoError.swift */,
+				99AFC04D2ABC6D3D00C6F74E /* AccessView.swift */,
 			);
 			path = Camera;
 			sourceTree = "<group>";
@@ -743,6 +746,7 @@
 				786385742AA45ED4004F8EF4 /* ProfileEditIntroduceView.swift in Sources */,
 				78F41A5D2AA70626004A7BFC /* PhotoModel.swift in Sources */,
 				78F980872A9F5AAC00AD542A /* GlassBottomSheet.swift in Sources */,
+				99AFC04E2ABC6D3D00C6F74E /* AccessView.swift in Sources */,
 				7801398A2AA127AE00D5FBDB /* SignInView.swift in Sources */,
 				78D148EB2A9E13CC00DDCE48 /* ProfileView.swift in Sources */,
 				1BE8EA1A2AB205EA00EB0A55 /* VideoEditorMainView.swift in Sources */,
