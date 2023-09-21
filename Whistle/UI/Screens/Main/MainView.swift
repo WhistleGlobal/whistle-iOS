@@ -22,9 +22,7 @@ struct MainView: View {
   @State var currentVideoUserId = 0
   @State var currentVideoContentId = 0
   @State var isShowingBottomSheet = false
-  @Binding var tabSelection: TabSelection
-  @Binding var tabbarOpacity: Double
-  @Binding var tabWidth: CGFloat
+  @EnvironmentObject var tabbarModel: TabbarModel
 
   var body: some View {
     ZStack {
@@ -40,8 +38,9 @@ struct MainView: View {
           showBookmarkToast: $showBookmarkToast,
           showFollowToast: $showFollowToast,
           currentVideoUserId: $currentVideoUserId,
-          tabWidth: $tabWidth)
+          tabWidth: $tabbarModel.tabWidth)
           .environmentObject(apiViewModel)
+          .environmentObject(tabbarModel)
       }
       Color.clear.overlay {
         VStack {
@@ -51,7 +50,7 @@ struct MainView: View {
             .onChange(of: isShowingBottomSheet) { newValue in
               if !newValue {
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-                  tabbarOpacity = 1
+                  tabbarModel.tabbarOpacity = 1
                 }
               }
             }
@@ -63,7 +62,7 @@ struct MainView: View {
                       isShowingBottomSheet = false
                     }
                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-                      tabbarOpacity = 1
+                      tabbarModel.tabbarOpacity = 1
                     }
                   }
                 })
@@ -72,7 +71,7 @@ struct MainView: View {
     }
     .background(Color.black.edgesIgnoringSafeArea(.all))
     .edgesIgnoringSafeArea(.all)
-    .onChange(of: tabSelection) { newValue in
+    .onChange(of: tabbarModel.tabSelection) { newValue in
       if newValue != .main {
         log("pause")
         apiViewModel.contentList[currentVideoIndex].player?.pause()
@@ -125,7 +124,7 @@ struct MainView: View {
         showHideContentToast = true
       }
       Button("신고", role: .destructive) {
-        tabbarOpacity = 0
+        tabbarModel.tabbarOpacity = 0
         withAnimation {
           isShowingBottomSheet = true
         }

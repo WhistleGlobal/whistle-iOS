@@ -86,6 +86,7 @@ struct PlayerPageView: UIViewRepresentable {
   }
 
   @EnvironmentObject var apiViewModel: APIViewModel
+  @EnvironmentObject var tabbarModel: TabbarModel
   @Binding var videoIndex: Int
   @Binding var currentVideoIndex: Int
   @Binding var currentVideoContentId: Int
@@ -111,9 +112,9 @@ struct PlayerPageView: UIViewRepresentable {
         showBookmarkToast: $showBookmarkToast,
         showFollowToast: $showFollowToast,
         currentVideoUserId: $currentVideoUserId,
-        currentVideoContentId: $currentVideoContentId,
-        tabWidth: $tabWidth)
-        .environmentObject(apiViewModel))
+        currentVideoContentId: $currentVideoContentId)
+        .environmentObject(apiViewModel)
+        .environmentObject(tabbarModel))
     childView.view.frame = CGRect(
       x: 0,
       y: 0,

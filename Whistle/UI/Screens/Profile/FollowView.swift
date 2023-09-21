@@ -23,6 +23,7 @@ struct FollowView: View {
 
   @Environment(\.dismiss) var dismiss
   @EnvironmentObject var apiViewModel: APIViewModel
+  @EnvironmentObject var tabbarModel: TabbarModel
   @State var tabStatus: profileTabStatus = .follower
   @State var showOtherProfile = false
   @State var selectedId: Int?
@@ -168,6 +169,7 @@ extension FollowView {
       NavigationLink {
         UserProfileView(userId: follower.followerId, mainVideoTabSelection: .constant(2))
           .environmentObject(apiViewModel)
+          .environmentObject(tabbarModel)
       } label: {
         personRow(
           isFollowed: Binding(get: {
@@ -189,6 +191,7 @@ extension FollowView {
       NavigationLink {
         UserProfileView(userId: following.followingId, mainVideoTabSelection: .constant(2))
           .environmentObject(apiViewModel)
+          .environmentObject(tabbarModel)
       } label: {
         personRow(
           isFollowed: .constant(true),
@@ -206,6 +209,7 @@ extension FollowView {
       NavigationLink {
         UserProfileView(userId: follower.followerId, mainVideoTabSelection: .constant(2))
           .environmentObject(apiViewModel)
+          .environmentObject(tabbarModel)
       } label: {
         personRow(
           isFollowed: Binding(get: {
@@ -227,6 +231,7 @@ extension FollowView {
       NavigationLink {
         UserProfileView(userId: following.followingId, mainVideoTabSelection: .constant(2))
           .environmentObject(apiViewModel)
+          .environmentObject(tabbarModel)
       } label: {
         personRow(
           isFollowed: .constant(true),

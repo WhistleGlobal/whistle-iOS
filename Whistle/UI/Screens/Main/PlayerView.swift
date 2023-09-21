@@ -23,6 +23,7 @@ protocol ViewLifecycleDelegate {
 
 struct PlayerView: View {
   @EnvironmentObject var apiViewModel: APIViewModel
+  @EnvironmentObject var tabbarModel: TabbarModel
   let lifecycleDelegate: ViewLifecycleDelegate?
   @State var newId = UUID()
   @State var mainVideoTabSelection = 0
@@ -32,7 +33,6 @@ struct PlayerView: View {
   @Binding var showFollowToast: (Bool, String)
   @Binding var currentVideoUserId: Int
   @Binding var currentVideoContentId: Int
-  @Binding var tabWidth: CGFloat
 
   var body: some View {
     VStack(spacing: 0) {
@@ -73,7 +73,7 @@ struct PlayerView: View {
               endPoint: .bottom)
               .frame(maxWidth: .infinity, maxHeight: .infinity)
               .allowsHitTesting(false)
-            if tabWidth != 56 {
+            if tabbarModel.tabWidth != 56 {
               userInfo(
                 contentId: content.contentId ?? 0,
                 userName: content.userName ?? "",
@@ -103,6 +103,7 @@ struct PlayerView: View {
           .tag(0)
           UserProfileView(userId: currentVideoUserId, mainVideoTabSelection: $mainVideoTabSelection)
             .environmentObject(apiViewModel)
+            .environmentObject(tabbarModel)
             .tag(1)
         }
         .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
@@ -141,6 +142,7 @@ extension PlayerView {
             NavigationLink {
               UserProfileView(userId: currentVideoUserId, mainVideoTabSelection: .constant(2))
                 .environmentObject(apiViewModel)
+                .environmentObject(tabbarModel)
             } label: {
               Group {
                 profileImageView(url: profileImg, size: 36)

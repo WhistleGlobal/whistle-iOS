@@ -30,12 +30,10 @@ struct ProfileView: View {
   @State var tabSelection: profileTabCase = .myVideo
   @State var showSignoutAlert = false
   @State var showDeleteAlert = false
-  @Binding var tabbarOpacity: Double
-  @Binding var tabBarSelection: TabSelection
-  @Binding var tabWidth: CGFloat
   @Binding var isFirstProfileLoaded: Bool
   @EnvironmentObject var apiViewModel: APIViewModel
   @EnvironmentObject var userAuth: UserAuth
+  @EnvironmentObject var tabbarModel: TabbarModel
 
   var body: some View {
     ZStack {
@@ -93,12 +91,14 @@ struct ProfileView: View {
                 NavigationLink {
                   MyContentListView(
                     currentIndex: index,
-                    tabSelection: $tabBarSelection,
-                    tabbarOpacity: $tabbarOpacity,
-                    tabWidth: $tabWidth)
+                    tabSelection: $tabbarModel.tabSelection,
+                    tabbarOpacity: $tabbarModel.tabbarOpacity,
+                    tabWidth: $tabbarModel.tabWidth)
                     .environmentObject(apiViewModel)
+                    .environmentObject(tabbarModel)
                 } label: {
                   videoThumbnailView(thumbnailUrl: content.thumbnailUrl ?? "", viewCount: content.contentViewCount ?? 0)
+                    .environmentObject(tabbarModel)
                 }
               }
             }
@@ -117,6 +117,7 @@ struct ProfileView: View {
                   log("video clicked")
                 } label: {
                   videoThumbnailView(thumbnailUrl: content.thumbnailUrl, viewCount: content.viewCount)
+                    .environmentObject(tabbarModel)
                 }
               }
             }
@@ -144,7 +145,7 @@ struct ProfileView: View {
           .onChange(of: isShowingBottomSheet) { newValue in
             if !newValue {
               DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-                tabbarOpacity = 1
+                tabbarModel.tabbarOpacity = 1
               }
             }
           }
@@ -156,7 +157,7 @@ struct ProfileView: View {
                     isShowingBottomSheet = false
                   }
                   DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-                    tabbarOpacity = 1
+                    tabbarModel.tabbarOpacity = 1
                   }
                 }
               })
@@ -199,7 +200,7 @@ extension ProfileView {
       HStack {
         Spacer()
         Button {
-          self.tabbarOpacity = 0
+          tabbarModel.tabbarOpacity = 0
           withAnimation {
             self.isShowingBottomSheet = true
           }
@@ -258,6 +259,7 @@ extension ProfileView {
         NavigationLink {
           FollowView()
             .environmentObject(apiViewModel)
+            .environmentObject(tabbarModel)
         } label: {
           VStack(spacing: 4) {
             Text("\(apiViewModel.myFollow.followerCount)")
@@ -313,7 +315,7 @@ extension ProfileView {
       .foregroundColor(.LabelColor_Primary_Dark)
     Button {
       withAnimation {
-        tabBarSelection = .upload
+        tabbarModel.tabSelection = .upload
       }
     } label: {
       Text("업로드하러 가기")

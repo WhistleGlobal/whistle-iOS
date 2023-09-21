@@ -22,6 +22,7 @@ struct UserProfileView: View {
   @State var showPasteToast = false
   let userId: Int
   @Binding var mainVideoTabSelection: Int
+  @EnvironmentObject var tabbarModel: TabbarModel
 
   var body: some View {
     ZStack {
@@ -57,9 +58,13 @@ struct UserProfileView: View {
               GridItem(.flexible()),
             ], spacing: 20) {
               ForEach(apiViewModel.userPostFeed, id: \.self) { content in
-                videoThumbnailView(
-                  thumbnailUrl: content.thumbnailUrl ?? "",
-                  viewCount: content.contentViewCount ?? 0)
+                NavigationLink {
+                  EmptyView()
+                } label: {
+                  videoThumbnailView(
+                    thumbnailUrl: content.thumbnailUrl ?? "",
+                    viewCount: content.contentViewCount ?? 0)
+                }
               }
             }
           }
