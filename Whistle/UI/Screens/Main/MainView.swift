@@ -11,7 +11,7 @@ import SwiftUI
 struct MainView: View {
 
   @EnvironmentObject var apiViewModel: APIViewModel
-    @EnvironmentObject var tabbarModel: TabbarModel
+  @EnvironmentObject var tabbarModel: TabbarModel
   @State var videoIndex = 0
   @State var currentVideoIndex = 0
   @State var showDialog = false

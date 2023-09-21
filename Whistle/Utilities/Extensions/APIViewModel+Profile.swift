@@ -182,13 +182,17 @@ extension APIViewModel: ProfileProtocol {
       AF.request(
         "\(domainUrl)/user/\(userId)/follow-list",
         method: .get,
-        headers: contentTypeJson)
+        headers: contentTypeXwwwForm)
         .validate(statusCode: 200...300)
-        .responseData { response in
+        .response { response in
           switch response.result {
           case .success(let data):
             do {
-              self.userFollow = try self.decoder.decode(UserFollow.self, from: data)
+              self.userFollow = try self.decoder.decode(UserFollow.self, from: data ?? .init())
+              log(self.userFollow.followerCount)
+              log(self.userFollow.followerCount)
+              log(self.userFollow.followerList)
+              log(self.userFollow.followingList)
               continuation.resume()
             } catch {
               log("Error decoding JSON: \(error)")
