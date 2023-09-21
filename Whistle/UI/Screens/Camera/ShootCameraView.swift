@@ -19,17 +19,18 @@ struct ShootCameraView: View {
   var body: some View {
     ZStack {
       // 카메라 프리뷰 또는 녹화된 동영상 프리뷰 표시
-      if let videoURL = recordedVideoURL {
-        VideoPlayer(player: AVPlayer(url: videoURL))
-          .onAppear {
-            let player = AVPlayer(url: videoURL)
-            player.play()
-          }
-          .onDisappear {
-            let player = AVPlayer(url: videoURL)
-            player.pause()
-          }
-      } else {
+        // 인트 수정
+        if let videoURL = viewModel.recordedVideoURL {
+                VideoPlayer(player: AVPlayer(url: videoURL))
+                  .onAppear {
+                    let player = AVPlayer(url: videoURL)
+                    player.play()
+                  }
+                  .onDisappear {
+                    let player = AVPlayer(url: videoURL)
+                    player.pause()
+                  }
+              } else {
         viewModel.preview?
           .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity)
           .edgesIgnoringSafeArea(.all)

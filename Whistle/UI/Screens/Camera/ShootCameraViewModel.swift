@@ -15,6 +15,9 @@ class ShootCameraViewModel: NSObject, ObservableObject {
   let session: AVCaptureSession
   @Published var preview: Preview?
 
+    // 인트 추가
+    @Published var recordedVideoURL: URL?
+
   override init() {
     session = AVCaptureSession()
 
@@ -72,15 +75,17 @@ class ShootCameraViewModel: NSObject, ObservableObject {
 
 // MARK: AVCaptureFileOutputRecordingDelegate
 
+// 인트 수정
 extension ShootCameraViewModel: AVCaptureFileOutputRecordingDelegate {
-  func fileOutput(
-    _: AVCaptureFileOutput,
-    didFinishRecordingTo _: URL,
-    from _: [AVCaptureConnection],
-    error _: Error?)
-  {
-    print("Video record is finished!")
-  }
+    func fileOutput(
+        _: AVCaptureFileOutput,
+        didFinishRecordingTo outputFileURL: URL,
+        from _: [AVCaptureConnection],
+        error _: Error?)
+      {
+        print("영상 촬영 완료!")
+        recordedVideoURL = outputFileURL  // 촬영된 영상의 URL 저장
+      }
 }
 
 
