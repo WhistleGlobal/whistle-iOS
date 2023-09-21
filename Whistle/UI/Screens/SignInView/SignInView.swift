@@ -19,6 +19,8 @@ import SwiftUI
 struct SignInView: View {
 
   @StateObject var appleSignInViewModel = AppleSignInViewModel()
+  @State var showTermsOfService = false
+  @State var showPrivacyPolicy = false
   @EnvironmentObject var userAuth: UserAuth
   let keychain = KeychainSwift()
 
@@ -47,12 +49,16 @@ struct SignInView: View {
           .fontSystem(fontDesignSystem: .caption_KO_Regular)
           .foregroundColor(.LabelColor_Primary_Dark)
         HStack(spacing: 16) {
-          Button { } label: {
+          Button {
+            showTermsOfService = true
+          } label: {
             Text("이용약관")
               .font(.system(size: 12, weight: .semibold))
               .underline(true, color: .LabelColor_Primary_Dark)
           }
-          Button { } label: {
+          Button {
+            showPrivacyPolicy = true
+          } label: {
             Text("개인정보처리방침")
               .font(.system(size: 12, weight: .semibold))
               .underline(true, color: .LabelColor_Primary_Dark)
@@ -61,6 +67,12 @@ struct SignInView: View {
         .foregroundColor(.LabelColor_Primary_Dark)
         .padding(.bottom, 16)
       }
+    }
+    .navigationDestination(isPresented: $showTermsOfService) {
+      TermsOfServiceView()
+    }
+    .navigationDestination(isPresented: $showPrivacyPolicy) {
+      PrivacyPolicyView()
     }
   }
 }
