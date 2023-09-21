@@ -108,6 +108,8 @@
 		78E1755B2ABA802000731259 /* PrivacyPolicyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78E1755A2ABA802000731259 /* PrivacyPolicyView.swift */; };
 		78E1755E2ABA838200731259 /* MarkdownUI in Frameworks */ = {isa = PBXBuildFile; productRef = 78E1755D2ABA838200731259 /* MarkdownUI */; };
 		78E175602ABA8DE100731259 /* TermsOfServiceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78E1755F2ABA8DE100731259 /* TermsOfServiceView.swift */; };
+		78E175622ABBE8F400731259 /* whistleSignInBackground.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = 78E175612ABBE8F400731259 /* whistleSignInBackground.mp4 */; };
+		78E175642ABBEF4500731259 /* SignInPlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78E175632ABBEF4500731259 /* SignInPlayerView.swift */; };
 		78E19B122AACE73D001DD3C8 /* ReportedContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78E19B112AACE73D001DD3C8 /* ReportedContent.swift */; };
 		78E738CA2AA9A90F00480046 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = 78E738C92AA9A90F00480046 /* Kingfisher */; };
 		78F41A5D2AA70626004A7BFC /* PhotoModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78F41A5C2AA70626004A7BFC /* PhotoModel.swift */; };
@@ -222,6 +224,8 @@
 		78DDADF92AA1A37F00960552 /* AppKeys.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppKeys.swift; sourceTree = "<group>"; };
 		78E1755A2ABA802000731259 /* PrivacyPolicyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivacyPolicyView.swift; sourceTree = "<group>"; };
 		78E1755F2ABA8DE100731259 /* TermsOfServiceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TermsOfServiceView.swift; sourceTree = "<group>"; };
+		78E175612ABBE8F400731259 /* whistleSignInBackground.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = whistleSignInBackground.mp4; sourceTree = "<group>"; };
+		78E175632ABBEF4500731259 /* SignInPlayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInPlayerView.swift; sourceTree = "<group>"; };
 		78E19B112AACE73D001DD3C8 /* ReportedContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportedContent.swift; sourceTree = "<group>"; };
 		78F41A5C2AA70626004A7BFC /* PhotoModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoModel.swift; sourceTree = "<group>"; };
 		78F41A5E2AA70639004A7BFC /* PhotoViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoViewModel.swift; sourceTree = "<group>"; };
@@ -395,6 +399,7 @@
 			isa = PBXGroup;
 			children = (
 				1B08DCC42AA1873000CA1DE1 /* newjeans.mp3 */,
+				78E175612ABBE8F400731259 /* whistleSignInBackground.mp4 */,
 				78D148D12A9E0A2600DDCE48 /* Fonts */,
 				1B3955432A95069D00BCB4DF /* Assets.xcassets */,
 				1B3955592A95094900BCB4DF /* Colors */,
@@ -432,6 +437,7 @@
 			isa = PBXGroup;
 			children = (
 				780139892AA127AE00D5FBDB /* SignInView.swift */,
+				78E175632ABBEF4500731259 /* SignInPlayerView.swift */,
 			);
 			path = SignInView;
 			sourceTree = "<group>";
@@ -632,6 +638,7 @@
 				78D148D62A9E0A3600DDCE48 /* SF-Pro.ttf in Resources */,
 				1B3955472A95069D00BCB4DF /* Preview Assets.xcassets in Resources */,
 				1B3955442A95069D00BCB4DF /* Assets.xcassets in Resources */,
+				78E175622ABBE8F400731259 /* whistleSignInBackground.mp4 in Resources */,
 				78D148D92A9E0A3600DDCE48 /* SF-Pro-Text-Semibold.otf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -721,6 +728,7 @@
 				78D85E522AB2D9F800B3AD6E /* ReportReasonView.swift in Sources */,
 				1BE8EA082AAE595000EB0A55 /* MusicListView.swift in Sources */,
 				1B39555D2A95098100BCB4DF /* VideoModel.swift in Sources */,
+				78E175642ABBEF4500731259 /* SignInPlayerView.swift in Sources */,
 				1B39555B2A95095500BCB4DF /* ColorManager.swift in Sources */,
 				786CFEAF2AAC4DCF00DB2ADD /* UserProfileView.swift in Sources */,
 				787C8AE02AB3293C00723085 /* ReportDetailView.swift in Sources */,

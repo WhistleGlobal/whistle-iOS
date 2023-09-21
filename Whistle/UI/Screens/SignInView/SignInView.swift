@@ -6,6 +6,8 @@
 //
 
 import _AuthenticationServices_SwiftUI
+import _AVKit_SwiftUI
+import AVFoundation
 import GoogleSignIn
 import GoogleSignInSwift
 import KeychainSwift
@@ -27,13 +29,38 @@ struct SignInView: View {
   private var customViewModel = GoogleSignInButtonViewModel(scheme: .light, style: .wide, state: .normal)
 
   var body: some View {
-    VStack {
-      GoogleSignInButton(viewModel: customViewModel, action: handleSignInButton)
-        .frame(maxWidth: 300, maxHeight: 45)
-      SignInWithAppleButton(
-        onRequest: appleSignInViewModel.configureRequest,
-        onCompletion: appleSignInViewModel.handleResult)
-        .frame(maxWidth: 300, maxHeight: 45)
+    ZStack {
+      SignInPlayerView()
+        .ignoresSafeArea()
+        .allowsTightening(false)
+      VStack(spacing: 0) {
+        Spacer()
+        GoogleSignInButton(viewModel: customViewModel, action: handleSignInButton)
+          .frame(maxWidth: 300, maxHeight: 45)
+          .padding(.bottom, 16)
+        SignInWithAppleButton(
+          onRequest: appleSignInViewModel.configureRequest,
+          onCompletion: appleSignInViewModel.handleResult)
+          .frame(maxWidth: 300, maxHeight: 45)
+          .padding(.bottom, 24)
+        Text("가입을 진행할 경우, 아래의 정책에 대해 동의한 것으로 간주합니다.")
+          .fontSystem(fontDesignSystem: .caption_KO_Regular)
+          .foregroundColor(.LabelColor_Primary_Dark)
+        HStack(spacing: 16) {
+          Button { } label: {
+            Text("이용약관")
+              .font(.system(size: 12, weight: .semibold))
+              .underline(true, color: .LabelColor_Primary_Dark)
+          }
+          Button { } label: {
+            Text("개인정보처리방침")
+              .font(.system(size: 12, weight: .semibold))
+              .underline(true, color: .LabelColor_Primary_Dark)
+          }
+        }
+        .foregroundColor(.LabelColor_Primary_Dark)
+        .padding(.bottom, 16)
+      }
     }
   }
 }
