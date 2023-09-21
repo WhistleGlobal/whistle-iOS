@@ -292,7 +292,7 @@ extension APIViewModel: PostFeedProtocol {
   }
 
   // FIXME: - 중복신고 반환 처리하도록 추후 수정
-  func reportContent(userId: Int, contentId: Int, reportReason: Int, reportDescription: String) async -> Bool {
+  func reportContent(userId: Int, contentId: Int, reportReason: Int, reportDescription: String) async -> Int {
     let params: [String: Any] = [
       "user_id" : "\(userId)",
       "report_reason" : "\(reportReason)",
@@ -310,10 +310,10 @@ extension APIViewModel: PostFeedProtocol {
           switch response.result {
           case .success(let data):
             log(data)
-            continuation.resume(returning: true)
+            continuation.resume(returning: 200)
           case .failure(let error):
             log(error)
-            continuation.resume(returning: false)
+            continuation.resume(returning: error.responseCode ?? 500)
           }
         }
     }

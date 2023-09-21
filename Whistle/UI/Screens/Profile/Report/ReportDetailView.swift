@@ -54,12 +54,23 @@ struct ReportDetailView: View {
           showAlert = false
         } reportAction: {
           if reportCategory == .post {
-            log("콘텐츠 신고 : \(reportReason)")
+            Task {
+              let reportSuccess = await apiViewModel.reportContent(
+                userId: userId,
+                contentId: selectedContentId,
+                reportReason: reportReason,
+                reportDescription: inputReportDetail)
+              if reportSuccess == 200 {
+                goReport = true
+              } else if reportSuccess == 400 {
+                log("중복")
+              } else {
+                log("서버 통신 실패")
+              }
+            }
+            goComplete = true
           } else {
             Task {
-              log(selectedContentId)
-              log(reportReason)
-              log(inputReportDetail)
               let statusCode = await apiViewModel.reportUser(
                 usedId: userId,
                 contentId: selectedContentId,

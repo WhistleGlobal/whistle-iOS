@@ -58,9 +58,13 @@ struct MainReportDetailView: View {
               contentId: contentId,
               reportReason: reportReason,
               reportDescription: inputReportDetail)
-            if reportSuccess {
+            if reportSuccess == 200 {
               goComplete = true
+            } else if reportSuccess == 400 {
+              log("중복")
+              showAlert = false
             } else {
+              log("서버 통신 실패")
               showAlert = false
             }
           }
