@@ -180,7 +180,7 @@ extension UserProfileView {
         }
         Rectangle().frame(width: 1, height: 36).foregroundColor(.white)
         NavigationLink {
-          FollowView(userId: userId)
+          UserFollowView(userId: userId)
             .environmentObject(apiViewModel)
             .environmentObject(tabbarModel)
         } label: {
