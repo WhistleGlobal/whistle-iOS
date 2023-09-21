@@ -10,12 +10,15 @@ import SwiftUI
 struct ReportDetailView: View {
 
   @Environment(\.dismiss) var dismiss
+  @EnvironmentObject var apiViewModel: APIViewModel
   @Binding var goReport: Bool
+  @Binding var selectedContentId: Int
   @State var goComplete = false
   @State var showAlert = false
   @State var inputReportDetail = ""
   let reportCategory: ReportUserView.ReportCategory
   let reportReason: Int
+  let userId: Int
 
   var body: some View {
     VStack(spacing: 0) {
@@ -53,7 +56,24 @@ struct ReportDetailView: View {
           if reportCategory == .post {
             log("콘텐츠 신고 : \(reportReason)")
           } else {
-            log("계정 신고 : \(reportReason)")
+            Task {
+              log(selectedContentId)
+              log(reportReason)
+              log(inputReportDetail)
+              let statusCode = await apiViewModel.reportUser(
+                usedId: userId,
+                contentId: selectedContentId,
+                reportReason: reportReason,
+                reportDescription: inputReportDetail)
+              log(statusCode)
+              if statusCode == 200 {
+                goReport = true
+              } else if statusCode == 400 {
+                log("중복입니다.")
+              } else {
+                log("서버 통신에 실패하였습니다.")
+              }
+            }
           }
           goComplete = true
         }

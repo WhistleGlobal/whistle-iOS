@@ -16,6 +16,7 @@ struct ReportPostView: View {
   @EnvironmentObject var apiViewModel: APIViewModel
   @State var isSelected = false
   @State var selectedIndex = 0
+  @Binding var selectedContentId: Int
   @State var dummySet: [Color] = [Color.blue, Color.red, Color.green, Color.Blue_Pressed]
   @Binding var goReport: Bool
   let userId: Int
@@ -34,6 +35,7 @@ struct ReportPostView: View {
             if let url = content.thumbnailUrl {
               Button {
                 selectedIndex = index
+                selectedContentId = apiViewModel.userPostFeed[index].contentId ?? 0
               } label: {
                 videoThumbnail(url: url, index: index)
                   .onAppear {
@@ -64,9 +66,20 @@ struct ReportPostView: View {
         NavigationLink {
           switch reportCategory {
           case .post:
-            ReportReasonView(goReport: $goReport, userId: userId, reportCategory: .post)
+            ReportReasonView(
+              goReport: $goReport,
+              selectedContentId: $selectedContentId,
+              userId: userId,
+              reportCategory: .post)
+              .environmentObject(apiViewModel)
           case .user:
-            ReportDetailView(goReport: $goReport, reportCategory: .post, reportReason: reportReason ?? 0)
+            ReportDetailView(
+              goReport: $goReport,
+              selectedContentId: $selectedContentId,
+              reportCategory: .user,
+              reportReason: reportReason ?? 0,
+              userId: userId)
+              .environmentObject(apiViewModel)
           }
         } label: {
           Text("다음")
@@ -78,9 +91,6 @@ struct ReportPostView: View {
     }
     .task {
       await apiViewModel.requestUserPostFeed(userId: userId)
-    }
-    .navigationDestination(isPresented: .constant(false)) {
-      ReportDetailView(goReport: $goReport, reportCategory: .user, reportReason: reportReason ?? 0)
     }
   }
 }

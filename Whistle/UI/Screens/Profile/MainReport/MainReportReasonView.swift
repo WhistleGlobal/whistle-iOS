@@ -16,6 +16,7 @@ struct MainReportReasonView: View {
   @Binding var goReport: Bool
   @State var goComplete = false
   let contentId: Int
+  let userId: Int
 
   var body: some View {
     NavigationStack {
@@ -53,7 +54,7 @@ struct MainReportReasonView: View {
         Divider().frame(width: UIScreen.width)
         ForEach(PostReportReason.allCases, id: \.self) { reason in
           NavigationLink {
-            MainReportDetailView(goReport: $goReport ,reportReason: reason.numericValue, contentId: contentId)
+            MainReportDetailView(goReport: $goReport ,reportReason: reason.numericValue, contentId: contentId, uesrId: userId)
               .environmentObject(apiViewModel)
           } label: {
             reportRow(text: reason.rawValue)

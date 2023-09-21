@@ -291,13 +291,11 @@ extension APIViewModel: PostFeedProtocol {
     }
   }
 
-  func reportContent(contentId: Int, reportReason: Int, reportDescription: String) async -> Bool {
-      log(contentId)
-      log(reportReason)
-      log(reportDescription)
+  // FIXME: - 중복신고 반환 처리하도록 추후 수정
+  func reportContent(userId: Int, contentId: Int, reportReason: Int, reportDescription: String) async -> Bool {
     let params: [String: Any] = [
-      "content_id" : contentId,
-      "report_reason" : reportReason,
+      "user_id" : "\(userId)",
+      "report_reason" : "\(reportReason)",
       "report_description" : "\(reportDescription)",
     ]
     return await withCheckedContinuation { continuation in
@@ -316,6 +314,33 @@ extension APIViewModel: PostFeedProtocol {
           case .failure(let error):
             log(error)
             continuation.resume(returning: false)
+          }
+        }
+    }
+  }
+
+  func reportUser(usedId: Int, contentId: Int, reportReason: Int, reportDescription: String) async -> Int {
+    let params: [String: Any] = [
+      "content_id" : "\(contentId)",
+      "report_reason" : "\(reportReason)",
+      "report_description" : "\(reportDescription)",
+    ]
+    return await withCheckedContinuation { continuation in
+      AF.request(
+        "\(domainUrl)/report/user/\(usedId)",
+        method: .post,
+        parameters: params,
+        encoding: JSONEncoding.default,
+        headers: contentTypeJson)
+        .validate(statusCode: 200...300)
+        .response { response in
+          switch response.result {
+          case .success(let data):
+            log(data)
+            continuation.resume(returning: 200)
+          case .failure(let error):
+            log(error)
+            continuation.resume(returning: error.responseCode ?? 500)
           }
         }
     }

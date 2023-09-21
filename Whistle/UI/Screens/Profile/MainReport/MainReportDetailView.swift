@@ -17,6 +17,7 @@ struct MainReportDetailView: View {
   @EnvironmentObject var apiViewModel: APIViewModel
   let reportReason: Int
   let contentId: Int
+  let uesrId: Int
 
   var body: some View {
     VStack(spacing: 0) {
@@ -53,6 +54,7 @@ struct MainReportDetailView: View {
         } reportAction: {
           Task {
             let reportSuccess = await apiViewModel.reportContent(
+              userId: uesrId,
               contentId: contentId,
               reportReason: reportReason,
               reportDescription: inputReportDetail)

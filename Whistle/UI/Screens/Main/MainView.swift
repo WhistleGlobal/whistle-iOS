@@ -186,7 +186,11 @@ struct MainView: View {
         .environmentObject(tabbarModel)
     }
     .fullScreenCover(isPresented: $showReport) {
-      MainReportReasonView(goReport: $showReport, contentId: currentVideoContentId)
+      MainReportReasonView(
+        goReport: $showReport,
+        contentId: currentVideoContentId,
+        userId: currentVideoUserId)
+        .environmentObject(apiViewModel)
     }
   }
 }

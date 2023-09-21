@@ -21,5 +21,6 @@ protocol PostFeedProtocol {
   func actionWhistleCancel(contentId: Int) async
   func actionContentHate(contentId: Int) async
   func deleteContent(contentId: Int) async
-  func reportContent(contentId: Int, reportReason: Int, reportDescription: String) async -> Bool
+  func reportContent(userId: Int, contentId: Int, reportReason: Int, reportDescription: String) async -> Bool
+  func reportUser(usedId: Int, contentId: Int, reportReason: Int, reportDescription: String) async -> Int
 }
