@@ -24,9 +24,11 @@ struct FollowView: View {
   @Environment(\.dismiss) var dismiss
   @EnvironmentObject var apiViewModel: APIViewModel
   @EnvironmentObject var tabbarModel: TabbarModel
+  @State var newId = UUID()
   @State var tabStatus: profileTabStatus = .follower
   @State var showOtherProfile = false
   @State var selectedId: Int?
+  @State var showUserProfile = false
   let userId: Int?
 
   var body: some View {
@@ -60,8 +62,16 @@ struct FollowView: View {
         } else {
           if userId != nil {
             userFollowerList()
+              .onReceive(apiViewModel.publisher) { id in
+                newId = id
+              }
+              .id(newId)
           } else {
             myFollowerList()
+              .onReceive(apiViewModel.publisher) { id in
+                newId = id
+              }
+              .id(newId)
           }
         }
       } else {
@@ -71,8 +81,16 @@ struct FollowView: View {
         } else {
           if userId != nil {
             userFollowingList()
+              .onReceive(apiViewModel.publisher) { id in
+                newId = id
+              }
+              .id(newId)
           } else {
             myFollowingList()
+              .onReceive(apiViewModel.publisher) { id in
+                newId = id
+              }
+              .id(newId)
           }
         }
       }
@@ -102,6 +120,12 @@ struct FollowView: View {
       } else {
         await apiViewModel.requestMyFollow()
       }
+      apiViewModel.postFeedPlayerChanged()
+    }
+    .fullScreenCover(isPresented: $showUserProfile) {
+      UserProfileView(userId: selectedId ?? 0)
+        .environmentObject(apiViewModel)
+        .environmentObject(tabbarModel)
     }
   }
 }
@@ -167,10 +191,9 @@ extension FollowView {
   @ViewBuilder
   func myFollowerList() -> some View {
     ForEach(apiViewModel.myFollow.followerList, id: \.userName) { follower in
-      NavigationLink {
-        UserProfileView(userId: follower.followerId)
-          .environmentObject(apiViewModel)
-          .environmentObject(tabbarModel)
+      Button {
+        selectedId = follower.followerId
+        showUserProfile = true
       } label: {
         personRow(
           isFollowed: Binding(get: {
@@ -189,10 +212,9 @@ extension FollowView {
   @ViewBuilder
   func myFollowingList() -> some View {
     ForEach(apiViewModel.myFollow.followingList, id: \.userName) { following in
-      NavigationLink {
-        UserProfileView(userId: following.followingId)
-          .environmentObject(apiViewModel)
-          .environmentObject(tabbarModel)
+      Button {
+        selectedId = following.followingId
+        showUserProfile = true
       } label: {
         personRow(
           isFollowed: .constant(true),
@@ -207,10 +229,9 @@ extension FollowView {
   @ViewBuilder
   func userFollowerList() -> some View {
     ForEach(apiViewModel.userFollow.followerList, id: \.userName) { follower in
-      NavigationLink {
-        UserProfileView(userId: follower.followerId)
-          .environmentObject(apiViewModel)
-          .environmentObject(tabbarModel)
+      Button {
+        selectedId = follower.followerId
+        showUserProfile = true
       } label: {
         personRow(
           isFollowed: Binding(get: {
@@ -229,10 +250,9 @@ extension FollowView {
   @ViewBuilder
   func userFollowingList() -> some View {
     ForEach(apiViewModel.userFollow.followingList, id: \.userName) { following in
-      NavigationLink {
-        UserProfileView(userId: following.followingId)
-          .environmentObject(apiViewModel)
-          .environmentObject(tabbarModel)
+      Button {
+        selectedId = following.followingId
+        showUserProfile = true
       } label: {
         personRow(
           isFollowed: Binding(get: {

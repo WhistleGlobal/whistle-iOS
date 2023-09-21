@@ -24,89 +24,89 @@ struct UserProfileView: View {
   let userId: Int
 
   var body: some View {
-    ZStack {
-      Color.clear.overlay {
-        Image("testCat")
-          .resizable()
-          .scaledToFill()
-          .ignoresSafeArea()
-          .blur(radius: 8)
-      }
-      VStack {
-        Spacer().frame(height: 64)
-        glassProfile(width: UIScreen.width - 32, height: 398, cornerRadius: 32, overlayed: profileInfo(height: 398))
-          .padding(.bottom, 12)
-        if apiViewModel.userPostFeed.isEmpty {
-          Spacer()
-          Image(systemName: "photo.fill")
+    NavigationStack {
+      ZStack {
+        Color.clear.overlay {
+          Image("testCat")
             .resizable()
-            .scaledToFit()
-            .frame(width: 48, height: 48)
-            .foregroundColor(.LabelColor_Primary_Dark)
-            .padding(.bottom, 24)
-          Text("아직 콘텐츠가 없습니다.")
-            .fontSystem(fontDesignSystem: .body1_KO)
-            .foregroundColor(.LabelColor_Primary_Dark)
-            .padding(.bottom, 76)
-          Spacer()
-        } else {
-          ScrollView {
-            LazyVGrid(columns: [
-              GridItem(.flexible()),
-              GridItem(.flexible()),
-              GridItem(.flexible()),
-            ], spacing: 20) {
-              ForEach(Array(apiViewModel.userPostFeed.enumerated()), id: \.element) { index ,content in
-                NavigationLink {
-                  UserContentListView(currentIndex: index)
-                    .environmentObject(apiViewModel)
-                    .environmentObject(tabbarModel)
-                } label: {
-                  videoThumbnailView(
-                    thumbnailUrl: content.thumbnailUrl ?? "",
-                    viewCount: content.contentViewCount ?? 0)
+            .scaledToFill()
+            .ignoresSafeArea()
+            .blur(radius: 8)
+        }
+        VStack {
+          Spacer().frame(height: 64)
+          glassProfile(width: UIScreen.width - 32, height: 398, cornerRadius: 32, overlayed: profileInfo(height: 398))
+            .padding(.bottom, 12)
+          if apiViewModel.userPostFeed.isEmpty {
+            Spacer()
+            Image(systemName: "photo.fill")
+              .resizable()
+              .scaledToFit()
+              .frame(width: 48, height: 48)
+              .foregroundColor(.LabelColor_Primary_Dark)
+              .padding(.bottom, 24)
+            Text("아직 콘텐츠가 없습니다.")
+              .fontSystem(fontDesignSystem: .body1_KO)
+              .foregroundColor(.LabelColor_Primary_Dark)
+              .padding(.bottom, 76)
+            Spacer()
+          } else {
+            ScrollView {
+              LazyVGrid(columns: [
+                GridItem(.flexible()),
+                GridItem(.flexible()),
+                GridItem(.flexible()),
+              ], spacing: 20) {
+                ForEach(Array(apiViewModel.userPostFeed.enumerated()), id: \.element) { index ,content in
+                  NavigationLink {
+                    UserContentListView(currentIndex: index)
+                      .environmentObject(apiViewModel)
+                      .environmentObject(tabbarModel)
+                  } label: {
+                    videoThumbnailView(
+                      thumbnailUrl: content.thumbnailUrl ?? "",
+                      viewCount: content.contentViewCount ?? 0)
+                  }
                 }
               }
             }
+            Spacer()
           }
-          Spacer()
+        }
+        .padding(.horizontal, 16)
+        .ignoresSafeArea()
+      }
+      .confirmationDialog("", isPresented: $showDialog) {
+        Button("프로필 URL 복사", role: .none) {
+          UIPasteboard.general.setValue(
+            "다른 유저 프로필 링크입니다.",
+            forPasteboardType: UTType.plainText.identifier)
+          showPasteToast = true
+        }
+        Button("신고", role: .destructive) {
+          goReport = true
+        }
+        Button("취소", role: .cancel) {
+          log("Cancel")
         }
       }
-      .padding(.horizontal, 16)
-      .ignoresSafeArea()
-    }
-    .navigationBarBackButtonHidden()
-    .confirmationDialog("", isPresented: $showDialog) {
-      Button("프로필 URL 복사", role: .none) {
-        UIPasteboard.general.setValue(
-          "다른 유저 프로필 링크입니다.",
-          forPasteboardType: UTType.plainText.identifier)
-        showPasteToast = true
+      .fullScreenCover(isPresented: $goReport) {
+        ReportUserView(goReport: $goReport, userId: userId)
+          .environmentObject(apiViewModel)
       }
-      Button("신고", role: .destructive) {
-        goReport = true
+      .task {
+        await apiViewModel.requestUserProfile(userId: userId)
+        await apiViewModel.requestUserFollow(userId: userId)
+        await apiViewModel.requestUserWhistlesCount(userId: userId)
+        isFollow = apiViewModel.userProfile.isFollowed == 1 ? true : false
       }
-      Button("취소", role: .cancel) {
-        log("Cancel")
+      .task {
+        await apiViewModel.requestUserPostFeed(userId: userId)
       }
-    }
-    .fullScreenCover(isPresented: $goReport) {
-      ReportUserView(goReport: $goReport, userId: userId)
-        .environmentObject(apiViewModel)
-    }
-    .task {
-      await apiViewModel.requestUserProfile(userId: userId)
-      await apiViewModel.requestUserFollow(userId: userId)
-      await apiViewModel.requestUserWhistlesCount(userId: userId)
-      isFollow = apiViewModel.userProfile.isFollowed == 1 ? true : false
-      log(isFollow)
-    }
-    .task {
-      await apiViewModel.requestUserPostFeed(userId: userId)
-    }
-    .overlay {
-      if showPasteToast {
-        ToastMessage(text: "클립보드에 복사되었어요", paddingBottom: 0, showToast: $showPasteToast)
+      .overlay {
+        if showPasteToast {
+          ToastMessage(text: "클립보드에 복사되었어요", paddingBottom: 0, showToast: $showPasteToast)
+        }
       }
     }
   }

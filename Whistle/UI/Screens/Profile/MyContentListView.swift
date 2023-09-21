@@ -54,7 +54,6 @@ struct MyContentListView: View {
                 .padding()
                 .rotationEffect(Angle(degrees: -90))
                 .ignoresSafeArea(.all, edges: .top)
-
                 .tag(index)
             } else {
               KFImage.url(URL(string: content.thumbnailUrl ?? ""))

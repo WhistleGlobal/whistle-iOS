@@ -41,9 +41,7 @@ struct WhistleApp: App {
           .environmentObject(userAuth)
           .task {
             if isAccess {
-              appleSignInViewModel.userAuth.loadData {
-                log("after Login")
-              }
+              appleSignInViewModel.userAuth.loadData { }
             }
           }
       } else {

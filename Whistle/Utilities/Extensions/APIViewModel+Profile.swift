@@ -21,6 +21,7 @@ extension APIViewModel: ProfileProtocol {
           switch response.result {
           case .success(let success):
             self.myProfile = success
+            log("success")
             continuation.resume()
           case .failure(let failure):
             log(failure)
