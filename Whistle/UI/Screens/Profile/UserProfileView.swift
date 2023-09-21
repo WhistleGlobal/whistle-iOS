@@ -16,13 +16,13 @@ struct UserProfileView: View {
 
   @Environment(\.dismiss) var dismiss
   @EnvironmentObject var apiViewModel: APIViewModel
+    @EnvironmentObject var tabbarModel: TabbarModel
   @State var isFollow = false
   @State var showDialog = false
   @State var goReport = false
   @State var showPasteToast = false
   let userId: Int
   @Binding var mainVideoTabSelection: Int
-  @EnvironmentObject var tabbarModel: TabbarModel
 
   var body: some View {
     ZStack {
@@ -57,9 +57,11 @@ struct UserProfileView: View {
               GridItem(.flexible()),
               GridItem(.flexible()),
             ], spacing: 20) {
-              ForEach(apiViewModel.userPostFeed, id: \.self) { content in
+              ForEach(Array(apiViewModel.userPostFeed.enumerated()), id: \.element) { index ,content in
                 NavigationLink {
-                  EmptyView()
+                  UserContentListView(currentIndex: index)
+                    .environmentObject(apiViewModel)
+                    .environmentObject(tabbarModel)
                 } label: {
                   videoThumbnailView(
                     thumbnailUrl: content.thumbnailUrl ?? "",

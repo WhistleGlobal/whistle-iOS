@@ -21,10 +21,8 @@ struct MyContentListView: View {
   @State var showPasteToast = false
   @State var showDeleteToast = false
   @EnvironmentObject var apiViewModel: APIViewModel
+  @EnvironmentObject var tabbarModel: TabbarModel
   @State var players: [AVPlayer?] = []
-  @Binding var tabSelection: TabSelection
-  @Binding var tabbarOpacity: Double
-  @Binding var tabWidth: CGFloat
 
   var body: some View {
     GeometryReader { proxy in
@@ -87,10 +85,11 @@ struct MyContentListView: View {
     .navigationBarBackButtonHidden()
     .background(.black)
     .onAppear {
-      players.append(AVPlayer(url: URL(string: apiViewModel.myPostFeed[currentIndex].videoUrl ?? "")!))
-      for _ in 0..<apiViewModel.myPostFeed.count - 1 {
+      for _ in 0..<apiViewModel.myPostFeed.count {
         players.append(nil)
       }
+      players[currentIndex] = AVPlayer(url: URL(string: apiViewModel.myPostFeed[currentIndex].videoUrl ?? "")!)
+      playerIndex = currentIndex
       guard let player = players[currentIndex] else {
         return
       }
@@ -116,16 +115,16 @@ struct MyContentListView: View {
     .overlay {
       VStack {
         Spacer()
-        glassMorphicTab(width: tabWidth)
+        glassMorphicTab(width: tabbarModel.tabWidth)
           .overlay {
-            if tabWidth != 56 {
+            if tabbarModel.tabWidth != 56 {
               tabItems()
             } else {
               HStack(spacing: 0) {
                 Spacer().frame(minWidth: 0)
                 Button {
                   withAnimation {
-                    tabWidth = UIScreen.width - 32
+                    tabbarModel.tabWidth = UIScreen.width - 32
                   }
                 } label: {
                   Circle()
@@ -152,13 +151,13 @@ struct MyContentListView: View {
                 if value.translation.width > 50 {
                   log("right swipe")
                   withAnimation {
-                    tabWidth = 56
+                    tabbarModel.tabWidth = 56
                   }
                 }
               })
       }
       .padding(.horizontal, 16)
-      .opacity(tabbarOpacity)
+      .opacity(tabbarModel.tabbarOpacity)
     }
     .overlay {
       if showPasteToast {
@@ -319,14 +318,14 @@ extension MyContentListView {
     RoundedRectangle(cornerRadius: 100)
       .foregroundColor(Color.Dim_Default)
       .frame(width: (UIScreen.width - 32) / 3 - 6)
-      .offset(x: tabSelection.rawValue * ((UIScreen.width - 32) / 3))
+      .offset(x: tabbarModel.tabSelection.rawValue * ((UIScreen.width - 32) / 3))
       .padding(3)
       .overlay(
         Capsule()
           .stroke(lineWidth: 1)
           .foregroundStyle(LinearGradient.Border_Glass)
           .padding(3)
-          .offset(x: tabSelection.rawValue * ((UIScreen.width - 32) / 3)))
+          .offset(x: tabbarModel.tabSelection.rawValue * ((UIScreen.width - 32) / 3)))
       .foregroundColor(.clear)
       .frame(height: 56)
       .frame(maxWidth: .infinity)
@@ -335,7 +334,7 @@ extension MyContentListView {
           Task {
             dismiss()
             withAnimation {
-              self.tabSelection = .main
+              tabbarModel.tabSelection = .main
             }
           }
         } label: {
@@ -354,9 +353,8 @@ extension MyContentListView {
         Button {
           dismiss()
           withAnimation {
-            self.tabSelection = .upload
+            tabbarModel.tabSelection = .upload
           }
-
         } label: {
           Color.clear.overlay {
             Image(systemName: "plus")

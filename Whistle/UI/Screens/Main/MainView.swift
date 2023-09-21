@@ -11,7 +11,7 @@ import SwiftUI
 struct MainView: View {
 
   @EnvironmentObject var apiViewModel: APIViewModel
-
+    @EnvironmentObject var tabbarModel: TabbarModel
   @State var videoIndex = 0
   @State var currentVideoIndex = 0
   @State var showDialog = false
@@ -22,7 +22,6 @@ struct MainView: View {
   @State var currentVideoUserId = 0
   @State var currentVideoContentId = 0
   @State var isShowingBottomSheet = false
-  @EnvironmentObject var tabbarModel: TabbarModel
 
   var body: some View {
     ZStack {

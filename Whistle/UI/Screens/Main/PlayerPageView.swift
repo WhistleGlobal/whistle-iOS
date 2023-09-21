@@ -114,7 +114,8 @@ struct PlayerPageView: UIViewRepresentable {
         currentVideoUserId: $currentVideoUserId,
         currentVideoContentId: $currentVideoContentId)
         .environmentObject(apiViewModel)
-        .environmentObject(tabbarModel))
+        .environmentObject(tabbarModel)
+    )
     childView.view.frame = CGRect(
       x: 0,
       y: 0,

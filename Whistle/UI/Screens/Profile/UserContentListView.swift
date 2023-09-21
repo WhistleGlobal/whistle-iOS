@@ -14,17 +14,15 @@ import SwiftUI
 struct UserContentListView: View {
 
   @Environment(\.dismiss) var dismiss
+  @EnvironmentObject var apiViewModel: APIViewModel
+  @EnvironmentObject var tabbarModel: TabbarModel
   @State var currentIndex = 0
   @State var newId = UUID()
   @State var playerIndex = 0
   @State var showDialog = false
   @State var showPasteToast = false
   @State var showDeleteToast = false
-  @EnvironmentObject var apiViewModel: APIViewModel
   @State var players: [AVPlayer?] = []
-  @Binding var tabSelection: TabSelection
-  @Binding var tabbarOpacity: Double
-  @Binding var tabWidth: CGFloat
 
   var body: some View {
     GeometryReader { proxy in
@@ -35,9 +33,10 @@ struct UserContentListView: View {
               Player(player: player)
                 .frame(width: proxy.size.width)
                 .overlay {
-                  // TODO: - contentId 백엔드 수정 필요, contentId & whistleCount
                   userInfo(
                     contentId: content.contentId ?? 0,
+                    userName: content.userName ?? "",
+                    profileImg: content.profileImg ?? "",
                     caption: content.caption ?? "",
                     musicTitle: content.musicTitle ?? "",
                     isWhistled:
@@ -56,7 +55,6 @@ struct UserContentListView: View {
                 .padding()
                 .rotationEffect(Angle(degrees: -90))
                 .ignoresSafeArea(.all, edges: .top)
-
                 .tag(index)
             } else {
               KFImage.url(URL(string: content.thumbnailUrl ?? ""))
@@ -87,15 +85,23 @@ struct UserContentListView: View {
     .navigationBarBackButtonHidden()
     .background(.black)
     .onAppear {
-      players.append(AVPlayer(url: URL(string: apiViewModel.userPostFeed[currentIndex].videoUrl ?? "")!))
-      for _ in 0..<apiViewModel.userPostFeed.count - 1 {
+      log("apiViewModel.userPostFeed : \(apiViewModel.userPostFeed)")
+      log("apiViewModel.userPostFeed.count : \(apiViewModel.userPostFeed.count)")
+      log("currentIndex : \(currentIndex)")
+      log("")
+      for _ in 0..<apiViewModel.userPostFeed.count {
         players.append(nil)
       }
+      log("players : \(players)")
+      players[currentIndex] = AVPlayer(url: URL(string: apiViewModel.userPostFeed[currentIndex].videoUrl ?? "")!)
+      log("players : \(players)")
+      playerIndex = currentIndex
       guard let player = players[currentIndex] else {
         return
       }
       player.seek(to: .zero)
       player.play()
+      apiViewModel.postFeedPlayerChanged()
     }
     .onChange(of: currentIndex) { newValue in
       log(playerIndex)
@@ -116,16 +122,16 @@ struct UserContentListView: View {
     .overlay {
       VStack {
         Spacer()
-        glassMorphicTab(width: tabWidth)
+        glassMorphicTab(width: tabbarModel.tabWidth)
           .overlay {
-            if tabWidth != 56 {
+            if tabbarModel.tabWidth != 56 {
               tabItems()
             } else {
               HStack(spacing: 0) {
                 Spacer().frame(minWidth: 0)
                 Button {
                   withAnimation {
-                    tabWidth = UIScreen.width - 32
+                    tabbarModel.tabWidth = UIScreen.width - 32
                   }
                 } label: {
                   Circle()
@@ -152,13 +158,13 @@ struct UserContentListView: View {
                 if value.translation.width > 50 {
                   log("right swipe")
                   withAnimation {
-                    tabWidth = 56
+                    tabbarModel.tabWidth = 56
                   }
                 }
               })
       }
       .padding(.horizontal, 16)
-      .opacity(tabbarOpacity)
+      .opacity(tabbarModel.tabbarOpacity)
     }
     .overlay {
       if showPasteToast {
@@ -167,15 +173,15 @@ struct UserContentListView: View {
       if showDeleteToast {
         CancelableToastMessage(text: "삭제되었습니다", paddingBottom: 78, action: {
           Task {
-            guard let contentId = apiViewModel.myPostFeed[currentIndex].contentId else { return }
+            guard let contentId = apiViewModel.userPostFeed[currentIndex].contentId else { return }
             log("contentId: \(contentId)")
             log("currentIndex: \(currentIndex)")
             log("playerIndex: \(playerIndex)")
-            apiViewModel.myPostFeed.remove(at: currentIndex)
+            apiViewModel.userPostFeed.remove(at: currentIndex)
             players[currentIndex]?.pause()
             players.remove(at: currentIndex)
             if !players.isEmpty {
-              players[currentIndex] = AVPlayer(url: URL(string: apiViewModel.myPostFeed[currentIndex].videoUrl ?? "")!)
+              players[currentIndex] = AVPlayer(url: URL(string: apiViewModel.userPostFeed[currentIndex].videoUrl ?? "")!)
               await players[currentIndex]?.seek(to: .zero)
               players[currentIndex]?.play()
             }
@@ -204,6 +210,8 @@ extension UserContentListView {
   @ViewBuilder
   func userInfo(
     contentId: Int?,
+    userName: String,
+    profileImg: String,
     caption: String,
     musicTitle: String,
     isWhistled: Binding<Bool>,
@@ -236,9 +244,9 @@ extension UserContentListView {
           Spacer()
           HStack(spacing: 0) {
             Group {
-              profileImageView(url: apiViewModel.myProfile.profileImage, size: 36)
+              profileImageView(url: profileImg, size: 36)
                 .padding(.trailing, 12)
-              Text(apiViewModel.myProfile.userName)
+              Text(userName)
                 .foregroundColor(.white)
                 .fontSystem(fontDesignSystem: .subtitle1)
                 .padding(.trailing, 16)
@@ -319,14 +327,14 @@ extension UserContentListView {
     RoundedRectangle(cornerRadius: 100)
       .foregroundColor(Color.Dim_Default)
       .frame(width: (UIScreen.width - 32) / 3 - 6)
-      .offset(x: tabSelection.rawValue * ((UIScreen.width - 32) / 3))
+      .offset(x: tabbarModel.tabSelection.rawValue * ((UIScreen.width - 32) / 3))
       .padding(3)
       .overlay(
         Capsule()
           .stroke(lineWidth: 1)
           .foregroundStyle(LinearGradient.Border_Glass)
           .padding(3)
-          .offset(x: tabSelection.rawValue * ((UIScreen.width - 32) / 3)))
+          .offset(x: tabbarModel.tabSelection.rawValue * ((UIScreen.width - 32) / 3)))
       .foregroundColor(.clear)
       .frame(height: 56)
       .frame(maxWidth: .infinity)
@@ -335,7 +343,7 @@ extension UserContentListView {
           Task {
             dismiss()
             withAnimation {
-              self.tabSelection = .main
+              tabbarModel.tabSelection = .main
             }
           }
         } label: {
@@ -354,7 +362,7 @@ extension UserContentListView {
         Button {
           dismiss()
           withAnimation {
-            self.tabSelection = .upload
+            tabbarModel.tabSelection = .upload
           }
 
         } label: {

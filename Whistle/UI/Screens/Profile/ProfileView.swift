@@ -89,11 +89,7 @@ struct ProfileView: View {
             ], spacing: 20) {
               ForEach(Array(apiViewModel.myPostFeed.enumerated()), id: \.element) { index, content in
                 NavigationLink {
-                  MyContentListView(
-                    currentIndex: index,
-                    tabSelection: $tabbarModel.tabSelection,
-                    tabbarOpacity: $tabbarModel.tabbarOpacity,
-                    tabWidth: $tabbarModel.tabWidth)
+                  MyContentListView(currentIndex: index)
                     .environmentObject(apiViewModel)
                     .environmentObject(tabbarModel)
                 } label: {
