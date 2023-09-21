@@ -53,7 +53,8 @@ struct MainReportReasonView: View {
         Divider().frame(width: UIScreen.width)
         ForEach(PostReportReason.allCases, id: \.self) { reason in
           NavigationLink {
-            MainReportDetailView(goReport: $goReport ,reportReason: reason.numericValue)
+            MainReportDetailView(goReport: $goReport ,reportReason: reason.numericValue, contentId: contentId)
+              .environmentObject(apiViewModel)
           } label: {
             reportRow(text: reason.rawValue)
           }

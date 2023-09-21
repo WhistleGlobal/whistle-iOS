@@ -291,6 +291,36 @@ extension APIViewModel: PostFeedProtocol {
     }
   }
 
+  func reportContent(contentId: Int, reportReason: Int, reportDescription: String) async -> Bool {
+      log(contentId)
+      log(reportReason)
+      log(reportDescription)
+    let params: [String: Any] = [
+      "content_id" : contentId,
+      "report_reason" : reportReason,
+      "report_description" : "\(reportDescription)",
+    ]
+    return await withCheckedContinuation { continuation in
+      AF.request(
+        "\(domainUrl)/report/content/\(contentId)",
+        method: .post,
+        parameters: params,
+        encoding: JSONEncoding.default,
+        headers: contentTypeJson)
+        .validate(statusCode: 200...300)
+        .response { response in
+          switch response.result {
+          case .success(let data):
+            log(data)
+            continuation.resume(returning: true)
+          case .failure(let error):
+            log(error)
+            continuation.resume(returning: false)
+          }
+        }
+    }
+  }
+
   func postFeedPlayerChanged() {
     publisher.send(UUID())
   }

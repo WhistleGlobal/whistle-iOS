@@ -14,7 +14,9 @@ struct MainReportDetailView: View {
   @State var goComplete = false
   @State var showAlert = false
   @State var inputReportDetail = ""
+  @EnvironmentObject var apiViewModel: APIViewModel
   let reportReason: Int
+  let contentId: Int
 
   var body: some View {
     VStack(spacing: 0) {
@@ -49,7 +51,17 @@ struct MainReportDetailView: View {
         ReportAlert {
           showAlert = false
         } reportAction: {
-          goComplete = true
+          Task {
+            let reportSuccess = await apiViewModel.reportContent(
+              contentId: contentId,
+              reportReason: reportReason,
+              reportDescription: inputReportDetail)
+            if reportSuccess {
+              goComplete = true
+            } else {
+              showAlert = false
+            }
+          }
         }
       }
     }
