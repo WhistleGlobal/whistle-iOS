@@ -27,11 +27,25 @@ struct UserProfileView: View {
     NavigationStack {
       ZStack {
         Color.clear.overlay {
-          Image("testCat")
-            .resizable()
-            .scaledToFill()
-            .ignoresSafeArea()
-            .blur(radius: 8)
+          if let url = apiViewModel.userProfile.profileImg, !url.isEmpty {
+            KFImage.url(URL(string: url))
+              .placeholder { _ in
+                // FIXME: - 나중에 이미지 변경
+                Image("testCat")
+                  .resizable()
+                  .scaledToFill()
+                  .blur(radius: 50)
+              }
+              .resizable()
+              .scaledToFill()
+              .scaleEffect(2.0)
+              .blur(radius: 50)
+          } else {
+            Image("testCat")
+              .resizable()
+              .scaledToFill()
+              .blur(radius: 50)
+          }
         }
         VStack {
           Spacer().frame(height: 64)
