@@ -16,6 +16,8 @@ struct ReportDetailView: View {
   @State var goComplete = false
   @State var showAlert = false
   @State var inputReportDetail = ""
+  @State var showDuplication = false
+  @State var showFailLoad = false
   let reportCategory: ReportUserView.ReportCategory
   let reportReason: Int
   let userId: Int
@@ -62,13 +64,13 @@ struct ReportDetailView: View {
                 reportDescription: inputReportDetail)
               if reportSuccess == 200 {
                 goReport = true
+                goComplete = true
               } else if reportSuccess == 400 {
-                log("중복")
+                showDuplication = true
               } else {
-                log("서버 통신 실패")
+                showFailLoad = true
               }
             }
-            goComplete = true
           } else {
             Task {
               let statusCode = await apiViewModel.reportUser(
@@ -79,15 +81,21 @@ struct ReportDetailView: View {
               log(statusCode)
               if statusCode == 200 {
                 goReport = true
+                goComplete = true
               } else if statusCode == 400 {
-                log("중복입니다.")
+                showDuplication = true
               } else {
-                log("서버 통신에 실패하였습니다.")
+                showFailLoad = true
               }
             }
           }
-          goComplete = true
         }
+      }
+      if showDuplication {
+        ToastMessage(text: "이미 신고처리가 되었습니다.", paddingBottom: 78, showToast: $showDuplication)
+      }
+      if showFailLoad {
+        ToastMessage(text: "신고 처리가 정상적으로 되지 않았습니다.", paddingBottom: 78, showToast: $showFailLoad)
       }
     }
     .toolbar {
