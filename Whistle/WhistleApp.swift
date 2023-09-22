@@ -34,24 +34,19 @@ struct WhistleApp: App {
 
   var body: some Scene {
     WindowGroup {
-      NavigationStack {
-        if isAccess {
-          //        MusicListView()
-          TabbarView()
-            .environmentObject(apiViewModel)
-            .environmentObject(userAuth)
-        } else {
-          SignInView()
-            .environmentObject(userAuth)
-        }
-      }
-      .tint(.black)
-      .task {
-        if isAccess {
-          appleSignInViewModel.userAuth.loadData {
-            log("after Login")
+      if isAccess {
+        //        MusicListView()
+        TabbarView()
+          .environmentObject(apiViewModel)
+          .environmentObject(userAuth)
+          .task {
+            if isAccess {
+              appleSignInViewModel.userAuth.loadData { }
+            }
           }
-        }
+      } else {
+        SignInView()
+          .environmentObject(userAuth)
       }
     }
   }

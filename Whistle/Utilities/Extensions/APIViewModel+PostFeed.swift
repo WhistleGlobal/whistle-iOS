@@ -271,6 +271,81 @@ extension APIViewModel: PostFeedProtocol {
     }
   }
 
+  func deleteContent(contentId: Int) async {
+    await withCheckedContinuation { continuation in
+      AF.request(
+        "\(domainUrl)/content/\(contentId)",
+        method: .delete,
+        headers: contentTypeXwwwForm)
+        .validate(statusCode: 200...300)
+        .response { response in
+          switch response.result {
+          case .success(let data):
+            log(data)
+            continuation.resume()
+          case .failure(let error):
+            log(error)
+            continuation.resume()
+          }
+        }
+    }
+  }
+
+  // FIXME: - 중복신고 반환 처리하도록 추후 수정
+  func reportContent(userId: Int, contentId: Int, reportReason: Int, reportDescription: String) async -> Int {
+    let params: [String: Any] = [
+      "user_id" : "\(userId)",
+      "report_reason" : "\(reportReason)",
+      "report_description" : "\(reportDescription)",
+    ]
+    return await withCheckedContinuation { continuation in
+      AF.request(
+        "\(domainUrl)/report/content/\(contentId)",
+        method: .post,
+        parameters: params,
+        encoding: JSONEncoding.default,
+        headers: contentTypeJson)
+        .validate(statusCode: 200...300)
+        .response { response in
+          switch response.result {
+          case .success(let data):
+            log(data)
+            continuation.resume(returning: 200)
+          case .failure(let error):
+            log(error)
+            continuation.resume(returning: error.responseCode ?? 500)
+          }
+        }
+    }
+  }
+
+  func reportUser(usedId: Int, contentId: Int, reportReason: Int, reportDescription: String) async -> Int {
+    let params: [String: Any] = [
+      "content_id" : "\(contentId)",
+      "report_reason" : "\(reportReason)",
+      "report_description" : "\(reportDescription)",
+    ]
+    return await withCheckedContinuation { continuation in
+      AF.request(
+        "\(domainUrl)/report/user/\(usedId)",
+        method: .post,
+        parameters: params,
+        encoding: JSONEncoding.default,
+        headers: contentTypeJson)
+        .validate(statusCode: 200...300)
+        .response { response in
+          switch response.result {
+          case .success(let data):
+            log(data)
+            continuation.resume(returning: 200)
+          case .failure(let error):
+            log(error)
+            continuation.resume(returning: error.responseCode ?? 500)
+          }
+        }
+    }
+  }
+
   func postFeedPlayerChanged() {
     publisher.send(UUID())
   }

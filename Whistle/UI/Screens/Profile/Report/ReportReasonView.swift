@@ -14,6 +14,7 @@ struct ReportReasonView: View {
   @Environment(\.dismiss) var dismiss
   @EnvironmentObject var apiViewModel: APIViewModel
   @Binding var goReport: Bool
+  @Binding var selectedContentId: Int
   @State var goComplete = false
   let userId: Int
   let reportCategory: ReportUserView.ReportCategory
@@ -36,7 +37,12 @@ struct ReportReasonView: View {
       if reportCategory == .post {
         ForEach(PostReportReason.allCases, id: \.self) { reason in
           NavigationLink {
-            ReportDetailView(goReport: $goReport, reportCategory: .post, reportReason: reason.numericValue)
+            ReportDetailView(
+              goReport: $goReport,
+              selectedContentId: $selectedContentId,
+              reportCategory: .post,
+              reportReason: reason.numericValue,
+              userId: userId)
           } label: {
             reportRow(text: reason.rawValue)
           }
@@ -44,7 +50,12 @@ struct ReportReasonView: View {
       } else {
         ForEach(UserReportReason.allCases, id: \.self) { reason in
           NavigationLink {
-            ReportPostView(goReport: $goReport, userId: userId, reportCategory: .user, reportReason: reason.numericValue)
+            ReportPostView(
+              selectedContentId: $selectedContentId,
+              goReport: $goReport,
+              userId: userId,
+              reportCategory: .user,
+              reportReason: reason.numericValue)
               .environmentObject(apiViewModel)
           } label: {
             reportRow(text: reason.rawValue)

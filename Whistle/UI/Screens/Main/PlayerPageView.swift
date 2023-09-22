@@ -34,6 +34,7 @@ struct PlayerPageView: UIViewRepresentable {
       parent.apiViewModel.contentList[index].player?.pause()
       if index != parent.currentVideoIndex {
         if parent.currentVideoIndex == 0 {
+          // TODO: - 인덱스 0이하일때 처리
           parent.apiViewModel.contentList[index + 1].player = nil
         } else if parent.currentVideoIndex == parent.apiViewModel.contentList.count - 1 {
           parent.apiViewModel.contentList[index - 1].player = nil
@@ -86,6 +87,7 @@ struct PlayerPageView: UIViewRepresentable {
   }
 
   @EnvironmentObject var apiViewModel: APIViewModel
+  @EnvironmentObject var tabbarModel: TabbarModel
   @Binding var videoIndex: Int
   @Binding var currentVideoIndex: Int
   @Binding var currentVideoContentId: Int
@@ -94,7 +96,6 @@ struct PlayerPageView: UIViewRepresentable {
   @Binding var showBookmarkToast: Bool
   @Binding var showFollowToast: (Bool, String)
   @Binding var currentVideoUserId: Int
-  @Binding var tabWidth: CGFloat
 
   func makeCoordinator() -> Coordinator {
     PlayerPageView.Coordinator(parent1: self)
@@ -111,9 +112,9 @@ struct PlayerPageView: UIViewRepresentable {
         showBookmarkToast: $showBookmarkToast,
         showFollowToast: $showFollowToast,
         currentVideoUserId: $currentVideoUserId,
-        currentVideoContentId: $currentVideoContentId,
-        tabWidth: $tabWidth)
-        .environmentObject(apiViewModel))
+        currentVideoContentId: $currentVideoContentId)
+        .environmentObject(apiViewModel)
+        .environmentObject(tabbarModel))
     childView.view.frame = CGRect(
       x: 0,
       y: 0,

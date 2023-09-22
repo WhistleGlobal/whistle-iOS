@@ -18,8 +18,8 @@ struct ReportUserView: View {
 
   @Environment(\.dismiss) var dismiss
   @EnvironmentObject var apiViewModel: APIViewModel
-  // TODO: - 리포트 타입 저장해서 뒷 화면에 넘겨주기
   @State var reportType = 0
+  @State var selectedContentId = 0
   @Binding var goReport: Bool
   let userId: Int
 
@@ -60,13 +60,23 @@ struct ReportUserView: View {
           .padding(.horizontal, 16)
         Divider().frame(width: UIScreen.width)
         NavigationLink {
-          ReportPostView(goReport: $goReport, userId: userId, reportCategory: .post, reportReason: 0)
+          ReportPostView(
+            selectedContentId: $selectedContentId,
+            goReport: $goReport,
+            userId: userId,
+            reportCategory: .post,
+            reportReason: 0)
+            .environmentObject(apiViewModel)
         } label: {
           reportRow(text: "특정 콘텐츠")
         }
         .padding(.horizontal, 16)
         NavigationLink {
-          ReportReasonView(goReport: $goReport, userId: userId, reportCategory: .user)
+          ReportReasonView(
+            goReport: $goReport,
+            selectedContentId: $selectedContentId,
+            userId: userId,
+            reportCategory: .user)
             .environmentObject(apiViewModel)
         } label: {
           reportRow(text: "이 계정에 관한 문제")

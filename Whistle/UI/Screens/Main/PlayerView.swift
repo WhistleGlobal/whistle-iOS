@@ -19,25 +19,32 @@ protocol ViewLifecycleDelegate {
   func onDisappear()
 }
 
+// MARK: - MaintabSelection
+
+enum MaintabSelection: String {
+  case left
+  case right
+}
+
 // MARK: - PlayerView
 
 struct PlayerView: View {
   @EnvironmentObject var apiViewModel: APIViewModel
+  @EnvironmentObject var tabbarModel: TabbarModel
   let lifecycleDelegate: ViewLifecycleDelegate?
   @State var newId = UUID()
-  @State var mainVideoTabSelection = 0
+  @State var mainTabSelection: MaintabSelection = .left
   @Binding var showDialog: Bool
   @Binding var showPasteToast: Bool
   @Binding var showBookmarkToast: Bool
   @Binding var showFollowToast: (Bool, String)
   @Binding var currentVideoUserId: Int
   @Binding var currentVideoContentId: Int
-  @Binding var tabWidth: CGFloat
 
   var body: some View {
     VStack(spacing: 0) {
       ForEach(apiViewModel.contentList, id: \.self) { content in
-        TabView(selection: $mainVideoTabSelection) {
+        TabView(selection: $mainTabSelection) {
           ZStack {
             Color.clear.overlay {
               if let url = content.thumbnailUrl {
@@ -54,7 +61,7 @@ struct PlayerView: View {
               if let player = content.player {
                 Player(player: player)
                   .frame(maxWidth: .infinity, maxHeight: .infinity)
-                  .onChange(of: mainVideoTabSelection) { _ in
+                  .onChange(of: mainTabSelection) { _ in
                     if player.rate != 0.0 {
                       player.pause()
                     } else {
@@ -73,7 +80,7 @@ struct PlayerView: View {
               endPoint: .bottom)
               .frame(maxWidth: .infinity, maxHeight: .infinity)
               .allowsHitTesting(false)
-            if tabWidth != 56 {
+            if tabbarModel.tabWidth != 56 {
               userInfo(
                 contentId: content.contentId ?? 0,
                 userName: content.userName ?? "",
@@ -100,10 +107,11 @@ struct PlayerView: View {
             }
           }
           .ignoresSafeArea()
-          .tag(0)
-          UserProfileView(userId: currentVideoUserId, mainVideoTabSelection: $mainVideoTabSelection)
+          .tag(MaintabSelection.left)
+          UserProfileView(userId: currentVideoUserId)
             .environmentObject(apiViewModel)
-            .tag(1)
+            .environmentObject(tabbarModel)
+            .tag(MaintabSelection.right)
         }
         .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
       }
@@ -139,8 +147,9 @@ extension PlayerView {
           Spacer()
           HStack(spacing: 0) {
             NavigationLink {
-              UserProfileView(userId: currentVideoUserId, mainVideoTabSelection: .constant(2))
+              UserProfileView(userId: currentVideoUserId)
                 .environmentObject(apiViewModel)
+                .environmentObject(tabbarModel)
             } label: {
               Group {
                 profileImageView(url: profileImg, size: 36)

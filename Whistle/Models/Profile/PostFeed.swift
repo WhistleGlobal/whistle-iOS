@@ -10,6 +10,7 @@ import Foundation
 class PostFeed: ObservableObject, Codable, Hashable {
 
   enum CodingKeys: String, CodingKey {
+    case contentId = "content_id"
     case userId = "user_id"
     case userName = "user_name"
     case profileImg = "profile_img"
@@ -24,6 +25,7 @@ class PostFeed: ObservableObject, Codable, Hashable {
     case isWhistled = "is_whistled"
   }
 
+  var contentId: Int?
   var userId: Int?
   var userName: String?
   var profileImg: String?

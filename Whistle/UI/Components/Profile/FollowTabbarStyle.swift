@@ -13,7 +13,7 @@ struct FollowTabbarStyle: ButtonStyle {
 
   // MARK: Lifecycle
 
-  init(followNum: Int, tab: String, selectedTab: Binding<FollowView.profileTabStatus>) {
+  init(followNum: Int, tab: String, selectedTab: Binding<profileTabStatus>) {
     self.followNum = followNum
     self.tab = tab
     _selectedTab = selectedTab
@@ -25,7 +25,7 @@ struct FollowTabbarStyle: ButtonStyle {
 
     let followNum: Int
     let tab: String
-    @Binding var selectedTab: FollowView.profileTabStatus
+    @Binding var selectedTab: profileTabStatus
 
     var body: some View {
       ZStack {
@@ -41,7 +41,7 @@ struct FollowTabbarStyle: ButtonStyle {
                 .opacity(tab == selectedTab.rawValue ? 1 : 0)
             }
         }
-        Text(tab == FollowView.profileTabStatus.follower.rawValue ? "\(followNum) follower" : "\(followNum) following")
+        Text(tab == profileTabStatus.follower.rawValue ? "\(followNum) follower" : "\(followNum) following")
           .fontSystem(fontDesignSystem: .subtitle2)
           .fontWeight(.semibold)
           .foregroundColor(tab == selectedTab.rawValue ? Color.LabelColor_Primary : Color.Disable_Placeholder)
@@ -52,7 +52,7 @@ struct FollowTabbarStyle: ButtonStyle {
 
   let followNum: Int
   let tab: String
-  @Binding var selectedTab: FollowView.profileTabStatus
+  @Binding var selectedTab: profileTabStatus
 
   func makeBody(configuration _: Configuration) -> some View {
     FollowTabItem(followNum: followNum, tab: tab, selectedTab: $selectedTab)
