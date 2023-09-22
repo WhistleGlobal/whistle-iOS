@@ -18,6 +18,10 @@ enum profileTabStatus: String {
 
 // MARK: - FollowView
 
+private var selectedId: Int?
+
+// MARK: - FollowView
+
 struct FollowView: View {
 
   // MARK: Internal
@@ -28,7 +32,6 @@ struct FollowView: View {
   @State var newId = UUID()
   @State var tabStatus: profileTabStatus = .follower
   @State var showOtherProfile = false
-  @State var selectedId: Int?
   @State var showUserProfile = false
 
   var body: some View {
