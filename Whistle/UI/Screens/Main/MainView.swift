@@ -29,6 +29,7 @@ struct MainView: View {
   @State var isShowingBottomSheet = false
   @State var players: [AVPlayer?] = []
   @State var newId = UUID()
+  @Binding var mainOpacity: Double
 
   var body: some View {
     GeometryReader { proxy in
@@ -99,6 +100,13 @@ struct MainView: View {
       .frame(width: proxy.size.height)
       .tabViewStyle(.page(indexDisplayMode: .never))
       .frame(maxWidth: proxy.size.width)
+      .onChange(of: mainOpacity) { newValue in
+        if newValue == 1 {
+          players[currentIndex]?.play()
+        } else {
+          players[currentIndex]?.pause()
+        }
+      }
     }
     .ignoresSafeArea(.all, edges: .top)
     .navigationBarBackButtonHidden()
