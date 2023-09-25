@@ -33,15 +33,11 @@ struct ReportPostView: View {
         ], spacing: 20) {
           ForEach(Array(apiViewModel.userPostFeed.enumerated()), id: \.element) { index, content in
             if let url = content.thumbnailUrl {
-              Button {
-                selectedIndex = index
-                selectedContentId = apiViewModel.userPostFeed[index].contentId ?? 0
-              } label: {
-                videoThumbnail(url: url, index: index)
-                  .onAppear {
-                    log(url)
-                  }
-              }
+              videoThumbnail(url: url, index: index)
+                .onTapGesture {
+                  selectedIndex = index
+                  selectedContentId = apiViewModel.userPostFeed[index].contentId ?? 0
+                }
             }
           }
         }
