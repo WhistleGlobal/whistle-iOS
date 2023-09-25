@@ -28,7 +28,7 @@ struct SignInView: View {
     AppKeys.domainUrl as! String
   }
 
-  private var customViewModel = GoogleSignInButtonViewModel(scheme: .light, style: .wide, state: .normal)
+  private var customViewModel = GoogleSignInButtonViewModel(scheme: .light, style: .standard, state: .normal)
 
   var body: some View {
     ZStack {
@@ -37,13 +37,61 @@ struct SignInView: View {
         .allowsTightening(false)
       VStack(spacing: 0) {
         Spacer()
-        GoogleSignInButton(viewModel: customViewModel, action: handleSignInButton)
-          .frame(maxWidth: 300, maxHeight: 45)
-          .padding(.bottom, 16)
+        Button {
+          handleSignInButton()
+        } label: {
+          Capsule()
+            .foregroundColor(.white)
+            .frame(maxWidth: 360, maxHeight: 48)
+            .overlay {
+              HStack(alignment: .center) {
+                Image("GoogleLogo")
+                  .resizable()
+                  .scaledToFit()
+                  .frame(width: 18, height: 18)
+                Spacer()
+                Text("Google로 계속하기")
+                  .font(.custom("Roboto-Medium", size: 16))
+                  .fontWeight(.semibold)
+                  .foregroundColor(.black.opacity(0.54))
+                Spacer()
+                Color.clear
+                  .frame(width: 18, height: 18)
+              }
+              .padding(.horizontal, 24)
+            }
+            .padding(.bottom, 16)
+        }
+
         SignInWithAppleButton(
           onRequest: appleSignInViewModel.configureRequest,
           onCompletion: appleSignInViewModel.handleResult)
-          .frame(maxWidth: 300, maxHeight: 45)
+          .frame(maxWidth: 360, maxHeight: 48)
+          .cornerRadius(48)
+          .overlay {
+            Capsule()
+              .foregroundColor(.black)
+              .frame(maxWidth: 360, maxHeight: 48)
+              .overlay {
+                HStack(alignment: .center) {
+                  Image(systemName: "apple.logo")
+                    .resizable()
+                    .scaledToFit()
+                    .foregroundColor(.white)
+                    .frame(width: 18, height: 18)
+                  Spacer()
+                  Text("Apple로 계속하기")
+                    .font(.system(size: 16))
+                    .fontWeight(.semibold)
+                    .foregroundColor(.white)
+                  Spacer()
+                  Color.clear
+                    .frame(width: 18, height: 18)
+                }
+                .padding(.horizontal, 24)
+              }
+              .allowsHitTesting(false)
+          }
           .padding(.bottom, 24)
         Text("가입을 진행할 경우, 아래의 정책에 대해 동의한 것으로 간주합니다.")
           .fontSystem(fontDesignSystem: .caption_KO_Regular)
