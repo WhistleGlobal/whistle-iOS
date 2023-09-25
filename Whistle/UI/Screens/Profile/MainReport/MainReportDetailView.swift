@@ -43,7 +43,6 @@ struct MainReportDetailView: View {
             .stroke(lineWidth: 1)
             .foregroundColor(.Disable_Placeholder)
         }
-
       Spacer()
     }
     .padding(.horizontal, 16)
