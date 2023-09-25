@@ -21,6 +21,14 @@ struct Player: UIViewControllerRepresentable {
     view.player = player
     view.showsPlaybackControls = false
     view.videoGravity = .resizeAspect
+    NotificationCenter.default.addObserver(
+      forName: .AVPlayerItemDidPlayToEndTime,
+      object: player.currentItem,
+      queue: .main)
+    { _ in
+      player.seek(to: .zero)
+      player.play()
+    }
     return view
   }
 

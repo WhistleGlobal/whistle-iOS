@@ -33,6 +33,12 @@ struct UserContentListView: View {
               Player(player: player)
                 .frame(width: proxy.size.width)
                 .overlay {
+                  LinearGradient(
+                    colors: [.clear, .black.opacity(0.24)],
+                    startPoint: .center,
+                    endPoint: .bottom)
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    .allowsHitTesting(false)
                   userInfo(
                     contentId: content.contentId ?? 0,
                     userName: content.userName ?? "",

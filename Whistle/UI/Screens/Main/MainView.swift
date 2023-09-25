@@ -6,6 +6,7 @@
 //
 
 import _AVKit_SwiftUI
+import AVFoundation
 import Kingfisher
 import SwiftUI
 
