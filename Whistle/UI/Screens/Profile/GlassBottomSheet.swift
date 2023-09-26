@@ -33,72 +33,72 @@ struct GlassBottomSheet: View {
           .frame(height: 450)
           .transition(.move(edge: .bottom))
           .background(Color.clear)
-          .overlay {
-            glassMoriphicView(width: UIScreen.width, height: 450, cornerRadius: 24)
-              .offset(y: 20)
-            RoundedRectangle(cornerRadius: 24)
-              .stroke(lineWidth: 1)
-              .foregroundStyle(
-                LinearGradient.Border_Glass)
-              .frame(maxWidth: .infinity, maxHeight: .infinity)
-              .offset(y: 20)
-            VStack(spacing: 0) {
-              Capsule()
-                .frame(width: 36, height: 5)
-                .foregroundColor(Color.Border_Default_Dark)
-                .padding(.top, 5)
-                .padding(.bottom, 4)
-              HStack {
-                Text("설정")
-                  .fontSystem(fontDesignSystem: .subtitle1_KO)
-                  .foregroundColor(.White)
-              }
-              .frame(height: 52)
-              Divider().background(Color("Gray10"))
-              NavigationLink {
-                ProfileNotiView(isShowingBottomSheet: $isShowing)
-                  .environmentObject(apiViewModel)
-              } label: {
-                bottomSheetRowWithIcon(systemName: "bell", iconWidth: 22, iconHeight: 20, text: "알림")
-              }
-              NavigationLink {
-                ProfileInfoView(isShowingBottomSheet: $isShowing)
-                  .environmentObject(apiViewModel)
-              } label: {
-                bottomSheetRowWithIcon(systemName: "info.circle", iconWidth: 22, iconHeight: 20, text: "약관 및 정책")
-              }
-              Button {
-                log("공유")
-              } label: {
-                bottomSheetRowWithIcon(systemName: "square.and.arrow.up", iconWidth: 22, iconHeight: 20, text: "프로필 공유")
-              }
-              NavigationLink {
-                ProfileReportView(isShowingBottomSheet: $isShowing)
-                  .environmentObject(apiViewModel)
-              } label: {
-                bottomSheetRowWithIcon(
-                  systemName: "exclamationmark.triangle.fill",
-                  iconWidth: 22,
-                  iconHeight: 20,
-                  text: "신고")
-              }
-              Divider().background(Color("Gray10"))
-              Group {
-                Button {
-                  showSignoutAlert = true
-                } label: {
-                  bottomSheetRow(text: "로그아웃", color: Color.Info)
-                }
-                Button {
-                  showDeleteAlert = true
-                } label: {
-                  bottomSheetRow(text: "계정삭제", color: Color.Danger)
-                }
-              }
-              Spacer()
-            }
-            .offset(y: 20)
-          }
+//          .overlay {
+//            glassMoriphicView(width: UIScreen.width, height: 450, cornerRadius: 24)
+//              .offset(y: 20)
+//            RoundedRectangle(cornerRadius: 24)
+//              .stroke(lineWidth: 1)
+//              .foregroundStyle(
+//                LinearGradient.Border_Glass)
+//              .frame(maxWidth: .infinity, maxHeight: .infinity)
+//              .offset(y: 20)
+//            VStack(spacing: 0) {
+//              Capsule()
+//                .frame(width: 36, height: 5)
+//                .foregroundColor(Color.Border_Default_Dark)
+//                .padding(.top, 5)
+//                .padding(.bottom, 4)
+//              HStack {
+//                Text("설정")
+//                  .fontSystem(fontDesignSystem: .subtitle1_KO)
+//                  .foregroundColor(.White)
+//              }
+//              .frame(height: 52)
+//              Divider().background(Color("Gray10"))
+//              NavigationLink {
+//                ProfileNotiView(isShowingBottomSheet: $isShowing)
+//                  .environmentObject(apiViewModel)
+//              } label: {
+//                bottomSheetRowWithIcon(systemName: "bell", iconWidth: 22, iconHeight: 20, text: "알림")
+//              }
+//              NavigationLink {
+//                ProfileInfoView(isShowingBottomSheet: $isShowing)
+//                  .environmentObject(apiViewModel)
+//              } label: {
+//                bottomSheetRowWithIcon(systemName: "info.circle", iconWidth: 22, iconHeight: 20, text: "약관 및 정책")
+//              }
+//              Button {
+//                log("공유")
+//              } label: {
+//                bottomSheetRowWithIcon(systemName: "square.and.arrow.up", iconWidth: 22, iconHeight: 20, text: "프로필 공유")
+//              }
+//              NavigationLink {
+//                ProfileReportView(isShowingBottomSheet: $isShowing)
+//                  .environmentObject(apiViewModel)
+//              } label: {
+//                bottomSheetRowWithIcon(
+//                  systemName: "exclamationmark.triangle.fill",
+//                  iconWidth: 22,
+//                  iconHeight: 20,
+//                  text: "신고")
+//              }
+//              Divider().background(Color("Gray10"))
+//              Group {
+//                Button {
+//                  showSignoutAlert = true
+//                } label: {
+//                  bottomSheetRow(text: "로그아웃", color: Color.Info)
+//                }
+//                Button {
+//                  showDeleteAlert = true
+//                } label: {
+//                  bottomSheetRow(text: "계정삭제", color: Color.Danger)
+//                }
+//              }
+//              Spacer()
+//            }
+//            .offset(y: 20)
+//          }
           .offset(y: isShowing ? 0 : 450)
       }
       .ignoresSafeArea()

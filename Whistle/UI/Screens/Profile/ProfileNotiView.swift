@@ -10,7 +10,6 @@ import SwiftUI
 struct ProfileNotiView: View {
   @Environment(\.dismiss) var dismiss
   @EnvironmentObject var apiViewModel: APIViewModel
-  @Binding var isShowingBottomSheet: Bool
   @AppStorage("isAllOff") var isAllOff = false
 
   var body: some View {
@@ -28,9 +27,6 @@ struct ProfileNotiView: View {
     .navigationBarBackButtonHidden()
     .navigationBarTitleDisplayMode(.inline)
     .navigationTitle("알림")
-    .onAppear {
-      isShowingBottomSheet = false
-    }
     .task {
       await apiViewModel.requestNotiSetting()
     }

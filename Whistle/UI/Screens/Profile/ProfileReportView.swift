@@ -12,9 +12,6 @@ struct ProfileReportView: View {
 
   @Environment(\.dismiss) var dismiss
   @EnvironmentObject var apiViewModel: APIViewModel
-  @Binding var isShowingBottomSheet: Bool
-  // FIXME: - Report 관련 모델로 변경할 것
-  @State var reports: [Any] = []
 
   var body: some View {
     VStack(spacing: 0) {
@@ -46,9 +43,6 @@ struct ProfileReportView: View {
     .navigationBarBackButtonHidden()
     .navigationBarTitleDisplayMode(.inline)
     .navigationTitle("신고")
-    .onAppear {
-      isShowingBottomSheet = false
-    }
     .task {
       if apiViewModel.reportedContent.isEmpty {
         await apiViewModel.requestReportedConent()
