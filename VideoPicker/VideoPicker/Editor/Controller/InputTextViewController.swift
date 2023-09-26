@@ -227,7 +227,6 @@ final class InputTextViewController: AnyImageViewController {
       return .portrait
     case .portrait:
       return .portrait
-      /Users/sangwon/Developer/whistle-iOS/VideoPicker/VideoPicker/Editor/Controller/InputTextViewController.swift:225:5 Switch covers known cases, but 'UIInterfaceOrientation' may have additional unknown values, possibly added in future versions
     case .portraitUpsideDown:
       return .portraitUpsideDown
     case .landscapeLeft:

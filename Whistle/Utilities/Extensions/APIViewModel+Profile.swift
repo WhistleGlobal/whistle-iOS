@@ -328,7 +328,7 @@ extension APIViewModel: ProfileProtocol {
     log("\(keychain.get("refresh_token") ?? "")")
     return await withCheckedContinuation { continuation in
       AF.request(
-        "\(domainUrl)/apple/logout",
+        "\(domainURL)/apple/logout",
         method: .post,
         parameters: params,
         headers: contentTypeXwwwForm)
