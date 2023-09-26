@@ -22,6 +22,8 @@ struct UserFollowView: View {
   @State var showOtherProfile = false
   @State var selectedId: Int?
   @State var showUserProfile = false
+  @State var userFollowing: [UserFollowingData] = []
+  @State var userFollower: [FollowerData] = []
   let userId: Int
 
   var body: some View {
@@ -82,6 +84,8 @@ struct UserFollowView: View {
     }
     .task {
       await apiViewModel.requestUserFollow(userId: userId)
+      userFollower = apiViewModel.userFollow.followerList
+      userFollowing = apiViewModel.userFollow.followingList
     }
     .fullScreenCover(isPresented: $showUserProfile) {
       UserProfileView(userId: selectedId ?? 0)
@@ -151,7 +155,7 @@ extension UserFollowView {
 
   @ViewBuilder
   func userFollowerList() -> some View {
-    ForEach(apiViewModel.userFollow.followerList, id: \.userName) { follower in
+    ForEach(userFollower, id: \.userName) { follower in
       Button {
         selectedId = follower.followerId
         showUserProfile = true
@@ -172,7 +176,7 @@ extension UserFollowView {
 
   @ViewBuilder
   func userFollowingList() -> some View {
-    ForEach(apiViewModel.userFollow.followingList, id: \.userName) { following in
+    ForEach(userFollowing, id: \.userName) { following in
       Button {
         selectedId = following.followingId
         showUserProfile = true
