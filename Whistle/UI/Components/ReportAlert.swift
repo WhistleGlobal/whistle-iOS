@@ -110,6 +110,3 @@ extension ReportAlert {
   }
 }
 
-#Preview {
-  ReportAlert(cancelAction: { }, reportAction: { })
-}

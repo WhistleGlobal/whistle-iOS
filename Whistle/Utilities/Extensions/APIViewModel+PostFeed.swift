@@ -17,7 +17,7 @@ extension APIViewModel: PostFeedProtocol {
   func requestMyPostFeed() async {
     await withCheckedContinuation { continuation in
       AF.request(
-        "\(domainUrl)/user/post/feed",
+        "\(domainURL)/user/post/feed",
         method: .get,
         headers: contentTypeJson)
         .validate(statusCode: 200...300)
@@ -48,7 +48,7 @@ extension APIViewModel: PostFeedProtocol {
   func requestUserPostFeed(userId: Int) async {
     await withCheckedContinuation { continuation in
       AF.request(
-        "\(domainUrl)/user/\(userId)/post/feed",
+        "\(domainURL)/user/\(userId)/post/feed",
         method: .get,
         headers: contentTypeJson)
         .validate(statusCode: 200...300)
@@ -78,7 +78,7 @@ extension APIViewModel: PostFeedProtocol {
   func requestMyBookmark() async {
     await withCheckedContinuation { continuation in
       AF.request(
-        "\(domainUrl)/user/post/bookmark",
+        "\(domainURL)/user/post/bookmark",
         method: .get,
         headers: contentTypeJson)
         .validate(statusCode: 200...300)
@@ -111,7 +111,7 @@ extension APIViewModel: PostFeedProtocol {
   func requestContentList() async {
     await withCheckedContinuation { continuation in
       AF.request(
-        "\(domainUrl)/content/content-list",
+        "\(domainURL)/content/content-list",
         method: .get,
         headers: contentTypeJson)
         .validate(statusCode: 200...300)
@@ -165,7 +165,7 @@ extension APIViewModel: PostFeedProtocol {
   func requestReportedConent() async {
     await withCheckedContinuation { continuation in
       AF.request(
-        "\(domainUrl)/user/post/suspend-list",
+        "\(domainURL)/user/post/suspend-list",
         method: .get,
         headers: contentTypeJson)
         .validate(statusCode: 200...300)
@@ -194,7 +194,7 @@ extension APIViewModel: PostFeedProtocol {
   func actionBookmark(contentId: Int) async -> Bool {
     await withCheckedContinuation { continuation in
       AF.request(
-        "\(domainUrl)/action/\(contentId)/bookmark",
+        "\(domainURL)/action/\(contentId)/bookmark",
         method: .post,
         headers: contentTypeXwwwForm)
         .validate(statusCode: 200...300)
@@ -214,7 +214,7 @@ extension APIViewModel: PostFeedProtocol {
   func actionWhistle(contentId: Int) async {
     await withCheckedContinuation { continuation in
       AF.request(
-        "\(domainUrl)/action/\(contentId)/whistle",
+        "\(domainURL)/action/\(contentId)/whistle",
         method: .post,
         headers: contentTypeXwwwForm)
         .validate(statusCode: 200...300)
@@ -234,7 +234,7 @@ extension APIViewModel: PostFeedProtocol {
   func actionWhistleCancel(contentId: Int) async {
     await withCheckedContinuation { continuation in
       AF.request(
-        "\(domainUrl)/action/\(contentId)/whistle",
+        "\(domainURL)/action/\(contentId)/whistle",
         method: .delete,
         headers: contentTypeXwwwForm)
         .validate(statusCode: 200...300)
@@ -254,7 +254,7 @@ extension APIViewModel: PostFeedProtocol {
   func actionContentHate(contentId: Int) async {
     await withCheckedContinuation { continuation in
       AF.request(
-        "\(domainUrl)/action/\(contentId)/hate",
+        "\(domainURL)/action/\(contentId)/hate",
         method: .post,
         headers: contentTypeXwwwForm)
         .validate(statusCode: 200...300)
@@ -274,7 +274,7 @@ extension APIViewModel: PostFeedProtocol {
   func deleteContent(contentId: Int) async {
     await withCheckedContinuation { continuation in
       AF.request(
-        "\(domainUrl)/content/\(contentId)",
+        "\(domainURL)/content/\(contentId)",
         method: .delete,
         headers: contentTypeXwwwForm)
         .validate(statusCode: 200...300)
@@ -300,7 +300,7 @@ extension APIViewModel: PostFeedProtocol {
     ]
     return await withCheckedContinuation { continuation in
       AF.request(
-        "\(domainUrl)/report/content/\(contentId)",
+        "\(domainURL)/report/content/\(contentId)",
         method: .post,
         parameters: params,
         encoding: JSONEncoding.default,
@@ -327,7 +327,7 @@ extension APIViewModel: PostFeedProtocol {
     ]
     return await withCheckedContinuation { continuation in
       AF.request(
-        "\(domainUrl)/report/user/\(usedId)",
+        "\(domainURL)/report/user/\(usedId)",
         method: .post,
         parameters: params,
         encoding: JSONEncoding.default,

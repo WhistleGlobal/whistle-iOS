@@ -10,7 +10,6 @@ import SwiftUI
 // MARK: - CustomPhotoView
 
 struct CustomPhotoView: View {
-
   @Environment(\.dismiss) var dismiss
   @EnvironmentObject var photoViewModel: PhotoViewModel
   @EnvironmentObject var apiViewModel: APIViewModel
@@ -98,10 +97,10 @@ struct CustomPhotoView: View {
 }
 
 extension CustomPhotoView {
-
   @ViewBuilder
   func photoView() -> some View {
     // MARK: - Image & Image List
+
     HStack(spacing: 8) {
       Button {
         photoViewModel.listAlbums()

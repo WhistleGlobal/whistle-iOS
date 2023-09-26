@@ -24,8 +24,8 @@ struct SignInView: View {
   @EnvironmentObject var userAuth: UserAuth
   let keychain = KeychainSwift()
 
-  var domainUrl: String {
-    AppKeys.domainUrl as! String
+  var domainURL: String {
+    AppKeys.domainURL as! String
   }
 
   private var customViewModel = GoogleSignInButtonViewModel(scheme: .light, style: .standard, state: .normal)
@@ -175,7 +175,7 @@ extension SignInView {
         return
       }
 
-      guard let url = URL(string: "\(domainUrl)/auth/google") else {
+      guard let url = URL(string: "\(domainURL)/auth/google") else {
         print("URL is nil")
         return
       }

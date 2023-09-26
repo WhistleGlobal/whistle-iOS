@@ -13,7 +13,7 @@ extension APIViewModel: MusicProtocol {
   func requestMusicList() async -> [Music] {
     await withCheckedContinuation { continuation in
       AF.request(
-        "\(domainUrl)/content/music-list",
+        "\(domainURL)/content/music-list",
         method: .get,
         headers: contentTypeJson)
         .validate(statusCode: 200...500)

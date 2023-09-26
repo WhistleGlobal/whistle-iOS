@@ -21,7 +21,6 @@ enum Provider: String {
 // MARK: - UserAuth
 
 class UserAuth: ObservableObject {
-
   enum CodingKeys: String, CodingKey {
     case idToken
     case refreshToken
@@ -29,7 +28,7 @@ class UserAuth: ObservableObject {
     case provider
     case email
     case userName
-    case imageUrl
+    case imageURL
     case userResponse
   }
 
@@ -40,23 +39,23 @@ class UserAuth: ObservableObject {
   var apiViewModel = APIViewModel()
   var email: String? = ""
   var userName = ""
-  var imageUrl: String? = ""
+  var imageURL: String? = ""
   var userResponse = UserResponse(email: "")
 
   let keychain = KeychainSwift()
 
-  var domainUrl: String {
-    AppKeys.domainUrl as! String
+  var domainURL: String {
+    AppKeys.domainURL as! String
   }
 
   var url: URL? {
     switch provider {
     case .apple:
 //      return URL(string: "\(domainUrl)/user/profile?provider=Apple")
-      return URL(string: "\(domainUrl)/user/profile")
+      return URL(string: "\(domainURL)/user/profile")
     case .google:
 //      return URL(string: "\(domainUrl)/user/profile?provider=Google")
-      return URL(string: "\(domainUrl)/user/profile")
+      return URL(string: "\(domainURL)/user/profile")
     }
   }
 
@@ -72,7 +71,7 @@ class UserAuth: ObservableObject {
     log("idToken \(idTokenKey)")
     let headers: HTTPHeaders = ["Authorization": "Bearer \(idTokenKey)"]
     AF.request(url, method: .get, headers: headers)
-      .validate(statusCode: 200...300)
+      .validate(statusCode: 200 ... 300)
       .response { response in
         switch response.result {
         case .success(let data):
@@ -102,7 +101,7 @@ class UserAuth: ObservableObject {
       log("refreshTokenKey nil")
       return
     }
-    guard let url = URL(string: "\(domainUrl)/auth/apple/refresh") else {
+    guard let url = URL(string: "\(domainURL)/auth/apple/refresh") else {
       return
     }
     let headers: HTTPHeaders = ["Content-Type": "application/x-www-form-urlencoded"]

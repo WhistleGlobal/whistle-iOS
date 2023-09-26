@@ -80,7 +80,6 @@ struct MusicTrimView: View {
         }
         .padding(.bottom, UIScreen.getHeight(40))
         .onAppear {
-          print(apiViewModel.idToken)
           Task {
             print(await apiViewModel.requestMusicList())
           }
