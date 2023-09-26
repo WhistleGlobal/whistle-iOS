@@ -15,7 +15,7 @@ import VideoPicker
 @main
 struct WhistleApp: App {
   // MARK: Lifecycle
-
+    // Layout Test
   init() {
     Font.registerFonts(fontName: "SF-Pro-Display-Semibold")
     Font.registerFonts(fontName: "SF-Pro-Text-Regular")
