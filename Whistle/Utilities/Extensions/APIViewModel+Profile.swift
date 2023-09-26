@@ -21,6 +21,7 @@ extension APIViewModel: ProfileProtocol {
           switch response.result {
           case .success(let success):
             self.myProfile = success
+            log("success")
             continuation.resume()
           case .failure(let failure):
             log(failure)
@@ -34,7 +35,7 @@ extension APIViewModel: ProfileProtocol {
     let params = [
       "user_name" : myProfile.userName,
       "introduce" : myProfile.introduce,
-      "country" : "Korea(Korea)",
+      "country" : "\(Locale.current.region?.identifier ?? "KR")",
     ]
     return await withCheckedContinuation { continuation in
       AF.request(
@@ -158,7 +159,7 @@ extension APIViewModel: ProfileProtocol {
         "\(domainURL)/user/follow-list",
         method: .get,
         headers: contentTypeJson)
-        .validate(statusCode: 200...500)
+        .validate(statusCode: 200...300)
         .responseData { response in
           switch response.result {
           case .success(let data):
@@ -182,13 +183,17 @@ extension APIViewModel: ProfileProtocol {
       AF.request(
         "\(domainURL)/user/\(userId)/follow-list",
         method: .get,
-        headers: contentTypeJson)
+        headers: contentTypeXwwwForm)
         .validate(statusCode: 200...300)
-        .responseData { response in
+        .response { response in
           switch response.result {
           case .success(let data):
             do {
-              self.userFollow = try self.decoder.decode(UserFollow.self, from: data)
+              self.userFollow = try self.decoder.decode(UserFollow.self, from: data ?? .init())
+              log(self.userFollow.followerCount)
+              log(self.userFollow.followerCount)
+              log(self.userFollow.followerList)
+              log(self.userFollow.followingList)
               continuation.resume()
             } catch {
               log("Error decoding JSON: \(error)")
@@ -316,7 +321,28 @@ extension APIViewModel: ProfileProtocol {
       }
   }
 
-  func deleteUser() async {
-    // TODO: - 함수 작성할 것
+  func rebokeAppleToken() async {
+    let params = [
+      "refresh_token" : "\(keychain.get("refresh_token") ?? "")",
+    ]
+    log("\(keychain.get("refresh_token") ?? "")")
+    return await withCheckedContinuation { continuation in
+      AF.request(
+        "\(domainUrl)/apple/logout",
+        method: .post,
+        parameters: params,
+        headers: contentTypeXwwwForm)
+        .validate(statusCode: 200...300)
+        .response { response in
+          switch response.result {
+          case .success(let data):
+            log(data)
+            continuation.resume()
+          case .failure(let error):
+            log(error)
+            continuation.resume()
+          }
+        }
+    }
   }
 }

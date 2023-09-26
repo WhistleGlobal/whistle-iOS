@@ -16,4 +16,11 @@ protocol PostFeedProtocol {
   func requestContentList() async
   func requestReportedConent() async
   func postFeedPlayerChanged()
+  func actionBookmark(contentId: Int) async -> Bool
+  func actionWhistle(contentId: Int) async
+  func actionWhistleCancel(contentId: Int) async
+  func actionContentHate(contentId: Int) async
+  func deleteContent(contentId: Int) async
+  func reportContent(userId: Int, contentId: Int, reportReason: Int, reportDescription: String) async -> Int
+  func reportUser(usedId: Int, contentId: Int, reportReason: Int, reportDescription: String) async -> Int
 }

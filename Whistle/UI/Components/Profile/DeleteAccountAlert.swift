@@ -116,8 +116,8 @@ extension DeleteAccountAlert {
       }
     }
   }
-}
 
+}
 // #Preview {
 //  DeleteAccountAlert(cancelAction: { }, deleteAction: { })
 // }

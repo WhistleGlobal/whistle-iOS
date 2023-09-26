@@ -36,32 +36,19 @@ struct WhistleApp: App {
   @State private var pickerOptions = PickerOptionsInfo()
   var body: some Scene {
     WindowGroup {
-      NavigationStack {
-        if isAccess {
-//          ZStack {
-//            Image("testCat")
-//              .resizable()
-//              .scaledToFill()
-//              .ignoresSafeArea()
-//            PickerConfigViewControllerWrapper(
-//              options: $pickerOptions)
-//              .frame(width: UIScreen.width, height: UIScreen.height)
-//          }
-          TabbarView()
-            .environmentObject(apiViewModel)
-            .environmentObject(userAuth)
-        } else {
-          SignInView()
-            .environmentObject(userAuth)
-        }
-      }
-      .tint(.black)
-      .task {
-        if isAccess {
-          appleSignInViewModel.userAuth.loadData {
-            log("after Login")
+      if isAccess {
+        //        MusicListView()
+        TabbarView()
+          .environmentObject(apiViewModel)
+          .environmentObject(userAuth)
+          .task {
+            if isAccess {
+              appleSignInViewModel.userAuth.loadData { }
+            }
           }
-        }
+      } else {
+        SignInView()
+          .environmentObject(userAuth)
       }
     }
   }

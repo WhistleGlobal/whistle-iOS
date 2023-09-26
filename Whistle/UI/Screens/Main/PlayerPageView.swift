@@ -28,24 +28,25 @@ struct PlayerPageView: UIViewRepresentable {
 
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
       // 새로 이동한 인덱스
-      let currentindex = Int(scrollView.contentOffset.y / UIScreen.main.bounds.height)
-      log(currentindex)
+      parent.currentVideoIndex = Int(scrollView.contentOffset.y / UIScreen.main.bounds.height)
+      log(parent.currentVideoIndex)
       parent.apiViewModel.contentList[index].player?.seek(to: .zero)
       parent.apiViewModel.contentList[index].player?.pause()
-      if index != currentindex {
-        if currentindex == 0 {
+      if index != parent.currentVideoIndex {
+        if parent.currentVideoIndex == 0 {
+          // TODO: - 인덱스 0이하일때 처리
           parent.apiViewModel.contentList[index + 1].player = nil
-        } else if currentindex == parent.apiViewModel.contentList.count - 1 {
+        } else if parent.currentVideoIndex == parent.apiViewModel.contentList.count - 1 {
           parent.apiViewModel.contentList[index - 1].player = nil
-        } else if index < currentindex {
-          let urlNext = parent.apiViewModel.contentList[currentindex + 1].videoUrl
-          parent.apiViewModel.contentList[currentindex + 1].player = AVPlayer(url: URL(string: urlNext ?? "")!)
+        } else if index < parent.currentVideoIndex {
+          let urlNext = parent.apiViewModel.contentList[parent.currentVideoIndex + 1].videoUrl
+          parent.apiViewModel.contentList[parent.currentVideoIndex + 1].player = AVPlayer(url: URL(string: urlNext ?? "")!)
           if index != 0 {
             parent.apiViewModel.contentList[index - 1].player = nil
           }
-        } else if index > currentindex {
-          let urlPrev = parent.apiViewModel.contentList[currentindex - 1].videoUrl
-          parent.apiViewModel.contentList[currentindex - 1].player = AVPlayer(url: URL(string: urlPrev ?? "")!)
+        } else if index > parent.currentVideoIndex {
+          let urlPrev = parent.apiViewModel.contentList[parent.currentVideoIndex - 1].videoUrl
+          parent.apiViewModel.contentList[parent.currentVideoIndex - 1].player = AVPlayer(url: URL(string: urlPrev ?? "")!)
           if index != parent.apiViewModel.contentList.count - 1 {
             parent.apiViewModel.contentList[index + 1].player = nil
           }
@@ -53,8 +54,9 @@ struct PlayerPageView: UIViewRepresentable {
           log("unknown")
         }
         parent.apiViewModel.postFeedPlayerChanged()
-        index = currentindex
-        parent.currentVideoUserId = parent.apiViewModel.contentList[currentindex].userId ?? 0
+        index = parent.currentVideoIndex
+        parent.currentVideoUserId = parent.apiViewModel.contentList[parent.currentVideoIndex].userId ?? 0
+        parent.currentVideoContentId = parent.apiViewModel.contentList[parent.currentVideoIndex].contentId ?? 0
         parent.apiViewModel.contentList[index].player?.play()
         parent.apiViewModel.contentList[index].player?.actionAtItemEnd = .none
         for i in 0..<parent.apiViewModel.contentList.count {
@@ -75,6 +77,7 @@ struct PlayerPageView: UIViewRepresentable {
       parent.apiViewModel.contentList[index].player?.seek(to: .zero)
       parent.apiViewModel.contentList[index].player?.play()
       parent.currentVideoUserId = parent.apiViewModel.contentList[index].userId ?? 0
+      parent.currentVideoContentId = parent.apiViewModel.contentList[index].contentId ?? 0
     }
 
     func onDisappear() {
@@ -84,10 +87,14 @@ struct PlayerPageView: UIViewRepresentable {
   }
 
   @EnvironmentObject var apiViewModel: APIViewModel
+  @EnvironmentObject var tabbarModel: TabbarModel
   @Binding var videoIndex: Int
-  @Binding var currnentVideoIndex: Int
+  @Binding var currentVideoIndex: Int
+  @Binding var currentVideoContentId: Int
   @Binding var showDialog: Bool
-  @Binding var showToast: Bool
+  @Binding var showPasteToast: Bool
+  @Binding var showBookmarkToast: Bool
+  @Binding var showFollowToast: (Bool, String)
   @Binding var currentVideoUserId: Int
 
   func makeCoordinator() -> Coordinator {
@@ -101,9 +108,13 @@ struct PlayerPageView: UIViewRepresentable {
       rootView: PlayerView(
         lifecycleDelegate: context.coordinator,
         showDialog: $showDialog,
-        showToast: $showToast,
-        currentVideoUserId: $currentVideoUserId)
-        .environmentObject(apiViewModel))
+        showPasteToast: $showPasteToast,
+        showBookmarkToast: $showBookmarkToast,
+        showFollowToast: $showFollowToast,
+        currentVideoUserId: $currentVideoUserId,
+        currentVideoContentId: $currentVideoContentId)
+        .environmentObject(apiViewModel)
+        .environmentObject(tabbarModel))
     childView.view.frame = CGRect(
       x: 0,
       y: 0,

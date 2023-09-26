@@ -22,7 +22,7 @@ class UserProfile: ObservableObject, Codable {
   var userId = 0
   var userName = ""
   var email = ""
-  var profileImg = ""
+  var profileImg: String?
   var introduce: String?
   var status: UserStatus = .active
   var isFollowed = 0

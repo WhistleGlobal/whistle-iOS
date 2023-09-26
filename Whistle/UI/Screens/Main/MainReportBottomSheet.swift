@@ -41,15 +41,21 @@ struct MainReportBottomSheet: View {
               .offset(y: 20)
             VStack(spacing: 0) {
               HStack {
-                Color.clear
-                  .frame(width: 25, height: 29)
-                  .overlay {
-                    Image(systemName: "xmark")
-                      .resizable()
-                      .scaledToFit()
-                      .frame(width: 19, height: 19)
-                      .foregroundColor(.Gray10)
+                Button {
+                  withAnimation {
+                    isShowing = false
                   }
+                } label: {
+                  Color.clear
+                    .frame(width: 25, height: 29)
+                    .overlay {
+                      Image(systemName: "xmark")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 19, height: 19)
+                        .foregroundColor(.Gray10)
+                    }
+                }
                 Spacer()
                 Text("신고")
                   .fontSystem(fontDesignSystem: .subtitle2_KO)
@@ -63,7 +69,7 @@ struct MainReportBottomSheet: View {
               Divider().frame(maxWidth: .infinity)
                 .padding(.bottom, 4)
               VStack(spacing: 10) {
-                Text("이 게시물을 신고하는 이유")
+                Text("이 콘텐츠를 신고하는 이유")
                   .fontSystem(fontDesignSystem: .subtitle2_KO)
                   .foregroundColor(.Gray10)
                   .frame(maxWidth: .infinity, alignment: .leading)
@@ -77,7 +83,7 @@ struct MainReportBottomSheet: View {
               Divider().frame(maxWidth: .infinity)
               ForEach(PostReportReason.allCases, id: \.rawValue) { reasonType in
                 Button {
-                  log("reportType : \(reasonType.description)")
+                  log("reportType : \(reasonType.numericValue)")
                 } label: {
                   listRow(reportType: reasonType)
                 }
@@ -126,3 +132,4 @@ extension MainReportBottomSheet {
 //        .scaledToFit()
 //    }
 // }
+

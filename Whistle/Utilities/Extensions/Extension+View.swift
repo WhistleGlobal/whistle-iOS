@@ -63,18 +63,27 @@ extension View {
 
 extension View {
   @ViewBuilder
-  func glassMorphicTab() -> some View {
-    ZStack {
-      RoundedRectangle(cornerRadius: 32, style: .continuous)
-        .fill(Color.black.opacity(0.3))
-      CustomBlurView(effect: .systemUltraThinMaterial) { view in
-        view.saturationAmout = 2.2
-        view.gaussianBlurRadius = 36
+  func glassMorphicTab(width: CGFloat) -> some View {
+    HStack(spacing: 0) {
+      Spacer().frame(minWidth: 0)
+      ZStack(alignment: .bottomTrailing) { // alignment 변경
+        RoundedRectangle(cornerRadius: 32, style: .continuous)
+          .fill(Color.black.opacity(0.3))
+        CustomBlurView(effect: .systemUltraThinMaterial) { view in
+          view.saturationAmout = 2.2
+          view.gaussianBlurRadius = 36
+        }
+        .clipShape(RoundedRectangle(cornerRadius: 28, style: .continuous))
       }
-      .clipShape(RoundedRectangle(cornerRadius: 28, style: .continuous))
+      .frame(width: width, height: 56)
+      .overlay {
+        Capsule()
+          .stroke(lineWidth: 1)
+          .foregroundStyle(
+            LinearGradient.Border_Glass)
+          .frame(maxWidth: .infinity)
+      }
     }
-    .frame(height: 56)
-    .frame(maxWidth: .infinity)
   }
 
   @ViewBuilder

@@ -10,19 +10,26 @@ import SwiftUI
 struct ReportDetailView: View {
 
   @Environment(\.dismiss) var dismiss
+  @EnvironmentObject var apiViewModel: APIViewModel
   @Binding var goReport: Bool
+  @Binding var selectedContentId: Int
   @State var goComplete = false
   @State var showAlert = false
   @State var inputReportDetail = ""
+  @State var showDuplication = false
+  @State var showFailLoad = false
+  let reportCategory: ReportUserView.ReportCategory
+  let reportReason: Int
+  let userId: Int
 
   var body: some View {
     VStack(spacing: 0) {
       Divider().frame(width: UIScreen.width)
-      Text("이 계정을 신고하는 이유는 무엇인가요?")
+      Text("이 \(reportCategory == .post ? "콘텐츠를" : "계정을") 신고하는 이유는 무엇인가요?")
         .fontSystem(fontDesignSystem: .subtitle2_KO)
         .foregroundColor(.LabelColor_Primary)
         .padding(.bottom, 4)
-      Text("이 계정을 신고하는 이유에 대해 추가적인 내용을 알려주세요.")
+      Text("이 \(reportCategory == .post ? "콘텐츠를" : "계정을") 신고하는 이유에 대해 추가적인 내용을 알려주세요.")
         .fontSystem(fontDesignSystem: .caption_Regular)
         .foregroundColor(.LabelColor_Secondary)
       TextField("기타 참고사항을 알려주세요 (선택사항)", text: $inputReportDetail)
@@ -48,8 +55,47 @@ struct ReportDetailView: View {
         ReportAlert {
           showAlert = false
         } reportAction: {
-          goComplete = true
+          if reportCategory == .post {
+            Task {
+              let reportSuccess = await apiViewModel.reportContent(
+                userId: userId,
+                contentId: selectedContentId,
+                reportReason: reportReason,
+                reportDescription: inputReportDetail)
+              if reportSuccess == 200 {
+                goReport = true
+                goComplete = true
+              } else if reportSuccess == 400 {
+                showDuplication = true
+              } else {
+                showFailLoad = true
+              }
+            }
+          } else {
+            Task {
+              let statusCode = await apiViewModel.reportUser(
+                usedId: userId,
+                contentId: selectedContentId,
+                reportReason: reportReason,
+                reportDescription: inputReportDetail)
+              log(statusCode)
+              if statusCode == 200 {
+                goReport = true
+                goComplete = true
+              } else if statusCode == 400 {
+                showDuplication = true
+              } else {
+                showFailLoad = true
+              }
+            }
+          }
         }
+      }
+      if showDuplication {
+        ToastMessage(text: "이미 신고처리가 되었습니다.", paddingBottom: 78, showToast: $showDuplication)
+      }
+      if showFailLoad {
+        ToastMessage(text: "신고 처리가 정상적으로 되지 않았습니다.", paddingBottom: 78, showToast: $showFailLoad)
       }
     }
     .toolbar {

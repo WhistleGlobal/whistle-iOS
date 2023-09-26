@@ -43,6 +43,7 @@ class ReportedContent: Hashable, Decodable {
     case userName = "user_name"
     case profileImg = "profile_img"
     case videoUrl = "video_url"
+    case thumbnailUrl = "thumbnail_url"
     case caption
     case status
     case whistleCount = "content_whistle_count"
@@ -58,6 +59,7 @@ class ReportedContent: Hashable, Decodable {
   var userName = ""
   var profileImg: String?
   var videoUrl = ""
+  var thumbnailUrl = ""
   var caption = ""
   var status: ConentStatus = .inactive
   var whistleCount = 0

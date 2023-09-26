@@ -5,6 +5,7 @@
 //  Created by ChoiYujin on 9/14/23.
 //
 
+import Kingfisher
 import SwiftUI
 
 // MARK: - ReportPostView
@@ -15,10 +16,12 @@ struct ReportPostView: View {
   @EnvironmentObject var apiViewModel: APIViewModel
   @State var isSelected = false
   @State var selectedIndex = 0
+  @Binding var selectedContentId: Int
   @State var dummySet: [Color] = [Color.blue, Color.red, Color.green, Color.Blue_Pressed]
   @Binding var goReport: Bool
   let userId: Int
   let reportCategory: ReportUserView.ReportCategory
+  let reportReason: Int?
 
   var body: some View {
     VStack(spacing: 0) {
@@ -29,9 +32,10 @@ struct ReportPostView: View {
           GridItem(.flexible()),
         ], spacing: 20) {
           ForEach(Array(apiViewModel.userPostFeed.enumerated()), id: \.element) { index, content in
-            if let url = content.videoUrl {
+            if let url = content.thumbnailUrl {
               Button {
                 selectedIndex = index
+                selectedContentId = apiViewModel.userPostFeed[index].contentId ?? 0
               } label: {
                 videoThumbnail(url: url, index: index)
                   .onAppear {
@@ -55,16 +59,27 @@ struct ReportPostView: View {
         }
       }
       ToolbarItem(placement: .principal) {
-        Text("게시물 선택")
+        Text("콘텐츠 선택")
           .fontSystem(fontDesignSystem: .subtitle2_KO)
       }
       ToolbarItem(placement: .confirmationAction) {
         NavigationLink {
           switch reportCategory {
           case .post:
-            ReportReasonView(goReport: $goReport, userId: userId, reportCategory: .post)
+            ReportReasonView(
+              goReport: $goReport,
+              selectedContentId: $selectedContentId,
+              userId: userId,
+              reportCategory: .post)
+              .environmentObject(apiViewModel)
           case .user:
-            ReportDetailView(goReport: $goReport)
+            ReportDetailView(
+              goReport: $goReport,
+              selectedContentId: $selectedContentId,
+              reportCategory: .user,
+              reportReason: reportReason ?? 0,
+              userId: userId)
+              .environmentObject(apiViewModel)
           }
         } label: {
           Text("다음")
@@ -77,19 +92,20 @@ struct ReportPostView: View {
     .task {
       await apiViewModel.requestUserPostFeed(userId: userId)
     }
-    .navigationDestination(isPresented: .constant(false)) {
-      ReportDetailView(goReport: $goReport)
-    }
   }
 }
 
 extension ReportPostView {
 
   @ViewBuilder
-  func videoThumbnail(url _: String, index: Int) -> some View {
-    ZStack {
-      RoundedRectangle(cornerRadius: 12)
-        .fill(.black)
+  func videoThumbnail(url: String, index: Int) -> some View {
+    Color.black.overlay {
+      KFImage.url(URL(string: url))
+        .placeholder { // 플레이스 홀더 설정
+          Color.black
+        }
+        .resizable()
+        .scaledToFit()
       VStack {
         HStack {
           Spacer()
@@ -104,6 +120,7 @@ extension ReportPostView {
       }
     }
     .frame(height: 204)
-    .frame(maxWidth: .infinity)
+    .cornerRadius(12)
   }
+
 }

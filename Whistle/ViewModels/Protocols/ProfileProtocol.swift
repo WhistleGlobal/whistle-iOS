@@ -20,6 +20,6 @@ protocol ProfileProtocol {
   func deleteProfileImage() async
   func followUser(userId: Int) async
   func unfollowUser(userId: Int) async
-  func deleteUser() async
+  func rebokeAppleToken() async
 
 }
