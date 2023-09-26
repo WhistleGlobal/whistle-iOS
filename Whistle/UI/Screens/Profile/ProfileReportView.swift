@@ -51,9 +51,6 @@ struct ProfileReportView: View {
     .navigationBarBackButtonHidden()
     .navigationBarTitleDisplayMode(.inline)
     .navigationTitle("가이드 상태")
-    .onAppear {
-      isShowingBottomSheet = false
-    }
     .task {
       if apiViewModel.reportedContent.isEmpty {
 //        await apiViewModel.requestReportedConent()
