@@ -10,6 +10,10 @@ import SwiftUI
 
 // MARK: - UserFollowView
 
+private var selectedId: Int?
+
+// MARK: - UserFollowView
+
 struct UserFollowView: View {
 
   // MARK: Internal
@@ -20,7 +24,6 @@ struct UserFollowView: View {
   @State var newId = UUID()
   @State var tabStatus: profileTabStatus = .follower
   @State var showOtherProfile = false
-  @State var selectedId: Int?
   @State var showUserProfile = false
   let userId: Int
 

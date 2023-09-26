@@ -6,6 +6,7 @@
 //
 
 import _AVKit_SwiftUI
+import AVFoundation
 import Kingfisher
 import SwiftUI
 
@@ -29,6 +30,9 @@ struct MainView: View {
   @State var isShowingBottomSheet = false
   @State var players: [AVPlayer?] = []
   @State var newId = UUID()
+  @State var isCurrentVideoWhistled = false
+  @State var timer: Timer? = nil
+  @Binding var mainOpacity: Double
 
   var body: some View {
     GeometryReader { proxy in
@@ -99,6 +103,13 @@ struct MainView: View {
       .frame(width: proxy.size.height)
       .tabViewStyle(.page(indexDisplayMode: .never))
       .frame(maxWidth: proxy.size.width)
+      .onChange(of: mainOpacity) { newValue in
+        if newValue == 1 {
+          players[currentIndex]?.play()
+        } else {
+          players[currentIndex]?.pause()
+        }
+      }
     }
     .ignoresSafeArea(.all, edges: .top)
     .navigationBarBackButtonHidden()
@@ -118,6 +129,7 @@ struct MainView: View {
         }
         currentVideoUserId = apiViewModel.contentList[currentIndex].userId ?? 0
         currentVideoContentId = apiViewModel.contentList[currentIndex].contentId ?? 0
+        isCurrentVideoWhistled = apiViewModel.contentList[currentIndex].isWhistled
         await player.seek(to: .zero)
         player.play()
       }
@@ -198,7 +210,7 @@ struct MainView: View {
 extension MainView {
   @ViewBuilder
   func userInfo(
-    contentId: Int,
+    contentId _: Int,
     userName: String,
     profileImg: String,
     isFollowed: Binding<Bool>,
@@ -273,17 +285,7 @@ extension MainView {
         VStack(spacing: 0) {
           Spacer()
           Button {
-            Task {
-              if isWhistled.wrappedValue {
-                await apiViewModel.actionWhistleCancel(contentId: contentId)
-                whistleCount.wrappedValue -= 1
-              } else {
-                await apiViewModel.actionWhistle(contentId: contentId)
-                whistleCount.wrappedValue += 1
-              }
-              isWhistled.wrappedValue.toggle()
-              apiViewModel.postFeedPlayerChanged()
-            }
+            whistleToggle()
           } label: {
             VStack(spacing: 0) {
               Image(systemName: isWhistled.wrappedValue ? "heart.fill" : "heart")
@@ -326,5 +328,29 @@ extension MainView {
     }
     .padding(.bottom, 112)
     .padding(.horizontal, 20)
+  }
+}
+
+// MARK: - Timer
+extension MainView {
+  func whistleToggle() {
+      timer?.invalidate()
+    if apiViewModel.contentList[currentIndex].isWhistled {
+      timer = Timer.scheduledTimer(withTimeInterval: 2, repeats: false) { _ in
+        Task {
+          await apiViewModel.actionWhistleCancel(contentId: currentVideoContentId)
+        }
+      }
+      apiViewModel.contentList[currentIndex].whistleCount? -= 1
+    } else {
+      timer = Timer.scheduledTimer(withTimeInterval: 2, repeats: false) { _ in
+        Task {
+          await apiViewModel.actionWhistle(contentId: currentVideoContentId)
+        }
+      }
+      apiViewModel.contentList[currentIndex].whistleCount? += 1
+    }
+    apiViewModel.contentList[currentIndex].isWhistled.toggle()
+    apiViewModel.postFeedPlayerChanged()
   }
 }

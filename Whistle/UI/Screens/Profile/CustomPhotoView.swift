@@ -87,6 +87,12 @@ struct CustomPhotoView: View {
       CustomAlbumListView(albumName: $albumName)
         .environmentObject(photoViewModel)
     }
+    .onAppear {
+      guard let selectedImage = photoViewModel.photos.first?.photo else {
+        return
+      }
+      self.selectedImage = selectedImage
+    }
   }
 }
 
@@ -213,7 +219,6 @@ extension CustomPhotoView {
     let cropSize = crop.size()
     GeometryReader {
       let size = $0.size
-
       if let selectedImage {
         Image(uiImage: selectedImage)
           .resizable()
