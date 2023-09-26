@@ -229,8 +229,8 @@ struct ProfileView: View {
             iconHeight: 20,
             text: "신고")
         }
-        Divider().background(Color("Gray10"))
         Group {
+          Divider().background(Color("Gray10"))
           Button {
             showSignoutAlert = true
           } label: {
@@ -252,7 +252,7 @@ struct ProfileView: View {
     .enableAppleScrollBehavior(false)
     .dragIndicatorColor(Color.Border_Default_Dark)
     .customBackground(
-      glassMoriphicView(width: UIScreen.width, height: 420, cornerRadius: 24)
+      glassMoriphicView(width: UIScreen.width, height: .infinity, cornerRadius: 24)
         .overlay {
           RoundedRectangle(cornerRadius: 24)
             .stroke(lineWidth: 1)
