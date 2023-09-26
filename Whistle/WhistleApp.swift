@@ -21,6 +21,7 @@ struct WhistleApp: App {
     Font.registerFonts(fontName: "SF-Pro-Text-Regular")
     Font.registerFonts(fontName: "SF-Pro-Text-Semibold")
     Font.registerFontsTTF(fontName: "SF-Pro")
+    Font.registerFontsTTF(fontName: "Roboto-Medium")
   }
 
   // MARK: Internal

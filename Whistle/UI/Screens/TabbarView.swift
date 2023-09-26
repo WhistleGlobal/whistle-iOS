@@ -13,16 +13,20 @@ struct TabbarView: View {
 
   @StateObject var tabbarModel: TabbarModel = .init()
   @State var isFirstProfileLoaded = true
+  @State var mainOpacity = 1.0
   @EnvironmentObject var apiViewModel: APIViewModel
   @EnvironmentObject var userAuth: UserAuth
 
   var body: some View {
     ZStack {
       NavigationStack {
-        MainView()
+        MainView(mainOpacity: $mainOpacity)
           .environmentObject(apiViewModel)
           .environmentObject(tabbarModel)
-          .opacity(tabbarModel.tabSelection == .main ? 1 : 0)
+          .opacity(mainOpacity)
+          .onChange(of: tabbarModel.tabSelection) { newValue in
+            mainOpacity = newValue == .main ? 1 : 0
+          }
       }
       .tint(.black)
       switch tabbarModel.tabSelection {

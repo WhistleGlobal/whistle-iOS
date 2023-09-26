@@ -34,6 +34,12 @@ struct MyContentListView: View {
                 .frame(width: proxy.size.width)
                 .overlay {
                   // TODO: - contentId 백엔드 수정 필요, contentId & whistleCount
+                  LinearGradient(
+                    colors: [.clear, .black.opacity(0.24)],
+                    startPoint: .center,
+                    endPoint: .bottom)
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    .allowsHitTesting(false)
                   userInfo(
                     contentId: content.contentId ?? 0,
                     caption: content.caption ?? "",

@@ -28,7 +28,7 @@ struct ReportAlert: View {
               LinearGradient.Border_Glass)
         }
         VStack(spacing: 0) {
-          Spacer().frame(height: 114)
+          Spacer().frame(height: 70)
           Rectangle()
             .frame(width: 270, height: 1)
             .foregroundStyle(LinearGradient.Border_Glass)
@@ -60,7 +60,7 @@ extension ReportAlert {
 
   @ViewBuilder
   func glassAlertTop() -> some View {
-    glassMorphicAlert(width: 270, height: 114)
+    glassMorphicAlert(width: 270, height: 70)
       .cornerRadius(14, corners: [.topLeft, .topRight])
   }
 
@@ -82,7 +82,7 @@ extension ReportAlert {
       Text("정말 신고하시겠습니까?")
     }
     .foregroundColor(.LabelColor_Primary_Dark)
-    .frame(width: 270, height: 114)
+    .frame(width: 270, height: 70)
     .background(
       glassAlertTop())
     HStack(spacing: 0) {
@@ -109,3 +109,4 @@ extension ReportAlert {
     }
   }
 }
+
