@@ -30,8 +30,7 @@ struct UserProfileView: View {
           if let url = apiViewModel.userProfile.profileImg, !url.isEmpty {
             KFImage.url(URL(string: url))
               .placeholder { _ in
-                // FIXME: - 나중에 이미지 변경
-                Image("testCat")
+                Image("DefaultBG")
                   .resizable()
                   .scaledToFill()
                   .blur(radius: 50)
@@ -41,7 +40,7 @@ struct UserProfileView: View {
               .scaleEffect(2.0)
               .blur(radius: 50)
           } else {
-            Image("testCat")
+            Image("DefaultBG")
               .resizable()
               .scaledToFill()
               .blur(radius: 50)
