@@ -18,7 +18,8 @@ struct ProfileReportView: View {
 
   var body: some View {
     VStack(spacing: 0) {
-      if apiViewModel.reportedContent.isEmpty {
+//      if apiViewModel.reportedContent.isEmpty {
+      if true {
         Text("회원님의 콘텐츠는\n 현재 영향을 받지 않습니다.")
           .fontSystem(fontDesignSystem: .subtitle1_KO)
           .foregroundColor(.LabelColor_Primary)
@@ -58,7 +59,7 @@ struct ProfileReportView: View {
     }
     .task {
       if apiViewModel.reportedContent.isEmpty {
-        await apiViewModel.requestReportedConent()
+//        await apiViewModel.requestReportedConent()
       }
     }
     .toolbar {
