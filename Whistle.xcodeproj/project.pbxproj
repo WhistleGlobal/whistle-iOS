@@ -72,6 +72,8 @@
 		1B39555B2A95095500BCB4DF /* ColorManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B39555A2A95095500BCB4DF /* ColorManager.swift */; };
 		1B39555D2A95098100BCB4DF /* VideoModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B39555C2A95098100BCB4DF /* VideoModel.swift */; };
 		1B39555F2A9509A700BCB4DF /* SubmitButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B39555E2A9509A700BCB4DF /* SubmitButton.swift */; };
+		1B6C04302AC2B93400DF4045 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 1B6C042F2AC2B93400DF4045 /* SnapKit */; };
+		1B6C04322AC2B93A00DF4045 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = 1B6C04312AC2B93A00DF4045 /* Kingfisher */; };
 		1BB7A06A2A9514B4002DD86F /* .swiftlint.yml in Resources */ = {isa = PBXBuildFile; fileRef = 1BB7A0692A9514B4002DD86F /* .swiftlint.yml */; };
 		1BD4E56B2ABA275200ADB783 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 1BD4E56A2ABA275200ADB783 /* SnapKit */; };
 		1BD4E5B62ABA2F5600ADB783 /* VideoPicker.h in Headers */ = {isa = PBXBuildFile; fileRef = 1BD4E5B52ABA2F5600ADB783 /* VideoPicker.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -294,8 +296,6 @@
 		1BD4E7BC2ABA2F8600ADB783 /* Mosaic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BD4E6DF2ABA2F8600ADB783 /* Mosaic.swift */; };
 		1BD4E7BD2ABA2F8600ADB783 /* PhotoEditorContentView+Mosaic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BD4E6E02ABA2F8600ADB783 /* PhotoEditorContentView+Mosaic.swift */; };
 		1BD4E7BE2ABA2F8600ADB783 /* EditorTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BD4E6E12ABA2F8600ADB783 /* EditorTheme.swift */; };
-		1BD4E7C12ABA31B600ADB783 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = 1BD4E7C02ABA31B600ADB783 /* Kingfisher */; };
-		1BD4E7C32ABA31F000ADB783 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 1BD4E7C22ABA31F000ADB783 /* SnapKit */; };
 		1BD4E7C62ABA68D500ADB783 /* PickerConfigViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BD4E7C52ABA68D500ADB783 /* PickerConfigViewController.swift */; };
 		1BD4E7C82ABA68DF00ADB783 /* PickerResultViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BD4E7C72ABA68DF00ADB783 /* PickerResultViewController.swift */; };
 		1BD4E7CC2ABA68EF00ADB783 /* ConfigCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BD4E7CB2ABA68EF00ADB783 /* ConfigCell.swift */; };
@@ -850,8 +850,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				1BD4E7C12ABA31B600ADB783 /* Kingfisher in Frameworks */,
-				1BD4E7C32ABA31F000ADB783 /* SnapKit in Frameworks */,
+				1B6C04322AC2B93A00DF4045 /* Kingfisher in Frameworks */,
+				1B6C04302AC2B93400DF4045 /* SnapKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1214,7 +1214,6 @@
 		1B3955582A95094200BCB4DF /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				1B08DCC42AA1873000CA1DE1 /* newjeans.mp3 */,
 				78E175652ABBF0D300731259 /* whistleSignInBackground.mp4 */,
 				78D148D12A9E0A2600DDCE48 /* Fonts */,
 				1B3955432A95069D00BCB4DF /* Assets.xcassets */,
@@ -2135,8 +2134,8 @@
 			);
 			name = VideoPicker;
 			packageProductDependencies = (
-				1BD4E7C02ABA31B600ADB783 /* Kingfisher */,
-				1BD4E7C22ABA31F000ADB783 /* SnapKit */,
+				1B6C042F2AC2B93400DF4045 /* SnapKit */,
+				1B6C04312AC2B93A00DF4045 /* Kingfisher */,
 			);
 			productName = VideoPicker;
 			productReference = 1BD4E5B32ABA2F5600ADB783 /* VideoPicker.framework */;
@@ -2284,7 +2283,7 @@
 				782DD47C2AA32448006183D3 /* Extension+UINavigationController.swift in Sources */,
 				1B0A29AE2AA662CB009077A1 /* HapticsManager.swift in Sources */,
 				1B3895452AB9CB7500B4C8DD /* MainEditorView.swift in Sources */,
-				787173B42AA472070018CB14 /* ProfileToastMessage.swift in Sources */,
+				787173B42AA472070018CB14 /* ToastMessage.swift in Sources */,
 				1B3895622AB9CBD300B4C8DD /* ToolModel.swift in Sources */,
 				1B3895472AB9CB7500B4C8DD /* FiltersView.swift in Sources */,
 				1B3895272AB9CB6000B4C8DD /* ToolButtonView.swift in Sources */,
@@ -2351,7 +2350,6 @@
 				1B38957B2AB9CC2C00B4C8DD /* VideoEditor.swift in Sources */,
 				1B3895412AB9CB7500B4C8DD /* PlayerHolderView.swift in Sources */,
 				789BCB432ABBF2E1002164C4 /* UserContentListView.swift in Sources */,
-				1BE8EA1A2AB205EA00EB0A55 /* VideoEditorMainView.swift in Sources */,
 				78BECCE52AAAE597003FA7B5 /* APIViewModel+Upload.swift in Sources */,
 				1BD4E7D42ABA6B2A00ADB783 /* VideoPickerTestView.swift in Sources */,
 				1BD4E7D22ABA690400ADB783 /* Extension+UITableViewCell.swift in Sources */,
@@ -3038,17 +3036,17 @@
 			package = 1B38958E2AB9E16E00B4C8DD /* XCRemoteSwiftPackageReference "BottomSheet" */;
 			productName = BottomSheet;
 		};
-		1BD4E56A2ABA275200ADB783 /* SnapKit */ = {
+		1B6C042F2AC2B93400DF4045 /* SnapKit */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 1BD4E5692ABA275200ADB783 /* XCRemoteSwiftPackageReference "SnapKit" */;
 			productName = SnapKit;
 		};
-		1BD4E7C02ABA31B600ADB783 /* Kingfisher */ = {
+		1B6C04312AC2B93A00DF4045 /* Kingfisher */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 78E738C82AA9A90E00480046 /* XCRemoteSwiftPackageReference "Kingfisher" */;
 			productName = Kingfisher;
 		};
-		1BD4E7C22ABA31F000ADB783 /* SnapKit */ = {
+		1BD4E56A2ABA275200ADB783 /* SnapKit */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 1BD4E5692ABA275200ADB783 /* XCRemoteSwiftPackageReference "SnapKit" */;
 			productName = SnapKit;
