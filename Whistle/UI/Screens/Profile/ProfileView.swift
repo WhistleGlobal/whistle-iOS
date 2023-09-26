@@ -215,6 +215,9 @@ struct ProfileView: View {
           bottomSheetRowWithIcon(systemName: "info.circle", iconWidth: 22, iconHeight: 20, text: "약관 및 정책")
         }
         Button {
+          withAnimation {
+            bottomSheetPosition = .hidden
+          }
           log("공유")
         } label: {
           bottomSheetRowWithIcon(systemName: "square.and.arrow.up", iconWidth: 22, iconHeight: 20, text: "프로필 공유")
@@ -232,11 +235,17 @@ struct ProfileView: View {
         Group {
           Divider().background(Color("Gray10"))
           Button {
+            withAnimation {
+              bottomSheetPosition = .hidden
+            }
             showSignoutAlert = true
           } label: {
             bottomSheetRow(text: "로그아웃", color: Color.Info)
           }
           Button {
+            withAnimation {
+              bottomSheetPosition = .hidden
+            }
             showDeleteAlert = true
           } label: {
             bottomSheetRow(text: "계정삭제", color: Color.Danger)
