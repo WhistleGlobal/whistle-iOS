@@ -332,14 +332,12 @@ extension MainView {
 }
 
 // MARK: - Timer
-
 extension MainView {
   func whistleToggle() {
-    timer?.invalidate()
+      timer?.invalidate()
     if apiViewModel.contentList[currentIndex].isWhistled {
       timer = Timer.scheduledTimer(withTimeInterval: 2, repeats: false) { _ in
         Task {
-          log("send to server after 2sec \(isCurrentVideoWhistled)")
           await apiViewModel.actionWhistleCancel(contentId: currentVideoContentId)
         }
       }
@@ -347,7 +345,6 @@ extension MainView {
     } else {
       timer = Timer.scheduledTimer(withTimeInterval: 2, repeats: false) { _ in
         Task {
-          log("send to server after 2sec \(isCurrentVideoWhistled)")
           await apiViewModel.actionWhistle(contentId: currentVideoContentId)
         }
       }
