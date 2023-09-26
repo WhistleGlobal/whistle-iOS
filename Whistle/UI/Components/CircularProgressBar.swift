@@ -26,7 +26,9 @@ struct CircularProgressBar: View {
           .foregroundColor(.Gray10)
           .rotationEffect(Angle(degrees: 270.0))
       }
-      .frame(width: min(geometry.size.width, geometry.size.height), height: min(geometry.size.width, geometry.size.height))
+      .frame(
+        width: min(geometry.size.width, geometry.size.height),
+        height: min(geometry.size.width, geometry.size.height))
       .onAppear {
         withAnimation(.linear(duration: 0.5)) { // 애니메이션 설정
           animatedProgress = progress
@@ -41,9 +43,10 @@ struct CircularProgressBar: View {
   }
 }
 
-//
-// struct CircularProgressBar_Previews: PreviewProvider {
-//  static var previews: some View {
-//    CircularProgressBar()
-//  }
-// }
+// MARK: - CircularProgressBar_Previews
+
+struct CircularProgressBar_Previews: PreviewProvider {
+  static var previews: some View {
+    CircularProgressBar(progress: 0.9)
+  }
+}

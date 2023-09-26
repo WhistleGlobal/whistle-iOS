@@ -11,7 +11,6 @@ import SwiftUI
 // MARK: - ProfileEditIDView
 
 struct ProfileEditIDView: View {
-
   // MARK: Public
 
   public enum InputValidationStatus: String {
@@ -118,7 +117,6 @@ struct ProfileEditIDView: View {
 }
 
 extension ProfileEditIDView {
-
   // MARK: - ClearButton
 
   struct ClearButton: ViewModifier {

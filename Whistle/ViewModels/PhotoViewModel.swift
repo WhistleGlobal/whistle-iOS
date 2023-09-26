@@ -10,7 +10,6 @@ import Photos
 import SwiftUI
 
 class PhotoViewModel: ObservableObject {
-
   enum SelectedPhotos: Int {
     case all = 1
     case favorites = 0
@@ -174,7 +173,6 @@ class PhotoViewModel: ObservableObject {
       completion(nil)
     }
   }
-
 
   func fetchPhotoByUUID(uuid: UUID) -> Photo? {
     photos.first { photo in

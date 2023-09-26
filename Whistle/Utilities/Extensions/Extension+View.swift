@@ -20,7 +20,7 @@ extension View {
 // MARK: - 추후 Sticky header
 extension View {
   @ViewBuilder
-  func offset(coordinateSpace: CoordinateSpace, completion: @escaping (CGFloat) -> ()) -> some View {
+  func offset(coordinateSpace: CoordinateSpace, completion: @escaping (CGFloat) -> Void) -> some View {
     overlay {
       GeometryReader { proxy in
         let minY = proxy.frame(in: coordinateSpace).minY
@@ -62,7 +62,6 @@ extension View {
 // MARK: - GlassMorphism 관련 코드
 
 extension View {
-
   @ViewBuilder
   func glassMorphicTab(width: CGFloat) -> some View {
     HStack(spacing: 0) {
@@ -366,5 +365,61 @@ fileprivate struct Removebackgroundcolor: UIViewRepresentable {
     DispatchQueue.main.async {
       uiView.superview?.superview?.backgroundColor = .clear
     }
+  }
+}
+
+extension View {
+  func getRect() -> CGRect {
+    UIScreen.main.bounds
+  }
+
+  // MARK: - Vertical Center
+
+  func vCenter() -> some View {
+    frame(maxHeight: .infinity, alignment: .center)
+  }
+
+  // MARK: - Vertical Top
+
+  func vTop() -> some View {
+    frame(maxHeight: .infinity, alignment: .top)
+  }
+
+  // MARK: - Vertical Bottom
+
+  func vBottom() -> some View {
+    frame(maxHeight: .infinity, alignment: .bottom)
+  }
+
+  // MARK: - Horizontal Center
+
+  func hCenter() -> some View {
+    frame(maxWidth: .infinity, alignment: .center)
+  }
+
+  // MARK: - Horizontal Leading
+
+  func hLeading() -> some View {
+    frame(maxWidth: .infinity, alignment: .leading)
+  }
+
+  // MARK: - Horizontal Trailing
+
+  func hTrailing() -> some View {
+    frame(maxWidth: .infinity, alignment: .trailing)
+  }
+
+  // MARK: - All frame
+
+  func allFrame() -> some View {
+    frame(maxWidth: .infinity, maxHeight: .infinity)
+  }
+
+  func withoutAnimation() -> some View {
+    animation(nil, value: UUID())
+  }
+
+  var isSmallScreen: Bool {
+    getRect().height < 700
   }
 }

@@ -17,7 +17,7 @@ extension APIViewModel: PostFeedProtocol {
   func requestMyPostFeed() async {
     await withCheckedContinuation { continuation in
       AF.request(
-        "\(domainUrl)/user/post/feed",
+        "\(domainURL)/user/post/feed",
         method: .get,
         headers: contentTypeJson)
         .validate(statusCode: 200...300)
@@ -48,7 +48,7 @@ extension APIViewModel: PostFeedProtocol {
   func requestUserPostFeed(userId: Int) async {
     await withCheckedContinuation { continuation in
       AF.request(
-        "\(domainUrl)/user/\(userId)/post/feed",
+        "\(domainURL)/user/\(userId)/post/feed",
         method: .get,
         headers: contentTypeJson)
         .validate(statusCode: 200...300)
@@ -78,7 +78,7 @@ extension APIViewModel: PostFeedProtocol {
   func requestMyBookmark() async {
     await withCheckedContinuation { continuation in
       AF.request(
-        "\(domainUrl)/user/post/bookmark",
+        "\(domainURL)/user/post/bookmark",
         method: .get,
         headers: contentTypeJson)
         .validate(statusCode: 200...300)
@@ -111,7 +111,7 @@ extension APIViewModel: PostFeedProtocol {
   func requestContentList() async {
     await withCheckedContinuation { continuation in
       AF.request(
-        "\(domainUrl)/content/content-list",
+        "\(domainURL)/content/content-list",
         method: .get,
         headers: contentTypeJson)
         .validate(statusCode: 200...300)
@@ -165,7 +165,7 @@ extension APIViewModel: PostFeedProtocol {
   func requestReportedConent() async {
     await withCheckedContinuation { continuation in
       AF.request(
-        "\(domainUrl)/user/post/suspend-list",
+        "\(domainURL)/user/post/suspend-list",
         method: .get,
         headers: contentTypeJson)
         .validate(statusCode: 200...300)
