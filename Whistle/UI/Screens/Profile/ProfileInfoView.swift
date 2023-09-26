@@ -11,7 +11,6 @@ import SwiftUI
 struct ProfileInfoView: View {
 
   @Environment(\.dismiss) var dismiss
-  @Binding var isShowingBottomSheet: Bool
   @EnvironmentObject var apiViewModel: APIViewModel
 
   var body: some View {
@@ -53,9 +52,6 @@ struct ProfileInfoView: View {
     .navigationTitle("정보")
     .task {
       apiViewModel.requestUserCreateDate()
-    }
-    .onAppear {
-      isShowingBottomSheet = false
     }
     .toolbar {
       ToolbarItem(placement: .cancellationAction) {

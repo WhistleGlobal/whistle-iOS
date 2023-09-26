@@ -6,6 +6,7 @@
 //
 
 import AVKit
+import BottomSheet
 import GoogleSignIn
 import GoogleSignInSwift
 import Kingfisher
@@ -29,6 +30,7 @@ struct ProfileView: View {
   @State var tabSelection: profileTabCase = .myVideo
   @State var showSignoutAlert = false
   @State var showDeleteAlert = false
+  @State var bottomSheetPosition: BottomSheetPosition = .hidden
   @Binding var isFirstProfileLoaded: Bool
   @EnvironmentObject var apiViewModel: APIViewModel
   @EnvironmentObject var userAuth: UserAuth
@@ -194,6 +196,95 @@ struct ProfileView: View {
         }
       }
     }
+    .onChange(of: bottomSheetPosition) { newValue in
+      if newValue == .hidden {
+//        tabbarModel.tabbarOpacity = 1.0
+      } else {
+        tabbarModel.tabbarOpacity = 0.0
+      }
+    }
+    .bottomSheet(
+      bottomSheetPosition: $bottomSheetPosition,
+      switchablePositions: [.hidden, .absolute(420)])
+    {
+      VStack(spacing: 0) {
+        HStack {
+          Text("설정")
+            .fontSystem(fontDesignSystem: .subtitle1_KO)
+            .foregroundColor(.White)
+        }
+        .frame(height: 52)
+        Divider().background(Color("Gray10"))
+        NavigationLink {
+          ProfileNotiView()
+            .environmentObject(apiViewModel)
+        } label: {
+          bottomSheetRowWithIcon(systemName: "bell", iconWidth: 22, iconHeight: 20, text: "알림")
+        }
+        NavigationLink {
+          ProfileInfoView()
+            .environmentObject(apiViewModel)
+        } label: {
+          bottomSheetRowWithIcon(systemName: "info.circle", iconWidth: 22, iconHeight: 20, text: "약관 및 정책")
+        }
+        Button {
+          withAnimation {
+            bottomSheetPosition = .hidden
+          }
+          log("공유")
+        } label: {
+          bottomSheetRowWithIcon(systemName: "square.and.arrow.up", iconWidth: 22, iconHeight: 20, text: "프로필 공유")
+        }
+        NavigationLink {
+          ProfileReportView()
+            .environmentObject(apiViewModel)
+        } label: {
+          bottomSheetRowWithIcon(
+            systemName: "exclamationmark.triangle.fill",
+            iconWidth: 22,
+            iconHeight: 20,
+            text: "신고")
+        }
+        Group {
+          Divider().background(Color("Gray10"))
+          Button {
+            withAnimation {
+              bottomSheetPosition = .hidden
+            }
+            showSignoutAlert = true
+          } label: {
+            bottomSheetRow(text: "로그아웃", color: Color.Info)
+          }
+          Button {
+            withAnimation {
+              bottomSheetPosition = .hidden
+            }
+            showDeleteAlert = true
+          } label: {
+            bottomSheetRow(text: "계정삭제", color: Color.Danger)
+          }
+        }
+        Spacer()
+      }
+      .frame(height: 420)
+    }
+    .enableSwipeToDismiss(true)
+    .enableTapToDismiss(true)
+    .enableContentDrag(true)
+    .enableAppleScrollBehavior(false)
+    .dragIndicatorColor(Color.Border_Default_Dark)
+    .customBackground(
+      glassMoriphicView(width: UIScreen.width, height: .infinity, cornerRadius: 24)
+        .overlay {
+          RoundedRectangle(cornerRadius: 24)
+            .stroke(lineWidth: 1)
+            .foregroundStyle(
+              LinearGradient.Border_Glass)
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+        })
+    .onDismiss {
+      tabbarModel.tabbarOpacity = 1.0
+    }
   }
 }
 
@@ -205,9 +296,8 @@ extension ProfileView {
       HStack {
         Spacer()
         Button {
-          tabbarModel.tabbarOpacity = 0
           withAnimation {
-            self.isShowingBottomSheet = true
+            bottomSheetPosition = .absolute(420)
           }
         } label: {
           Circle()
@@ -331,5 +421,58 @@ extension ProfileView {
     .buttonStyle(ProfileEditButtonStyle())
     .padding(.bottom, 76)
     Spacer()
+  }
+}
+
+extension ProfileView {
+
+  @ViewBuilder
+  func bottomSheetRowWithIcon(
+    systemName: String,
+    iconWidth: CGFloat,
+    iconHeight: CGFloat,
+    text: String)
+    -> some View
+  {
+    HStack(spacing: 12) {
+      Image(systemName: systemName)
+        .resizable()
+        .scaledToFit()
+        .frame(width: iconWidth, height: iconHeight)
+        .foregroundColor(.white)
+
+      Text(text)
+        .foregroundColor(.white)
+        .fontSystem(fontDesignSystem: .body1_KO)
+      Spacer()
+      Image(systemName: "chevron.forward")
+        .resizable()
+        .scaledToFit()
+        .padding(.vertical, 2.5)
+        .padding(.horizontal, 6)
+        .frame(width: 24, height: 24)
+        .foregroundColor(.white)
+    }
+    .frame(height: 56)
+    .padding(.horizontal, 16)
+  }
+
+  @ViewBuilder
+  func bottomSheetRow(text: String, color: Color) -> some View {
+    HStack {
+      Text(text)
+        .foregroundColor(color)
+        .fontSystem(fontDesignSystem: .body1_KO)
+      Spacer()
+      Image(systemName: "chevron.forward")
+        .resizable()
+        .scaledToFit()
+        .padding(.vertical, 2.5)
+        .padding(.horizontal, 6)
+        .frame(width: 24, height: 24)
+        .foregroundColor(.white)
+    }
+    .frame(height: 56)
+    .padding(.horizontal, 16)
   }
 }
