@@ -48,8 +48,11 @@ struct WhistleApp: App {
             }
           }
       } else {
-        SignInView()
-          .environmentObject(userAuth)
+        NavigationStack {
+          SignInView()
+            .environmentObject(userAuth)
+        }
+        .tint(.black)
       }
     }
   }

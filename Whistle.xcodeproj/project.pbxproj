@@ -365,7 +365,6 @@
 		788F43F72AA6136F00718D38 /* Player.swift in Sources */ = {isa = PBXBuildFile; fileRef = 788F43F62AA6136F00718D38 /* Player.swift */; };
 		788F43F92AA615AF00718D38 /* PlayerPageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 788F43F82AA615AF00718D38 /* PlayerPageView.swift */; };
 		789BCB432ABBF2E1002164C4 /* UserContentListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 789BCB422ABBF2E1002164C4 /* UserContentListView.swift */; };
-		78B33C382AC2AEB200FBB4FE /* TestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78B33C372AC2AEB200FBB4FE /* TestView.swift */; };
 		78B6FD2C2AA718A80043E461 /* CustomAlbumListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78B6FD2B2AA718A80043E461 /* CustomAlbumListView.swift */; };
 		78B6FD2E2AA719190043E461 /* AlbumModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78B6FD2D2AA719190043E461 /* AlbumModel.swift */; };
 		78BECCD72AAAE169003FA7B5 /* ProfileProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78BECCD62AAAE169003FA7B5 /* ProfileProtocol.swift */; };
@@ -789,7 +788,6 @@
 		788F43F62AA6136F00718D38 /* Player.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Player.swift; sourceTree = "<group>"; };
 		788F43F82AA615AF00718D38 /* PlayerPageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerPageView.swift; sourceTree = "<group>"; };
 		789BCB422ABBF2E1002164C4 /* UserContentListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserContentListView.swift; sourceTree = "<group>"; };
-		78B33C372AC2AEB200FBB4FE /* TestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestView.swift; sourceTree = "<group>"; };
 		78B6FD2B2AA718A80043E461 /* CustomAlbumListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomAlbumListView.swift; sourceTree = "<group>"; };
 		78B6FD2D2AA719190043E461 /* AlbumModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlbumModel.swift; sourceTree = "<group>"; };
 		78BECCD62AAAE169003FA7B5 /* ProfileProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileProtocol.swift; sourceTree = "<group>"; };
@@ -1091,7 +1089,6 @@
 				1B39554E2A9506BD00BCB4DF /* Models */,
 				1B39553F2A95069C00BCB4DF /* WhistleApp.swift */,
 				1B3955452A95069D00BCB4DF /* Preview Content */,
-				78B33C372AC2AEB200FBB4FE /* TestView.swift */,
 			);
 			path = Whistle;
 			sourceTree = "<group>";
@@ -2357,8 +2354,6 @@
 				1B38957B2AB9CC2C00B4C8DD /* VideoEditor.swift in Sources */,
 				1B3895412AB9CB7500B4C8DD /* PlayerHolderView.swift in Sources */,
 				789BCB432ABBF2E1002164C4 /* UserContentListView.swift in Sources */,
-				1BE8EA1A2AB205EA00EB0A55 /* VideoEditorMainView.swift in Sources */,
-				78B33C382AC2AEB200FBB4FE /* TestView.swift in Sources */,
 				78BECCE52AAAE597003FA7B5 /* APIViewModel+Upload.swift in Sources */,
 				1BD4E7D42ABA6B2A00ADB783 /* VideoPickerTestView.swift in Sources */,
 				1BD4E7D22ABA690400ADB783 /* Extension+UITableViewCell.swift in Sources */,

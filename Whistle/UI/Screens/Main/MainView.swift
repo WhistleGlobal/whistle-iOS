@@ -334,7 +334,7 @@ extension MainView {
 // MARK: - Timer
 extension MainView {
   func whistleToggle() {
-      timer?.invalidate()
+    timer?.invalidate()
     if apiViewModel.contentList[currentIndex].isWhistled {
       timer = Timer.scheduledTimer(withTimeInterval: 2, repeats: false) { _ in
         Task {
