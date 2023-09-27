@@ -29,7 +29,7 @@ struct TabbarView: View {
           }
       }
       .tint(.black)
-      switch tabbarModel.tabSelection {
+      switch tabbarModel.tabSelectionNoAnimation {
       case .main:
         Color.clear
       case .upload:
@@ -114,6 +114,7 @@ extension TabbarView {
       .overlay {
         Button {
           Task {
+            tabbarModel.tabSelectionNoAnimation = .main
             withAnimation {
               tabbarModel.tabSelection = .main
             }
@@ -131,6 +132,7 @@ extension TabbarView {
         .padding(3)
         .offset(x: -1 * ((UIScreen.width - 32) / 3))
         Button {
+          tabbarModel.tabSelectionNoAnimation = .upload
           withAnimation {
             tabbarModel.tabSelection = .upload
           }
@@ -172,6 +174,7 @@ extension TabbarView {
 extension TabbarView {
   var profileTabClicked: () -> Void {
     {
+      tabbarModel.tabSelectionNoAnimation = .profile
       withAnimation(.default) {
         tabbarModel.tabSelection = .profile
       }
@@ -206,6 +209,7 @@ public enum TabSelection: CGFloat {
 
 class TabbarModel: ObservableObject {
   @Published var tabSelection: TabSelection = .main
+  @Published var tabSelectionNoAnimation: TabSelection = .main
   @Published var tabbarOpacity = 1.0
   @Published var tabWidth = UIScreen.width - 32
 }
