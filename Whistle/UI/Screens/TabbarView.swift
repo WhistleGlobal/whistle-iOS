@@ -29,7 +29,7 @@ struct TabbarView: View {
           }
       }
       .tint(.black)
-      switch tabbarModel.tabSelection {
+      switch tabbarModel.tabSelectionNoAnimation {
       case .main:
         Color.clear
       case .upload:
@@ -114,9 +114,7 @@ extension TabbarView {
       .overlay {
         Button {
           Task {
-            withAnimation {
-              tabbarModel.tabSelection = .main
-            }
+            switchTab(to: .main)
           }
         } label: {
           Color.clear.overlay {
@@ -131,10 +129,7 @@ extension TabbarView {
         .padding(3)
         .offset(x: -1 * ((UIScreen.width - 32) / 3))
         Button {
-          withAnimation {
-            tabbarModel.tabSelection = .upload
-          }
-
+          switchTab(to: .upload)
         } label: {
           Color.clear.overlay {
             Image(systemName: "plus")
@@ -172,9 +167,7 @@ extension TabbarView {
 extension TabbarView {
   var profileTabClicked: () -> Void {
     {
-      withAnimation(.default) {
-        tabbarModel.tabSelection = .profile
-      }
+      switchTab(to: .profile)
       if isFirstProfileLoaded {
         Task {
           await apiViewModel.requestMyFollow()
@@ -192,6 +185,13 @@ extension TabbarView {
       }
     }
   }
+
+  func switchTab(to tabSelection: TabSelection) {
+    tabbarModel.tabSelectionNoAnimation = tabSelection
+    withAnimation {
+      tabbarModel.tabSelection = tabSelection
+    }
+  }
 }
 
 // MARK: - TabSelection
@@ -206,6 +206,7 @@ public enum TabSelection: CGFloat {
 
 class TabbarModel: ObservableObject {
   @Published var tabSelection: TabSelection = .main
+  @Published var tabSelectionNoAnimation: TabSelection = .main
   @Published var tabbarOpacity = 1.0
   @Published var tabWidth = UIScreen.width - 32
 }
