@@ -114,10 +114,7 @@ extension TabbarView {
       .overlay {
         Button {
           Task {
-            tabbarModel.tabSelectionNoAnimation = .main
-            withAnimation {
-              tabbarModel.tabSelection = .main
-            }
+            switchTab(to: .main)
           }
         } label: {
           Color.clear.overlay {
@@ -132,11 +129,7 @@ extension TabbarView {
         .padding(3)
         .offset(x: -1 * ((UIScreen.width - 32) / 3))
         Button {
-          tabbarModel.tabSelectionNoAnimation = .upload
-          withAnimation {
-            tabbarModel.tabSelection = .upload
-          }
-
+          switchTab(to: .upload)
         } label: {
           Color.clear.overlay {
             Image(systemName: "plus")
@@ -174,10 +167,7 @@ extension TabbarView {
 extension TabbarView {
   var profileTabClicked: () -> Void {
     {
-      tabbarModel.tabSelectionNoAnimation = .profile
-      withAnimation(.default) {
-        tabbarModel.tabSelection = .profile
-      }
+      switchTab(to: .profile)
       if isFirstProfileLoaded {
         Task {
           await apiViewModel.requestMyFollow()
@@ -193,6 +183,13 @@ extension TabbarView {
         }
         isFirstProfileLoaded = false
       }
+    }
+  }
+
+  func switchTab(to tabSelection: TabSelection) {
+    tabbarModel.tabSelectionNoAnimation = tabSelection
+    withAnimation {
+      tabbarModel.tabSelection = tabSelection
     }
   }
 }
