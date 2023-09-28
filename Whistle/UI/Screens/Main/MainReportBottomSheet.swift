@@ -32,7 +32,7 @@ struct MainReportBottomSheet: View {
           .transition(.move(edge: .bottom))
           .background(Color.clear)
           .overlay {
-            glassMoriphicView(width: UIScreen.width, height: UIScreen.height - 48, cornerRadius: 24)
+            glassMorphicView(width: UIScreen.width, height: UIScreen.height - 48, cornerRadius: 24)
               .offset(y: 20)
             RoundedRectangle(cornerRadius: 24)
               .stroke(lineWidth: 1)

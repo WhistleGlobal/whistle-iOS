@@ -124,7 +124,7 @@ extension AssetPickerViewController: ImageCaptureControllerDelegate {
         }
         self?.view.hud.hide()
       }
-    case .photoLive, .photoGIF:
+    case .photoLive:
       // Not support yet
       break
     }

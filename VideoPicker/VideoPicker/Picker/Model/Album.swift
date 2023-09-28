@@ -40,7 +40,6 @@ extension Album {
     var array: [Asset] = []
     let selectPhoto = selectOptions.contains(.photo)
     let selectVideo = selectOptions.contains(.video)
-    let selectPhotoGIF = selectOptions.contains(.photoGIF)
     let selectPhotoLive = selectOptions.contains(.photoLive)
 
     for phAsset in result.objects() {
@@ -52,10 +51,6 @@ extension Album {
         }
       case .video:
         if selectVideo {
-          array.append(asset)
-        }
-      case .photoGIF:
-        if selectPhotoGIF {
           array.append(asset)
         }
       case .photoLive:

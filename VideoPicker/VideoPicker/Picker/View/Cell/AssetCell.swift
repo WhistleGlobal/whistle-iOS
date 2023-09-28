@@ -22,12 +22,6 @@ final class AssetCell: UICollectionViewCell {
     return view
   }()
 
-  private lazy var gifView: GIFView = {
-    let view = GIFView()
-    view.isHidden = true
-    return view
-  }()
-
   private lazy var videoView: VideoView = {
     let view = VideoView()
     view.isHidden = true
@@ -42,44 +36,13 @@ final class AssetCell: UICollectionViewCell {
     return view
   }()
 
-  private lazy var selectedCoverView: UIView = {
-    let view = UIView(frame: .zero)
-    view.isHidden = true
-    view.backgroundColor = UIColor.black.withAlphaComponent(0.5)
-    return view
-  }()
-
-  private lazy var disableCoverView: UIView = {
-    let view = UIView(frame: .zero)
-    view.isHidden = true
-    view.backgroundColor = UIColor.white.withAlphaComponent(0.5)
-    return view
-  }()
-
-  private(set) lazy var boxCoverView: UIView = {
-    let view = UIView(frame: .zero)
-    view.isHidden = true
-    view.layer.borderWidth = 4
-    return view
-  }()
-
-//  private(set) lazy var selectButton: NumberCircleButton = {
-//    let view = NumberCircleButton(frame: .zero, style: .default)
-//    view.addTarget(self, action: #selector(selectButtonTapped(_:)), for: .touchUpInside)
-//    return view
-//  }()
-
   private var identifier = ""
 
   override func prepareForReuse() {
     super.prepareForReuse()
     identifier = ""
-    selectedCoverView.isHidden = true
-    gifView.isHidden = true
     videoView.isHidden = true
     editedView.isHidden = true
-    disableCoverView.isHidden = true
-    boxCoverView.isHidden = true
   }
 
   override init(frame: CGRect) {
@@ -94,21 +57,10 @@ final class AssetCell: UICollectionViewCell {
 
   private func setupView() {
     contentView.addSubview(imageView)
-    contentView.addSubview(selectedCoverView)
-    contentView.addSubview(gifView)
     contentView.addSubview(videoView)
     contentView.addSubview(editedView)
-    contentView.addSubview(disableCoverView)
-    contentView.addSubview(boxCoverView)
-//    contentView.addSubview(selectButton)
 
     imageView.snp.makeConstraints { maker in
-      maker.edges.equalToSuperview()
-    }
-    selectedCoverView.snp.makeConstraints { maker in
-      maker.edges.equalToSuperview()
-    }
-    gifView.snp.makeConstraints { maker in
       maker.edges.equalToSuperview()
     }
     videoView.snp.makeConstraints { maker in
@@ -117,16 +69,6 @@ final class AssetCell: UICollectionViewCell {
     editedView.snp.makeConstraints { maker in
       maker.edges.equalToSuperview()
     }
-    disableCoverView.snp.makeConstraints { maker in
-      maker.edges.equalToSuperview()
-    }
-    boxCoverView.snp.makeConstraints { maker in
-      maker.edges.equalToSuperview()
-    }
-//    selectButton.snp.makeConstraints { maker in
-//      maker.top.right.equalToSuperview().inset(0)
-//      maker.width.height.equalTo(40)
-//    }
   }
 }
 
@@ -134,8 +76,6 @@ final class AssetCell: UICollectionViewCell {
 
 extension AssetCell: PickerOptionsConfigurable {
   func update(options: PickerOptionsInfo) {
-    boxCoverView.layer.borderColor = options.theme[color: .primary].cgColor
-//    selectButton.isHidden = options.selectionTapAction.hideToolBar && options.selectLimit == 1
     updateChildrenConfigurable(options: options)
   }
 }
@@ -147,13 +87,6 @@ extension AssetCell {
 }
 
 // MARK: - Action
-
-// extension AssetCell {
-//  @objc
-//  private func selectButtonTapped(_: NumberCircleButton) {
-//    selectEvent.call()
-//  }
-// }
 
 extension AssetCell {
   func setContent(_ asset: Asset, manager: PickerManager, animated: Bool = false, isPreview: Bool = false) {
@@ -177,31 +110,17 @@ extension AssetCell {
     updateState(asset, manager: manager, animated: animated, isPreview: isPreview)
   }
 
-  func updateState(_ asset: Asset, manager: PickerManager, animated _: Bool = false, isPreview: Bool = false) {
+  func updateState(_ asset: Asset, manager: PickerManager, animated _: Bool = false, isPreview _: Bool = false) {
     asset.check(disable: manager.options.disableRules, assetList: manager.selectedAssets)
     update(options: manager.options)
     if asset._images[.edited] != nil {
       editedView.isHidden = false
     } else {
       switch asset.mediaType {
-      case .photoGIF:
-        gifView.isHidden = false
       case .video:
         videoView.isHidden = false
       default:
         break
-      }
-    }
-
-    if isPreview {
-      selectedCoverView.isHidden = asset.isSelected
-    } else {
-//      selectButton.setNum(asset.selectedNum, isSelected: asset.isSelected, animated: animated)
-      selectedCoverView.isHidden = !asset.isSelected
-      if asset.isDisable {
-        disableCoverView.isHidden = false
-      } else {
-        disableCoverView.isHidden = !(manager.isUpToLimit && !asset.isSelected)
       }
     }
   }
@@ -264,7 +183,6 @@ private class VideoView: UIView {
       maker.height.equalTo(15)
     }
     videoLabel.snp.makeConstraints { maker in
-//      maker.left.equalTo(videoImageView.snp.right).offset(3)
       maker.right.equalTo(0).offset(-8)
       maker.centerY.equalTo(videoImageView)
     }
@@ -272,7 +190,6 @@ private class VideoView: UIView {
 }
 
 extension VideoView {
-  /// 设置视频时间，单位：秒
   func setVideoTime(_ time: String) {
     videoLabel.isHidden = false
     videoLabel.text = time
@@ -283,67 +200,8 @@ extension VideoView {
 
 extension VideoView: PickerOptionsConfigurable {
   func update(options: PickerOptionsInfo) {
-//    videoImageView.image = options.theme[icon: .video]
     updateChildrenConfigurable(options: options)
     options.theme.labelConfiguration[.assetCellVideoDuration]?.configuration(videoLabel)
-  }
-}
-
-// MARK: - GIFView
-
-private class GIFView: UIView {
-  private lazy var gifLabel: UILabel = {
-    let view = UILabel(frame: .zero)
-    view.text = "GIF"
-    view.textColor = UIColor.white
-    view.font = UIFont.systemFont(ofSize: 12, weight: .semibold)
-    return view
-  }()
-
-  private lazy var coverLayer: CAGradientLayer = {
-    let layer = CAGradientLayer()
-    layer.frame = CGRect(x: 0, y: self.bounds.height - 35, width: self.bounds.width, height: 35)
-    layer.colors = [
-      UIColor.black.withAlphaComponent(0.5).cgColor,
-      UIColor.black.withAlphaComponent(0).cgColor,
-    ]
-    layer.locations = [0, 1]
-    layer.startPoint = CGPoint(x: 0.5, y: 1)
-    layer.endPoint = CGPoint(x: 0.5, y: 0)
-    return layer
-  }()
-
-  override func layoutSubviews() {
-    super.layoutSubviews()
-    coverLayer.frame = CGRect(x: 0, y: bounds.height - 35, width: bounds.width, height: 35)
-  }
-
-  override init(frame: CGRect) {
-    super.init(frame: frame)
-    setupView()
-  }
-
-  @available(*, unavailable)
-  required init?(coder _: NSCoder) {
-    fatalError("init(coder:) has not been implemented")
-  }
-
-  private func setupView() {
-    layer.addSublayer(coverLayer)
-    addSubview(gifLabel)
-
-    gifLabel.snp.makeConstraints { maker in
-      maker.left.bottom.equalToSuperview().inset(8)
-      maker.height.equalTo(15)
-    }
-  }
-}
-
-// MARK: PickerOptionsConfigurable
-
-extension GIFView: PickerOptionsConfigurable {
-  func update(options: PickerOptionsInfo) {
-    options.theme.labelConfiguration[.assetCellGIFMark]?.configuration(gifLabel)
   }
 }
 
@@ -397,7 +255,6 @@ private class EditedView: UIView {
 
 extension EditedView: PickerOptionsConfigurable {
   func update(options: PickerOptionsInfo) {
-//    imageView.image = options.theme[icon: .photoEdited]
     updateChildrenConfigurable(options: options)
   }
 }

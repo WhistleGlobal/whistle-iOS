@@ -19,7 +19,6 @@ final class PickerConfigViewController: UIViewController {
     super.viewDidLoad()
     setupNavigation()
     setUpButton()
-//    setupView()
   }
 
   override func viewWillAppear(_: Bool) {

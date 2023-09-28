@@ -120,7 +120,6 @@ final class AssetPickerViewController: AnyImageViewController {
     if #available(iOS 14.0, *) {
     } else {
       view.registerCell(AssetCell.self)
-      view.registerCell(CameraCell.self)
       view.dataSource = self
     }
     view.delegate = self
@@ -433,6 +432,7 @@ extension AssetPickerViewController {
 
     if !asset.isSelected {
       let result = manager.addSelectedAsset(asset)
+      print("Result: \(asset)")
       if !result.success, !result.message.isEmpty {
         showAlert(message: result.message, stringConfig: manager.options.theme)
       }
@@ -608,17 +608,6 @@ extension AssetPickerViewController: UICollectionViewDataSource {
     guard let asset = album?.assets[indexPath.item] else { return collectionView.dequeueReusableCell(
       UICollectionViewCell.self,
       for: indexPath) }
-
-    #if ANYIMAGEKIT_ENABLE_CAPTURE
-    if asset.isCamera {
-      let cell = collectionView.dequeueReusableCell(CameraCell.self, for: indexPath)
-      cell.update(options: manager.options)
-      cell.isAccessibilityElement = true
-      cell.accessibilityTraits = .button
-      cell.accessibilityLabel = manager.options.theme[string: .pickerTakePhoto]
-      return cell
-    }
-    #endif
 
     let cell = collectionView.dequeueReusableCell(AssetCell.self, for: indexPath)
     cell.tag = indexPath.row
@@ -859,14 +848,6 @@ extension AssetPickerViewController {
 
   @available(iOS 14.0, *)
   private func setupDataSource() {
-    let cameraCellRegistration = UICollectionView.CellRegistration<CameraCell, Asset> { [weak self] cell, _, _ in
-      guard let self else { return }
-      cell.update(options: manager.options)
-      cell.isAccessibilityElement = true
-      cell.accessibilityTraits = .button
-      cell.accessibilityLabel = manager.options.theme[string: .pickerTakePhoto]
-    }
-
     let cellRegistration = UICollectionView.CellRegistration<AssetCell, Asset> { [weak self] cell, indexPath, asset in
       guard let self else { return }
       cell.tag = indexPath.row
@@ -885,11 +866,7 @@ extension AssetPickerViewController {
       Section,
       Asset
     >(collectionView: collectionView) { collectionView, indexPath, asset -> UICollectionViewCell? in
-      if asset.isCamera {
-        return collectionView.dequeueConfiguredReusableCell(using: cameraCellRegistration, for: indexPath, item: asset)
-      } else {
-        return collectionView.dequeueConfiguredReusableCell(using: cellRegistration, for: indexPath, item: asset)
-      }
+      collectionView.dequeueConfiguredReusableCell(using: cellRegistration, for: indexPath, item: asset)
     }
   }
 }

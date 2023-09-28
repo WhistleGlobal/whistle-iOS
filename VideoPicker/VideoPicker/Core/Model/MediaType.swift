@@ -13,7 +13,6 @@ public enum MediaType: Equatable, CustomStringConvertible {
 
   case photo
   case video
-  case photoGIF
   case photoLive
 
   init?(utType: String) {
@@ -23,8 +22,6 @@ public enum MediaType: Equatable, CustomStringConvertible {
       self = .photo
     case kUTTypeMovie:
       self = .video
-    case kUTTypeGIF:
-      self = .photoGIF
     case kUTTypeLivePhoto:
       self = .photoLive
     default:
@@ -38,8 +35,6 @@ public enum MediaType: Equatable, CustomStringConvertible {
       return "PHOTO"
     case .video:
       return "VIDEO"
-    case .photoGIF:
-      return "PHOTO/GIF"
     case .photoLive:
       return "PHOTO/LIVE"
     }
@@ -51,8 +46,6 @@ public enum MediaType: Equatable, CustomStringConvertible {
       return kUTTypeImage as String
     case .video:
       return kUTTypeMovie as String
-    case .photoGIF:
-      return kUTTypeGIF as String
     case .photoLive:
       return kUTTypeLivePhoto as String
     }

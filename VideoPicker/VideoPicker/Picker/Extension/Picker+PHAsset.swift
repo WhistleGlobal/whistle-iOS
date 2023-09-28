@@ -13,12 +13,4 @@ extension PHAsset {
   var isLivePhoto: Bool {
     mediaSubtypes.contains(.photoLive)
   }
-
-  var isGIF: Bool {
-    if let fileName = value(forKey: "filename") as? String {
-      return fileName.uppercased().hasSuffix("GIF")
-    } else {
-      return false
-    }
-  }
 }

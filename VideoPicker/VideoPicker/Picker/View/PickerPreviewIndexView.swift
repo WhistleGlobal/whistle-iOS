@@ -149,8 +149,6 @@ extension PickerPreviewIndexView: UICollectionViewDataSource {
     let cell = collectionView.dequeueReusableCell(AssetCell.self, for: indexPath)
     let asset = selectedAssets[indexPath.item]
     cell.setContent(asset, manager: manager, animated: false, isPreview: true)
-//    cell.selectButton.isHidden = true
-    cell.boxCoverView.isHidden = asset != currentAsset
     return cell
   }
 }

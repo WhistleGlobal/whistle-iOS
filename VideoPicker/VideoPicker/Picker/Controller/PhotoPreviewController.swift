@@ -75,23 +75,17 @@ final class PhotoPreviewController: AnyImageViewController, PickerOptionsConfigu
     }
   }
 
-  /// 左右两张图之间的间隙
   var photoSpacing: CGFloat = 30
-  /// 图片缩放模式
   var imageScaleMode: UIView.ContentMode = .scaleAspectFill
-  /// 双击放大图片时的目标比例
   var imageZoomScaleForDoubleTap: CGFloat = 2.0
 
   // MARK: - Private
-
-  /// 当前正在显示视图的前一个页面关联视图
   private var relatedView: UIView? {
     dataSource?.previewController(self, thumbnailViewForIndex: currentIndex)
   }
 
-  /// 缩放型转场协调器
   private weak var scalePresentationController: ScalePresentationController?
-  /// ToolBar 缩放动画前的状态
+  /// ToolBar
   private var toolBarHiddenStateBeforePan = false
 
   private lazy var flowLayout: UICollectionViewFlowLayout = {
@@ -109,7 +103,6 @@ final class PhotoPreviewController: AnyImageViewController, PickerOptionsConfigu
     view.delegate = self
     view.dataSource = self
     view.registerCell(PhotoPreviewCell.self)
-    view.registerCell(PhotoGIFPreviewCell.self)
     view.registerCell(VideoPreviewCell.self)
     view.registerCell(PhotoLivePreviewCell.self)
     view.isPagingEnabled = true
@@ -180,7 +173,6 @@ final class PhotoPreviewController: AnyImageViewController, PickerOptionsConfigu
   override func viewWillAppear(_ animated: Bool) {
     super.viewWillAppear(animated)
     didSetCurrentIDx()
-    setGIF(animated: true)
   }
 
   override func viewDidAppear(_ animated: Bool) {
@@ -331,20 +323,6 @@ extension PhotoPreviewController {
     }
   }
 
-  /// 播放/暂停 GIF
-  /// - Parameter animated: true-播放；false-暂停
-  private func setGIF(animated: Bool) {
-    for cell in collectionView.visibleCells {
-      if let cell = cell as? PhotoGIFPreviewCell {
-        if animated {
-          cell.imageView.startAnimating()
-        } else {
-          cell.imageView.stopAnimating()
-        }
-      }
-    }
-  }
-
   /// 暂停视频
   private func stopVideo() {
     for cell in collectionView.visibleCells {
@@ -477,8 +455,6 @@ extension PhotoPreviewController: UICollectionViewDataSource {
     case .video:
       cell = collectionView.dequeueReusableCell(VideoPreviewCell.self, for: indexPath)
       cell.imageView.contentMode = imageScaleMode
-    case .photoGIF:
-      cell = collectionView.dequeueReusableCell(PhotoGIFPreviewCell.self, for: indexPath)
     case .photoLive:
       cell = collectionView.dequeueReusableCell(PhotoLivePreviewCell.self, for: indexPath)
       cell.imageView.contentMode = imageScaleMode
@@ -518,9 +494,6 @@ extension PhotoPreviewController: UICollectionViewDelegate {
         cell.requestPhoto()
       }
       cell.requestVideo()
-    case let cell as PhotoGIFPreviewCell:
-      cell.setImage(data.thumbnail)
-      cell.requestGIF()
     case let cell as PhotoLivePreviewCell:
       cell.setImage(data.thumbnail)
       cell.requestLivePhoto()
@@ -548,14 +521,11 @@ extension PhotoPreviewController: UICollectionViewDelegate {
 extension PhotoPreviewController: UIScrollViewDelegate {
   /// 开始滑动 - 停止 GIF 和视频
   func scrollViewWillBeginDragging(_: UIScrollView) {
-    setGIF(animated: false)
     stopVideo()
   }
 
   /// 停止滑动 - 开始 GIF
-  func scrollViewDidEndDecelerating(_: UIScrollView) {
-    setGIF(animated: true)
-  }
+  func scrollViewDidEndDecelerating(_: UIScrollView) { }
 
   func scrollViewDidScroll(_ scrollView: UIScrollView) {
     if scrollView.contentSize.width - scrollView.contentOffset.x < scrollView.bounds.width { return } // isLast
