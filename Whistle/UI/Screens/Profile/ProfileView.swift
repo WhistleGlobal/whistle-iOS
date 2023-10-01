@@ -274,7 +274,7 @@ struct ProfileView: View {
     .enableAppleScrollBehavior(false)
     .dragIndicatorColor(Color.Border_Default_Dark)
     .customBackground(
-      glassMoriphicView(width: UIScreen.width, height: .infinity, cornerRadius: 24)
+      glassMorphicView(width: UIScreen.width, height: .infinity, cornerRadius: 24)
         .overlay {
           RoundedRectangle(cornerRadius: 24)
             .stroke(lineWidth: 1)

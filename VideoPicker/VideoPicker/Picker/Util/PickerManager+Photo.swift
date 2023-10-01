@@ -62,7 +62,6 @@ enum PhotoSizeMode: Equatable {
 
 typealias _PhotoFetchCompletion = (Result<PhotoFetchResponse, AnyImageError>) -> Void
 typealias _PhotoDataFetchCompletion = (Result<PhotoDataFetchResponse, AnyImageError>) -> Void
-typealias _PhotoGIFFetchCompletion = (Result<PhotoGIFFetchResponse, AnyImageError>) -> Void
 typealias _PhotoLiveFetchCompletion = (Result<PhotoLiveFetchResponse, AnyImageError>) -> Void
 
 extension PickerManager {
@@ -203,62 +202,6 @@ extension PickerManager {
   {
     let requestID = ExportTool.requestPhotoData(for: asset, options: options) { result, requestID in
       completion(result)
-      self.dequeueFetch(for: asset.localIdentifier, requestID: requestID)
-    }
-    enqueueFetch(for: asset.localIdentifier, requestID: requestID)
-  }
-}
-
-// MARK: - PhotoGIFFetchOptions
-
-struct PhotoGIFFetchOptions {
-  let isNetworkAccessAllowed: Bool
-  let version: PHImageRequestOptionsVersion
-  let progressHandler: PHAssetImageProgressHandler?
-
-  init(
-    isNetworkAccessAllowed: Bool = true,
-    version: PHImageRequestOptionsVersion = .current,
-    progressHandler: PHAssetImageProgressHandler? = nil)
-  {
-    self.isNetworkAccessAllowed = isNetworkAccessAllowed
-    self.version = version
-    self.progressHandler = progressHandler
-  }
-}
-
-// MARK: - PhotoGIFFetchResponse
-
-struct PhotoGIFFetchResponse {
-  let image: UIImage
-}
-
-extension PickerManager {
-  func requestPhotoGIF(
-    for asset: PHAsset,
-    options: PhotoGIFFetchOptions = .init(),
-    completion: @escaping _PhotoGIFFetchCompletion)
-  {
-    let photoDataOptions = PhotoDataFetchOptions(
-      version: .unadjusted,
-      isNetworkAccessAllowed: options.isNetworkAccessAllowed,
-      progressHandler: options.progressHandler)
-    let requestID = ExportTool.requestPhotoData(for: asset, options: photoDataOptions) { result, requestID in
-      switch result {
-      case .success(let response):
-        guard UTTypeConformsTo(response.dataUTI as CFString, kUTTypeGIF) else {
-          completion(.failure(.invalidDataUTI))
-          return
-        }
-        let creatingOptions = ImageCreatingOptions()
-        guard let image = KingfisherWrapper<UIImage>.animatedImage(data: response.data, options: creatingOptions) else {
-          completion(.failure(.invalidImage))
-          return
-        }
-        completion(.success(.init(image: image)))
-      case .failure(let error):
-        completion(.failure(error))
-      }
       self.dequeueFetch(for: asset.localIdentifier, requestID: requestID)
     }
     enqueueFetch(for: asset.localIdentifier, requestID: requestID)

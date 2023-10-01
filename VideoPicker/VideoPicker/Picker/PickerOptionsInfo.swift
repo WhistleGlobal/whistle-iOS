@@ -22,7 +22,7 @@ public struct PickerOptionsInfo {
 
   /// Column Number
   /// - Default: 4
-  public var columnNumber = 4
+  public var columnNumber = 3
 
   /// Auto Calculate Column Number
   /// In iOS column number is `columnNumber`, in iPadOS column number will calculated by device orientation or device size.
@@ -41,7 +41,7 @@ public struct PickerOptionsInfo {
   public var allowUseOriginalImage = false
 
   /// Album Options
-  /// - Default: smart album + user create album + shared
+  /// - Default: smart album + user create album + shared + userCreated
   public var albumOptions: PickerAlbumOption = [.smart, .userCreated, .shared]
 
   /// Select Options
@@ -73,33 +73,6 @@ public struct PickerOptionsInfo {
   /// - Default: false
   public var enableDebugLog = false
 
-  #if ANYIMAGEKIT_ENABLE_EDITOR
-  /// Save edited asset when picker dismiss with success
-  /// - Default: true
-  public var saveEditedAsset = true
-
-  /// Editor Options
-  /// - Default: []
-  public var editorOptions: PickerEditorOption = []
-
-  /// Editor photo option info items
-  public var editorPhotoOptions: EditorPhotoOptionsInfo = .init()
-
-  /// Editor video option info items
-  /* public */ var editorVideoOptions: EditorVideoOptionsInfo = .init()
-  #endif
-
-  #if ANYIMAGEKIT_ENABLE_CAPTURE
-  /// Capture option info items
-  public var captureOptions: CaptureOptionsInfo = .init()
-  #endif
-
-  #if ANYIMAGEKIT_ENABLE_EDITOR && ANYIMAGEKIT_ENABLE_CAPTURE
-  /// Use Same Editor Options In Capture
-  /// - Default: true
-  public var useSameEditorOptionsInCapture = true
-  #endif
-
   public init() {
     #if ANYIMAGEKIT_ENABLE_CAPTURE
     captureOptions.mediaOptions = []
@@ -114,8 +87,6 @@ public struct PickerSelectOption: OptionSet {
   public static let photo = PickerSelectOption(rawValue: 1 << 0)
   /// Video
   public static let video = PickerSelectOption(rawValue: 1 << 1)
-  /// GIF
-  public static let photoGIF = PickerSelectOption(rawValue: 1 << 2)
   /// Live Photo
   public static let photoLive = PickerSelectOption(rawValue: 1 << 3)
 
@@ -126,7 +97,7 @@ public struct PickerSelectOption: OptionSet {
   }
 
   public var isPhoto: Bool {
-    contains(.photo) || contains(.photoGIF) || contains(.photoLive)
+    contains(.photo) || contains(.photoLive)
   }
 
   public var isVideo: Bool {
@@ -137,7 +108,7 @@ public struct PickerSelectOption: OptionSet {
 extension PickerSelectOption {
   var mediaTypes: [PHAssetMediaType] {
     var result: [PHAssetMediaType] = []
-    if contains(.photo) || contains(.photoGIF) || contains(.photoLive) {
+    if contains(.photo) || contains(.photoLive) {
       result.append(.image)
     }
     if contains(.video) {

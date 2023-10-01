@@ -9,14 +9,11 @@
 import Photos
 
 extension MediaType {
-
   init(asset: PHAsset, selectOptions: PickerSelectOption) {
     switch asset.mediaType {
     case .image:
       if selectOptions.contains(.photoLive), asset.isLivePhoto {
         self = .photoLive
-      } else if selectOptions.contains(.photoGIF), asset.isGIF {
-        self = .photoGIF
       } else {
         self = .photo
       }

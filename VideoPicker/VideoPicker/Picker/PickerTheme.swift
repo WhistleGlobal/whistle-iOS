@@ -253,7 +253,6 @@ extension PickerTheme {
     case albumCellSubTitle
 
     case assetCellVideoDuration
-    case assetCellGIFMark
 
     case selectedNumber
     case selectedNumberInPreview

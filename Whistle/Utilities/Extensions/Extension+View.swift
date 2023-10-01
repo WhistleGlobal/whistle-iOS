@@ -87,7 +87,7 @@ extension View {
   }
 
   @ViewBuilder
-  func glassMoriphicView(width: CGFloat, height: CGFloat, cornerRadius: CGFloat) -> some View {
+  func glassMorphicView(width: CGFloat, height: CGFloat, cornerRadius: CGFloat) -> some View {
     ZStack {
       RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
         .fill(Color.black.opacity(0.3))
@@ -103,7 +103,7 @@ extension View {
 
   @ViewBuilder
   func glassProfile(width: CGFloat, height: CGFloat, cornerRadius: CGFloat, overlayed: some View) -> some View {
-    glassMoriphicView(width: width, height: height, cornerRadius: cornerRadius)
+    glassMorphicView(width: width, height: height, cornerRadius: cornerRadius)
       .overlay {
         RoundedRectangle(cornerRadius: cornerRadius)
           .stroke(lineWidth: 1)

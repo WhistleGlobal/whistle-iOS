@@ -29,19 +29,16 @@ final class PickerManager {
 
   var useOriginalImage = false
 
-  /// 已选中的资源
   private(set) var selectedAssets: [Asset] = []
   /// The selected assets before user enter the preview controller
   var lastSelectedAssets: [Asset] = []
-  /// 获取失败的资源
   private var failedAssets: [Asset] = []
-  /// 管理 failedAssets 队列的锁
+  ///  failedAssets
   private let lock: NSLock = .init()
 
   /// Running Fetch Requests
   private var fetchRecords = [FetchRecord]()
 
-  /// 缓存
   let cache = ImageCacheTool(module: .picker(.default), memoryCountLimit: 10, useDiskCache: false)
 
   init() { }
@@ -166,8 +163,7 @@ extension PickerManager {
 
   func syncAsset(_ asset: Asset) {
     switch asset.mediaType {
-    case .photo, .photoGIF, .photoLive:
-      // 勾选图片就开始加载
+    case .photo, .photoLive:
       if let image = cache.retrieveImage(forKey: asset.identifier) {
         asset._images[.initial] = image
         didSyncAsset()
@@ -205,7 +201,6 @@ extension PickerManager {
             break
           }
         })
-        // 同步请求图片
         requestVideo(for: asset.phAsset) { [weak self] result in
           guard let self else { return }
           switch result {

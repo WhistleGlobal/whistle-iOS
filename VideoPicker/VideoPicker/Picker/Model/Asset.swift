@@ -12,9 +12,8 @@ import UIKit
 // MARK: - Asset
 
 public class Asset: IdentifiableResource {
-  /// 对应的 PHAsset
+  /// PHAsset
   public let phAsset: PHAsset
-  /// 媒体类型
   public let mediaType: MediaType
 
   var _images: [ImageKey: UIImage] = [:]
@@ -36,7 +35,6 @@ public class Asset: IdentifiableResource {
 }
 
 extension Asset {
-  /// 输出图像
   public var image: UIImage {
     _image ?? .init()
   }
@@ -58,7 +56,7 @@ extension Asset {
 
   var isReady: Bool {
     switch mediaType {
-    case .photo, .photoGIF, .photoLive:
+    case .photo, .photoLive:
       return _image != nil
     case .video:
       return videoDidDownload
@@ -142,10 +140,10 @@ extension Asset {
 // MARK: - Original Photo
 
 extension Asset {
-  /// Fetch Photo Data 获取原图数据
-  /// - Note: Only for `MediaType` Photo, GIF, LivePhoto 仅用于媒体类型为照片、GIF、实况
-  /// - Parameter options: Photo Data Fetch Options 原图获取选项
-  /// - Parameter completion: Photo Data Fetch Completion 原图获取结果回调
+  /// Fetch Photo Data
+  /// - Note: Only for `MediaType` Photo, LivePhoto
+  /// - Parameter options: Photo Data Fetch Options
+  /// - Parameter completion: Photo Data Fetch Completion
   @discardableResult
   public func fetchPhotoData(
     options: PhotoDataFetchOptions = .init(),
@@ -159,10 +157,10 @@ extension Asset {
     return ExportTool.requestPhotoData(for: phAsset, options: options, completion: completion)
   }
 
-  /// Fetch Photo URL 获取原图路径
-  /// - Note: Only for `MediaType` Photo, PhotoGIF 仅用于媒体类型为照片、GIF
-  /// - Parameter options: Photo URL Fetch Options 原图路径获取选项
-  /// - Parameter completion: Photo URL Fetch Completion 原图路径获取结果回调
+  /// Fetch Photo URL
+  /// - Note: Only for `MediaType` Photo
+  /// - Parameter options: Photo URL Fetch Options
+  /// - Parameter completion: Photo URL Fetch Completion
   @discardableResult
   public func fetchPhotoURL(
     options: PhotoURLFetchOptions = .init(),
@@ -180,10 +178,10 @@ extension Asset {
 // MARK: - Video
 
 extension Asset {
-  /// Fetch Video 获取视频，用于播放
-  /// - Note: Only for `MediaType` Video 仅用于媒体类型为视频
-  /// - Parameter options: Video Fetch Options 视频获取选项
-  /// - Parameter completion: Video Fetch Completion 视频获取结果回调
+  /// Fetch Video
+  /// - Note: Only for `MediaType` Video
+  /// - Parameter options: Video Fetch Options
+  /// - Parameter completion: Video Fetch Completion
   @discardableResult
   public func fetchVideo(
     options: VideoFetchOptions = .init(),
@@ -197,10 +195,10 @@ extension Asset {
     return ExportTool.requestVideo(for: phAsset, options: options, completion: completion)
   }
 
-  /// Fetch Video URL 获取视频路径，用于传输
-  /// - Note: Only for `MediaType` Video 仅用于媒体类型为视频
-  /// - Parameter options: Video URL Fetch Options 视频路径获取选项
-  /// - Parameter completion: Video URL Fetch Completion 视频路径获取结果回调
+  /// Fetch Video URL
+  /// - Note: Only for `MediaType` Video
+  /// - Parameter options: Video URL Fetch Options
+  /// - Parameter completion: Video URL Fetch Completion
   @discardableResult
   public func fetchVideoURL(
     options: VideoURLFetchOptions = .init(),

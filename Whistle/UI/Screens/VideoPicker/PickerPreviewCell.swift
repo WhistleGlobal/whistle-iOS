@@ -40,12 +40,8 @@ final class PickerPreviewCell: UICollectionViewCell {
 
   private func setupView() {
     contentView.addSubview(imageView)
-//        contentView.addSubview(titleLabel)
     imageView.snp.makeConstraints { maker in
       maker.edges.equalToSuperview()
     }
-//        titleLabel.snp.makeConstraints { maker in
-//            maker.top.left.equalToSuperview().offset(4)
-//        }
   }
 }
