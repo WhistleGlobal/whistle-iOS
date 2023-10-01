@@ -114,6 +114,7 @@ struct UserProfileView: View {
         isFollow = apiViewModel.userProfile.isFollowed == 1 ? true : false
       }
       .task {
+        log(userId)
         await apiViewModel.requestUserPostFeed(userId: userId)
       }
       .overlay {

@@ -68,6 +68,7 @@ extension APIViewModel: PostFeedProtocol {
             }
           case .failure(let error):
             log("Error: \(error)")
+            self.userPostFeed = []
             continuation.resume()
           }
         }
