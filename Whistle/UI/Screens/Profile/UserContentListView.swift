@@ -179,6 +179,8 @@ extension UserContentListView {
     VStack(spacing: 0) {
       HStack(spacing: 0) {
         Button {
+          players[currentIndex]?.pause()
+          players.removeAll()
           dismiss()
         } label: {
           Color.clear
