@@ -115,7 +115,9 @@ struct MainView: View {
     .navigationBarBackButtonHidden()
     .background(.black)
     .task {
-      await apiViewModel.requestMyProfile()
+      if apiViewModel.myProfile.userName.isEmpty {
+        await apiViewModel.requestMyProfile()
+      }
       if apiViewModel.contentList.isEmpty {
         apiViewModel.requestContentList {
           Task {
