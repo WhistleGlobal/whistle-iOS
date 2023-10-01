@@ -197,7 +197,7 @@ struct MainView: View {
         log("Cancel")
       }
     }
-    .fullScreenCover(isPresented: $showUserProfile) {
+    .navigationDestination(isPresented: $showUserProfile) {
       UserProfileView(userId: currentVideoUserId)
         .environmentObject(apiViewModel)
         .environmentObject(tabbarModel)

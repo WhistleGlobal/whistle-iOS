@@ -24,103 +24,104 @@ struct UserProfileView: View {
   let userId: Int
 
   var body: some View {
-    NavigationStack {
-      ZStack {
-        Color.clear.overlay {
-          if let url = apiViewModel.userProfile.profileImg, !url.isEmpty {
-            KFImage.url(URL(string: url))
-              .placeholder { _ in
-                Image("DefaultBG")
-                  .resizable()
-                  .scaledToFill()
-                  .blur(radius: 50)
-              }
-              .resizable()
-              .scaledToFill()
-              .scaleEffect(2.0)
-              .blur(radius: 50)
-          } else {
-            Image("DefaultBG")
-              .resizable()
-              .scaledToFill()
-              .blur(radius: 50)
-          }
+    ZStack {
+      Color.clear.overlay {
+        if let url = apiViewModel.userProfile.profileImg, !url.isEmpty {
+          KFImage.url(URL(string: url))
+            .placeholder { _ in
+              Image("DefaultBG")
+                .resizable()
+                .scaledToFill()
+                .blur(radius: 50)
+            }
+            .resizable()
+            .scaledToFill()
+            .scaleEffect(2.0)
+            .blur(radius: 50)
+        } else {
+          Image("DefaultBG")
+            .resizable()
+            .scaledToFill()
+            .blur(radius: 50)
         }
-        VStack {
-          Spacer().frame(height: 64)
-          glassProfile(width: UIScreen.width - 32, height: 398, cornerRadius: 32, overlayed: profileInfo(height: 398))
-            .padding(.bottom, 12)
-          if apiViewModel.userPostFeed.isEmpty {
-            Spacer()
-            Image(systemName: "photo.fill")
-              .resizable()
-              .scaledToFit()
-              .frame(width: 48, height: 48)
-              .foregroundColor(.LabelColor_Primary_Dark)
-              .padding(.bottom, 24)
-            Text("아직 콘텐츠가 없습니다.")
-              .fontSystem(fontDesignSystem: .body1_KO)
-              .foregroundColor(.LabelColor_Primary_Dark)
-              .padding(.bottom, 76)
-            Spacer()
-          } else {
-            ScrollView {
-              LazyVGrid(columns: [
-                GridItem(.flexible()),
-                GridItem(.flexible()),
-                GridItem(.flexible()),
-              ], spacing: 20) {
-                ForEach(Array(apiViewModel.userPostFeed.enumerated()), id: \.element) { index ,content in
-                  NavigationLink {
-                    UserContentListView(currentIndex: index)
-                      .environmentObject(apiViewModel)
-                      .environmentObject(tabbarModel)
-                  } label: {
-                    videoThumbnailView(
-                      thumbnailUrl: content.thumbnailUrl ?? "",
-                      viewCount: content.contentViewCount ?? 0)
-                  }
+      }
+      VStack {
+        Spacer().frame(height: 64)
+        glassProfile(width: UIScreen.width - 32, height: 398, cornerRadius: 32, overlayed: profileInfo(height: 398))
+          .padding(.bottom, 12)
+        if apiViewModel.userPostFeed.isEmpty {
+          Spacer()
+          Image(systemName: "photo.fill")
+            .resizable()
+            .scaledToFit()
+            .frame(width: 48, height: 48)
+            .foregroundColor(.LabelColor_Primary_Dark)
+            .padding(.bottom, 24)
+          Text("아직 콘텐츠가 없습니다.")
+            .fontSystem(fontDesignSystem: .body1_KO)
+            .foregroundColor(.LabelColor_Primary_Dark)
+            .padding(.bottom, 76)
+          Spacer()
+        } else {
+          ScrollView {
+            LazyVGrid(columns: [
+              GridItem(.flexible()),
+              GridItem(.flexible()),
+              GridItem(.flexible()),
+            ], spacing: 20) {
+              ForEach(Array(apiViewModel.userPostFeed.enumerated()), id: \.element) { index ,content in
+                NavigationLink {
+                  UserContentListView(currentIndex: index)
+                    .environmentObject(apiViewModel)
+                    .environmentObject(tabbarModel)
+                    .id(UUID())
+                } label: {
+                  videoThumbnailView(
+                    thumbnailUrl: content.thumbnailUrl ?? "",
+                    viewCount: content.contentViewCount ?? 0)
                 }
+                .id(UUID())
               }
             }
-            Spacer()
           }
-        }
-        .padding(.horizontal, 16)
-        .ignoresSafeArea()
-      }
-      .confirmationDialog("", isPresented: $showDialog) {
-        Button("프로필 URL 복사", role: .none) {
-          UIPasteboard.general.setValue(
-            "다른 유저 프로필 링크입니다.",
-            forPasteboardType: UTType.plainText.identifier)
-          showPasteToast = true
-        }
-        Button("신고", role: .destructive) {
-          goReport = true
-        }
-        Button("취소", role: .cancel) {
-          log("Cancel")
+          Spacer()
         }
       }
-      .fullScreenCover(isPresented: $goReport) {
-        ReportUserView(goReport: $goReport, userId: userId)
-          .environmentObject(apiViewModel)
+      .padding(.horizontal, 16)
+      .ignoresSafeArea()
+    }
+    .navigationBarBackButtonHidden()
+    .confirmationDialog("", isPresented: $showDialog) {
+      Button("프로필 URL 복사", role: .none) {
+        UIPasteboard.general.setValue(
+          "다른 유저 프로필 링크입니다.",
+          forPasteboardType: UTType.plainText.identifier)
+        showPasteToast = true
       }
-      .task {
-        await apiViewModel.requestUserProfile(userId: userId)
-        await apiViewModel.requestUserFollow(userId: userId)
-        await apiViewModel.requestUserWhistlesCount(userId: userId)
-        isFollow = apiViewModel.userProfile.isFollowed == 1 ? true : false
+      Button("신고", role: .destructive) {
+        goReport = true
       }
-      .task {
-        log(userId)
-        await apiViewModel.requestUserPostFeed(userId: userId)
+      Button("취소", role: .cancel) {
+        log("Cancel")
       }
-      .overlay {
-        if showPasteToast {
-          ToastMessage(text: "클립보드에 복사되었어요", paddingBottom: 0, showToast: $showPasteToast)
-        }
+    }
+    .fullScreenCover(isPresented: $goReport) {
+      ReportUserView(goReport: $goReport, userId: userId)
+        .environmentObject(apiViewModel)
+    }
+    .task {
+      await apiViewModel.requestUserProfile(userId: userId)
+      await apiViewModel.requestUserFollow(userId: userId)
+      await apiViewModel.requestUserWhistlesCount(userId: userId)
+      isFollow = apiViewModel.userProfile.isFollowed == 1 ? true : false
+    }
+    .task {
+      log(userId)
+      await apiViewModel.requestUserPostFeed(userId: userId)
+    }
+    .overlay {
+      if showPasteToast {
+        ToastMessage(text: "클립보드에 복사되었어요", paddingBottom: 0, showToast: $showPasteToast)
       }
     }
   }
@@ -197,6 +198,7 @@ extension UserProfileView {
           UserFollowView(userId: userId)
             .environmentObject(apiViewModel)
             .environmentObject(tabbarModel)
+            .id(UUID())
         } label: {
           VStack(spacing: 4) {
             Text("\(apiViewModel.userFollow.followerCount)")
@@ -207,6 +209,7 @@ extension UserProfileView {
               .fontSystem(fontDesignSystem: .caption_SemiBold)
           }
         }
+        .id(UUID())
       }
       Spacer()
     }

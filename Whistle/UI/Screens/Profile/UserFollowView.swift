@@ -90,11 +90,6 @@ struct UserFollowView: View {
       userFollower = apiViewModel.userFollow.followerList
       userFollowing = apiViewModel.userFollow.followingList
     }
-    .fullScreenCover(isPresented: $showUserProfile) {
-      UserProfileView(userId: selectedId ?? 0)
-        .environmentObject(apiViewModel)
-        .environmentObject(tabbarModel)
-    }
   }
 }
 
@@ -159,9 +154,10 @@ extension UserFollowView {
   @ViewBuilder
   func userFollowerList() -> some View {
     ForEach(userFollower, id: \.userName) { follower in
-      Button {
-        selectedId = follower.followerId
-        showUserProfile = true
+      NavigationLink {
+        UserProfileView(userId: follower.followerId)
+          .environmentObject(apiViewModel)
+          .environmentObject(tabbarModel)
       } label: {
         personRow(
           isFollowed: Binding(get: {
@@ -180,9 +176,10 @@ extension UserFollowView {
   @ViewBuilder
   func userFollowingList() -> some View {
     ForEach(userFollowing, id: \.userName) { following in
-      Button {
-        selectedId = following.followingId
-        showUserProfile = true
+      NavigationLink {
+        UserProfileView(userId: following.followingId)
+          .environmentObject(apiViewModel)
+          .environmentObject(tabbarModel)
       } label: {
         personRow(
           isFollowed: Binding(get: {
