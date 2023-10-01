@@ -10,10 +10,6 @@ import SwiftUI
 
 // MARK: - UserFollowView
 
-private var selectedId: Int?
-
-// MARK: - UserFollowView
-
 struct UserFollowView: View {
 
   // MARK: Internal
