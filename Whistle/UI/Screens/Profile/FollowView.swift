@@ -18,10 +18,6 @@ enum profileTabStatus: String {
 
 // MARK: - FollowView
 
-private var selectedId: Int?
-
-// MARK: - FollowView
-
 struct FollowView: View {
 
   // MARK: Internal
@@ -93,11 +89,6 @@ struct FollowView: View {
     .task {
       await apiViewModel.requestMyFollow()
     }
-    .fullScreenCover(isPresented: $showUserProfile) {
-      UserProfileView(userId: selectedId ?? 0)
-        .environmentObject(apiViewModel)
-        .environmentObject(tabbarModel)
-    }
   }
 }
 
@@ -162,9 +153,11 @@ extension FollowView {
   @ViewBuilder
   func myFollowerList() -> some View {
     ForEach(apiViewModel.myFollow.followerList, id: \.userName) { follower in
-      Button {
-        selectedId = follower.followerId
-        showUserProfile = true
+      NavigationLink {
+        UserProfileView(userId: follower.followerId)
+          .environmentObject(apiViewModel)
+          .environmentObject(tabbarModel)
+          .id(UUID())
       } label: {
         personRow(
           isFollowed: Binding(get: {
@@ -177,15 +170,18 @@ extension FollowView {
           profileImage: follower.profileImg ?? "",
           userId: follower.followerId)
       }
+      .id(UUID())
     }
   }
 
   @ViewBuilder
   func myFollowingList() -> some View {
     ForEach(apiViewModel.myFollow.followingList, id: \.userName) { following in
-      Button {
-        selectedId = following.followingId
-        showUserProfile = true
+      NavigationLink {
+        UserProfileView(userId: following.followingId)
+          .environmentObject(apiViewModel)
+          .environmentObject(tabbarModel)
+          .id(UUID())
       } label: {
         personRow(
           isFollowed: .constant(true),
@@ -194,6 +190,7 @@ extension FollowView {
           profileImage: following.profileImg ?? "",
           userId: following.followingId)
       }
+      .id(UUID())
     }
   }
 }

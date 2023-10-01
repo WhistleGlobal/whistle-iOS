@@ -115,23 +115,30 @@ struct MainView: View {
     .navigationBarBackButtonHidden()
     .background(.black)
     .task {
-      await apiViewModel.requestMyProfile()
-      await apiViewModel.requestContentList()
-      if !apiViewModel.contentList.isEmpty {
-        for _ in 0..<apiViewModel.contentList.count {
-          players.append(nil)
+      if apiViewModel.myProfile.userName.isEmpty {
+        await apiViewModel.requestMyProfile()
+      }
+      if apiViewModel.contentList.isEmpty {
+        apiViewModel.requestContentList {
+          Task {
+            if !apiViewModel.contentList.isEmpty {
+              for _ in 0..<apiViewModel.contentList.count {
+                players.append(nil)
+              }
+              log(players)
+              players[currentIndex] = AVPlayer(url: URL(string: apiViewModel.contentList[currentIndex].videoUrl ?? "")!)
+              playerIndex = currentIndex
+              guard let player = players[currentIndex] else {
+                return
+              }
+              currentVideoUserId = apiViewModel.contentList[currentIndex].userId ?? 0
+              currentVideoContentId = apiViewModel.contentList[currentIndex].contentId ?? 0
+              isCurrentVideoWhistled = apiViewModel.contentList[currentIndex].isWhistled
+              await player.seek(to: .zero)
+              player.play()
+            }
+          }
         }
-        log(players)
-        players[currentIndex] = AVPlayer(url: URL(string: apiViewModel.contentList[currentIndex].videoUrl ?? "")!)
-        playerIndex = currentIndex
-        guard let player = players[currentIndex] else {
-          return
-        }
-        currentVideoUserId = apiViewModel.contentList[currentIndex].userId ?? 0
-        currentVideoContentId = apiViewModel.contentList[currentIndex].contentId ?? 0
-        isCurrentVideoWhistled = apiViewModel.contentList[currentIndex].isWhistled
-        await player.seek(to: .zero)
-        player.play()
       }
     }
     .onChange(of: currentIndex) { newValue in
@@ -192,7 +199,7 @@ struct MainView: View {
         log("Cancel")
       }
     }
-    .fullScreenCover(isPresented: $showUserProfile) {
+    .navigationDestination(isPresented: $showUserProfile) {
       UserProfileView(userId: currentVideoUserId)
         .environmentObject(apiViewModel)
         .environmentObject(tabbarModel)
