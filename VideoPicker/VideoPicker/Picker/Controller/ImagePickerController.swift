@@ -8,6 +8,8 @@
 
 import SnapKit
 import UIKit
+import SwiftUI
+import VideoPicker
 
 // MARK: - ImagePickerControllerDelegate
 
@@ -164,6 +166,7 @@ extension ImagePickerController {
 // MARK: - Private function
 
 extension ImagePickerController {
+  /// PickerOptionsInfo를 확인하고 올바른 값으로 보정하는 내부 메서드입니다. 예를 들어, 최소 선택 제한, 열의 수 등을 확인하고 보정합니다.
   private func check(options: PickerOptionsInfo) -> PickerOptionsInfo {
     var options = options
     options.largePhotoMaxWidth = max(options.photoMaxWidth, options.largePhotoMaxWidth)
@@ -203,8 +206,8 @@ extension ImagePickerController {
           let result = PickerResult(assets: newAssets, useOriginalImage: self.manager.useOriginalImage)
           guard self.didCallback == false else { return }
           self.pickerDelegate?.imagePicker(self, didFinishPicking: result)
-          self.didCallback = true
-        }
+          let pickerResultView = TestPickerResultView(result: result)
+          let hostingController = UIHostingController(rootView: pickerResultView)
       }
     }
   }

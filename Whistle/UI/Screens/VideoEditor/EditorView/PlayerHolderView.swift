@@ -54,6 +54,11 @@ extension PlayerHolderView {
               .cornerRadius(12)
               .hCenter()
               .vCenter()
+              .overlay {
+                RoundedRectangle(cornerRadius: 12)
+                  .strokeBorder(Color.Border_Default_Dark, lineWidth: 1)
+                  .frame(width: UIScreen.getWidth(videoWidth), height: UIScreen.getHeight(videoWidth * videoScale))
+              }
             if !videoPlayer.isPlaying {
               Image(systemName: "play.fill")
                 .font(.system(size: 24))
