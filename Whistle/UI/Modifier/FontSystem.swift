@@ -73,17 +73,17 @@ struct FontSystem: ViewModifier {
         .padding(.vertical, 4)
     case .subtitle1:
       content
-        .font(.system(size: 18))
+        .font(.system(size: 18, weight: .semibold))
         .lineSpacing(10)
         .padding(.vertical, 5)
     case .subtitle2:
       content
-        .font(.system(size: 16))
+        .font(.system(size: 16, weight: .semibold))
         .lineSpacing(8)
         .padding(.vertical, 4)
     case .subtitle3:
       content
-        .font(.system(size: 14))
+        .font(.system(size: 14, weight: .semibold))
         .lineSpacing(6)
         .padding(.vertical, 3)
     case .body1:

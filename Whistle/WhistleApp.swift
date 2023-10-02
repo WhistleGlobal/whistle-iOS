@@ -40,6 +40,7 @@ struct WhistleApp: App {
       if isAccess {
         NavigationStack {
           PickerConfigViewControllerWrapper(options: $pickerOptions)
+            .environmentObject(rootVM)
         }
 //        TabbarView()
 //          .environmentObject(apiViewModel)

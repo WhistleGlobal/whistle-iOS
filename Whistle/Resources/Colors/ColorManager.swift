@@ -91,6 +91,10 @@ extension Color {
     Color.lightAndDarkColor(light: "White", dark: "Gray80")
   }
 
+  static var Background_Default_Dark: Color {
+    Color("Gray80_Dark")
+  }
+
   // MARK: - Background_Elevated
 
   static var Elevated: Color {

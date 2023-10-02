@@ -12,9 +12,11 @@ import SwiftUI
 
 struct ThumbnailsSliderView: View {
   @State var rangeDuration: ClosedRange<Double> = 0 ... 1
-  @Binding var curretTime: Double
+  @Binding var currentTime: Double
   @Binding var video: EditableVideo?
-  var isChangeState: Bool?
+  @ObservedObject var editorVM: EditorViewModel
+  @ObservedObject var videoPlayer: VideoPlayerManager
+
   let onChangeTimeValue: () -> Void
 
   private var totalDuration: Double {
@@ -30,65 +32,62 @@ struct ThumbnailsSliderView: View {
       GeometryReader { proxy in
         ZStack {
           thumbnailsImagesSection(proxy)
-            .border(Color.red, width: 2)
           if let video {
             RangedSliderView(
+              editor: editorVM,
+              player: videoPlayer,
               value: $rangeDuration,
+              currentTime: $currentTime,
               bounds: 0 ... video.originalDuration,
               onEndChange: { setOnChangeTrim(false) })
-            {
-              Rectangle().blendMode(.destinationOut)
-            }
-            .onChange(of: self.video?.rangeDuration.upperBound) { upperBound in
-              if let upperBound {
-                curretTime = Double(upperBound)
-                onChangeTimeValue()
-                setOnChangeTrim(true)
+              .onChange(of: self.video?.rangeDuration.upperBound) { upperBound in
+                if let upperBound {
+                  currentTime = Double(upperBound)
+                  onChangeTimeValue()
+                  setOnChangeTrim(true)
+                }
               }
-            }
-            .onChange(of: self.video?.rangeDuration.lowerBound) { lowerBound in
-              if let lowerBound {
-                curretTime = Double(lowerBound)
-                onChangeTimeValue()
-                setOnChangeTrim(true)
+              .onChange(of: self.video?.rangeDuration.lowerBound) { lowerBound in
+                if let lowerBound {
+                  currentTime = Double(lowerBound)
+                  onChangeTimeValue()
+                  setOnChangeTrim(true)
+                }
               }
-            }
-            .onChange(of: rangeDuration) { newValue in
-              self.video?.rangeDuration = newValue
-            }
+              .onChange(of: rangeDuration) { newValue in
+                self.video?.rangeDuration = newValue
+              }
+              .onAppear {
+                setVideoRange()
+              }
           }
         }
         .frame(width: proxy.size.width, height: proxy.size.height)
-        .onAppear {
-          setVideoRange()
-        }
       }
-      .frame(width: getRect().width - 64, height: 70)
-    }
-    .onChange(of: isChangeState) { isChange in
-      if !(isChange ?? true) {
-        setVideoRange()
-      }
+      .frame(width: UIScreen.getWidth(getRect().width - 48), height: UIScreen.getHeight(72))
     }
   }
 }
 
-// MARK: - ThumbnailsSliderView_Previews
-
-struct ThumbnailsSliderView_Previews: PreviewProvider {
-  static var previews: some View {
-    ThumbnailsSliderView(
-      curretTime: .constant(0),
-      video: .constant(EditableVideo.mock),
-      isChangeState: nil,
-      onChangeTimeValue: { })
-  }
-}
+//// MARK: - ThumbnailsSliderView_Previews
+//
+// struct ThumbnailsSliderView_Previews: PreviewProvider {
+//  static var previews: some View {
+//    ThumbnailsSliderView(
+//      currentTime: .constant(0),
+//      video: .constant(EditableVideo.mock),
+//      onChangeTimeValue: { }, videoPlayer: VideoPlayerManager)
+//  }
+// }
 
 extension ThumbnailsSliderView {
   private func setVideoRange() {
     if let video {
-      rangeDuration = video.rangeDuration
+      if video.rangeDuration.upperBound <= 15 {
+        rangeDuration = video.rangeDuration
+      } else {
+        rangeDuration = video.rangeDuration.lowerBound ... 15
+      }
     }
   }
 
@@ -101,8 +100,7 @@ extension ThumbnailsSliderView {
             Image(uiImage: image)
               .resizable()
               .aspectRatio(contentMode: .fit)
-              .rotationEffect(Angle(degrees: 90))
-              .frame(width: proxy.size.width / CGFloat(video.thumbnailsImages.count), height: proxy.size.height - 5)
+              .frame(width: proxy.size.width / CGFloat(video.thumbnailsImages.count), height: proxy.size.height - 8)
               .clipped()
           }
         }
@@ -110,9 +108,11 @@ extension ThumbnailsSliderView {
     }
   }
 
+  /// 자르기에 변화가 생겼을 때 비디오 현재 재생 시간을 바꿔주는 함수.
+  /// - Parameter isChange: 변화 생김
   private func setOnChangeTrim(_ isChange: Bool) {
     if !isChange {
-      curretTime = video?.rangeDuration.upperBound ?? 0
+      currentTime = video?.rangeDuration.lowerBound ?? 0
       onChangeTimeValue()
     }
   }

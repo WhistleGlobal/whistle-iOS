@@ -7,9 +7,8 @@
 //
 
 import SnapKit
-import UIKit
 import SwiftUI
-import VideoPicker
+import UIKit
 
 // MARK: - ImagePickerControllerDelegate
 
@@ -192,6 +191,8 @@ extension ImagePickerController {
     return options
   }
 
+  /// 이미지 데이터를 확인하고 필요한 경우 이미지를 리사이징하는 메서드입니다.
+  /// 이미지의 준비 여부와 원본 이미지 사용 여부를 확인하여 이미지를 조정합니다.
   private func checkData() {
     view.hud.show()
     workQueue.async { [weak self] in
@@ -206,8 +207,8 @@ extension ImagePickerController {
           let result = PickerResult(assets: newAssets, useOriginalImage: self.manager.useOriginalImage)
           guard self.didCallback == false else { return }
           self.pickerDelegate?.imagePicker(self, didFinishPicking: result)
-          let pickerResultView = TestPickerResultView(result: result)
-          let hostingController = UIHostingController(rootView: pickerResultView)
+          self.didCallback = true
+        }
       }
     }
   }

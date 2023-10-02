@@ -7,6 +7,7 @@
 
 import AVKit
 import PhotosUI
+import SnapKit
 import SwiftUI
 
 // MARK: - MainEditorView
@@ -15,19 +16,32 @@ struct MainEditorView: View {
   @Environment(\.scenePhase) private var scenePhase
   @Environment(\.dismiss) private var dismiss
   var project: ProjectEntity?
-  var selectedVideoURl: URL?
+  var selectedVideoURL: URL?
   @State var isFullScreen = false
   @State var showVideoQualitySheet = false
   @StateObject var editorVM = EditorViewModel()
   @StateObject var videoPlayer = VideoPlayerManager()
+
   var body: some View {
     ZStack {
       GeometryReader { proxy in
         VStack(spacing: 0) {
-          headerView
+          CustomNavigationBarViewController(title: "새 게시물") {
+            dismiss()
+          }
+          .frame(height: UIScreen.getHeight(54))
           PlayerHolderView(isFullScreen: $isFullScreen, editorVM: editorVM, videoPlayer: videoPlayer)
-          PlayerControl(isFullScreen: $isFullScreen, editorVM: editorVM, videoPlayer: videoPlayer)
+          ThumbnailsSliderView(
+            currentTime: $videoPlayer.currentTime,
+            video: $editorVM.currentVideo, editorVM: editorVM, videoPlayer: videoPlayer)
+          {
+            videoPlayer.scrubState = .scrubEnded(videoPlayer.currentTime)
+            editorVM.setTools()
+          }
+//          PlayerControl(isFullScreen: $isFullScreen, editorVM: editorVM, videoPlayer: videoPlayer)
+//            .border(.green, width: 10)
           ToolsSectionView(videoPlayer: videoPlayer, editorVM: editorVM)
+            .border(.yellow, width: 10)
             .opacity(isFullScreen ? 0 : 1)
             .padding(.top, 5)
         }
@@ -40,11 +54,10 @@ struct MainEditorView: View {
         VideoExporterBottomSheetView(isPresented: $showVideoQualitySheet, video: video)
       }
     }
-    .background(Color.black)
+    .background(Color.Background_Default_Dark)
     .navigationBarHidden(true)
     .navigationBarBackButtonHidden(true)
-    .ignoresSafeArea(.all, edges: .top)
-    .statusBar(hidden: true)
+//    .ignoresSafeArea(.all)
     .onChange(of: scenePhase) { phase in
       saveProject(phase)
     }
@@ -56,15 +69,14 @@ struct MainEditorView: View {
 extension MainEditorView {
   private var headerView: some View {
     HStack {
-      Button {
-        editorVM.updateProject()
-        dismiss()
-      } label: {
-        Image(systemName: "folder.fill")
-      }
-
-      Spacer()
-
+//      Button {
+//        editorVM.updateProject()
+//        dismiss()
+//      } label: {
+//        Image(systemName: "folder.fill")
+//      }
+//
+//      Spacer()
       Button {
         editorVM.selectedTools = nil
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
@@ -75,9 +87,7 @@ extension MainEditorView {
       }
     }
     .foregroundColor(.white)
-    .padding(.horizontal, 20)
     .frame(height: 50)
-    .padding(.bottom)
   }
 
   private func saveProject(_ phase: ScenePhase) {
@@ -90,9 +100,9 @@ extension MainEditorView {
   }
 
   private func setVideo(_ proxy: GeometryProxy) {
-    if let selectedVideoURl {
-      videoPlayer.loadState = .loaded(selectedVideoURl)
-      editorVM.setNewVideo(selectedVideoURl, geo: proxy)
+    if let selectedVideoURL {
+      videoPlayer.loadState = .loaded(selectedVideoURL)
+      editorVM.setNewVideo(selectedVideoURL, geo: proxy)
     }
 
     if let project, let url = project.videoURL {
