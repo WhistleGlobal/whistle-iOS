@@ -32,6 +32,7 @@ struct MainView: View {
   @State var newId = UUID()
   @State var isCurrentVideoWhistled = false
   @State var timer: Timer? = nil
+  @State var isSplashOn = true
   @Binding var mainOpacity: Double
 
   var body: some View {
@@ -146,6 +147,9 @@ struct MainView: View {
               isCurrentVideoWhistled = apiViewModel.contentList[currentIndex].isWhistled
               await player.seek(to: .zero)
               player.play()
+              withAnimation {
+                isSplashOn = false
+              }
             }
           }
         }
@@ -190,6 +194,26 @@ struct MainView: View {
             apiViewModel.postFeedPlayerChanged()
           }
         }, showToast: $showHideContentToast)
+      }
+    }
+    .onAppear {
+      DispatchQueue.main.asyncAfter(deadline: .now() + 1.4) {
+        withAnimation {
+          isSplashOn = false
+        }
+      }
+    }
+    .overlay {
+      if isSplashOn {
+        SignInPlayerView()
+          .ignoresSafeArea()
+          .allowsTightening(false)
+          .onAppear {
+            tabbarModel.tabbarOpacity = 0.0
+          }
+          .onDisappear {
+            tabbarModel.tabbarOpacity = 1.0
+          }
       }
     }
     .confirmationDialog("", isPresented: $showDialog) {
