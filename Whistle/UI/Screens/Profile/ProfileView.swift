@@ -98,9 +98,6 @@ struct ProfileView: View {
         }
         .padding(.horizontal, profileHorizontalPadding)
         .zIndex(1)
-        .onChange(of: offsetY) { newValue in
-          log(newValue)
-        }
         switch (tabSelection, apiViewModel.myPostFeed.isEmpty, apiViewModel.bookmark.isEmpty) {
         // 내 비디오 탭 & 올린 컨텐츠 있음
         case (.myVideo, false, _):
@@ -166,6 +163,33 @@ struct ProfileView: View {
         }
       }
       .ignoresSafeArea()
+    }
+    .overlay {
+      VStack(spacing: 0) {
+        HStack {
+          Spacer()
+          Button {
+            withAnimation {
+              bottomSheetPosition = .absolute(420)
+            }
+          } label: {
+            Circle()
+              .foregroundColor(.Gray_Default)
+              .frame(width: 48, height: 48)
+              .overlay {
+                Image(systemName: "ellipsis")
+                  .resizable()
+                  .scaledToFit()
+                  .foregroundColor(Color.White)
+                  .fontWeight(.semibold)
+                  .frame(width: 20, height: 20)
+              }
+          }
+        }
+        .padding([.top, .horizontal], 16)
+        Spacer()
+      }
+      .padding(16)
     }
     .overlay {
       if showSignoutAlert {
@@ -308,7 +332,6 @@ extension ProfileView {
       .frame(height: introduceHeight)
       .padding(.bottom, 16)
       .padding(.horizontal, 48)
-
       Spacer()
       NavigationLink {
         ProfileEditView()
@@ -357,32 +380,6 @@ extension ProfileView {
     }
     .frame(height: 418 + (418 * progress))
     .frame(maxWidth: .infinity)
-    .overlay {
-      VStack(spacing: 0) {
-        HStack {
-          Spacer()
-          Button {
-            withAnimation {
-              bottomSheetPosition = .absolute(420)
-            }
-          } label: {
-            Circle()
-              .foregroundColor(.Gray_Default)
-              .frame(width: 48, height: 48)
-              .overlay {
-                Image(systemName: "ellipsis")
-                  .resizable()
-                  .scaledToFit()
-                  .foregroundColor(Color.White)
-                  .fontWeight(.semibold)
-                  .frame(width: 20, height: 20)
-              }
-          }
-        }
-        .padding([.top, .horizontal], 16)
-        Spacer()
-      }
-    }
   }
 
   @ViewBuilder
