@@ -25,7 +25,7 @@ struct TabbarView: View {
             .environmentObject(apiViewModel)
             .environmentObject(tabbarModel)
             .opacity(mainOpacity)
-            .onChange(of: tabbarModel.tabSelection) { newValue in
+            .onChange(of: tabbarModel.tabSelectionNoAnimation) { newValue in
               mainOpacity = newValue == .main ? 1 : 0
             }
         } else {
@@ -42,7 +42,7 @@ struct TabbarView: View {
         Color.pink.opacity(0.4).ignoresSafeArea()
       case .profile:
         NavigationStack {
-          if false {
+          if true {
             ProfileView(isFirstProfileLoaded: $isFirstProfileLoaded)
               .environmentObject(apiViewModel)
               .environmentObject(tabbarModel)
@@ -128,9 +128,7 @@ extension TabbarView {
       .frame(maxWidth: .infinity)
       .overlay {
         Button {
-          Task {
-            switchTab(to: .main)
-          }
+          switchTab(to: .main)
         } label: {
           Color.clear.overlay {
             Image(systemName: "house.fill")
