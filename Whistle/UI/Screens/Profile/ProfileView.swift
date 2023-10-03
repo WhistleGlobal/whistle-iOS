@@ -116,6 +116,7 @@ struct ProfileView: View {
                 }
               }
             }
+            .offset(y: videoOffset)
             .offset(coordinateSpace: .named("SCROLL")) { offset in
               offsetY = offset
             }
@@ -142,6 +143,7 @@ struct ProfileView: View {
                 }
               }
             }
+            .offset(y: videoOffset)
             .offset(coordinateSpace: .named("SCROLL")) { offset in
               offsetY = offset
             }
@@ -386,7 +388,7 @@ extension ProfileView {
   func videoThumbnailView(thumbnailUrl: String, viewCount: Int) -> some View {
     Color.black.overlay {
       KFImage.url(URL(string: thumbnailUrl))
-        .placeholder { // 플레이스 홀더 설정
+        .placeholder {
           Color.black
         }
         .resizable()
@@ -631,5 +633,23 @@ extension ProfileView {
     default:
       return 0
     }
+  }
+
+  var tabHeight: CGFloat {
+    switch -offsetY {
+    case ..<252:
+      return 48
+    case 252..<305:
+      return 48 + (48 * ((offsetY + 252) / 53))
+    case 305...:
+      return 0
+    default:
+      return 0
+    }
+  }
+
+  var videoOffset: CGFloat {
+    log("\(offsetY < -204 ? 204 : -offsetY)")
+    return offsetY < -204 ? 204 : -offsetY
   }
 }
