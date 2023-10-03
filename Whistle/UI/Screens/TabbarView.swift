@@ -20,7 +20,6 @@ struct TabbarView: View {
   var body: some View {
     ZStack {
       NavigationStack {
-//        Color.Blue_Default
         MainView(mainOpacity: $mainOpacity)
           .environmentObject(apiViewModel)
           .environmentObject(tabbarModel)

@@ -13,7 +13,7 @@ protocol PostFeedProtocol {
   func requestMyPostFeed() async
   func requestUserPostFeed(userId: Int) async
   func requestMyBookmark() async
-  func requestContentList() async
+  func requestContentList(completion: @escaping () -> ())
   func requestReportedConent() async
   func postFeedPlayerChanged()
   func actionBookmark(contentId: Int) async -> Bool

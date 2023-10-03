@@ -409,6 +409,7 @@ extension ProfileView {
       .fontSystem(fontDesignSystem: .body1_KO)
       .foregroundColor(.LabelColor_Primary_Dark)
     Button {
+      tabbarModel.tabSelectionNoAnimation = .upload
       withAnimation {
         tabbarModel.tabSelection = .upload
       }
