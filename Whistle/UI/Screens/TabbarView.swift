@@ -20,13 +20,18 @@ struct TabbarView: View {
   var body: some View {
     ZStack {
       NavigationStack {
-        MainView(mainOpacity: $mainOpacity)
-          .environmentObject(apiViewModel)
-          .environmentObject(tabbarModel)
-          .opacity(mainOpacity)
-          .onChange(of: tabbarModel.tabSelection) { newValue in
-            mainOpacity = newValue == .main ? 1 : 0
-          }
+        if true { // 로그인 관련 로직으로 바꿀것
+          MainView(mainOpacity: $mainOpacity)
+            .environmentObject(apiViewModel)
+            .environmentObject(tabbarModel)
+            .opacity(mainOpacity)
+            .onChange(of: tabbarModel.tabSelection) { newValue in
+              mainOpacity = newValue == .main ? 1 : 0
+            }
+        } else {
+          // FIXME: - 비로그인 메인화면으로 교체할 것
+          EmptyView()
+        }
       }
       .tint(.black)
       switch tabbarModel.tabSelectionNoAnimation {
@@ -37,10 +42,14 @@ struct TabbarView: View {
         Color.pink.opacity(0.4).ignoresSafeArea()
       case .profile:
         NavigationStack {
-          ProfileView(isFirstProfileLoaded: $isFirstProfileLoaded)
-            .environmentObject(apiViewModel)
-            .environmentObject(tabbarModel)
-            .environmentObject(userAuth)
+          if false {
+            ProfileView(isFirstProfileLoaded: $isFirstProfileLoaded)
+              .environmentObject(apiViewModel)
+              .environmentObject(tabbarModel)
+              .environmentObject(userAuth)
+          } else {
+            NoSignInProfileView()
+          }
         }
         .tint(.black)
       }
