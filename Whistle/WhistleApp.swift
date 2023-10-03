@@ -38,18 +38,14 @@ struct WhistleApp: App {
   var body: some Scene {
     WindowGroup {
       if isAccess {
-        NavigationStack {
-          PickerConfigViewControllerWrapper(options: $pickerOptions)
-            .environmentObject(rootVM)
-        }
-//        TabbarView()
-//          .environmentObject(apiViewModel)
-//          .environmentObject(userAuth)
-//          .task {
-//            if isAccess {
-//              appleSignInViewModel.userAuth.loadData { }
-//            }
-//          }
+        TabbarView()
+          .environmentObject(apiViewModel)
+          .environmentObject(userAuth)
+          .task {
+            if isAccess {
+              appleSignInViewModel.userAuth.loadData { }
+            }
+          }
       } else {
         NavigationStack {
           SignInView()
