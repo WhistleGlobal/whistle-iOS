@@ -109,7 +109,7 @@ extension View {
           .stroke(lineWidth: 1)
           .foregroundStyle(
             LinearGradient.Border_Glass)
-        overlayed
+          .frame(width: width, height: height)
       }
   }
 
