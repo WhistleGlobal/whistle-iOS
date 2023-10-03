@@ -11,11 +11,11 @@ import SwiftUI
 
 struct TabbarView: View {
 
-  @StateObject var tabbarModel: TabbarModel = .init()
   @State var isFirstProfileLoaded = true
   @State var mainOpacity = 1.0
   @EnvironmentObject var apiViewModel: APIViewModel
   @EnvironmentObject var userAuth: UserAuth
+  @EnvironmentObject var tabbarModel: TabbarModel
 
   var body: some View {
     ZStack {

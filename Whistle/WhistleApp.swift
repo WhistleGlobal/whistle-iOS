@@ -31,6 +31,7 @@ struct WhistleApp: App {
   @StateObject var appleSignInViewModel = AppleSignInViewModel()
   @StateObject var userAuth = UserAuth()
   @StateObject var apiViewModel = APIViewModel()
+  @StateObject var tabbarModel: TabbarModel = .init()
   @State var testBool = false
   @AppStorage("isAccess") var isAccess = false
   let keychain = KeychainSwift()
@@ -41,6 +42,7 @@ struct WhistleApp: App {
         TabbarView()
           .environmentObject(apiViewModel)
           .environmentObject(userAuth)
+          .environmentObject(tabbarModel)
           .task {
             if isAccess {
               appleSignInViewModel.userAuth.loadData { }
@@ -49,7 +51,9 @@ struct WhistleApp: App {
       } else {
         NavigationStack {
           SignInView()
+            .environmentObject(apiViewModel)
             .environmentObject(userAuth)
+            .environmentObject(tabbarModel)
         }
         .tint(.black)
       }
