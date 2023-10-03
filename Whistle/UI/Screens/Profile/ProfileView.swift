@@ -31,6 +31,7 @@ struct ProfileView: View {
   @State var showSignoutAlert = false
   @State var showDeleteAlert = false
   @State var bottomSheetPosition: BottomSheetPosition = .hidden
+  @State var offsetY: CGFloat = 0
   @Binding var isFirstProfileLoaded: Bool
   @EnvironmentObject var apiViewModel: APIViewModel
   @EnvironmentObject var userAuth: UserAuth
@@ -58,40 +59,49 @@ struct ProfileView: View {
             .blur(radius: 50)
         }
       }
-      VStack {
-        Spacer().frame(height: 64)
-        glassProfile(
-          width: UIScreen.width - 32,
-          height: 418,
-          cornerRadius: 32,
-          overlayed: profileInfo(minHeight: 398, maxHeight: 418))
-          .padding(.bottom, 12)
-        HStack(spacing: 0) {
-          Button {
-            tabSelection = .myVideo
-          } label: {
-            Color.gray
-              .opacity(0.01)
-              .frame(maxWidth: .infinity, maxHeight: .infinity)
-          }
-          .buttonStyle(ProfileTabItem(
-            systemName: "square.grid.2x2.fill",
-            tab: profileTabCase.myVideo.rawValue,
-            selectedTab: $tabSelection))
-          Button {
-            tabSelection = .bookmark
-          } label: {
-            Color.gray
-              .opacity(0.01)
-              .frame(maxWidth: .infinity, maxHeight: .infinity)
-          }
-          .buttonStyle(ProfileTabItem(
-            systemName: "bookmark.fill",
-            tab: profileTabCase.bookmark.rawValue,
-            selectedTab: $tabSelection))
+      VStack(spacing: 0) {
+        VStack(spacing: 0) {
+          Spacer().frame(height: topSpacerHeight)
+          glassProfile(
+            width: .infinity,
+            height: 418 + (240 * progress),
+            cornerRadius: profileCornerRadius,
+            overlayed: profileInfo(minHeight: 398, maxHeight: 418))
+            .padding(.bottom, 12)
         }
-        .frame(height: 48)
-        .padding(.bottom, 16)
+        .padding(.horizontal, profileHorizontalPadding)
+        .zIndex(1)
+        Color.clear.overlay {
+          HStack(spacing: 0) {
+            Button {
+              tabSelection = .myVideo
+            } label: {
+              Color.gray
+                .opacity(0.01)
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+            }
+            .buttonStyle(ProfileTabItem(
+              systemName: "square.grid.2x2.fill",
+              tab: profileTabCase.myVideo.rawValue,
+              selectedTab: $tabSelection))
+            Button {
+              tabSelection = .bookmark
+            } label: {
+              Color.gray
+                .opacity(0.01)
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+            }
+            .buttonStyle(ProfileTabItem(
+              systemName: "bookmark.fill",
+              tab: profileTabCase.bookmark.rawValue,
+              selectedTab: $tabSelection))
+          }
+          .frame(height: 48)
+          .offset(y: tabOffset)
+        }
+        .frame(height: tabHeight)
+        .padding(.bottom, tabPadding)
+        .zIndex(2)
         switch (tabSelection, apiViewModel.myPostFeed.isEmpty, apiViewModel.bookmark.isEmpty) {
         // 내 비디오 탭 & 올린 컨텐츠 있음
         case (.myVideo, false, _):
@@ -110,7 +120,16 @@ struct ProfileView: View {
                 }
               }
             }
+            .offset(y: videoOffset)
+            .offset(coordinateSpace: .named("SCROLL")) { offset in
+              offsetY = offset
+            }
+            Spacer().frame(height: 800)
           }
+          .padding(.horizontal, 16)
+          .scrollIndicators(.hidden)
+          .coordinateSpace(name: "SCROLL")
+          .zIndex(0)
           Spacer()
         // 북마크 탭 & 올린 컨텐츠 있음
         case (.bookmark, _, false):
@@ -128,48 +147,55 @@ struct ProfileView: View {
                 }
               }
             }
+            .offset(y: videoOffset)
+            .offset(coordinateSpace: .named("SCROLL")) { offset in
+              offsetY = offset
+            }
+            Spacer().frame(height: 800)
           }
+          .padding(.horizontal, 16)
+          .scrollIndicators(.hidden)
+          .coordinateSpace(name: "SCROLL")
+          .zIndex(0)
           Spacer()
         // 내 비디오 탭 & 올린 컨텐츠 없음
         case (.myVideo, true, _):
           listEmptyView()
+            .padding(.horizontal, 16)
         // 북마크 탭 & 올린 컨텐츠 없음
         case (.bookmark, _, true):
           listEmptyView()
+            .padding(.horizontal, 16)
         }
       }
-      .padding(.horizontal, 16)
       .ignoresSafeArea()
-      VStack {
-        Spacer()
-        GlassBottomSheet(
-          isShowing: $isShowingBottomSheet,
-          showSignoutAlert: $showSignoutAlert,
-          showDeleteAlert: $showDeleteAlert,
-          content: AnyView(Text("")))
-          .environmentObject(apiViewModel)
-          .environmentObject(userAuth)
-          .onChange(of: isShowingBottomSheet) { newValue in
-            if !newValue {
-              DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-                tabbarModel.tabbarOpacity = 1
-              }
+    }
+    .overlay {
+      VStack(spacing: 0) {
+        HStack {
+          Spacer()
+          Button {
+            withAnimation {
+              bottomSheetPosition = .absolute(420)
             }
+          } label: {
+            Circle()
+              .foregroundColor(.Gray_Default)
+              .frame(width: 48, height: 48)
+              .overlay {
+                Image(systemName: "ellipsis")
+                  .resizable()
+                  .scaledToFit()
+                  .foregroundColor(Color.White)
+                  .fontWeight(.semibold)
+                  .frame(width: 20, height: 20)
+              }
           }
-          .gesture(
-            DragGesture(minimumDistance: 20, coordinateSpace: .local)
-              .onEnded { value in
-                if value.translation.height > 20 {
-                  withAnimation {
-                    isShowingBottomSheet = false
-                  }
-                  DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-                    tabbarModel.tabbarOpacity = 1
-                  }
-                }
-              })
+        }
+        .padding([.top, .horizontal], 16)
+        Spacer()
       }
-      .ignoresSafeArea()
+      .padding(16)
     }
     .overlay {
       if showSignoutAlert {
@@ -293,41 +319,25 @@ extension ProfileView {
   @ViewBuilder
   func profileInfo(minHeight _: CGFloat, maxHeight _: CGFloat) -> some View {
     VStack(spacing: 0) {
-      HStack {
-        Spacer()
-        Button {
-          withAnimation {
-            bottomSheetPosition = .absolute(420)
-          }
-        } label: {
-          Circle()
-            .foregroundColor(.Gray_Default)
-            .frame(width: 48, height: 48)
-            .overlay {
-              Image(systemName: "ellipsis")
-                .resizable()
-                .scaledToFit()
-                .foregroundColor(Color.White)
-                .fontWeight(.semibold)
-                .frame(width: 20, height: 20)
-            }
-        }
-      }
-      .padding([.top, .horizontal], 16)
-      profileImageView(url: apiViewModel.myProfile.profileImage, size: 100)
+      Spacer().frame(height: 64)
+      profileImageView(url: apiViewModel.myProfile.profileImage, size: profileImageSize)
         .padding(.bottom, 16)
       Text(apiViewModel.myProfile.userName)
         .foregroundColor(Color.LabelColor_Primary_Dark)
         .fontSystem(fontDesignSystem: .title2_Expanded)
         .padding(.bottom, 4)
-      Text(apiViewModel.myProfile.introduce ?? " ")
-        .foregroundColor(Color.LabelColor_Secondary_Dark)
-        .fontSystem(fontDesignSystem: .body2_KO)
-        .lineLimit(nil)
-        .multilineTextAlignment(.center)
-        .fixedSize(horizontal: false, vertical: true)
-        .padding(.horizontal, 48)
-        .padding(.bottom, 16)
+      Color.clear.overlay {
+        Text(apiViewModel.myProfile.introduce ?? " ")
+          .foregroundColor(Color.LabelColor_Secondary_Dark)
+          .fontSystem(fontDesignSystem: .body2_KO)
+          .lineLimit(nil)
+          .multilineTextAlignment(.center)
+          .fixedSize(horizontal: false, vertical: true)
+          .scaleEffect(introduceScale)
+      }
+      .frame(height: introduceHeight)
+      .padding(.bottom, 16)
+      .padding(.horizontal, 48)
       Spacer()
       NavigationLink {
         ProfileEditView()
@@ -336,9 +346,10 @@ extension ProfileView {
         Text("프로필 편집")
           .fontSystem(fontDesignSystem: .subtitle2_KO)
           .foregroundColor(Color.LabelColor_Primary_Dark)
-          .frame(width: 114, height: 36)
+          .scaleEffect(profileEditButtonScale)
+          .frame(width: profileEditButtonWidth, height: profileEditButtonHeight)
       }
-      .frame(width: 114, height: 36)
+      .frame(width: profileEditButtonWidth, height: profileEditButtonHeight)
       .padding(.bottom, 24)
       .buttonStyle(ProfileEditButtonStyle())
       HStack(spacing: 48) {
@@ -346,11 +357,13 @@ extension ProfileView {
           Text("\(apiViewModel.myWhistleCount)")
             .foregroundColor(Color.LabelColor_Primary_Dark)
             .fontSystem(fontDesignSystem: .title2_Expanded)
+            .scaleEffect(whistleFollowerTextScale)
           Text("whistle")
             .foregroundColor(Color.LabelColor_Secondary_Dark)
             .fontSystem(fontDesignSystem: .caption_SemiBold)
+            .scaleEffect(whistleFollowerTextScale)
         }
-        Rectangle().frame(width: 1, height: 36).foregroundColor(.white)
+        Rectangle().frame(width: 1 , height: .infinity).foregroundColor(.white)
         NavigationLink {
           FollowView()
             .environmentObject(apiViewModel)
@@ -360,15 +373,18 @@ extension ProfileView {
             Text("\(apiViewModel.myFollow.followerCount)")
               .foregroundColor(Color.LabelColor_Primary_Dark)
               .fontSystem(fontDesignSystem: .title2_Expanded)
+              .scaleEffect(whistleFollowerTextScale)
             Text("follower")
               .foregroundColor(Color.LabelColor_Secondary_Dark)
               .fontSystem(fontDesignSystem: .caption_SemiBold)
+              .scaleEffect(whistleFollowerTextScale)
           }
         }
       }
+      .frame(height: whistleFollowerTabHeight)
       .padding(.bottom, 32)
     }
-    .frame(height: 418)
+    .frame(height: 418 + (418 * progress))
     .frame(maxWidth: .infinity)
   }
 
@@ -376,7 +392,7 @@ extension ProfileView {
   func videoThumbnailView(thumbnailUrl: String, viewCount: Int) -> some View {
     Color.black.overlay {
       KFImage.url(URL(string: thumbnailUrl))
-        .placeholder { // 플레이스 홀더 설정
+        .placeholder {
           Color.black
         }
         .resizable()
@@ -475,5 +491,182 @@ extension ProfileView {
     }
     .frame(height: 56)
     .padding(.horizontal, 16)
+  }
+}
+
+// MARK: - Sticky Header Computed Properties
+
+extension ProfileView {
+  var progress: CGFloat {
+    -(offsetY / 177) > 1 ? -1 : (offsetY > 0 ? 0 : (offsetY / 177))
+  }
+
+  var progressOpacity: CGFloat {
+    abs(1 + (progress * 1.5)) > 1 ? 0 : 1 + (progress * 1.5)
+  }
+
+  var profileHorizontalPadding: CGFloat {
+    switch -offsetY {
+    case ..<0:
+      return 16
+    case 0..<64:
+      return 16 + (16 * (offsetY / 64))
+    default:
+      return 0
+    }
+  }
+
+  var profileCornerRadius: CGFloat {
+    switch -offsetY {
+    case ..<0:
+      return 32
+    case 0..<64:
+      return 32 + (32 * (offsetY / 64))
+    default:
+      return 0
+    }
+  }
+
+  var topSpacerHeight: CGFloat {
+    switch -offsetY {
+    case ..<0:
+      return 64
+    case 0..<64:
+      return 64 + offsetY
+    default:
+      return 0
+    }
+  }
+
+  var profileImageSize: CGFloat {
+    switch -offsetY {
+    case ..<0:
+      return 100
+    case 0..<122:
+      return 100 + (100 * (offsetY / 122))
+    default:
+      return 0
+    }
+  }
+
+  var whistleFollowerTabHeight: CGFloat {
+    switch -offsetY {
+    case ..<122:
+      return 54
+    case 122..<200:
+      return 54 + (54 * ((offsetY + 122) / 78))
+    default:
+      return 0
+    }
+  }
+
+  var whistleFollowerTextScale: CGFloat {
+    switch -offsetY {
+    case ..<122:
+      return 1
+    case 122..<200:
+      return 1 - abs((offsetY + 122) / 78)
+    default:
+      return 0
+    }
+  }
+
+  var profileEditButtonHeight: CGFloat {
+    switch -offsetY {
+    case ..<200:
+      return 36
+    case 200..<252:
+      return 36 + (36 * ((offsetY + 200) / 52))
+    default:
+      return 0
+    }
+  }
+
+  var profileEditButtonWidth: CGFloat {
+    switch -offsetY {
+    case ..<200:
+      return 114
+    case 200..<252:
+      return 114 + (114 * ((offsetY + 200) / 52))
+    default:
+      return 0
+    }
+  }
+
+  var profileEditButtonScale: CGFloat {
+    switch -offsetY {
+    case ..<200:
+      return 1
+    case 200..<252:
+      return 1 - abs((offsetY + 200) / 52)
+    default:
+      return 0
+    }
+  }
+
+  var introduceHeight: CGFloat {
+    switch -offsetY {
+    case ..<252:
+      return 20
+    case 252..<305:
+      return 20 + (20 * ((offsetY + 252) / 53))
+    default:
+      return 0
+    }
+  }
+
+  var introduceScale: CGFloat {
+    switch -offsetY {
+    case ..<252:
+      return 1
+    case 252..<305:
+      return 1 - abs((offsetY + 252) / 53)
+    default:
+      return 0
+    }
+  }
+
+  var tabOffset: CGFloat {
+    switch -offsetY {
+    case ..<252:
+      return 0
+    case 252..<305:
+      return 36 * ((offsetY + 252) / 53)
+    case 305...:
+      return -36
+    default:
+      return 0
+    }
+  }
+
+  var tabPadding: CGFloat {
+    switch -offsetY {
+    case ..<252:
+      return 16
+    case 252..<305:
+      return 16 + (16 * ((offsetY + 252) / 53))
+    case 305...:
+      return 0
+    default:
+      return 0
+    }
+  }
+
+  var tabHeight: CGFloat {
+    switch -offsetY {
+    case ..<252:
+      return 48
+    case 252..<305:
+      return 48 + (48 * ((offsetY + 252) / 53))
+    case 305...:
+      return 0
+    default:
+      return 0
+    }
+  }
+
+  var videoOffset: CGFloat {
+    log("\(offsetY < -305 ? 305 : -offsetY)")
+    return offsetY < -305 ? 305 : -offsetY
   }
 }
