@@ -110,6 +110,7 @@ extension View {
           .foregroundStyle(
             LinearGradient.Border_Glass)
           .frame(width: width, height: height)
+        overlayed
       }
   }
 
