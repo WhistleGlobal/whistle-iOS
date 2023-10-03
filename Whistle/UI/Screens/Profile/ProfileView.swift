@@ -289,7 +289,7 @@ extension ProfileView {
   func profileInfo(minHeight _: CGFloat, maxHeight _: CGFloat) -> some View {
     VStack(spacing: 0) {
       Spacer().frame(height: 64)
-      profileImageView(url: apiViewModel.myProfile.profileImage, size: 100 + (100 * progress))
+      profileImageView(url: apiViewModel.myProfile.profileImage, size: profileImageSize)
         .padding(.bottom, 16)
       Text(apiViewModel.myProfile.userName)
         .foregroundColor(Color.LabelColor_Primary_Dark)
@@ -497,7 +497,7 @@ extension ProfileView {
   var profileHorizontalPadding: CGFloat {
     switch -offsetY {
     case ..<0:
-        return 16
+      return 16
     case 0..<64:
       return 16 + (16 * (offsetY / 64))
     default:
@@ -508,7 +508,7 @@ extension ProfileView {
   var profileCornerRadius: CGFloat {
     switch -offsetY {
     case ..<0:
-        return 32
+      return 32
     case 0..<64:
       return 32 + (32 * (offsetY / 64))
     default:
@@ -519,24 +519,22 @@ extension ProfileView {
   var topSpacerHeight: CGFloat {
     switch -offsetY {
     case ..<0:
-        return 64
+      return 64
     case 0..<64:
       return 64 + offsetY
     default:
       return 0
     }
   }
-    
-    var profileImageSize: CGFloat {
-        switch -offsetY {
-        case ..<0:
-            return 100
-        case 0..<64:
-          return 100
-        case 64..<122:
-            return 32 + (32 * (offsetY / 64))
-        default:
-          return 0
-        }
+
+  var profileImageSize: CGFloat {
+    switch -offsetY {
+    case ..<0:
+      return 100
+    case 0..<122:
+      return 100 + (100 * (offsetY / 122))
+    default:
+      return 0
     }
+  }
 }
