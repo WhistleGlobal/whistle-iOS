@@ -33,7 +33,7 @@ struct RootView: View {
         }
       }
       .navigationDestination(isPresented: $showEditor) {
-        MainEditorView(selectedVideoURl: selectedVideoURL)
+        MainEditorView(selectedVideoURL: selectedVideoURL)
       }
       .toolbar {
         ToolbarItem(placement: .navigationBarLeading) {

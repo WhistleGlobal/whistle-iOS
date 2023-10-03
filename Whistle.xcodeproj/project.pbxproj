@@ -72,8 +72,11 @@
 		1B39555B2A95095500BCB4DF /* ColorManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B39555A2A95095500BCB4DF /* ColorManager.swift */; };
 		1B39555D2A95098100BCB4DF /* VideoModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B39555C2A95098100BCB4DF /* VideoModel.swift */; };
 		1B39555F2A9509A700BCB4DF /* SubmitButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B39555E2A9509A700BCB4DF /* SubmitButton.swift */; };
+		1B5FB4B72AC6777A0049E4EE /* ImagePickerController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BD4E6442ABA2F8600ADB783 /* ImagePickerController.swift */; };
+		1B5FB4BB2AC70E460049E4EE /* ResizeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B5FB4BA2AC70E460049E4EE /* ResizeViewModel.swift */; };
 		1B6C04302AC2B93400DF4045 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 1B6C042F2AC2B93400DF4045 /* SnapKit */; };
 		1B6C04322AC2B93A00DF4045 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = 1B6C04312AC2B93A00DF4045 /* Kingfisher */; };
+		1B7D801D2AC881490030CAC3 /* CustomNavigationBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B7D801C2AC881490030CAC3 /* CustomNavigationBarViewController.swift */; };
 		1BB7A06A2A9514B4002DD86F /* .swiftlint.yml in Resources */ = {isa = PBXBuildFile; fileRef = 1BB7A0692A9514B4002DD86F /* .swiftlint.yml */; };
 		1BD4E56B2ABA275200ADB783 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 1BD4E56A2ABA275200ADB783 /* SnapKit */; };
 		1BD4E5B62ABA2F5600ADB783 /* VideoPicker.h in Headers */ = {isa = PBXBuildFile; fileRef = 1BD4E5B52ABA2F5600ADB783 /* VideoPicker.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -186,7 +189,6 @@
 		1BD4E74A2ABA2F8600ADB783 /* PickerOptionsConfigurable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BD4E63F2ABA2F8600ADB783 /* PickerOptionsConfigurable.swift */; };
 		1BD4E74B2ABA2F8600ADB783 /* ScaleAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BD4E6412ABA2F8600ADB783 /* ScaleAnimator.swift */; };
 		1BD4E74C2ABA2F8600ADB783 /* AssetPickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BD4E6432ABA2F8600ADB783 /* AssetPickerViewController.swift */; };
-		1BD4E74D2ABA2F8600ADB783 /* ImagePickerController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BD4E6442ABA2F8600ADB783 /* ImagePickerController.swift */; };
 		1BD4E74E2ABA2F8600ADB783 /* PhotoPreviewController+Editor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BD4E6452ABA2F8600ADB783 /* PhotoPreviewController+Editor.swift */; };
 		1BD4E74F2ABA2F8600ADB783 /* PhotoPreviewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BD4E6462ABA2F8600ADB783 /* PhotoPreviewController.swift */; };
 		1BD4E7502ABA2F8600ADB783 /* AssetPickerViewController+Capture.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BD4E6472ABA2F8600ADB783 /* AssetPickerViewController+Capture.swift */; };
@@ -500,6 +502,8 @@
 		1B39555A2A95095500BCB4DF /* ColorManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorManager.swift; sourceTree = "<group>"; };
 		1B39555C2A95098100BCB4DF /* VideoModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoModel.swift; sourceTree = "<group>"; };
 		1B39555E2A9509A700BCB4DF /* SubmitButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubmitButton.swift; sourceTree = "<group>"; };
+		1B5FB4BA2AC70E460049E4EE /* ResizeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResizeViewModel.swift; sourceTree = "<group>"; };
+		1B7D801C2AC881490030CAC3 /* CustomNavigationBarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomNavigationBarViewController.swift; sourceTree = "<group>"; };
 		1BB7A0692A9514B4002DD86F /* .swiftlint.yml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = .swiftlint.yml; sourceTree = "<group>"; };
 		1BD4E5B32ABA2F5600ADB783 /* VideoPicker.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = VideoPicker.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		1BD4E5B52ABA2F5600ADB783 /* VideoPicker.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VideoPicker.h; sourceTree = "<group>"; };
@@ -892,6 +896,7 @@
 				1B38952B2AB9CB7400B4C8DD /* Swipe.swift */,
 				1B38952C2AB9CB7400B4C8DD /* TimeLineView.swift */,
 				1B38952D2AB9CB7400B4C8DD /* MainEditorView.swift */,
+				1B7D801C2AC881490030CAC3 /* CustomNavigationBarViewController.swift */,
 			);
 			path = EditorView;
 			sourceTree = "<group>";
@@ -984,6 +989,7 @@
 				1B3895502AB9CB8C00B4C8DD /* ExporterViewModel.swift */,
 				1B3895512AB9CB8C00B4C8DD /* FiltersViewModel.swift */,
 				1B3895532AB9CB8C00B4C8DD /* RootViewModel.swift */,
+				1B5FB4BA2AC70E460049E4EE /* ResizeViewModel.swift */,
 			);
 			path = VideoEditor;
 			sourceTree = "<group>";
@@ -1158,6 +1164,7 @@
 		1B3955512A9507CC00BCB4DF /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
+				1BD4E7D12ABA690400ADB783 /* Extension+UITableViewCell.swift */,
 				1B38956D2AB9CBFC00B4C8DD /* Extension+AVAssets.swift */,
 				1B3895682AB9CBFB00B4C8DD /* Extension+AVAudioSession.swift */,
 				1B3895692AB9CBFC00B4C8DD /* Extension+FileManager.swift */,
@@ -1566,8 +1573,8 @@
 		1BD4E6422ABA2F8600ADB783 /* Controller */ = {
 			isa = PBXGroup;
 			children = (
-				1BD4E6432ABA2F8600ADB783 /* AssetPickerViewController.swift */,
 				1BD4E6442ABA2F8600ADB783 /* ImagePickerController.swift */,
+				1BD4E6432ABA2F8600ADB783 /* AssetPickerViewController.swift */,
 				1BD4E6452ABA2F8600ADB783 /* PhotoPreviewController+Editor.swift */,
 				1BD4E6462ABA2F8600ADB783 /* PhotoPreviewController.swift */,
 				1BD4E6472ABA2F8600ADB783 /* AssetPickerViewController+Capture.swift */,
@@ -1911,7 +1918,6 @@
 				1BD4E7CB2ABA68EF00ADB783 /* ConfigCell.swift */,
 				1BD4E7CD2ABA68F600ADB783 /* PickerPreviewCell.swift */,
 				1BD4E7CF2ABA68FA00ADB783 /* EnableCell.swift */,
-				1BD4E7D12ABA690400ADB783 /* Extension+UITableViewCell.swift */,
 				1BD4E7D32ABA6B2A00ADB783 /* VideoPickerTestView.swift */,
 			);
 			path = VideoPicker;
@@ -2369,6 +2375,7 @@
 				1BE8EA032AAE321200EB0A55 /* MusicProtocol.swift in Sources */,
 				1B3895642AB9CBD300B4C8DD /* VideoQuality.swift in Sources */,
 				788F43F72AA6136F00718D38 /* Player.swift in Sources */,
+				1B5FB4BB2AC70E460049E4EE /* ResizeViewModel.swift in Sources */,
 				78DA58D72AA448A100F8D2F1 /* ProfileEditIDView.swift in Sources */,
 				787AF5752AA88F4000C190E6 /* BookMark.swift in Sources */,
 				1B3895882AB9CC4300B4C8DD /* CoreDataContainer.xcdatamodeld in Sources */,
@@ -2378,6 +2385,7 @@
 				1B3895462AB9CB7500B4C8DD /* RootView.swift in Sources */,
 				1B3895612AB9CBD300B4C8DD /* FilteredImage.swift in Sources */,
 				785E82722AAC8FDD00EF3576 /* MainContent.swift in Sources */,
+				1B7D801D2AC881490030CAC3 /* CustomNavigationBarViewController.swift in Sources */,
 				1BD4E7CC2ABA68EF00ADB783 /* ConfigCell.swift in Sources */,
 				7874CB902AA0B5350081DE54 /* ProfileNotiView.swift in Sources */,
 				78D148E92A9E13A800DDCE48 /* CustomBlurView.swift in Sources */,
@@ -2549,6 +2557,7 @@
 				1BD4E6E52ABA2F8600ADB783 /* Capture+AVCaptureDevice.swift in Sources */,
 				1BD4E7952ABA2F8600ADB783 /* TextData.swift in Sources */,
 				1BD4E6F72ABA2F8600ADB783 /* PadCaptureViewController.swift in Sources */,
+				1B5FB4B72AC6777A0049E4EE /* ImagePickerController.swift in Sources */,
 				1BD4E7782ABA2F8600ADB783 /* Editor+CGPoint.swift in Sources */,
 				1BD4E79A2ABA2F8600ADB783 /* BlurredMask.swift in Sources */,
 				1BD4E7BB2ABA2F8600ADB783 /* MosaicContentView.swift in Sources */,
@@ -2605,7 +2614,6 @@
 				1BD4E7222ABA2F8600ADB783 /* DebugHelper.swift in Sources */,
 				1BD4E7522ABA2F8600ADB783 /* AssetPickerViewController+Editor.swift in Sources */,
 				1BD4E76B2ABA2F8600ADB783 /* PickerResult.swift in Sources */,
-				1BD4E74D2ABA2F8600ADB783 /* ImagePickerController.swift in Sources */,
 				1BD4E6F52ABA2F8600ADB783 /* CaptureAspectRatio.swift in Sources */,
 				1BD4E7972ABA2F8600ADB783 /* MosaicData.swift in Sources */,
 				1BD4E7B82ABA2F8600ADB783 /* PhotoEditorContentView+Brush.swift in Sources */,

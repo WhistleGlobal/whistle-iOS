@@ -39,6 +39,7 @@ struct VideoSpeedSlider: View {
         thumbSize: CGSize(width: 20, height: 20))
     }
     .onChange(of: isChangeState) { isChange in
+
       if !(isChange ?? true) {
         value = 1
       }

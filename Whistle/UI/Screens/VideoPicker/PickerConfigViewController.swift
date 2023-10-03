@@ -5,6 +5,7 @@
 //  Created by 박상원 on 2023/09/20.
 //
 
+import SwiftUI
 import UIKit
 import VideoPicker
 
@@ -25,7 +26,7 @@ final class PickerConfigViewController: UIViewController {
     // 테스트용 코드
     addButtonTapped()
     //
-    parent?.navigationItem.title = "Picker"
+    parent?.navigationItem.title = ""
     let title = Bundle.main.localizedString(forKey: "OpenPicker", value: nil, table: nil)
     parent?.navigationItem.rightBarButtonItem = UIBarButtonItem(
       title: title,
@@ -81,12 +82,25 @@ final class PickerConfigViewController: UIViewController {
 // MARK: ImagePickerControllerDelegate
 
 extension PickerConfigViewController: ImagePickerControllerDelegate {
+  /// Picker에서 선택된 asset을 PickerResultViewController로 전달해 줍니다.
   func imagePicker(_ picker: ImagePickerController, didFinishPicking result: PickerResult) {
-    print(result.assets)
     let controller = PickerResultViewController()
+    var videoURL: URL?
     controller.assets = result.assets
-    show(controller, sender: nil)
-    picker.dismiss(animated: true, completion: nil)
+    controller.assets[0].phAsset.loadURL { result in
+      switch result {
+      case .success(let url):
+        videoURL = url
+        print(videoURL)
+        DispatchQueue.main.async {
+          let editorView = MainEditorView(selectedVideoURL: videoURL)
+          self.show(UIHostingController(rootView: editorView), sender: nil)
+          picker.dismiss(animated: true, completion: nil)
+        }
+      case .failure(let error):
+        print("Error: \(error)")
+      }
+    }
   }
 }
 

@@ -49,11 +49,11 @@ struct ToolsSectionView: View {
 
 // MARK: - ToolsSectionView_Previews
 
-struct ToolsSectionView_Previews: PreviewProvider {
-  static var previews: some View {
-    MainEditorView(selectedVideoURl: EditableVideo.mock.url)
-  }
-}
+// struct ToolsSectionView_Previews: PreviewProvider {
+//  static var previews: some View {
+//    MainEditorView(selectedVideoURL: EditableVideo.mock.url)
+//  }
+// }
 
 extension ToolsSectionView {
   @ViewBuilder
@@ -65,9 +65,10 @@ extension ToolsSectionView {
       switch tool {
       case .cut:
         ThumbnailsSliderView(
-          curretTime: $videoPlayer.currentTime,
+          currentTime: $videoPlayer.currentTime,
           video: $editorVM.currentVideo,
-          isChangeState: isAppliedTool)
+          editorVM: editorVM,
+          videoPlayer: videoPlayer)
         {
           videoPlayer.scrubState = .scrubEnded(videoPlayer.currentTime)
           editorVM.setTools()

@@ -18,7 +18,7 @@ struct TimeLineView: View {
   var textInterval: ClosedRange<Double>?
   let onChangeTimeValue: () -> Void
   let onSetAudio: (Audio) -> Void
-  private let frameWidth: CGFloat = 46
+  private let frameWidth: CGFloat = 23
 
   private var calcWidth: CGFloat {
     frameWidth * CGFloat(viewState.countImages) + 10
@@ -97,7 +97,7 @@ extension TimeLineView {
           Image(uiImage: image)
             .resizable()
             .aspectRatio(contentMode: .fill)
-            .frame(height: 52)
+            .frame(height: UIScreen.getHeight(64))
             .rotationEffect(Angle(degrees: 90))
             .clipped()
         }
@@ -169,7 +169,7 @@ enum TimeLineViewState: Int {
   var countImages: Int {
     switch self {
     case .audio: return 2
-    case .empty: return 8
+    case .empty: return 15
     }
   }
 }

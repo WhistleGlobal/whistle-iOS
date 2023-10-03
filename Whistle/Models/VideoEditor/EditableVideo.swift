@@ -49,15 +49,17 @@ struct EditableVideo: Identifiable {
     self.rotation = rotation
   }
 
-  mutating func updateThumbnails(_ geo: GeometryProxy) {
-    let imagesCount = thumbnailCount(geo)
+  mutating func updateThumbnails(_: GeometryProxy) {
+//    let imagesCount = thumbnailCount(geo)
+    let imagesCount = 21
 
     var offset: Float64 = 0
-    for i in 0 ..< imagesCount {
+    for i in 0 ... imagesCount {
       let thumbnailImage = ThumbnailImage(image: asset.getImage(Int(offset)))
       offset = Double(i) * (originalDuration / Double(imagesCount))
       thumbnailsImages.append(thumbnailImage)
     }
+    thumbnailsImages.remove(at: 0)
   }
 
   /// reset and update

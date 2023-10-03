@@ -7,6 +7,7 @@
 //
 
 import SnapKit
+import SwiftUI
 import UIKit
 
 // MARK: - ImagePickerControllerDelegate
@@ -164,6 +165,7 @@ extension ImagePickerController {
 // MARK: - Private function
 
 extension ImagePickerController {
+  /// PickerOptionsInfo를 확인하고 올바른 값으로 보정하는 내부 메서드입니다. 예를 들어, 최소 선택 제한, 열의 수 등을 확인하고 보정합니다.
   private func check(options: PickerOptionsInfo) -> PickerOptionsInfo {
     var options = options
     options.largePhotoMaxWidth = max(options.photoMaxWidth, options.largePhotoMaxWidth)
@@ -189,6 +191,8 @@ extension ImagePickerController {
     return options
   }
 
+  /// 이미지 데이터를 확인하고 필요한 경우 이미지를 리사이징하는 메서드입니다.
+  /// 이미지의 준비 여부와 원본 이미지 사용 여부를 확인하여 이미지를 조정합니다.
   private func checkData() {
     view.hud.show()
     workQueue.async { [weak self] in

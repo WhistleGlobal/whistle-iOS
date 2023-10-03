@@ -17,7 +17,7 @@ struct TimelineSlider<T: View>: View {
   @State var offset: CGFloat = 0
   @State var draggedOffset: CGFloat = 0
   @State var accumulatedOffset: CGFloat = 0
-  var frameWidth: CGFloat = 56
+  var frameWidth: CGFloat = 33
   @ViewBuilder
   var frameView: () -> T
   let onChange: () -> Void

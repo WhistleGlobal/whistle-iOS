@@ -180,13 +180,11 @@ final class VideoPlayerManager: ObservableObject {
 
         switch scrubState {
         case .reset:
-          print("ScrubReset")
           currentTime = time
         case .scrubEnded:
-          print("ScrubEnded1")
           scrubState = .reset
         case .scrubStarted:
-          print("ScrubStarted")
+          break
         }
       }
     }
