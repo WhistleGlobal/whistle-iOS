@@ -122,7 +122,7 @@ extension APIViewModel: PostFeedProtocol {
               return
             }
             let jsonArray = try JSONSerialization.jsonObject(with: data, options: []) as? [[String: Any]]
-
+            self.contentList.removeAll()
             for jsonObject in jsonArray ?? [] {
               let tempContent: MainContent = .init()
               tempContent.contentId = jsonObject["content_id"] as? Int
