@@ -181,16 +181,23 @@ extension UserProfileView {
   func profileInfo(height: CGFloat) -> some View {
     VStack(spacing: 0) {
       Spacer().frame(height: 64)
-      profileImageView(url: apiViewModel.userProfile.profileImg, size: 100)
+      profileImageView(url: apiViewModel.userProfile.profileImg, size: profileImageSize)
         .padding(.bottom, 16)
       Text(apiViewModel.userProfile.userName)
         .foregroundColor(Color.LabelColor_Primary_Dark)
         .fontSystem(fontDesignSystem: .title2_Expanded)
-      Text(apiViewModel.userProfile.introduce ?? "")
-        .foregroundColor(Color.LabelColor_Secondary_Dark)
-        .fontSystem(fontDesignSystem: .body2_KO)
-        .padding(.bottom, 16)
-      // FIXME: - 팔로잉 팔로워 버튼으로 만들기
+
+      Color.clear.overlay {
+        Text(apiViewModel.userProfile.introduce ?? " ")
+          .foregroundColor(Color.LabelColor_Secondary_Dark)
+          .fontSystem(fontDesignSystem: .body2_KO)
+          .lineLimit(nil)
+          .multilineTextAlignment(.center)
+          .fixedSize(horizontal: false, vertical: true)
+          .scaleEffect(introduceScale)
+          .padding(.bottom, 16)
+      }
+      .frame(height: introduceHeight)
       Button("") {
         Task {
           if isFollow {
@@ -203,17 +210,20 @@ extension UserProfileView {
         }
       }
       .buttonStyle(FollowButtonStyle(isFollowed: $isFollow))
+      .scaleEffect(profileEditButtonScale)
       .padding(.bottom, 24)
       HStack(spacing: 48) {
         VStack(spacing: 4) {
           Text("\(apiViewModel.userWhistleCount)")
             .foregroundColor(Color.LabelColor_Primary_Dark)
             .fontSystem(fontDesignSystem: .title2_Expanded)
+            .scaleEffect(whistleFollowerTextScale)
           Text("whistle")
             .foregroundColor(Color.LabelColor_Secondary_Dark)
             .fontSystem(fontDesignSystem: .caption_SemiBold)
+            .scaleEffect(whistleFollowerTextScale)
         }
-        Rectangle().frame(width: 1, height: 36).foregroundColor(.white)
+        Rectangle().frame(width: 1 , height: .infinity).foregroundColor(.white)
         NavigationLink {
           UserFollowView(userId: userId)
             .environmentObject(apiViewModel)
@@ -224,13 +234,16 @@ extension UserProfileView {
             Text("\(apiViewModel.userFollow.followerCount)")
               .foregroundColor(Color.LabelColor_Primary_Dark)
               .fontSystem(fontDesignSystem: .title2_Expanded)
+              .scaleEffect(whistleFollowerTextScale)
             Text("follower")
               .foregroundColor(Color.LabelColor_Secondary_Dark)
               .fontSystem(fontDesignSystem: .caption_SemiBold)
+              .scaleEffect(whistleFollowerTextScale)
           }
         }
         .id(UUID())
       }
+      .frame(height: whistleFollowerTabHeight)
       Spacer()
     }
     .frame(height: height)
