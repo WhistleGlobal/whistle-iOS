@@ -59,7 +59,7 @@ struct ProfileView: View {
             .blur(radius: 50)
         }
       }
-      VStack {
+      VStack(spacing: 0) {
         VStack(spacing: 0) {
           Spacer().frame(height: topSpacerHeight)
           glassProfile(
@@ -68,6 +68,10 @@ struct ProfileView: View {
             cornerRadius: profileCornerRadius,
             overlayed: profileInfo(minHeight: 398, maxHeight: 418))
             .padding(.bottom, 12)
+        }
+        .padding(.horizontal, profileHorizontalPadding)
+        .zIndex(1)
+        Color.clear.overlay {
           HStack(spacing: 0) {
             Button {
               tabSelection = .myVideo
@@ -94,10 +98,10 @@ struct ProfileView: View {
           }
           .frame(height: 48)
           .offset(y: tabOffset)
-          .padding(.bottom, 16)
         }
-        .padding(.horizontal, profileHorizontalPadding)
-        .zIndex(1)
+        .frame(height: tabHeight)
+        .padding(.bottom, tabPadding)
+        .zIndex(2)
         switch (tabSelection, apiViewModel.myPostFeed.isEmpty, apiViewModel.bookmark.isEmpty) {
         // 내 비디오 탭 & 올린 컨텐츠 있음
         case (.myVideo, false, _):
@@ -627,9 +631,22 @@ extension ProfileView {
     case ..<252:
       return 0
     case 252..<305:
-      return offsetY + 252
+      return 36 * ((offsetY + 252) / 53)
     case 305...:
-      return -60
+      return -36
+    default:
+      return 0
+    }
+  }
+
+  var tabPadding: CGFloat {
+    switch -offsetY {
+    case ..<252:
+      return 16
+    case 252..<305:
+      return 16 + (16 * ((offsetY + 252) / 53))
+    case 305...:
+      return 0
     default:
       return 0
     }
