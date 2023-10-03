@@ -295,14 +295,19 @@ extension ProfileView {
         .foregroundColor(Color.LabelColor_Primary_Dark)
         .fontSystem(fontDesignSystem: .title2_Expanded)
         .padding(.bottom, 4)
-      Text(apiViewModel.myProfile.introduce ?? " ")
-        .foregroundColor(Color.LabelColor_Secondary_Dark)
-        .fontSystem(fontDesignSystem: .body2_KO)
-        .lineLimit(nil)
-        .multilineTextAlignment(.center)
-        .fixedSize(horizontal: false, vertical: true)
+        Color.clear.overlay {
+            Text(apiViewModel.myProfile.introduce ?? " ")
+              .foregroundColor(Color.LabelColor_Secondary_Dark)
+              .fontSystem(fontDesignSystem: .body2_KO)
+              .lineLimit(nil)
+              .multilineTextAlignment(.center)
+              .fixedSize(horizontal: false, vertical: true)
+              .scaleEffect(introduceScale)
+              .padding(.bottom, 16)
+        }
+        .frame(height: introduceHeight)
         .padding(.horizontal, 48)
-        .padding(.bottom, 16)
+        
       Spacer()
       NavigationLink {
         ProfileEditView()
@@ -594,4 +599,25 @@ extension ProfileView {
       return 0
     }
   }
+    var introduceHeight: CGFloat {
+        switch -offsetY {
+        case ..<252:
+          return 20
+        case 252..<305:
+          return 20 + (20 * ((offsetY + 252) / 53))
+        default:
+          return 0
+        }
+    }
+    
+    var introduceScale: CGFloat {
+        switch -offsetY {
+        case ..<252:
+          return 1
+        case 252..<305:
+          return 1 - abs((offsetY + 252) / 53)
+        default:
+          return 0
+        }
+    }
 }
