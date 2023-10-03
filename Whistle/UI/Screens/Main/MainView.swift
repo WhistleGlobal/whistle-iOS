@@ -14,6 +14,7 @@ import SwiftUI
 
 struct MainView: View {
 
+  @Environment(\.scenePhase) var scenePhase
   @EnvironmentObject var apiViewModel: APIViewModel
   @EnvironmentObject var tabbarModel: TabbarModel
   @State var currentIndex = 0
@@ -32,7 +33,10 @@ struct MainView: View {
   @State var newId = UUID()
   @State var isCurrentVideoWhistled = false
   @State var timer: Timer? = nil
+  @State var viewTimer: Timer? = nil
   @State var isSplashOn = true
+  @State var viewedContentId: Set<Int> = []
+  @State var processedContentId: Set<Int> = []
   @Binding var mainOpacity: Double
 
   var body: some View {
@@ -118,6 +122,13 @@ struct MainView: View {
           players[currentIndex]?.play()
         } else {
           players[currentIndex]?.pause()
+          DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+            // FIXME: - 조회수 API 함수로 교체
+            log("viewedContentId \(viewedContentId)")
+            processedContentId = processedContentId.union(viewedContentId)
+            viewedContentId.removeAll()
+            log("processedContentId \(processedContentId)")
+          }
         }
       }
     }
@@ -137,7 +148,8 @@ struct MainView: View {
                 players.append(nil)
               }
               log(players)
-              players[currentIndex] = AVPlayer(url: URL(string: apiViewModel.contentList[currentIndex].videoUrl ?? "")!)
+              players[currentIndex] =
+                AVPlayer(url: URL(string: apiViewModel.contentList[currentIndex].videoUrl ?? "")!)
               playerIndex = currentIndex
               guard let player = players[currentIndex] else {
                 return
@@ -149,6 +161,11 @@ struct MainView: View {
               player.play()
               withAnimation {
                 isSplashOn = false
+              }
+              if currentIndex == 0 {
+                let duration = players[0]?.currentItem?.duration.seconds ?? 0
+                setViewTimer(duration > 3 ? 3 : duration)
+                log("viewcontentid : \(viewedContentId)")
               }
             }
           }
@@ -169,6 +186,23 @@ struct MainView: View {
       currentVideoUserId = apiViewModel.contentList[newValue].userId ?? 0
       currentVideoContentId = apiViewModel.contentList[newValue].contentId ?? 0
       apiViewModel.postFeedPlayerChanged()
+      let duration = players[newValue]?.currentItem?.duration.seconds ?? 0
+      setViewTimer(duration > 3 ? 3 : duration)
+      log("viewcontentid : \(viewedContentId)")
+    }
+    .onChange(of: scenePhase) { newValue in
+      switch newValue {
+      case .background:
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+          // FIXME: - 조회수 API 함수로 교체
+          log("viewedContentId \(viewedContentId)")
+          processedContentId = processedContentId.union(viewedContentId)
+          viewedContentId.removeAll()
+          log("processedContentId \(processedContentId)")
+        }
+      default:
+        log("default")
+      }
     }
     .overlay {
       if showPasteToast {
@@ -268,8 +302,10 @@ extension MainView {
           Spacer()
           HStack(spacing: 0) {
             Button {
-              players[currentIndex]?.pause()
-              showUserProfile = true
+              if apiViewModel.contentList[currentIndex].userName != apiViewModel.myProfile.userName {
+                players[currentIndex]?.pause()
+                showUserProfile = true
+              }
             } label: {
               Group {
                 profileImageView(url: profileImg, size: 36)
@@ -393,5 +429,15 @@ extension MainView {
     }
     apiViewModel.contentList[currentIndex].isWhistled.toggle()
     apiViewModel.postFeedPlayerChanged()
+  }
+
+  func setViewTimer(_: Double) {
+    viewTimer?.invalidate()
+    viewTimer = Timer.scheduledTimer(withTimeInterval: 3, repeats: false) { _ in
+      if apiViewModel.contentList[currentIndex].userName != apiViewModel.myProfile.userName {
+        viewedContentId.insert(apiViewModel.contentList[currentIndex].contentId ?? 0)
+        log("inserted : \(viewedContentId)")
+      }
+    }
   }
 }
