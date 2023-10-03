@@ -104,6 +104,9 @@ struct MainView: View {
       .tabViewStyle(.page(indexDisplayMode: .never))
       .frame(maxWidth: proxy.size.width)
       .onChange(of: mainOpacity) { newValue in
+        if apiViewModel.contentList.isEmpty {
+          return
+        }
         if newValue == 1 {
           players[currentIndex]?.play()
         } else {

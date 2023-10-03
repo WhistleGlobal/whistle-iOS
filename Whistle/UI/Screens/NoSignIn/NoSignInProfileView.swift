@@ -59,14 +59,14 @@ struct NoSignInProfileView: View {
     {
       VStack(spacing: 0) {
         HStack {
-            Button {
-                bottomSheetPosition = .hidden
-            } label: {
-                Image(systemName: "xmark")
-                  .foregroundColor(.White)
-                  .frame(width: 18, height: 18)
-                  .padding(.horizontal, 16)
-            }
+          Button {
+            bottomSheetPosition = .hidden
+          } label: {
+            Image(systemName: "xmark")
+              .foregroundColor(.White)
+              .frame(width: 18, height: 18)
+              .padding(.horizontal, 16)
+          }
           Spacer()
         }
         .frame(height: 52)
