@@ -93,6 +93,7 @@ struct ProfileView: View {
               selectedTab: $tabSelection))
           }
           .frame(height: 48)
+          .offset(y: tabOffset)
           .padding(.bottom, 16)
         }
         .padding(.horizontal, profileHorizontalPadding)
@@ -295,19 +296,19 @@ extension ProfileView {
         .foregroundColor(Color.LabelColor_Primary_Dark)
         .fontSystem(fontDesignSystem: .title2_Expanded)
         .padding(.bottom, 4)
-        Color.clear.overlay {
-            Text(apiViewModel.myProfile.introduce ?? " ")
-              .foregroundColor(Color.LabelColor_Secondary_Dark)
-              .fontSystem(fontDesignSystem: .body2_KO)
-              .lineLimit(nil)
-              .multilineTextAlignment(.center)
-              .fixedSize(horizontal: false, vertical: true)
-              .scaleEffect(introduceScale)
-              .padding(.bottom, 16)
-        }
-        .frame(height: introduceHeight)
-        .padding(.horizontal, 48)
-        
+      Color.clear.overlay {
+        Text(apiViewModel.myProfile.introduce ?? " ")
+          .foregroundColor(Color.LabelColor_Secondary_Dark)
+          .fontSystem(fontDesignSystem: .body2_KO)
+          .lineLimit(nil)
+          .multilineTextAlignment(.center)
+          .fixedSize(horizontal: false, vertical: true)
+          .scaleEffect(introduceScale)
+      }
+      .frame(height: introduceHeight)
+      .padding(.bottom, 16)
+      .padding(.horizontal, 48)
+
       Spacer()
       NavigationLink {
         ProfileEditView()
@@ -599,25 +600,39 @@ extension ProfileView {
       return 0
     }
   }
-    var introduceHeight: CGFloat {
-        switch -offsetY {
-        case ..<252:
-          return 20
-        case 252..<305:
-          return 20 + (20 * ((offsetY + 252) / 53))
-        default:
-          return 0
-        }
+
+  var introduceHeight: CGFloat {
+    switch -offsetY {
+    case ..<252:
+      return 20
+    case 252..<305:
+      return 20 + (20 * ((offsetY + 252) / 53))
+    default:
+      return 0
     }
-    
-    var introduceScale: CGFloat {
-        switch -offsetY {
-        case ..<252:
-          return 1
-        case 252..<305:
-          return 1 - abs((offsetY + 252) / 53)
-        default:
-          return 0
-        }
+  }
+
+  var introduceScale: CGFloat {
+    switch -offsetY {
+    case ..<252:
+      return 1
+    case 252..<305:
+      return 1 - abs((offsetY + 252) / 53)
+    default:
+      return 0
     }
+  }
+
+  var tabOffset: CGFloat {
+    switch -offsetY {
+    case ..<252:
+      return 0
+    case 252..<305:
+      return offsetY + 252
+    case 305...:
+      return -60
+    default:
+      return 0
+    }
+  }
 }
