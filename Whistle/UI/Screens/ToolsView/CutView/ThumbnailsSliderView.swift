@@ -19,53 +19,49 @@ struct ThumbnailsSliderView: View {
 
   let onChangeTimeValue: () -> Void
 
-  private var totalDuration: Double {
-    rangeDuration.upperBound - rangeDuration.lowerBound
-  }
-
   var body: some View {
-    VStack(spacing: 6) {
-      // 자르기 범위 안에 들어간 초
-      Text(totalDuration.formatterTimeString())
-        .foregroundColor(.white)
-        .font(.subheadline)
-      GeometryReader { proxy in
-        ZStack {
-          thumbnailsImagesSection(proxy)
-          if let video {
-            RangedSliderView(
-              editor: editorVM,
-              player: videoPlayer,
-              value: $rangeDuration,
-              currentTime: $currentTime,
-              bounds: 0 ... video.originalDuration,
-              onEndChange: { setOnChangeTrim(false) })
-              .onChange(of: self.video?.rangeDuration.upperBound) { upperBound in
-                if let upperBound {
-                  currentTime = Double(upperBound)
-                  onChangeTimeValue()
-                  setOnChangeTrim(true)
-                }
+//    Group {
+    GeometryReader { proxy in
+      ZStack {
+        thumbnailsImagesSection(proxy)
+        if let video {
+          RangedSliderView(
+            editor: editorVM,
+            player: videoPlayer,
+            value: $rangeDuration,
+            currentTime: $currentTime,
+            bounds: 0 ... video.originalDuration,
+            onEndChange: { setOnChangeTrim(false) })
+            .onChange(of: self.video?.rangeDuration.upperBound) { upperBound in
+              if let upperBound {
+                currentTime = Double(upperBound)
+                onChangeTimeValue()
+                setOnChangeTrim(true)
               }
-              .onChange(of: self.video?.rangeDuration.lowerBound) { lowerBound in
-                if let lowerBound {
-                  currentTime = Double(lowerBound)
-                  onChangeTimeValue()
-                  setOnChangeTrim(true)
-                }
+            }
+            .onChange(of: self.video?.rangeDuration.lowerBound) { lowerBound in
+              if let lowerBound {
+                currentTime = Double(lowerBound)
+                onChangeTimeValue()
+                setOnChangeTrim(true)
               }
-              .onChange(of: rangeDuration) { newValue in
-                self.video?.rangeDuration = newValue
-              }
-              .onAppear {
-                setVideoRange()
-              }
-          }
+            }
+            .onChange(of: rangeDuration) { newValue in
+              self.video?.rangeDuration = newValue
+            }
+            .onAppear {
+              setVideoRange()
+            }
         }
-        .frame(width: proxy.size.width, height: proxy.size.height)
       }
-      .frame(width: UIScreen.getWidth(getRect().width - 48), height: UIScreen.getHeight(72))
+      .frame(width: proxy.size.width, height: proxy.size.height)
     }
+    .frame(width: UIScreen.width - 48, height: UIScreen.getHeight(72))
+    .hCenter()
+    .padding(.vertical, 28)
+    .background(Color.Elevated_Dark)
+//    }
+//    .frame(width: UIScreen.width)
   }
 }
 
@@ -95,14 +91,16 @@ extension ThumbnailsSliderView {
   @ViewBuilder
   private func thumbnailsImagesSection(_ proxy: GeometryProxy) -> some View {
     if let video {
-      HStack(spacing: 0) {
-        ForEach(video.thumbnailsImages) { trimData in
-          if let image = trimData.image {
-            Image(uiImage: image)
-              .resizable()
-              .aspectRatio(contentMode: .fit)
-              .frame(width: proxy.size.width / CGFloat(video.thumbnailsImages.count), height: proxy.size.height - 8)
-              .clipped()
+      ScrollView(.horizontal) {
+        HStack(spacing: 0) {
+          ForEach(video.thumbnailsImages) { trimData in
+            if let image = trimData.image {
+              Image(uiImage: image)
+                .resizable()
+                .aspectRatio(contentMode: .fill)
+                .frame(width: proxy.size.width / CGFloat(video.thumbnailsImages.count), height: proxy.size.height - 8)
+                .clipped()
+            }
           }
         }
       }

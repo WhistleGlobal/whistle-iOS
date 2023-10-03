@@ -101,6 +101,10 @@ extension Color {
     Color.lightAndDarkColor(light: "White", dark: "Gray70")
   }
 
+  static var Elevated_Dark: Color {
+    Color("Gray70_Dark")
+  }
+
   // MARK: - Border Color
 
   static var Border_Default: Color {

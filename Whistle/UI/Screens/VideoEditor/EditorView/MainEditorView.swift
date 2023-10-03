@@ -31,6 +31,7 @@ struct MainEditorView: View {
           }
           .frame(height: UIScreen.getHeight(54))
           PlayerHolderView(isFullScreen: $isFullScreen, editorVM: editorVM, videoPlayer: videoPlayer)
+          
           ThumbnailsSliderView(
             currentTime: $videoPlayer.currentTime,
             video: $editorVM.currentVideo,
@@ -40,8 +41,7 @@ struct MainEditorView: View {
             videoPlayer.scrubState = .scrubEnded(videoPlayer.currentTime)
             editorVM.setTools()
           }
-//          PlayerControl(isFullScreen: $isFullScreen, editorVM: editorVM, videoPlayer: videoPlayer)
-//            .border(.green, width: 10)
+          
           ToolsSectionView(videoPlayer: videoPlayer, editorVM: editorVM)
             .border(.yellow, width: 10)
             .opacity(isFullScreen ? 0 : 1)
