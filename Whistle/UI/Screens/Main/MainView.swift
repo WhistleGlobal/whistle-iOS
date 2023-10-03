@@ -295,8 +295,10 @@ extension MainView {
           Spacer()
           HStack(spacing: 0) {
             Button {
-              players[currentIndex]?.pause()
-              showUserProfile = true
+              if apiViewModel.contentList[currentIndex].userName != apiViewModel.myProfile.userName {
+                players[currentIndex]?.pause()
+                showUserProfile = true
+              }
             } label: {
               Group {
                 profileImageView(url: profileImg, size: 36)
