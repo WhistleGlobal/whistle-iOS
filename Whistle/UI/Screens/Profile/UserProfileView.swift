@@ -91,6 +91,7 @@ struct UserProfileView: View {
               }
             }
             .padding(.horizontal, 16)
+            .offset(y: videoOffset)
             .offset(coordinateSpace: .named("SCROLL")) { offset in
               offsetY = offset
             }
@@ -422,5 +423,10 @@ extension UserProfileView {
     default:
       return 0
     }
+  }
+
+  var videoOffset: CGFloat {
+    log("\(offsetY < -305 ? 305 : -offsetY)")
+    return offsetY < -305 ? 305 : -offsetY
   }
 }
