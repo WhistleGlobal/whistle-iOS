@@ -311,9 +311,10 @@ extension ProfileView {
         Text("프로필 편집")
           .fontSystem(fontDesignSystem: .subtitle2_KO)
           .foregroundColor(Color.LabelColor_Primary_Dark)
-          .frame(width: 114, height: 36)
+          .scaleEffect(profileEditButtonScale)
+          .frame(width: profileEditButtonWidth, height: profileEditButtonHeight)
       }
-      .frame(width: 114, height: 36)
+      .frame(width: profileEditButtonWidth, height: profileEditButtonHeight)
       .padding(.bottom, 24)
       .buttonStyle(ProfileEditButtonStyle())
       HStack(spacing: 48) {
@@ -556,6 +557,39 @@ extension ProfileView {
       return 1
     case 122..<200:
       return 1 - abs((offsetY + 122) / 78)
+    default:
+      return 0
+    }
+  }
+
+  var profileEditButtonHeight: CGFloat {
+    switch -offsetY {
+    case ..<200:
+      return 36
+    case 200..<252:
+      return 36 + (36 * ((offsetY + 200) / 52))
+    default:
+      return 0
+    }
+  }
+
+  var profileEditButtonWidth: CGFloat {
+    switch -offsetY {
+    case ..<200:
+      return 114
+    case 200..<252:
+      return 114 + (114 * ((offsetY + 200) / 52))
+    default:
+      return 0
+    }
+  }
+
+  var profileEditButtonScale: CGFloat {
+    switch -offsetY {
+    case ..<200:
+      return 1
+    case 200..<252:
+      return 1 - abs((offsetY + 200) / 52)
     default:
       return 0
     }
