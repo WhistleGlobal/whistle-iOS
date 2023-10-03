@@ -311,9 +311,9 @@ extension ProfileView {
         Text("프로필 편집")
           .fontSystem(fontDesignSystem: .subtitle2_KO)
           .foregroundColor(Color.LabelColor_Primary_Dark)
-          .frame(width: 114 + (114 * progress), height: 36 + (36 * progress))
+          .frame(width: 114, height: 36)
       }
-      .frame(width: 114 + (114 * progress), height: 36 + (36 * progress))
+      .frame(width: 114, height: 36)
       .padding(.bottom, 24)
       .buttonStyle(ProfileEditButtonStyle())
       HStack(spacing: 48) {
@@ -321,13 +321,13 @@ extension ProfileView {
           Text("\(apiViewModel.myWhistleCount)")
             .foregroundColor(Color.LabelColor_Primary_Dark)
             .fontSystem(fontDesignSystem: .title2_Expanded)
-            .scaleEffect(1 + progress)
+            .scaleEffect(whistleFollowerTextScale)
           Text("whistle")
             .foregroundColor(Color.LabelColor_Secondary_Dark)
             .fontSystem(fontDesignSystem: .caption_SemiBold)
-            .scaleEffect(1 + progress)
+            .scaleEffect(whistleFollowerTextScale)
         }
-        Rectangle().frame(width: 1 + progress, height: 36 + (36 * progress)).foregroundColor(.white)
+        Rectangle().frame(width: 1 , height: .infinity).foregroundColor(.white)
         NavigationLink {
           FollowView()
             .environmentObject(apiViewModel)
@@ -337,14 +337,15 @@ extension ProfileView {
             Text("\(apiViewModel.myFollow.followerCount)")
               .foregroundColor(Color.LabelColor_Primary_Dark)
               .fontSystem(fontDesignSystem: .title2_Expanded)
-              .scaleEffect(1 + progress)
+              .scaleEffect(whistleFollowerTextScale)
             Text("follower")
               .foregroundColor(Color.LabelColor_Secondary_Dark)
               .fontSystem(fontDesignSystem: .caption_SemiBold)
-              .scaleEffect(1 + progress)
+              .scaleEffect(whistleFollowerTextScale)
           }
         }
       }
+      .frame(height: whistleFollowerTabHeight)
       .padding(.bottom, 32)
     }
     .frame(height: 418 + (418 * progress))
@@ -533,6 +534,28 @@ extension ProfileView {
       return 100
     case 0..<122:
       return 100 + (100 * (offsetY / 122))
+    default:
+      return 0
+    }
+  }
+
+  var whistleFollowerTabHeight: CGFloat {
+    switch -offsetY {
+    case ..<122:
+      return 54
+    case 122..<200:
+      return 54 + (54 * ((offsetY + 122) / 78))
+    default:
+      return 0
+    }
+  }
+
+  var whistleFollowerTextScale: CGFloat {
+    switch -offsetY {
+    case ..<122:
+      return 1
+    case 122..<200:
+      return 1 - abs((offsetY + 122) / 78)
     default:
       return 0
     }
