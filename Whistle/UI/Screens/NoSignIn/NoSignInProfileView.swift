@@ -17,6 +17,7 @@ struct NoSignInProfileView: View {
 
   @EnvironmentObject var userAuth: UserAuth
   @EnvironmentObject var tabbarModel: TabbarModel
+  @EnvironmentObject var apiViewModel: APIViewModel
   @StateObject var appleSignInViewModel = AppleSignInViewModel()
   @State var bottomSheetPosition: BottomSheetPosition = .hidden
   @State var showTermsOfService = false
@@ -47,6 +48,22 @@ struct NoSignInProfileView: View {
       }
     }
     .ignoresSafeArea()
+    .onChange(of: userAuth.isAccess) { newValue in
+      if newValue {
+        apiViewModel.myProfile = .init()
+        apiViewModel.contentList = []
+        tabbarModel.tabSelection = .main
+        tabbarModel.tabSelectionNoAnimation = .main
+        tabbarModel.tabbarOpacity = 1.0
+      }
+    }
+    .onChange(of: bottomSheetPosition) { newValue in
+      if newValue == .hidden {
+//        tabbarModel.tabbarOpacity = 1.0
+      } else {
+        tabbarModel.tabbarOpacity = 0.0
+      }
+    }
     .navigationDestination(isPresented: $showTermsOfService) {
       TermsOfServiceView()
     }

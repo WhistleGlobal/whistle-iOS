@@ -20,7 +20,7 @@ struct TabbarView: View {
   var body: some View {
     ZStack {
       NavigationStack {
-        if true { // 로그인 관련 로직으로 바꿀것
+        if userAuth.isAccess { // 로그인 관련 로직으로 바꿀것
           MainView(mainOpacity: $mainOpacity)
             .environmentObject(apiViewModel)
             .environmentObject(tabbarModel)
@@ -42,13 +42,16 @@ struct TabbarView: View {
         Color.pink.opacity(0.4).ignoresSafeArea()
       case .profile:
         NavigationStack {
-          if true {
+          if userAuth.isAccess {
             ProfileView(isFirstProfileLoaded: $isFirstProfileLoaded)
               .environmentObject(apiViewModel)
               .environmentObject(tabbarModel)
               .environmentObject(userAuth)
           } else {
             NoSignInProfileView()
+              .environmentObject(tabbarModel)
+              .environmentObject(userAuth)
+              .environmentObject(apiViewModel)
           }
         }
         .tint(.black)
@@ -99,6 +102,7 @@ struct TabbarView: View {
       .padding(.horizontal, 16)
       .opacity(tabbarModel.tabbarOpacity)
     }
+    .navigationBarBackButtonHidden()
   }
 }
 

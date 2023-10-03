@@ -104,7 +104,13 @@ struct MainView: View {
       .tabViewStyle(.page(indexDisplayMode: .never))
       .frame(maxWidth: proxy.size.width)
       .onChange(of: mainOpacity) { newValue in
-        if apiViewModel.contentList.isEmpty {
+        if apiViewModel.contentList.isEmpty, players.isEmpty {
+          return
+        }
+        log("currentIndex : \(currentIndex)")
+        log("contentList : \(apiViewModel.contentList)")
+        log("players : \(players)")
+        guard let player = players[currentIndex] else {
           return
         }
         if newValue == 1 {
@@ -125,6 +131,7 @@ struct MainView: View {
         apiViewModel.requestContentList {
           Task {
             if !apiViewModel.contentList.isEmpty {
+              players.removeAll()
               for _ in 0..<apiViewModel.contentList.count {
                 players.append(nil)
               }
