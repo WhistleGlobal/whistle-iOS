@@ -33,7 +33,9 @@ struct MainEditorView: View {
           PlayerHolderView(isFullScreen: $isFullScreen, editorVM: editorVM, videoPlayer: videoPlayer)
           ThumbnailsSliderView(
             currentTime: $videoPlayer.currentTime,
-            video: $editorVM.currentVideo, editorVM: editorVM, videoPlayer: videoPlayer)
+            video: $editorVM.currentVideo,
+            editorVM: editorVM,
+            videoPlayer: videoPlayer)
           {
             videoPlayer.scrubState = .scrubEnded(videoPlayer.currentTime)
             editorVM.setTools()

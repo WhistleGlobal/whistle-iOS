@@ -88,6 +88,7 @@ extension ThumbnailsSliderView {
       } else {
         rangeDuration = video.rangeDuration.lowerBound ... 15
       }
+      videoPlayer.currentTime = rangeDuration.lowerBound
     }
   }
 
