@@ -122,6 +122,13 @@ struct MainView: View {
           players[currentIndex]?.play()
         } else {
           players[currentIndex]?.pause()
+          DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+            // FIXME: - 조회수 API 함수로 교체
+            log("viewedContentId \(viewedContentId)")
+            processedContentId = processedContentId.union(viewedContentId)
+            viewedContentId.removeAll()
+            log("processedContentId \(processedContentId)")
+          }
         }
       }
     }
