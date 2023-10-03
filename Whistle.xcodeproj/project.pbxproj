@@ -326,6 +326,7 @@
 		7830281B2AB8918B00127D76 /* DeleteAccountAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7830281A2AB8918B00127D76 /* DeleteAccountAlert.swift */; };
 		78370B892AB874CD00090522 /* MainReportBottomSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78370B882AB874CD00090522 /* MainReportBottomSheet.swift */; };
 		78370B8B2AB87C7D00090522 /* Enums.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78370B8A2AB87C7D00090522 /* Enums.swift */; };
+		785258572ACC6D680024E466 /* NoSignInProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 785258562ACC6D680024E466 /* NoSignInProfileView.swift */; };
 		785E82722AAC8FDD00EF3576 /* MainContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 785E82712AAC8FDD00EF3576 /* MainContent.swift */; };
 		785E9E6A2AB9DCB1003A93E8 /* CancelableToastMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 785E9E692AB9DCB1003A93E8 /* CancelableToastMessage.swift */; };
 		7860FC232AB04A2F007C5C79 /* OffsetKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7860FC222AB04A2F007C5C79 /* OffsetKey.swift */; };
@@ -753,6 +754,7 @@
 		7830281A2AB8918B00127D76 /* DeleteAccountAlert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteAccountAlert.swift; sourceTree = "<group>"; };
 		78370B882AB874CD00090522 /* MainReportBottomSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainReportBottomSheet.swift; sourceTree = "<group>"; };
 		78370B8A2AB87C7D00090522 /* Enums.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Enums.swift; sourceTree = "<group>"; };
+		785258562ACC6D680024E466 /* NoSignInProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoSignInProfileView.swift; sourceTree = "<group>"; };
 		785E82712AAC8FDD00EF3576 /* MainContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainContent.swift; sourceTree = "<group>"; };
 		785E9E692AB9DCB1003A93E8 /* CancelableToastMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CancelableToastMessage.swift; sourceTree = "<group>"; };
 		7860FC222AB04A2F007C5C79 /* OffsetKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OffsetKey.swift; sourceTree = "<group>"; };
@@ -1106,6 +1108,7 @@
 		1B39554D2A9506B300BCB4DF /* Screens */ = {
 			isa = PBXGroup;
 			children = (
+				785258552ACC6C440024E466 /* NoSignIn */,
 				1BD4E7C42ABA689E00ADB783 /* VideoPicker */,
 				1BE8EA182AB205CE00EB0A55 /* VideoEditor */,
 				788F43EE2AA5CD9300718D38 /* Main */,
@@ -1966,6 +1969,14 @@
 			path = Profile;
 			sourceTree = "<group>";
 		};
+		785258552ACC6C440024E466 /* NoSignIn */ = {
+			isa = PBXGroup;
+			children = (
+				785258562ACC6D680024E466 /* NoSignInProfileView.swift */,
+			);
+			path = NoSignIn;
+			sourceTree = "<group>";
+		};
 		787AF55E2AA85CA800C190E6 /* Profile */ = {
 			isa = PBXGroup;
 			children = (
@@ -2282,6 +2293,7 @@
 				78370B892AB874CD00090522 /* MainReportBottomSheet.swift in Sources */,
 				78BECCD92AAAE1E6003FA7B5 /* PostFeedProtocol.swift in Sources */,
 				1B38954A2AB9CB7500B4C8DD /* CropperRatio.swift in Sources */,
+				785258572ACC6D680024E466 /* NoSignInProfileView.swift in Sources */,
 				788F43F52AA5E95E00718D38 /* PlayerView.swift in Sources */,
 				1B3955422A95069C00BCB4DF /* ContentView.swift in Sources */,
 				782DD47C2AA32448006183D3 /* Extension+UINavigationController.swift in Sources */,
@@ -2715,6 +2727,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
@@ -2769,6 +2782,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;

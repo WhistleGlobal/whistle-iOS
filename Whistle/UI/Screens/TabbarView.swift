@@ -11,22 +11,27 @@ import SwiftUI
 
 struct TabbarView: View {
 
-  @StateObject var tabbarModel: TabbarModel = .init()
   @State var isFirstProfileLoaded = true
   @State var mainOpacity = 1.0
   @EnvironmentObject var apiViewModel: APIViewModel
   @EnvironmentObject var userAuth: UserAuth
+  @EnvironmentObject var tabbarModel: TabbarModel
 
   var body: some View {
     ZStack {
       NavigationStack {
-        MainView(mainOpacity: $mainOpacity)
-          .environmentObject(apiViewModel)
-          .environmentObject(tabbarModel)
-          .opacity(mainOpacity)
-          .onChange(of: tabbarModel.tabSelection) { newValue in
-            mainOpacity = newValue == .main ? 1 : 0
-          }
+        if userAuth.isAccess { // 로그인 관련 로직으로 바꿀것
+          MainView(mainOpacity: $mainOpacity)
+            .environmentObject(apiViewModel)
+            .environmentObject(tabbarModel)
+            .opacity(mainOpacity)
+            .onChange(of: tabbarModel.tabSelectionNoAnimation) { newValue in
+              mainOpacity = newValue == .main ? 1 : 0
+            }
+        } else {
+          // FIXME: - 비로그인 메인화면으로 교체할 것
+          EmptyView()
+        }
       }
       .tint(.black)
       switch tabbarModel.tabSelectionNoAnimation {
@@ -37,10 +42,17 @@ struct TabbarView: View {
         Color.pink.opacity(0.4).ignoresSafeArea()
       case .profile:
         NavigationStack {
-          ProfileView(isFirstProfileLoaded: $isFirstProfileLoaded)
-            .environmentObject(apiViewModel)
-            .environmentObject(tabbarModel)
-            .environmentObject(userAuth)
+          if userAuth.isAccess {
+            ProfileView(isFirstProfileLoaded: $isFirstProfileLoaded)
+              .environmentObject(apiViewModel)
+              .environmentObject(tabbarModel)
+              .environmentObject(userAuth)
+          } else {
+            NoSignInProfileView()
+              .environmentObject(tabbarModel)
+              .environmentObject(userAuth)
+              .environmentObject(apiViewModel)
+          }
         }
         .tint(.black)
       }
@@ -90,6 +102,7 @@ struct TabbarView: View {
       .padding(.horizontal, 16)
       .opacity(tabbarModel.tabbarOpacity)
     }
+    .navigationBarBackButtonHidden()
   }
 }
 
@@ -119,9 +132,7 @@ extension TabbarView {
       .frame(maxWidth: .infinity)
       .overlay {
         Button {
-          Task {
-            switchTab(to: .main)
-          }
+          switchTab(to: .main)
         } label: {
           Color.clear.overlay {
             Image(systemName: "house.fill")

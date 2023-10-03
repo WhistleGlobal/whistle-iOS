@@ -32,6 +32,7 @@ struct MainView: View {
   @State var newId = UUID()
   @State var isCurrentVideoWhistled = false
   @State var timer: Timer? = nil
+  @State var isSplashOn = true
   @Binding var mainOpacity: Double
 
   var body: some View {
@@ -104,6 +105,15 @@ struct MainView: View {
       .tabViewStyle(.page(indexDisplayMode: .never))
       .frame(maxWidth: proxy.size.width)
       .onChange(of: mainOpacity) { newValue in
+        if apiViewModel.contentList.isEmpty, players.isEmpty {
+          return
+        }
+        log("currentIndex : \(currentIndex)")
+        log("contentList : \(apiViewModel.contentList)")
+        log("players : \(players)")
+        guard let player = players[currentIndex] else {
+          return
+        }
         if newValue == 1 {
           players[currentIndex]?.play()
         } else {
@@ -122,6 +132,7 @@ struct MainView: View {
         apiViewModel.requestContentList {
           Task {
             if !apiViewModel.contentList.isEmpty {
+              players.removeAll()
               for _ in 0..<apiViewModel.contentList.count {
                 players.append(nil)
               }
@@ -136,6 +147,9 @@ struct MainView: View {
               isCurrentVideoWhistled = apiViewModel.contentList[currentIndex].isWhistled
               await player.seek(to: .zero)
               player.play()
+              withAnimation {
+                isSplashOn = false
+              }
             }
           }
         }
@@ -180,6 +194,26 @@ struct MainView: View {
             apiViewModel.postFeedPlayerChanged()
           }
         }, showToast: $showHideContentToast)
+      }
+    }
+    .onAppear {
+      DispatchQueue.main.asyncAfter(deadline: .now() + 1.4) {
+        withAnimation {
+          isSplashOn = false
+        }
+      }
+    }
+    .overlay {
+      if isSplashOn {
+        SignInPlayerView()
+          .ignoresSafeArea()
+          .allowsTightening(false)
+          .onAppear {
+            tabbarModel.tabbarOpacity = 0.0
+          }
+          .onDisappear {
+            tabbarModel.tabbarOpacity = 1.0
+          }
       }
     }
     .confirmationDialog("", isPresented: $showDialog) {

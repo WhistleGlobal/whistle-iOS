@@ -1,59 +1,100 @@
 //
-//  SignInView.swift
+//  NoSignInProfileView.swift
 //  Whistle
 //
-//  Created by ChoiYujin on 9/1/23.
+//  Created by ChoiYujin on 10/4/23.
 //
 
 import _AuthenticationServices_SwiftUI
-import _AVKit_SwiftUI
-import AVFoundation
+import BottomSheet
 import GoogleSignIn
-import GoogleSignInSwift
 import KeychainSwift
-import Security
 import SwiftUI
 
-// MARK: - SignInView
+// MARK: - NoSignInProfileView
 
-struct SignInView: View {
+struct NoSignInProfileView: View {
 
-  @StateObject var appleSignInViewModel = AppleSignInViewModel()
-  @State var showTermsOfService = false
-  @State var showPrivacyPolicy = false
-  @State var loginOpacity = 0.0
-  @EnvironmentObject var apiViewModel: APIViewModel
   @EnvironmentObject var userAuth: UserAuth
   @EnvironmentObject var tabbarModel: TabbarModel
+  @EnvironmentObject var apiViewModel: APIViewModel
+  @StateObject var appleSignInViewModel = AppleSignInViewModel()
+  @State var bottomSheetPosition: BottomSheetPosition = .hidden
+  @State var showTermsOfService = false
+  @State var showPrivacyPolicy = false
   let keychain = KeychainSwift()
-
   var domainURL: String {
     AppKeys.domainURL as! String
   }
 
-  private var customViewModel = GoogleSignInButtonViewModel(scheme: .light, style: .standard, state: .normal)
-
   var body: some View {
     ZStack {
-      SignInPlayerView()
-        .ignoresSafeArea()
-        .allowsTightening(false)
+      Color.clear.overlay {
+        Image("DefaultBG")
+          .resizable()
+          .scaledToFill()
+          .blur(radius: 50)
+          .scaleEffect(1.4)
+      }
       VStack(spacing: 0) {
-        NavigationLink {
-          TabbarView()
-            .environmentObject(apiViewModel)
-            .environmentObject(tabbarModel)
-            .environmentObject(userAuth)
-        } label: {
-          HStack(spacing: 0) {
-            Spacer()
-            Text("건너뛰기")
-              .fontSystem(fontDesignSystem: .subtitle2_KO)
-              .foregroundColor(.LabelColor_Secondary_Dark)
+        Spacer().frame(height: 64)
+        glassProfile(
+          width: UIScreen.width - 32,
+          height: 340,
+          cornerRadius: 32,
+          overlayed: overlayedView())
+          .padding(.bottom, 12)
+        Spacer()
+      }
+    }
+    .ignoresSafeArea()
+    .onChange(of: userAuth.isAccess) { newValue in
+      if newValue {
+        apiViewModel.myProfile = .init()
+        apiViewModel.contentList = []
+        tabbarModel.tabSelection = .main
+        tabbarModel.tabSelectionNoAnimation = .main
+        tabbarModel.tabbarOpacity = 1.0
+      }
+    }
+    .onChange(of: bottomSheetPosition) { newValue in
+      if newValue == .hidden {
+//        tabbarModel.tabbarOpacity = 1.0
+      } else {
+        tabbarModel.tabbarOpacity = 0.0
+      }
+    }
+    .navigationDestination(isPresented: $showTermsOfService) {
+      TermsOfServiceView()
+    }
+    .navigationDestination(isPresented: $showPrivacyPolicy) {
+      PrivacyPolicyView()
+    }
+    .bottomSheet(
+      bottomSheetPosition: $bottomSheetPosition,
+      switchablePositions: [.hidden, .absolute(UIScreen.height - 68)])
+    {
+      VStack(spacing: 0) {
+        HStack {
+          Button {
+            bottomSheetPosition = .hidden
+          } label: {
+            Image(systemName: "xmark")
+              .foregroundColor(.White)
+              .frame(width: 18, height: 18)
+              .padding(.horizontal, 16)
           }
-          .padding(.horizontal, 24)
-          .padding(.vertical, 12)
+          Spacer()
         }
+        .frame(height: 52)
+        .padding(.bottom, 56)
+        Text("Whistle에 로그인")
+          .fontSystem(fontDesignSystem: .title2)
+          .foregroundColor(.LabelColor_Primary_Dark)
+          .padding(.bottom, 12)
+        Text("더 많은 스포츠 콘텐츠를 즐겨보세요")
+          .fontSystem(fontDesignSystem: .body1_KO)
+          .foregroundColor(.LabelColor_Secondary_Dark)
         Spacer()
         Button {
           handleSignInButton()
@@ -131,27 +172,85 @@ struct SignInView: View {
           }
         }
         .foregroundColor(.LabelColor_Primary_Dark)
-        .padding(.bottom, 16)
+        .padding(.bottom, 64)
       }
-      .opacity(loginOpacity)
+      .frame(height: UIScreen.height - 68)
     }
-    .onAppear {
-      DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-        withAnimation {
-          loginOpacity = 1.0
-        }
-      }
-    }
-    .navigationDestination(isPresented: $showTermsOfService) {
-      TermsOfServiceView()
-    }
-    .navigationDestination(isPresented: $showPrivacyPolicy) {
-      PrivacyPolicyView()
+    .enableSwipeToDismiss(true)
+    .enableTapToDismiss(true)
+    .enableContentDrag(true)
+    .enableAppleScrollBehavior(false)
+    .dragIndicatorColor(Color.Border_Default_Dark)
+    .customBackground(
+      glassMorphicView(width: UIScreen.width, height: .infinity, cornerRadius: 24)
+        .overlay {
+          RoundedRectangle(cornerRadius: 24)
+            .stroke(lineWidth: 1)
+            .foregroundStyle(
+              LinearGradient.Border_Glass)
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+        })
+    .onDismiss {
+      tabbarModel.tabbarOpacity = 1.0
     }
   }
 }
 
-extension SignInView {
+extension NoSignInProfileView {
+  @ViewBuilder
+  func overlayedView() -> some View {
+    VStack(spacing: 0) {
+      HStack {
+        Spacer()
+        Button { } label: {
+          Circle()
+            .foregroundColor(.Gray_Default)
+            .frame(width: 48, height: 48)
+            .overlay {
+              Image(systemName: "ellipsis")
+                .resizable()
+                .scaledToFit()
+                .foregroundColor(Color.White)
+                .fontWeight(.semibold)
+                .frame(width: 20, height: 20)
+            }
+        }
+      }
+      .padding([.top, .horizontal], 16)
+      Image("ProfileDefault")
+        .resizable()
+        .scaledToFit()
+        .frame(height: 100)
+        .padding(.bottom, 16)
+      Text("로그인을 해주세요")
+        .fontWeight(.semibold)
+        .fontSystem(fontDesignSystem: .title2_Expanded)
+        .foregroundColor(.LabelColor_Primary_Dark)
+        .padding(4)
+      Text("더 많은 스포츠 콘텐츠를 즐겨보세요")
+        .fontSystem(fontDesignSystem: .body2_KO)
+        .foregroundColor(.LabelColor_Secondary_Dark)
+        .padding(.bottom, 24)
+      Button {
+        bottomSheetPosition = .absolute(UIScreen.height - 68)
+      } label: {
+        Text("가입하기")
+          .fontSystem(fontDesignSystem: .subtitle2_KO)
+          .foregroundColor(.LabelColor_Primary_Dark)
+          .frame(maxWidth: .infinity)
+          .background {
+            Capsule()
+              .foregroundColor(.Blue_Default)
+              .frame(width: .infinity, height: 48)
+              .padding(.horizontal, 32)
+          }
+      }
+      Spacer()
+    }
+  }
+}
+
+extension NoSignInProfileView {
   // 구글 로그인 버튼 클릭 처리
   func handleSignInButton() {
     // rootViewController 찾기
@@ -159,42 +258,30 @@ extension SignInView {
       let rootViewController = (UIApplication.shared.connectedScenes.first as? UIWindowScene)?.windows.first?
         .rootViewController
     else {
-      return // rootViewController를 얻을 수 없을 경우 반환
+      return
     }
-
-    // 구글 로그인 실행
     GIDSignIn.sharedInstance.signIn(
       withPresenting: rootViewController)
     { signInResult, error in
 
       guard let result = signInResult else {
-        return // 로그인 실패시 반환
+        return
       }
-
-      // 토큰 갱신
       result.user.refreshTokensIfNeeded { user, error in
         guard error == nil else { return }
         guard let user else { return }
 
-        let idToken = user.idToken // ID 토큰
-
-        // let refreshToken = user.refreshToken // 리프레시 토큰
-        // print("저장될 구글 리프레시 토큰: \(refreshToken.tokenString)")
-
-//                    userAuth.refresh_token = nil // 리프레시 토큰 저장
+        let idToken = user.idToken
         keychain.set("", forKey: "refresh_token")
-
         if let idTokenString = idToken?.tokenString {
           print("저장될 ID 토큰: \(idTokenString)")
           keychain.set(idTokenString, forKey: "id_token")
         }
-
         userAuth.provider = .google
-        tokenSignIn(idToken: keychain.get("id_token") ?? "") // 서버로 토큰 전송
+        tokenSignIn(idToken: keychain.get("id_token") ?? "")
       }
     }
 
-    // 서버로 ID 토큰을 전송하여 인증
     func tokenSignIn(idToken: String) {
       guard let authData = try? JSONEncoder().encode(["idToken": idToken]) else {
         print("JSON 인코딩 실패")
@@ -210,7 +297,6 @@ extension SignInView {
       request.httpMethod = "POST"
       request.setValue("application/json", forHTTPHeaderField: "Content-Type")
 
-      // 서버 통신
       let task = URLSession.shared.uploadTask(with: request, from: authData) { _, _, error in
         if let error {
           print("서버 통신 에러: \(error)")
@@ -222,5 +308,12 @@ extension SignInView {
       task.resume()
     }
   }
+}
 
+#Preview {
+  NavigationStack {
+    NoSignInProfileView()
+      .environmentObject(TabbarModel())
+      .environmentObject(UserAuth())
+  }
 }
