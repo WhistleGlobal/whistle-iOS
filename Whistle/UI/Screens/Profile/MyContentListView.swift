@@ -269,7 +269,7 @@ extension MyContentListView {
         }
       }
     }
-    .padding(.bottom, 112)
+    .padding(.bottom, 64)
     .padding(.horizontal, 20)
   }
 }
