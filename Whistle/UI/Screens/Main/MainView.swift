@@ -219,12 +219,12 @@ struct MainView: View {
           Task {
             await apiViewModel.actionContentHate(contentId: currentVideoContentId)
             apiViewModel.contentList.remove(at: currentIndex)
-            guard let url = apiViewModel.contentList[currentIndex + 1].videoUrl else {
+            guard let url = apiViewModel.contentList[currentIndex].videoUrl else {
               return
             }
-            apiViewModel.contentList[currentIndex + 1].player = AVPlayer(url: URL(string: url)!)
-            await apiViewModel.contentList[currentIndex].player?.seek(to: .zero)
-            apiViewModel.contentList[currentIndex].player?.play()
+            players[currentIndex] = AVPlayer(url: URL(string: url)!)
+            await players[currentIndex]?.seek(to: .zero)
+            players[currentIndex]?.play()
             apiViewModel.postFeedPlayerChanged()
           }
         }, showToast: $showHideContentToast)
