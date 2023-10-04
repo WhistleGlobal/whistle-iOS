@@ -331,6 +331,7 @@
 		785E9E6A2AB9DCB1003A93E8 /* CancelableToastMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 785E9E692AB9DCB1003A93E8 /* CancelableToastMessage.swift */; };
 		7860FC232AB04A2F007C5C79 /* OffsetKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7860FC222AB04A2F007C5C79 /* OffsetKey.swift */; };
 		7861E68A2ACD092B00612E2F /* NavigationUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7861E6892ACD092B00612E2F /* NavigationUtil.swift */; };
+		7861E68E2ACD266B00612E2F /* ViewCount.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7861E68D2ACD266B00612E2F /* ViewCount.swift */; };
 		786385742AA45ED4004F8EF4 /* ProfileEditIntroduceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 786385732AA45ED4004F8EF4 /* ProfileEditIntroduceView.swift */; };
 		786669472AA1282D00448EC7 /* AppleSignInViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 786669462AA1282D00448EC7 /* AppleSignInViewModel.swift */; };
 		786669492AA1284F00448EC7 /* UserAuth.swift in Sources */ = {isa = PBXBuildFile; fileRef = 786669482AA1284F00448EC7 /* UserAuth.swift */; };
@@ -758,6 +759,7 @@
 		785E9E692AB9DCB1003A93E8 /* CancelableToastMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CancelableToastMessage.swift; sourceTree = "<group>"; };
 		7860FC222AB04A2F007C5C79 /* OffsetKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OffsetKey.swift; sourceTree = "<group>"; };
 		7861E6892ACD092B00612E2F /* NavigationUtil.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationUtil.swift; sourceTree = "<group>"; };
+		7861E68D2ACD266B00612E2F /* ViewCount.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewCount.swift; sourceTree = "<group>"; };
 		786385732AA45ED4004F8EF4 /* ProfileEditIntroduceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileEditIntroduceView.swift; sourceTree = "<group>"; };
 		786669462AA1282D00448EC7 /* AppleSignInViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppleSignInViewModel.swift; sourceTree = "<group>"; };
 		786669482AA1284F00448EC7 /* UserAuth.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserAuth.swift; sourceTree = "<group>"; };
@@ -1135,6 +1137,7 @@
 				78B6FD2D2AA719190043E461 /* AlbumModel.swift */,
 				7860FC222AB04A2F007C5C79 /* OffsetKey.swift */,
 				78370B8A2AB87C7D00090522 /* Enums.swift */,
+				7861E68D2ACD266B00612E2F /* ViewCount.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -2324,6 +2327,7 @@
 				7874CB942AA0B5430081DE54 /* ProfileReportView.swift in Sources */,
 				1B38958A2AB9CC4300B4C8DD /* PersistenceController.swift in Sources */,
 				78D85E4F2AB2B52C00B3AD6E /* SignoutAlert.swift in Sources */,
+				7861E68E2ACD266B00612E2F /* ViewCount.swift in Sources */,
 				1B3895652AB9CBD300B4C8DD /* EditableVideo.swift in Sources */,
 				1B3895872AB9CC4300B4C8DD /* ProjectEntity+Ext.swift in Sources */,
 				1B38954B2AB9CB7500B4C8DD /* CropView.swift in Sources */,

@@ -17,6 +17,7 @@ struct MainView: View {
   @Environment(\.scenePhase) var scenePhase
   @EnvironmentObject var apiViewModel: APIViewModel
   @EnvironmentObject var tabbarModel: TabbarModel
+  @State var viewCount: ViewCount = .init()
   @State var currentIndex = 0
   @State var playerIndex = 0
   @State var showDialog = false
@@ -85,6 +86,30 @@ struct MainView: View {
                 .rotationEffect(Angle(degrees: -90))
                 .ignoresSafeArea(.all, edges: .top)
                 .tag(index)
+                .onAppear {
+                  let dateFormatter = DateFormatter()
+                  dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+                  let dateString = dateFormatter.string(from: .now)
+                  if let index = viewCount.views.firstIndex(where: { $0.contentId == content.contentId }) {
+                    viewCount.views[index].viewDate = dateString
+                  } else {
+                    viewCount.views.append(.init(contentId: content.contentId ?? 0, viewDate: dateString))
+                  }
+                  log("viewCount.views: \(viewCount.views)")
+                }
+                .onDisappear {
+                  if let index = viewCount.views.firstIndex(where: { $0.contentId == content.contentId }) {
+                    let viewDate = viewCount.views[index].viewDate.toDate()
+                    var nowDate = Date.now
+                    nowDate.addTimeInterval(3600 * 9)
+                    log("Date.now: \(nowDate)")
+                    log("viewDate: \(viewDate)")
+                    let viewTime = nowDate.timeIntervalSince(viewDate ?? Date.now)
+                    log("viewTime: \(viewTime)")
+                    viewCount.views[index].viewTime = "\(Int(viewTime))"
+                    log("viewCount.views[index].viewTime : \(viewCount.views[index].viewTime)")
+                  }
+                }
             } else {
               KFImage.url(URL(string: content.thumbnailUrl ?? ""))
                 .placeholder {
@@ -177,10 +202,10 @@ struct MainView: View {
       guard let url = apiViewModel.contentList[newValue].videoUrl else {
         return
       }
-      players[newValue] = AVPlayer(url: URL(string: url)!)
       players[playerIndex]?.seek(to: .zero)
       players[playerIndex]?.pause()
       players[playerIndex] = nil
+      players[newValue] = AVPlayer(url: URL(string: url)!)
       players[newValue]?.seek(to: .zero)
       players[newValue]?.play()
       playerIndex = newValue
@@ -447,5 +472,27 @@ extension MainView {
         log("inserted : \(viewedContentId)")
       }
     }
+  }
+}
+
+extension String {
+  func toDate() -> Date? { // "yyyy-MM-dd HH:mm:ss"
+    let dateFormatter = DateFormatter()
+    dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+    dateFormatter.timeZone = TimeZone(identifier: "UTC")
+    if let date = dateFormatter.date(from: self) {
+      return date
+    } else {
+      return nil
+    }
+  }
+}
+
+extension Date {
+  func toString() -> String {
+    let dateFormatter = DateFormatter()
+    dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+    dateFormatter.timeZone = TimeZone(identifier: "UTC")
+    return dateFormatter.string(from: self)
   }
 }
