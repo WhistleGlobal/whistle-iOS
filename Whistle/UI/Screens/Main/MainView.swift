@@ -48,6 +48,13 @@ struct MainView: View {
             if let player = players[index] {
               Player(player: player)
                 .frame(width: proxy.size.width)
+                .onTapGesture {
+                  if player.rate == 0.0 {
+                    player.play()
+                  } else {
+                    player.pause()
+                  }
+                }
                 .overlay {
                   LinearGradient(
                     colors: [.clear, .black.opacity(0.24)],
