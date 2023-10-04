@@ -144,7 +144,7 @@ struct MainView: View {
         if apiViewModel.contentList.isEmpty, players.isEmpty {
           return
         }
-        if players.count >= currentIndex {
+        if players.count <= currentIndex {
           return
         }
         guard let player = players[currentIndex] else {
