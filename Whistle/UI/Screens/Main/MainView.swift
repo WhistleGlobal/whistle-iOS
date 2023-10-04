@@ -37,7 +37,7 @@ struct MainView: View {
   @State var isSplashOn = true
   @State var viewedContentId: Set<Int> = []
   @State var processedContentId: Set<Int> = []
-  @State var isRootActive = false
+  @Binding var isRootActive: Bool
   @Binding var mainOpacity: Double
 
   var body: some View {
@@ -298,20 +298,22 @@ extension MainView {
           Spacer()
           HStack(spacing: 0) {
             if apiViewModel.contentList[currentIndex].userName != apiViewModel.myProfile.userName {
-              NavigationLink {
-                UserProfileView(players: $players, currentIndex: $currentIndex, userId: currentVideoUserId)
+              NavigationLink(
+                destination: UserProfileView(players: $players, currentIndex: $currentIndex, userId: currentVideoUserId)
                   .environmentObject(apiViewModel)
-                  .environmentObject(tabbarModel)
-              } label: {
-                Group {
-                  profileImageView(url: profileImg, size: 36)
-                    .padding(.trailing, 12)
-                  Text(userName)
-                    .foregroundColor(.white)
-                    .fontSystem(fontDesignSystem: .subtitle1)
-                    .padding(.trailing, 16)
-                }
-              }
+                  .environmentObject(tabbarModel),
+                isActive: self.$isRootActive,
+                label: {
+                  Group {
+                    profileImageView(url: profileImg, size: 36)
+                      .padding(.trailing, 12)
+                    Text(userName)
+                      .foregroundColor(.white)
+                      .fontSystem(fontDesignSystem: .subtitle1)
+                      .padding(.trailing, 16)
+                  }
+                })
+                .isDetailLink(false)
             } else {
               Group {
                 profileImageView(url: profileImg, size: 36)
