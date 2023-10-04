@@ -160,6 +160,9 @@ struct UserContentListView: View {
         log("Cancel")
       }
     }
+    .onDisappear {
+      players[currentIndex]?.pause()
+    }
   }
 }
 

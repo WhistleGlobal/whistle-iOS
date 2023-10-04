@@ -22,6 +22,8 @@ struct UserProfileView: View {
   @State var goReport = false
   @State var showPasteToast = false
   @State var offsetY: CGFloat = 0
+  @Binding var players: [AVPlayer?]
+  @Binding var currentIndex: Int
   let userId: Int
 
   var body: some View {
@@ -109,6 +111,9 @@ struct UserProfileView: View {
       VStack(spacing: 0) {
         HStack {
           Button {
+            if !players.isEmpty {
+              players[currentIndex]?.play()
+            }
             dismiss()
           } label: {
             Image(systemName: "chevron.left")
@@ -171,6 +176,11 @@ struct UserProfileView: View {
     .overlay {
       if showPasteToast {
         ToastMessage(text: "클립보드에 복사되었어요", paddingBottom: 0, showToast: $showPasteToast)
+      }
+    }
+    .onAppear {
+      if !players.isEmpty {
+        players[currentIndex]?.pause()
       }
     }
   }

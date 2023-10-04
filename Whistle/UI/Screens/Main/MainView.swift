@@ -37,6 +37,7 @@ struct MainView: View {
   @State var isSplashOn = true
   @State var viewedContentId: Set<Int> = []
   @State var processedContentId: Set<Int> = []
+  @Binding var isRootActive: Bool
   @Binding var mainOpacity: Double
 
   var body: some View {
@@ -219,12 +220,12 @@ struct MainView: View {
           Task {
             await apiViewModel.actionContentHate(contentId: currentVideoContentId)
             apiViewModel.contentList.remove(at: currentIndex)
-            guard let url = apiViewModel.contentList[currentIndex + 1].videoUrl else {
+            guard let url = apiViewModel.contentList[currentIndex].videoUrl else {
               return
             }
-            apiViewModel.contentList[currentIndex + 1].player = AVPlayer(url: URL(string: url)!)
-            await apiViewModel.contentList[currentIndex].player?.seek(to: .zero)
-            apiViewModel.contentList[currentIndex].player?.play()
+            players[currentIndex] = AVPlayer(url: URL(string: url)!)
+            await players[currentIndex]?.seek(to: .zero)
+            players[currentIndex]?.play()
             apiViewModel.postFeedPlayerChanged()
           }
         }, showToast: $showHideContentToast)
@@ -267,11 +268,6 @@ struct MainView: View {
         log("Cancel")
       }
     }
-    .navigationDestination(isPresented: $showUserProfile) {
-      UserProfileView(userId: currentVideoUserId)
-        .environmentObject(apiViewModel)
-        .environmentObject(tabbarModel)
-    }
     .fullScreenCover(isPresented: $showReport) {
       MainReportReasonView(
         goReport: $showReport,
@@ -301,12 +297,24 @@ extension MainView {
         VStack(alignment: .leading, spacing: 12) {
           Spacer()
           HStack(spacing: 0) {
-            Button {
-              if apiViewModel.contentList[currentIndex].userName != apiViewModel.myProfile.userName {
-                players[currentIndex]?.pause()
-                showUserProfile = true
-              }
-            } label: {
+            if apiViewModel.contentList[currentIndex].userName != apiViewModel.myProfile.userName {
+              NavigationLink(
+                destination: UserProfileView(players: $players, currentIndex: $currentIndex, userId: currentVideoUserId)
+                  .environmentObject(apiViewModel)
+                  .environmentObject(tabbarModel),
+                isActive: self.$isRootActive,
+                label: {
+                  Group {
+                    profileImageView(url: profileImg, size: 36)
+                      .padding(.trailing, 12)
+                    Text(userName)
+                      .foregroundColor(.white)
+                      .fontSystem(fontDesignSystem: .subtitle1)
+                      .padding(.trailing, 16)
+                  }
+                })
+                .isDetailLink(false)
+            } else {
               Group {
                 profileImageView(url: profileImg, size: 36)
                   .padding(.trailing, 12)

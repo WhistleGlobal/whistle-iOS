@@ -13,6 +13,7 @@ struct TabbarView: View {
 
   @State var isFirstProfileLoaded = true
   @State var mainOpacity = 1.0
+  @State var isRootActive = false
   @EnvironmentObject var apiViewModel: APIViewModel
   @EnvironmentObject var userAuth: UserAuth
   @EnvironmentObject var tabbarModel: TabbarModel
@@ -21,7 +22,7 @@ struct TabbarView: View {
     ZStack {
       NavigationStack {
         if userAuth.isAccess { // 로그인 관련 로직으로 바꿀것
-          MainView(mainOpacity: $mainOpacity)
+          MainView(isRootActive: $isRootActive, mainOpacity: $mainOpacity)
             .environmentObject(apiViewModel)
             .environmentObject(tabbarModel)
             .opacity(mainOpacity)
@@ -39,7 +40,7 @@ struct TabbarView: View {
         Color.clear
       case .upload:
         // FIXME: - uploadview로 교체하기
-        Color.pink.opacity(0.4).ignoresSafeArea()
+        Color.pink.ignoresSafeArea()
       case .profile:
         NavigationStack {
           if userAuth.isAccess {
@@ -132,7 +133,11 @@ extension TabbarView {
       .frame(maxWidth: .infinity)
       .overlay {
         Button {
-          switchTab(to: .main)
+          if tabbarModel.tabSelectionNoAnimation == .main {
+            NavigationUtil.popToRootView()
+          } else {
+            switchTab(to: .main)
+          }
         } label: {
           Color.clear.overlay {
             Image(systemName: "house.fill")

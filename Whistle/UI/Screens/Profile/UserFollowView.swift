@@ -151,7 +151,7 @@ extension UserFollowView {
   func userFollowerList() -> some View {
     ForEach(userFollower, id: \.userName) { follower in
       NavigationLink {
-        UserProfileView(userId: follower.followerId)
+        UserProfileView(players: .constant([]), currentIndex: .constant(0), userId: follower.followerId)
           .environmentObject(apiViewModel)
           .environmentObject(tabbarModel)
       } label: {
@@ -173,7 +173,7 @@ extension UserFollowView {
   func userFollowingList() -> some View {
     ForEach(userFollowing, id: \.userName) { following in
       NavigationLink {
-        UserProfileView(userId: following.followingId)
+        UserProfileView(players: .constant([]), currentIndex: .constant(0), userId: following.followingId)
           .environmentObject(apiViewModel)
           .environmentObject(tabbarModel)
       } label: {
