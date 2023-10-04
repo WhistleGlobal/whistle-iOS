@@ -22,6 +22,7 @@ struct NoSignInProfileView: View {
   @State var bottomSheetPosition: BottomSheetPosition = .hidden
   @State var showTermsOfService = false
   @State var showPrivacyPolicy = false
+  @AppStorage("isAccess") var isAccess = false
   let keychain = KeychainSwift()
   var domainURL: String {
     AppKeys.domainURL as! String
@@ -48,7 +49,7 @@ struct NoSignInProfileView: View {
       }
     }
     .ignoresSafeArea()
-    .onChange(of: userAuth.isAccess) { newValue in
+    .onChange(of: isAccess) { newValue in
       if newValue {
         apiViewModel.myProfile = .init()
         apiViewModel.contentList = []

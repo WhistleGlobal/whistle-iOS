@@ -338,6 +338,8 @@
 		7866694B2AA1287500448EC7 /* UserResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7866694A2AA1287500448EC7 /* UserResponse.swift */; };
 		7866694E2AA1289900448EC7 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 7866694D2AA1289900448EC7 /* Alamofire */; };
 		786669552AA12F7F00448EC7 /* KeychainSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 786669542AA12F7F00448EC7 /* KeychainSwift */; };
+		786A7D522ACD6E1B001CC4F2 /* NoSignInMainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 786A7D512ACD6E1B001CC4F2 /* NoSignInMainView.swift */; };
+		786A7D542ACD7278001CC4F2 /* NoSignInMainContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 786A7D532ACD7278001CC4F2 /* NoSignInMainContent.swift */; };
 		786CFEAF2AAC4DCF00DB2ADD /* UserProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 786CFEAE2AAC4DCF00DB2ADD /* UserProfileView.swift */; };
 		786CFEB12AAC5D5100DB2ADD /* ReportUserView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 786CFEB02AAC5D5100DB2ADD /* ReportUserView.swift */; };
 		787173B42AA472070018CB14 /* ToastMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 787173B32AA472070018CB14 /* ToastMessage.swift */; };
@@ -764,6 +766,8 @@
 		786669462AA1282D00448EC7 /* AppleSignInViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppleSignInViewModel.swift; sourceTree = "<group>"; };
 		786669482AA1284F00448EC7 /* UserAuth.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserAuth.swift; sourceTree = "<group>"; };
 		7866694A2AA1287500448EC7 /* UserResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserResponse.swift; sourceTree = "<group>"; };
+		786A7D512ACD6E1B001CC4F2 /* NoSignInMainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoSignInMainView.swift; sourceTree = "<group>"; };
+		786A7D532ACD7278001CC4F2 /* NoSignInMainContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoSignInMainContent.swift; sourceTree = "<group>"; };
 		786CFEAE2AAC4DCF00DB2ADD /* UserProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfileView.swift; sourceTree = "<group>"; };
 		786CFEB02AAC5D5100DB2ADD /* ReportUserView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportUserView.swift; sourceTree = "<group>"; };
 		787173B32AA472070018CB14 /* ToastMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToastMessage.swift; sourceTree = "<group>"; };
@@ -1975,6 +1979,7 @@
 			isa = PBXGroup;
 			children = (
 				785258562ACC6D680024E466 /* NoSignInProfileView.swift */,
+				786A7D512ACD6E1B001CC4F2 /* NoSignInMainView.swift */,
 			);
 			path = NoSignIn;
 			sourceTree = "<group>";
@@ -1992,6 +1997,7 @@
 				787AF5782AA8930700C190E6 /* NotiSetting.swift */,
 				785E82712AAC8FDD00EF3576 /* MainContent.swift */,
 				78E19B112AACE73D001DD3C8 /* ReportedContent.swift */,
+				786A7D532ACD7278001CC4F2 /* NoSignInMainContent.swift */,
 			);
 			path = Profile;
 			sourceTree = "<group>";
@@ -2301,7 +2307,9 @@
 				787173B42AA472070018CB14 /* ToastMessage.swift in Sources */,
 				1B3895622AB9CBD300B4C8DD /* ToolModel.swift in Sources */,
 				1B3895472AB9CB7500B4C8DD /* FiltersView.swift in Sources */,
+				786A7D522ACD6E1B001CC4F2 /* NoSignInMainView.swift in Sources */,
 				1B3895272AB9CB6000B4C8DD /* ToolButtonView.swift in Sources */,
+				786A7D542ACD7278001CC4F2 /* NoSignInMainContent.swift in Sources */,
 				787173B42AA472070018CB14 /* ToastMessage.swift in Sources */,
 				7866694B2AA1287500448EC7 /* UserResponse.swift in Sources */,
 				782DD4732AA30BDD006183D3 /* FollowView.swift in Sources */,

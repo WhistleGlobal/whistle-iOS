@@ -28,6 +28,7 @@ class APIViewModel: ObservableObject {
   @Published var bookmark: [Bookmark] = []
   @Published var notiSetting: NotiSetting = .init()
   @Published var contentList: [MainContent] = []
+  @Published var noSignInContentList: [NoSignInMainContent] = []
   @Published var reportedContent: [ReportedContent] = []
   @Published var userCreatedDate = ""
 
