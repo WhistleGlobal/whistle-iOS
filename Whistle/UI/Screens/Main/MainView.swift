@@ -144,16 +144,16 @@ struct MainView: View {
         if apiViewModel.contentList.isEmpty, players.isEmpty {
           return
         }
-        log("currentIndex : \(currentIndex)")
-        log("contentList : \(apiViewModel.contentList)")
-        log("players : \(players)")
+        if players.count >= currentIndex {
+          return
+        }
         guard let player = players[currentIndex] else {
           return
         }
         if newValue == 1 {
-          players[currentIndex]?.play()
+          player.play()
         } else {
-          players[currentIndex]?.pause()
+          player.pause()
           apiViewModel.addViewCount(viewCount, notInclude: processedContentId) { viewCountList in
             var tempSet: Set<Int> = []
             for view in viewCountList {

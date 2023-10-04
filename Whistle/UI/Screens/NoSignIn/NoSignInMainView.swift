@@ -103,13 +103,16 @@ struct NoSignInMainView: View {
         if apiViewModel.noSignInContentList.isEmpty, players.isEmpty {
           return
         }
+        if players.count >= currentIndex {
+          return
+        }
         guard let player = players[currentIndex] else {
           return
         }
         if newValue == 1 {
-          players[currentIndex]?.play()
+          player.play()
         } else {
-          players[currentIndex]?.pause()
+          player.pause()
         }
       }
     }
