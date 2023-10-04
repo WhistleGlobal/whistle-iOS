@@ -34,7 +34,11 @@ struct TabbarView: View {
           NoSignInMainView(mainOpacity: $mainOpacity)
             .environmentObject(apiViewModel)
             .environmentObject(tabbarModel)
+            .environmentObject(userAuth)
             .opacity(mainOpacity)
+            .onChange(of: tabbarModel.tabSelectionNoAnimation) { newValue in
+              mainOpacity = newValue == .main ? 1 : 0
+            }
         }
       }
       .tint(.black)
