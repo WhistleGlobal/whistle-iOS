@@ -108,7 +108,7 @@ struct PlayerView: View {
           }
           .ignoresSafeArea()
           .tag(MaintabSelection.left)
-          UserProfileView(userId: currentVideoUserId)
+          UserProfileView(players: .constant([]), currentIndex: .constant(0), userId: currentVideoUserId)
             .environmentObject(apiViewModel)
             .environmentObject(tabbarModel)
             .tag(MaintabSelection.right)
@@ -147,7 +147,7 @@ extension PlayerView {
           Spacer()
           HStack(spacing: 0) {
             NavigationLink {
-              UserProfileView(userId: currentVideoUserId)
+              UserProfileView(players: .constant([]), currentIndex: .constant(0), userId: currentVideoUserId)
                 .environmentObject(apiViewModel)
                 .environmentObject(tabbarModel)
             } label: {

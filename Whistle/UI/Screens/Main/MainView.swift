@@ -268,7 +268,7 @@ struct MainView: View {
       }
     }
     .navigationDestination(isPresented: $showUserProfile) {
-      UserProfileView(userId: currentVideoUserId)
+      UserProfileView(players: $players, currentIndex: $currentIndex, userId: currentVideoUserId)
         .environmentObject(apiViewModel)
         .environmentObject(tabbarModel)
     }

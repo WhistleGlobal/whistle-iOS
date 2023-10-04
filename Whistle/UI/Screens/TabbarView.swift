@@ -39,7 +39,7 @@ struct TabbarView: View {
         Color.clear
       case .upload:
         // FIXME: - uploadview로 교체하기
-        Color.pink.opacity(0.4).ignoresSafeArea()
+        Color.pink.ignoresSafeArea()
       case .profile:
         NavigationStack {
           if userAuth.isAccess {

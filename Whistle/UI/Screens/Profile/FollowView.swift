@@ -154,7 +154,7 @@ extension FollowView {
   func myFollowerList() -> some View {
     ForEach(apiViewModel.myFollow.followerList, id: \.userName) { follower in
       NavigationLink {
-        UserProfileView(userId: follower.followerId)
+        UserProfileView(players: .constant([]), currentIndex: .constant(0), userId: follower.followerId)
           .environmentObject(apiViewModel)
           .environmentObject(tabbarModel)
           .id(UUID())
@@ -178,7 +178,7 @@ extension FollowView {
   func myFollowingList() -> some View {
     ForEach(apiViewModel.myFollow.followingList, id: \.userName) { following in
       NavigationLink {
-        UserProfileView(userId: following.followingId)
+        UserProfileView(players: .constant([]), currentIndex: .constant(0), userId: following.followingId)
           .environmentObject(apiViewModel)
           .environmentObject(tabbarModel)
           .id(UUID())
