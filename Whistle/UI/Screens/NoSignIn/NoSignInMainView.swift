@@ -270,6 +270,9 @@ struct NoSignInMainView: View {
       currentVideoUserId = apiViewModel.noSignInContentList[newValue].userId ?? 0
       currentVideoContentId = apiViewModel.noSignInContentList[newValue].contentId ?? 0
       apiViewModel.postFeedPlayerChanged()
+      if newValue % 3 == 0, newValue != 0 {
+        bottomSheetPosition = .absolute(UIScreen.height - 68)
+      }
     }
     .onChange(of: isAccess) { newValue in
       if newValue {
