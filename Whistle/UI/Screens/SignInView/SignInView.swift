@@ -24,7 +24,6 @@ struct SignInView: View {
   @State var loginOpacity = 0.0
   @EnvironmentObject var apiViewModel: APIViewModel
   @EnvironmentObject var userAuth: UserAuth
-  @EnvironmentObject var tabbarModel: TabbarModel
   let keychain = KeychainSwift()
 
   var domainURL: String {
@@ -42,7 +41,6 @@ struct SignInView: View {
         NavigationLink {
           TabbarView()
             .environmentObject(apiViewModel)
-            .environmentObject(tabbarModel)
             .environmentObject(userAuth)
         } label: {
           HStack(spacing: 0) {

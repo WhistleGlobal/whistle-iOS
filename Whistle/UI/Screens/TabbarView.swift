@@ -17,7 +17,7 @@ struct TabbarView: View {
   @AppStorage("isAccess") var isAccess = false
   @EnvironmentObject var apiViewModel: APIViewModel
   @EnvironmentObject var userAuth: UserAuth
-  @EnvironmentObject var tabbarModel: TabbarModel
+  @StateObject var tabbarModel: TabbarModel = .init()
 
   var body: some View {
     ZStack {
