@@ -178,6 +178,11 @@ struct UserProfileView: View {
         ToastMessage(text: "클립보드에 복사되었어요", paddingBottom: 0, showToast: $showPasteToast)
       }
     }
+    .onAppear {
+      if !players.isEmpty {
+        players[currentIndex]?.pause()
+      }
+    }
   }
 }
 
