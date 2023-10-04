@@ -147,7 +147,13 @@ struct MainView: View {
           players[currentIndex]?.play()
         } else {
           players[currentIndex]?.pause()
-          apiViewModel.addViewCount(viewCount)
+          apiViewModel.addViewCount(viewCount, notInclude: processedContentId) { viewCountList in
+            var tempSet: Set<Int> = []
+            for view in viewCountList {
+              tempSet.insert(view.contentId)
+            }
+            processedContentId = processedContentId.union(tempSet)
+          }
         }
       }
     }
@@ -204,7 +210,13 @@ struct MainView: View {
     .onChange(of: scenePhase) { newValue in
       switch newValue {
       case .background:
-        apiViewModel.addViewCount(viewCount)
+        apiViewModel.addViewCount(viewCount, notInclude: processedContentId) { viewCountList in
+          var tempSet: Set<Int> = []
+          for view in viewCountList {
+            tempSet.insert(view.contentId)
+          }
+          processedContentId = processedContentId.union(tempSet)
+        }
       default:
         log("default")
       }
