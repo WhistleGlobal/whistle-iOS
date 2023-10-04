@@ -17,6 +17,7 @@ struct MainView: View {
   @Environment(\.scenePhase) var scenePhase
   @EnvironmentObject var apiViewModel: APIViewModel
   @EnvironmentObject var tabbarModel: TabbarModel
+  @State var viewCount: ViewCount = .init()
   @State var currentIndex = 0
   @State var playerIndex = 0
   @State var showDialog = false
@@ -35,7 +36,6 @@ struct MainView: View {
   @State var timer: Timer? = nil
   @State var viewTimer: Timer? = nil
   @State var isSplashOn = true
-  @State var viewedContentId: Set<Int> = []
   @State var processedContentId: Set<Int> = []
   @Binding var isRootActive: Bool
   @Binding var mainOpacity: Double
@@ -85,6 +85,30 @@ struct MainView: View {
                 .rotationEffect(Angle(degrees: -90))
                 .ignoresSafeArea(.all, edges: .top)
                 .tag(index)
+                .onAppear {
+                  let dateFormatter = DateFormatter()
+                  dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+                  let dateString = dateFormatter.string(from: .now)
+                  if let index = viewCount.views.firstIndex(where: { $0.contentId == content.contentId }) {
+                    viewCount.views[index].viewDate = dateString
+                  } else {
+                    viewCount.views.append(.init(contentId: content.contentId ?? 0, viewDate: dateString))
+                  }
+                  log("viewCount.views: \(viewCount.views)")
+                }
+                .onDisappear {
+                  if let index = viewCount.views.firstIndex(where: { $0.contentId == content.contentId }) {
+                    let viewDate = viewCount.views[index].viewDate.toDate()
+                    var nowDate = Date.now
+                    nowDate.addTimeInterval(3600 * 9)
+                    log("Date.now: \(nowDate)")
+                    log("viewDate: \(viewDate)")
+                    let viewTime = nowDate.timeIntervalSince(viewDate ?? Date.now)
+                    log("viewTime: \(viewTime)")
+                    viewCount.views[index].viewTime = "\(Int(viewTime))"
+                    log("viewCount.views[index].viewTime : \(viewCount.views[index].viewTime)")
+                  }
+                }
             } else {
               KFImage.url(URL(string: content.thumbnailUrl ?? ""))
                 .placeholder {
@@ -123,12 +147,12 @@ struct MainView: View {
           players[currentIndex]?.play()
         } else {
           players[currentIndex]?.pause()
-          DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-            // FIXME: - 조회수 API 함수로 교체
-            log("viewedContentId \(viewedContentId)")
-            processedContentId = processedContentId.union(viewedContentId)
-            viewedContentId.removeAll()
-            log("processedContentId \(processedContentId)")
+          apiViewModel.addViewCount(viewCount, notInclude: processedContentId) { viewCountList in
+            var tempSet: Set<Int> = []
+            for view in viewCountList {
+              tempSet.insert(view.contentId)
+            }
+            processedContentId = processedContentId.union(tempSet)
           }
         }
       }
@@ -163,11 +187,6 @@ struct MainView: View {
               withAnimation {
                 isSplashOn = false
               }
-              if currentIndex == 0 {
-                let duration = players[0]?.currentItem?.duration.seconds ?? 0
-                setViewTimer(duration > 3 ? 3 : duration)
-                log("viewcontentid : \(viewedContentId)")
-              }
             }
           }
         }
@@ -177,29 +196,26 @@ struct MainView: View {
       guard let url = apiViewModel.contentList[newValue].videoUrl else {
         return
       }
-      players[newValue] = AVPlayer(url: URL(string: url)!)
       players[playerIndex]?.seek(to: .zero)
       players[playerIndex]?.pause()
       players[playerIndex] = nil
+      players[newValue] = AVPlayer(url: URL(string: url)!)
       players[newValue]?.seek(to: .zero)
       players[newValue]?.play()
       playerIndex = newValue
       currentVideoUserId = apiViewModel.contentList[newValue].userId ?? 0
       currentVideoContentId = apiViewModel.contentList[newValue].contentId ?? 0
       apiViewModel.postFeedPlayerChanged()
-      let duration = players[newValue]?.currentItem?.duration.seconds ?? 0
-      setViewTimer(duration > 3 ? 3 : duration)
-      log("viewcontentid : \(viewedContentId)")
     }
     .onChange(of: scenePhase) { newValue in
       switch newValue {
       case .background:
-        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-          // FIXME: - 조회수 API 함수로 교체
-          log("viewedContentId \(viewedContentId)")
-          processedContentId = processedContentId.union(viewedContentId)
-          viewedContentId.removeAll()
-          log("processedContentId \(processedContentId)")
+        apiViewModel.addViewCount(viewCount, notInclude: processedContentId) { viewCountList in
+          var tempSet: Set<Int> = []
+          for view in viewCountList {
+            tempSet.insert(view.contentId)
+          }
+          processedContentId = processedContentId.union(tempSet)
         }
       default:
         log("default")
@@ -298,22 +314,21 @@ extension MainView {
           Spacer()
           HStack(spacing: 0) {
             if apiViewModel.contentList[currentIndex].userName != apiViewModel.myProfile.userName {
-              NavigationLink(
-                destination: UserProfileView(players: $players, currentIndex: $currentIndex, userId: currentVideoUserId)
+              NavigationLink {
+                UserProfileView(players: $players, currentIndex: $currentIndex, userId: currentVideoUserId)
                   .environmentObject(apiViewModel)
-                  .environmentObject(tabbarModel),
-                isActive: self.$isRootActive,
-                label: {
-                  Group {
-                    profileImageView(url: profileImg, size: 36)
-                      .padding(.trailing, 12)
-                    Text(userName)
-                      .foregroundColor(.white)
-                      .fontSystem(fontDesignSystem: .subtitle1)
-                      .padding(.trailing, 16)
-                  }
-                })
-                .isDetailLink(false)
+                  .environmentObject(tabbarModel)
+              } label: {
+                Group {
+                  profileImageView(url: profileImg, size: 36)
+                    .padding(.trailing, 12)
+                  Text(userName)
+                    .foregroundColor(.white)
+                    .fontSystem(fontDesignSystem: .subtitle1)
+                    .padding(.trailing, 16)
+                }
+              }
+              .isDetailLink(false)
             } else {
               Group {
                 profileImageView(url: profileImg, size: 36)
@@ -438,14 +453,26 @@ extension MainView {
     apiViewModel.contentList[currentIndex].isWhistled.toggle()
     apiViewModel.postFeedPlayerChanged()
   }
+}
 
-  func setViewTimer(_: Double) {
-    viewTimer?.invalidate()
-    viewTimer = Timer.scheduledTimer(withTimeInterval: 3, repeats: false) { _ in
-      if apiViewModel.contentList[currentIndex].userName != apiViewModel.myProfile.userName {
-        viewedContentId.insert(apiViewModel.contentList[currentIndex].contentId ?? 0)
-        log("inserted : \(viewedContentId)")
-      }
+extension String {
+  func toDate() -> Date? { // "yyyy-MM-dd HH:mm:ss"
+    let dateFormatter = DateFormatter()
+    dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+    dateFormatter.timeZone = TimeZone(identifier: "UTC")
+    if let date = dateFormatter.date(from: self) {
+      return date
+    } else {
+      return nil
     }
+  }
+}
+
+extension Date {
+  func toString() -> String {
+    let dateFormatter = DateFormatter()
+    dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+    dateFormatter.timeZone = TimeZone(identifier: "UTC")
+    return dateFormatter.string(from: self)
   }
 }
