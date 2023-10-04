@@ -342,6 +342,35 @@ extension APIViewModel: PostFeedProtocol {
     }
   }
 
+  func addViewCount(_ viewCount: ViewCount) {
+    do {
+      var tempViewCount = viewCount
+      tempViewCount.views = viewCount.views.filter { Int($0.viewTime) ?? 0 >= 3 }
+      tempViewCount.views = tempViewCount.views.filter { !$0.viewTime.isEmpty }
+      let data = try JSONEncoder().encode(tempViewCount)
+      if let dictionary = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {
+        log(dictionary)
+        AF.request(
+          "\(domainURL)/content/record-view",
+          method: .post,
+          parameters: dictionary,
+          encoding: JSONEncoding.default,
+          headers: contentTypeJson)
+          .validate(statusCode: 200..<300)
+          .response { response in
+            switch response.result {
+            case .success(let data):
+              log(data)
+            case .failure(let error):
+              log(error)
+            }
+          }
+      }
+    } catch {
+      log(error)
+    }
+  }
+
   func postFeedPlayerChanged() {
     publisher.send(UUID())
   }

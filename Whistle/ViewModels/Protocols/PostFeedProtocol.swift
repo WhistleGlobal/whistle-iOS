@@ -23,4 +23,5 @@ protocol PostFeedProtocol {
   func deleteContent(contentId: Int) async
   func reportContent(userId: Int, contentId: Int, reportReason: Int, reportDescription: String) async -> Int
   func reportUser(usedId: Int, contentId: Int, reportReason: Int, reportDescription: String) async -> Int
+  func addViewCount(_ viewCount: ViewCount)
 }

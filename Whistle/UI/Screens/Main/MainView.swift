@@ -36,7 +36,6 @@ struct MainView: View {
   @State var timer: Timer? = nil
   @State var viewTimer: Timer? = nil
   @State var isSplashOn = true
-  @State var viewedContentId: Set<Int> = []
   @State var processedContentId: Set<Int> = []
   @Binding var isRootActive: Bool
   @Binding var mainOpacity: Double
@@ -148,13 +147,7 @@ struct MainView: View {
           players[currentIndex]?.play()
         } else {
           players[currentIndex]?.pause()
-          DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-            // FIXME: - 조회수 API 함수로 교체
-            log("viewedContentId \(viewedContentId)")
-            processedContentId = processedContentId.union(viewedContentId)
-            viewedContentId.removeAll()
-            log("processedContentId \(processedContentId)")
-          }
+          apiViewModel.addViewCount(viewCount)
         }
       }
     }
@@ -211,13 +204,7 @@ struct MainView: View {
     .onChange(of: scenePhase) { newValue in
       switch newValue {
       case .background:
-        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-          // FIXME: - 조회수 API 함수로 교체
-          log("viewedContentId \(viewedContentId)")
-          processedContentId = processedContentId.union(viewedContentId)
-          viewedContentId.removeAll()
-          log("processedContentId \(processedContentId)")
-        }
+        apiViewModel.addViewCount(viewCount)
       default:
         log("default")
       }
