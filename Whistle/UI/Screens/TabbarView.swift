@@ -133,7 +133,11 @@ extension TabbarView {
       .frame(maxWidth: .infinity)
       .overlay {
         Button {
-          switchTab(to: .main)
+          if tabbarModel.tabSelectionNoAnimation == .main {
+            NavigationUtil.popToRootView()
+          } else {
+            switchTab(to: .main)
+          }
         } label: {
           Color.clear.overlay {
             Image(systemName: "house.fill")
