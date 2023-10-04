@@ -188,11 +188,6 @@ struct MainView: View {
               withAnimation {
                 isSplashOn = false
               }
-              if currentIndex == 0 {
-                let duration = players[0]?.currentItem?.duration.seconds ?? 0
-                setViewTimer(duration > 3 ? 3 : duration)
-                log("viewcontentid : \(viewedContentId)")
-              }
             }
           }
         }
@@ -212,9 +207,6 @@ struct MainView: View {
       currentVideoUserId = apiViewModel.contentList[newValue].userId ?? 0
       currentVideoContentId = apiViewModel.contentList[newValue].contentId ?? 0
       apiViewModel.postFeedPlayerChanged()
-      let duration = players[newValue]?.currentItem?.duration.seconds ?? 0
-      setViewTimer(duration > 3 ? 3 : duration)
-      log("viewcontentid : \(viewedContentId)")
     }
     .onChange(of: scenePhase) { newValue in
       switch newValue {
@@ -323,22 +315,21 @@ extension MainView {
           Spacer()
           HStack(spacing: 0) {
             if apiViewModel.contentList[currentIndex].userName != apiViewModel.myProfile.userName {
-              NavigationLink(
-                destination: UserProfileView(players: $players, currentIndex: $currentIndex, userId: currentVideoUserId)
+              NavigationLink {
+                UserProfileView(players: $players, currentIndex: $currentIndex, userId: currentVideoUserId)
                   .environmentObject(apiViewModel)
-                  .environmentObject(tabbarModel),
-                isActive: self.$isRootActive,
-                label: {
-                  Group {
-                    profileImageView(url: profileImg, size: 36)
-                      .padding(.trailing, 12)
-                    Text(userName)
-                      .foregroundColor(.white)
-                      .fontSystem(fontDesignSystem: .subtitle1)
-                      .padding(.trailing, 16)
-                  }
-                })
-                .isDetailLink(false)
+                  .environmentObject(tabbarModel)
+              } label: {
+                Group {
+                  profileImageView(url: profileImg, size: 36)
+                    .padding(.trailing, 12)
+                  Text(userName)
+                    .foregroundColor(.white)
+                    .fontSystem(fontDesignSystem: .subtitle1)
+                    .padding(.trailing, 16)
+                }
+              }
+              .isDetailLink(false)
             } else {
               Group {
                 profileImageView(url: profileImg, size: 36)
@@ -462,16 +453,6 @@ extension MainView {
     }
     apiViewModel.contentList[currentIndex].isWhistled.toggle()
     apiViewModel.postFeedPlayerChanged()
-  }
-
-  func setViewTimer(_: Double) {
-    viewTimer?.invalidate()
-    viewTimer = Timer.scheduledTimer(withTimeInterval: 3, repeats: false) { _ in
-      if apiViewModel.contentList[currentIndex].userName != apiViewModel.myProfile.userName {
-        viewedContentId.insert(apiViewModel.contentList[currentIndex].contentId ?? 0)
-        log("inserted : \(viewedContentId)")
-      }
-    }
   }
 }
 
