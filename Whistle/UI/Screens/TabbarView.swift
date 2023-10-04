@@ -13,7 +13,7 @@ struct TabbarView: View {
 
   @State var isFirstProfileLoaded = true
   @State var mainOpacity = 1.0
-  @State var isRootActive = false
+  @State var isRootStacked = false
   @AppStorage("isAccess") var isAccess = false
   @EnvironmentObject var apiViewModel: APIViewModel
   @EnvironmentObject var userAuth: UserAuth
@@ -22,8 +22,8 @@ struct TabbarView: View {
   var body: some View {
     ZStack {
       NavigationStack {
-        if isAccess { // 로그인 관련 로직으로 바꿀것
-          MainView(isRootActive: $isRootActive, mainOpacity: $mainOpacity)
+        if isAccess {
+          MainView(mainOpacity: $mainOpacity, isRootStacked: $isRootStacked)
             .environmentObject(apiViewModel)
             .environmentObject(tabbarModel)
             .opacity(mainOpacity)

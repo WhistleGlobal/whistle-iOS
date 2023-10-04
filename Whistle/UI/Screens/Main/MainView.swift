@@ -37,8 +37,8 @@ struct MainView: View {
   @State var viewTimer: Timer? = nil
   @State var isSplashOn = true
   @State var processedContentId: Set<Int> = []
-  @Binding var isRootActive: Bool
   @Binding var mainOpacity: Double
+  @Binding var isRootStacked: Bool
 
   var body: some View {
     GeometryReader { proxy in
@@ -151,7 +151,9 @@ struct MainView: View {
           return
         }
         if newValue == 1 {
-          player.play()
+          if !isRootStacked {
+            player.play()
+          }
         } else {
           player.pause()
           apiViewModel.addViewCount(viewCount, notInclude: processedContentId) { viewCountList in
@@ -298,6 +300,11 @@ struct MainView: View {
         userId: currentVideoUserId)
         .environmentObject(apiViewModel)
     }
+    .navigationDestination(isPresented: $isRootStacked) {
+      UserProfileView(players: $players, currentIndex: $currentIndex, userId: currentVideoUserId)
+        .environmentObject(apiViewModel)
+        .environmentObject(tabbarModel)
+    }
   }
 }
 
@@ -321,10 +328,8 @@ extension MainView {
           Spacer()
           HStack(spacing: 0) {
             if apiViewModel.contentList[currentIndex].userName != apiViewModel.myProfile.userName {
-              NavigationLink {
-                UserProfileView(players: $players, currentIndex: $currentIndex, userId: currentVideoUserId)
-                  .environmentObject(apiViewModel)
-                  .environmentObject(tabbarModel)
+              Button {
+                isRootStacked = true
               } label: {
                 Group {
                   profileImageView(url: profileImg, size: 36)
@@ -335,7 +340,6 @@ extension MainView {
                     .padding(.trailing, 16)
                 }
               }
-              .isDetailLink(false)
             } else {
               Group {
                 profileImageView(url: profileImg, size: 36)
