@@ -167,9 +167,15 @@ struct UserContentListView: View {
         log("Cancel")
       }
     }
-//    .onDisappear {
-//      players[currentIndex]?.pause()
-//    }
+    .onDisappear {
+      if players.count <= currentIndex {
+        return
+      }
+      guard let player = players[currentIndex] else {
+        return
+      }
+      player.pause()
+    }
   }
 }
 
