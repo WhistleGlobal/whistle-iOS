@@ -21,20 +21,17 @@ class ViewCount: Codable {
 
 class ViewCountModel: Codable {
   var contentId = 0
-  var userId = 0
   var viewTime = ""
   var viewDate = ""
 
   enum CodingKeys: String, CodingKey {
     case contentId = "content_id"
-    case userId = "user_id"
     case viewTime = "view_time"
     case viewDate = "view_date"
   }
 
-  init(contentId: Int = 0, userId: Int = 0, viewTime: String = "", viewDate: String = "") {
+  init(contentId: Int = 0, viewTime: String = "", viewDate: String = "") {
     self.contentId = contentId
-    self.userId = userId
     self.viewTime = viewTime
     self.viewDate = viewDate
   }
