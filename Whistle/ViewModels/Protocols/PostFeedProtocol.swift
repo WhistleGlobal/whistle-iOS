@@ -24,4 +24,5 @@ protocol PostFeedProtocol {
   func reportContent(userId: Int, contentId: Int, reportReason: Int, reportDescription: String) async -> Int
   func reportUser(usedId: Int, contentId: Int, reportReason: Int, reportDescription: String) async -> Int
   func addViewCount(_ viewCount: ViewCount, notInclude: Set<Int>, completion: @escaping ([ViewCountModel]) -> Void)
+  func requestNoSignInContent(completion: @escaping () -> ())
 }

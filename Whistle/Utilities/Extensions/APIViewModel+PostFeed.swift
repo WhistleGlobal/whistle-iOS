@@ -373,6 +373,46 @@ extension APIViewModel: PostFeedProtocol {
     }
   }
 
+  func requestNoSignInContent(completion: @escaping () -> ()) { // completion: @escaping () -> ())
+    AF.request(
+      "\(domainURL)/content/all-content-list",
+      method: .get,
+      headers: contentTypeJson)
+      .validate(statusCode: 200..<300)
+      .response { response in
+        switch response.result {
+        case .success(let data):
+          do {
+            guard let data else {
+              return
+            }
+            let jsonArray = try JSONSerialization.jsonObject(with: data, options: []) as? [[String: Any]]
+            self.noSignInContentList.removeAll()
+            for jsonObject in jsonArray ?? [] {
+              let tempContent: NoSignInMainContent = .init()
+              tempContent.contentId = jsonObject["content_id"] as? Int
+              tempContent.userId = jsonObject["user_id"] as? Int
+              tempContent.userName = jsonObject["user_name"] as? String
+              tempContent.profileImg = jsonObject["profile_img"] as? String
+              tempContent.caption = jsonObject["caption"] as? String
+              tempContent.videoUrl = jsonObject["video_url"] as? String
+              tempContent.thumbnailUrl = jsonObject["thumbnail_url"] as? String
+              tempContent.musicArtist = jsonObject["music_artist"] as? String
+              tempContent.musicTitle = jsonObject["music_title"] as? String
+              tempContent.hashtags = jsonObject["content_hashtags"] as? String
+              tempContent.whistleCount = jsonObject["content_whistle_count"] as? Int
+              self.noSignInContentList.append(tempContent)
+            }
+            completion()
+          } catch {
+            log(error)
+          }
+        case .failure(let error):
+          log(error)
+        }
+      }
+  }
+
   func postFeedPlayerChanged() {
     publisher.send(UUID())
   }

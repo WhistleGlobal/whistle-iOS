@@ -14,6 +14,7 @@ struct TabbarView: View {
   @State var isFirstProfileLoaded = true
   @State var mainOpacity = 1.0
   @State var isRootActive = false
+  @AppStorage("isAccess") var isAccess = false
   @EnvironmentObject var apiViewModel: APIViewModel
   @EnvironmentObject var userAuth: UserAuth
   @EnvironmentObject var tabbarModel: TabbarModel
@@ -21,7 +22,7 @@ struct TabbarView: View {
   var body: some View {
     ZStack {
       NavigationStack {
-        if userAuth.isAccess { // 로그인 관련 로직으로 바꿀것
+        if isAccess { // 로그인 관련 로직으로 바꿀것
           MainView(isRootActive: $isRootActive, mainOpacity: $mainOpacity)
             .environmentObject(apiViewModel)
             .environmentObject(tabbarModel)
@@ -30,8 +31,10 @@ struct TabbarView: View {
               mainOpacity = newValue == .main ? 1 : 0
             }
         } else {
-          // FIXME: - 비로그인 메인화면으로 교체할 것
-          EmptyView()
+          NoSignInMainView(mainOpacity: $mainOpacity)
+            .environmentObject(apiViewModel)
+            .environmentObject(tabbarModel)
+            .opacity(mainOpacity)
         }
       }
       .tint(.black)
@@ -43,7 +46,7 @@ struct TabbarView: View {
         Color.pink.ignoresSafeArea()
       case .profile:
         NavigationStack {
-          if userAuth.isAccess {
+          if isAccess {
             ProfileView(isFirstProfileLoaded: $isFirstProfileLoaded)
               .environmentObject(apiViewModel)
               .environmentObject(tabbarModel)
