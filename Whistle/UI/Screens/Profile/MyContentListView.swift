@@ -32,6 +32,13 @@ struct MyContentListView: View {
             if let player = players[index] {
               Player(player: player)
                 .frame(width: proxy.size.width)
+                .onTapGesture {
+                  if player.rate == 0.0 {
+                    player.play()
+                  } else {
+                    player.pause()
+                  }
+                }
                 .overlay {
                   // TODO: - contentId 백엔드 수정 필요, contentId & whistleCount
                   LinearGradient(
@@ -269,7 +276,7 @@ extension MyContentListView {
         }
       }
     }
-    .padding(.bottom, 112)
+    .padding(.bottom, 64)
     .padding(.horizontal, 20)
   }
 }

@@ -53,7 +53,6 @@ struct WhistleApp: App {
           SignInView()
             .environmentObject(apiViewModel)
             .environmentObject(userAuth)
-            .environmentObject(tabbarModel)
         }
         .tint(.black)
       }

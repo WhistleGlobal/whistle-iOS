@@ -37,8 +37,8 @@ struct MainView: View {
   @State var viewTimer: Timer? = nil
   @State var isSplashOn = true
   @State var processedContentId: Set<Int> = []
-  @Binding var isRootActive: Bool
   @Binding var mainOpacity: Double
+  @Binding var isRootStacked: Bool
 
   var body: some View {
     GeometryReader { proxy in
@@ -48,6 +48,13 @@ struct MainView: View {
             if let player = players[index] {
               Player(player: player)
                 .frame(width: proxy.size.width)
+                .onTapGesture {
+                  if player.rate == 0.0 {
+                    player.play()
+                  } else {
+                    player.pause()
+                  }
+                }
                 .overlay {
                   LinearGradient(
                     colors: [.clear, .black.opacity(0.24)],
@@ -137,16 +144,18 @@ struct MainView: View {
         if apiViewModel.contentList.isEmpty, players.isEmpty {
           return
         }
-        log("currentIndex : \(currentIndex)")
-        log("contentList : \(apiViewModel.contentList)")
-        log("players : \(players)")
+        if players.count <= currentIndex {
+          return
+        }
         guard let player = players[currentIndex] else {
           return
         }
         if newValue == 1 {
-          players[currentIndex]?.play()
+          if !isRootStacked {
+            player.play()
+          }
         } else {
-          players[currentIndex]?.pause()
+          player.pause()
           apiViewModel.addViewCount(viewCount, notInclude: processedContentId) { viewCountList in
             var tempSet: Set<Int> = []
             for view in viewCountList {
@@ -291,6 +300,11 @@ struct MainView: View {
         userId: currentVideoUserId)
         .environmentObject(apiViewModel)
     }
+    .navigationDestination(isPresented: $isRootStacked) {
+      UserProfileView(players: $players, currentIndex: $currentIndex, userId: currentVideoUserId)
+        .environmentObject(apiViewModel)
+        .environmentObject(tabbarModel)
+    }
   }
 }
 
@@ -314,10 +328,8 @@ extension MainView {
           Spacer()
           HStack(spacing: 0) {
             if apiViewModel.contentList[currentIndex].userName != apiViewModel.myProfile.userName {
-              NavigationLink {
-                UserProfileView(players: $players, currentIndex: $currentIndex, userId: currentVideoUserId)
-                  .environmentObject(apiViewModel)
-                  .environmentObject(tabbarModel)
+              Button {
+                isRootStacked = true
               } label: {
                 Group {
                   profileImageView(url: profileImg, size: 36)
@@ -328,7 +340,6 @@ extension MainView {
                     .padding(.trailing, 16)
                 }
               }
-              .isDetailLink(false)
             } else {
               Group {
                 profileImageView(url: profileImg, size: 36)
@@ -426,7 +437,7 @@ extension MainView {
         }
       }
     }
-    .padding(.bottom, 112)
+    .padding(.bottom, 64)
     .padding(.horizontal, 20)
   }
 }

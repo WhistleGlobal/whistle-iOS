@@ -47,6 +47,13 @@ struct NoSignInMainView: View {
             if let player = players[index] {
               Player(player: player)
                 .frame(width: proxy.size.width)
+                .onTapGesture {
+                  if player.rate == 0.0 {
+                    player.play()
+                  } else {
+                    player.pause()
+                  }
+                }
                 .overlay {
                   LinearGradient(
                     colors: [.clear, .black.opacity(0.24)],
@@ -96,13 +103,16 @@ struct NoSignInMainView: View {
         if apiViewModel.noSignInContentList.isEmpty, players.isEmpty {
           return
         }
+        if players.count <= currentIndex {
+          return
+        }
         guard let player = players[currentIndex] else {
           return
         }
         if newValue == 1 {
-          players[currentIndex]?.play()
+          player.play()
         } else {
-          players[currentIndex]?.pause()
+          player.pause()
         }
       }
     }
@@ -406,7 +416,7 @@ extension NoSignInMainView {
         }
       }
     }
-    .padding(.bottom, 112)
+    .padding(.bottom, 64)
     .padding(.horizontal, 20)
   }
 }
