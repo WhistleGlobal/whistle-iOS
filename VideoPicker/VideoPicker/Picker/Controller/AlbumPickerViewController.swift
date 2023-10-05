@@ -146,7 +146,7 @@ extension AlbumPickerViewController {
     } else {
       let height = CGFloat(albums.count) * rowHeight
       let preferredHeight = max(preferredMinHeight, min(height, preferredMaxHeight))
-      preferredContentSize = CGSize(width: preferredWidth, height: preferredHeight)
+      preferredContentSize = CGSize(width: preferredWidth, height: screenSize.height)
     }
   }
 }
@@ -169,15 +169,24 @@ extension AlbumPickerViewController: UITableViewDataSource {
   }
 
   func tableView(_: UITableView, numberOfRowsInSection _: Int) -> Int {
-    albums.count
+    albums.count + 2
   }
 
   func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-    let cell = tableView.dequeueReusableCell(AlbumCell.self, for: indexPath)
-    let album = albums[indexPath.row]
-    cell.setContent(album, manager: manager)
-    cell.accessoryType = self.album == album ? .checkmark : .none
-    return cell
+    if indexPath.row < albums.count {
+      let cell = tableView.dequeueReusableCell(AlbumCell.self, for: indexPath)
+      let album = albums[indexPath.row]
+      cell.setContent(album, manager: manager)
+      cell.accessoryType = self.album == album ? .checkmark : .none
+      return cell
+    } else {
+      // 빈 row를 위한 셀을 생성하거나 사용할 셀을 만듭니다.
+      // 예를 들어, 기본 UITableViewCell을 사용하거나 커스텀 셀을 따로 만들 수 있습니다.
+      let cell = UITableViewCell(style: .default, reuseIdentifier: nil)
+      cell.textLabel?.text = "" // 빈 텍스트로 설정하거나 원하는 내용을 추가합니다.
+      cell.backgroundColor = .clear
+      return cell
+    }
   }
 }
 

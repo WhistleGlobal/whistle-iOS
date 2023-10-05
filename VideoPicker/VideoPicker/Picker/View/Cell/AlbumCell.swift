@@ -22,13 +22,14 @@ final class AlbumCell: UITableViewCell {
 
   private lazy var titleLabel: UILabel = {
     let view = UILabel(frame: .zero)
-    view.font = UIFont.preferredFont(forTextStyle: .body)
+    view.font = UIFont.systemFont(ofSize: 18, weight: .semibold)
     return view
   }()
 
   private lazy var subTitleLabel: UILabel = {
     let view = UILabel(frame: .zero)
-    view.font = UIFont.preferredFont(forTextStyle: .body)
+    view.font = UIFont.systemFont(ofSize: 14, weight: .regular)
+    view.textColor = UIColor(named: "Gray20_Dark")
     return view
   }()
 
@@ -44,20 +45,23 @@ final class AlbumCell: UITableViewCell {
 
   private func setupView() {
     // Subviews
+    let stackView = UIStackView(arrangedSubviews: [titleLabel, subTitleLabel])
+    stackView.axis = .vertical
+    stackView.alignment = .leading
+    stackView.spacing = 8 // Adjust the spacing between titleLabel and subTitleLabel if needed
+
+    // Add the stack view to contentView
     contentView.addSubview(posterImageView)
-    contentView.addSubview(titleLabel)
-    contentView.addSubview(subTitleLabel)
+    contentView.addSubview(stackView)
+
     posterImageView.snp.makeConstraints { maker in
       maker.left.top.bottom.equalToSuperview()
       maker.width.equalTo(posterImageView.snp.height)
     }
-    titleLabel.snp.makeConstraints { maker in
+
+    stackView.snp.makeConstraints { maker in
       maker.centerY.equalTo(contentView.snp.centerY)
       maker.left.equalTo(posterImageView.snp.right).offset(16)
-    }
-    subTitleLabel.snp.makeConstraints { maker in
-      maker.centerY.equalTo(contentView.snp.centerY)
-      maker.left.equalTo(titleLabel.snp.right).offset(8)
     }
   }
 

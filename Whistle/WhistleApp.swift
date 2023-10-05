@@ -51,21 +51,12 @@ struct WhistleApp: App {
 //        NavigationStack {
 //          PickerConfigViewControllerWrapper(options: $pickerOptions)
 //            .environmentObject(rootVM)
- //       }
+            //       }
 //        MusicListView()
 //        .task {
 //          if isAccess {
 //            appleSignInViewModel.userAuth.loadData { }
           }
-        }
-//        TabbarView()
-//          .environmentObject(apiViewModel)
-//          .environmentObject(userAuth)
-//          .task {
-//            if isAccess {
-//              appleSignInViewModel.userAuth.loadData { }
-//            }
-//          }
       } else {
         NavigationStack {
           SignInView()

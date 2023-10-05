@@ -68,7 +68,7 @@ struct MusicTrimView: View {
                 .foregroundStyle(Color.white)
             }
             Spacer()
-            Button {} label: {
+            Button { } label: {
               Text("완료")
                 .fontSystem(fontDesignSystem: .subtitle2_KO)
                 .foregroundStyle(Color.Info)
@@ -102,8 +102,7 @@ struct MusicTrimView: View {
               .fill(Color.Secondary_Default)
               .frame(
                 width: UIScreen.getWidth(CGFloat(273 / length * musicVM.trimmedDuration)),
-                height: UIScreen.getHeight(8)
-              )
+                height: UIScreen.getHeight(8))
               .offset(x: Double(288 * offset) / (Double(length) * 16.9) + draggedOffset)
               .gesture(
                 DragGesture()
@@ -236,20 +235,20 @@ struct MusicTrimView: View {
           videoPlayer.action(video)
         }
         switch value {
-          case true:
-            if let duration = editorVM.currentVideo?.rangeDuration {
-              videoPlayer.scrubState = .scrubEnded(duration.lowerBound)
-            }
-            timer.upstream.connect().cancel()
-            audioTime = musicVM.trimmedDuration
-            print("scroll audioTime set \(getTime())")
-            isAnimated = false
-            musicVM.stopAudio()
-          case false:
-            timer = Timer.publish(every: 0.1, on: .main, in: .common).autoconnect()
-            isAnimated = true
-              musicVM.playAudio(startTime: offset / 16.4, endTime: offset / 16.4 + musicVM.trimmedDuration)
-              print("스크롤 시작, 음악 재설정 및 플레이 \(getTime())")
+        case true:
+          if let duration = editorVM.currentVideo?.rangeDuration {
+            videoPlayer.scrubState = .scrubEnded(duration.lowerBound)
+          }
+          timer.upstream.connect().cancel()
+          audioTime = musicVM.trimmedDuration
+          print("scroll audioTime set \(getTime())")
+          isAnimated = false
+          musicVM.stopAudio()
+        case false:
+          timer = Timer.publish(every: 0.1, on: .main, in: .common).autoconnect()
+          isAnimated = true
+          musicVM.playAudio(startTime: offset / 16.4, endTime: offset / 16.4 + musicVM.trimmedDuration)
+          print("스크롤 시작, 음악 재설정 및 플레이 \(getTime())")
         }
       }
       .onReceive(timer) { _ in

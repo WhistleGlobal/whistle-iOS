@@ -56,7 +56,7 @@ final class VideoPlayerManager: ObservableObject {
       play(video.rate)
     }
   }
-  
+
   func setAudio(_ url: URL?) {
     guard let url else {
       isSetAudio = false

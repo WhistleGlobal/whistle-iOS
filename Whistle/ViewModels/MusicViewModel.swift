@@ -95,7 +95,7 @@ extension MusicViewModel {
     }
   }
 
-  func playAudio(startTime: Double, endTime: Double)  {
+  func playAudio(startTime: Double, endTime: Double) {
     if isPlaying {
       pauseAudio()
     } else {

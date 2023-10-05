@@ -23,14 +23,6 @@ final class PickerArrowButton: UIControl {
     return view
   }()
 
-  private lazy var effectView: UIVisualEffectView = {
-    let effect = UIBlurEffect(style: .light)
-    let view = UIVisualEffectView(effect: effect)
-    view.isUserInteractionEnabled = false
-    view.clipsToBounds = true
-    return view
-  }()
-
   private var preferredStyle: UserInterfaceStyle = .auto
 
   override var isSelected: Bool {
@@ -57,13 +49,11 @@ final class PickerArrowButton: UIControl {
 
   override func layoutSubviews() {
     super.layoutSubviews()
-    effectView.layer.cornerRadius = effectView.bounds.height * 0.5
   }
 
   private func setupView() {
     addSubview(label)
     addSubview(imageView)
-    let height: CGFloat = 32
 
     label.snp.makeConstraints { maker in
       maker.top.bottom.equalToSuperview()
@@ -82,15 +72,6 @@ final class PickerArrowButton: UIControl {
     if #available(iOS 13.0, *) {
       guard preferredStyle == .auto else { return }
       guard traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) else { return }
-
-      effectView.effect = UIBlurEffect(style: .init(
-        uiStyle: preferredStyle,
-        traitCollection: traitCollection))
-      let color = UIColor.create(
-        style: preferredStyle,
-        light: UIColor.white,
-        dark: UIColor.white)
-      effectView.backgroundColor = color
     }
   }
 }
@@ -107,7 +88,6 @@ extension PickerArrowButton {
       self.label.textColor = .white
       self.layoutIfNeeded()
     }
-//        accessibilityLabel = String(format: a11ySwitchAlbumTips, title)
   }
 }
 
@@ -127,14 +107,6 @@ extension PickerArrowButton: PickerOptionsConfigurable {
     preferredStyle = options.theme.style
     label.textColor = options.theme[color: .whiteText]
     imageView.image = options.theme[icon: .albumArrow]
-    effectView.effect = UIBlurEffect(style: .init(
-      uiStyle: preferredStyle,
-      traitCollection: traitCollection))
-    let effectViewColor = UIColor.create(
-      style: preferredStyle,
-      light: UIColor.white,
-      dark: UIColor.white)
-    effectView.backgroundColor = effectViewColor
 
     options.theme.labelConfiguration[.albumTitle]?.configuration(label)
   }
