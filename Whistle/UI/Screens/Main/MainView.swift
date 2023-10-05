@@ -234,6 +234,13 @@ struct MainView: View {
         log("default")
       }
     }
+    .onChange(of: universalRoutingModel.isUniversalProfile) { newValue in
+      if newValue {
+        tabbarModel.tabSelectionNoAnimation = .main
+        tabbarModel.tabSelection = .main
+        isRootStacked = true
+      }
+    }
     .overlay {
       if showPasteToast {
         ToastMessage(text: "클립보드에 복사되었어요", paddingBottom: 78, showToast: $showPasteToast)
