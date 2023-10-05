@@ -58,6 +58,7 @@ struct WhistleApp: App {
             urlString = urlString.replacingOccurrences(of: "\(domainURL)", with: "")
             log(urlString)
             if urlString.contains("/profile_uni?") {
+              log("/profile_uni? .contains")
               urlString = urlString.replacingOccurrences(of: "/profile_uni?id=", with: "")
               guard let userId = Int(urlString) else {
                 return
@@ -65,7 +66,16 @@ struct WhistleApp: App {
               universalRoutingModel.userId = userId
               universalRoutingModel.isUniversalProfile = true
             } else if urlString.contains("/content_uni?") {
-              // TODO: - 컨텐츠 링크 로직으로 대체
+              log("/content_uni? .contains")
+              urlString = urlString.replacingOccurrences(of: "/content_uni?contentId=", with: "")
+              log("urlString: \(urlString)")
+              guard let contentId = Int(urlString) else {
+                log("guard urlString: \(urlString)")
+                return
+              }
+              log("contentId: \(contentId)")
+              universalRoutingModel.contentId = contentId
+              universalRoutingModel.isUniversalContent = true
             }
           }
       } else {
@@ -135,6 +145,7 @@ public func log<T>(
 
 class UniversalRoutingModel: ObservableObject {
   @Published var isUniversalProfile = false
+  @Published var isUniversalContent = false
   @Published var userId = 0
   @Published var contentId = 0
 }

@@ -108,7 +108,7 @@ extension APIViewModel: PostFeedProtocol {
     }
   }
 
-  func requestContentList(completion: @escaping () -> ()) {
+  func requestContentList(completion: @escaping () -> Void) {
     AF.request(
       "\(domainURL)/content/content-list",
       method: .get,
