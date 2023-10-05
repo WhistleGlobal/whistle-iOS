@@ -176,9 +176,8 @@ struct MainView: View {
       }
       if apiViewModel.contentList.isEmpty {
         if universalRoutingModel.isUniversalContent {
-            // FIXME: - API 나중에 만들어지면 수정
           log("universalRoutingModel.isUniversalContent \(universalRoutingModel.isUniversalContent)")
-          apiViewModel.requestContentList {
+          apiViewModel.requestUniversalContent(contentId: universalRoutingModel.contentId) {
             Task {
               if !apiViewModel.contentList.isEmpty {
                 players.removeAll()
@@ -208,7 +207,6 @@ struct MainView: View {
             universalRoutingModel.isUniversalContent = false
           }
         } else {
-          log("universalRoutingModel.isUniversalContent \(universalRoutingModel.isUniversalContent)")
           apiViewModel.requestContentList {
             Task {
               if !apiViewModel.contentList.isEmpty {
@@ -277,39 +275,73 @@ struct MainView: View {
       }
     }
     .onChange(of: universalRoutingModel.isUniversalContent) { newValue in
-        // FIXME: - API 나중에 만들어지면 수정
       if newValue {
         tabbarModel.tabSelectionNoAnimation = .main
         tabbarModel.tabSelection = .main
-        log("universalRoutingModel.isUniversalContent \(universalRoutingModel.isUniversalContent)")
-        apiViewModel.requestContentList {
-          Task {
-            if !apiViewModel.contentList.isEmpty {
-              players.removeAll()
-              for _ in 0..<apiViewModel.contentList.count {
-                players.append(nil)
-              }
-              log(players)
-              players[currentIndex] =
-                AVPlayer(url: URL(string: apiViewModel.contentList[currentIndex].videoUrl ?? "")!)
-              playerIndex = currentIndex
-              guard let player = players[currentIndex] else {
-                return
-              }
-              currentVideoUserId = apiViewModel.contentList[currentIndex].userId ?? 0
-              currentVideoContentId = apiViewModel.contentList[currentIndex].contentId ?? 0
-              isCurrentVideoWhistled = apiViewModel.contentList[currentIndex].isWhistled
-              await player.seek(to: .zero)
-              player.play()
-              withAnimation {
-                isSplashOn = false
-              }
-              if universalRoutingModel.isUniversalProfile {
-                isRootStacked = true
+        var currentIndex = 0
+        var playerIndex = 0
+        currentVideoUserId = 0
+        currentVideoContentId = 0
+        players.removeAll()
+        if universalRoutingModel.isUniversalContent {
+          apiViewModel.requestUniversalContent(contentId: universalRoutingModel.contentId) {
+            Task {
+              if !apiViewModel.contentList.isEmpty {
+                for _ in 0..<apiViewModel.contentList.count {
+                  players.append(nil)
+                }
+                log(players)
+                players[currentIndex] =
+                  AVPlayer(url: URL(string: apiViewModel.contentList[currentIndex].videoUrl ?? "")!)
+                playerIndex = currentIndex
+                guard let player = players[currentIndex] else {
+                  return
+                }
+                currentVideoUserId = apiViewModel.contentList[currentIndex].userId ?? 0
+                currentVideoContentId = apiViewModel.contentList[currentIndex].contentId ?? 0
+                isCurrentVideoWhistled = apiViewModel.contentList[currentIndex].isWhistled
+                await player.seek(to: .zero)
+                player.play()
+                withAnimation {
+                  isSplashOn = false
+                }
+                if universalRoutingModel.isUniversalProfile {
+                  isRootStacked = true
+                }
               }
             }
+            universalRoutingModel.isUniversalContent = false
           }
-          universalRoutingModel.isUniversalContent = false
+        } else {
+          apiViewModel.requestContentList {
+            Task {
+              if !apiViewModel.contentList.isEmpty {
+                players.removeAll()
+                for _ in 0..<apiViewModel.contentList.count {
+                  players.append(nil)
+                }
+                log(players)
+                players[currentIndex] =
+                  AVPlayer(url: URL(string: apiViewModel.contentList[currentIndex].videoUrl ?? "")!)
+                playerIndex = currentIndex
+                guard let player = players[currentIndex] else {
+                  return
+                }
+                currentVideoUserId = apiViewModel.contentList[currentIndex].userId ?? 0
+                currentVideoContentId = apiViewModel.contentList[currentIndex].contentId ?? 0
+                isCurrentVideoWhistled = apiViewModel.contentList[currentIndex].isWhistled
+                await player.seek(to: .zero)
+                player.play()
+                withAnimation {
+                  isSplashOn = false
+                }
+                if universalRoutingModel.isUniversalProfile {
+                  isRootStacked = true
+                }
+              }
+            }
+            universalRoutingModel.isUniversalContent = false
+          }
         }
       }
     }
