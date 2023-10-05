@@ -60,21 +60,8 @@ struct ThumbnailsSliderView: View {
     .hCenter()
     .padding(.vertical, 28)
     .background(Color.Elevated_Dark)
-//    }
-//    .frame(width: UIScreen.width)
   }
 }
-
-//// MARK: - ThumbnailsSliderView_Previews
-//
-// struct ThumbnailsSliderView_Previews: PreviewProvider {
-//  static var previews: some View {
-//    ThumbnailsSliderView(
-//      currentTime: .constant(0),
-//      video: .constant(EditableVideo.mock),
-//      onChangeTimeValue: { }, videoPlayer: VideoPlayerManager)
-//  }
-// }
 
 extension ThumbnailsSliderView {
   private func setVideoRange() {
@@ -91,16 +78,14 @@ extension ThumbnailsSliderView {
   @ViewBuilder
   private func thumbnailsImagesSection(_ proxy: GeometryProxy) -> some View {
     if let video {
-      ScrollView(.horizontal) {
-        HStack(spacing: 0) {
-          ForEach(video.thumbnailsImages) { trimData in
-            if let image = trimData.image {
-              Image(uiImage: image)
-                .resizable()
-                .aspectRatio(contentMode: .fill)
-                .frame(width: proxy.size.width / CGFloat(video.thumbnailsImages.count), height: proxy.size.height - 8)
-                .clipped()
-            }
+      HStack(spacing: 0) {
+        ForEach(video.thumbnailsImages) { trimData in
+          if let image = trimData.image {
+            Image(uiImage: image)
+              .resizable()
+              .aspectRatio(contentMode: .fill)
+              .frame(width: proxy.size.width / CGFloat(video.thumbnailsImages.count), height: proxy.size.height - 8)
+              .clipped()
           }
         }
       }

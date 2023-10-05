@@ -15,25 +15,33 @@ struct ToolButtonView: View {
   let isChange: Bool
   let action: () -> Void
 
-  private var bgColor: Color {
-    Color(isChange ? .systemGray5 : .systemGray6)
-  }
+//  private var bgColor: Color {
+  ////    Color(isChange ? .systemGray5 : .systemGray6)
+//  }
 
   var body: some View {
     Button {
       action()
     } label: {
-      VStack(spacing: 4) {
-        Image(systemName: image)
-          .imageScale(.medium)
-        Text(label)
-          .font(.caption)
+      ZStack {
+        RoundedRectangle(cornerRadius: 12)
+          .fill(Color("Gray30_Dark").opacity(0.24))
+        VStack(spacing: 6) {
+          Image(systemName: image)
+            .font(.system(size: 20))
+          Text(label)
+            .fontSystem(fontDesignSystem: .body2_KO)
+        }
+        .hCenter()
       }
-      .frame(width: 107, height: 85)
-      .hCenter()
-      .background(bgColor, in: RoundedRectangle(cornerRadius: 12, style: .continuous))
+      .frame(width: UIScreen.getWidth(107), height: UIScreen.getHeight(72))
+      .overlay {
+        RoundedRectangle(cornerRadius: 12)
+          .strokeBorder(LinearGradient.Border_Glass, lineWidth: 1)
+      }
     }
     .buttonStyle(.plain)
+    .foregroundStyle(Color.white)
   }
 }
 

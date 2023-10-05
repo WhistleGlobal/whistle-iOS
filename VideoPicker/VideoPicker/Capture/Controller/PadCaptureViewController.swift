@@ -60,7 +60,7 @@ extension PadCaptureViewController: UIImagePickerControllerDelegate, UINavigatio
 
   func imagePickerController(
     _: UIImagePickerController,
-    didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any])
+    didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey: Any])
   {
     func exit() {
       DispatchQueue.main.async {

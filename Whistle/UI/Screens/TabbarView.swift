@@ -6,11 +6,11 @@
 //
 
 import SwiftUI
+import VideoPicker
 
 // MARK: - TabbarView
 
 struct TabbarView: View {
-
   @State var isFirstProfileLoaded = true
   @State var mainOpacity = 1.0
   @State var isRootStacked = false
@@ -19,6 +19,7 @@ struct TabbarView: View {
   @EnvironmentObject var userAuth: UserAuth
   @EnvironmentObject var universalRoutingModel: UniversalRoutingModel
   @StateObject var tabbarModel: TabbarModel = .init()
+  @State private var pickerOptions = PickerOptionsInfo()
 
   var body: some View {
     ZStack {
@@ -49,7 +50,13 @@ struct TabbarView: View {
         Color.clear
       case .upload:
         // FIXME: - uploadview로 교체하기
-        Color.pink.ignoresSafeArea()
+//        Color.pink.ignoresSafeArea()]
+        NavigationStack {
+          ZStack {
+            Color.pink.ignoresSafeArea()
+            PickerConfigViewControllerWrapper()
+          }
+        }
       case .profile:
         NavigationStack {
           if isAccess {
@@ -195,6 +202,7 @@ extension TabbarView {
 }
 
 // MARK: - TabClicked Actions
+
 extension TabbarView {
   var profileTabClicked: () -> Void {
     {

@@ -20,16 +20,7 @@ struct EditablePlayerView: UIViewControllerRepresentable {
     view.videoGravity = .resizeAspect
     view.contentOverlayView?.layer.cornerRadius = 12
     view.contentOverlayView?.layer.masksToBounds = true
-//    view.contentOverlayView?.snp.makeConstraints { make in
-//      make.top.equalToSuperview().offset(50)
-//      make.bottom.equalToSuperview()
-//      make.left.equalToSuperview()
-//      make.right.equalToSuperview()
-//    }
-//
-//    view.contentOverlayView?.layer.frame = CGRect(origin: CGPoint(x: 0, y: 0), size: CGSize(width: 203, height: 361))
-//    view.contentOverlayView?.layer.borderColor = UIColor.red.cgColor
-//    view.contentOverlayView?.layer.borderWidth = 10
+    view.allowsVideoFrameAnalysis = false
     return view
   }
 

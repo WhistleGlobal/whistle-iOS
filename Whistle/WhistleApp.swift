@@ -15,6 +15,7 @@ import VideoPicker
 @main
 struct WhistleApp: App {
   // MARK: Lifecycle
+
   // Layout Test
   init() {
     Font.registerFonts(fontName: "SF-Pro-Display-Semibold")
@@ -51,6 +52,14 @@ struct WhistleApp: App {
             if isAccess {
               appleSignInViewModel.userAuth.loadData { }
             }
+//        NavigationStack {
+//          PickerConfigViewControllerWrapper(options: $pickerOptions)
+//            .environmentObject(rootVM)
+            //       }
+//        MusicListView()
+//        .task {
+//          if isAccess {
+//            appleSignInViewModel.userAuth.loadData { }
           }
           .onOpenURL { url in
             log(url)

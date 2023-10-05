@@ -207,7 +207,7 @@ struct RangedSliderView: View {
         Rectangle()
           .scale(2, anchor: .leading)
           .scale(2, anchor: .trailing))
-      .offset(x: videoPlayer.currentTime * by)
+      .offset(x: videoPlayer.currentTime * by - strokeWidth / 2)
       .onAppear {
         print(videoPlayer.currentTime)
       }

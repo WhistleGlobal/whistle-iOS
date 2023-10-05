@@ -140,7 +140,9 @@ final class VideoPlayerManager: ObservableObject {
         }
       }
     }
+
     videoPlayer.play()
+    print("비디오 시작 \(getTime())")
     if isSetAudio {
       audioPlayer.play()
     }

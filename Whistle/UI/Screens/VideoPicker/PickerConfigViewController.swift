@@ -18,50 +18,11 @@ final class PickerConfigViewController: UIViewController {
 
   override func viewDidLoad() {
     super.viewDidLoad()
-    setupNavigation()
-    setUpButton()
   }
 
   override func viewWillAppear(_: Bool) {
-    // 테스트용 코드
-    addButtonTapped()
-    //
-    parent?.navigationItem.title = ""
-    let title = Bundle.main.localizedString(forKey: "OpenPicker", value: nil, table: nil)
-    parent?.navigationItem.rightBarButtonItem = UIBarButtonItem(
-      title: title,
-      style: .done,
-      target: self,
-      action: #selector(openPickerTapped))
-  }
-
-  @objc
-  private func addButtonTapped() {
     openPickerTapped()
-  }
-
-  private func setUpButton() {
-    let addButton = UIButton(type: .system)
-    addButton.setTitle("추가", for: .normal)
-    addButton.addTarget(self, action: #selector(addButtonTapped), for: .touchUpInside)
-
-    // 버튼 레이아웃 설정
-    addButton.translatesAutoresizingMaskIntoConstraints = false
-    view.addSubview(addButton)
-
-    // Auto Layout을 사용하여 버튼 위치 설정
-    addButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20).isActive = true
-    addButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -50).isActive = true
-  }
-
-  private func setupNavigation() {
-    navigationItem.title = "Picker"
-    let title = Bundle.main.localizedString(forKey: "OpenPicker", value: nil, table: nil)
-    navigationItem.rightBarButtonItem = UIBarButtonItem(
-      title: title,
-      style: .done,
-      target: self,
-      action: #selector(openPickerTapped))
+    view.backgroundColor = UIColor.clear
   }
 
   // MARK: - Target
@@ -82,20 +43,18 @@ final class PickerConfigViewController: UIViewController {
 // MARK: ImagePickerControllerDelegate
 
 extension PickerConfigViewController: ImagePickerControllerDelegate {
-  /// Picker에서 선택된 asset을 PickerResultViewController로 전달해 줍니다.
+  /// Picker에서 선택된 asset을 MainEditorview로 전달해 줍니다.
   func imagePicker(_ picker: ImagePickerController, didFinishPicking result: PickerResult) {
-    let controller = PickerResultViewController()
     var videoURL: URL?
-    controller.assets = result.assets
-    controller.assets[0].phAsset.loadURL { result in
+    result.assets[0].phAsset.loadURL { result in
       switch result {
       case .success(let url):
         videoURL = url
-        print(videoURL)
         DispatchQueue.main.async {
           let editorView = MainEditorView(selectedVideoURL: videoURL)
           self.show(UIHostingController(rootView: editorView), sender: nil)
           picker.dismiss(animated: true, completion: nil)
+          self.parent?.dismiss(animated: false)
         }
       case .failure(let error):
         print("Error: \(error)")

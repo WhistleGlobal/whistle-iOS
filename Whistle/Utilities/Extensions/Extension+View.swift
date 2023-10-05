@@ -89,13 +89,16 @@ extension View {
   @ViewBuilder
   func glassMorphicView(width: CGFloat, height: CGFloat, cornerRadius: CGFloat) -> some View {
     ZStack {
-      RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
+//      RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
+      Rectangle()
         .fill(Color.black.opacity(0.3))
+        .cornerRadius(cornerRadius, corners: .allCorners)
       CustomBlurView(effect: .systemUltraThinMaterialLight) { view in
         // FIXME: - 피그마와 비슷하도록 값 고치기
         view.saturationAmout = 2.2
-        view.gaussianBlurRadius = 36
+        view.gaussianBlurRadius = 32
       }
+//      .cornerRadius(cornerRadius, corners: [.topLeft, .topRight])
       .clipShape(RoundedRectangle(cornerRadius: cornerRadius, style: .continuous))
     }
     .frame(width: width, height: height)

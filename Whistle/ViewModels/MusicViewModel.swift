@@ -14,76 +14,39 @@ import SwiftUI
 
 // MARK: - MusicViewModel
 
+@MainActor
+
 class MusicViewModel: ObservableObject {
   private var timer: Timer?
-  private var downloadedAudioURL: URL?
-
+//  private var downloadedAudioURL: URL?
+  @Published var url: URL?
   @Published var isPlaying = false
   @Published public var soundSamples = [MusicNote]()
   /// 오디오를 샘플링하기 위한 count
-  let sample_count: Int
+  @Published var sample_count = 10
+  @Published var trimmedDuration: Double = 15
+  @Published var player: AVPlayer?
+  @Published var session: AVAudioSession?
 
   /// 샘플링된 정보를 배열에 저장할 때 필요한 index
   var index = 0
   /// 오디오 url
-  let url: URL
+//  let url: URL?
 
   var dataManager: MusicServiceProtocol
 
-  @Published var player: AVPlayer?
-  @Published var session: AVAudioSession!
-
-  init(url _: URL, samples_count: Int, dataManager: MusicServiceProtocol = MusicService.shared) {
-    url = URL(string: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3")!
-    sample_count = samples_count
+  init(dataManager: MusicServiceProtocol = MusicService.shared) {
     self.dataManager = dataManager
-    print("init!!!")
-    // 주어진 sample_count와 dataManager로 visualizing을 시작합니다.
-    Task {
-      await visualizeAudio()
-    }
 
     // AudioSession의 카테고리를 playback으로 설정하고, 오디오 출력은 기존의 포트를 사용합니다.
     do {
       session = AVAudioSession.sharedInstance()
-      try session.setCategory(.playback)
-
-      try session.overrideOutputAudioPort(AVAudioSession.PortOverride.none)
+      try session?.setCategory(.playback)
+      try session?.overrideOutputAudioPort(.none)
 
     } catch {
       print(error.localizedDescription)
     }
-
-//    player = AVPlayer(url: url)
-    // 다운로드된 오디오 파일이 없을 때만 다운로드하도록 처리
-    if
-      let downloadedURL = try? FileManager.default.url(
-        for: .documentDirectory,
-        in: .userDomainMask,
-        appropriateFor: nil,
-        create: true).appendingPathComponent("downloadedAudio.mp3")
-    {
-      if FileManager.default.fileExists(atPath: downloadedURL.path) {
-        // 이미 다운로드된 파일이 있는 경우, 다운로드한 파일의 URL 저장
-        downloadedAudioURL = downloadedURL
-      } else {
-        // 파일이 없는 경우 다운로드 진행
-        Task {
-          do {
-            downloadedAudioURL = try await dataManager.downloadMusicAsync(from: url)
-          } catch {
-            print("Audio download error: \(error)")
-          }
-        }
-      }
-    }
-
-    // 다운로드가 완료되지 않은 경우에도 기본 URL 사용
-    if downloadedAudioURL == nil {
-      downloadedAudioURL = url
-    }
-
-    player = AVPlayer(url: downloadedAudioURL!)
   }
 }
 
@@ -124,20 +87,40 @@ extension MusicViewModel {
   }
 
   func visualizeAudio() async {
-    let results = try? await dataManager.buffer(url: url, samplesCount: sample_count)
-    DispatchQueue.main.async {
-      self.soundSamples = results ?? []
+    if let url {
+      let results = try? await dataManager.buffer(url: url, samplesCount: sample_count)
+      DispatchQueue.main.async {
+        self.soundSamples = results ?? []
+      }
     }
   }
 
-  func playAudio(startTime: Double, endTime: Double) async {
+  func playAudio(startTime: Double, endTime: Double) {
     if isPlaying {
       pauseAudio()
     } else {
+      player = AVPlayer(url: url!)
+      let startTime = CMTime(seconds: startTime, preferredTimescale: 1)
+      let endTime = CMTime(seconds: endTime, preferredTimescale: 1)
+      player?.seek(to: startTime) // 시작 시간으로 이동
+      player?.play()
+
+      startTimer()
+      count_duration { _ in }
+
+      // 특정 시간 범위까지 재생 후 시작 시간으로 이동하는 클로저를 등록
+      player?.addBoundaryTimeObserver(forTimes: [NSValue(time: endTime)], queue: .main) {
+        [weak self] in
+        self?.player?.seek(to: startTime) // 시작 시간으로 이동
+      }
+
+//      // 특정 시간 범위까지 재생 후 일시 정지하려면
+//      player?.addBoundaryTimeObserver(forTimes: [NSValue(time: endTime)], queue: .main) {
+//        [weak self] in
+//        self?.stopAudio()
+//      }
       DispatchQueue.main.async {
-        self.player = AVPlayer(url: self.downloadedAudioURL!)
-        print("url: \(self.downloadedAudioURL!)")
-        self.player?.play()
+        self.isPlaying.toggle()
       }
 
       NotificationCenter.default.addObserver(
@@ -145,23 +128,6 @@ extension MusicViewModel {
         selector: #selector(playerDidFinishPlaying(note:)),
         name: NSNotification.Name.AVPlayerItemDidPlayToEndTime,
         object: player?.currentItem)
-      let startTime = CMTime(seconds: startTime, preferredTimescale: 1)
-      let endTime = CMTime(seconds: endTime, preferredTimescale: 1)
-      await player?.seek(to: startTime) // 시작 시간으로 이동
-      player?.play()
-      print("playing: \(player?.currentItem?.currentTime().seconds)")
-      startTimer()
-      count_duration { _ in }
-
-      // 특정 시간 범위까지 재생 후 일시 정지하려면
-      player?.addBoundaryTimeObserver(forTimes: [NSValue(time: endTime)], queue: .main) {
-        [weak self] in
-//        self?.pauseAudio()
-        self?.stopAudio()
-      }
-      DispatchQueue.main.async {
-        self.isPlaying.toggle()
-      }
     }
   }
 
@@ -200,7 +166,9 @@ extension MusicViewModel {
 
   func removeAudio() {
     do {
-      try FileManager.default.removeItem(at: url)
+      if let url {
+        try FileManager.default.removeItem(at: url)
+      }
     } catch {
       print(error)
     }
