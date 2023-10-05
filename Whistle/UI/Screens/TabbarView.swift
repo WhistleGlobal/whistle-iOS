@@ -11,22 +11,35 @@ import SwiftUI
 
 struct TabbarView: View {
 
-  @StateObject var tabbarModel: TabbarModel = .init()
   @State var isFirstProfileLoaded = true
   @State var mainOpacity = 1.0
+  @State var isRootStacked = false
+  @AppStorage("isAccess") var isAccess = false
   @EnvironmentObject var apiViewModel: APIViewModel
   @EnvironmentObject var userAuth: UserAuth
+  @StateObject var tabbarModel: TabbarModel = .init()
 
   var body: some View {
     ZStack {
       NavigationStack {
-        MainView(mainOpacity: $mainOpacity)
-          .environmentObject(apiViewModel)
-          .environmentObject(tabbarModel)
-          .opacity(mainOpacity)
-          .onChange(of: tabbarModel.tabSelection) { newValue in
-            mainOpacity = newValue == .main ? 1 : 0
-          }
+        if isAccess {
+          MainView(mainOpacity: $mainOpacity, isRootStacked: $isRootStacked)
+            .environmentObject(apiViewModel)
+            .environmentObject(tabbarModel)
+            .opacity(mainOpacity)
+            .onChange(of: tabbarModel.tabSelectionNoAnimation) { newValue in
+              mainOpacity = newValue == .main ? 1 : 0
+            }
+        } else {
+          NoSignInMainView(mainOpacity: $mainOpacity)
+            .environmentObject(apiViewModel)
+            .environmentObject(tabbarModel)
+            .environmentObject(userAuth)
+            .opacity(mainOpacity)
+            .onChange(of: tabbarModel.tabSelectionNoAnimation) { newValue in
+              mainOpacity = newValue == .main ? 1 : 0
+            }
+        }
       }
       .tint(.black)
       switch tabbarModel.tabSelectionNoAnimation {
@@ -34,13 +47,20 @@ struct TabbarView: View {
         Color.clear
       case .upload:
         // FIXME: - uploadview로 교체하기
-        Color.pink.opacity(0.4).ignoresSafeArea()
+        Color.pink.ignoresSafeArea()
       case .profile:
         NavigationStack {
-          ProfileView(isFirstProfileLoaded: $isFirstProfileLoaded)
-            .environmentObject(apiViewModel)
-            .environmentObject(tabbarModel)
-            .environmentObject(userAuth)
+          if isAccess {
+            ProfileView(isFirstProfileLoaded: $isFirstProfileLoaded)
+              .environmentObject(apiViewModel)
+              .environmentObject(tabbarModel)
+              .environmentObject(userAuth)
+          } else {
+            NoSignInProfileView()
+              .environmentObject(tabbarModel)
+              .environmentObject(userAuth)
+              .environmentObject(apiViewModel)
+          }
         }
         .tint(.black)
       }
@@ -90,6 +110,7 @@ struct TabbarView: View {
       .padding(.horizontal, 16)
       .opacity(tabbarModel.tabbarOpacity)
     }
+    .navigationBarBackButtonHidden()
   }
 }
 
@@ -119,7 +140,9 @@ extension TabbarView {
       .frame(maxWidth: .infinity)
       .overlay {
         Button {
-          Task {
+          if tabbarModel.tabSelectionNoAnimation == .main {
+            NavigationUtil.popToRootView()
+          } else {
             switchTab(to: .main)
           }
         } label: {

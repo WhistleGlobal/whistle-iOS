@@ -14,8 +14,10 @@ import SwiftUI
 
 struct MainView: View {
 
+  @Environment(\.scenePhase) var scenePhase
   @EnvironmentObject var apiViewModel: APIViewModel
   @EnvironmentObject var tabbarModel: TabbarModel
+  @State var viewCount: ViewCount = .init()
   @State var currentIndex = 0
   @State var playerIndex = 0
   @State var showDialog = false
@@ -32,7 +34,11 @@ struct MainView: View {
   @State var newId = UUID()
   @State var isCurrentVideoWhistled = false
   @State var timer: Timer? = nil
+  @State var viewTimer: Timer? = nil
+  @State var isSplashOn = true
+  @State var processedContentId: Set<Int> = []
   @Binding var mainOpacity: Double
+  @Binding var isRootStacked: Bool
 
   var body: some View {
     GeometryReader { proxy in
@@ -42,6 +48,13 @@ struct MainView: View {
             if let player = players[index] {
               Player(player: player)
                 .frame(width: proxy.size.width)
+                .onTapGesture {
+                  if player.rate == 0.0 {
+                    player.play()
+                  } else {
+                    player.pause()
+                  }
+                }
                 .overlay {
                   LinearGradient(
                     colors: [.clear, .black.opacity(0.24)],
@@ -79,6 +92,30 @@ struct MainView: View {
                 .rotationEffect(Angle(degrees: -90))
                 .ignoresSafeArea(.all, edges: .top)
                 .tag(index)
+                .onAppear {
+                  let dateFormatter = DateFormatter()
+                  dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+                  let dateString = dateFormatter.string(from: .now)
+                  if let index = viewCount.views.firstIndex(where: { $0.contentId == content.contentId }) {
+                    viewCount.views[index].viewDate = dateString
+                  } else {
+                    viewCount.views.append(.init(contentId: content.contentId ?? 0, viewDate: dateString))
+                  }
+                  log("viewCount.views: \(viewCount.views)")
+                }
+                .onDisappear {
+                  if let index = viewCount.views.firstIndex(where: { $0.contentId == content.contentId }) {
+                    let viewDate = viewCount.views[index].viewDate.toDate()
+                    var nowDate = Date.now
+                    nowDate.addTimeInterval(3600 * 9)
+                    log("Date.now: \(nowDate)")
+                    log("viewDate: \(viewDate)")
+                    let viewTime = nowDate.timeIntervalSince(viewDate ?? Date.now)
+                    log("viewTime: \(viewTime)")
+                    viewCount.views[index].viewTime = "\(Int(viewTime))"
+                    log("viewCount.views[index].viewTime : \(viewCount.views[index].viewTime)")
+                  }
+                }
             } else {
               KFImage.url(URL(string: content.thumbnailUrl ?? ""))
                 .placeholder {
@@ -104,10 +141,28 @@ struct MainView: View {
       .tabViewStyle(.page(indexDisplayMode: .never))
       .frame(maxWidth: proxy.size.width)
       .onChange(of: mainOpacity) { newValue in
+        if apiViewModel.contentList.isEmpty, players.isEmpty {
+          return
+        }
+        if players.count <= currentIndex {
+          return
+        }
+        guard let player = players[currentIndex] else {
+          return
+        }
         if newValue == 1 {
-          players[currentIndex]?.play()
+          if !isRootStacked {
+            player.play()
+          }
         } else {
-          players[currentIndex]?.pause()
+          player.pause()
+          apiViewModel.addViewCount(viewCount, notInclude: processedContentId) { viewCountList in
+            var tempSet: Set<Int> = []
+            for view in viewCountList {
+              tempSet.insert(view.contentId)
+            }
+            processedContentId = processedContentId.union(tempSet)
+          }
         }
       }
     }
@@ -122,11 +177,13 @@ struct MainView: View {
         apiViewModel.requestContentList {
           Task {
             if !apiViewModel.contentList.isEmpty {
+              players.removeAll()
               for _ in 0..<apiViewModel.contentList.count {
                 players.append(nil)
               }
               log(players)
-              players[currentIndex] = AVPlayer(url: URL(string: apiViewModel.contentList[currentIndex].videoUrl ?? "")!)
+              players[currentIndex] =
+                AVPlayer(url: URL(string: apiViewModel.contentList[currentIndex].videoUrl ?? "")!)
               playerIndex = currentIndex
               guard let player = players[currentIndex] else {
                 return
@@ -136,6 +193,9 @@ struct MainView: View {
               isCurrentVideoWhistled = apiViewModel.contentList[currentIndex].isWhistled
               await player.seek(to: .zero)
               player.play()
+              withAnimation {
+                isSplashOn = false
+              }
             }
           }
         }
@@ -145,16 +205,30 @@ struct MainView: View {
       guard let url = apiViewModel.contentList[newValue].videoUrl else {
         return
       }
-      players[newValue] = AVPlayer(url: URL(string: url)!)
       players[playerIndex]?.seek(to: .zero)
       players[playerIndex]?.pause()
       players[playerIndex] = nil
+      players[newValue] = AVPlayer(url: URL(string: url)!)
       players[newValue]?.seek(to: .zero)
       players[newValue]?.play()
       playerIndex = newValue
       currentVideoUserId = apiViewModel.contentList[newValue].userId ?? 0
       currentVideoContentId = apiViewModel.contentList[newValue].contentId ?? 0
       apiViewModel.postFeedPlayerChanged()
+    }
+    .onChange(of: scenePhase) { newValue in
+      switch newValue {
+      case .background:
+        apiViewModel.addViewCount(viewCount, notInclude: processedContentId) { viewCountList in
+          var tempSet: Set<Int> = []
+          for view in viewCountList {
+            tempSet.insert(view.contentId)
+          }
+          processedContentId = processedContentId.union(tempSet)
+        }
+      default:
+        log("default")
+      }
     }
     .overlay {
       if showPasteToast {
@@ -171,15 +245,35 @@ struct MainView: View {
           Task {
             await apiViewModel.actionContentHate(contentId: currentVideoContentId)
             apiViewModel.contentList.remove(at: currentIndex)
-            guard let url = apiViewModel.contentList[currentIndex + 1].videoUrl else {
+            guard let url = apiViewModel.contentList[currentIndex].videoUrl else {
               return
             }
-            apiViewModel.contentList[currentIndex + 1].player = AVPlayer(url: URL(string: url)!)
-            await apiViewModel.contentList[currentIndex].player?.seek(to: .zero)
-            apiViewModel.contentList[currentIndex].player?.play()
+            players[currentIndex] = AVPlayer(url: URL(string: url)!)
+            await players[currentIndex]?.seek(to: .zero)
+            players[currentIndex]?.play()
             apiViewModel.postFeedPlayerChanged()
           }
         }, showToast: $showHideContentToast)
+      }
+    }
+    .onAppear {
+      DispatchQueue.main.asyncAfter(deadline: .now() + 1.4) {
+        withAnimation {
+          isSplashOn = false
+        }
+      }
+    }
+    .overlay {
+      if isSplashOn {
+        SignInPlayerView()
+          .ignoresSafeArea()
+          .allowsTightening(false)
+          .onAppear {
+            tabbarModel.tabbarOpacity = 0.0
+          }
+          .onDisappear {
+            tabbarModel.tabbarOpacity = 1.0
+          }
       }
     }
     .confirmationDialog("", isPresented: $showDialog) {
@@ -199,17 +293,17 @@ struct MainView: View {
         log("Cancel")
       }
     }
-    .navigationDestination(isPresented: $showUserProfile) {
-      UserProfileView(userId: currentVideoUserId)
-        .environmentObject(apiViewModel)
-        .environmentObject(tabbarModel)
-    }
     .fullScreenCover(isPresented: $showReport) {
       MainReportReasonView(
         goReport: $showReport,
         contentId: currentVideoContentId,
         userId: currentVideoUserId)
         .environmentObject(apiViewModel)
+    }
+    .navigationDestination(isPresented: $isRootStacked) {
+      UserProfileView(players: $players, currentIndex: $currentIndex, userId: currentVideoUserId)
+        .environmentObject(apiViewModel)
+        .environmentObject(tabbarModel)
     }
   }
 }
@@ -233,10 +327,20 @@ extension MainView {
         VStack(alignment: .leading, spacing: 12) {
           Spacer()
           HStack(spacing: 0) {
-            Button {
-              players[currentIndex]?.pause()
-              showUserProfile = true
-            } label: {
+            if apiViewModel.contentList[currentIndex].userName != apiViewModel.myProfile.userName {
+              Button {
+                isRootStacked = true
+              } label: {
+                Group {
+                  profileImageView(url: profileImg, size: 36)
+                    .padding(.trailing, 12)
+                  Text(userName)
+                    .foregroundColor(.white)
+                    .fontSystem(fontDesignSystem: .subtitle1)
+                    .padding(.trailing, 16)
+                }
+              }
+            } else {
               Group {
                 profileImageView(url: profileImg, size: 36)
                   .padding(.trailing, 12)
@@ -333,7 +437,7 @@ extension MainView {
         }
       }
     }
-    .padding(.bottom, 112)
+    .padding(.bottom, 64)
     .padding(.horizontal, 20)
   }
 }
@@ -359,5 +463,27 @@ extension MainView {
     }
     apiViewModel.contentList[currentIndex].isWhistled.toggle()
     apiViewModel.postFeedPlayerChanged()
+  }
+}
+
+extension String {
+  func toDate() -> Date? { // "yyyy-MM-dd HH:mm:ss"
+    let dateFormatter = DateFormatter()
+    dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+    dateFormatter.timeZone = TimeZone(identifier: "UTC")
+    if let date = dateFormatter.date(from: self) {
+      return date
+    } else {
+      return nil
+    }
+  }
+}
+
+extension Date {
+  func toString() -> String {
+    let dateFormatter = DateFormatter()
+    dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+    dateFormatter.timeZone = TimeZone(identifier: "UTC")
+    return dateFormatter.string(from: self)
   }
 }

@@ -112,6 +112,7 @@ extension View {
           .stroke(lineWidth: 1)
           .foregroundStyle(
             LinearGradient.Border_Glass)
+          .frame(width: width, height: height)
         overlayed
       }
   }
@@ -424,5 +425,12 @@ extension View {
 
   var isSmallScreen: Bool {
     getRect().height < 700
+  }
+}
+
+extension View {
+  @ViewBuilder
+  func frame(_ size: CGSize) -> some View {
+    frame(width: size.width, height: size.height)
   }
 }

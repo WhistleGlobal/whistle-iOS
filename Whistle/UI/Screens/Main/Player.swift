@@ -19,6 +19,9 @@ struct Player: UIViewControllerRepresentable {
   func makeUIViewController(context _: Context) -> AVPlayerViewController {
     let view = AVPlayerViewController()
     view.player = player
+    if #available(iOS 16.0, *) {
+      view.allowsVideoFrameAnalysis = false
+    }
     view.showsPlaybackControls = false
     view.videoGravity = .resizeAspect
     NotificationCenter.default.addObserver(

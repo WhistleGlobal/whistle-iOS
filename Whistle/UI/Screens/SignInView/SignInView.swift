@@ -21,6 +21,8 @@ struct SignInView: View {
   @StateObject var appleSignInViewModel = AppleSignInViewModel()
   @State var showTermsOfService = false
   @State var showPrivacyPolicy = false
+  @State var loginOpacity = 0.0
+  @EnvironmentObject var apiViewModel: APIViewModel
   @EnvironmentObject var userAuth: UserAuth
   let keychain = KeychainSwift()
 
@@ -36,6 +38,20 @@ struct SignInView: View {
         .ignoresSafeArea()
         .allowsTightening(false)
       VStack(spacing: 0) {
+        NavigationLink {
+          TabbarView()
+            .environmentObject(apiViewModel)
+            .environmentObject(userAuth)
+        } label: {
+          HStack(spacing: 0) {
+            Spacer()
+            Text("건너뛰기")
+              .fontSystem(fontDesignSystem: .subtitle2_KO)
+              .foregroundColor(.LabelColor_Secondary_Dark)
+          }
+          .padding(.horizontal, 24)
+          .padding(.vertical, 12)
+        }
         Spacer()
         Button {
           handleSignInButton()
@@ -114,6 +130,14 @@ struct SignInView: View {
         }
         .foregroundColor(.LabelColor_Primary_Dark)
         .padding(.bottom, 16)
+      }
+      .opacity(loginOpacity)
+    }
+    .onAppear {
+      DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+        withAnimation {
+          loginOpacity = 1.0
+        }
       }
     }
     .navigationDestination(isPresented: $showTermsOfService) {

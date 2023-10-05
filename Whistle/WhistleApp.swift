@@ -32,6 +32,7 @@ struct WhistleApp: App {
   @StateObject var appleSignInViewModel = AppleSignInViewModel()
   @StateObject var userAuth = UserAuth()
   @StateObject var apiViewModel = APIViewModel()
+  @StateObject var tabbarModel: TabbarModel = .init()
   @State var testBool = false
   @AppStorage("isAccess") var isAccess = false
   let keychain = KeychainSwift()
@@ -39,14 +40,22 @@ struct WhistleApp: App {
   var body: some Scene {
     WindowGroup {
       if isAccess {
-        NavigationStack {
-          PickerConfigViewControllerWrapper(options: $pickerOptions)
-            .environmentObject(rootVM)
-        }
+        TabbarView()
+          .environmentObject(apiViewModel)
+          .environmentObject(userAuth)
+          .environmentObject(tabbarModel)
+          .task {
+            if isAccess {
+              appleSignInViewModel.userAuth.loadData { }
+            }
+//        NavigationStack {
+//          PickerConfigViewControllerWrapper(options: $pickerOptions)
+//            .environmentObject(rootVM)
+ //       }
 //        MusicListView()
-        .task {
-          if isAccess {
-            appleSignInViewModel.userAuth.loadData { }
+//        .task {
+//          if isAccess {
+//            appleSignInViewModel.userAuth.loadData { }
           }
         }
 //        TabbarView()
@@ -60,6 +69,7 @@ struct WhistleApp: App {
       } else {
         NavigationStack {
           SignInView()
+            .environmentObject(apiViewModel)
             .environmentObject(userAuth)
         }
         .tint(.black)
