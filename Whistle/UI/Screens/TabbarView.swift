@@ -17,6 +17,7 @@ struct TabbarView: View {
   @AppStorage("isAccess") var isAccess = false
   @EnvironmentObject var apiViewModel: APIViewModel
   @EnvironmentObject var userAuth: UserAuth
+  @EnvironmentObject var universalRoutingModel: UniversalRoutingModel
   @StateObject var tabbarModel: TabbarModel = .init()
   @State private var pickerOptions = PickerOptionsInfo()
 
@@ -27,6 +28,7 @@ struct TabbarView: View {
           MainView(mainOpacity: $mainOpacity, isRootStacked: $isRootStacked)
             .environmentObject(apiViewModel)
             .environmentObject(tabbarModel)
+            .environmentObject(universalRoutingModel)
             .opacity(mainOpacity)
             .onChange(of: tabbarModel.tabSelectionNoAnimation) { newValue in
               mainOpacity = newValue == .main ? 1 : 0

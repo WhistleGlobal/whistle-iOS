@@ -32,10 +32,14 @@ struct WhistleApp: App {
   @StateObject var appleSignInViewModel = AppleSignInViewModel()
   @StateObject var userAuth = UserAuth()
   @StateObject var apiViewModel = APIViewModel()
-  @StateObject var tabbarModel: TabbarModel = .init()
+  @StateObject var universalRoutingModel: UniversalRoutingModel = .init()
   @State var testBool = false
   @AppStorage("isAccess") var isAccess = false
   let keychain = KeychainSwift()
+  var domainURL: String {
+    AppKeys.domainURL as! String
+  }
+
   @State private var pickerOptions = PickerOptionsInfo()
   var body: some Scene {
     WindowGroup {
@@ -43,7 +47,7 @@ struct WhistleApp: App {
         TabbarView()
           .environmentObject(apiViewModel)
           .environmentObject(userAuth)
-          .environmentObject(tabbarModel)
+          .environmentObject(universalRoutingModel)
           .task {
             if isAccess {
               appleSignInViewModel.userAuth.loadData { }
@@ -56,6 +60,32 @@ struct WhistleApp: App {
 //        .task {
 //          if isAccess {
 //            appleSignInViewModel.userAuth.loadData { }
+          }
+          .onOpenURL { url in
+            log(url)
+            var urlString = url.absoluteString
+            urlString = urlString.replacingOccurrences(of: "\(domainURL)", with: "")
+            log(urlString)
+            if urlString.contains("/profile_uni?") {
+              log("/profile_uni? .contains")
+              urlString = urlString.replacingOccurrences(of: "/profile_uni?id=", with: "")
+              guard let userId = Int(urlString) else {
+                return
+              }
+              universalRoutingModel.userId = userId
+              universalRoutingModel.isUniversalProfile = true
+            } else if urlString.contains("/content_uni?") {
+              log("/content_uni? .contains")
+              urlString = urlString.replacingOccurrences(of: "/content_uni?contentId=", with: "")
+              log("urlString: \(urlString)")
+              guard let contentId = Int(urlString) else {
+                log("guard urlString: \(urlString)")
+                return
+              }
+              log("contentId: \(contentId)")
+              universalRoutingModel.contentId = contentId
+              universalRoutingModel.isUniversalContent = true
+            }
           }
       } else {
         NavigationStack {
@@ -118,4 +148,13 @@ public func log<T>(
     print("\(filename.components(separatedBy: "/").last ?? "")(\(line)) : \(funcName) : nil")
   }
   #endif
+}
+
+// MARK: - UniversalRoutingModel
+
+class UniversalRoutingModel: ObservableObject {
+  @Published var isUniversalProfile = false
+  @Published var isUniversalContent = false
+  @Published var userId = 0
+  @Published var contentId = 0
 }

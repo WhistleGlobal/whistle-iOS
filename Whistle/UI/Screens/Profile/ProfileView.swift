@@ -30,6 +30,7 @@ struct ProfileView: View {
   @State var tabSelection: profileTabCase = .myVideo
   @State var showSignoutAlert = false
   @State var showDeleteAlert = false
+  @State var showPasteToast = false
   @State var bottomSheetPosition: BottomSheetPosition = .hidden
   @State var offsetY: CGFloat = 0
   @Binding var isFirstProfileLoaded: Bool
@@ -222,9 +223,14 @@ struct ProfileView: View {
         }
       }
     }
+    .overlay {
+      if showPasteToast {
+        ToastMessage(text: "클립보드에 복사되었어요", paddingBottom: 78, showToast: $showPasteToast)
+      }
+    }
     .onChange(of: bottomSheetPosition) { newValue in
       if newValue == .hidden {
-//        tabbarModel.tabbarOpacity = 1.0
+        tabbarModel.tabbarOpacity = 1.0
       } else {
         tabbarModel.tabbarOpacity = 0.0
       }
@@ -257,7 +263,10 @@ struct ProfileView: View {
           withAnimation {
             bottomSheetPosition = .hidden
           }
-          log("공유")
+          UIPasteboard.general.setValue(
+            "https://readywhistle.com/profile_uni?id=\(apiViewModel.myProfile.userId)",
+            forPasteboardType: UTType.plainText.identifier)
+          showPasteToast = true
         } label: {
           bottomSheetRowWithIcon(systemName: "square.and.arrow.up", iconWidth: 22, iconHeight: 20, text: "프로필 공유")
         }
