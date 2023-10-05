@@ -179,4 +179,6 @@ class PhotoViewModel: ObservableObject {
       photo.id == uuid
     }
   }
+
+
 }

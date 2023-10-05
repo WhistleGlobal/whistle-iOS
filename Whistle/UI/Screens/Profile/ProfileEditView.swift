@@ -20,7 +20,7 @@ struct ProfileEditView: View {
   @State var showAuthAlert = false
   @StateObject var photoViewModel = PhotoViewModel()
   @EnvironmentObject var apiViewModel: APIViewModel
-
+  @ObservedObject var photoCollection = PhotoCollection(smartAlbum: .smartAlbumUserLibrary)
   var body: some View {
     VStack(spacing: 0) {
       Divider()
@@ -54,9 +54,23 @@ struct ProfileEditView: View {
       ToastMessage(text: "소개가 수정되었습니다.", paddingBottom: 32, showToast: $showToast)
     }
     .fullScreenCover(isPresented: $showGallery) {
-      CustomPhotoView()
-        .environmentObject(photoViewModel)
+      PhotoCollectionView(photoCollection: photoCollection)
         .environmentObject(apiViewModel)
+        .task {
+          let authorized = await PhotoLibrary.checkAuthorization()
+          guard authorized else {
+            return
+          }
+
+          Task {
+            do {
+              try await photoCollection.load()
+//                  await loadThumbnail()
+            } catch let error {
+              log(error)
+            }
+          }
+        }
     }
     .padding(.horizontal, 16)
     .navigationBarBackButtonHidden()

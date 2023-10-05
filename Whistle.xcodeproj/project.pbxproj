@@ -344,6 +344,11 @@
 		786CFEB12AAC5D5100DB2ADD /* ReportUserView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 786CFEB02AAC5D5100DB2ADD /* ReportUserView.swift */; };
 		787173B42AA472070018CB14 /* ToastMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 787173B32AA472070018CB14 /* ToastMessage.swift */; };
 		787173B62AA47A510018CB14 /* ProfileAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 787173B52AA47A510018CB14 /* ProfileAlert.swift */; };
+		78730CE72ACE8660008B9981 /* PhotoCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78730CE62ACE8660008B9981 /* PhotoCollection.swift */; };
+		78730CEB2ACE8691008B9981 /* PhotoAssetCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78730CEA2ACE8691008B9981 /* PhotoAssetCollection.swift */; };
+		78730CED2ACE86C9008B9981 /* PhotoAsset.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78730CEC2ACE86C9008B9981 /* PhotoAsset.swift */; };
+		78730CEF2ACE86EA008B9981 /* CachedImageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78730CEE2ACE86EA008B9981 /* CachedImageManager.swift */; };
+		78730CF12ACE8F23008B9981 /* PhotoLibrary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78730CF02ACE8F23008B9981 /* PhotoLibrary.swift */; };
 		7874CB882AA0842D0081DE54 /* FontSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7874CB872AA0842D0081DE54 /* FontSystem.swift */; };
 		7874CB902AA0B5350081DE54 /* ProfileNotiView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7874CB8F2AA0B5350081DE54 /* ProfileNotiView.swift */; };
 		7874CB922AA0B53A0081DE54 /* ProfileInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7874CB912AA0B53A0081DE54 /* ProfileInfoView.swift */; };
@@ -772,6 +777,11 @@
 		786CFEB02AAC5D5100DB2ADD /* ReportUserView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportUserView.swift; sourceTree = "<group>"; };
 		787173B32AA472070018CB14 /* ToastMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToastMessage.swift; sourceTree = "<group>"; };
 		787173B52AA47A510018CB14 /* ProfileAlert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileAlert.swift; sourceTree = "<group>"; };
+		78730CE62ACE8660008B9981 /* PhotoCollection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoCollection.swift; sourceTree = "<group>"; };
+		78730CEA2ACE8691008B9981 /* PhotoAssetCollection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoAssetCollection.swift; sourceTree = "<group>"; };
+		78730CEC2ACE86C9008B9981 /* PhotoAsset.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoAsset.swift; sourceTree = "<group>"; };
+		78730CEE2ACE86EA008B9981 /* CachedImageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CachedImageManager.swift; sourceTree = "<group>"; };
+		78730CF02ACE8F23008B9981 /* PhotoLibrary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoLibrary.swift; sourceTree = "<group>"; };
 		7874CB872AA0842D0081DE54 /* FontSystem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FontSystem.swift; sourceTree = "<group>"; };
 		7874CB8F2AA0B5350081DE54 /* ProfileNotiView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileNotiView.swift; sourceTree = "<group>"; };
 		7874CB912AA0B53A0081DE54 /* ProfileInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileInfoView.swift; sourceTree = "<group>"; };
@@ -1984,9 +1994,22 @@
 			path = NoSignIn;
 			sourceTree = "<group>";
 		};
+		78730CE52ACE864B008B9981 /* ProfilePhoto */ = {
+			isa = PBXGroup;
+			children = (
+				78730CE62ACE8660008B9981 /* PhotoCollection.swift */,
+				78730CEA2ACE8691008B9981 /* PhotoAssetCollection.swift */,
+				78730CEC2ACE86C9008B9981 /* PhotoAsset.swift */,
+				78730CEE2ACE86EA008B9981 /* CachedImageManager.swift */,
+				78730CF02ACE8F23008B9981 /* PhotoLibrary.swift */,
+			);
+			path = ProfilePhoto;
+			sourceTree = "<group>";
+		};
 		787AF55E2AA85CA800C190E6 /* Profile */ = {
 			isa = PBXGroup;
 			children = (
+				78730CE52ACE864B008B9981 /* ProfilePhoto */,
 				787AF55F2AA85CBC00C190E6 /* Profile.swift */,
 				787AF5662AA87D2E00C190E6 /* UserProfile.swift */,
 				787AF56C2AA8846100C190E6 /* Follow.swift */,
@@ -2286,6 +2309,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				78DA58D52AA445E400F8D2F1 /* ProfileEditView.swift in Sources */,
+				78730CED2ACE86C9008B9981 /* PhotoAsset.swift in Sources */,
 				78E1755B2ABA802000731259 /* PrivacyPolicyView.swift in Sources */,
 				785E9E6A2AB9DCB1003A93E8 /* CancelableToastMessage.swift in Sources */,
 				787AF5712AA887E600C190E6 /* PostFeed.swift in Sources */,
@@ -2303,6 +2327,7 @@
 				1B3955422A95069C00BCB4DF /* ContentView.swift in Sources */,
 				782DD47C2AA32448006183D3 /* Extension+UINavigationController.swift in Sources */,
 				1B0A29AE2AA662CB009077A1 /* HapticsManager.swift in Sources */,
+				78730CEB2ACE8691008B9981 /* PhotoAssetCollection.swift in Sources */,
 				1B3895452AB9CB7500B4C8DD /* MainEditorView.swift in Sources */,
 				787173B42AA472070018CB14 /* ToastMessage.swift in Sources */,
 				1B3895622AB9CBD300B4C8DD /* ToolModel.swift in Sources */,
@@ -2395,6 +2420,7 @@
 				78BECCDD2AAAE204003FA7B5 /* UploadProtocol.swift in Sources */,
 				1BE8EA032AAE321200EB0A55 /* MusicProtocol.swift in Sources */,
 				1B3895642AB9CBD300B4C8DD /* VideoQuality.swift in Sources */,
+				78730CEF2ACE86EA008B9981 /* CachedImageManager.swift in Sources */,
 				788F43F72AA6136F00718D38 /* Player.swift in Sources */,
 				1B5FB4BB2AC70E460049E4EE /* ResizeViewModel.swift in Sources */,
 				78DA58D72AA448A100F8D2F1 /* ProfileEditIDView.swift in Sources */,
@@ -2403,6 +2429,7 @@
 				78F980812A9F32C800AD542A /* TabbarView.swift in Sources */,
 				1BE8E9FF2AAE2DFB00EB0A55 /* MusicServiceProtocol.swift in Sources */,
 				1BD4E7C82ABA68DF00ADB783 /* PickerResultViewController.swift in Sources */,
+				78730CE72ACE8660008B9981 /* PhotoCollection.swift in Sources */,
 				1B3895462AB9CB7500B4C8DD /* RootView.swift in Sources */,
 				1B3895612AB9CBD300B4C8DD /* FilteredImage.swift in Sources */,
 				785E82722AAC8FDD00EF3576 /* MainContent.swift in Sources */,
@@ -2441,6 +2468,7 @@
 				1BE8EA102AB0F7B100EB0A55 /* SearchBar.swift in Sources */,
 				787AF5792AA8930700C190E6 /* NotiSetting.swift in Sources */,
 				787AF56D2AA8846100C190E6 /* Follow.swift in Sources */,
+				78730CF12ACE8F23008B9981 /* PhotoLibrary.swift in Sources */,
 				787C8B182AB33FC000723085 /* ReportAlert.swift in Sources */,
 				1BD4E7C62ABA68D500ADB783 /* PickerConfigViewController.swift in Sources */,
 				782DD4772AA30C5C006183D3 /* FollowTabbarStyle.swift in Sources */,
@@ -2823,6 +2851,7 @@
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
@@ -2866,6 +2895,7 @@
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
