@@ -17,6 +17,7 @@ struct MainView: View {
   @Environment(\.scenePhase) var scenePhase
   @EnvironmentObject var apiViewModel: APIViewModel
   @EnvironmentObject var tabbarModel: TabbarModel
+  @EnvironmentObject var universalRoutingModel: UniversalRoutingModel
   @State var viewCount: ViewCount = .init()
   @State var currentIndex = 0
   @State var playerIndex = 0
@@ -196,6 +197,9 @@ struct MainView: View {
               withAnimation {
                 isSplashOn = false
               }
+              if universalRoutingModel.isUniversalProfile {
+                isRootStacked = true
+              }
             }
           }
         }
@@ -301,9 +305,18 @@ struct MainView: View {
         .environmentObject(apiViewModel)
     }
     .navigationDestination(isPresented: $isRootStacked) {
-      UserProfileView(players: $players, currentIndex: $currentIndex, userId: currentVideoUserId)
-        .environmentObject(apiViewModel)
-        .environmentObject(tabbarModel)
+      if universalRoutingModel.isUniversalProfile {
+        UserProfileView(players: $players, currentIndex: $currentIndex, userId: universalRoutingModel.userId)
+          .environmentObject(apiViewModel)
+          .environmentObject(tabbarModel)
+          .onDisappear {
+            universalRoutingModel.isUniversalProfile = false
+          }
+      } else {
+        UserProfileView(players: $players, currentIndex: $currentIndex, userId: currentVideoUserId)
+          .environmentObject(apiViewModel)
+          .environmentObject(tabbarModel)
+      }
     }
   }
 }
