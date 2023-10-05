@@ -145,9 +145,15 @@ struct PhotoCollectionView: View {
         .background(.white)
         .padding(.horizontal, 16)
         .zIndex(1)
-        cropImageView()
-          .frame(width: UIScreen.width, height: UIScreen.width)
-          .zIndex(0)
+        ZStack {
+          scaledImageView()
+            .frame(width: UIScreen.width, height: UIScreen.width)
+          cropImageView()
+            .frame(width: UIScreen.width, height: UIScreen.width)
+        }
+        .frame(width: UIScreen.width, height: UIScreen.width)
+        .clipped()
+        .zIndex(0)
         HStack(spacing: 8) {
           Button {
             photoCollection.fetchAlbumList()
@@ -219,6 +225,26 @@ extension PhotoCollectionView {
           await photoCollection.cache.stopCaching(for: [asset], targetSize: imageSize)
         }
       }
+  }
+
+  @ViewBuilder
+  func scaledImageView() -> some View {
+    let cropSize = crop.size()
+    GeometryReader {
+      let size = $0.size
+      if let selectedImage {
+        Image(uiImage: selectedImage)
+          .resizable()
+          .aspectRatio(contentMode: .fill)
+          .frame(size)
+      }
+    }
+    .offset(offset)
+    .scaleEffect(scale)
+    .frame(cropSize)
+    .overlay {
+      Color.Dim_Default
+    }
   }
 
   @ViewBuilder

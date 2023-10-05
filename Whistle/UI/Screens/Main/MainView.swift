@@ -48,12 +48,19 @@ struct MainView: View {
             if let player = players[index] {
               Player(player: player)
                 .frame(width: proxy.size.width)
+                .onTapGesture(count: 2) {
+                  whistleToggle()
+                }
                 .onTapGesture {
                   if player.rate == 0.0 {
                     player.play()
                   } else {
                     player.pause()
                   }
+                }
+                .onLongPressGesture {
+                  HapticManager.instance.impact(style: .medium)
+                  showDialog = true
                 }
                 .overlay {
                   LinearGradient(
@@ -445,6 +452,7 @@ extension MainView {
 // MARK: - Timer
 extension MainView {
   func whistleToggle() {
+    HapticManager.instance.impact(style: .medium)
     timer?.invalidate()
     if apiViewModel.contentList[currentIndex].isWhistled {
       timer = Timer.scheduledTimer(withTimeInterval: 2, repeats: false) { _ in
