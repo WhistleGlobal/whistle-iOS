@@ -145,14 +145,15 @@ struct PhotoCollectionView: View {
         .background(.white)
         .padding(.horizontal, 16)
         .zIndex(1)
-        scaledImageView()
-          .frame(width: UIScreen.width, height: UIScreen.width)
-          .overlay {
-            cropImageView()
-              .frame(width: UIScreen.width, height: UIScreen.width)
-          }
-          .clipped()
-          .zIndex(0)
+        ZStack {
+          scaledImageView()
+            .frame(width: UIScreen.width, height: UIScreen.width)
+          cropImageView()
+            .frame(width: UIScreen.width, height: UIScreen.width)
+        }
+        .frame(width: UIScreen.width, height: UIScreen.width)
+        .clipped()
+        .zIndex(0)
         HStack(spacing: 8) {
           Button {
             photoCollection.fetchAlbumList()
@@ -235,37 +236,6 @@ extension PhotoCollectionView {
         Image(uiImage: selectedImage)
           .resizable()
           .aspectRatio(contentMode: .fill)
-          .overlay {
-            GeometryReader { proxy in
-              let rect = proxy.frame(in: .named("CROPVIEW"))
-              Color.clear
-                .onChange(of: isInteracting) { newValue in
-
-                  withAnimation(.easeInOut(duration: 0.2)) {
-                    if rect.minX > 0 {
-                      offset.width = (offset.width - rect.minX)
-                      haptics(.medium)
-                    }
-                    if rect.minY > 0 {
-                      offset.height = (offset.height - rect.minY)
-                      haptics(.medium)
-                    }
-                    if rect.maxX < size.width {
-                      offset.width = (rect.minX - offset.width)
-                      haptics(.medium)
-                    }
-                    if rect.maxY < size.height {
-                      offset.height = (rect.minY - offset.height)
-                      haptics(.medium)
-                    }
-                  }
-
-                  if !newValue {
-                    lastStoredOffset = offset
-                  }
-                }
-            }
-          }
           .frame(size)
       }
     }
