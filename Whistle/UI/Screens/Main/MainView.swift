@@ -434,7 +434,7 @@ extension MainView {
           Button {
             showPasteToast = true
             UIPasteboard.general.setValue(
-              "복사할 링크입니다.",
+              "https://readywhistle.com/content_uni?contentId=\(currentVideoContentId)",
               forPasteboardType: UTType.plainText.identifier)
           } label: {
             Image(systemName: "square.and.arrow.up")
