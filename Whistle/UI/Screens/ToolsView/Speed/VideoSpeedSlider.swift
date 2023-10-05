@@ -13,14 +13,18 @@ struct VideoSpeedSlider: View {
   @State var value: Double = 1
   var isChangeState: Bool?
   let onEditingChanged: (Float) -> Void
-  private let rateRange = 0.1 ... 8
+  private let rateRange = 0.1 ... 10
   var body: some View {
     VStack {
       Text(String(format: "%.1fx", value))
+        .fontSystem(fontDesignSystem: .subtitle2)
+        .foregroundStyle(Color.White)
       CustomSlider(
         value: $value,
         in: rateRange,
-        step: 0.2,
+        step: 0.1,
+        minimumValueLabel: Text("0.1x"),
+        maximumValueLabel: Text("10x"),
         onEditingChanged: { started in
           if !started {
             onEditingChanged(Float(value))
@@ -28,8 +32,8 @@ struct VideoSpeedSlider: View {
         },
         track: {
           Capsule()
-            .foregroundColor(.secondary)
-            .frame(width: 250, height: 5)
+            .foregroundColor(Color.Border_Default_Dark)
+            .frame(width: UIScreen.getWidth(324), height: UIScreen.getHeight(20))
         },
         thumb: {
           Circle()

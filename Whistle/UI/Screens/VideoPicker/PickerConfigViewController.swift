@@ -91,7 +91,6 @@ extension PickerConfigViewController: ImagePickerControllerDelegate {
       switch result {
       case .success(let url):
         videoURL = url
-        print(videoURL)
         DispatchQueue.main.async {
           let editorView = MainEditorView(selectedVideoURL: videoURL)
           self.show(UIHostingController(rootView: editorView), sender: nil)

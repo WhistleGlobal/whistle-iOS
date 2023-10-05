@@ -699,7 +699,7 @@ extension AssetPickerViewController: UICollectionViewDelegateFlowLayout {
     }
     let width = floor((maxSize.width - (columnNumber - 1) * defaultAssetSpacing) / columnNumber)
     // 컬렉션뷰 셀 사이즈 변경 코드
-    return CGSize(width: UIScreen.getWidth(115), height: UIScreen.getHeight(204))
+    return CGSize(width: UIScreen.getWidth(width), height: UIScreen.getHeight(16 / 9 * width))
   }
 }
 

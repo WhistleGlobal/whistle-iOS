@@ -55,9 +55,13 @@ extension PlayerHolderView {
           if !videoPlayer.isPlaying {
             Image(systemName: "play.fill")
               .font(.system(size: 24))
+              .foregroundStyle(Color.Gray10)
               .padding(16)
-              .background(.ultraThinMaterial)
+              .background(Color.Gray30_Dark.opacity(0.24))
               .clipShape(Circle())
+              .overlay {
+                Circle().strokeBorder(LinearGradient.Border_Glass)
+              }
           }
         }
         .fixedSize()
@@ -92,7 +96,7 @@ extension PlayerHolderView {
         Text(min(video.originalDuration, videoPlayer.currentTime).formatterTimeString())
           .fontSystem(fontDesignSystem: .subtitle3)
           .padding(.horizontal, 16)
-          .padding(.vertical, 4)
+          .padding(.vertical, 2)
           .background(RoundedRectangle(cornerRadius: 100).fill(Color.Blue_Default))
         Spacer()
         Text(Int(video.originalDuration).secondsToTime())

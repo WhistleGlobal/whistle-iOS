@@ -14,6 +14,7 @@ struct ToolsSectionView: View {
   @StateObject var filtersVM = FiltersViewModel()
   @ObservedObject var videoPlayer: VideoPlayerManager
   @ObservedObject var editorVM: EditorViewModel
+//  @State var bottomSheetPosition: BottomSheetPosition = .hidden
   private let columns = Array(repeating: GridItem(.flexible()), count: 4)
   var body: some View {
     ZStack {
@@ -30,12 +31,12 @@ struct ToolsSectionView: View {
           }
         }
       }
-      .padding()
-      .opacity(editorVM.selectedTools != nil ? 0 : 1)
-      if let toolState = editorVM.selectedTools, let video = editorVM.currentVideo {
-        bottomSheet(toolState, video)
-          .transition(.move(edge: .bottom).combined(with: .opacity))
-      }
+      .padding(.horizontal, 16)
+//      .opacity(editorVM.selectedTools != nil ? 0 : 1)
+//      if let toolState = editorVM.selectedTools, let video = editorVM.currentVideo {
+//        bottomSheet(toolState, video)
+//          .transition(.move(edge: .bottom).combined(with: .opacity))
+//      }
     }
     .animation(.easeIn(duration: 0.15), value: editorVM.selectedTools)
     .onChange(of: editorVM.currentVideo) { newValue in
@@ -63,21 +64,27 @@ extension ToolsSectionView {
     VStack(spacing: 16) {
       sheetHeader(tool)
       switch tool {
-      case .cut:
-        ThumbnailsSliderView(
-          currentTime: $videoPlayer.currentTime,
-          video: $editorVM.currentVideo,
-          editorVM: editorVM,
-          videoPlayer: videoPlayer)
-        {
-          videoPlayer.scrubState = .scrubEnded(videoPlayer.currentTime)
-          editorVM.setTools()
-        }
+//      case .cut:
+//        ThumbnailsSliderView(
+//          currentTime: $videoPlayer.currentTime,
+//          video: $editorVM.currentVideo,
+//          editorVM: editorVM,
+//          videoPlayer: videoPlayer)
+//        {
+//          videoPlayer.scrubState = .scrubEnded(videoPlayer.currentTime)
+//          editorVM.setTools()
+//        }
       case .speed:
         VideoSpeedSlider(value: Double(video.rate), isChangeState: isAppliedTool) { rate in
           videoPlayer.pause()
           editorVM.updateRate(rate: rate)
         }
+      case .music:
+        MusicListView(
+          musicVM: MusicViewModel(),
+          editorVM: editorVM,
+          videoPlayer: videoPlayer,
+          bottomSheetPosition: .constant(.hidden), isShowingMusicTrimView: .constant(false))
       case .audio:
         AudioSheetView(videoPlayer: videoPlayer, editorVM: editorVM)
       case .filters:

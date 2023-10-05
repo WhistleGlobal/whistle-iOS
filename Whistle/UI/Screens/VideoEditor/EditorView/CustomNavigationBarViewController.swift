@@ -36,6 +36,7 @@ struct CustomNavigationBarViewController: UIViewControllerRepresentable {
       target: nil,
       action: nil)
     viewController.navigationItem.rightBarButtonItem?.tintColor = UIColor(Color.Info)
+    viewController.navigationItem.rightBarButtonItem?.style = .done
     navigationController.pushViewController(viewController, animated: false)
     context.coordinator.parent = self
     return navigationController

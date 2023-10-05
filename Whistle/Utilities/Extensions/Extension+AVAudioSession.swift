@@ -33,12 +33,12 @@ extension AVAudioSession {
   }
 
   func configurePlaybackSession() {
-    print("Configuring playback session")
+//    print("Configuring playback session")
     do {
       try setCategory(.playback, mode: .default)
       try overrideOutputAudioPort(.none)
       try setActive(true)
-      print("Current audio route: ", currentRoute.outputs)
+//      print("Current audio route: ", currentRoute.outputs)
     } catch let error as NSError {
       print("#configureAudioSessionToSpeaker Error \(error.localizedDescription)")
     }

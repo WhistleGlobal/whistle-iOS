@@ -67,7 +67,7 @@ extension Color {
   static let Gray_Pressed = Color("Gray80").opacity(0.36)
   static let Gray_Disabled = Color("Gray80").opacity(0.56)
 
-  static var Border_Default_Dark = Color("Gray40").opacity(0.36)
+  static var Border_Default_Dark = Color("Gray20_Dark").opacity(0.36)
 
   // 위 Alert color와 이름 동일
   // static let Success = Color("Success")
@@ -130,7 +130,7 @@ extension Color {
 
 extension LinearGradient {
   static var Border_Glass = LinearGradient(
-    gradient: Gradient(colors: [Color("White").opacity(0.36), Color("White").opacity(0.24)]),
+    gradient: Gradient(colors: [Color("White").opacity(0.48), Color("White").opacity(0.16)]),
     startPoint: .top, endPoint: .bottom)
 
   static var primaryGradient = LinearGradient(

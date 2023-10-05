@@ -56,7 +56,7 @@ final class VideoPlayerManager: ObservableObject {
       play(video.rate)
     }
   }
-
+  
   func setAudio(_ url: URL?) {
     guard let url else {
       isSetAudio = false
@@ -140,7 +140,9 @@ final class VideoPlayerManager: ObservableObject {
         }
       }
     }
+
     videoPlayer.play()
+    print("비디오 시작 \(getTime())")
     if isSetAudio {
       audioPlayer.play()
     }

@@ -133,11 +133,11 @@ extension EditorViewModel {
     guard let selectedTools else { return }
 
     switch selectedTools {
-    case .cut:
-      currentVideo?.resetRangeDuration()
+//    case .cut:
+//      currentVideo?.resetRangeDuration()
     case .speed:
       currentVideo?.resetRate()
-    case .audio:
+    case .audio, .music:
       break
     case .filters:
       currentVideo?.setFilter(nil)
