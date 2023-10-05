@@ -145,8 +145,13 @@ struct PhotoCollectionView: View {
         .background(.white)
         .padding(.horizontal, 16)
         .zIndex(1)
-        cropImageView()
+        scaledImageView()
           .frame(width: UIScreen.width, height: UIScreen.width)
+          .overlay {
+            cropImageView()
+              .frame(width: UIScreen.width, height: UIScreen.width)
+          }
+          .clipped()
           .zIndex(0)
         HStack(spacing: 8) {
           Button {
@@ -219,6 +224,57 @@ extension PhotoCollectionView {
           await photoCollection.cache.stopCaching(for: [asset], targetSize: imageSize)
         }
       }
+  }
+
+  @ViewBuilder
+  func scaledImageView() -> some View {
+    let cropSize = crop.size()
+    GeometryReader {
+      let size = $0.size
+      if let selectedImage {
+        Image(uiImage: selectedImage)
+          .resizable()
+          .aspectRatio(contentMode: .fill)
+          .overlay {
+            GeometryReader { proxy in
+              let rect = proxy.frame(in: .named("CROPVIEW"))
+              Color.clear
+                .onChange(of: isInteracting) { newValue in
+
+                  withAnimation(.easeInOut(duration: 0.2)) {
+                    if rect.minX > 0 {
+                      offset.width = (offset.width - rect.minX)
+                      haptics(.medium)
+                    }
+                    if rect.minY > 0 {
+                      offset.height = (offset.height - rect.minY)
+                      haptics(.medium)
+                    }
+                    if rect.maxX < size.width {
+                      offset.width = (rect.minX - offset.width)
+                      haptics(.medium)
+                    }
+                    if rect.maxY < size.height {
+                      offset.height = (rect.minY - offset.height)
+                      haptics(.medium)
+                    }
+                  }
+
+                  if !newValue {
+                    lastStoredOffset = offset
+                  }
+                }
+            }
+          }
+          .frame(size)
+      }
+    }
+    .offset(offset)
+    .scaleEffect(scale)
+    .frame(cropSize)
+    .overlay {
+      Color.Dim_Default
+    }
   }
 
   @ViewBuilder
