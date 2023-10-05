@@ -8,47 +8,6 @@
 import Photos
 import SwiftUI
 
-extension View {
-  @ViewBuilder
-  func frame(_ size: CGSize) -> some View {
-    frame(width: size.width, height: size.height)
-  }
-}
-
-
-// MARK: - PhotoItemView
-
-struct PhotoItemView: View {
-  var asset: PhotoAsset
-  var cache: CachedImageManager?
-  var imageSize: CGSize
-  @State private var image: Image?
-  @State private var imageRequestID: PHImageRequestID?
-
-  var body: some View {
-    Group {
-      if let image {
-        image
-          .resizable()
-          .scaledToFill()
-      } else {
-        ProgressView()
-          .scaleEffect(0.5)
-      }
-    }
-    .task {
-      guard image == nil, let cache else { return }
-      imageRequestID = await cache.requestImage(for: asset, targetSize: imageSize) { result in
-        Task {
-          if let result {
-            image = result.image
-          }
-        }
-      }
-    }
-  }
-}
-
 // MARK: - PhotoCollectionView
 
 struct PhotoCollectionView: View {
@@ -70,7 +29,6 @@ struct PhotoCollectionView: View {
   @Environment(\.dismiss) var dismiss
   @State var selectedImage: UIImage?
 
-  // Image crop properties
   var crop: Crop = .circle
 
   @State private var scale: CGFloat = 1
@@ -78,78 +36,174 @@ struct PhotoCollectionView: View {
   @State private var offset: CGSize = .zero
   @State private var lastStoredOffset: CGSize = .zero
   @State private var albumName = "최근 항목"
+  @State var showAlbumList = false
   @GestureState private var isInteracting = false
   @EnvironmentObject var apiViewModel: APIViewModel
 
   var body: some View {
     VStack(spacing: 0) {
-      HStack(spacing: 0) {
-        Button {
-          dismiss()
-        } label: {
-          Image(systemName: "xmark")
-        }
-        Spacer()
-        Text("갤러리")
-          .fontSystem(fontDesignSystem: .subtitle1_KO)
-          .foregroundColor(.LabelColor_Primary)
-        Spacer()
-        Button {
-          guard let selectedImage else {
-            dismiss()
-            return
+      if showAlbumList {
+        VStack(spacing: 0) {
+          HStack(spacing: 0) {
+            Button {
+              dismiss()
+            } label: {
+              Image(systemName: "xmark")
+            }
+            Spacer()
+            Text("갤러리")
+              .fontSystem(fontDesignSystem: .subtitle1_KO)
+              .foregroundColor(.LabelColor_Primary)
+            Spacer()
+            Button {
+              dismiss()
+            } label: {
+              Text("완료")
+                .fontSystem(fontDesignSystem: .subtitle2_KO)
+                .foregroundColor(.Info)
+            }
           }
-          Task {
-            let renderer = ImageRenderer(content: cropImageView(true))
-            renderer.scale = 0.5
-            renderer.proposedSize = .init(crop.size())
-            guard let image = renderer.uiImage else {
-              log("Fail to render image")
+          .frame(height: 54)
+          .frame(maxWidth: .infinity)
+          .padding(.horizontal, 16)
+          .background(.white)
+          Divider().frame(width: UIScreen.width)
+          List(photoCollection.albums, id: \.name) { album in
+            Button {
+              Task {
+                albumName = album.name
+                await photoCollection.fetchAssetsInAlbum(albumName: album.name)
+              }
+              showAlbumList = false
+            } label: {
+              HStack(spacing: 16) {
+                Image(uiImage: album.thumbnail ?? UIImage())
+                  .resizable()
+                  .frame(width: 64, height: 64)
+                  .cornerRadius(8)
+                  .overlay {
+                    RoundedRectangle(cornerRadius: 8)
+                      .stroke(lineWidth: 1)
+                      .foregroundColor(.Border_Default)
+                      .frame(width: 64, height: 64)
+                  }
+                VStack(spacing: 0) {
+                  Text("\(album.name)")
+                    .fontSystem(fontDesignSystem: .subtitle1_KO)
+                    .foregroundColor(.LabelColor_Primary)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                  Text("\(album.count)")
+                    .fontSystem(fontDesignSystem: .body1)
+                    .foregroundColor(.LabelColor_Secondary)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                }
+              }
+              .listRowSeparator(.hidden)
+              .frame(height: 80)
+            }
+          }
+          .listStyle(.plain)
+        }
+        .padding(.horizontal, 16)
+      } else {
+        HStack(spacing: 0) {
+          Button {
+            dismiss()
+          } label: {
+            Image(systemName: "xmark")
+          }
+          Spacer()
+          Text("갤러리")
+            .fontSystem(fontDesignSystem: .subtitle1_KO)
+            .foregroundColor(.LabelColor_Primary)
+          Spacer()
+          Button {
+            guard let selectedImage else {
+              dismiss()
               return
             }
-            await apiViewModel.uploadPhoto(image: image) { url in log(url) }
-            await apiViewModel.requestMyProfile()
-            dismiss()
+            Task {
+              let renderer = ImageRenderer(content: cropImageView(true))
+              renderer.scale = 0.5
+              renderer.proposedSize = .init(crop.size())
+              guard let image = renderer.uiImage else {
+                log("Fail to render image")
+                return
+              }
+              await apiViewModel.uploadPhoto(image: image) { url in log(url) }
+              await apiViewModel.requestMyProfile()
+              dismiss()
+            }
+          } label: {
+            Text("완료")
+              .fontSystem(fontDesignSystem: .subtitle2_KO)
+              .foregroundColor(.Info)
           }
-        } label: {
-          Text("완료")
-            .fontSystem(fontDesignSystem: .subtitle2_KO)
-            .foregroundColor(.Info)
         }
-      }
-      .frame(height: 54)
-      .frame(maxWidth: .infinity)
-      .background(.white)
-      .padding(.horizontal, 16)
-      .zIndex(1)
-      cropImageView()
-        .frame(width: UIScreen.width, height: UIScreen.width)
-        .zIndex(0)
-      HStack(spacing: 8) {
-        Button { } label: {
-          Text(albumName)
-            .fontSystem(fontDesignSystem: .subtitle2_KO)
-            .foregroundColor(.LabelColor_Primary)
-          Image(systemName: "chevron.down")
+        .frame(height: 54)
+        .frame(maxWidth: .infinity)
+        .background(.white)
+        .padding(.horizontal, 16)
+        .zIndex(1)
+        cropImageView()
+          .frame(width: UIScreen.width, height: UIScreen.width)
+          .zIndex(0)
+        HStack(spacing: 8) {
+          Button {
+            photoCollection.fetchAlbumList()
+            showAlbumList = true
+          } label: {
+            Text(albumName)
+              .fontSystem(fontDesignSystem: .subtitle2_KO)
+              .foregroundColor(.LabelColor_Primary)
+            Image(systemName: "chevron.down")
+          }
+          Spacer()
         }
-        Spacer()
-      }
-      .frame(height: 54)
-      .frame(maxWidth: .infinity)
-      .background(.white)
-      .padding(.horizontal, 16)
-      ScrollView {
-        LazyVGrid(columns: columns, spacing: 0) {
-          ForEach(photoCollection.photoAssets) { asset in
-            Button { } label: {
-              photoItemView(asset: asset)
+        .frame(height: 54)
+        .frame(maxWidth: .infinity)
+        .background(.white)
+        .padding(.horizontal, 16)
+        ScrollView {
+          LazyVGrid(columns: columns, spacing: 0) {
+            ForEach(photoCollection.photoAssets) { asset in
+              Button {
+                photoCollection.fetchPhotoByLocalIdentifier(localIdentifier: asset.phAsset?.localIdentifier ?? "") { photo in
+                  selectedImage = photo?.photo
+                }
+              } label: {
+                photoItemView(asset: asset)
+              }
             }
           }
         }
+        .ignoresSafeArea()
       }
-      .ignoresSafeArea()
+    }
+    .task {
+      let authorized = await PhotoLibrary.checkAuthorization()
+      guard authorized else {
+        return
+      }
+      Task {
+        do {
+          try await photoCollection.load()
+          photoCollection
+            .fetchPhotoByLocalIdentifier(
+              localIdentifier: photoCollection.photoAssets.first?.phAsset?
+                .localIdentifier ?? "")
+          { photo in
+            selectedImage = photo?.photo
+          }
+        } catch let error {
+          log(error)
+        }
+      }
     }
   }
+}
+
+extension PhotoCollectionView {
 
   private func photoItemView(asset: PhotoAsset) -> some View {
     PhotoItemView(asset: asset, cache: photoCollection.cache, imageSize: imageSize)
@@ -166,9 +220,6 @@ struct PhotoCollectionView: View {
         }
       }
   }
-}
-
-extension PhotoCollectionView {
 
   @ViewBuilder
   func cropImageView(_: Bool = true) -> some View {
@@ -283,7 +334,39 @@ enum Crop: Equatable {
       return cGSzie
     }
   }
+}
 
+// MARK: - PhotoItemView
+
+struct PhotoItemView: View {
+  var asset: PhotoAsset
+  var cache: CachedImageManager?
+  var imageSize: CGSize
+  @State private var image: Image?
+  @State private var imageRequestID: PHImageRequestID?
+
+  var body: some View {
+    Group {
+      if let image {
+        image
+          .resizable()
+          .scaledToFill()
+      } else {
+        ProgressView()
+          .scaleEffect(0.5)
+      }
+    }
+    .task {
+      guard image == nil, let cache else { return }
+      imageRequestID = await cache.requestImage(for: asset, targetSize: imageSize) { result in
+        Task {
+          if let result {
+            image = result.image
+          }
+        }
+      }
+    }
+  }
 }
 
 
@@ -551,4 +634,3 @@ extension CustomPhotoView {
     UIImpactFeedbackGenerator(style: style).impactOccurred()
   }
 }
-

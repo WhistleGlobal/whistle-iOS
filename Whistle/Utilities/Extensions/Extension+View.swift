@@ -424,3 +424,10 @@ extension View {
     getRect().height < 700
   }
 }
+
+extension View {
+  @ViewBuilder
+  func frame(_ size: CGSize) -> some View {
+    frame(width: size.width, height: size.height)
+  }
+}

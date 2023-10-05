@@ -13,6 +13,7 @@ import Photos
 class PhotoCollection: NSObject, ObservableObject {
 
   @Published var photoAssets = PhotoAssetCollection(PHFetchResult<PHAsset>())
+  @Published var albums: [AlbumModel] = []
 
   var identifier: String? {
     assetCollection?.localIdentifier
@@ -205,6 +206,34 @@ class PhotoCollection: NSObject, ObservableObject {
     }
   }
 
+  func fetchAssetsInAlbum(albumName: String) async {
+    // 먼저 앨범 이름을 사용하여 앨범을 찾습니다.
+    let albumOptions = PHFetchOptions()
+    albumOptions.predicate = NSPredicate(format: "title = %@", albumName)
+    let albumCollection = PHAssetCollection.fetchAssetCollections(
+      with: .album,
+      subtype: .any,
+      options: albumOptions).firstObject
+
+    guard let album = albumCollection else {
+      print("앨범을 찾을 수 없습니다.")
+      return
+    }
+
+    // 앨범에 속한 이미지를 가져옵니다.
+    let fetchOptions = PHFetchOptions()
+    fetchOptions.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
+    fetchOptions.predicate = NSPredicate(format: "mediaType == %d", PHAssetMediaType.image.rawValue)
+
+    let fetchResult = PHAsset.fetchAssets(in: album, options: fetchOptions)
+
+    await MainActor.run {
+      photoAssets = PhotoAssetCollection(fetchResult)
+      logger.debug("앨범 '\(albumName)'의 이미지를 가져왔습니다. 이미지 수: \(self.photoAssets.count)")
+    }
+  }
+
+
 
   private static func getAlbum(identifier: String) -> PHAssetCollection? {
     let fetchOptions = PHFetchOptions()
@@ -242,6 +271,80 @@ class PhotoCollection: NSObject, ObservableObject {
     }
     let collections = PHAssetCollection.fetchAssetCollections(withLocalIdentifiers: [collectionIdentifier], options: nil)
     return collections.firstObject
+  }
+
+  func fetchAlbumList() {
+    albums.removeAll()
+    var albums = [AlbumModel]()
+    let options = PHFetchOptions()
+    let userAlbums = PHAssetCollection.fetchAssetCollections(with: .album, subtype: .any, options: options)
+    userAlbums.enumerateObjects { object, _, _ in
+      if let albumCollection = object as? PHAssetCollection {
+        let fetchOptions = PHFetchOptions()
+        fetchOptions.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
+        fetchOptions.predicate = NSPredicate(format: "mediaType = %d", PHAssetMediaType.image.rawValue)
+
+        let assets = PHAsset.fetchAssets(in: albumCollection, options: fetchOptions)
+
+        if let firstAsset = assets.firstObject {
+          let imageManager = PHImageManager.default()
+          let targetSize = CGSize(width: 300, height: 300)
+
+          imageManager
+            .requestImage(
+              for: firstAsset,
+              targetSize: targetSize,
+              contentMode: .aspectFit,
+              options: nil)
+          { image, _ in
+            if let thumbnailImage = image {
+              let newAlbum = AlbumModel(
+                name: albumCollection.localizedTitle ?? "",
+                count: assets.count,
+                collection: albumCollection,
+                thumbnail: thumbnailImage)
+              albums.append(newAlbum)
+            }
+          }
+        } else {
+          let newAlbum = AlbumModel(
+            name: albumCollection.localizedTitle ?? "",
+            count: assets.count,
+            collection: albumCollection,
+            thumbnail: nil)
+          albums.append(newAlbum)
+        }
+      }
+    }
+    self.albums = albums
+  }
+
+  func fetchPhotoByLocalIdentifier(localIdentifier: String, completion: @escaping (Photo?) -> Void) {
+    let fetchResult: PHFetchResult = PHAsset.fetchAssets(withLocalIdentifiers: [localIdentifier], options: nil)
+
+    if fetchResult.count > 0 {
+      let asset = fetchResult.object(at: 0)
+      let imgManager = PHImageManager.default()
+      let requestOptions = PHImageRequestOptions()
+      requestOptions.deliveryMode = .highQualityFormat
+
+      imgManager.requestImage(
+        for: asset, targetSize: CGSize(width: 800, height: 800),
+        contentMode: .aspectFit,
+        options: requestOptions)
+      { image, _ in
+        if let image {
+          let photo = Photo(localIdentifier: localIdentifier, photo: image)
+          DispatchQueue.main.async {
+            completion(photo)
+          }
+        } else {
+          completion(nil)
+        }
+      }
+    } else {
+      completion(nil)
+    }
   }
 }
 

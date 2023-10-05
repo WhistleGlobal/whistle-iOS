@@ -56,21 +56,6 @@ struct ProfileEditView: View {
     .fullScreenCover(isPresented: $showGallery) {
       PhotoCollectionView(photoCollection: photoCollection)
         .environmentObject(apiViewModel)
-        .task {
-          let authorized = await PhotoLibrary.checkAuthorization()
-          guard authorized else {
-            return
-          }
-
-          Task {
-            do {
-              try await photoCollection.load()
-//                  await loadThumbnail()
-            } catch let error {
-              log(error)
-            }
-          }
-        }
     }
     .padding(.horizontal, 16)
     .navigationBarBackButtonHidden()
