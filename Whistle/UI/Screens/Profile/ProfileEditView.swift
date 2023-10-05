@@ -18,7 +18,6 @@ struct ProfileEditView: View {
   @State var showToast = false
   @State var showGallery = false
   @State var showAuthAlert = false
-  @StateObject var photoViewModel = PhotoViewModel()
   @EnvironmentObject var apiViewModel: APIViewModel
   @ObservedObject var photoCollection = PhotoCollection(smartAlbum: .smartAlbumUserLibrary)
   var body: some View {
@@ -66,7 +65,6 @@ struct ProfileEditView: View {
           case .notDetermined, .restricted, .denied:
             break
           case .authorized, .limited:
-            photoViewModel.fetchPhotos(startIndex: 0, endIndex: 100)
             showGallery = true
           @unknown default:
             break
