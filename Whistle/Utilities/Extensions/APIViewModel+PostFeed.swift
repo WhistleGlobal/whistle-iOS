@@ -108,7 +108,7 @@ extension APIViewModel: PostFeedProtocol {
     }
   }
 
-  func requestContentList(completion: @escaping () -> ()) {
+  func requestContentList(completion: @escaping () -> Void) {
     AF.request(
       "\(domainURL)/content/content-list",
       method: .get,
@@ -373,7 +373,7 @@ extension APIViewModel: PostFeedProtocol {
     }
   }
 
-  func requestNoSignInContent(completion: @escaping () -> ()) { // completion: @escaping () -> ())
+  func requestNoSignInContent(completion: @escaping () -> Void) {
     AF.request(
       "\(domainURL)/content/all-content-list",
       method: .get,
@@ -409,6 +409,81 @@ extension APIViewModel: PostFeedProtocol {
           }
         case .failure(let error):
           log(error)
+        }
+      }
+  }
+
+  func requestUniversalContent(contentId: Int,completion: @escaping () -> Void) {
+    AF.request(
+      "\(domainURL)/content/\(contentId)",
+      method: .get,
+      headers: contentTypeJson)
+      .validate(statusCode: 200...300)
+      .response { response in
+        switch response.result {
+        case .success(let data):
+          do {
+            guard let data else {
+              return
+            }
+            let jsonData = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any]
+            self.contentList.removeAll()
+
+            guard let singleContentJson = jsonData?["singleContent"] as? [String: Any] else {
+              return
+            }
+            let singleContent: MainContent = .init()
+            singleContent.contentId = singleContentJson["content_id"] as? Int
+            singleContent.userId = singleContentJson["user_id"] as? Int
+            singleContent.userName = singleContentJson["user_name"] as? String
+            singleContent.profileImg = singleContentJson["profile_img"] as? String
+            singleContent.caption = singleContentJson["caption"] as? String
+            singleContent.videoUrl = singleContentJson["video_url"] as? String
+            singleContent.thumbnailUrl = singleContentJson["thumbnail_url"] as? String
+            singleContent.musicArtist = singleContentJson["music_artist"] as? String
+            singleContent.musicTitle = singleContentJson["music_title"] as? String
+            singleContent.hashtags = singleContentJson["hashtags"] as? String
+            singleContent.whistleCount = singleContentJson["content_whistle_count"] as? Int
+            singleContent.isWhistled = (singleContentJson["is_whistled"] as? Int) == 0 ? false : true
+            singleContent.isFollowed = (singleContentJson["is_followed"] as? Int) == 0 ? false : true
+            singleContent.isBookmarked = (singleContentJson["is_bookmarked"] as? Int) == 0 ? false : true
+            self.contentList.append(singleContent)
+
+            guard let allContentsJson = jsonData?["allContents"] as? [[String: Any]] else {
+              return
+            }
+            for jsonObject in allContentsJson {
+              let tempContent: MainContent = .init()
+              tempContent.contentId = jsonObject["content_id"] as? Int
+              tempContent.userId = jsonObject["user_id"] as? Int
+              tempContent.userName = jsonObject["user_name"] as? String
+              tempContent.profileImg = jsonObject["profile_img"] as? String
+              tempContent.caption = jsonObject["caption"] as? String
+              tempContent.videoUrl = jsonObject["video_url"] as? String
+              tempContent.thumbnailUrl = jsonObject["thumbnail_url"] as? String
+              tempContent.musicArtist = jsonObject["music_artist"] as? String
+              tempContent.musicTitle = jsonObject["music_title"] as? String
+              tempContent.musicTitle = jsonObject["music_title"] as? String
+              tempContent.hashtags = jsonObject["hashtags"] as? String
+              tempContent.hashtags = jsonObject["hashtags"] as? String
+              tempContent.whistleCount = jsonObject["content_whistle_count"] as? Int
+              tempContent.isWhistled = (jsonObject["is_whistled"] as? Int) == 0 ? false : true
+              tempContent.isFollowed = (jsonObject["is_followed"] as? Int) == 0 ? false : true
+              tempContent.isBookmarked = (jsonObject["is_bookmarked"] as? Int) == 0 ? false : true
+              if self.contentList.count < 2 {
+                tempContent.player = AVPlayer(url: URL(string: tempContent.videoUrl ?? "")!)
+              }
+              self.contentList.append(tempContent)
+            }
+
+
+            completion()
+          } catch {
+            log("Error parsing JSON: \(error)")
+            log("피드를 불러올 수 없습니다.")
+          }
+        case .failure(let error):
+          log("Error: \(error)")
         }
       }
   }

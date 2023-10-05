@@ -148,7 +148,7 @@ struct UserProfileView: View {
     .confirmationDialog("", isPresented: $showDialog) {
       Button("프로필 URL 복사", role: .none) {
         UIPasteboard.general.setValue(
-          "다른 유저 프로필 링크입니다.",
+          "https://readywhistle.com/profile_uni?id=\(userId)",
           forPasteboardType: UTType.plainText.identifier)
         showPasteToast = true
       }
@@ -175,7 +175,7 @@ struct UserProfileView: View {
     }
     .overlay {
       if showPasteToast {
-        ToastMessage(text: "클립보드에 복사되었어요", paddingBottom: 0, showToast: $showPasteToast)
+        ToastMessage(text: "클립보드에 복사되었어요", paddingBottom: 78, showToast: $showPasteToast)
       }
     }
     .onAppear {

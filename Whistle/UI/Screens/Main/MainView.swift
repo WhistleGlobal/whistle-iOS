@@ -17,6 +17,7 @@ struct MainView: View {
   @Environment(\.scenePhase) var scenePhase
   @EnvironmentObject var apiViewModel: APIViewModel
   @EnvironmentObject var tabbarModel: TabbarModel
+  @EnvironmentObject var universalRoutingModel: UniversalRoutingModel
   @State var viewCount: ViewCount = .init()
   @State var currentIndex = 0
   @State var playerIndex = 0
@@ -181,27 +182,63 @@ struct MainView: View {
         await apiViewModel.requestMyProfile()
       }
       if apiViewModel.contentList.isEmpty {
-        apiViewModel.requestContentList {
-          Task {
-            if !apiViewModel.contentList.isEmpty {
-              players.removeAll()
-              for _ in 0..<apiViewModel.contentList.count {
-                players.append(nil)
+        if universalRoutingModel.isUniversalContent {
+          log("universalRoutingModel.isUniversalContent \(universalRoutingModel.isUniversalContent)")
+          apiViewModel.requestUniversalContent(contentId: universalRoutingModel.contentId) {
+            Task {
+              if !apiViewModel.contentList.isEmpty {
+                players.removeAll()
+                for _ in 0..<apiViewModel.contentList.count {
+                  players.append(nil)
+                }
+                log(players)
+                players[currentIndex] =
+                  AVPlayer(url: URL(string: apiViewModel.contentList[currentIndex].videoUrl ?? "")!)
+                playerIndex = currentIndex
+                guard let player = players[currentIndex] else {
+                  return
+                }
+                currentVideoUserId = apiViewModel.contentList[currentIndex].userId ?? 0
+                currentVideoContentId = apiViewModel.contentList[currentIndex].contentId ?? 0
+                isCurrentVideoWhistled = apiViewModel.contentList[currentIndex].isWhistled
+                await player.seek(to: .zero)
+                player.play()
+                withAnimation {
+                  isSplashOn = false
+                }
+                if universalRoutingModel.isUniversalProfile {
+                  isRootStacked = true
+                }
               }
-              log(players)
-              players[currentIndex] =
-                AVPlayer(url: URL(string: apiViewModel.contentList[currentIndex].videoUrl ?? "")!)
-              playerIndex = currentIndex
-              guard let player = players[currentIndex] else {
-                return
-              }
-              currentVideoUserId = apiViewModel.contentList[currentIndex].userId ?? 0
-              currentVideoContentId = apiViewModel.contentList[currentIndex].contentId ?? 0
-              isCurrentVideoWhistled = apiViewModel.contentList[currentIndex].isWhistled
-              await player.seek(to: .zero)
-              player.play()
-              withAnimation {
-                isSplashOn = false
+            }
+            universalRoutingModel.isUniversalContent = false
+          }
+        } else {
+          apiViewModel.requestContentList {
+            Task {
+              if !apiViewModel.contentList.isEmpty {
+                players.removeAll()
+                for _ in 0..<apiViewModel.contentList.count {
+                  players.append(nil)
+                }
+                log(players)
+                players[currentIndex] =
+                  AVPlayer(url: URL(string: apiViewModel.contentList[currentIndex].videoUrl ?? "")!)
+                playerIndex = currentIndex
+                guard let player = players[currentIndex] else {
+                  return
+                }
+                currentVideoUserId = apiViewModel.contentList[currentIndex].userId ?? 0
+                currentVideoContentId = apiViewModel.contentList[currentIndex].contentId ?? 0
+                isCurrentVideoWhistled = apiViewModel.contentList[currentIndex].isWhistled
+                await player.seek(to: .zero)
+                player.play()
+                withAnimation {
+                  isSplashOn = false
+                }
+                if universalRoutingModel.isUniversalProfile {
+                  isRootStacked = true
+                }
               }
             }
           }
@@ -235,6 +272,84 @@ struct MainView: View {
         }
       default:
         log("default")
+      }
+    }
+    .onChange(of: universalRoutingModel.isUniversalProfile) { newValue in
+      if newValue {
+        tabbarModel.tabSelectionNoAnimation = .main
+        tabbarModel.tabSelection = .main
+        isRootStacked = true
+      }
+    }
+    .onChange(of: universalRoutingModel.isUniversalContent) { newValue in
+      if newValue {
+        tabbarModel.tabSelectionNoAnimation = .main
+        tabbarModel.tabSelection = .main
+        var currentIndex = 0
+        var playerIndex = 0
+        currentVideoUserId = 0
+        currentVideoContentId = 0
+        players.removeAll()
+        if universalRoutingModel.isUniversalContent {
+          apiViewModel.requestUniversalContent(contentId: universalRoutingModel.contentId) {
+            Task {
+              if !apiViewModel.contentList.isEmpty {
+                for _ in 0..<apiViewModel.contentList.count {
+                  players.append(nil)
+                }
+                log(players)
+                players[currentIndex] =
+                  AVPlayer(url: URL(string: apiViewModel.contentList[currentIndex].videoUrl ?? "")!)
+                playerIndex = currentIndex
+                guard let player = players[currentIndex] else {
+                  return
+                }
+                currentVideoUserId = apiViewModel.contentList[currentIndex].userId ?? 0
+                currentVideoContentId = apiViewModel.contentList[currentIndex].contentId ?? 0
+                isCurrentVideoWhistled = apiViewModel.contentList[currentIndex].isWhistled
+                await player.seek(to: .zero)
+                player.play()
+                withAnimation {
+                  isSplashOn = false
+                }
+                if universalRoutingModel.isUniversalProfile {
+                  isRootStacked = true
+                }
+              }
+            }
+            universalRoutingModel.isUniversalContent = false
+          }
+        } else {
+          apiViewModel.requestContentList {
+            Task {
+              if !apiViewModel.contentList.isEmpty {
+                players.removeAll()
+                for _ in 0..<apiViewModel.contentList.count {
+                  players.append(nil)
+                }
+                log(players)
+                players[currentIndex] =
+                  AVPlayer(url: URL(string: apiViewModel.contentList[currentIndex].videoUrl ?? "")!)
+                playerIndex = currentIndex
+                guard let player = players[currentIndex] else {
+                  return
+                }
+                currentVideoUserId = apiViewModel.contentList[currentIndex].userId ?? 0
+                currentVideoContentId = apiViewModel.contentList[currentIndex].contentId ?? 0
+                isCurrentVideoWhistled = apiViewModel.contentList[currentIndex].isWhistled
+                await player.seek(to: .zero)
+                player.play()
+                withAnimation {
+                  isSplashOn = false
+                }
+                if universalRoutingModel.isUniversalProfile {
+                  isRootStacked = true
+                }
+              }
+            }
+            universalRoutingModel.isUniversalContent = false
+          }
+        }
       }
     }
     .overlay {
@@ -308,9 +423,18 @@ struct MainView: View {
         .environmentObject(apiViewModel)
     }
     .navigationDestination(isPresented: $isRootStacked) {
-      UserProfileView(players: $players, currentIndex: $currentIndex, userId: currentVideoUserId)
-        .environmentObject(apiViewModel)
-        .environmentObject(tabbarModel)
+      if universalRoutingModel.isUniversalProfile {
+        UserProfileView(players: $players, currentIndex: $currentIndex, userId: universalRoutingModel.userId)
+          .environmentObject(apiViewModel)
+          .environmentObject(tabbarModel)
+          .onDisappear {
+            universalRoutingModel.isUniversalProfile = false
+          }
+      } else {
+        UserProfileView(players: $players, currentIndex: $currentIndex, userId: currentVideoUserId)
+          .environmentObject(apiViewModel)
+          .environmentObject(tabbarModel)
+      }
     }
   }
 }
@@ -421,7 +545,7 @@ extension MainView {
           Button {
             showPasteToast = true
             UIPasteboard.general.setValue(
-              "복사할 링크입니다.",
+              "https://readywhistle.com/content_uni?contentId=\(currentVideoContentId)",
               forPasteboardType: UTType.plainText.identifier)
           } label: {
             Image(systemName: "square.and.arrow.up")
