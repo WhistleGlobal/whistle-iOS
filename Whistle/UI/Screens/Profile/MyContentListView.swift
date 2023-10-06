@@ -29,7 +29,44 @@ struct MyContentListView: View {
     GeometryReader { proxy in
       if apiViewModel.myPostFeed.isEmpty {
         // FIXME: - 디자인수정
-        Color.cyan.ignoresSafeArea()
+        Color.black.ignoresSafeArea().overlay {
+          VStack(spacing: 16) {
+            HStack(spacing: 0) {
+              Button {
+                if !players.isEmpty {
+                  players[currentIndex]?.pause()
+                  players.removeAll()
+                }
+                dismiss()
+              } label: {
+                Color.clear
+                  .frame(width: 24, height: 24)
+                  .overlay {
+                    Image(systemName: "chevron.backward")
+                      .resizable()
+                      .scaledToFit()
+                      .frame(width: 24, height: 20)
+                      .foregroundColor(.white)
+                  }
+              }
+              Spacer()
+            }
+            .frame(height: 52)
+            .padding(.top, 54)
+            .padding(.horizontal, 16)
+            Spacer()
+            Image(systemName: "photo")
+              .resizable()
+              .scaledToFit()
+              .frame(width: 60)
+              .foregroundColor(.LabelColor_Primary_Dark)
+            Text("콘텐츠가 없습니다")
+              .fontSystem(fontDesignSystem: .body1_KO)
+              .foregroundColor(.LabelColor_Primary_Dark)
+            Spacer()
+          }
+        }
+
       } else {
         TabView(selection: $currentIndex) {
           ForEach(Array(apiViewModel.myPostFeed.enumerated()), id: \.element) { index, content in
@@ -229,7 +266,6 @@ extension MyContentListView {
       }
       .frame(height: 52)
       .padding(.top, 54)
-
       Spacer()
       HStack(spacing: 0) {
         VStack(alignment: .leading, spacing: 12) {
