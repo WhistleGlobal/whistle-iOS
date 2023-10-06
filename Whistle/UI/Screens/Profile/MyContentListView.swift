@@ -203,7 +203,7 @@ struct MyContentListView: View {
               log("contentId: \(contentId)")
               log("currentIndex: \(currentIndex)")
               log("playerIndex: \(currentIndex)")
-              //            await apiViewModel.deleteContent(contentId: contentId)
+              await apiViewModel.deleteContent(contentId: contentId)
             } else {
               guard let contentId = apiViewModel.myPostFeed[currentIndex].contentId else { return }
               log("contentId: \(contentId)")
@@ -217,7 +217,7 @@ struct MyContentListView: View {
               log("contentId: \(contentId)")
               log("currentIndex: \(currentIndex)")
               log("playerIndex: \(currentIndex)")
-              //            await apiViewModel.deleteContent(contentId: contentId)
+              await apiViewModel.deleteContent(contentId: contentId)
             }
           }
         }, showToast: $showDeleteToast)

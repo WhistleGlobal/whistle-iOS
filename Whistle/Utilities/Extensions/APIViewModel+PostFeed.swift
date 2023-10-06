@@ -272,7 +272,7 @@ extension APIViewModel: PostFeedProtocol {
       AF.request(
         "\(domainURL)/content/\(contentId)",
         method: .delete,
-        headers: contentTypeXwwwForm)
+        headers: contentTypeJson)
         .validate(statusCode: 200...300)
         .response { response in
           switch response.result {

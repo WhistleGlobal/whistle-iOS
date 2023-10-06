@@ -212,6 +212,7 @@ struct MyBookmarkView: View {
               log("contentId: \(contentId)")
               log("currentIndex: \(currentIndex)")
               log("playerIndex: \(currentIndex)")
+              //            await apiViewModel.deleteContent(contentId: contentId)
             }
           }
         }, showToast: $showDeleteToast)
@@ -349,21 +350,23 @@ extension MyBookmarkView {
     HapticManager.instance.impact(style: .medium)
     timer?.invalidate()
     if apiViewModel.bookmark[currentIndex].isWhistled == 1 {
+      let contentId = apiViewModel.bookmark[currentIndex].contentId
       timer = Timer.scheduledTimer(withTimeInterval: 2, repeats: false) { _ in
         Task {
-//          await apiViewModel.actionWhistleCancel(contentId: apiViewModel.bookmark[currentIndex].contentId ?? 0)
+          await apiViewModel.actionWhistleCancel(contentId: contentId)
         }
       }
-//      apiViewModel.bookmark[currentIndex].contentWhistleCount? -= 1
+      apiViewModel.bookmark[currentIndex].whistleCount -= 1
     } else {
+      let contentId = apiViewModel.bookmark[currentIndex].contentId
       timer = Timer.scheduledTimer(withTimeInterval: 2, repeats: false) { _ in
         Task {
-//          await apiViewModel.actionWhistle(contentId: apiViewModel.bookmark[currentIndex].contentId ?? 0)
+          await apiViewModel.actionWhistle(contentId: contentId)
         }
       }
-//      apiViewModel.bookmark[currentIndex].contentWhistleCount! += 1
+      apiViewModel.bookmark[currentIndex].whistleCount += 1
     }
-//    apiViewModel.bookmark[currentIndex].isWhistled = apiViewModel.bookmark[currentIndex].isWhistled == 1 ? 0 : 1
+    apiViewModel.bookmark[currentIndex].isWhistled = apiViewModel.bookmark[currentIndex].isWhistled == 1 ? 0 : 1
     apiViewModel.postFeedPlayerChanged()
   }
 }
