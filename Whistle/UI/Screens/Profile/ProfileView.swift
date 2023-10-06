@@ -140,9 +140,11 @@ struct ProfileView: View {
               GridItem(.flexible()),
               GridItem(.flexible()),
             ], spacing: 20) {
-              ForEach(apiViewModel.bookmark, id: \.self) { content in
-                Button {
-                  log("video clicked")
+              ForEach(Array(apiViewModel.bookmark.enumerated()), id: \.element) { index ,content in
+
+                NavigationLink {
+                  MyBookmarkView(currentIndex: index)
+                    .environmentObject(apiViewModel)
                 } label: {
                   videoThumbnailView(thumbnailUrl: content.thumbnailUrl, viewCount: content.viewCount)
                 }

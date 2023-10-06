@@ -10,6 +10,7 @@ import Foundation
 class Bookmark: ObservableObject, Codable, Hashable {
 
   enum CodingKeys: String, CodingKey {
+    case contentId = "content_id"
     case userId = "user_id"
     case userName = "user_name"
     case profileImg = "profile_img"
@@ -26,6 +27,7 @@ class Bookmark: ObservableObject, Codable, Hashable {
     case isBookmarked = "is_bookmarked"
   }
 
+  var contentId = 0
   var userId = 0
   var userName = ""
   var profileImg: String?
