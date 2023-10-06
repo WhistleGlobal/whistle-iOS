@@ -20,78 +20,91 @@ struct MyContentListView: View {
   @State var showDialog = false
   @State var showPasteToast = false
   @State var showDeleteToast = false
+  @State var timer: Timer? = nil
   @EnvironmentObject var apiViewModel: APIViewModel
   @EnvironmentObject var tabbarModel: TabbarModel
   @State var players: [AVPlayer?] = []
 
   var body: some View {
     GeometryReader { proxy in
-      TabView(selection: $currentIndex) {
-        ForEach(Array(apiViewModel.myPostFeed.enumerated()), id: \.element) { index, content in
-          if !players.isEmpty {
-            if let player = players[index] {
-              Player(player: player)
-                .frame(width: proxy.size.width)
-                .onTapGesture {
-                  if player.rate == 0.0 {
-                    player.play()
-                  } else {
-                    player.pause()
+      if apiViewModel.myPostFeed.isEmpty {
+        // FIXME: - 디자인수정
+        Color.cyan.ignoresSafeArea()
+      } else {
+        TabView(selection: $currentIndex) {
+          ForEach(Array(apiViewModel.myPostFeed.enumerated()), id: \.element) { index, content in
+            if !players.isEmpty {
+              if let player = players[index] {
+                Player(player: player)
+                  .frame(width: proxy.size.width)
+                  .onTapGesture(count: 2) {
+                    whistleToggle()
                   }
-                }
-                .overlay {
-                  // TODO: - contentId 백엔드 수정 필요, contentId & whistleCount
-                  LinearGradient(
-                    colors: [.clear, .black.opacity(0.24)],
-                    startPoint: .center,
-                    endPoint: .bottom)
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
-                    .allowsHitTesting(false)
-                  userInfo(
-                    contentId: content.contentId ?? 0,
-                    caption: content.caption ?? "",
-                    musicTitle: content.musicTitle ?? "",
-                    isWhistled:
-                    Binding(get: {
-                      content.isWhistled == 1 ? true : false
-                    }, set: { newValue in
-                      content.isWhistled = newValue ? 1 : 0
-                    }),
-                    whistleCount:
-                    Binding(get: {
-                      content.contentWhistleCount ?? 0
-                    }, set: { newValue in
-                      content.contentWhistleCount = newValue
-                    }))
-                }
-                .padding()
-                .rotationEffect(Angle(degrees: -90))
-                .ignoresSafeArea(.all, edges: .top)
-                .tag(index)
-            } else {
-              KFImage.url(URL(string: content.thumbnailUrl ?? ""))
-                .placeholder {
-                  Color.black
-                }
-                .resizable()
-                .scaledToFill()
-                .tag(index)
-                .frame(width: proxy.size.width)
-                .padding()
-                .rotationEffect(Angle(degrees: -90))
-                .ignoresSafeArea(.all, edges: .top)
+                  .onTapGesture {
+                    if player.rate == 0.0 {
+                      player.play()
+                    } else {
+                      player.pause()
+                    }
+                  }
+                  .onLongPressGesture {
+                    HapticManager.instance.impact(style: .medium)
+                    showDialog = true
+                  }
+                  .overlay {
+                    // TODO: - contentId 백엔드 수정 필요, contentId & whistleCount
+                    LinearGradient(
+                      colors: [.clear, .black.opacity(0.24)],
+                      startPoint: .center,
+                      endPoint: .bottom)
+                      .frame(maxWidth: .infinity, maxHeight: .infinity)
+                      .allowsHitTesting(false)
+                    userInfo(
+                      contentId: content.contentId ?? 0,
+                      caption: content.caption ?? "",
+                      musicTitle: content.musicTitle ?? "",
+                      isWhistled:
+                      Binding(get: {
+                        content.isWhistled == 1 ? true : false
+                      }, set: { newValue in
+                        content.isWhistled = newValue ? 1 : 0
+                      }),
+                      whistleCount:
+                      Binding(get: {
+                        content.contentWhistleCount ?? 0
+                      }, set: { newValue in
+                        content.contentWhistleCount = newValue
+                      }))
+                  }
+                  .padding()
+                  .rotationEffect(Angle(degrees: -90))
+                  .ignoresSafeArea(.all, edges: .top)
+                  .tag(index)
+              } else {
+                KFImage.url(URL(string: content.thumbnailUrl ?? ""))
+                  .placeholder {
+                    Color.black
+                  }
+                  .resizable()
+                  .scaledToFill()
+                  .tag(index)
+                  .frame(width: proxy.size.width)
+                  .padding()
+                  .rotationEffect(Angle(degrees: -90))
+                  .ignoresSafeArea(.all, edges: .top)
+              }
             }
           }
+          .onReceive(apiViewModel.publisher) { id in
+            newId = id
+          }
+          .id(newId)
         }
-        .onReceive(apiViewModel.publisher) { id in
-          newId = id
-        }
-        .id(newId)
+        .rotationEffect(Angle(degrees: 90))
+        .frame(width: proxy.size.height)
+        .tabViewStyle(.page(indexDisplayMode: .never))
+        .frame(maxWidth: proxy.size.width)
       }
-      .rotationEffect(Angle(degrees: 90))
-      .frame(width: proxy.size.height)
-      .tabViewStyle(.page(indexDisplayMode: .never))
-      .frame(maxWidth: proxy.size.width)
     }
     .ignoresSafeArea(.all, edges: .top)
     .navigationBarBackButtonHidden()
@@ -299,5 +312,30 @@ extension MyContentListView {
     }
     .padding(.bottom, 64)
     .padding(.horizontal, 20)
+  }
+}
+
+// MARK: - Timer
+extension MyContentListView {
+  func whistleToggle() {
+    HapticManager.instance.impact(style: .medium)
+    timer?.invalidate()
+    if apiViewModel.myPostFeed[currentIndex].isWhistled == 1 {
+      timer = Timer.scheduledTimer(withTimeInterval: 2, repeats: false) { _ in
+        Task {
+          await apiViewModel.actionWhistleCancel(contentId: apiViewModel.myPostFeed[currentIndex].contentId ?? 0)
+        }
+      }
+      apiViewModel.myPostFeed[currentIndex].contentWhistleCount? -= 1
+    } else {
+      timer = Timer.scheduledTimer(withTimeInterval: 2, repeats: false) { _ in
+        Task {
+          await apiViewModel.actionWhistle(contentId: apiViewModel.myPostFeed[currentIndex].contentId ?? 0)
+        }
+      }
+      apiViewModel.myPostFeed[currentIndex].contentWhistleCount! += 1
+    }
+    apiViewModel.myPostFeed[currentIndex].isWhistled = apiViewModel.myPostFeed[currentIndex].isWhistled == 1 ? 0 : 1
+    apiViewModel.postFeedPlayerChanged()
   }
 }
