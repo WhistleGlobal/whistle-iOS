@@ -109,6 +109,9 @@ struct MyContentListView: View {
       player.play()
     }
     .onChange(of: currentIndex) { newValue in
+      if apiViewModel.myPostFeed.isEmpty {
+        return
+      }
       log(playerIndex)
       log(newValue)
       log(currentIndex)
@@ -116,9 +119,11 @@ struct MyContentListView: View {
         return
       }
       players[newValue] = AVPlayer(url: URL(string: url)!)
-      players[playerIndex]?.seek(to: .zero)
-      players[playerIndex]?.pause()
-      players[playerIndex] = nil
+      if playerIndex < players.count {
+        players[playerIndex]?.seek(to: .zero)
+        players[playerIndex]?.pause()
+        players[playerIndex] = nil
+      }
       players[newValue]?.seek(to: .zero)
       players[newValue]?.play()
       playerIndex = newValue
@@ -131,23 +136,39 @@ struct MyContentListView: View {
       if showDeleteToast {
         CancelableToastMessage(text: "삭제되었습니다", paddingBottom: 78, action: {
           Task {
-            guard let contentId = apiViewModel.myPostFeed[currentIndex].contentId else { return }
-            log("contentId: \(contentId)")
-            log("currentIndex: \(currentIndex)")
-            log("playerIndex: \(playerIndex)")
-            apiViewModel.myPostFeed.remove(at: currentIndex)
-            players[currentIndex]?.pause()
-            players.remove(at: currentIndex)
-            if !players.isEmpty {
-              players[currentIndex] = AVPlayer(url: URL(string: apiViewModel.myPostFeed[currentIndex].videoUrl ?? "")!)
-              await players[currentIndex]?.seek(to: .zero)
-              players[currentIndex]?.play()
+            if apiViewModel.myPostFeed.count - 1 != currentIndex { // 삭제하려는 컨텐츠가 배열 마지막이 아님
+              guard let contentId = apiViewModel.myPostFeed[currentIndex].contentId else { return }
+              log("contentId: \(contentId)")
+              log("currentIndex: \(currentIndex)")
+              log("playerIndex: \(playerIndex)")
+              apiViewModel.myPostFeed.remove(at: currentIndex)
+              players[currentIndex]?.pause()
+              players.remove(at: currentIndex)
+              if !players.isEmpty {
+                players[currentIndex] = AVPlayer(url: URL(string: apiViewModel.myPostFeed[currentIndex].videoUrl ?? "")!)
+                await players[currentIndex]?.seek(to: .zero)
+                players[currentIndex]?.play()
+              }
+              apiViewModel.postFeedPlayerChanged()
+              log("contentId: \(contentId)")
+              log("currentIndex: \(currentIndex)")
+              log("playerIndex: \(currentIndex)")
+              //            await apiViewModel.deleteContent(contentId: contentId)
+            } else {
+              guard let contentId = apiViewModel.myPostFeed[currentIndex].contentId else { return }
+              log("contentId: \(contentId)")
+              log("currentIndex: \(currentIndex)")
+              log("playerIndex: \(playerIndex)")
+              apiViewModel.myPostFeed.removeLast()
+              players.last??.pause()
+              players.removeLast()
+              currentIndex -= 1
+              apiViewModel.postFeedPlayerChanged()
+              log("contentId: \(contentId)")
+              log("currentIndex: \(currentIndex)")
+              log("playerIndex: \(currentIndex)")
+              //            await apiViewModel.deleteContent(contentId: contentId)
             }
-            apiViewModel.postFeedPlayerChanged()
-            log("contentId: \(contentId)")
-            log("currentIndex: \(currentIndex)")
-            log("playerIndex: \(currentIndex)")
-//            await apiViewModel.deleteContent(contentId: contentId)
           }
         }, showToast: $showDeleteToast)
       }
