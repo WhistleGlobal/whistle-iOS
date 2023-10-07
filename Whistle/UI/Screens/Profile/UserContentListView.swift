@@ -37,12 +37,19 @@ struct UserContentListView: View {
             if let player = players[index] {
               Player(player: player)
                 .frame(width: proxy.size.width)
+                .onTapGesture(count: 2) {
+                  whistleToggle()
+                }
                 .onTapGesture {
                   if player.rate == 0.0 {
                     player.play()
                   } else {
                     player.pause()
                   }
+                }
+                .onLongPressGesture {
+                  HapticManager.instance.impact(style: .medium)
+                  showDialog = true
                 }
                 .overlay {
                   LinearGradient(
@@ -343,30 +350,30 @@ extension UserContentListView {
 extension UserContentListView {
   func whistleToggle() {
     HapticManager.instance.impact(style: .medium)
-    timer?.invalidate()
-    guard let contentId = apiViewModel.userPostFeed[currentIndex].contentId else {
-      return
-    }
-    if apiViewModel.userPostFeed[currentIndex].isWhistled! == 1 {
-      timer = Timer.scheduledTimer(withTimeInterval: 2, repeats: false) { _ in
-        Task {
-          await apiViewModel.actionWhistleCancel(contentId: contentId)
-        }
-      }
-      apiViewModel.userPostFeed[currentIndex].contentWhistleCount! -= 1
-    } else {
-      timer = Timer.scheduledTimer(withTimeInterval: 2, repeats: false) { _ in
-        Task {
-          await apiViewModel.actionWhistle(contentId: contentId)
-        }
-      }
-      apiViewModel.userPostFeed[currentIndex].contentWhistleCount! += 1
-    }
-    if apiViewModel.userPostFeed[currentIndex].isWhistled! == 0 {
-      apiViewModel.userPostFeed[currentIndex].isWhistled = 1
-    } else {
-      apiViewModel.userPostFeed[currentIndex].isWhistled = 0
-    }
-    apiViewModel.postFeedPlayerChanged()
+//    timer?.invalidate()
+//    guard let contentId = apiViewModel.userPostFeed[currentIndex].contentId else {
+//      return
+//    }
+//    if apiViewModel.userPostFeed[currentIndex].isWhistled! == 1 {
+//      timer = Timer.scheduledTimer(withTimeInterval: 2, repeats: false) { _ in
+//        Task {
+//          await apiViewModel.actionWhistleCancel(contentId: contentId)
+//        }
+//      }
+//      apiViewModel.userPostFeed[currentIndex].contentWhistleCount! -= 1
+//    } else {
+//      timer = Timer.scheduledTimer(withTimeInterval: 2, repeats: false) { _ in
+//        Task {
+//          await apiViewModel.actionWhistle(contentId: contentId)
+//        }
+//      }
+//      apiViewModel.userPostFeed[currentIndex].contentWhistleCount! += 1
+//    }
+//    if apiViewModel.userPostFeed[currentIndex].isWhistled! == 0 {
+//      apiViewModel.userPostFeed[currentIndex].isWhistled = 1
+//    } else {
+//      apiViewModel.userPostFeed[currentIndex].isWhistled = 0
+//    }
+//    apiViewModel.postFeedPlayerChanged()
   }
 }
