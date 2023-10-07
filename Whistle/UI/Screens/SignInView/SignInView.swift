@@ -38,20 +38,20 @@ struct SignInView: View {
         .ignoresSafeArea()
         .allowsTightening(false)
       VStack(spacing: 0) {
-        NavigationLink {
-          TabbarView()
-            .environmentObject(apiViewModel)
-            .environmentObject(userAuth)
-        } label: {
-          HStack(spacing: 0) {
-            Spacer()
+        HStack(spacing: 0) {
+          Spacer()
+          NavigationLink {
+            TabbarView()
+              .environmentObject(apiViewModel)
+              .environmentObject(userAuth)
+          } label: {
             Text("건너뛰기")
               .fontSystem(fontDesignSystem: .subtitle2_KO)
               .foregroundColor(.LabelColor_Secondary_Dark)
           }
-          .padding(.horizontal, 24)
-          .padding(.vertical, 12)
         }
+        .padding(.horizontal, 24)
+        .padding(.vertical, 12)
         Spacer()
         Button {
           handleSignInButton()
