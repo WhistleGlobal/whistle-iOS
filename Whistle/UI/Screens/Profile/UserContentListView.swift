@@ -190,6 +190,13 @@ struct UserContentListView: View {
         }, showToast: $showHideContentToast)
       }
     }
+    .fullScreenCover(isPresented: $showReport) {
+      MainReportReasonView(
+        goReport: $showReport,
+        contentId: apiViewModel.userPostFeed[currentIndex].contentId ?? 0,
+        userId: apiViewModel.userPostFeed[currentIndex].userId ?? 0)
+        .environmentObject(apiViewModel)
+    }
     .confirmationDialog("", isPresented: $showDialog) {
       Button("저장하기", role: .none) {
         Task {
