@@ -14,12 +14,15 @@ struct ToastMessage: View {
   // MARK: Internal
 
   let text: String
-  let paddingBottom: CGFloat
+  let toastPadding: CGFloat
+  @State var isTopAlignment = false
   @Binding var showToast: Bool
 
   var body: some View {
     VStack {
-      Spacer()
+      if !isTopAlignment {
+        Spacer()
+      }
       Text(text)
         .frame(height: 56)
         .frame(maxWidth: .infinity)
@@ -28,9 +31,12 @@ struct ToastMessage: View {
         .background(Color.Gray70_Dark)
         .cornerRadius(8)
         .opacity(toastOpacity)
+      if isTopAlignment {
+        Spacer()
+      }
     }
     .padding(.horizontal, 16)
-    .padding(.bottom, paddingBottom)
+    .padding(isTopAlignment ? .top : .bottom, isTopAlignment ? 0 : toastPadding)
     .onAppear {
       // showToast가 true로 설정되면 토스트 메시지를 표시하도록 설정
       if showToast {

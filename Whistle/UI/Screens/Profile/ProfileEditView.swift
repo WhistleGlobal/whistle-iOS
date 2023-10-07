@@ -58,10 +58,10 @@ struct ProfileEditView: View {
     }
     .overlay {
       if showIdToast {
-        ToastMessage(text: "사용자 ID가 수정되었습니다.", paddingBottom: 32, showToast: $showIdToast)
+        ToastMessage(text: "사용자 ID가 수정되었습니다.", toastPadding: 32, showToast: $showIdToast)
       }
       if showIntroductionToast {
-        ToastMessage(text: "소개가 수정되었습니다.", paddingBottom: 32, showToast: $showIntroductionToast)
+        ToastMessage(text: "소개가 수정되었습니다.", toastPadding: 32, showToast: $showIntroductionToast)
       }
     }
     .fullScreenCover(isPresented: $showGallery) {

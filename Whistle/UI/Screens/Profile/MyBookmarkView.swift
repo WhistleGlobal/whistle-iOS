@@ -176,7 +176,7 @@ struct MyBookmarkView: View {
     }
     .overlay {
       if showPasteToast {
-        ToastMessage(text: "클립보드에 복사되었어요", paddingBottom: 78, showToast: $showPasteToast)
+        ToastMessage(text: "클립보드에 복사되었어요", toastPadding: 78, showToast: $showPasteToast)
       }
       if showDeleteToast {
         CancelableToastMessage(text: "북마크 해제되었습니다.", paddingBottom: 78, action: {
@@ -316,7 +316,7 @@ extension MyBookmarkView {
           Button {
             showPasteToast = true
             UIPasteboard.general.setValue(
-                "https://readywhistle.com/content_uni?contentId=\(apiViewModel.bookmark[currentIndex].contentId)",
+              "https://readywhistle.com/content_uni?contentId=\(apiViewModel.bookmark[currentIndex].contentId)",
               forPasteboardType: UTType.plainText.identifier)
           } label: {
             Image(systemName: "square.and.arrow.up")

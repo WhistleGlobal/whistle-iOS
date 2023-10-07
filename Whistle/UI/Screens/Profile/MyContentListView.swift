@@ -181,7 +181,7 @@ struct MyContentListView: View {
     }
     .overlay {
       if showPasteToast {
-        ToastMessage(text: "클립보드에 복사되었어요", paddingBottom: 78, showToast: $showPasteToast)
+        ToastMessage(text: "클립보드에 복사되었어요", toastPadding: 70, isTopAlignment: true, showToast: $showPasteToast)
       }
       if showDeleteToast {
         CancelableToastMessage(text: "삭제되었습니다", paddingBottom: 78, action: {
