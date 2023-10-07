@@ -105,7 +105,7 @@ struct MyBookmarkView: View {
                       }),
                       whistleCount:
                       Binding(get: {
-                        content.whistleCount ?? 0
+                        content.whistleCount
                       }, set: { newValue in
                         content.whistleCount = newValue
                       }))
@@ -115,7 +115,7 @@ struct MyBookmarkView: View {
                   .ignoresSafeArea(.all, edges: .top)
                   .tag(index)
               } else {
-                KFImage.url(URL(string: content.thumbnailUrl ?? ""))
+                KFImage.url(URL(string: content.thumbnailUrl))
                   .placeholder {
                     Color.black
                   }
@@ -147,7 +147,7 @@ struct MyBookmarkView: View {
       for _ in 0..<apiViewModel.bookmark.count {
         players.append(nil)
       }
-      players[currentIndex] = AVPlayer(url: URL(string: apiViewModel.bookmark[currentIndex].videoUrl ?? "")!)
+      players[currentIndex] = AVPlayer(url: URL(string: apiViewModel.bookmark[currentIndex].videoUrl)!)
       playerIndex = currentIndex
       guard let player = players[currentIndex] else {
         return
@@ -190,7 +190,7 @@ struct MyBookmarkView: View {
               players[currentIndex]?.pause()
               players.remove(at: currentIndex)
               if !players.isEmpty {
-                players[currentIndex] = AVPlayer(url: URL(string: apiViewModel.bookmark[currentIndex].videoUrl ?? "")!)
+                players[currentIndex] = AVPlayer(url: URL(string: apiViewModel.bookmark[currentIndex].videoUrl)!)
                 await players[currentIndex]?.seek(to: .zero)
                 players[currentIndex]?.play()
               }
@@ -198,7 +198,7 @@ struct MyBookmarkView: View {
               log("contentId: \(contentId)")
               log("currentIndex: \(currentIndex)")
               log("playerIndex: \(currentIndex)")
-              //            await apiViewModel.deleteContent(contentId: contentId)
+              _ = await apiViewModel.actionBookmarkCancel(contentId: contentId)
             } else {
               let contentId = apiViewModel.bookmark[currentIndex].contentId
               log("contentId: \(contentId)")
@@ -212,7 +212,7 @@ struct MyBookmarkView: View {
               log("contentId: \(contentId)")
               log("currentIndex: \(currentIndex)")
               log("playerIndex: \(currentIndex)")
-              //            await apiViewModel.deleteContent(contentId: contentId)
+              _ = await apiViewModel.actionBookmarkCancel(contentId: contentId)
             }
           }
         }, showToast: $showDeleteToast)
