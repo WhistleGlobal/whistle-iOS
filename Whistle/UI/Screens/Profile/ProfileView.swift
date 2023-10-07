@@ -205,10 +205,10 @@ struct ProfileView: View {
         SignoutAlert {
           showSignoutAlert = false
         } signOutAction: {
-          apiViewModel.myProfile.userName.removeAll()
+          apiViewModel.reset()
           GIDSignIn.sharedInstance.signOut()
           userAuth.appleSignout()
-          isFirstProfileLoaded = true
+          isFirstProfileLoaded = false
         }
       }
       if showDeleteAlert {

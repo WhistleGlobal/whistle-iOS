@@ -92,6 +92,7 @@ struct WhistleApp: App {
           SignInView()
             .environmentObject(apiViewModel)
             .environmentObject(userAuth)
+            .environmentObject(universalRoutingModel)
         }
         .tint(.black)
       }
