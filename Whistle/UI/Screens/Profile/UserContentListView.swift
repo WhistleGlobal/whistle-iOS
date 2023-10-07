@@ -22,7 +22,12 @@ struct UserContentListView: View {
   @State var showDialog = false
   @State var showPasteToast = false
   @State var showDeleteToast = false
+  @State var showBookmarkToast = false
+  @State var showHideContentToast = false
+  @State var showReport = false
+  @State var showFollowToast = (false, "")
   @State var players: [AVPlayer?] = []
+  @State var timer: Timer? = nil
 
   var body: some View {
     GeometryReader { proxy in
@@ -115,7 +120,9 @@ struct UserContentListView: View {
       log("onchange end")
     }
     .onChange(of: currentIndex) { newValue in
-      log("실행")
+      if apiViewModel.userPostFeed.isEmpty {
+        return
+      }
       log(playerIndex)
       log(newValue)
       log(currentIndex)
@@ -123,9 +130,11 @@ struct UserContentListView: View {
         return
       }
       players[newValue] = AVPlayer(url: URL(string: url)!)
-      players[playerIndex]?.seek(to: .zero)
-      players[playerIndex]?.pause()
-      players[playerIndex] = nil
+      if playerIndex < players.count {
+        players[playerIndex]?.seek(to: .zero)
+        players[playerIndex]?.pause()
+        players[playerIndex] = nil
+      }
       players[newValue]?.seek(to: .zero)
       players[newValue]?.play()
       playerIndex = newValue
@@ -135,33 +144,66 @@ struct UserContentListView: View {
       if showPasteToast {
         ToastMessage(text: "클립보드에 복사되었어요", paddingBottom: 78, showToast: $showPasteToast)
       }
-      if showDeleteToast {
-        CancelableToastMessage(text: "삭제되었습니다", paddingBottom: 78, action: {
+      if showBookmarkToast {
+        ToastMessage(text: "저장되었습니다!", paddingBottom: 78, showToast: $showBookmarkToast)
+      }
+      if showFollowToast.0 {
+        ToastMessage(text: showFollowToast.1, paddingBottom: 78, showToast: $showFollowToast.0)
+      }
+      if showHideContentToast {
+        CancelableToastMessage(text: "해당 콘텐츠를 숨겼습니다", paddingBottom: 78, action: {
           Task {
-            guard let contentId = apiViewModel.userPostFeed[currentIndex].contentId else { return }
-            log("contentId: \(contentId)")
-            log("currentIndex: \(currentIndex)")
-            log("playerIndex: \(playerIndex)")
-            apiViewModel.userPostFeed.remove(at: currentIndex)
-            players[currentIndex]?.pause()
-            players.remove(at: currentIndex)
-            if !players.isEmpty {
-              players[currentIndex] = AVPlayer(url: URL(string: apiViewModel.userPostFeed[currentIndex].videoUrl ?? "")!)
-              await players[currentIndex]?.seek(to: .zero)
-              players[currentIndex]?.play()
+            if apiViewModel.userPostFeed.count - 1 != currentIndex { // 삭제하려는 컨텐츠가 배열 마지막이 아님
+              guard let contentId = apiViewModel.userPostFeed[currentIndex].contentId else { return }
+              log("contentId: \(contentId)")
+              log("currentIndex: \(currentIndex)")
+              log("playerIndex: \(playerIndex)")
+              apiViewModel.userPostFeed.remove(at: currentIndex)
+              players[currentIndex]?.pause()
+              players.remove(at: currentIndex)
+              if !players.isEmpty {
+                players[currentIndex] = AVPlayer(url: URL(string: apiViewModel.userPostFeed[currentIndex].videoUrl ?? "")!)
+                await players[currentIndex]?.seek(to: .zero)
+                players[currentIndex]?.play()
+              }
+              apiViewModel.postFeedPlayerChanged()
+              log("contentId: \(contentId)")
+              log("currentIndex: \(currentIndex)")
+              log("playerIndex: \(currentIndex)")
+              await apiViewModel.actionContentHate(contentId: contentId)
+            } else {
+              guard let contentId = apiViewModel.userPostFeed[currentIndex].contentId else { return }
+              log("contentId: \(contentId)")
+              log("currentIndex: \(currentIndex)")
+              log("playerIndex: \(playerIndex)")
+              apiViewModel.userPostFeed.removeLast()
+              players.last??.pause()
+              players.removeLast()
+              currentIndex -= 1
+              apiViewModel.postFeedPlayerChanged()
+              log("contentId: \(contentId)")
+              log("currentIndex: \(currentIndex)")
+              log("playerIndex: \(currentIndex)")
+              await apiViewModel.actionContentHate(contentId: contentId)
             }
-            apiViewModel.postFeedPlayerChanged()
-            log("contentId: \(contentId)")
-            log("currentIndex: \(currentIndex)")
-            log("playerIndex: \(currentIndex)")
-//            await apiViewModel.deleteContent(contentId: contentId)
           }
-        }, showToast: $showDeleteToast)
+        }, showToast: $showHideContentToast)
       }
     }
     .confirmationDialog("", isPresented: $showDialog) {
-      Button("삭제하기", role: .destructive) {
-        showDeleteToast = true
+      Button("저장하기", role: .none) {
+        Task {
+          guard let contentId = apiViewModel.userPostFeed[currentIndex].contentId else {
+            return
+          }
+          showBookmarkToast = await apiViewModel.actionBookmark(contentId: contentId)
+        }
+      }
+      Button("관심없음", role: .none) {
+        showHideContentToast = true
+      }
+      Button("신고", role: .destructive) {
+        showReport = true
       }
       Button("닫기", role: .cancel) {
         log("Cancel")
@@ -183,7 +225,7 @@ extension UserContentListView {
 
   @ViewBuilder
   func userInfo(
-    contentId: Int?,
+    contentId _: Int?,
     userName: String,
     profileImg: String,
     caption: String,
@@ -241,19 +283,7 @@ extension UserContentListView {
         VStack(spacing: 0) {
           Spacer()
           Button {
-            Task {
-              if isWhistled.wrappedValue {
-                guard let contentId else { return }
-                await apiViewModel.actionWhistleCancel(contentId: contentId)
-                whistleCount.wrappedValue -= 1
-              } else {
-                guard let contentId else { return }
-                await apiViewModel.actionWhistle(contentId: contentId)
-                whistleCount.wrappedValue += 1
-              }
-              isWhistled.wrappedValue.toggle()
-              apiViewModel.postFeedPlayerChanged()
-            }
+            whistleToggle()
           } label: {
             VStack(spacing: 0) {
               Image(systemName: isWhistled.wrappedValue ? "heart.fill" : "heart")
@@ -269,9 +299,12 @@ extension UserContentListView {
             }
           }
           Button {
+            guard let contentId = apiViewModel.userPostFeed[currentIndex].contentId else {
+              return
+            }
             showPasteToast = true
             UIPasteboard.general.setValue(
-              "복사할 링크입니다.",
+              "https://readywhistle.com/content_uni?contentId=\(contentId)",
               forPasteboardType: UTType.plainText.identifier)
           } label: {
             Image(systemName: "square.and.arrow.up")
@@ -296,5 +329,37 @@ extension UserContentListView {
     }
     .padding(.bottom, 64)
     .padding(.horizontal, 20)
+  }
+}
+
+// MARK: - Timer
+extension UserContentListView {
+  func whistleToggle() {
+    HapticManager.instance.impact(style: .medium)
+    timer?.invalidate()
+    guard let contentId = apiViewModel.userPostFeed[currentIndex].contentId else {
+      return
+    }
+    if apiViewModel.userPostFeed[currentIndex].isWhistled! == 1 {
+      timer = Timer.scheduledTimer(withTimeInterval: 2, repeats: false) { _ in
+        Task {
+          await apiViewModel.actionWhistleCancel(contentId: contentId)
+        }
+      }
+      apiViewModel.userPostFeed[currentIndex].contentWhistleCount! -= 1
+    } else {
+      timer = Timer.scheduledTimer(withTimeInterval: 2, repeats: false) { _ in
+        Task {
+          await apiViewModel.actionWhistle(contentId: contentId)
+        }
+      }
+      apiViewModel.userPostFeed[currentIndex].contentWhistleCount! += 1
+    }
+    if apiViewModel.userPostFeed[currentIndex].isWhistled! == 0 {
+      apiViewModel.userPostFeed[currentIndex].isWhistled = 1
+    } else {
+      apiViewModel.userPostFeed[currentIndex].isWhistled = 0
+    }
+    apiViewModel.postFeedPlayerChanged()
   }
 }
