@@ -201,23 +201,9 @@ extension NoSignInProfileView {
   @ViewBuilder
   func overlayedView() -> some View {
     VStack(spacing: 0) {
-      HStack {
-        Spacer()
-        Button { } label: {
-          Circle()
-            .foregroundColor(.Gray_Default)
-            .frame(width: 48, height: 48)
-            .overlay {
-              Image(systemName: "ellipsis")
-                .resizable()
-                .scaledToFit()
-                .foregroundColor(Color.White)
-                .fontWeight(.semibold)
-                .frame(width: 20, height: 20)
-            }
-        }
-      }
-      .padding([.top, .horizontal], 16)
+      Spacer()
+        .frame(height: 48)
+        .padding([.top, .horizontal], 16)
       Image("ProfileDefault")
         .resizable()
         .scaledToFit()

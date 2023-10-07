@@ -295,7 +295,7 @@ struct NoSignInMainView: View {
     }
     .onChange(of: bottomSheetPosition) { newValue in
       if newValue == .hidden {
-//        tabbarModel.tabbarOpacity = 1.0
+        tabbarModel.tabbarOpacity = 1.0
       } else {
         tabbarModel.tabbarOpacity = 0.0
       }
