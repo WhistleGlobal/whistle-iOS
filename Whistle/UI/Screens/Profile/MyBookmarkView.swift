@@ -95,6 +95,7 @@ struct MyBookmarkView: View {
                       .allowsHitTesting(false)
                     userInfo(
                       contentId: content.contentId,
+                      userName: content.userName,
                       caption: content.caption ?? "",
                       musicTitle: content.musicTitle ?? "",
                       isWhistled:
@@ -234,6 +235,7 @@ extension MyBookmarkView {
   @ViewBuilder
   func userInfo(
     contentId: Int,
+    userName: String,
     caption: String,
     musicTitle: String,
     isWhistled: Binding<Bool>,
@@ -269,7 +271,7 @@ extension MyBookmarkView {
             Group {
               profileImageView(url: apiViewModel.myProfile.profileImage, size: 36)
                 .padding(.trailing, 12)
-              Text(apiViewModel.myProfile.userName)
+              Text(userName)
                 .foregroundColor(.white)
                 .fontSystem(fontDesignSystem: .subtitle1)
                 .padding(.trailing, 16)
