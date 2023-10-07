@@ -353,6 +353,8 @@ extension ProfileView {
       NavigationLink {
         ProfileEditView()
           .environmentObject(apiViewModel)
+          .environmentObject(tabbarModel)
+
       } label: {
         Text("프로필 편집")
           .fontSystem(fontDesignSystem: .subtitle2_KO)

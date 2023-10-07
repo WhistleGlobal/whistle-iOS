@@ -19,6 +19,7 @@ struct ProfileEditView: View {
   @State var showGallery = false
   @State var showAuthAlert = false
   @EnvironmentObject var apiViewModel: APIViewModel
+  @EnvironmentObject var tabbarModel: TabbarModel
   @ObservedObject var photoCollection = PhotoCollection(smartAlbum: .smartAlbumUserLibrary)
   var body: some View {
     VStack(spacing: 0) {
@@ -37,13 +38,16 @@ struct ProfileEditView: View {
       .padding(.bottom, 40)
       Divider()
       profileEditLink(
-        destination: ProfileEditIDView(showToast: $showToast).environmentObject(apiViewModel),
+        destination: ProfileEditIDView(showToast: $showToast)
+          .environmentObject(apiViewModel)
+          .environmentObject(tabbarModel),
         title: "사용자 ID",
         content: apiViewModel.myProfile.userName)
       Divider().padding(.leading, 96)
       profileEditLink(
         destination: ProfileEditIntroduceView(showToast: $showToast, introduce: apiViewModel.myProfile.introduce ?? " ")
-          .environmentObject(apiViewModel),
+          .environmentObject(apiViewModel)
+          .environmentObject(tabbarModel),
         title: "소개",
         content: apiViewModel.myProfile.introduce ?? " ")
       Divider()
@@ -84,6 +88,7 @@ struct ProfileEditView: View {
     .toolbar {
       ToolbarItem(placement: .cancellationAction) {
         Button {
+          tabbarModel.tabbarOpacity = 1.0
           dismiss()
         } label: {
           Image(systemName: "chevron.backward")
@@ -97,6 +102,7 @@ struct ProfileEditView: View {
       ToolbarItem(placement: .confirmationAction) {
         Button {
           log("Update Profile")
+          tabbarModel.tabbarOpacity = 1.0
           dismiss()
         } label: {
           Text("완료")
@@ -107,6 +113,9 @@ struct ProfileEditView: View {
     }
     .task {
       await apiViewModel.requestMyProfile()
+    }
+    .onAppear {
+      tabbarModel.tabbarOpacity = 0.0
     }
   }
 }
