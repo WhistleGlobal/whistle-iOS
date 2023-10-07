@@ -34,7 +34,7 @@ extension VideoError {
     case notConfigured =
       "No camera session was created, please check your camera permissions."
     case notRunning =
-      "Session is not running. Check if you've ran the session or permitted camera permissio.n"
+      "Session is not running. Check if you've ran the session or permitted camera permission."
     case cannnotFindMovieFileOutput =
       "Couldn't find connected output. Check if you've added connection properly"
     case cannotFindConnection =

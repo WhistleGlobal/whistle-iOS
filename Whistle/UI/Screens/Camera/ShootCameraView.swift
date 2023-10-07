@@ -18,6 +18,7 @@ struct ShootCameraView: View {
   @State private var recordingDuration: TimeInterval = 0
   @State private var recordingTimer: Timer?
   private let maxRecordingDuration: TimeInterval = 15 // 최대 녹화 시간 (15초)
+  @State private var isCameraFrontFacing = true
 
   var body: some View {
     ZStack {
@@ -76,7 +77,10 @@ struct ShootCameraView: View {
             }
           }) {
             // 시간을 표시할 버튼
-            CameraButtonView(state: buttonState, timerText: timeStringFromTimeInterval(recordingDuration))
+            CameraButtonView(
+              state: buttonState,
+              timerText: timeStringFromTimeInterval(recordingDuration),
+              progress: min(recordingDuration / maxRecordingDuration, 1.0))
           }
           .padding()
         }
@@ -151,6 +155,11 @@ enum CameraButtonState {
 struct CameraButtonView: View {
   let state: CameraButtonState
   let timerText: String
+  var progress: Double
+  let cameraViewModel = ShootCameraViewModel()
+
+  @State private var animatedProgress = 0.0
+  @State private var isCameraFrontFacing = true
 
   var body: some View {
     ZStack {
@@ -169,12 +178,17 @@ struct CameraButtonView: View {
               endPoint: .leading))
             .frame(width: 72, height: 72, alignment: .center)
         }
+//        .overlay(
+//          HStack {
+//            GalleryButton()
+//            Spacer(minLength: 150)
+////            ScreenTransitionButton(viewModel: cameraViewModel)
+//            ScreenTransitionButton()
+//          })
 
       case .recording:
-
         VStack {
-          // 시간을 표시할 텍스트
-          Text(timerText)
+          Text(timerText) // 시간을 표시할 텍스트
             .font(.custom("SFProText-Semibold", size: 16))
             .foregroundColor(.Gray10)
 
@@ -183,16 +197,134 @@ struct CameraButtonView: View {
               .foregroundColor(.Dim_Thick)
               .frame(width: 114, height: 114, alignment: .center)
 
+            Circle()
+              .trim(from: 0.0, to: CGFloat(min(progress, 1.0))) // progress 값에 따라 trim 설정
+              .stroke(lineWidth: 5)
+              .foregroundColor(.Primary_Default)
+              .frame(width: 109, height: 109, alignment: .center)
+              .rotationEffect(Angle(degrees: -90)) // 반시계 방향으로 돌게 설정
+              .animation(.linear(duration: 0.1)) // 타이밍 함수 변경
+
             Rectangle()
               .foregroundColor(.White)
               .cornerRadius(8)
               .frame(width: 36, height: 36, alignment: .center)
           }
         }
+        .onAppear {
+          withAnimation(.linear(duration: 0.5)) { // 애니메이션 설정
+            animatedProgress = progress
+          }
+        }
+        .onChange(of: progress) { newValue in
+          withAnimation(.linear(duration: 0.5)) { // 값이 변경될 때 애니메이션으로 업데이트
+            animatedProgress = newValue
+          }
+        }
 
       case .completed:
         // 투명한 버튼을 위한 빈 ZStack
         ZStack { }
+      }
+    }
+  }
+}
+
+// MARK: - GalleryButton
+
+struct GalleryButton: View {
+  var body: some View {
+    VStack(spacing: 8) {
+      Rectangle()
+        .stroke(
+          Color.LabelColor_Primary_Dark,
+          lineWidth: 2)
+        .frame(width: 56, height: 56.5)
+        .cornerRadius(6)
+      Text("갤러리")
+        .foregroundColor(.white)
+    }
+  }
+}
+
+// MARK: - ScreenTransitionButton
+
+struct ScreenTransitionButton: View {
+  @StateObject private var viewModel = ShootCameraViewModel()
+//  @ObservedObject private var viewModel: ShootCameraViewModel
+//
+//  init(viewModel: ShootCameraViewModel) {
+//    self.viewModel = viewModel
+//  }
+
+  var body: some View {
+    Button(action: {
+//      viewModel.toggleCameraDirection()
+    }) {
+      VStack(spacing: 8) {
+        ZStack {
+          glassMoriphicCircleView(width: 56, height: 56)
+            .overlay {
+              Circle()
+                .stroke(lineWidth: 1)
+                .foregroundStyle(LinearGradient.Border_Glass)
+            }
+          Image(systemName: "arrow.triangle.2.circlepath")
+            .resizable()
+            .scaledToFit()
+            .foregroundColor(.white)
+            .frame(width: 27, height: 20)
+        }
+        Text("화면 전환")
+          .foregroundColor(.white)
+      }
+    }
+  }
+}
+
+// MARK: - flashButton
+
+struct flashButton: View {
+  var body: some View {
+    Button(action: {
+      //      viewModel.toggleCameraDirection()
+    }) {
+      ZStack {
+        glassMoriphicCircleView(width: 36, height: 36)
+          .overlay {
+            Circle()
+              .stroke(lineWidth: 1)
+              .foregroundStyle(LinearGradient.Border_Glass)
+          }
+        Image(systemName: "bolt.slash.fill")
+          .resizable()
+          .scaledToFit()
+          .foregroundColor(.white)
+          .frame(width: 15, height: 16)
+      }
+    }
+  }
+}
+
+// MARK: - timerButton
+
+struct timerButton: View {
+  var body: some View {
+    Button(action: {
+      //      viewModel.toggleCameraDirection()
+    }) {
+      ZStack {
+        glassMoriphicCircleView(width: 36, height: 36)
+          .overlay {
+            Circle()
+              .stroke(lineWidth: 1)
+              .foregroundStyle(LinearGradient.Border_Glass)
+          }
+        Image(systemName: "clock")
+          .resizable()
+          .scaledToFit()
+          .foregroundColor(.white)
+          .frame(width: 18, height: 16)
       }
     }
   }

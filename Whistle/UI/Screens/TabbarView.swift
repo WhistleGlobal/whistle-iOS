@@ -6,54 +6,85 @@
 //
 
 import SwiftUI
+import VideoPicker
 
 // MARK: - TabbarView
 
 struct TabbarView: View {
-
-  @State var tabSelection: TabSelection = .main
-  @State var tabbarOpacity = 1.0
   @State var isFirstProfileLoaded = true
-  @State var tabWidth = UIScreen.width - 32
+  @State var mainOpacity = 1.0
+  @State var isRootStacked = false
+  @AppStorage("isAccess") var isAccess = false
   @EnvironmentObject var apiViewModel: APIViewModel
   @EnvironmentObject var userAuth: UserAuth
-
+  @EnvironmentObject var universalRoutingModel: UniversalRoutingModel
+  @StateObject var tabbarModel: TabbarModel = .init()
+  @State private var pickerOptions = PickerOptionsInfo()
+  
   var body: some View {
     ZStack {
-      MainView(
-        tabSelection: $tabSelection,
-        tabbarOpacity: $tabbarOpacity,
-        tabWidth: $tabWidth)
-        .environmentObject(apiViewModel)
-        .opacity(tabSelection == .main ? 1 : 0)
-      switch tabSelection {
+      NavigationStack {
+        if isAccess {
+          MainView(mainOpacity: $mainOpacity, isRootStacked: $isRootStacked)
+            .environmentObject(apiViewModel)
+            .environmentObject(tabbarModel)
+            .environmentObject(universalRoutingModel)
+            .opacity(mainOpacity)
+            .onChange(of: tabbarModel.tabSelectionNoAnimation) { newValue in
+              mainOpacity = newValue == .main ? 1 : 0
+            }
+        } else {
+          NoSignInMainView(mainOpacity: $mainOpacity)
+            .environmentObject(apiViewModel)
+            .environmentObject(tabbarModel)
+            .environmentObject(userAuth)
+            .opacity(mainOpacity)
+            .onChange(of: tabbarModel.tabSelectionNoAnimation) { newValue in
+              mainOpacity = newValue == .main ? 1 : 0
+            }
+        }
+      }
+      .tint(.black)
+      switch tabbarModel.tabSelectionNoAnimation {
       case .main:
         Color.clear
       case .upload:
         // FIXME: - uploadview로 교체하기
-//        Color.pink.opacity(0.4).ignoresSafeArea()
-        ShootCameraView()
+        //        Color.pink.ignoresSafeArea()]
+        NavigationStack {
+          ZStack {
+            Color.pink.ignoresSafeArea()
+            PickerConfigViewControllerWrapper()
+          }
+        }
       case .profile:
-        ProfileView(
-          tabbarOpacity: $tabbarOpacity,
-          tabBarSelection: $tabSelection,
-          tabWidth: $tabWidth,
-          isFirstProfileLoaded: $isFirstProfileLoaded)
-          .environmentObject(apiViewModel)
-          .environmentObject(userAuth)
+        NavigationStack {
+          if isAccess {
+            ProfileView(isFirstProfileLoaded: $isFirstProfileLoaded)
+              .environmentObject(apiViewModel)
+              .environmentObject(tabbarModel)
+              .environmentObject(userAuth)
+          } else {
+            NoSignInProfileView()
+              .environmentObject(tabbarModel)
+              .environmentObject(userAuth)
+              .environmentObject(apiViewModel)
+          }
+        }
+        .tint(.black)
       }
       VStack {
         Spacer()
-        glassMorphicTab(width: tabWidth)
+        glassMorphicTab(width: tabbarModel.tabWidth)
           .overlay {
-            if tabWidth != 56 {
+            if tabbarModel.tabWidth != 56 {
               tabItems()
             } else {
               HStack(spacing: 0) {
                 Spacer().frame(minWidth: 0)
                 Button {
                   withAnimation {
-                    tabWidth = UIScreen.width - 32
+                    tabbarModel.tabWidth = UIScreen.width - 32
                   }
                 } label: {
                   Circle()
@@ -80,15 +111,22 @@ struct TabbarView: View {
                 if value.translation.width > 50 {
                   log("right swipe")
                   withAnimation {
-                    tabWidth = 56
+                    tabbarModel.tabWidth = 56
                   }
                 }
               })
       }
       .padding(.horizontal, 16)
-      .opacity(tabbarOpacity)
+      .opacity(tabbarModel.tabbarOpacity)
     }
+    .navigationBarBackButtonHidden()
   }
+}
+
+#Preview {
+  TabbarView()
+    .environmentObject(APIViewModel())
+    .environmentObject(UserAuth())
 }
 
 extension TabbarView {
@@ -97,23 +135,24 @@ extension TabbarView {
     RoundedRectangle(cornerRadius: 100)
       .foregroundColor(Color.Dim_Default)
       .frame(width: (UIScreen.width - 32) / 3 - 6)
-      .offset(x: tabSelection.rawValue * ((UIScreen.width - 32) / 3))
+      .offset(x: tabbarModel.tabSelection.rawValue * ((UIScreen.width - 32) / 3))
       .padding(3)
-      .overlay(
+      .overlay {
         Capsule()
           .stroke(lineWidth: 1)
           .foregroundStyle(LinearGradient.Border_Glass)
           .padding(3)
-          .offset(x: tabSelection.rawValue * ((UIScreen.width - 32) / 3)))
+          .offset(x: tabbarModel.tabSelection.rawValue * ((UIScreen.width - 32) / 3))
+      }
       .foregroundColor(.clear)
       .frame(height: 56)
       .frame(maxWidth: .infinity)
       .overlay {
         Button {
-          Task {
-            withAnimation {
-              self.tabSelection = .main
-            }
+          if tabbarModel.tabSelectionNoAnimation == .main {
+            NavigationUtil.popToRootView()
+          } else {
+            switchTab(to: .main)
           }
         } label: {
           Color.clear.overlay {
@@ -127,12 +166,8 @@ extension TabbarView {
         .foregroundColor(.white)
         .padding(3)
         .offset(x: -1 * ((UIScreen.width - 32) / 3))
-
         Button {
-          withAnimation {
-            self.tabSelection = .upload
-          }
-
+          switchTab(to: .upload)
         } label: {
           Color.clear.overlay {
             Image(systemName: "plus")
@@ -167,12 +202,11 @@ extension TabbarView {
 }
 
 // MARK: - TabClicked Actions
+
 extension TabbarView {
   var profileTabClicked: () -> Void {
     {
-      withAnimation(.default) {
-        tabSelection = .profile
-      }
+      switchTab(to: .profile)
       if isFirstProfileLoaded {
         Task {
           await apiViewModel.requestMyFollow()
@@ -190,6 +224,13 @@ extension TabbarView {
       }
     }
   }
+  
+  func switchTab(to tabSelection: TabSelection) {
+    tabbarModel.tabSelectionNoAnimation = tabSelection
+    withAnimation {
+      tabbarModel.tabSelection = tabSelection
+    }
+  }
 }
 
 // MARK: - TabSelection
@@ -198,4 +239,13 @@ public enum TabSelection: CGFloat {
   case main = -1.0
   case upload = 0.0
   case profile = 1.0
+}
+
+// MARK: - TabbarModel
+
+class TabbarModel: ObservableObject {
+  @Published var tabSelection: TabSelection = .main
+  @Published var tabSelectionNoAnimation: TabSelection = .main
+  @Published var tabbarOpacity = 1.0
+  @Published var tabWidth = UIScreen.width - 32
 }

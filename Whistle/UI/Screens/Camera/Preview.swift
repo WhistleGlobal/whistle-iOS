@@ -3,7 +3,6 @@
 //  Whistle
 //
 //  Created by Lee Juwon on 2023/09/21.
-//
 
 import AVFoundation
 import SwiftUI
@@ -18,6 +17,7 @@ struct Preview: UIViewControllerRepresentable {
   {
     self.gravity = gravity
     previewLayer = AVCaptureVideoPreviewLayer(session: session)
+    previewLayer.videoGravity = gravity
   }
 
   func makeUIViewController(context _: Context) -> UIViewController {

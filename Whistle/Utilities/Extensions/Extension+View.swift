@@ -103,6 +103,21 @@ extension View {
   }
 
   @ViewBuilder
+  func glassMoriphicCircleView(width: CGFloat, height: CGFloat) -> some View {
+    ZStack {
+      Circle()
+        .fill(Color.black.opacity(0.3))
+      CustomBlurView(effect: .systemUltraThinMaterialLight) { view in
+        // FIXME: - 피그마와 비슷하도록 값 고치기
+        view.saturationAmout = 2.2
+        view.gaussianBlurRadius = 36
+      }
+      .clipShape(Circle())
+    }
+    .frame(width: width, height: height)
+  }
+
+  @ViewBuilder
   func glassProfile(width: CGFloat, height: CGFloat, cornerRadius: CGFloat, overlayed: some View) -> some View {
     glassMoriphicView(width: width, height: height, cornerRadius: cornerRadius)
       .overlay {
