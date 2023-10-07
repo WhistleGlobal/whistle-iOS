@@ -86,7 +86,7 @@ extension ProfileAlert {
       Text("정말 사용자 ID를\n 변경하시겠습니까?")
         .fontSystem(fontDesignSystem: .subtitle2_KO)
         .foregroundColor(.LabelColor_Primary_Dark)
-      Text("30일마다 한 번씩 사용자 ID를\n 변경할 수 있습니다.")
+      Text("14일마다 한 번씩 사용자 ID를\n 변경할 수 있습니다.")
         .fontSystem(fontDesignSystem: .body2_KO)
         .foregroundColor(.LabelColor_Secondary_Dark)
     }
