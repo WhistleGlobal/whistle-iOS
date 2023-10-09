@@ -79,7 +79,7 @@ final class VideoPlayerManager: ObservableObject {
           pause()
           videoPlayer = AVPlayer(url: url)
           startStatusSubscriptions()
-          print("AVPlayer set url:", url.absoluteString)
+//          print("AVPlayer set url:", url.absoluteString)
         case .failed, .loading, .unknown:
           break
         }

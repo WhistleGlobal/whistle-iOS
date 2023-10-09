@@ -78,7 +78,7 @@ struct MusicTrimView: View {
             RoundedRectangle(cornerRadius: 6)
               .fill(Color.Secondary_Default_Dark)
               .frame(
-                width: UIScreen.getWidth(max(CGFloat(273 / musicDuration * musicVM.trimmedDuration), 12)),
+                width: UIScreen.getWidth(max(CGFloat(273 / musicDuration * musicVM.trimDuration), 12)),
                 height: UIScreen.getHeight(8))
               .offset(x: UIScreen.getWidth(indicatorOffset))
 //              .offset(x: Double(288 * offset) / (Double(length) * 16.9) + draggedOffset)
@@ -103,7 +103,7 @@ struct MusicTrimView: View {
               .frame(width: UIScreen.getWidth(175), height: UIScreen.getHeight(84))
               .mask(alignment: .leading) {
                 Rectangle()
-                  .frame(width: isAnimated ? max(0.1, UIScreen.getWidth(175 - (audioTimer / musicVM.trimmedDuration) * 175)) : 0)
+                  .frame(width: isAnimated ? max(0.1, UIScreen.getWidth(175 - (audioTimer / musicVM.trimDuration) * 175)) : 0)
               }
 
             // MARK: - Audio Waveform
@@ -130,11 +130,11 @@ struct MusicTrimView: View {
           if let video = editorVM.currentVideo {
             videoPlayer.action(video)
           }
-          audioTimer = musicVM.trimmedDuration
+          audioTimer = musicVM.trimDuration
           musicVM.stopAudio()
         }
         if value {
-          musicVM.playAudio(startTime: (offset / 16.0) * (musicVM.trimmedDuration / 10))
+          musicVM.playAudio(startTime: (offset / 16.0) * (musicVM.trimDuration / 10))
         }
       }
       // 스크롤중 / 스크롤 끝
@@ -166,7 +166,9 @@ extension MusicTrimView {
         Task {
           stopPlaying()
           isShowingMusicTrimView = false
-          musicVM.musicInfo = nil
+          if !musicVM.isTrimmed {
+            musicVM.musicInfo = nil
+          }
         }
       } label: {
         Text("취소")
@@ -175,12 +177,12 @@ extension MusicTrimView {
       }
       Spacer()
       Button {
-        musicVM.startTime = offset / 16.4
+        musicVM.startTime = (offset / 16.0) * (musicVM.trimDuration / 10)
         Task {
           stopPlaying()
           isShowingMusicTrimView = false
         }
-        musicVM.trimmedMusicInfo = musicVM.musicInfo
+        musicVM.isTrimmed = true
       } label: {
         Text("완료")
           .fontSystem(fontDesignSystem: .subtitle2_KO)
@@ -217,8 +219,8 @@ extension MusicTrimView {
         })
         .onPreferenceChange(ViewOffsetKey.self) { offset in
           self.offset = offset
-          let currentTime = (offset / 16.0) * (musicVM.trimmedDuration / 10)
-          let indicatorMaxOffset = 273 - max(CGFloat(273 / musicDuration * musicVM.trimmedDuration), 12)
+          let currentTime = (offset / 16.0) * (musicVM.trimDuration / 10)
+          let indicatorMaxOffset = 273 - max(CGFloat(273 / musicDuration * musicVM.trimDuration), 12)
           indicatorOffset = min(indicatorMaxOffset, 273 / musicDuration * currentTime)
           // 각 note가 박스를 나갈 때마다 햅틱을 재생합니다. 0~1.7인 이유는 스크롤 시 뛰어넘는 offset이 가끔 발생하기 때문입니다.
           if
@@ -258,9 +260,14 @@ extension MusicTrimView {
 
 extension MusicTrimView {
   func initialStart() {
-    musicVM.startTime = nil
+//    musicVM.startTime = nil
     loadAudioFile()
+//    print("starTtime:", musicVM.startTime)
+//    if let starttime = musicVM.startTime {
+//      offset = starttime * 16 * 10 / musicVM.trimDuration
+//    } else {
     offset = 0
+//    }
     if let url = musicVM.url {
       musicDuration = audioDuration(url)
     }
@@ -269,7 +276,7 @@ extension MusicTrimView {
 
   func startPlaying() {
     // progress 시작
-    audioTimer = musicVM.trimmedDuration
+    audioTimer = musicVM.trimDuration
     timer = Timer.publish(every: 0.1, on: .main, in: .common).autoconnect()
     isAnimated = true
 
@@ -281,7 +288,7 @@ extension MusicTrimView {
 
   func stopPlaying() {
     // progress 정지
-    audioTimer = musicVM.trimmedDuration
+    audioTimer = musicVM.trimDuration
     timer.upstream.connect().cancel()
     isAnimated = false
 

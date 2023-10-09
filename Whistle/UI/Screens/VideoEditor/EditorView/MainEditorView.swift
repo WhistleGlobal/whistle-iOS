@@ -23,11 +23,12 @@ struct MainEditorView: View {
   @State var isShowingMusicTrimView = false
   @State var bottomSheetTitle = ""
   @State var bottomSheetPosition: BottomSheetPosition = .hidden
+  @State var sheetPositions: [BottomSheetPosition] = [.hidden, .dynamic]
   @StateObject var musicVM = MusicViewModel()
   @StateObject var editorVM = EditorViewModel()
   @StateObject var videoPlayer = VideoPlayerManager()
 
-  @State var searchQueryString = ""
+//  @State var searchQueryString = ""
   var body: some View {
     ZStack {
       GeometryReader { proxy in
@@ -82,20 +83,21 @@ struct MainEditorView: View {
     .onChange(of: editorVM.selectedTools) { newValue in
       switch newValue {
 //      case .speed:
-//        bottomSheetPosition = .absolute(UIScreen.getHeight(270))
+//        bottomSheetPosition = .dynamic
 //        bottomSheetTitle = "영상 속도"
       case .music:
         if let video = editorVM.currentVideo {
           if videoPlayer.isPlaying {
-            print("ha")
             videoPlayer.action(video)
           }
           videoPlayer.scrubState = .scrubEnded(video.rangeDuration.lowerBound)
         }
-        bottomSheetPosition = .absolute(UIScreen.getHeight(784))
+        bottomSheetPosition = .relative(1)
+        sheetPositions = [.absolute(UIScreen.getHeight(400)), .hidden, .relative(1)]
         bottomSheetTitle = "음악 검색"
       case .audio:
-        bottomSheetPosition = .absolute(UIScreen.getHeight(410))
+        bottomSheetPosition = .dynamic
+        sheetPositions = [.hidden, .dynamic]
         bottomSheetTitle = "볼륨 조절"
 //      case .filters: print("filters")
 //      case .corrections: print("corrections")
@@ -103,10 +105,10 @@ struct MainEditorView: View {
       case nil: print("nil")
       }
     }
-    .bottomSheet(bottomSheetPosition: $bottomSheetPosition, switchablePositions: [
-      .hidden,
-      .relative(0.4),
-    ]) {
+    .bottomSheet(
+      bottomSheetPosition: $bottomSheetPosition,
+      switchablePositions: sheetPositions)
+    {
       VStack(spacing: 0) {
         ZStack {
           Text(bottomSheetTitle)
@@ -159,7 +161,14 @@ struct MainEditorView: View {
           videoPlayer: videoPlayer,
           bottomSheetPosition: $bottomSheetPosition,
           isShowingMusicTrimView: $isShowingMusicTrimView)
-      //        case .audio: print("audio")
+        {
+          bottomSheetPosition = .relative(1)
+        }
+      case .audio:
+        AudioSheetView(videoPlayer: videoPlayer, editorVM: editorVM, musicVM: musicVM) {
+          bottomSheetPosition = .hidden
+          editorVM.selectedTools = nil
+        }
       //        case .filters: print("filters")
       //        case .corrections: print("corrections")
       //        case .frames: print("frames")
@@ -222,7 +231,7 @@ extension MainEditorView {
 
   @ViewBuilder
   private func musicInfo() -> some View {
-    if let music = musicVM.trimmedMusicInfo {
+    if let music = musicVM.musicInfo {
       HStack(spacing: 12) {
         Image(systemName: "music.note")
         Text(music.musicTitle)
@@ -239,9 +248,7 @@ extension MainEditorView {
         Image(systemName: "xmark")
           .contentShape(Rectangle())
           .onTapGesture {
-            musicVM.trimmedMusicInfo = nil
-            musicVM.musicInfo = nil
-            musicVM.startTime = nil
+            musicVM.removeMusic()
           }
       }
       .foregroundStyle(Color.White)

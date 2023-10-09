@@ -84,9 +84,9 @@ extension ToolsSectionView {
           musicVM: MusicViewModel(),
           editorVM: editorVM,
           videoPlayer: videoPlayer,
-          bottomSheetPosition: .constant(.hidden), isShowingMusicTrimView: .constant(false))
+          bottomSheetPosition: .constant(.hidden), isShowingMusicTrimView: .constant(false)) { }
       case .audio:
-        AudioSheetView(videoPlayer: videoPlayer, editorVM: editorVM)
+        AudioSheetView(videoPlayer: videoPlayer, editorVM: editorVM, musicVM: MusicViewModel()) { }
 //      case .filters:
 //        FiltersView(selectedFilterName: video.filterName, viewModel: filtersVM) { filterName in
 //          if let filterName {

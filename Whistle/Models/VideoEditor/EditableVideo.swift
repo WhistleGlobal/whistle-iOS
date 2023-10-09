@@ -57,7 +57,6 @@ struct EditableVideo: Identifiable {
     for i in 0 ... imagesCount {
       let thumbnailImage = ThumbnailImage(image: asset.getImage(Int(offset)))
       offset = Double(i) * (originalDuration / Double(imagesCount))
-      print("imageori: \(thumbnailImage.image?.size)")
       thumbnailsImages.append(thumbnailImage)
     }
     thumbnailsImages.remove(at: 0)
@@ -66,7 +65,6 @@ struct EditableVideo: Identifiable {
   /// reset and update
   mutating func updateRate(_ rate: Float) {
     let lowerBound = (rangeDuration.lowerBound * Double(self.rate)) / Double(rate)
-    print(self.rate, rate)
     let upperBound = (rangeDuration.upperBound * Double(self.rate)) / Double(rate)
     rangeDuration = lowerBound ... upperBound
 

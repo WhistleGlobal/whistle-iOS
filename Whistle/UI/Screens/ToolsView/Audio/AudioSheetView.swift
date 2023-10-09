@@ -14,21 +14,77 @@ struct AudioSheetView: View {
   @State private var audioVolume: Float = 1.0
   @ObservedObject var videoPlayer: VideoPlayerManager
   @ObservedObject var editorVM: EditorViewModel
+  @ObservedObject var musicVM: MusicViewModel
 
-  var value: Binding<Float> {
-    editorVM.isSelectVideo ? $videoVolume : $audioVolume
+  let tapDismiss: (() -> Void)?
+  var videoValue: Binding<Float> {
+//    editorVM.isSelectVideo ? $videoVolume : $audioVolume
+    $videoVolume
+  }
+
+  var audioValue: Binding<Float> {
+    $audioVolume
   }
 
   var body: some View {
-    HStack {
-      Image(systemName: value.wrappedValue > 0 ? "speaker.wave.2.fill" : "speaker.slash.fill")
-      Slider(value: value, in: 0 ... 1) { _ in
-        onChange()
+    VStack(alignment: .leading, spacing: 12) {
+      subtitleText(text: "원본 사운드")
+      CustomSlider(
+        value: videoValue,
+        in: 0 ... 1,
+        onChanged: {
+          onChange()
+        },
+        track: {
+          RoundedRectangle(cornerRadius: 12)
+            .foregroundColor(Color.Dim_Default)
+            .frame(width: UIScreen.getWidth(361), height: UIScreen.getHeight(56))
+        },
+        thumb: {
+          RoundedRectangle(cornerRadius: 12)
+            .foregroundColor(.white)
+            .shadow(radius: 20 / 1)
+        },
+        thumbSize: CGSize(width: UIScreen.getWidth(16), height: UIScreen.getHeight(56)))
+        .frame(width: UIScreen.getWidth(361), height: UIScreen.getHeight(56))
+        .overlay(alignment: .leading) {
+          Text("\(Int(videoValue.wrappedValue * 100))")
+            .fontSystem(fontDesignSystem: .subtitle3)
+            .vCenter()
+            .padding(.leading, UIScreen.getWidth(24))
+        }
+      if musicVM.isTrimmed {
+        subtitleText(text: "추가된 음악 사운드")
+          .padding(.top, 12)
+        CustomSlider(
+          value: audioValue,
+          in: 0 ... 1,
+          onChanged: {
+            onChange()
+          },
+          track: {
+            RoundedRectangle(cornerRadius: 12)
+              .foregroundColor(Color.Dim_Default)
+              .frame(width: UIScreen.getWidth(361), height: UIScreen.getHeight(56))
+          },
+          thumb: {
+            RoundedRectangle(cornerRadius: 12)
+              .foregroundColor(.white)
+              .shadow(radius: 20 / 1)
+          },
+          thumbSize: CGSize(width: UIScreen.getWidth(16), height: UIScreen.getHeight(56)))
+          .frame(width: UIScreen.getWidth(361), height: UIScreen.getHeight(56))
+          .overlay(alignment: .leading) {
+            Text("\(Int(audioValue.wrappedValue * 100))")
+              .fontSystem(fontDesignSystem: .subtitle3)
+              .vCenter()
+              .padding(.leading, UIScreen.getWidth(24))
+          }
       }
-      .tint(.white)
-      Text("\(Int(value.wrappedValue * 100))")
+      completeButton()
     }
-    .font(.caption)
+    .padding(.top, UIScreen.getHeight(20))
+    .padding(.bottom, UIScreen.getHeight(32))
     .onAppear {
       setValue()
     }
@@ -39,7 +95,29 @@ struct AudioSheetView: View {
 
 struct AudioSheetView_Previews: PreviewProvider {
   static var previews: some View {
-    AudioSheetView(videoPlayer: VideoPlayerManager(), editorVM: EditorViewModel())
+    AudioSheetView(videoPlayer: VideoPlayerManager(), editorVM: EditorViewModel(), musicVM: MusicViewModel()) { }
+  }
+}
+
+extension AudioSheetView {
+  @ViewBuilder
+  func subtitleText(text: String) -> some View {
+    Text(text)
+      .fontSystem(fontDesignSystem: .subtitle2_KO)
+      .foregroundStyle(Color.Gray10_Dark)
+  }
+
+  @ViewBuilder
+  func completeButton() -> some View {
+    Text("음량 설정")
+      .fontSystem(fontDesignSystem: .subtitle2_KO)
+      .foregroundStyle(Color.white)
+      .padding(.horizontal, UIScreen.getWidth(150))
+      .padding(.vertical, UIScreen.getHeight(12))
+      .background(Capsule().fill(Color.Blue_Default))
+      .onTapGesture {
+        tapDismiss?()
+      }
   }
 }
 
@@ -48,17 +126,26 @@ extension AudioSheetView {
     guard let video = editorVM.currentVideo else { return }
     if editorVM.isSelectVideo {
       videoVolume = video.volume
-    } else if let audio = video.audio {
-      audioVolume = audio.volume
+    }
+//    else if let audio = video.audio {
+//      audioVolume = audio.volume
+//    }
+    if musicVM.isTrimmed {
+      audioVolume = musicVM.musicVolume
     }
   }
 
   private func onChange() {
     if editorVM.isSelectVideo {
       editorVM.currentVideo?.setVolume(videoVolume)
-    } else {
-      editorVM.currentVideo?.audio?.setVolume(audioVolume)
+//      musicVM.setVolume(value: audioVolume)
     }
-    videoPlayer.setVolume(editorVM.isSelectVideo, value: value.wrappedValue)
+//    else {
+//      editorVM.currentVideo?.audio?.setVolume(audioVolume)
+//    }
+    videoPlayer.setVolume(editorVM.isSelectVideo, value: videoValue.wrappedValue)
+    if musicVM.isTrimmed {
+      musicVM.setVolume(value: audioValue.wrappedValue)
+    }
   }
 }

@@ -80,17 +80,19 @@ struct CustomSlider<Value, Track, Thumb>: View
   var body: some View {
     // the HStack orders minimumValueLabel, the slider and maximumValueLabel horizontally
     VStack {
-      HStack {
-        minimumValueLabel
-        Spacer()
-        maximumValueLabel
+      if let minimumValueLabel {
+        HStack {
+          minimumValueLabel
+          Spacer()
+          maximumValueLabel
+        }
+        .fontSystem(fontDesignSystem: .caption_SemiBold)
+        .foregroundStyle(Color.Disable_Placeholder)
+        .frame(width: trackSize.width)
       }
-      .fontSystem(fontDesignSystem: .caption_SemiBold)
-      .foregroundStyle(Color.Disable_Placeholder)
-      .frame(width: trackSize.width)
       // Represent the custom slider. ZStack overlays `fill` on top of `track`,
       // while the `thumb` is in their `overlay`.
-      ZStack {
+      ZStack(alignment: .leading) {
         track()
           // get the size of the track at runtime as it
           // defines all the other functionality
@@ -110,6 +112,10 @@ struct CustomSlider<Value, Track, Thumb>: View
               lastOffset = xOffset
             }
           }
+        Rectangle()
+          .fill(Color.Gray30_Light)
+          .cornerRadius(12, corners: [.topLeft, .bottomLeft])
+          .frame(width: UIScreen.getWidth(xOffset + thumbSize.width / 2), height: trackSize.height)
       }
       // make sure the entire ZStack is the same size as `track`
       .frame(width: trackSize.width, height: trackSize.height)

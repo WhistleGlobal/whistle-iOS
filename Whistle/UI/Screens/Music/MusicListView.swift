@@ -50,6 +50,7 @@ struct MusicListView: View {
     }
   }
 
+  let tapSearchBar: (() -> Void)?
   var filteredMusicList: [Music] {
     if searchQueryString.isEmpty {
       return musicList
@@ -65,6 +66,9 @@ struct MusicListView: View {
       SearchBar(
         searchText: $searchQueryString,
         isSearching: $isSearching)
+        .simultaneousGesture(TapGesture().onEnded {
+          tapSearchBar?()
+        })
       if musicList.isEmpty {
         ProgressView()
           .scaleEffect(2.0)
@@ -97,14 +101,15 @@ struct MusicListView: View {
                 switch downloadStatus[music] {
                 case .beforeDownload:
                   downloadAudioUsingAlamofire(for: music)
-                case .complete:
+                default:
+                  audioPlayer?.stop()
                   DispatchQueue.main.async {
                     musicVM.musicInfo = music
                     musicVM.url = fileDirectories[music]
                     Task {
                       if let url = musicVM.url, let duration = editorVM.currentVideo?.totalDuration {
                         musicVM.sample_count = Int(audioDuration(url) / (duration / 10))
-                        musicVM.trimmedDuration = duration
+                        musicVM.trimDuration = duration
                       }
                       await musicVM.visualizeAudio()
                       bottomSheetPosition = .hidden
@@ -112,7 +117,7 @@ struct MusicListView: View {
                       isShowingMusicTrimView = true
                     }
                   }
-                default: break
+//                default: break
                 }
               })
               handleDownloadButton(for: music)

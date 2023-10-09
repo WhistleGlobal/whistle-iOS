@@ -52,7 +52,9 @@ extension Color {
 
   static let White: Color = .init("White")
   static let Gray10 = Color("Gray10")
+  static let Gray10_Dark = Color("Gray10_Dark")
   static let Gray30 = Color("Gray30")
+  static let Gray30_Light = Color("Gray30_Light")
   static let Gray30_Dark = Color("Gray30_Dark")
   static let Gray40 = Color("Gray40")
   static let Gray50_Dark = Color("Gray50_Dark")

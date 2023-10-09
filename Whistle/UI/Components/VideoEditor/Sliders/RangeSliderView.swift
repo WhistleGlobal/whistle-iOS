@@ -209,9 +209,6 @@ struct RangedSliderView: View {
           .scale(2, anchor: .leading)
           .scale(2, anchor: .trailing))
       .offset(x: videoPlayer.currentTime * by - strokeWidth / 2)
-      .onAppear {
-        print(videoPlayer.currentTime)
-      }
   }
 
   func increaseRange(range: ClosedRange<Double>, by: Double) -> ClosedRange<Double> {
