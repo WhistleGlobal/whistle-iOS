@@ -350,30 +350,30 @@ extension UserContentListView {
 extension UserContentListView {
   func whistleToggle() {
     HapticManager.instance.impact(style: .medium)
-//    timer?.invalidate()
-//    guard let contentId = apiViewModel.userPostFeed[currentIndex].contentId else {
-//      return
-//    }
-//    if apiViewModel.userPostFeed[currentIndex].isWhistled! == 1 {
-//      timer = Timer.scheduledTimer(withTimeInterval: 2, repeats: false) { _ in
-//        Task {
-//          await apiViewModel.actionWhistleCancel(contentId: contentId)
-//        }
-//      }
-//      apiViewModel.userPostFeed[currentIndex].contentWhistleCount! -= 1
-//    } else {
-//      timer = Timer.scheduledTimer(withTimeInterval: 2, repeats: false) { _ in
-//        Task {
-//          await apiViewModel.actionWhistle(contentId: contentId)
-//        }
-//      }
-//      apiViewModel.userPostFeed[currentIndex].contentWhistleCount! += 1
-//    }
-//    if apiViewModel.userPostFeed[currentIndex].isWhistled! == 0 {
-//      apiViewModel.userPostFeed[currentIndex].isWhistled = 1
-//    } else {
-//      apiViewModel.userPostFeed[currentIndex].isWhistled = 0
-//    }
-//    apiViewModel.postFeedPlayerChanged()
+    timer?.invalidate()
+    guard let contentId = apiViewModel.userPostFeed[currentIndex].contentId else {
+      return
+    }
+    if apiViewModel.userPostFeed[currentIndex].isWhistled! == 1 {
+      timer = Timer.scheduledTimer(withTimeInterval: 2, repeats: false) { _ in
+        Task {
+          await apiViewModel.actionWhistleCancel(contentId: contentId)
+        }
+      }
+      apiViewModel.userPostFeed[currentIndex].contentWhistleCount! -= 1
+    } else {
+      timer = Timer.scheduledTimer(withTimeInterval: 2, repeats: false) { _ in
+        Task {
+          await apiViewModel.actionWhistle(contentId: contentId)
+        }
+      }
+      apiViewModel.userPostFeed[currentIndex].contentWhistleCount! += 1
+    }
+    if apiViewModel.userPostFeed[currentIndex].isWhistled! == 0 {
+      apiViewModel.userPostFeed[currentIndex].isWhistled = 1
+    } else {
+      apiViewModel.userPostFeed[currentIndex].isWhistled = 0
+    }
+    apiViewModel.postFeedPlayerChanged()
   }
 }
