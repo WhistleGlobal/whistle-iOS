@@ -138,10 +138,11 @@ struct RangedSliderView: View {
             let newUpperBound = originalValue.upperBound + draggedTime
 
             // 범위를 변경하되, 범위가 sliderBounds 내에 머무르도록 제한
-            let clampedLowerBound = min(max(newLowerBound, sliderBounds.lowerBound), sliderBounds.upperBound - 15)
-            let clampedUpperBound = min(max(newUpperBound, sliderBounds.lowerBound + 15), sliderBounds.upperBound)
-
-            currentValue?.wrappedValue = clampedLowerBound ... clampedUpperBound
+            if let totalduration = editorVM.currentVideo?.totalDuration {
+              let clampedLowerBound = min(max(newLowerBound, sliderBounds.lowerBound), sliderBounds.upperBound - totalduration)
+              let clampedUpperBound = min(max(newUpperBound, sliderBounds.lowerBound + totalduration), sliderBounds.upperBound)
+              currentValue?.wrappedValue = clampedLowerBound ... clampedUpperBound
+            }
           }.onEnded { _ in
             updateOriginalValue()
           })
@@ -208,9 +209,6 @@ struct RangedSliderView: View {
           .scale(2, anchor: .leading)
           .scale(2, anchor: .trailing))
       .offset(x: videoPlayer.currentTime * by - strokeWidth / 2)
-      .onAppear {
-        print(videoPlayer.currentTime)
-      }
   }
 
   func increaseRange(range: ClosedRange<Double>, by: Double) -> ClosedRange<Double> {

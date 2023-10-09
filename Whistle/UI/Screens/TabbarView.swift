@@ -49,6 +49,7 @@ struct TabbarView: View {
       switch tabbarModel.tabSelectionNoAnimation {
       case .main:
         Color.clear
+
       case .upload:
         // FIXME: - uploadview로 교체하기
 //        Color.pink.ignoresSafeArea()]
@@ -57,6 +58,12 @@ struct TabbarView: View {
             Color.pink.ignoresSafeArea()
             PickerConfigViewControllerWrapper()
           }
+        }
+        .onAppear {
+          tabbarModel.tabbarOpacity = 0.0
+        }
+        .onDisappear {
+          tabbarModel.tabbarOpacity = 1.0
         }
       case .profile:
         if isAccess {
