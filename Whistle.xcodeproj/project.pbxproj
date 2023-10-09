@@ -1126,8 +1126,7 @@
 				78D148E12A9E132700DDCE48 /* Profile */,
 				1B3955412A95069C00BCB4DF /* ContentView.swift */,
 				78F980802A9F32C800AD542A /* TabbarView.swift */,
-				1B08DCC22AA1872200CA1DE1 /* MusicTrimView.swift */,
-				1BE8EA072AAE595000EB0A55 /* MusicListView.swift */,
+				1BC32C392ACF3013004AC3C1 /* Music */,
 			);
 			path = Screens;
 			sourceTree = "<group>";
@@ -1247,6 +1246,15 @@
 				1B39555A2A95095500BCB4DF /* ColorManager.swift */,
 			);
 			path = Colors;
+			sourceTree = "<group>";
+		};
+		1BC32C392ACF3013004AC3C1 /* Music */ = {
+			isa = PBXGroup;
+			children = (
+				1B08DCC22AA1872200CA1DE1 /* MusicTrimView.swift */,
+				1BE8EA072AAE595000EB0A55 /* MusicListView.swift */,
+			);
+			path = Music;
 			sourceTree = "<group>";
 		};
 		1BD4E5B42ABA2F5600ADB783 /* VideoPicker */ = {

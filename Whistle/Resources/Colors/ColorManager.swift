@@ -12,12 +12,14 @@ extension Color {
 
   static let Primary_Lighten = Color("Primary_Lighten")
   static let Primary_Default = Color("Primary_Default")
+  static let Primary_Default_Dark = Color("Primary_Default_Dark")
   static let Primary_Darken = Color("Primary_Darken")
 
   // MARK: - Secondary
 
   static let Secondary_Lighten = Color("Secondary_Lighten")
   static let Secondary_Default = Color("Secondary_Default")
+  static let Secondary_Default_Dark = Color("Secondary_Default_Dark")
   static let Secondary_Darken = Color("Secondary_Darken")
 
   // MARK: - Alert
@@ -53,6 +55,7 @@ extension Color {
   static let Gray30 = Color("Gray30")
   static let Gray30_Dark = Color("Gray30_Dark")
   static let Gray40 = Color("Gray40")
+  static let Gray50_Dark = Color("Gray50_Dark")
   static let Gray70_Dark = Color("Gray70_Dark")
 
   // MARK: - Button Blue Color
@@ -134,7 +137,7 @@ extension LinearGradient {
     startPoint: .top, endPoint: .bottom)
 
   static var primaryGradient = LinearGradient(
-    colors: [.Primary_Default, .Secondary_Default],
+    colors: [.Primary_Default_Dark, .Secondary_Default_Dark],
     startPoint: .leading,
     endPoint: .trailing)
 }

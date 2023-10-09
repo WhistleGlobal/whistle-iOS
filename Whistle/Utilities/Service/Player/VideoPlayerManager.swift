@@ -142,7 +142,6 @@ final class VideoPlayerManager: ObservableObject {
     }
 
     videoPlayer.play()
-    print("비디오 시작 \(getTime())")
     if isSetAudio {
       audioPlayer.play()
     }
@@ -193,7 +192,10 @@ final class VideoPlayerManager: ObservableObject {
   }
 
   private func playerDidFinishPlaying() {
-    videoPlayer.seek(to: .zero)
+//    videoPlayer.seek(to: .zero)
+    if let currentDurationRange {
+      seek(currentDurationRange.lowerBound, player: videoPlayer)
+    }
   }
 
   private func removeTimeObserver() {

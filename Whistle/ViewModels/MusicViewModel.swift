@@ -28,6 +28,11 @@ class MusicViewModel: ObservableObject {
   @Published var player: AVPlayer?
   @Published var session: AVAudioSession?
 
+  @Published var musicInfo: Music?
+  @Published var trimmedMusicInfo: Music?
+  @Published var startTime: Double?
+  @Published var musicVolume = 1.0
+
   /// 샘플링된 정보를 배열에 저장할 때 필요한 index
   var index = 0
   /// 오디오 url
@@ -54,12 +59,11 @@ extension MusicViewModel {
   func startTimer() {
     count_duration { duration in
       let time_interval = duration / Double(self.sample_count)
-
-      self.timer = Timer.scheduledTimer(withTimeInterval: time_interval * 1.5, repeats: true, block: { _ in
+      self.timer = Timer.scheduledTimer(withTimeInterval: time_interval * self.trimmedDuration / 10, repeats: true, block: { _ in
         if self.index < self.soundSamples.count {
-          withAnimation(.linear) {
-            self.soundSamples[self.index].color = Color.Secondary_Default
-          }
+//          withAnimation(.linear) {
+//            self.soundSamples[self.index].color = Color.Secondary_Default
+//          }
           self.index += 1
         }
       })
@@ -89,45 +93,27 @@ extension MusicViewModel {
   func visualizeAudio() async {
     if let url {
       let results = try? await dataManager.buffer(url: url, samplesCount: sample_count)
+      print("count: \(soundSamples.count)")
       DispatchQueue.main.async {
         self.soundSamples = results ?? []
       }
     }
   }
 
-  func playAudio(startTime: Double, endTime: Double) {
+  func playAudio(startTime: Double) {
     if isPlaying {
       pauseAudio()
     } else {
       player = AVPlayer(url: url!)
-      let startTime = CMTime(seconds: startTime, preferredTimescale: 1)
-      let endTime = CMTime(seconds: endTime, preferredTimescale: 1)
-      player?.seek(to: startTime) // 시작 시간으로 이동
+      player?.volume = 0.2
+      let start = CMTime(seconds: startTime, preferredTimescale: 1000)
+      player?.seek(to: start) // 시작 시간으로 이동
       player?.play()
-
       startTimer()
       count_duration { _ in }
-
-      // 특정 시간 범위까지 재생 후 시작 시간으로 이동하는 클로저를 등록
-      player?.addBoundaryTimeObserver(forTimes: [NSValue(time: endTime)], queue: .main) {
-        [weak self] in
-        self?.player?.seek(to: startTime) // 시작 시간으로 이동
-      }
-
-//      // 특정 시간 범위까지 재생 후 일시 정지하려면
-//      player?.addBoundaryTimeObserver(forTimes: [NSValue(time: endTime)], queue: .main) {
-//        [weak self] in
-//        self?.stopAudio()
-//      }
       DispatchQueue.main.async {
         self.isPlaying.toggle()
       }
-
-      NotificationCenter.default.addObserver(
-        self,
-        selector: #selector(playerDidFinishPlaying(note:)),
-        name: NSNotification.Name.AVPlayerItemDidPlayToEndTime,
-        object: player?.currentItem)
     }
   }
 
@@ -140,6 +126,7 @@ extension MusicViewModel {
   }
 
   func stopAudio() {
+    print("Audio Stopped")
     player?.pause()
     timer?.invalidate()
     DispatchQueue.main.async {

@@ -36,8 +36,13 @@ struct MainEditorView: View {
             dismiss()
           }
           .frame(height: UIScreen.getHeight(44))
-          PlayerHolderView(isFullScreen: $isFullScreen, editorVM: editorVM, videoPlayer: videoPlayer)
-            .padding(.top, 4)
+
+          ZStack(alignment: .top) {
+            PlayerHolderView(isFullScreen: $isFullScreen, editorVM: editorVM, videoPlayer: videoPlayer, musicVM: musicVM)
+            musicInfo()
+          }
+          .padding(.top, 4)
+
           ThumbnailsSliderView(
             currentTime: $videoPlayer.currentTime,
             video: $editorVM.currentVideo,
@@ -76,9 +81,9 @@ struct MainEditorView: View {
     }
     .onChange(of: editorVM.selectedTools) { newValue in
       switch newValue {
-      case .speed:
-        bottomSheetPosition = .absolute(UIScreen.getHeight(270))
-        bottomSheetTitle = "영상 속도"
+//      case .speed:
+//        bottomSheetPosition = .absolute(UIScreen.getHeight(270))
+//        bottomSheetTitle = "영상 속도"
       case .music:
         if let video = editorVM.currentVideo {
           if videoPlayer.isPlaying {
@@ -92,9 +97,9 @@ struct MainEditorView: View {
       case .audio:
         bottomSheetPosition = .absolute(UIScreen.getHeight(410))
         bottomSheetTitle = "볼륨 조절"
-      case .filters: print("filters")
-      case .corrections: print("corrections")
-      case .frames: print("frames")
+//      case .filters: print("filters")
+//      case .corrections: print("corrections")
+//      case .frames: print("frames")
       case nil: print("nil")
       }
     }
@@ -125,28 +130,28 @@ struct MainEditorView: View {
       }
     } mainContent: {
       switch editorVM.selectedTools {
-      case .speed:
-        if let toolState = editorVM.selectedTools, let video = editorVM.currentVideo {
-          let isAppliedTool = video.isAppliedTool(for: toolState)
-          VStack {
-            VideoSpeedSlider(value: Double(video.rate), isChangeState: isAppliedTool) { rate in
-              videoPlayer.pause()
-              editorVM.updateRate(rate: rate)
-              print("range: \(editorVM.currentVideo?.rangeDuration)")
-            }
-            Text("속도 설정")
-              .fontSystem(fontDesignSystem: .subtitle2_KO)
-              .foregroundColor(.white)
-              .padding(.horizontal, UIScreen.getWidth(150))
-              .padding(.vertical, UIScreen.getHeight(12))
-              .background(RoundedRectangle(cornerRadius: 100).fill(Color.Blue_Default))
-              .onTapGesture {
-                bottomSheetPosition = .hidden
-                editorVM.selectedTools = nil
-              }
-              .padding(.top, UIScreen.getHeight(36))
-          }
-        }
+//      case .speed:
+//        if let toolState = editorVM.selectedTools, let video = editorVM.currentVideo {
+//          let isAppliedTool = video.isAppliedTool(for: toolState)
+//          VStack {
+//            VideoSpeedSlider(value: Double(video.rate), isChangeState: isAppliedTool) { rate in
+//              videoPlayer.pause()
+//              editorVM.updateRate(rate: rate)
+//              print("range: \(editorVM.currentVideo?.rangeDuration)")
+//            }
+//            Text("속도 설정")
+//              .fontSystem(fontDesignSystem: .subtitle2_KO)
+//              .foregroundColor(.white)
+//              .padding(.horizontal, UIScreen.getWidth(150))
+//              .padding(.vertical, UIScreen.getHeight(12))
+//              .background(RoundedRectangle(cornerRadius: 100).fill(Color.Blue_Default))
+//              .onTapGesture {
+//                bottomSheetPosition = .hidden
+//                editorVM.selectedTools = nil
+//              }
+//              .padding(.top, UIScreen.getHeight(36))
+//          }
+//        }
       case .music:
         MusicListView(
           musicVM: musicVM,
@@ -172,7 +177,6 @@ struct MainEditorView: View {
         .overlay(RoundedRectangle(cornerRadius: 24).strokeBorder(LinearGradient.Border_Glass)))
     .showDragIndicator(true)
     .dragIndicatorColor(Color.Border_Default_Dark)
-//    .frame(width: UIScreen.width, height: UIScreen.height)
   }
 }
 
@@ -213,6 +217,39 @@ extension MainEditorView {
       editorVM.updateProject()
     default:
       break
+    }
+  }
+
+  @ViewBuilder
+  private func musicInfo() -> some View {
+    if let music = musicVM.trimmedMusicInfo {
+      HStack(spacing: 12) {
+        Image(systemName: "music.note")
+        Text(music.musicTitle)
+          .frame(maxWidth: UIScreen.getWidth(90))
+          .lineLimit(1)
+          .truncationMode(.tail)
+          .fontSystem(fontDesignSystem: .body1)
+          .contentShape(Rectangle())
+          .onTapGesture {
+            isShowingMusicTrimView = true
+          }
+        Divider()
+          .overlay { Color.White }
+        Image(systemName: "xmark")
+          .contentShape(Rectangle())
+          .onTapGesture {
+            musicVM.trimmedMusicInfo = nil
+            musicVM.musicInfo = nil
+            musicVM.startTime = nil
+          }
+      }
+      .foregroundStyle(Color.White)
+      .fixedSize()
+      .padding(.horizontal, 16)
+      .padding(.vertical, 8)
+      .background(glassMorphicView(cornerRadius: 8))
+      .padding(.top, 8)
     }
   }
 

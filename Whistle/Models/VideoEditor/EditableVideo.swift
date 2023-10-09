@@ -57,6 +57,7 @@ struct EditableVideo: Identifiable {
     for i in 0 ... imagesCount {
       let thumbnailImage = ThumbnailImage(image: asset.getImage(Int(offset)))
       offset = Double(i) * (originalDuration / Double(imagesCount))
+      print("imageori: \(thumbnailImage.image?.size)")
       thumbnailsImages.append(thumbnailImage)
     }
     thumbnailsImages.remove(at: 0)

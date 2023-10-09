@@ -18,19 +18,19 @@ struct ToolsSectionView: View {
   private let columns = Array(repeating: GridItem(.flexible()), count: 4)
   var body: some View {
     ZStack {
-      ScrollView(.horizontal, showsIndicators: false) {
-        HStack {
-          ForEach(ToolEnum.allCases, id: \.self) { tool in
-            ToolButtonView(
-              label: tool.title,
-              image: tool.image,
-              isChange: editorVM.currentVideo?.isAppliedTool(for: tool) ?? false)
-            {
-              editorVM.selectedTools = tool
-            }
+//      ScrollView(.horizontal, showsIndicators: false) {
+      HStack(spacing: 20) {
+        ForEach(ToolEnum.allCases, id: \.self) { tool in
+          ToolButtonView(
+            label: tool.title,
+            image: tool.image,
+            isChange: editorVM.currentVideo?.isAppliedTool(for: tool) ?? false)
+          {
+            editorVM.selectedTools = tool
           }
         }
       }
+//      }
       .padding(.horizontal, 16)
 //      .opacity(editorVM.selectedTools != nil ? 0 : 1)
 //      if let toolState = editorVM.selectedTools, let video = editorVM.currentVideo {
@@ -74,11 +74,11 @@ extension ToolsSectionView {
 //          videoPlayer.scrubState = .scrubEnded(videoPlayer.currentTime)
 //          editorVM.setTools()
 //        }
-      case .speed:
-        VideoSpeedSlider(value: Double(video.rate), isChangeState: isAppliedTool) { rate in
-          videoPlayer.pause()
-          editorVM.updateRate(rate: rate)
-        }
+//      case .speed:
+//        VideoSpeedSlider(value: Double(video.rate), isChangeState: isAppliedTool) { rate in
+//          videoPlayer.pause()
+//          editorVM.updateRate(rate: rate)
+//        }
       case .music:
         MusicListView(
           musicVM: MusicViewModel(),
@@ -87,25 +87,25 @@ extension ToolsSectionView {
           bottomSheetPosition: .constant(.hidden), isShowingMusicTrimView: .constant(false))
       case .audio:
         AudioSheetView(videoPlayer: videoPlayer, editorVM: editorVM)
-      case .filters:
-        FiltersView(selectedFilterName: video.filterName, viewModel: filtersVM) { filterName in
-          if let filterName {
-            videoPlayer.setFilters(mainFilter: CIFilter(name: filterName), colorCorrection: filtersVM.colorCorrection)
-          } else {
-            videoPlayer.removeFilter()
-          }
-          editorVM.setFilter(filterName)
-        }
-      case .corrections:
-        CorrectionsToolView(correction: $filtersVM.colorCorrection) { corrections in
-          videoPlayer.setFilters(mainFilter: CIFilter(name: video.filterName ?? ""), colorCorrection: corrections)
-          editorVM.setCorrections(corrections)
-        }
-      case .frames:
-        FramesToolView(
-          selectedColor: $editorVM.frames.frameColor,
-          scaleValue: $editorVM.frames.scaleValue,
-          onChange: editorVM.setFrames)
+//      case .filters:
+//        FiltersView(selectedFilterName: video.filterName, viewModel: filtersVM) { filterName in
+//          if let filterName {
+//            videoPlayer.setFilters(mainFilter: CIFilter(name: filterName), colorCorrection: filtersVM.colorCorrection)
+//          } else {
+//            videoPlayer.removeFilter()
+//          }
+//          editorVM.setFilter(filterName)
+//        }
+//      case .corrections:
+//        CorrectionsToolView(correction: $filtersVM.colorCorrection) { corrections in
+//          videoPlayer.setFilters(mainFilter: CIFilter(name: video.filterName ?? ""), colorCorrection: corrections)
+//          editorVM.setCorrections(corrections)
+//        }
+//      case .frames:
+//        FramesToolView(
+//          selectedColor: $editorVM.frames.frameColor,
+//          scaleValue: $editorVM.frames.scaleValue,
+//          onChange: editorVM.setFrames)
       }
       Spacer()
     }
@@ -127,7 +127,8 @@ extension ToolsSectionView {
           .background(Color(.systemGray5), in: RoundedRectangle(cornerRadius: 5))
       }
       Spacer()
-      if tool != .filters, tool != .audio {
+//      if tool != .filters, tool != .audio {
+      if tool != .audio {
         Button {
           editorVM.reset()
         } label: {
