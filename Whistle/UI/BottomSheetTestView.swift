@@ -173,100 +173,8 @@ struct BottomSheetTestView: View {
                       Spacer().frame(width: 34)
                     }
                   }
-                  .gesture(
-                    DragGesture()
-                      .onChanged { value in
-                        if
-                          CGFloat(defaultWidth + value.translation.width) >
-                          CGFloat(UIScreen.width - 32)
-                        {
-                          dragOffset = CGFloat((6 + barSpacing) * 7)
-                        } else if defaultWidth + value.translation.width < 6 {
-                          dragOffset = -CGFloat((6 + barSpacing) * 8)
-                        } else {
-                          dragOffset = value.translation.width
-                        }
-                      }
-                      .onEnded { _ in
-                        let dragValue = Int(dragOffset + defaultWidth)
-                        let multiplier = 6 + barSpacing
-                        switch dragValue {
-                        case .min..<6:
-                          withAnimation {
-                            dragOffset = -8.0 * CGFloat(multiplier)
-                          }
-                        case 6 - Int(barSpacing)..<Int(multiplier) + Int(barSpacing):
-                          withAnimation {
-                            dragOffset = -7.0 * CGFloat(multiplier)
-                          }
-                        case Int(multiplier) - Int(barSpacing)..<Int(2 * multiplier) + Int(barSpacing):
-                          withAnimation {
-                            dragOffset = -6.0 * CGFloat(multiplier)
-                          }
-                        case Int(2 * multiplier) - Int(barSpacing)..<Int(3 * multiplier) +
-                          Int(barSpacing):
-                          withAnimation {
-                            dragOffset = -5.0 * CGFloat(multiplier)
-                          }
-                        case Int(3 * multiplier) - Int(barSpacing)..<Int(4 * multiplier) +
-                          Int(barSpacing):
-                          withAnimation {
-                            dragOffset = -4.0 * CGFloat(multiplier)
-                          }
-                        case Int(4 * multiplier) - Int(barSpacing)..<Int(5 * multiplier) +
-                          Int(barSpacing):
-                          withAnimation {
-                            dragOffset = -3.0 * CGFloat(multiplier)
-                          }
-                        case Int(5 * multiplier) - Int(barSpacing)..<Int(6 * multiplier) +
-                          Int(barSpacing):
-                          withAnimation {
-                            dragOffset = -2.0 * CGFloat(multiplier)
-                          }
-                        case Int(6 * multiplier) - Int(barSpacing)..<Int(7 * multiplier) +
-                          Int(barSpacing):
-                          withAnimation {
-                            dragOffset = -CGFloat(multiplier)
-                          }
-                        case Int(7 * multiplier) - Int(barSpacing)..<Int(8 * multiplier) +
-                          Int(barSpacing):
-                          withAnimation {
-                            dragOffset = 0.0
-                          }
-                        case Int(8 * multiplier) - Int(barSpacing)..<Int(9 * multiplier) +
-                          Int(barSpacing):
-                          withAnimation {
-                            dragOffset = CGFloat(multiplier)
-                          }
-                        case Int(9 * multiplier) - Int(barSpacing)..<Int(10 * multiplier) +
-                          Int(barSpacing):
-                          withAnimation {
-                            dragOffset = 2.0 * CGFloat(multiplier)
-                          }
-                        case Int(10 * multiplier) - Int(barSpacing)..<Int(11 * multiplier) +
-                          Int(barSpacing):
-                          withAnimation {
-                            dragOffset = 3.0 * CGFloat(multiplier)
-                          }
-                        case Int(11 * multiplier) - Int(barSpacing)..<Int(12 * multiplier) +
-                          Int(barSpacing):
-                          withAnimation {
-                            dragOffset = 4.0 * CGFloat(multiplier)
-                          }
-                        case Int(12 * multiplier) - Int(barSpacing)..<Int(13 * multiplier) +
-                          Int(barSpacing):
-                          withAnimation {
-                            dragOffset = 5.0 * CGFloat(multiplier)
-                          }
-                        case 15 - Int(barSpacing)...Int.max:
-                          withAnimation {
-                            dragOffset = 6.0 * CGFloat(multiplier)
-                          }
-                        default:
-                          log("")
-                        }
-                      })
               }
+              .frame(width: UIScreen.width - 32, alignment: .leading)
               HStack {
                 Text("0s")
                 Spacer()
@@ -279,16 +187,114 @@ struct BottomSheetTestView: View {
                 Text("\(Int((defaultWidth + dragOffset - 6) / (barSpacing + 6)))s")
                   .foregroundColor(Color.White)
                   .fontSystem(fontDesignSystem: .caption_KO_Semibold)
-                  .frame(maxWidth: .infinity, alignment: .trailing)
+                  .frame(width: dragOffset + defaultWidth, alignment: .trailing)
               }
+              .frame(width: UIScreen.width - 32, alignment: .leading)
               .foregroundColor(Color.LabelColor_Primary_Dark)
               .fontSystem(fontDesignSystem: .caption_KO_Semibold)
-              .frame(width: dragOffset + defaultWidth)
               .offset(y: -53)
             }
             .frame(height: 104)
         }
         .frame(width: UIScreen.width - 32, alignment: .leading)
+        .gesture(
+          DragGesture()
+            .onChanged { value in
+              if
+                CGFloat(defaultWidth + value.translation.width) >
+                CGFloat(UIScreen.width - 32)
+              {
+                dragOffset = CGFloat((6 + barSpacing) * 7)
+              } else if defaultWidth + value.translation.width < 6 {
+                dragOffset = -CGFloat((6 + barSpacing) * 8)
+              } else {
+                dragOffset = value.translation.width
+              }
+            }
+            .onEnded { _ in
+              let dragValue = Int(dragOffset + defaultWidth)
+              let multiplier = 6 + barSpacing
+              switch dragValue {
+              case .min..<6 + Int(barSpacing):
+                withAnimation {
+                  dragOffset = -8.0 * CGFloat(multiplier)
+                }
+              case 6 - Int(barSpacing)..<Int(multiplier) + Int(barSpacing):
+                withAnimation {
+                  dragOffset = -7.0 * CGFloat(multiplier)
+                }
+              case Int(multiplier) - Int(barSpacing)..<Int(2 * multiplier) + Int(barSpacing):
+                withAnimation {
+                  dragOffset = -6.0 * CGFloat(multiplier)
+                }
+              case Int(2 * multiplier) - Int(barSpacing)..<Int(3 * multiplier) +
+                Int(barSpacing):
+                withAnimation {
+                  dragOffset = -5.0 * CGFloat(multiplier)
+                }
+              case Int(3 * multiplier) - Int(barSpacing)..<Int(4 * multiplier) +
+                Int(barSpacing):
+                withAnimation {
+                  dragOffset = -4.0 * CGFloat(multiplier)
+                }
+              case Int(4 * multiplier) - Int(barSpacing)..<Int(5 * multiplier) +
+                Int(barSpacing):
+                withAnimation {
+                  dragOffset = -3.0 * CGFloat(multiplier)
+                }
+              case Int(5 * multiplier) - Int(barSpacing)..<Int(6 * multiplier) +
+                Int(barSpacing):
+                withAnimation {
+                  dragOffset = -2.0 * CGFloat(multiplier)
+                }
+              case Int(6 * multiplier) - Int(barSpacing)..<Int(7 * multiplier) +
+                Int(barSpacing):
+                withAnimation {
+                  dragOffset = -CGFloat(multiplier)
+                }
+              case Int(7 * multiplier) - Int(barSpacing)..<Int(8 * multiplier) +
+                Int(barSpacing):
+                withAnimation {
+                  dragOffset = 0.0
+                }
+              case Int(8 * multiplier) - Int(barSpacing)..<Int(9 * multiplier) +
+                Int(barSpacing):
+                withAnimation {
+                  dragOffset = CGFloat(multiplier)
+                }
+              case Int(9 * multiplier) - Int(barSpacing)..<Int(10 * multiplier) +
+                Int(barSpacing):
+                withAnimation {
+                  dragOffset = 2.0 * CGFloat(multiplier)
+                }
+              case Int(10 * multiplier) - Int(barSpacing)..<Int(11 * multiplier) +
+                Int(barSpacing):
+                withAnimation {
+                  dragOffset = 3.0 * CGFloat(multiplier)
+                }
+              case Int(11 * multiplier) - Int(barSpacing)..<Int(12 * multiplier) +
+                Int(barSpacing):
+                withAnimation {
+                  dragOffset = 4.0 * CGFloat(multiplier)
+                }
+              case Int(12 * multiplier) - Int(barSpacing)..<Int(13 * multiplier) +
+                Int(barSpacing):
+                withAnimation {
+                  dragOffset = 5.0 * CGFloat(multiplier)
+                }
+              case Int(13 * multiplier) - Int(barSpacing)..<Int(14 * multiplier) +
+                Int(barSpacing):
+                withAnimation {
+                  dragOffset = 6.0 * CGFloat(multiplier)
+                }
+              case Int(14 * multiplier) - Int(barSpacing)...Int.max:
+                withAnimation {
+                  dragOffset = 7.0 * CGFloat(multiplier)
+                }
+              default:
+                log("")
+              }
+            })
         HStack {
           Text("끌어서 이 영상의 길이를 선택하세요. 타이머를 설정하면 녹화가 시작되기 전에 카운트 다운이 실행됩니다.")
             .fontSystem(fontDesignSystem: .caption_KO_Regular)
