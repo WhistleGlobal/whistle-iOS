@@ -13,6 +13,8 @@ struct PlayerHolderView: View {
   @Binding var isFullScreen: Bool
   @ObservedObject var editorVM: EditorViewModel
   @ObservedObject var videoPlayer: VideoPlayerManager
+  @ObservedObject var musicVM: MusicViewModel
+
   let videoScale: CGFloat = 16 / 9
   let videoWidth: CGFloat = 203
   var scale: CGFloat = 0.5
@@ -71,6 +73,20 @@ extension PlayerHolderView {
         }
         .onTapGesture {
           videoPlayer.action(video)
+        }
+        .onChange(of: videoPlayer.isPlaying) { value in
+          switch value {
+          case true:
+            if let startTime = musicVM.startTime, let duration = editorVM.currentVideo?.rangeDuration {
+              let minTime = duration.lowerBound
+              let videoCurrentTime = videoPlayer.currentTime
+              let timeOffset = duration.upperBound <= videoCurrentTime ? 0 : videoCurrentTime - minTime
+              musicVM
+                .playAudio(startTime: startTime + timeOffset)
+            }
+          case false:
+            musicVM.stopAudio()
+          }
         }
         .scaleEffect(editorVM.frames.scale)
         .onAppear {

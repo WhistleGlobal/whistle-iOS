@@ -122,7 +122,6 @@ struct SliderView<V>: View where V: BinaryFloatingPoint, V.Stride: BinaryFloatin
 
     self.ratio = ratio
     self.value = V(bounds.upperBound - bounds.lowerBound) * V(ratio)
-    print(self.value)
   }
 }
 

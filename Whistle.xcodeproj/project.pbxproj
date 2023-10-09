@@ -73,7 +73,6 @@
 		1B39555D2A95098100BCB4DF /* VideoModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B39555C2A95098100BCB4DF /* VideoModel.swift */; };
 		1B39555F2A9509A700BCB4DF /* SubmitButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B39555E2A9509A700BCB4DF /* SubmitButton.swift */; };
 		1B5FB4B72AC6777A0049E4EE /* ImagePickerController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BD4E6442ABA2F8600ADB783 /* ImagePickerController.swift */; };
-		1B5FB4BB2AC70E460049E4EE /* ResizeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B5FB4BA2AC70E460049E4EE /* ResizeViewModel.swift */; };
 		1B6C04302AC2B93400DF4045 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 1B6C042F2AC2B93400DF4045 /* SnapKit */; };
 		1B6C04322AC2B93A00DF4045 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = 1B6C04312AC2B93A00DF4045 /* Kingfisher */; };
 		1B7D801D2AC881490030CAC3 /* CustomNavigationBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B7D801C2AC881490030CAC3 /* CustomNavigationBarViewController.swift */; };
@@ -297,9 +296,6 @@
 		1BD4E7BD2ABA2F8600ADB783 /* PhotoEditorContentView+Mosaic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BD4E6E02ABA2F8600ADB783 /* PhotoEditorContentView+Mosaic.swift */; };
 		1BD4E7BE2ABA2F8600ADB783 /* EditorTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BD4E6E12ABA2F8600ADB783 /* EditorTheme.swift */; };
 		1BD4E7C62ABA68D500ADB783 /* PickerConfigViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BD4E7C52ABA68D500ADB783 /* PickerConfigViewController.swift */; };
-		1BD4E7C82ABA68DF00ADB783 /* PickerResultViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BD4E7C72ABA68DF00ADB783 /* PickerResultViewController.swift */; };
-		1BD4E7CC2ABA68EF00ADB783 /* ConfigCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BD4E7CB2ABA68EF00ADB783 /* ConfigCell.swift */; };
-		1BD4E7CE2ABA68F600ADB783 /* PickerPreviewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BD4E7CD2ABA68F600ADB783 /* PickerPreviewCell.swift */; };
 		1BD4E7D02ABA68FA00ADB783 /* EnableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BD4E7CF2ABA68FA00ADB783 /* EnableCell.swift */; };
 		1BD4E7D22ABA690400ADB783 /* Extension+UITableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BD4E7D12ABA690400ADB783 /* Extension+UITableViewCell.swift */; };
 		1BD4E7D42ABA6B2A00ADB783 /* VideoPickerTestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BD4E7D32ABA6B2A00ADB783 /* VideoPickerTestView.swift */; };
@@ -508,7 +504,6 @@
 		1B39555A2A95095500BCB4DF /* ColorManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorManager.swift; sourceTree = "<group>"; };
 		1B39555C2A95098100BCB4DF /* VideoModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoModel.swift; sourceTree = "<group>"; };
 		1B39555E2A9509A700BCB4DF /* SubmitButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubmitButton.swift; sourceTree = "<group>"; };
-		1B5FB4BA2AC70E460049E4EE /* ResizeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResizeViewModel.swift; sourceTree = "<group>"; };
 		1B7D801C2AC881490030CAC3 /* CustomNavigationBarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomNavigationBarViewController.swift; sourceTree = "<group>"; };
 		1BB7A0692A9514B4002DD86F /* .swiftlint.yml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = .swiftlint.yml; sourceTree = "<group>"; };
 		1BD4E5B32ABA2F5600ADB783 /* VideoPicker.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = VideoPicker.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -729,9 +724,6 @@
 		1BD4E6E02ABA2F8600ADB783 /* PhotoEditorContentView+Mosaic.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "PhotoEditorContentView+Mosaic.swift"; sourceTree = "<group>"; };
 		1BD4E6E12ABA2F8600ADB783 /* EditorTheme.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditorTheme.swift; sourceTree = "<group>"; };
 		1BD4E7C52ABA68D500ADB783 /* PickerConfigViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PickerConfigViewController.swift; sourceTree = "<group>"; };
-		1BD4E7C72ABA68DF00ADB783 /* PickerResultViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PickerResultViewController.swift; sourceTree = "<group>"; };
-		1BD4E7CB2ABA68EF00ADB783 /* ConfigCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfigCell.swift; sourceTree = "<group>"; };
-		1BD4E7CD2ABA68F600ADB783 /* PickerPreviewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PickerPreviewCell.swift; sourceTree = "<group>"; };
 		1BD4E7CF2ABA68FA00ADB783 /* EnableCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnableCell.swift; sourceTree = "<group>"; };
 		1BD4E7D12ABA690400ADB783 /* Extension+UITableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Extension+UITableViewCell.swift"; sourceTree = "<group>"; };
 		1BD4E7D32ABA6B2A00ADB783 /* VideoPickerTestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoPickerTestView.swift; sourceTree = "<group>"; };
@@ -1001,7 +993,6 @@
 				1B3895502AB9CB8C00B4C8DD /* ExporterViewModel.swift */,
 				1B3895512AB9CB8C00B4C8DD /* FiltersViewModel.swift */,
 				1B3895532AB9CB8C00B4C8DD /* RootViewModel.swift */,
-				1B5FB4BA2AC70E460049E4EE /* ResizeViewModel.swift */,
 			);
 			path = VideoEditor;
 			sourceTree = "<group>";
@@ -1126,8 +1117,7 @@
 				78D148E12A9E132700DDCE48 /* Profile */,
 				1B3955412A95069C00BCB4DF /* ContentView.swift */,
 				78F980802A9F32C800AD542A /* TabbarView.swift */,
-				1B08DCC22AA1872200CA1DE1 /* MusicTrimView.swift */,
-				1BE8EA072AAE595000EB0A55 /* MusicListView.swift */,
+				1BC32C392ACF3013004AC3C1 /* Music */,
 			);
 			path = Screens;
 			sourceTree = "<group>";
@@ -1247,6 +1237,15 @@
 				1B39555A2A95095500BCB4DF /* ColorManager.swift */,
 			);
 			path = Colors;
+			sourceTree = "<group>";
+		};
+		1BC32C392ACF3013004AC3C1 /* Music */ = {
+			isa = PBXGroup;
+			children = (
+				1B08DCC22AA1872200CA1DE1 /* MusicTrimView.swift */,
+				1BE8EA072AAE595000EB0A55 /* MusicListView.swift */,
+			);
+			path = Music;
 			sourceTree = "<group>";
 		};
 		1BD4E5B42ABA2F5600ADB783 /* VideoPicker */ = {
@@ -1928,9 +1927,6 @@
 			isa = PBXGroup;
 			children = (
 				1BD4E7C52ABA68D500ADB783 /* PickerConfigViewController.swift */,
-				1BD4E7C72ABA68DF00ADB783 /* PickerResultViewController.swift */,
-				1BD4E7CB2ABA68EF00ADB783 /* ConfigCell.swift */,
-				1BD4E7CD2ABA68F600ADB783 /* PickerPreviewCell.swift */,
 				1BD4E7CF2ABA68FA00ADB783 /* EnableCell.swift */,
 				1BD4E7D32ABA6B2A00ADB783 /* VideoPickerTestView.swift */,
 			);
@@ -2341,7 +2337,6 @@
 				1BE8EA122AB0F7E800EB0A55 /* CircularProgressBar.swift in Sources */,
 				1B3895702AB9CBFC00B4C8DD /* Extension+AVAudioSession.swift in Sources */,
 				1B38956F2AB9CBFC00B4C8DD /* Extension+Int.swift in Sources */,
-				1BD4E7CE2ABA68F600ADB783 /* PickerPreviewCell.swift in Sources */,
 				78B6FD2E2AA719190043E461 /* AlbumModel.swift in Sources */,
 				78E175602ABA8DE100731259 /* TermsOfServiceView.swift in Sources */,
 				7874CB882AA0842D0081DE54 /* FontSystem.swift in Sources */,
@@ -2414,19 +2409,16 @@
 				1B3895642AB9CBD300B4C8DD /* VideoQuality.swift in Sources */,
 				78730CEF2ACE86EA008B9981 /* CachedImageManager.swift in Sources */,
 				788F43F72AA6136F00718D38 /* Player.swift in Sources */,
-				1B5FB4BB2AC70E460049E4EE /* ResizeViewModel.swift in Sources */,
 				78DA58D72AA448A100F8D2F1 /* ProfileEditIDView.swift in Sources */,
 				787AF5752AA88F4000C190E6 /* BookMark.swift in Sources */,
 				1B3895882AB9CC4300B4C8DD /* CoreDataContainer.xcdatamodeld in Sources */,
 				78F980812A9F32C800AD542A /* TabbarView.swift in Sources */,
 				1BE8E9FF2AAE2DFB00EB0A55 /* MusicServiceProtocol.swift in Sources */,
-				1BD4E7C82ABA68DF00ADB783 /* PickerResultViewController.swift in Sources */,
 				78730CE72ACE8660008B9981 /* PhotoCollection.swift in Sources */,
 				1B3895462AB9CB7500B4C8DD /* RootView.swift in Sources */,
 				1B3895612AB9CBD300B4C8DD /* FilteredImage.swift in Sources */,
 				785E82722AAC8FDD00EF3576 /* MainContent.swift in Sources */,
 				1B7D801D2AC881490030CAC3 /* CustomNavigationBarViewController.swift in Sources */,
-				1BD4E7CC2ABA68EF00ADB783 /* ConfigCell.swift in Sources */,
 				7874CB902AA0B5350081DE54 /* ProfileNotiView.swift in Sources */,
 				78D148E92A9E13A800DDCE48 /* CustomBlurView.swift in Sources */,
 				78D148DB2A9E0A5E00DDCE48 /* Extension+Font.swift in Sources */,
