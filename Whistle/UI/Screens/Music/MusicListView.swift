@@ -50,6 +50,7 @@ struct MusicListView: View {
     }
   }
 
+  let tapSearchBar: (() -> Void)?
   var filteredMusicList: [Music] {
     if searchQueryString.isEmpty {
       return musicList
@@ -65,6 +66,9 @@ struct MusicListView: View {
       SearchBar(
         searchText: $searchQueryString,
         isSearching: $isSearching)
+        .simultaneousGesture(TapGesture().onEnded {
+          tapSearchBar?()
+        })
       if musicList.isEmpty {
         ProgressView()
           .scaleEffect(2.0)
@@ -97,16 +101,15 @@ struct MusicListView: View {
                 switch downloadStatus[music] {
                 case .beforeDownload:
                   downloadAudioUsingAlamofire(for: music)
-                case .complete:
+                default:
+                  audioPlayer?.stop()
                   DispatchQueue.main.async {
+                    musicVM.musicInfo = music
                     musicVM.url = fileDirectories[music]
                     Task {
-                      if let url = musicVM.url {
-                        musicVM.sample_count = Int(audioDuration(url))
-                      }
-                      if let duration = editorVM.currentVideo?.totalDuration {
-                        musicVM.trimmedDuration = duration
-                        print("set duration: \(duration)")
+                      if let url = musicVM.url, let duration = editorVM.currentVideo?.totalDuration {
+                        musicVM.sample_count = Int(audioDuration(url) / (duration / 10))
+                        musicVM.trimDuration = duration
                       }
                       await musicVM.visualizeAudio()
                       bottomSheetPosition = .hidden
@@ -114,7 +117,7 @@ struct MusicListView: View {
                       isShowingMusicTrimView = true
                     }
                   }
-                default: break
+//                default: break
                 }
               })
               handleDownloadButton(for: music)
@@ -348,14 +351,6 @@ extension MusicListView {
   }
 }
 
-//// MARK: - MusicListView_Previews
-//
-// struct MusicListView_Previews: PreviewProvider {
-//  static var previews: some View {
-//    MusicListView(progressStatus: [:], editorVM: VideoPlayerManager)
-//  }
-// }
-
 extension UIApplication {
   func endEditing() {
     sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
@@ -389,9 +384,6 @@ struct SearchBar: View {
             withAnimation {
               isSearching = false
             }
-          }
-          .onChange(of: searchText) { _ in
-            print("HI")
           }
         if isSearching {
           Text("취소")

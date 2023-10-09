@@ -83,6 +83,7 @@ extension ThumbnailsSliderView {
           if let image = trimData.image {
             Image(uiImage: image)
               .resizable()
+//              .rotationEffect(Angle(degrees: 90))
               .aspectRatio(contentMode: .fill)
               .frame(width: proxy.size.width / CGFloat(video.thumbnailsImages.count), height: proxy.size.height - 8)
               .clipped()

@@ -87,29 +87,26 @@ extension View {
   }
 
   @ViewBuilder
-  func glassMorphicView(width: CGFloat, height: CGFloat, cornerRadius: CGFloat) -> some View {
+  func glassMoriphicCircleView(width: CGFloat, height: CGFloat) -> some View {
     ZStack {
-//      RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
-      Rectangle()
+      Circle()
         .fill(Color.black.opacity(0.3))
-        .cornerRadius(cornerRadius, corners: .allCorners)
       CustomBlurView(effect: .systemUltraThinMaterialLight) { view in
         // FIXME: - 피그마와 비슷하도록 값 고치기
         view.saturationAmout = 2.2
-        view.gaussianBlurRadius = 32
+        view.gaussianBlurRadius = 36
       }
-//      .cornerRadius(cornerRadius, corners: [.topLeft, .topRight])
-      .clipShape(RoundedRectangle(cornerRadius: cornerRadius, style: .continuous))
+      .clipShape(Circle())
     }
     .frame(width: width, height: height)
   }
 
   @ViewBuilder
-  func glassMorphicAccessView(width: CGFloat, height: CGFloat, cornerRadius: CGFloat) -> some View {
+  func glassMorphicView(width: CGFloat, height: CGFloat, cornerRadius: CGFloat) -> some View {
     ZStack {
       //      RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
       Rectangle()
-        .fill(Color.black.opacity(0.6))
+        .fill(Color.black.opacity(0.3))
         .cornerRadius(cornerRadius, corners: .allCorners)
       CustomBlurView(effect: .systemUltraThinMaterialLight) { view in
         // FIXME: - 피그마와 비슷하도록 값 고치기
@@ -123,18 +120,18 @@ extension View {
   }
 
   @ViewBuilder
-  func glassMoriphicCircleView(width: CGFloat, height: CGFloat) -> some View {
+  func glassMorphicView(cornerRadius: CGFloat) -> some View {
     ZStack {
-      Circle()
+      Rectangle()
         .fill(Color.black.opacity(0.3))
+        .cornerRadius(cornerRadius, corners: .allCorners)
       CustomBlurView(effect: .systemUltraThinMaterialLight) { view in
         // FIXME: - 피그마와 비슷하도록 값 고치기
         view.saturationAmout = 2.2
-        view.gaussianBlurRadius = 36
+        view.gaussianBlurRadius = 32
       }
-      .clipShape(Circle())
+      .clipShape(RoundedRectangle(cornerRadius: cornerRadius, style: .continuous))
     }
-    .frame(width: width, height: height)
   }
 
   @ViewBuilder

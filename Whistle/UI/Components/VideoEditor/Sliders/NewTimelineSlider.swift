@@ -45,7 +45,6 @@ struct TimelineSlider<T: View>: View {
         DragGesture(minimumDistance: 1)
           .onChanged { gesture in
             isChange = true
-            print("sliderPosition: \(sliderPositionX), \(sliderViewYCenter)")
             let translationWidth = gesture.translation.width
             let newDraggedOffset = accumulatedOffset + translationWidth
 

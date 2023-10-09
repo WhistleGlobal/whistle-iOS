@@ -65,7 +65,6 @@ struct EditableVideo: Identifiable {
   /// reset and update
   mutating func updateRate(_ rate: Float) {
     let lowerBound = (rangeDuration.lowerBound * Double(self.rate)) / Double(rate)
-    print(self.rate, rate)
     let upperBound = (rangeDuration.upperBound * Double(self.rate)) / Double(rate)
     rangeDuration = lowerBound ... upperBound
 
