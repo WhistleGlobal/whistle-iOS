@@ -19,11 +19,10 @@ struct MyContentListView: View {
   @State var playerIndex = 0
   @State var showDialog = false
   @State var showPasteToast = false
+  @State var showDeleteToast = false
   @EnvironmentObject var apiViewModel: APIViewModel
+  @EnvironmentObject var tabbarModel: TabbarModel
   @State var players: [AVPlayer?] = []
-  @Binding var tabSelection: TabSelection
-  @Binding var tabbarOpacity: Double
-  @Binding var tabWidth: CGFloat
 
   var body: some View {
     GeometryReader { proxy in
@@ -33,10 +32,23 @@ struct MyContentListView: View {
             if let player = players[index] {
               Player(player: player)
                 .frame(width: proxy.size.width)
+                .onTapGesture {
+                  if player.rate == 0.0 {
+                    player.play()
+                  } else {
+                    player.pause()
+                  }
+                }
                 .overlay {
                   // TODO: - contentId 백엔드 수정 필요, contentId & whistleCount
+                  LinearGradient(
+                    colors: [.clear, .black.opacity(0.24)],
+                    startPoint: .center,
+                    endPoint: .bottom)
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    .allowsHitTesting(false)
                   userInfo(
-                    contentId: 0,
+                    contentId: content.contentId ?? 0,
                     caption: content.caption ?? "",
                     musicTitle: content.musicTitle ?? "",
                     isWhistled:
@@ -47,15 +59,14 @@ struct MyContentListView: View {
                     }),
                     whistleCount:
                     Binding(get: {
-                      0
-                    }, set: { _ in
-                      0
+                      content.contentWhistleCount ?? 0
+                    }, set: { newValue in
+                      content.contentWhistleCount = newValue
                     }))
                 }
                 .padding()
                 .rotationEffect(Angle(degrees: -90))
                 .ignoresSafeArea(.all, edges: .top)
-
                 .tag(index)
             } else {
               KFImage.url(URL(string: content.thumbnailUrl ?? ""))
@@ -86,10 +97,11 @@ struct MyContentListView: View {
     .navigationBarBackButtonHidden()
     .background(.black)
     .onAppear {
-      players.append(AVPlayer(url: URL(string: apiViewModel.myPostFeed[currentIndex].videoUrl ?? "")!))
-      for _ in 0..<apiViewModel.myPostFeed.count - 1 {
+      for _ in 0..<apiViewModel.myPostFeed.count {
         players.append(nil)
       }
+      players[currentIndex] = AVPlayer(url: URL(string: apiViewModel.myPostFeed[currentIndex].videoUrl ?? "")!)
+      playerIndex = currentIndex
       guard let player = players[currentIndex] else {
         return
       }
@@ -113,62 +125,36 @@ struct MyContentListView: View {
       apiViewModel.postFeedPlayerChanged()
     }
     .overlay {
-      VStack {
-        Spacer()
-        glassMorphicTab(width: tabWidth)
-          .overlay {
-            if tabWidth != 56 {
-              tabItems()
-            } else {
-              HStack(spacing: 0) {
-                Spacer().frame(minWidth: 0)
-                Button {
-                  withAnimation {
-                    tabWidth = UIScreen.width - 32
-                  }
-                } label: {
-                  Circle()
-                    .foregroundColor(.Dim_Default)
-                    .frame(width: 48, height: 48)
-                    .overlay {
-                      Circle()
-                        .stroke(lineWidth: 1)
-                        .foregroundStyle(LinearGradient.Border_Glass)
-                    }
-                    .padding(4)
-                    .overlay {
-                      Image(systemName: "arrow.up.left.and.arrow.down.right")
-                        .foregroundColor(.White)
-                        .frame(width: 20, height: 20)
-                    }
-                }
-              }
-            }
-          }
-          .gesture(
-            DragGesture(minimumDistance: 0, coordinateSpace: .local)
-              .onEnded { value in
-                if value.translation.width > 50 {
-                  log("right swipe")
-                  withAnimation {
-                    tabWidth = 56
-                  }
-                }
-              })
-      }
-      .padding(.horizontal, 16)
-      .opacity(tabbarOpacity)
-    }
-    .overlay {
       if showPasteToast {
         ToastMessage(text: "클립보드에 복사되었어요", paddingBottom: 78, showToast: $showPasteToast)
+      }
+      if showDeleteToast {
+        CancelableToastMessage(text: "삭제되었습니다", paddingBottom: 78, action: {
+          Task {
+            guard let contentId = apiViewModel.myPostFeed[currentIndex].contentId else { return }
+            log("contentId: \(contentId)")
+            log("currentIndex: \(currentIndex)")
+            log("playerIndex: \(playerIndex)")
+            apiViewModel.myPostFeed.remove(at: currentIndex)
+            players[currentIndex]?.pause()
+            players.remove(at: currentIndex)
+            if !players.isEmpty {
+              players[currentIndex] = AVPlayer(url: URL(string: apiViewModel.myPostFeed[currentIndex].videoUrl ?? "")!)
+              await players[currentIndex]?.seek(to: .zero)
+              players[currentIndex]?.play()
+            }
+            apiViewModel.postFeedPlayerChanged()
+            log("contentId: \(contentId)")
+            log("currentIndex: \(currentIndex)")
+            log("playerIndex: \(currentIndex)")
+//            await apiViewModel.deleteContent(contentId: contentId)
+          }
+        }, showToast: $showDeleteToast)
       }
     }
     .confirmationDialog("", isPresented: $showDialog) {
       Button("삭제하기", role: .destructive) {
-        Task {
-          log("삭제하기")
-        }
+        showDeleteToast = true
       }
       Button("닫기", role: .cancel) {
         log("Cancel")
@@ -181,7 +167,7 @@ extension MyContentListView {
 
   @ViewBuilder
   func userInfo(
-    contentId: Int,
+    contentId: Int?,
     caption: String,
     musicTitle: String,
     isWhistled: Binding<Bool>,
@@ -191,6 +177,8 @@ extension MyContentListView {
     VStack(spacing: 0) {
       HStack(spacing: 0) {
         Button {
+          players[currentIndex]?.pause()
+          players.removeAll()
           dismiss()
         } label: {
           Color.clear
@@ -237,9 +225,11 @@ extension MyContentListView {
           Button {
             Task {
               if isWhistled.wrappedValue {
+                guard let contentId else { return }
                 await apiViewModel.actionWhistleCancel(contentId: contentId)
                 whistleCount.wrappedValue -= 1
               } else {
+                guard let contentId else { return }
                 await apiViewModel.actionWhistle(contentId: contentId)
                 whistleCount.wrappedValue += 1
               }
@@ -286,83 +276,7 @@ extension MyContentListView {
         }
       }
     }
-    .padding(.bottom, 112)
+    .padding(.bottom, 64)
     .padding(.horizontal, 20)
   }
-
-  @ViewBuilder
-  func tabItems() -> some View {
-    RoundedRectangle(cornerRadius: 100)
-      .foregroundColor(Color.Dim_Default)
-      .frame(width: (UIScreen.width - 32) / 3 - 6)
-      .offset(x: tabSelection.rawValue * ((UIScreen.width - 32) / 3))
-      .padding(3)
-      .overlay(
-        Capsule()
-          .stroke(lineWidth: 1)
-          .foregroundStyle(LinearGradient.Border_Glass)
-          .padding(3)
-          .offset(x: tabSelection.rawValue * ((UIScreen.width - 32) / 3)))
-      .foregroundColor(.clear)
-      .frame(height: 56)
-      .frame(maxWidth: .infinity)
-      .overlay {
-        Button {
-          Task {
-            dismiss()
-            withAnimation {
-              self.tabSelection = .main
-            }
-          }
-        } label: {
-          Color.clear.overlay {
-            Image(systemName: "house.fill")
-              .resizable()
-              .scaledToFit()
-              .frame(width: 24, height: 24)
-          }
-          .frame(width: (UIScreen.width - 32) / 3, height: 56)
-        }
-        .foregroundColor(.white)
-        .padding(3)
-        .offset(x: -1 * ((UIScreen.width - 32) / 3))
-
-        Button {
-          dismiss()
-          withAnimation {
-            self.tabSelection = .upload
-          }
-
-        } label: {
-          Color.clear.overlay {
-            Image(systemName: "plus")
-              .resizable()
-              .scaledToFit()
-              .frame(width: 20, height: 20)
-              .foregroundColor(.white)
-          }
-          .frame(width: (UIScreen.width - 32) / 3, height: 56)
-        }
-        .foregroundColor(.white)
-        .padding(3)
-        Button {
-          dismiss()
-        } label: {
-          Color.clear.overlay {
-            Image(systemName: "person.fill")
-              .resizable()
-              .scaledToFit()
-              .frame(width: 20, height: 20)
-              .foregroundColor(.white)
-          }
-          .frame(width: (UIScreen.width - 32) / 3, height: 56)
-        }
-        .foregroundColor(.white)
-        .padding(3)
-        .offset(x: (UIScreen.width - 32) / 3)
-      }
-      .frame(height: 56)
-      .frame(maxWidth: .infinity)
-  }
-
 }

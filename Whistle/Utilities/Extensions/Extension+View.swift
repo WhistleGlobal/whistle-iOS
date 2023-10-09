@@ -20,7 +20,7 @@ extension View {
 // MARK: - 추후 Sticky header
 extension View {
   @ViewBuilder
-  func offset(coordinateSpace: CoordinateSpace, completion: @escaping (CGFloat) -> ()) -> some View {
+  func offset(coordinateSpace: CoordinateSpace, completion: @escaping (CGFloat) -> Void) -> some View {
     overlay {
       GeometryReader { proxy in
         let minY = proxy.frame(in: coordinateSpace).minY
@@ -62,7 +62,6 @@ extension View {
 // MARK: - GlassMorphism 관련 코드
 
 extension View {
-
   @ViewBuilder
   func glassMorphicTab(width: CGFloat) -> some View {
     HStack(spacing: 0) {
@@ -88,15 +87,36 @@ extension View {
   }
 
   @ViewBuilder
-  func glassMoriphicView(width: CGFloat, height: CGFloat, cornerRadius: CGFloat) -> some View {
+  func glassMorphicView(width: CGFloat, height: CGFloat, cornerRadius: CGFloat) -> some View {
     ZStack {
-      RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
+//      RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
+      Rectangle()
         .fill(Color.black.opacity(0.3))
+        .cornerRadius(cornerRadius, corners: .allCorners)
       CustomBlurView(effect: .systemUltraThinMaterialLight) { view in
         // FIXME: - 피그마와 비슷하도록 값 고치기
         view.saturationAmout = 2.2
-        view.gaussianBlurRadius = 36
+        view.gaussianBlurRadius = 32
       }
+//      .cornerRadius(cornerRadius, corners: [.topLeft, .topRight])
+      .clipShape(RoundedRectangle(cornerRadius: cornerRadius, style: .continuous))
+    }
+    .frame(width: width, height: height)
+  }
+
+  @ViewBuilder
+  func glassMorphicAccessView(width: CGFloat, height: CGFloat, cornerRadius: CGFloat) -> some View {
+    ZStack {
+      //      RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
+      Rectangle()
+        .fill(Color.black.opacity(0.6))
+        .cornerRadius(cornerRadius, corners: .allCorners)
+      CustomBlurView(effect: .systemUltraThinMaterialLight) { view in
+        // FIXME: - 피그마와 비슷하도록 값 고치기
+        view.saturationAmout = 2.2
+        view.gaussianBlurRadius = 32
+      }
+      //      .cornerRadius(cornerRadius, corners: [.topLeft, .topRight])
       .clipShape(RoundedRectangle(cornerRadius: cornerRadius, style: .continuous))
     }
     .frame(width: width, height: height)
@@ -119,12 +139,13 @@ extension View {
 
   @ViewBuilder
   func glassProfile(width: CGFloat, height: CGFloat, cornerRadius: CGFloat, overlayed: some View) -> some View {
-    glassMoriphicView(width: width, height: height, cornerRadius: cornerRadius)
+    glassMorphicView(width: width, height: height, cornerRadius: cornerRadius)
       .overlay {
         RoundedRectangle(cornerRadius: cornerRadius)
           .stroke(lineWidth: 1)
           .foregroundStyle(
             LinearGradient.Border_Glass)
+          .frame(width: width, height: height)
         overlayed
       }
   }
@@ -381,5 +402,68 @@ fileprivate struct Removebackgroundcolor: UIViewRepresentable {
     DispatchQueue.main.async {
       uiView.superview?.superview?.backgroundColor = .clear
     }
+  }
+}
+
+extension View {
+  func getRect() -> CGRect {
+    UIScreen.main.bounds
+  }
+
+  // MARK: - Vertical Center
+
+  func vCenter() -> some View {
+    frame(maxHeight: .infinity, alignment: .center)
+  }
+
+  // MARK: - Vertical Top
+
+  func vTop() -> some View {
+    frame(maxHeight: .infinity, alignment: .top)
+  }
+
+  // MARK: - Vertical Bottom
+
+  func vBottom() -> some View {
+    frame(maxHeight: .infinity, alignment: .bottom)
+  }
+
+  // MARK: - Horizontal Center
+
+  func hCenter() -> some View {
+    frame(maxWidth: .infinity, alignment: .center)
+  }
+
+  // MARK: - Horizontal Leading
+
+  func hLeading() -> some View {
+    frame(maxWidth: .infinity, alignment: .leading)
+  }
+
+  // MARK: - Horizontal Trailing
+
+  func hTrailing() -> some View {
+    frame(maxWidth: .infinity, alignment: .trailing)
+  }
+
+  // MARK: - All frame
+
+  func allFrame() -> some View {
+    frame(maxWidth: .infinity, maxHeight: .infinity)
+  }
+
+  func withoutAnimation() -> some View {
+    animation(nil, value: UUID())
+  }
+
+  var isSmallScreen: Bool {
+    getRect().height < 700
+  }
+}
+
+extension View {
+  @ViewBuilder
+  func frame(_ size: CGSize) -> some View {
+    frame(width: size.width, height: size.height)
   }
 }

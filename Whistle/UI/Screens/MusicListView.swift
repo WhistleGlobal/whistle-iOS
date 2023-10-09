@@ -8,6 +8,7 @@
 import Alamofire
 import AVFoundation
 import AVKit
+import BottomSheet
 import Kingfisher
 import SwiftUI
 
@@ -23,13 +24,19 @@ enum DownloadStatus {
 // MARK: - MusicListView
 
 struct MusicListView: View {
+  @ObservedObject var musicVM: MusicViewModel
+  @ObservedObject var editorVM: EditorViewModel
+  @ObservedObject var videoPlayer: VideoPlayerManager
+  @Binding var bottomSheetPosition: BottomSheetPosition
   @State var searchQueryString = ""
+  @State var isSearching = false
   @State var musicList: [Music] = []
   @State var progressStatus: [Music: Double] = [:]
   @State var downloadStatus: [Music: DownloadStatus] = [:]
   @State var downloadRequests: [Music: DownloadRequest] = [:]
   @State var fileDirectories: [Music: URL] = [:]
   @State var audioPlayer: AVAudioPlayer?
+  @Binding var isShowingMusicTrimView: Bool
   @State var currentMusic: Music? = nil {
     didSet(oldValue) {
       if let oldValue {
@@ -54,33 +61,90 @@ struct MusicListView: View {
   @StateObject var apiViewModel = APIViewModel()
 
   var body: some View {
-    SearchBar(text: $searchQueryString) {
-      List(filteredMusicList, id: \.musicID) { music in
-        HStack {
-          KFImage(URL(string: music.albumCover))
-            .cancelOnDisappear(true)
-            .placeholder {
-              ProgressView()
+    VStack {
+      SearchBar(
+        searchText: $searchQueryString,
+        isSearching: $isSearching)
+      if musicList.isEmpty {
+        ProgressView()
+          .scaleEffect(2.0)
+          .hCenter()
+          .padding(.top, 40)
+          .preferredColorScheme(.dark)
+      } else {
+        if !filteredMusicList.isEmpty {
+          List(filteredMusicList, id: \.musicID) { music in
+            HStack(spacing: 0) {
+              KFImage(URL(string: music.albumCover))
+                .cancelOnDisappear(true)
+                .placeholder {
+                  ProgressView()
+                }
+                .retry(maxCount: 3, interval: .seconds(0.5))
+                .onSuccess { _ in
+                }
+                .onFailure { _ in
+                }
+                .resizable()
+                .frame(width: UIScreen.getWidth(64), height: UIScreen.getWidth(64))
+                .cornerRadius(8)
+                .padding(.trailing, 16)
+              HStack {
+                Text("\(music.musicTitle)")
+                Rectangle().foregroundStyle(.ultraThinMaterial.opacity(0.001))
+              }
+              .highPriorityGesture(TapGesture().onEnded {
+                switch downloadStatus[music] {
+                case .beforeDownload:
+                  downloadAudioUsingAlamofire(for: music)
+                case .complete:
+                  DispatchQueue.main.async {
+                    musicVM.url = fileDirectories[music]
+                    Task {
+                      if let url = musicVM.url {
+                        musicVM.sample_count = Int(audioDuration(url))
+                      }
+                      if let duration = editorVM.currentVideo?.totalDuration {
+                        musicVM.trimmedDuration = duration
+                        print("set duration: \(duration)")
+                      }
+                      await musicVM.visualizeAudio()
+                      bottomSheetPosition = .hidden
+                      editorVM.selectedTools = nil
+                      isShowingMusicTrimView = true
+                    }
+                  }
+                default: break
+                }
+              })
+              handleDownloadButton(for: music)
             }
-            .retry(maxCount: 3, interval: .seconds(0.5))
-            .onSuccess { _ in
-            }
-            .onFailure { _ in
-            }
-            .resizable()
-            .frame(width: UIScreen.getWidth(64), height: UIScreen.getWidth(64))
-            .cornerRadius(8)
-          Text("\(music.musicTitle)")
-          Spacer()
-          handleDownloadButton(for: music)
+            .listRowSeparator(.hidden)
+            .listRowBackground(Color.clear)
+          }
+          .listStyle(.plain)
+          .navigationTitle("")
+          .foregroundStyle(Color.White)
+        } else {
+          List {
+            Text("검색 결과가 없습니다.")
+              .fontSystem(fontDesignSystem: .subtitle2_KO)
+              .foregroundStyle(Color.white)
+              .listRowSeparator(.hidden)
+              .listRowBackground(Color.clear)
+          }
+          .foregroundStyle(Color.white)
+          .listStyle(.plain)
         }
-        .listRowSeparator(.hidden)
-//          .listRowBackground(Color.clear)
       }
-      .padding(.top, 80)
     }
-    .listStyle(.plain)
-    .navigationTitle("")
+    .fullScreenCover(isPresented: $isShowingMusicTrimView) {
+      MusicTrimView(
+        musicVM: musicVM,
+        editorVM: editorVM,
+        videoPlayer: videoPlayer,
+        isShowingMusicTrimView: $isShowingMusicTrimView)
+    }
     .onAppear {
       let fileManager = FileManager.default
       let temporaryDirectory = FileManager.default.temporaryDirectory
@@ -98,23 +162,27 @@ struct MusicListView: View {
         downloadStatus = Dictionary(uniqueKeysWithValues: musicList.map { ($0, .beforeDownload) })
       }
     }
-    .ignoresSafeArea()
   }
 
-  @ViewBuilder
-  func glassMoriphicView(width: CGFloat, height: CGFloat, cornerRadius: CGFloat) -> some View {
-    ZStack {
-      RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
-        .fill(Color.black.opacity(0.3))
-      CustomBlurView(effect: .systemUltraThinMaterialLight) { view in
-        // FIXME: - 피그마와 비슷하도록 값 고치기
-        view.saturationAmout = 2.2
-        view.gaussianBlurRadius = 36
-      }
-      .clipShape(RoundedRectangle(cornerRadius: cornerRadius, style: .continuous))
-    }
-    .frame(width: width, height: height)
-  }
+//  @ViewBuilder
+//  func glassMoriphicView(
+//    width: CGFloat,
+//    height: CGFloat,
+//    cornerRadius: CGFloat)
+//    -> some View
+//  {
+//    ZStack {
+//      RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
+//        .fill(Color.black.opacity(0.3))
+//      CustomBlurView(effect: .systemUltraThinMaterialLight) { view in
+//        // FIXME: - 피그마와 비슷하도록 값 고치기
+//        view.saturationAmout = 2.2
+//        view.gaussianBlurRadius = 36
+//      }
+//      .clipShape(RoundedRectangle(cornerRadius: cornerRadius, style: .continuous))
+//    }
+//    .frame(width: width, height: height)
+//  }
 
   @ViewBuilder
   func handleDownloadButton(for music: Music) -> some View {
@@ -216,7 +284,7 @@ extension MusicListView {
   }
 
   func cancelDownload(for music: Music) {
-    guard let index = musicList.firstIndex(where: { $0.id == music.id }) else { return }
+    guard musicList.firstIndex(where: { $0.id == music.id }) != nil else { return }
     downloadRequests[music]?.cancel()
     downloadStatus[music] = .beforeDownload
   }
@@ -273,12 +341,90 @@ extension MusicListView {
       downloadStatus[music] = .complete
     }
   }
+
+  func audioDuration(_ url: URL) -> TimeInterval {
+    let asset = AVURLAsset(url: url)
+    return asset.videoDuration()
+  }
 }
 
-// MARK: - MusicListView_Previews
+//// MARK: - MusicListView_Previews
+//
+// struct MusicListView_Previews: PreviewProvider {
+//  static var previews: some View {
+//    MusicListView(progressStatus: [:], editorVM: VideoPlayerManager)
+//  }
+// }
 
-struct MusicListView_Previews: PreviewProvider {
-  static var previews: some View {
-    MusicListView(progressStatus: [:])
+extension UIApplication {
+  func endEditing() {
+    sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+  }
+}
+
+// MARK: - SearchBar
+
+struct SearchBar: View {
+  @Binding var searchText: String
+  @Binding var isSearching: Bool
+
+  var body: some View {
+    ZStack {
+      HStack(spacing: 0) {
+        TextField("", text: $searchText, prompt: Text("Search").foregroundColor(Color.LabelColor_Secondary_Dark))
+          .padding(.horizontal, 34)
+          .frame(height: UIScreen.getHeight(36))
+          .foregroundStyle(Color.LabelColor_Primary_Dark)
+          .fontSystem(fontDesignSystem: .body1_KO)
+          .background(Color.Dim_Default)
+          .cornerRadius(10)
+          .padding(.leading, 16)
+          .padding(.trailing, isSearching ? 0 : 16)
+          .onTapGesture {
+            withAnimation {
+              isSearching = true
+            }
+          }
+          .onSubmit {
+            withAnimation {
+              isSearching = false
+            }
+          }
+          .onChange(of: searchText) { _ in
+            print("HI")
+          }
+        if isSearching {
+          Text("취소")
+            .foregroundStyle(Color.Info)
+            .fontSystem(fontDesignSystem: .body1_KO)
+            .padding(.horizontal, 16)
+            .contentShape(Rectangle())
+            .onTapGesture {
+              UIApplication.shared.endEditing()
+              searchText = ""
+              withAnimation {
+                isSearching = false
+              }
+            }
+        }
+      }
+      Image(systemName: "magnifyingglass")
+        .foregroundStyle(Color.LabelColor_Secondary_Dark)
+        .font(.system(size: 16))
+        .hLeading()
+        .padding(.leading, 24)
+
+      if isSearching, !searchText.isEmpty {
+        Button(action: {
+          searchText = ""
+        }) {
+          Image(systemName: "xmark.circle.fill")
+            .foregroundColor(Color.LabelColor_Secondary_Dark)
+        }
+        .hTrailing()
+        .padding(.trailing, 66)
+      }
+    }
+    .padding(.top, 16)
   }
 }

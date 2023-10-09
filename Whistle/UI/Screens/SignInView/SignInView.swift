@@ -6,6 +6,8 @@
 //
 
 import _AuthenticationServices_SwiftUI
+import _AVKit_SwiftUI
+import AVFoundation
 import GoogleSignIn
 import GoogleSignInSwift
 import KeychainSwift
@@ -17,23 +19,132 @@ import SwiftUI
 struct SignInView: View {
 
   @StateObject var appleSignInViewModel = AppleSignInViewModel()
+  @State var showTermsOfService = false
+  @State var showPrivacyPolicy = false
+  @State var loginOpacity = 0.0
+  @EnvironmentObject var apiViewModel: APIViewModel
   @EnvironmentObject var userAuth: UserAuth
   let keychain = KeychainSwift()
 
-  var domainUrl: String {
-    AppKeys.domainUrl as! String
+  var domainURL: String {
+    AppKeys.domainURL as! String
   }
 
-  private var customViewModel = GoogleSignInButtonViewModel(scheme: .light, style: .wide, state: .normal)
+  private var customViewModel = GoogleSignInButtonViewModel(scheme: .light, style: .standard, state: .normal)
 
   var body: some View {
-    VStack {
-      GoogleSignInButton(viewModel: customViewModel, action: handleSignInButton)
-        .frame(maxWidth: 300, maxHeight: 45)
-      SignInWithAppleButton(
-        onRequest: appleSignInViewModel.configureRequest,
-        onCompletion: appleSignInViewModel.handleResult)
-        .frame(maxWidth: 300, maxHeight: 45)
+    ZStack {
+      SignInPlayerView()
+        .ignoresSafeArea()
+        .allowsTightening(false)
+      VStack(spacing: 0) {
+        NavigationLink {
+          TabbarView()
+            .environmentObject(apiViewModel)
+            .environmentObject(userAuth)
+        } label: {
+          HStack(spacing: 0) {
+            Spacer()
+            Text("건너뛰기")
+              .fontSystem(fontDesignSystem: .subtitle2_KO)
+              .foregroundColor(.LabelColor_Secondary_Dark)
+          }
+          .padding(.horizontal, 24)
+          .padding(.vertical, 12)
+        }
+        Spacer()
+        Button {
+          handleSignInButton()
+        } label: {
+          Capsule()
+            .foregroundColor(.white)
+            .frame(maxWidth: 360, maxHeight: 48)
+            .overlay {
+              HStack(alignment: .center) {
+                Image("GoogleLogo")
+                  .resizable()
+                  .scaledToFit()
+                  .frame(width: 18, height: 18)
+                Spacer()
+                Text("Google로 계속하기")
+                  .font(.custom("Roboto-Medium", size: 16))
+                  .fontWeight(.semibold)
+                  .foregroundColor(.black.opacity(0.54))
+                Spacer()
+                Color.clear
+                  .frame(width: 18, height: 18)
+              }
+              .padding(.horizontal, 24)
+            }
+            .padding(.bottom, 16)
+        }
+
+        SignInWithAppleButton(
+          onRequest: appleSignInViewModel.configureRequest,
+          onCompletion: appleSignInViewModel.handleResult)
+          .frame(maxWidth: 360, maxHeight: 48)
+          .cornerRadius(48)
+          .overlay {
+            Capsule()
+              .foregroundColor(.black)
+              .frame(maxWidth: 360, maxHeight: 48)
+              .overlay {
+                HStack(alignment: .center) {
+                  Image(systemName: "apple.logo")
+                    .resizable()
+                    .scaledToFit()
+                    .foregroundColor(.white)
+                    .frame(width: 18, height: 18)
+                  Spacer()
+                  Text("Apple로 계속하기")
+                    .font(.system(size: 16))
+                    .fontWeight(.semibold)
+                    .foregroundColor(.white)
+                  Spacer()
+                  Color.clear
+                    .frame(width: 18, height: 18)
+                }
+                .padding(.horizontal, 24)
+              }
+              .allowsHitTesting(false)
+          }
+          .padding(.bottom, 24)
+        Text("가입을 진행할 경우, 아래의 정책에 대해 동의한 것으로 간주합니다.")
+          .fontSystem(fontDesignSystem: .caption_KO_Regular)
+          .foregroundColor(.LabelColor_Primary_Dark)
+        HStack(spacing: 16) {
+          Button {
+            showTermsOfService = true
+          } label: {
+            Text("이용약관")
+              .font(.system(size: 12, weight: .semibold))
+              .underline(true, color: .LabelColor_Primary_Dark)
+          }
+          Button {
+            showPrivacyPolicy = true
+          } label: {
+            Text("개인정보처리방침")
+              .font(.system(size: 12, weight: .semibold))
+              .underline(true, color: .LabelColor_Primary_Dark)
+          }
+        }
+        .foregroundColor(.LabelColor_Primary_Dark)
+        .padding(.bottom, 16)
+      }
+      .opacity(loginOpacity)
+    }
+    .onAppear {
+      DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+        withAnimation {
+          loginOpacity = 1.0
+        }
+      }
+    }
+    .navigationDestination(isPresented: $showTermsOfService) {
+      TermsOfServiceView()
+    }
+    .navigationDestination(isPresented: $showPrivacyPolicy) {
+      PrivacyPolicyView()
     }
   }
 }
@@ -88,7 +199,7 @@ extension SignInView {
         return
       }
 
-      guard let url = URL(string: "\(domainUrl)/auth/google") else {
+      guard let url = URL(string: "\(domainURL)/auth/google") else {
         print("URL is nil")
         return
       }

@@ -8,25 +8,27 @@
 import Kingfisher
 import SwiftUI
 
+
+// MARK: - profileTabStatus
+
+enum profileTabStatus: String {
+  case follower
+  case following
+}
+
 // MARK: - FollowView
 
 struct FollowView: View {
-
-  // MARK: Public
-
-  public enum profileTabStatus: String {
-    case follower
-    case following
-  }
 
   // MARK: Internal
 
   @Environment(\.dismiss) var dismiss
   @EnvironmentObject var apiViewModel: APIViewModel
+  @EnvironmentObject var tabbarModel: TabbarModel
+  @State var newId = UUID()
   @State var tabStatus: profileTabStatus = .follower
   @State var showOtherProfile = false
-  @State var selectedId: Int?
-  @State var userId: Int?
+  @State var showUserProfile = false
 
   var body: some View {
     VStack(spacing: 0) {
@@ -36,7 +38,7 @@ struct FollowView: View {
         }
         .buttonStyle(
           FollowTabbarStyle(
-            followNum: userId == nil ? apiViewModel.myFollow.followerCount : apiViewModel.userFollow.followerCount,
+            followNum: apiViewModel.myFollow.followerCount,
             tab: profileTabStatus.follower.rawValue,
             selectedTab: $tabStatus))
         Button("") {
@@ -44,9 +46,7 @@ struct FollowView: View {
         }
         .buttonStyle(
           FollowTabbarStyle(
-            followNum: userId == nil
-              ? apiViewModel.myFollow.followingCount
-              : apiViewModel.userFollow.followingCount,
+            followNum: apiViewModel.myFollow.followingCount,
             tab: profileTabStatus.following.rawValue,
             selectedTab: $tabStatus))
       }
@@ -57,25 +57,16 @@ struct FollowView: View {
           Spacer()
           followEmptyView()
         } else {
-          if userId != nil {
-            userFollowerList()
-          } else {
-            myFollowerList()
-          }
+          myFollowerList()
         }
       } else {
         if apiViewModel.myFollow.followingCount == 0 {
           Spacer()
           followEmptyView()
         } else {
-          if userId != nil {
-            userFollowingList()
-          } else {
-            myFollowingList()
-          }
+          myFollowingList()
         }
       }
-
       Spacer()
     }
     .padding(.horizontal, 16)
@@ -83,6 +74,7 @@ struct FollowView: View {
     .toolbar {
       ToolbarItem(placement: .cancellationAction) {
         Button {
+          log("dismiss")
           dismiss()
         } label: {
           Image(systemName: "chevron.backward")
@@ -95,11 +87,7 @@ struct FollowView: View {
       }
     }
     .task {
-      if let userId {
-        await apiViewModel.requestUserFollow(userId: userId)
-      } else {
-        await apiViewModel.requestMyFollow()
-      }
+      await apiViewModel.requestMyFollow()
     }
   }
 }
@@ -166,8 +154,10 @@ extension FollowView {
   func myFollowerList() -> some View {
     ForEach(apiViewModel.myFollow.followerList, id: \.userName) { follower in
       NavigationLink {
-        UserProfileView(userId: follower.followerId, mainVideoTabSelection: .constant(2))
+        UserProfileView(players: .constant([]), currentIndex: .constant(0), userId: follower.followerId)
           .environmentObject(apiViewModel)
+          .environmentObject(tabbarModel)
+          .id(UUID())
       } label: {
         personRow(
           isFollowed: Binding(get: {
@@ -180,6 +170,7 @@ extension FollowView {
           profileImage: follower.profileImg ?? "",
           userId: follower.followerId)
       }
+      .id(UUID())
     }
   }
 
@@ -187,8 +178,10 @@ extension FollowView {
   func myFollowingList() -> some View {
     ForEach(apiViewModel.myFollow.followingList, id: \.userName) { following in
       NavigationLink {
-        UserProfileView(userId: following.followingId, mainVideoTabSelection: .constant(2))
+        UserProfileView(players: .constant([]), currentIndex: .constant(0), userId: following.followingId)
           .environmentObject(apiViewModel)
+          .environmentObject(tabbarModel)
+          .id(UUID())
       } label: {
         personRow(
           isFollowed: .constant(true),
@@ -197,44 +190,7 @@ extension FollowView {
           profileImage: following.profileImg ?? "",
           userId: following.followingId)
       }
-    }
-  }
-
-  @ViewBuilder
-  func userFollowerList() -> some View {
-    ForEach(apiViewModel.userFollow.followerList, id: \.userName) { follower in
-      NavigationLink {
-        UserProfileView(userId: follower.followerId, mainVideoTabSelection: .constant(2))
-          .environmentObject(apiViewModel)
-      } label: {
-        personRow(
-          isFollowed: Binding(get: {
-            follower.isFollowed
-          }, set: { newValue in
-            follower.isFollowed = newValue
-          }),
-          userName: follower.userName,
-          description: follower.userName,
-          profileImage: follower.profileImg ?? "",
-          userId: follower.followerId)
-      }
-    }
-  }
-
-  @ViewBuilder
-  func userFollowingList() -> some View {
-    ForEach(apiViewModel.userFollow.followingList, id: \.userName) { following in
-      NavigationLink {
-        UserProfileView(userId: following.followingId, mainVideoTabSelection: .constant(2))
-          .environmentObject(apiViewModel)
-      } label: {
-        personRow(
-          isFollowed: .constant(true),
-          userName: following.userName,
-          description: following.userName,
-          profileImage: following.profileImg ?? "",
-          userId: following.followingId)
-      }
+      .id(UUID())
     }
   }
 }

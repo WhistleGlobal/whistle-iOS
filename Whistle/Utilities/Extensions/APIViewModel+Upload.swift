@@ -17,7 +17,7 @@ extension APIViewModel: UploadProtocol {
     return await withCheckedContinuation { continuation in
       AF.upload(multipartFormData: { multipartFormData in
         multipartFormData.append(image, withName: "image", fileName: "image.jpg", mimeType: "image/jpeg")
-      }, to: "\(domainUrl)/user/profile/image", headers: contentTypeMultipart)
+      }, to: "\(domainURL)/user/profile/image", headers: contentTypeMultipart)
         .validate(statusCode: 200..<300)
         .response { response in
           switch response.result {

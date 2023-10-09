@@ -8,6 +8,7 @@
 import GoogleSignIn
 import KeychainSwift
 import SwiftUI
+import VideoPicker
 
 // MARK: - WhistleApp
 
@@ -15,43 +16,84 @@ import SwiftUI
 struct WhistleApp: App {
   // MARK: Lifecycle
 
+  // Layout Test
   init() {
     Font.registerFonts(fontName: "SF-Pro-Display-Semibold")
     Font.registerFonts(fontName: "SF-Pro-Text-Regular")
     Font.registerFonts(fontName: "SF-Pro-Text-Semibold")
     Font.registerFontsTTF(fontName: "SF-Pro")
+    Font.registerFontsTTF(fontName: "Roboto-Medium")
   }
 
   // MARK: Internal
 
   @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
+  @StateObject var rootVM = RootViewModel(mainContext: PersistenceController.shared.viewContext)
   @StateObject var appleSignInViewModel = AppleSignInViewModel()
   @StateObject var userAuth = UserAuth()
   @StateObject var apiViewModel = APIViewModel()
+  @StateObject var universalRoutingModel: UniversalRoutingModel = .init()
   @State var testBool = false
   @AppStorage("isAccess") var isAccess = false
   let keychain = KeychainSwift()
+  var domainURL: String {
+    AppKeys.domainURL as! String
+  }
 
+  @State private var pickerOptions = PickerOptionsInfo()
   var body: some Scene {
     WindowGroup {
-      NavigationStack {
-        if isAccess {
-          //        MusicListView()
-          TabbarView()
+      if isAccess {
+        TabbarView()
+          .environmentObject(apiViewModel)
+          .environmentObject(userAuth)
+          .environmentObject(universalRoutingModel)
+          .task {
+            if isAccess {
+              appleSignInViewModel.userAuth.loadData { }
+            }
+//        NavigationStack {
+//          PickerConfigViewControllerWrapper(options: $pickerOptions)
+//            .environmentObject(rootVM)
+            //       }
+//        MusicListView()
+//        .task {
+//          if isAccess {
+//            appleSignInViewModel.userAuth.loadData { }
+          }
+          .onOpenURL { url in
+            log(url)
+            var urlString = url.absoluteString
+            urlString = urlString.replacingOccurrences(of: "\(domainURL)", with: "")
+            log(urlString)
+            if urlString.contains("/profile_uni?") {
+              log("/profile_uni? .contains")
+              urlString = urlString.replacingOccurrences(of: "/profile_uni?id=", with: "")
+              guard let userId = Int(urlString) else {
+                return
+              }
+              universalRoutingModel.userId = userId
+              universalRoutingModel.isUniversalProfile = true
+            } else if urlString.contains("/content_uni?") {
+              log("/content_uni? .contains")
+              urlString = urlString.replacingOccurrences(of: "/content_uni?contentId=", with: "")
+              log("urlString: \(urlString)")
+              guard let contentId = Int(urlString) else {
+                log("guard urlString: \(urlString)")
+                return
+              }
+              log("contentId: \(contentId)")
+              universalRoutingModel.contentId = contentId
+              universalRoutingModel.isUniversalContent = true
+            }
+          }
+      } else {
+        NavigationStack {
+          SignInView()
             .environmentObject(apiViewModel)
             .environmentObject(userAuth)
-        } else {
-          SignInView()
-            .environmentObject(userAuth)
         }
-      }
-      .tint(.black)
-      .task {
-        if isAccess {
-          appleSignInViewModel.userAuth.loadData {
-            log("after Login")
-          }
-        }
+        .tint(.black)
       }
     }
   }
@@ -106,4 +148,13 @@ public func log<T>(
     print("\(filename.components(separatedBy: "/").last ?? "")(\(line)) : \(funcName) : nil")
   }
   #endif
+}
+
+// MARK: - UniversalRoutingModel
+
+class UniversalRoutingModel: ObservableObject {
+  @Published var isUniversalProfile = false
+  @Published var isUniversalContent = false
+  @Published var userId = 0
+  @Published var contentId = 0
 }

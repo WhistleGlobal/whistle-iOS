@@ -20,7 +20,7 @@ struct TabbarView: View {
   @EnvironmentObject var universalRoutingModel: UniversalRoutingModel
   @StateObject var tabbarModel: TabbarModel = .init()
   @State private var pickerOptions = PickerOptionsInfo()
-  
+
   var body: some View {
     ZStack {
       NavigationStack {
@@ -51,10 +51,18 @@ struct TabbarView: View {
       case .upload:
         // FIXME: - uploadview로 교체하기
         //        Color.pink.ignoresSafeArea()]
+//        Color.pink.ignoresSafeArea()]
         NavigationStack {
           ZStack {
-            Color.pink.ignoresSafeArea()
-            PickerConfigViewControllerWrapper()
+//            Color.pink.ignoresSafeArea()
+//            PickerConfigViewControllerWrapper()
+//            AccessView()
+            ShootCameraView(
+              viewModel: ShootCameraViewModel(),
+              isCameraAuthorized: true,
+              isAlbumAuthorized: true,
+              isMicrophoneAuthorized: true)
+              .ignoresSafeArea()
           }
         }
       case .profile:
@@ -224,7 +232,7 @@ extension TabbarView {
       }
     }
   }
-  
+
   func switchTab(to tabSelection: TabSelection) {
     tabbarModel.tabSelectionNoAnimation = tabSelection
     withAnimation {

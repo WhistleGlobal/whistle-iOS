@@ -18,8 +18,8 @@ class AppleSignInViewModel: ObservableObject {
   @AppStorage("provider") var provider: Provider = .apple
   let keychain = KeychainSwift()
 
-  var domainUrl: String {
-    AppKeys.domainUrl as! String
+  var domainURL: String {
+    AppKeys.domainURL as! String
   }
 
   // 밑으로는 사용 되는 함수들
@@ -46,7 +46,7 @@ class AppleSignInViewModel: ObservableObject {
   // 백엔드 서버에 인증 코드를 전송하는 함수
   func sendAuthCodeToBackend(authCode: String) {
     log("sendAuthCodeToBackend authCode: \(authCode)")
-    let url = "\(domainUrl)/auth/apple"
+    let url = "\(domainURL)/auth/apple"
     let parameters: [String: Any] = [
       "authCode": authCode,
     ]

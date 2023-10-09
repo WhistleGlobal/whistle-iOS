@@ -11,7 +11,6 @@ import SwiftUI
 struct ProfileInfoView: View {
 
   @Environment(\.dismiss) var dismiss
-  @Binding var isShowingBottomSheet: Bool
   @EnvironmentObject var apiViewModel: APIViewModel
 
   var body: some View {
@@ -33,13 +32,13 @@ struct ProfileInfoView: View {
         }
         .listRowSeparator(.hidden)
         NavigationLink {
-          EmptyView()
+          PrivacyPolicyView()
         } label: {
           Text("개인정보처리방침")
             .listRowSeparator(.hidden)
         }
         NavigationLink {
-          EmptyView()
+          TermsOfServiceView()
         } label: {
           Text("이용약관")
             .listRowSeparator(.hidden)
@@ -53,9 +52,6 @@ struct ProfileInfoView: View {
     .navigationTitle("정보")
     .task {
       apiViewModel.requestUserCreateDate()
-    }
-    .onAppear {
-      isShowingBottomSheet = false
     }
     .toolbar {
       ToolbarItem(placement: .cancellationAction) {

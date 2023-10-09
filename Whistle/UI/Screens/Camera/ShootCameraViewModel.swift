@@ -1,10 +1,3 @@
-//
-//  ShootCameraViewModel.swift
-//  Whistle
-//
-//  Created by Lee Juwon on 2023/09/21.
-//
-
 import AVFoundation
 import Foundation
 import Photos
@@ -14,29 +7,68 @@ import Photos
 class ShootCameraViewModel: NSObject, ObservableObject {
   let session: AVCaptureSession
   @Published var preview: Preview?
-
   @Published var recordedVideoURL: URL?
+  @Published var isRecording = false
+  @Published var isCameraAuthorized = false
+  @Published var isMicrophoneAuthorized = false
 
   override init() {
     session = AVCaptureSession()
-
     super.init()
+    initializeCamera()
+  }
 
+  func initializeCamera() {
     Task(priority: .background) {
-      switch await AuthorizationChecker.checkCaptureAuthorizationStatus() {
-      case .permitted:
-        try? session
-          .addMovieInput()
-          .addMovieFileOutput()
-          .startRunning()
-
-        DispatchQueue.main.async {
-          self.preview = Preview(session: self.session, gravity: .resizeAspectFill)
-        }
-
-      case .notPermitted:
-        break
+      switch await AuthorizationChecker.checkAccess() {
+      case (let cameraAuthorized, let albumAuthorized, let microphoneAuthorized):
+        if cameraAuthorized, albumAuthorized, microphoneAuthorized {
+          do {
+            try setupCamera()
+          } catch {
+            print("Error setting up AVCaptureSession: \(error)")
+          }
+        } else { }
       }
+    }
+  }
+
+  private func setupCamera() throws {
+    guard let videoDevice = AVCaptureDevice.default(for: .video) else {
+      throw VideoError.device(reason: .unableToSetInput)
+    }
+
+    let videoInput = try AVCaptureDeviceInput(device: videoDevice)
+    guard session.canAddInput(videoInput) else {
+      throw VideoError.device(reason: .unableToSetInput)
+    }
+
+    session.beginConfiguration()
+    session.addInput(videoInput)
+
+    // Add movie file output
+    let fileOutput = AVCaptureMovieFileOutput()
+    guard session.canAddOutput(fileOutput) else {
+      throw VideoError.device(reason: .unableToSetOutput)
+    }
+    session.addOutput(fileOutput)
+    session.commitConfiguration()
+
+    session.startRunning()
+    DispatchQueue.main.async {
+      self.preview = Preview(session: self.session, gravity: .resizeAspectFill)
+    }
+  }
+
+  func startCameraPreview() {
+    if !session.isRunning, !isRecording {
+      session.startRunning()
+    }
+  }
+
+  func stopCameraPreview() {
+    if session.isRunning, !isRecording {
+      session.stopRunning()
     }
   }
 
@@ -46,20 +78,18 @@ class ShootCameraViewModel: NSObject, ObservableObject {
       return
     }
 
-    guard
-      let directoryPath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first
-    else {
+    isRecording = true
+
+    guard let directoryPath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else {
       print("Cannot access local file domain")
       return
     }
 
     let fileName = UUID().uuidString
-
-    let filePath = directoryPath
-      .appendingPathComponent(fileName)
-      .appendingPathExtension("mp4")
+    let filePath = directoryPath.appendingPathComponent(fileName).appendingPathExtension("mp4")
 
     output.startRecording(to: filePath, recordingDelegate: self)
+    preview?.previewLayer.connection?.isEnabled = true
   }
 
   func stopRecording() {
@@ -68,47 +98,9 @@ class ShootCameraViewModel: NSObject, ObservableObject {
       return
     }
 
+    isRecording = false
     output.stopRecording()
   }
-
-//  func toggleCameraDirection() {
-//    // 카메라 전환을 비동기로 수행
-//    Task {
-//      await switchCameraDirection()
-//    }
-//  }
-//
-//  @MainActor
-//  private func switchCameraDirection() {
-//    guard let currentVideoInput = session.inputs.first as? AVCaptureDeviceInput else {
-//      print("No video inputs found.")
-//      return
-//    }
-//
-//    let currentPosition = currentVideoInput.device.position
-//    let newCameraPosition: AVCaptureDevice.Position = (currentPosition == .back) ? .front : .back
-//
-//    if let newVideoDevice = AVCaptureDevice.DiscoverySession(
-//      deviceTypes: [.builtInWideAngleCamera],
-//      mediaType: .video,
-//      position: newCameraPosition).devices.first
-//    {
-//      do {
-//        let newVideoInput = try AVCaptureDeviceInput(device: newVideoDevice)
-//
-//        session.beginConfiguration()
-//        session.removeInput(currentVideoInput)
-//        if session.canAddInput(newVideoInput) {
-//          session.addInput(newVideoInput)
-//        } else {
-//          print("Could not add the new video input to the session")
-//        }
-//        session.commitConfiguration()
-//      } catch {
-//        print("Error creating AVCaptureDeviceInput: \(error)")
-//      }
-//    }
-//  }
 
   func toggleCameraDirection() {
     guard let currentVideoInput = session.inputs.first as? AVCaptureDeviceInput else {
@@ -116,13 +108,9 @@ class ShootCameraViewModel: NSObject, ObservableObject {
       return
     }
 
-    // 현재 카메라 장치의 위치를 확인합니다.
     let currentPosition = currentVideoInput.device.position
-
-    // 새로운 카메라 위치를 설정합니다.
     let newCameraPosition: AVCaptureDevice.Position = (currentPosition == .back) ? .front : .back
 
-    // 사용 가능한 카메라 장치들 중에서 새로운 카메라 위치에 해당하는 장치를 찾습니다.
     if
       let newVideoDevice = AVCaptureDevice.DiscoverySession(
         deviceTypes: [.builtInWideAngleCamera],
@@ -132,25 +120,19 @@ class ShootCameraViewModel: NSObject, ObservableObject {
       do {
         let newVideoInput = try AVCaptureDeviceInput(device: newVideoDevice)
 
-        // 설정 변경을 시작합니다.
         session.beginConfiguration()
-
-        // 기존의 비디오 입력을 제거하고 새로운 비디오 입력을 추가합니다.
         session.removeInput(currentVideoInput)
         if session.canAddInput(newVideoInput) {
           session.addInput(newVideoInput)
         } else {
           print("Could not add the new video input to the session")
         }
-
-        // 설정 변경을 완료합니다.
         session.commitConfiguration()
       } catch {
         print("Error creating AVCaptureDeviceInput: \(error)")
       }
     }
   }
-
 }
 
 // MARK: AVCaptureFileOutputRecordingDelegate
@@ -162,15 +144,18 @@ extension ShootCameraViewModel: AVCaptureFileOutputRecordingDelegate {
     from _: [AVCaptureConnection],
     error _: Error?)
   {
-    print("영상 촬영 완료!")
+    print("Video recording completed!")
     recordedVideoURL = outputFileURL
+
+    if !isRecording {
+      startCameraPreview()
+    }
   }
 }
 
 extension AVCaptureSession {
   var movieFileOutput: AVCaptureMovieFileOutput? {
-    let output = outputs.first as? AVCaptureMovieFileOutput
-    return output
+    outputs.first as? AVCaptureMovieFileOutput
   }
 
   func addMovieInput() throws -> Self {

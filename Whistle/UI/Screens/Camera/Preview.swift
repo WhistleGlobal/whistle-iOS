@@ -27,10 +27,7 @@ struct Preview: UIViewControllerRepresentable {
 
   func updateUIViewController(_ uiViewController: UIViewController, context _: Context) {
     previewLayer.videoGravity = gravity
-    uiViewController.view.layer.addSublayer(previewLayer)
-
-    previewLayer.frame = uiViewController.view.bounds
-//    print("updated")
+    uiViewController.view.layer.sublayers?.first?.frame = uiViewController.view.layer.bounds
   }
 
   func dismantleUIViewController(_: UIViewController, coordinator _: ()) {

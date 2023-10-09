@@ -12,13 +12,11 @@ struct ProfileReportView: View {
 
   @Environment(\.dismiss) var dismiss
   @EnvironmentObject var apiViewModel: APIViewModel
-  @Binding var isShowingBottomSheet: Bool
-  // FIXME: - Report 관련 모델로 변경할 것
-  @State var reports: [Any] = []
 
   var body: some View {
     VStack(spacing: 0) {
-      if apiViewModel.reportedContent.isEmpty {
+//      if apiViewModel.reportedContent.isEmpty {
+      if true {
         Text("회원님의 콘텐츠는\n 현재 영향을 받지 않습니다.")
           .fontSystem(fontDesignSystem: .subtitle1_KO)
           .foregroundColor(.LabelColor_Primary)
@@ -29,10 +27,17 @@ struct ProfileReportView: View {
           .foregroundColor(.LabelColor_Secondary)
       } else {
         Divider()
-        Text("회원님의 계정 또는 콘텐츠가 가이드라인을 준수하지 않아 Whistle이 적용한 조치를 확인해보세요.")
-          .fontSystem(fontDesignSystem: .caption_Regular)
-          .foregroundColor(.LabelColor_Secondary)
-          .frame(height: 60)
+        Group {
+          Text(
+            "회원님의 계정 또는 콘텐츠가 가이드라인을 준수하지 않아 Whistle이 적용한 조치를 확인해보세요. Whistle")
+            + Text(" 가이드라인").underline().bold()
+            + Text("을 살펴보고 콘텐츠가 가이드를 준수하는지 확인합니다.\n\n결정이 잘못되었다고 생각되는 경우 ")
+            + Text("readywhistle@gmail.com").underline().bold()
+            + Text("로 해당 내용을 알려주세요.")
+        }
+        .fontSystem(fontDesignSystem: .caption_Regular)
+        .foregroundColor(.LabelColor_Secondary)
+        .padding(.vertical, 12)
         Divider()
         List {
           ForEach(apiViewModel.reportedContent, id: \.self) { content in
@@ -45,13 +50,10 @@ struct ProfileReportView: View {
     }
     .navigationBarBackButtonHidden()
     .navigationBarTitleDisplayMode(.inline)
-    .navigationTitle("신고")
-    .onAppear {
-      isShowingBottomSheet = false
-    }
+    .navigationTitle("가이드 상태")
     .task {
       if apiViewModel.reportedContent.isEmpty {
-        await apiViewModel.requestReportedConent()
+//        await apiViewModel.requestReportedConent()
       }
     }
     .toolbar {

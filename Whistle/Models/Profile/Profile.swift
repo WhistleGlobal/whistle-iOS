@@ -12,6 +12,7 @@ import Foundation
 class Profile: ObservableObject, Decodable {
 
   enum CodingKeys: String, CodingKey {
+    case userId = "user_id"
     case userName = "user_name"
     case email
     case profileImage = "profile_img"
@@ -19,6 +20,7 @@ class Profile: ObservableObject, Decodable {
     case status
   }
 
+  var userId = 0
   var userName = ""
   var email = ""
   var profileImage: String?

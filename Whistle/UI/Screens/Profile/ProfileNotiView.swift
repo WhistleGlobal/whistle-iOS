@@ -10,7 +10,6 @@ import SwiftUI
 struct ProfileNotiView: View {
   @Environment(\.dismiss) var dismiss
   @EnvironmentObject var apiViewModel: APIViewModel
-  @Binding var isShowingBottomSheet: Bool
   @AppStorage("isAllOff") var isAllOff = false
 
   var body: some View {
@@ -28,9 +27,6 @@ struct ProfileNotiView: View {
     .navigationBarBackButtonHidden()
     .navigationBarTitleDisplayMode(.inline)
     .navigationTitle("알림")
-    .onAppear {
-      isShowingBottomSheet = false
-    }
     .task {
       await apiViewModel.requestNotiSetting()
     }
@@ -45,7 +41,7 @@ struct ProfileNotiView: View {
       }
     }
     .onChange(of: isAllOff) { newValue in
-      if !newValue {
+      if newValue {
         Task {
           await apiViewModel.updateSettingWhistle(newSetting: false)
           await apiViewModel.updateSettingFollow(newSetting: false)
@@ -58,21 +54,33 @@ struct ProfileNotiView: View {
     .onChange(of: apiViewModel.notiSetting.whistleEnabled) { newValue in
       Task {
         await apiViewModel.updateSettingWhistle(newSetting: newValue)
+        if newValue {
+          isAllOff = false
+        }
       }
     }
     .onChange(of: apiViewModel.notiSetting.followEnabled) { newValue in
       Task {
         await apiViewModel.updateSettingFollow(newSetting: newValue)
+        if newValue {
+          isAllOff = false
+        }
       }
     }
     .onChange(of: apiViewModel.notiSetting.infoEnabled) { newValue in
       Task {
         await apiViewModel.updateSettingInfo(newSetting: newValue)
+        if newValue {
+          isAllOff = false
+        }
       }
     }
     .onChange(of: apiViewModel.notiSetting.adEnabled) { newValue in
       Task {
         await apiViewModel.updateSettingAd(newSetting: newValue)
+        if newValue {
+          isAllOff = false
+        }
       }
     }
   }

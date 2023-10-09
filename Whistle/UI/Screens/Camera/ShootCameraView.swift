@@ -12,7 +12,7 @@ import SwiftUI
 // MARK: - ShootCameraView
 
 struct ShootCameraView: View {
-  @StateObject var viewModel = ShootCameraViewModel()
+//  @StateObject var viewModel = ShootCameraViewModel()
   @State private var buttonState: CameraButtonState = .idle
   @State private var recordedVideoURL: URL?
   @State private var recordingDuration: TimeInterval = 0
@@ -20,15 +20,89 @@ struct ShootCameraView: View {
   private let maxRecordingDuration: TimeInterval = 15 // 최대 녹화 시간 (15초)
   @State private var isCameraFrontFacing = true
 
+  @ObservedObject var viewModel: ShootCameraViewModel
+  @State private var isCameraAuthorized = false
+  @State private var isAlbumAuthorized = false
+  @State private var isMicrophoneAuthorized = false
+
+  init(viewModel: ShootCameraViewModel, isCameraAuthorized: Bool, isAlbumAuthorized: Bool, isMicrophoneAuthorized: Bool) {
+    self.viewModel = viewModel
+    _isCameraAuthorized = State(initialValue: isCameraAuthorized)
+    _isAlbumAuthorized = State(initialValue: isAlbumAuthorized)
+    _isMicrophoneAuthorized = State(initialValue: isMicrophoneAuthorized)
+  }
+
   var body: some View {
     ZStack {
       // 카메라 프리뷰 또는 녹화된 동영상 프리뷰 표시
+//      if let videoURL = viewModel.recordedVideoURL {
+//        PlayVideo(url: videoURL)
+//      } else {
+//        viewModel.preview?
+//          .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity)
+//          .edgesIgnoringSafeArea(.all)
+//      }
+//      if let videoURL = viewModel.recordedVideoURL {
+//        PlayVideo(url: videoURL)
+//      } else {
+//        viewModel.preview?
+//          .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity)
+//          .edgesIgnoringSafeArea(.all)
+//          .onAppear {
+//            // Start camera preview when the view appears
+//            viewModel.startCameraPreview()
+//          }
+//          .onDisappear {
+//            // Stop camera preview when the view disappears
+//            viewModel.stopCameraPreview()
+//          }
+//      }
+//      if let videoURL = viewModel.recordedVideoURL {
+//        PlayVideo(url: videoURL)
+//      } else {
+//        viewModel.preview?
+//          .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity)
+//          .edgesIgnoringSafeArea(.all)
+//          .onAppear {
+//            // Start camera preview when the view appears
+//            viewModel.startCameraPreview()
+//          }
+//          .onDisappear {
+//            // Stop camera preview when the view disappears
+//            viewModel.stopCameraPreview()
+//          }
+//          .onChange(of: viewModel.isRecording) { isRecording in
+//            // Update camera preview only if not recording
+//            if !isRecording {
+//              viewModel.startCameraPreview()
+//            }
+//          }
+//      }
+//      if let videoURL = viewModel.recordedVideoURL {
+//        PlayVideo(url: videoURL)
+//      } else {
+//        if !viewModel.isRecording { // 녹화 중이 아닐 때에만 카메라 미리보기 표시
+//          viewModel.preview?
+//            .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity)
+//            .edgesIgnoringSafeArea(.all)
+//            .onAppear {
+//              viewModel.startCameraPreview()
+//            }
+//            .onDisappear {
+//              viewModel.stopCameraPreview()
+//            }
+//        }
+//      }
       if let videoURL = viewModel.recordedVideoURL {
         PlayVideo(url: videoURL)
       } else {
-        viewModel.preview?
-          .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity)
-          .edgesIgnoringSafeArea(.all)
+        CameraPreviewView(viewModel: viewModel)
+          .onAppear {
+            viewModel.startCameraPreview()
+          }
+          .onDisappear {
+            viewModel.stopCameraPreview()
+          }
       }
 
       VStack {
@@ -87,6 +161,19 @@ struct ShootCameraView: View {
 
         Spacer()
       }
+    }
+    .onAppear {
+      // ShootCameraView에서 카메라 및 마이크 권한 상태 업데이트
+      viewModel.isCameraAuthorized = isCameraAuthorized
+      viewModel.isMicrophoneAuthorized = isMicrophoneAuthorized
+    }
+    .onChange(of: isCameraAuthorized) { newValue in
+      // 카메라 권한 상태가 변경되었을 때 수행할 동작
+      viewModel.isCameraAuthorized = newValue
+    }
+    .onChange(of: isMicrophoneAuthorized) { newValue in
+      // 마이크 권한 상태가 변경되었을 때 수행할 동작
+      viewModel.isMicrophoneAuthorized = newValue
     }
   }
 
@@ -330,6 +417,33 @@ struct timerButton: View {
   }
 }
 
-#Preview {
-  ShootCameraView()
+// MARK: - CameraPreviewView
+
+struct CameraPreviewView: UIViewRepresentable {
+  @ObservedObject var viewModel: ShootCameraViewModel
+
+  func makeUIView(context _: Context) -> UIView {
+    let previewView = UIView()
+    previewView.backgroundColor = .black
+    return previewView
+  }
+
+  func updateUIView(_ uiView: UIView, context _: Context) {
+    if let layer = viewModel.preview?.previewLayer {
+      layer.frame = uiView.layer.bounds
+      layer.videoGravity = .resizeAspectFill
+      uiView.layer.addSublayer(layer)
+    }
+  }
+
+  private func setupCameraPreview(on view: UIView) {
+    guard let previewLayer = viewModel.preview?.previewLayer else { return }
+    previewLayer.frame = view.layer.bounds
+    previewLayer.videoGravity = .resizeAspectFill
+    view.layer.addSublayer(previewLayer)
+  }
 }
+
+// #Preview {
+//  ShootCameraView()
+// }
