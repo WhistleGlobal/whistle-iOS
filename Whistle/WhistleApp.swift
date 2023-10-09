@@ -43,59 +43,60 @@ struct WhistleApp: App {
   @State private var pickerOptions = PickerOptionsInfo()
   var body: some Scene {
     WindowGroup {
-      if isAccess {
-        TabbarView()
-          .environmentObject(apiViewModel)
-          .environmentObject(userAuth)
-          .environmentObject(universalRoutingModel)
-          .task {
-            if isAccess {
-              appleSignInViewModel.userAuth.loadData { }
-            }
+//      if isAccess {
+//        TabbarView()
+//          .environmentObject(apiViewModel)
+//          .environmentObject(userAuth)
+//          .environmentObject(universalRoutingModel)
+//          .task {
+//            if isAccess {
+//              appleSignInViewModel.userAuth.loadData { }
+//            }
+      ////        NavigationStack {
+      ////          PickerConfigViewControllerWrapper(options: $pickerOptions)
+      ////            .environmentObject(rootVM)
+//            //       }
+      ////        MusicListView()
+      ////        .task {
+      ////          if isAccess {
+      ////            appleSignInViewModel.userAuth.loadData { }
+//          }
+//          .onOpenURL { url in
+//            log(url)
+//            var urlString = url.absoluteString
+//            urlString = urlString.replacingOccurrences(of: "\(domainURL)", with: "")
+//            log(urlString)
+//            if urlString.contains("/profile_uni?") {
+//              log("/profile_uni? .contains")
+//              urlString = urlString.replacingOccurrences(of: "/profile_uni?id=", with: "")
+//              guard let userId = Int(urlString) else {
+//                return
+//              }
+//              universalRoutingModel.userId = userId
+//              universalRoutingModel.isUniversalProfile = true
+//            } else if urlString.contains("/content_uni?") {
+//              log("/content_uni? .contains")
+//              urlString = urlString.replacingOccurrences(of: "/content_uni?contentId=", with: "")
+//              log("urlString: \(urlString)")
+//              guard let contentId = Int(urlString) else {
+//                log("guard urlString: \(urlString)")
+//                return
+//              }
+//              log("contentId: \(contentId)")
+//              universalRoutingModel.contentId = contentId
+//              universalRoutingModel.isUniversalContent = true
+//            }
+//          }
+//      } else {
 //        NavigationStack {
-//          PickerConfigViewControllerWrapper(options: $pickerOptions)
-//            .environmentObject(rootVM)
-            //       }
-//        MusicListView()
-//        .task {
-//          if isAccess {
-//            appleSignInViewModel.userAuth.loadData { }
-          }
-          .onOpenURL { url in
-            log(url)
-            var urlString = url.absoluteString
-            urlString = urlString.replacingOccurrences(of: "\(domainURL)", with: "")
-            log(urlString)
-            if urlString.contains("/profile_uni?") {
-              log("/profile_uni? .contains")
-              urlString = urlString.replacingOccurrences(of: "/profile_uni?id=", with: "")
-              guard let userId = Int(urlString) else {
-                return
-              }
-              universalRoutingModel.userId = userId
-              universalRoutingModel.isUniversalProfile = true
-            } else if urlString.contains("/content_uni?") {
-              log("/content_uni? .contains")
-              urlString = urlString.replacingOccurrences(of: "/content_uni?contentId=", with: "")
-              log("urlString: \(urlString)")
-              guard let contentId = Int(urlString) else {
-                log("guard urlString: \(urlString)")
-                return
-              }
-              log("contentId: \(contentId)")
-              universalRoutingModel.contentId = contentId
-              universalRoutingModel.isUniversalContent = true
-            }
-          }
-      } else {
-        NavigationStack {
-          SignInView()
-            .environmentObject(apiViewModel)
-            .environmentObject(userAuth)
-            .environmentObject(universalRoutingModel)
-        }
-        .tint(.black)
-      }
+//          SignInView()
+//            .environmentObject(apiViewModel)
+//            .environmentObject(userAuth)
+//            .environmentObject(universalRoutingModel)
+//        }
+//        .tint(.black)
+//      }
+      BottomSheetTestView()
     }
   }
 }
