@@ -174,33 +174,6 @@ struct ProfileView: View {
       .ignoresSafeArea()
     }
     .overlay {
-      VStack(spacing: 0) {
-        HStack {
-          Spacer()
-          Button {
-            withAnimation {
-              bottomSheetPosition = .absolute(420)
-            }
-          } label: {
-            Circle()
-              .foregroundColor(.Gray_Default)
-              .frame(width: 48, height: 48)
-              .overlay {
-                Image(systemName: "ellipsis")
-                  .resizable()
-                  .scaledToFit()
-                  .foregroundColor(Color.White)
-                  .fontWeight(.semibold)
-                  .frame(width: 20, height: 20)
-              }
-          }
-        }
-        .padding([.top, .horizontal], 16)
-        Spacer()
-      }
-      .padding(16)
-    }
-    .overlay {
       if showSignoutAlert {
         SignoutAlert {
           showSignoutAlert = false
@@ -399,6 +372,32 @@ extension ProfileView {
     }
     .frame(height: 418 + (418 * progress))
     .frame(maxWidth: .infinity)
+    .overlay {
+      VStack(spacing: 0) {
+        HStack {
+          Spacer()
+          Button {
+            withAnimation {
+              bottomSheetPosition = .absolute(420)
+            }
+          } label: {
+            Circle()
+              .foregroundColor(.Gray_Default)
+              .frame(width: 48, height: 48)
+              .overlay {
+                Image(systemName: "ellipsis")
+                  .resizable()
+                  .scaledToFit()
+                  .foregroundColor(Color.White)
+                  .fontWeight(.semibold)
+                  .frame(width: 20, height: 20)
+              }
+          }
+        }
+        Spacer()
+      }
+      .padding(16)
+    }
   }
 
   @ViewBuilder

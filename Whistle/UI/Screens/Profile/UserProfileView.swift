@@ -107,43 +107,6 @@ struct UserProfileView: View {
       }
       .ignoresSafeArea()
     }
-    .overlay {
-      VStack(spacing: 0) {
-        HStack {
-          Button {
-            if !players.isEmpty {
-              players[currentIndex]?.play()
-            }
-            dismiss()
-          } label: {
-            Image(systemName: "chevron.left")
-              .foregroundColor(Color.White)
-              .fontWeight(.semibold)
-              .frame(width: 48, height: 48)
-              .background(
-                Circle()
-                  .foregroundColor(.Gray_Default)
-                  .frame(width: 48, height: 48))
-          }
-          Spacer()
-          Button {
-            showDialog = true
-          } label: {
-            Image(systemName: "ellipsis")
-              .foregroundColor(Color.White)
-              .fontWeight(.semibold)
-              .frame(width: 48, height: 48)
-              .background(
-                Circle()
-                  .foregroundColor(.Gray_Default)
-                  .frame(width: 48, height: 48))
-          }
-        }
-        .padding([.top, .horizontal], 16)
-        Spacer()
-      }
-      .padding(16)
-    }
     .navigationBarBackButtonHidden()
     .confirmationDialog("", isPresented: $showDialog) {
       Button("프로필 URL 복사", role: .none) {
@@ -259,6 +222,42 @@ extension UserProfileView {
     }
     .frame(height: height)
     .frame(maxWidth: .infinity)
+    .overlay {
+      VStack(spacing: 0) {
+        HStack {
+          Button {
+            if !players.isEmpty {
+              players[currentIndex]?.play()
+            }
+            dismiss()
+          } label: {
+            Image(systemName: "chevron.left")
+              .foregroundColor(Color.White)
+              .fontWeight(.semibold)
+              .frame(width: 48, height: 48)
+              .background(
+                Circle()
+                  .foregroundColor(.Gray_Default)
+                  .frame(width: 48, height: 48))
+          }
+          Spacer()
+          Button {
+            showDialog = true
+          } label: {
+            Image(systemName: "ellipsis")
+              .foregroundColor(Color.White)
+              .fontWeight(.semibold)
+              .frame(width: 48, height: 48)
+              .background(
+                Circle()
+                  .foregroundColor(.Gray_Default)
+                  .frame(width: 48, height: 48))
+          }
+        }
+        Spacer()
+      }
+      .padding(16)
+    }
   }
 
   @ViewBuilder
