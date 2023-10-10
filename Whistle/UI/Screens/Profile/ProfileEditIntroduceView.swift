@@ -15,6 +15,7 @@ struct ProfileEditIntroduceView: View {
   @Environment(\.dismiss) var dismiss
   @Binding var showToast: Bool
   @EnvironmentObject var apiViewModel: APIViewModel
+  @EnvironmentObject var tabbarModel: TabbarModel
   @State var introduce = ""
 
   var body: some View {
@@ -69,6 +70,9 @@ struct ProfileEditIntroduceView: View {
         }
         .disabled(false)
       }
+    }
+    .onAppear {
+      tabbarModel.tabbarOpacity = 0.0
     }
   }
 }

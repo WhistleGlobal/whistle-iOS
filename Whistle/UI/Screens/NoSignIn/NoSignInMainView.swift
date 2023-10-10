@@ -243,25 +243,28 @@ struct NoSignInMainView: View {
       tabbarModel.tabbarOpacity = 1.0
     }
     .task {
-      if apiViewModel.noSignInContentList.isEmpty {
-        apiViewModel.requestNoSignInContent {
-          Task {
-            if !apiViewModel.noSignInContentList.isEmpty {
-              players.removeAll()
-              for _ in 0..<apiViewModel.noSignInContentList.count {
-                players.append(nil)
-              }
-              players[currentIndex] =
-                AVPlayer(url: URL(string: apiViewModel.noSignInContentList[currentIndex].videoUrl ?? "")!)
-              playerIndex = currentIndex
-              guard let player = players[currentIndex] else {
-                return
-              }
-              currentVideoUserId = apiViewModel.noSignInContentList[currentIndex].userId ?? 0
-              currentVideoContentId = apiViewModel.noSignInContentList[currentIndex].contentId ?? 0
-              await player.seek(to: .zero)
-              player.play()
+      log("Task executed")
+      log("apiViewModel.noSignInContentList : \(apiViewModel.noSignInContentList)")
+
+      log("isEmpty")
+      apiViewModel.requestNoSignInContent {
+        log("request executed")
+        Task {
+          if !apiViewModel.noSignInContentList.isEmpty {
+            players.removeAll()
+            for _ in 0..<apiViewModel.noSignInContentList.count {
+              players.append(nil)
             }
+            players[currentIndex] =
+              AVPlayer(url: URL(string: apiViewModel.noSignInContentList[currentIndex].videoUrl ?? "")!)
+            playerIndex = currentIndex
+            guard let player = players[currentIndex] else {
+              return
+            }
+            currentVideoUserId = apiViewModel.noSignInContentList[currentIndex].userId ?? 0
+            currentVideoContentId = apiViewModel.noSignInContentList[currentIndex].contentId ?? 0
+            await player.seek(to: .zero)
+            player.play()
           }
         }
       }
@@ -295,7 +298,7 @@ struct NoSignInMainView: View {
     }
     .onChange(of: bottomSheetPosition) { newValue in
       if newValue == .hidden {
-//        tabbarModel.tabbarOpacity = 1.0
+        tabbarModel.tabbarOpacity = 1.0
       } else {
         tabbarModel.tabbarOpacity = 0.0
       }
@@ -308,6 +311,9 @@ struct NoSignInMainView: View {
     }
     .onChange(of: mainOpacity) { newValue in
       if apiViewModel.noSignInContentList.isEmpty, players.isEmpty {
+        return
+      }
+      if players.isEmpty {
         return
       }
       guard let player = players[currentIndex] else {

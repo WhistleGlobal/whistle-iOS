@@ -1,17 +1,17 @@
 //
-//  MyContentListView.swift
+//  MyBookmarkView.swift
 //  Whistle
 //
-//  Created by ChoiYujin on 9/20/23.
+//  Created by ChoiYujin on 10/6/23.
 //
 
 import AVFoundation
 import Kingfisher
 import SwiftUI
 
-// MARK: - MyContentListView
+// MARK: - MyBookmarkView
 
-struct MyContentListView: View {
+struct MyBookmarkView: View {
 
   @Environment(\.dismiss) var dismiss
   @State var currentIndex = 0
@@ -27,8 +27,7 @@ struct MyContentListView: View {
 
   var body: some View {
     GeometryReader { proxy in
-      if apiViewModel.myPostFeed.isEmpty {
-        // FIXME: - 디자인수정
+      if apiViewModel.bookmark.isEmpty {
         Color.black.ignoresSafeArea().overlay {
           VStack(spacing: 16) {
             HStack(spacing: 0) {
@@ -66,10 +65,9 @@ struct MyContentListView: View {
             Spacer()
           }
         }
-
       } else {
         TabView(selection: $currentIndex) {
-          ForEach(Array(apiViewModel.myPostFeed.enumerated()), id: \.element) { index, content in
+          ForEach(Array(apiViewModel.bookmark.enumerated()), id: \.element) { index, content in
             if !players.isEmpty {
               if let player = players[index] {
                 Player(player: player)
@@ -89,7 +87,6 @@ struct MyContentListView: View {
                     showDialog = true
                   }
                   .overlay {
-                    // TODO: - contentId 백엔드 수정 필요, contentId & whistleCount
                     LinearGradient(
                       colors: [.clear, .black.opacity(0.24)],
                       startPoint: .center,
@@ -97,7 +94,8 @@ struct MyContentListView: View {
                       .frame(maxWidth: .infinity, maxHeight: .infinity)
                       .allowsHitTesting(false)
                     userInfo(
-                      contentId: content.contentId ?? 0,
+                      contentId: content.contentId,
+                      userName: content.userName,
                       caption: content.caption ?? "",
                       musicTitle: content.musicTitle ?? "",
                       isWhistled:
@@ -108,9 +106,9 @@ struct MyContentListView: View {
                       }),
                       whistleCount:
                       Binding(get: {
-                        content.contentWhistleCount ?? 0
+                        content.whistleCount
                       }, set: { newValue in
-                        content.contentWhistleCount = newValue
+                        content.whistleCount = newValue
                       }))
                   }
                   .padding()
@@ -118,7 +116,7 @@ struct MyContentListView: View {
                   .ignoresSafeArea(.all, edges: .top)
                   .tag(index)
               } else {
-                KFImage.url(URL(string: content.thumbnailUrl ?? ""))
+                KFImage.url(URL(string: content.thumbnailUrl))
                   .placeholder {
                     Color.black
                   }
@@ -147,10 +145,10 @@ struct MyContentListView: View {
     .navigationBarBackButtonHidden()
     .background(.black)
     .onAppear {
-      for _ in 0..<apiViewModel.myPostFeed.count {
+      for _ in 0..<apiViewModel.bookmark.count {
         players.append(nil)
       }
-      players[currentIndex] = AVPlayer(url: URL(string: apiViewModel.myPostFeed[currentIndex].videoUrl ?? "")!)
+      players[currentIndex] = AVPlayer(url: URL(string: apiViewModel.bookmark[currentIndex].videoUrl)!)
       playerIndex = currentIndex
       guard let player = players[currentIndex] else {
         return
@@ -159,15 +157,13 @@ struct MyContentListView: View {
       player.play()
     }
     .onChange(of: currentIndex) { newValue in
-      if apiViewModel.myPostFeed.isEmpty {
+      if apiViewModel.bookmark.isEmpty {
         return
       }
       log(playerIndex)
       log(newValue)
       log(currentIndex)
-      guard let url = apiViewModel.myPostFeed[newValue].videoUrl else {
-        return
-      }
+      let url = apiViewModel.bookmark[newValue].videoUrl
       players[newValue] = AVPlayer(url: URL(string: url)!)
       if playerIndex < players.count {
         players[playerIndex]?.seek(to: .zero)
@@ -181,21 +177,21 @@ struct MyContentListView: View {
     }
     .overlay {
       if showPasteToast {
-        ToastMessage(text: "클립보드에 복사되었어요", toastPadding: 70, isTopAlignment: true, showToast: $showPasteToast)
+        ToastMessage(text: "클립보드에 복사되었어요", toastPadding: 78, showToast: $showPasteToast)
       }
       if showDeleteToast {
-        CancelableToastMessage(text: "삭제되었습니다", paddingBottom: 78, action: {
+        CancelableToastMessage(text: "북마크 해제되었습니다.", paddingBottom: 78, action: {
           Task {
-            if apiViewModel.myPostFeed.count - 1 != currentIndex { // 삭제하려는 컨텐츠가 배열 마지막이 아님
-              guard let contentId = apiViewModel.myPostFeed[currentIndex].contentId else { return }
+            if apiViewModel.bookmark.count - 1 != currentIndex { // 삭제하려는 컨텐츠가 배열 마지막이 아님
+              let contentId = apiViewModel.bookmark[currentIndex].contentId
               log("contentId: \(contentId)")
               log("currentIndex: \(currentIndex)")
               log("playerIndex: \(playerIndex)")
-              apiViewModel.myPostFeed.remove(at: currentIndex)
+              apiViewModel.bookmark.remove(at: currentIndex)
               players[currentIndex]?.pause()
               players.remove(at: currentIndex)
               if !players.isEmpty {
-                players[currentIndex] = AVPlayer(url: URL(string: apiViewModel.myPostFeed[currentIndex].videoUrl ?? "")!)
+                players[currentIndex] = AVPlayer(url: URL(string: apiViewModel.bookmark[currentIndex].videoUrl)!)
                 await players[currentIndex]?.seek(to: .zero)
                 players[currentIndex]?.play()
               }
@@ -203,13 +199,13 @@ struct MyContentListView: View {
               log("contentId: \(contentId)")
               log("currentIndex: \(currentIndex)")
               log("playerIndex: \(currentIndex)")
-              await apiViewModel.deleteContent(contentId: contentId)
+              _ = await apiViewModel.actionBookmarkCancel(contentId: contentId)
             } else {
-              guard let contentId = apiViewModel.myPostFeed[currentIndex].contentId else { return }
+              let contentId = apiViewModel.bookmark[currentIndex].contentId
               log("contentId: \(contentId)")
               log("currentIndex: \(currentIndex)")
               log("playerIndex: \(playerIndex)")
-              apiViewModel.myPostFeed.removeLast()
+              apiViewModel.bookmark.removeLast()
               players.last??.pause()
               players.removeLast()
               currentIndex -= 1
@@ -217,14 +213,14 @@ struct MyContentListView: View {
               log("contentId: \(contentId)")
               log("currentIndex: \(currentIndex)")
               log("playerIndex: \(currentIndex)")
-              await apiViewModel.deleteContent(contentId: contentId)
+              _ = await apiViewModel.actionBookmarkCancel(contentId: contentId)
             }
           }
         }, showToast: $showDeleteToast)
       }
     }
     .confirmationDialog("", isPresented: $showDialog) {
-      Button("삭제하기", role: .destructive) {
+      Button("북마크 해제", role: .destructive) {
         showDeleteToast = true
       }
       Button("닫기", role: .cancel) {
@@ -234,11 +230,12 @@ struct MyContentListView: View {
   }
 }
 
-extension MyContentListView {
+extension MyBookmarkView {
 
   @ViewBuilder
   func userInfo(
-    contentId: Int?,
+    contentId: Int,
+    userName: String,
     caption: String,
     musicTitle: String,
     isWhistled: Binding<Bool>,
@@ -274,7 +271,7 @@ extension MyContentListView {
             Group {
               profileImageView(url: apiViewModel.myProfile.profileImage, size: 36)
                 .padding(.trailing, 12)
-              Text(apiViewModel.myProfile.userName)
+              Text(userName)
                 .foregroundColor(.white)
                 .fontSystem(fontDesignSystem: .subtitle1)
                 .padding(.trailing, 16)
@@ -295,11 +292,9 @@ extension MyContentListView {
           Button {
             Task {
               if isWhistled.wrappedValue {
-                guard let contentId else { return }
                 await apiViewModel.actionWhistleCancel(contentId: contentId)
                 whistleCount.wrappedValue -= 1
               } else {
-                guard let contentId else { return }
                 await apiViewModel.actionWhistle(contentId: contentId)
                 whistleCount.wrappedValue += 1
               }
@@ -323,7 +318,7 @@ extension MyContentListView {
           Button {
             showPasteToast = true
             UIPasteboard.general.setValue(
-              "https://readywhistle.com/content_uni?contentId=\(apiViewModel.myPostFeed[currentIndex].contentId ?? 0)",
+              "https://readywhistle.com/content_uni?contentId=\(apiViewModel.bookmark[currentIndex].contentId)",
               forPasteboardType: UTType.plainText.identifier)
           } label: {
             Image(systemName: "square.and.arrow.up")
@@ -352,26 +347,28 @@ extension MyContentListView {
 }
 
 // MARK: - Timer
-extension MyContentListView {
+extension MyBookmarkView {
   func whistleToggle() {
     HapticManager.instance.impact(style: .medium)
     timer?.invalidate()
-    if apiViewModel.myPostFeed[currentIndex].isWhistled == 1 {
+    if apiViewModel.bookmark[currentIndex].isWhistled == 1 {
+      let contentId = apiViewModel.bookmark[currentIndex].contentId
       timer = Timer.scheduledTimer(withTimeInterval: 2, repeats: false) { _ in
         Task {
-          await apiViewModel.actionWhistleCancel(contentId: apiViewModel.myPostFeed[currentIndex].contentId ?? 0)
+          await apiViewModel.actionWhistleCancel(contentId: contentId)
         }
       }
-      apiViewModel.myPostFeed[currentIndex].contentWhistleCount? -= 1
+      apiViewModel.bookmark[currentIndex].whistleCount -= 1
     } else {
+      let contentId = apiViewModel.bookmark[currentIndex].contentId
       timer = Timer.scheduledTimer(withTimeInterval: 2, repeats: false) { _ in
         Task {
-          await apiViewModel.actionWhistle(contentId: apiViewModel.myPostFeed[currentIndex].contentId ?? 0)
+          await apiViewModel.actionWhistle(contentId: contentId)
         }
       }
-      apiViewModel.myPostFeed[currentIndex].contentWhistleCount! += 1
+      apiViewModel.bookmark[currentIndex].whistleCount += 1
     }
-    apiViewModel.myPostFeed[currentIndex].isWhistled = apiViewModel.myPostFeed[currentIndex].isWhistled == 1 ? 0 : 1
+    apiViewModel.bookmark[currentIndex].isWhistled = apiViewModel.bookmark[currentIndex].isWhistled == 1 ? 0 : 1
     apiViewModel.postFeedPlayerChanged()
   }
 }

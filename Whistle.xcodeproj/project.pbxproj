@@ -369,6 +369,7 @@
 		788F43F02AA5CD9F00718D38 /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 788F43EF2AA5CD9F00718D38 /* MainView.swift */; };
 		788F43F72AA6136F00718D38 /* Player.swift in Sources */ = {isa = PBXBuildFile; fileRef = 788F43F62AA6136F00718D38 /* Player.swift */; };
 		789BCB432ABBF2E1002164C4 /* UserContentListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 789BCB422ABBF2E1002164C4 /* UserContentListView.swift */; };
+		78A58E062AD1C287007F6A69 /* ReverseMask in Frameworks */ = {isa = PBXBuildFile; productRef = 78A58E052AD1C287007F6A69 /* ReverseMask */; };
 		78B6FD2E2AA719190043E461 /* AlbumModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78B6FD2D2AA719190043E461 /* AlbumModel.swift */; };
 		78BECCD72AAAE169003FA7B5 /* ProfileProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78BECCD62AAAE169003FA7B5 /* ProfileProtocol.swift */; };
 		78BECCD92AAAE1E6003FA7B5 /* PostFeedProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78BECCD82AAAE1E6003FA7B5 /* PostFeedProtocol.swift */; };
@@ -403,6 +404,7 @@
 		78E175662ABBF0D300731259 /* whistleSignInBackground.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = 78E175652ABBF0D300731259 /* whistleSignInBackground.mp4 */; };
 		78E19B122AACE73D001DD3C8 /* ReportedContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78E19B112AACE73D001DD3C8 /* ReportedContent.swift */; };
 		78E738CA2AA9A90F00480046 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = 78E738C92AA9A90F00480046 /* Kingfisher */; };
+		78EFDA8E2ACF95C10035FD83 /* MyBookmarkView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78EFDA8D2ACF95C10035FD83 /* MyBookmarkView.swift */; };
 		78F41A5D2AA70626004A7BFC /* PhotoModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78F41A5C2AA70626004A7BFC /* PhotoModel.swift */; };
 		78F41A612AA707D2004A7BFC /* CustomPhotoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78F41A602AA707D2004A7BFC /* CustomPhotoView.swift */; };
 		78F780052AB34876005623CD /* GoogleSignIn in Frameworks */ = {isa = PBXBuildFile; productRef = 78F780042AB34876005623CD /* GoogleSignIn */; };
@@ -410,6 +412,7 @@
 		78F980812A9F32C800AD542A /* TabbarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78F980802A9F32C800AD542A /* TabbarView.swift */; };
 		78F980872A9F5AAC00AD542A /* GlassBottomSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78F980862A9F5AAC00AD542A /* GlassBottomSheet.swift */; };
 		78F980892A9F5B2500AD542A /* RoundedCorners.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78F980882A9F5B2500AD542A /* RoundedCorners.swift */; };
+		78FDEBEF2AD1A4DA001FD593 /* BottomSheetTestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78FDEBEE2AD1A4DA001FD593 /* BottomSheetTestView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -827,11 +830,13 @@
 		78E175632ABBEF4500731259 /* SignInPlayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInPlayerView.swift; sourceTree = "<group>"; };
 		78E175652ABBF0D300731259 /* whistleSignInBackground.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = whistleSignInBackground.mp4; sourceTree = "<group>"; };
 		78E19B112AACE73D001DD3C8 /* ReportedContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportedContent.swift; sourceTree = "<group>"; };
+		78EFDA8D2ACF95C10035FD83 /* MyBookmarkView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyBookmarkView.swift; sourceTree = "<group>"; };
 		78F41A5C2AA70626004A7BFC /* PhotoModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoModel.swift; sourceTree = "<group>"; };
 		78F41A602AA707D2004A7BFC /* CustomPhotoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomPhotoView.swift; sourceTree = "<group>"; };
 		78F980802A9F32C800AD542A /* TabbarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabbarView.swift; sourceTree = "<group>"; };
 		78F980862A9F5AAC00AD542A /* GlassBottomSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlassBottomSheet.swift; sourceTree = "<group>"; };
 		78F980882A9F5B2500AD542A /* RoundedCorners.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoundedCorners.swift; sourceTree = "<group>"; };
+		78FDEBEE2AD1A4DA001FD593 /* BottomSheetTestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomSheetTestView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -839,6 +844,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				78A58E062AD1C287007F6A69 /* ReverseMask in Frameworks */,
 				1BD4E5B92ABA2F5600ADB783 /* VideoPicker.framework in Frameworks */,
 				78F780052AB34876005623CD /* GoogleSignIn in Frameworks */,
 				1BD4E56B2ABA275200ADB783 /* SnapKit in Frameworks */,
@@ -1199,6 +1205,7 @@
 				78D148DE2A9E0CEE00DDCE48 /* Modifier */,
 				1B3955552A95081400BCB4DF /* Components */,
 				1B39554D2A9506B300BCB4DF /* Screens */,
+				78FDEBEE2AD1A4DA001FD593 /* BottomSheetTestView.swift */,
 			);
 			path = UI;
 			sourceTree = "<group>";
@@ -2090,6 +2097,7 @@
 				78E1755A2ABA802000731259 /* PrivacyPolicyView.swift */,
 				78E1755F2ABA8DE100731259 /* TermsOfServiceView.swift */,
 				789BCB422ABBF2E1002164C4 /* UserContentListView.swift */,
+				78EFDA8D2ACF95C10035FD83 /* MyBookmarkView.swift */,
 			);
 			path = Profile;
 			sourceTree = "<group>";
@@ -2147,6 +2155,7 @@
 				1B38958F2AB9E16E00B4C8DD /* BottomSheet */,
 				1BD4E56A2ABA275200ADB783 /* SnapKit */,
 				78E1755D2ABA838200731259 /* MarkdownUI */,
+				78A58E052AD1C287007F6A69 /* ReverseMask */,
 			);
 			productName = Whistle;
 			productReference = 1B39553C2A95069C00BCB4DF /* Whistle.app */;
@@ -2211,6 +2220,7 @@
 				1B38958E2AB9E16E00B4C8DD /* XCRemoteSwiftPackageReference "BottomSheet" */,
 				1BD4E5692ABA275200ADB783 /* XCRemoteSwiftPackageReference "SnapKit" */,
 				78E1755C2ABA838200731259 /* XCRemoteSwiftPackageReference "swift-markdown-ui" */,
+				78A58E042AD1C287007F6A69 /* XCRemoteSwiftPackageReference "ReverseMask" */,
 			);
 			productRefGroup = 1B39553D2A95069C00BCB4DF /* Products */;
 			projectDirPath = "";
@@ -2376,6 +2386,7 @@
 				7861E68A2ACD092B00612E2F /* NavigationUtil.swift in Sources */,
 				78BECCD72AAAE169003FA7B5 /* ProfileProtocol.swift in Sources */,
 				1B3895762AB9CBFC00B4C8DD /* Extension+UIImage.swift in Sources */,
+				78EFDA8E2ACF95C10035FD83 /* MyBookmarkView.swift in Sources */,
 				1B3895632AB9CBD300B4C8DD /* VideoItem.swift in Sources */,
 				78D148E72A9E137100DDCE48 /* Extension+UIVisualEffectView.swift in Sources */,
 				786385742AA45ED4004F8EF4 /* ProfileEditIntroduceView.swift in Sources */,
@@ -2434,6 +2445,7 @@
 				787AF5622AA85D0300C190E6 /* APIViewModel.swift in Sources */,
 				1B3895602AB9CBD300B4C8DD /* AudioModel.swift in Sources */,
 				782DD47A2AA31F3C006183D3 /* ProfileEditButtonStyle.swift in Sources */,
+				78FDEBEF2AD1A4DA001FD593 /* BottomSheetTestView.swift in Sources */,
 				1B3955402A95069C00BCB4DF /* WhistleApp.swift in Sources */,
 				78BECCDF2AAAE4F1003FA7B5 /* APIViewModel+Profile.swift in Sources */,
 				1B3895892AB9CC4300B4C8DD /* AudioEntity+Ext.swift in Sources */,
@@ -3044,6 +3056,14 @@
 				minimumVersion = 5.0.1;
 			};
 		};
+		78A58E042AD1C287007F6A69 /* XCRemoteSwiftPackageReference "ReverseMask" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/stateman92/ReverseMask.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.0.1;
+			};
+		};
 		78E1755C2ABA838200731259 /* XCRemoteSwiftPackageReference "swift-markdown-ui" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/gonzalezreal/swift-markdown-ui.git";
@@ -3105,6 +3125,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 787AF5632AA85D2C00C190E6 /* XCRemoteSwiftPackageReference "SwiftyJSON" */;
 			productName = SwiftyJSON;
+		};
+		78A58E052AD1C287007F6A69 /* ReverseMask */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 78A58E042AD1C287007F6A69 /* XCRemoteSwiftPackageReference "ReverseMask" */;
+			productName = ReverseMask;
 		};
 		78E1755D2ABA838200731259 /* MarkdownUI */ = {
 			isa = XCSwiftPackageProductDependency;

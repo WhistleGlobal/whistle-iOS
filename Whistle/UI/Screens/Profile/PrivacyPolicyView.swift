@@ -215,6 +215,7 @@ struct PrivacyPolicyView: View {
       }
       .padding(.horizontal, 16)
       .lineSpacing(10)
+      .tint(.Primary_Lighten)
     }
     .navigationTitle("개인정보 처리 방침")
   }

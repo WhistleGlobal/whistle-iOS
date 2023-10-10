@@ -95,10 +95,10 @@ struct ReportDetailView: View {
         }
       }
       if showDuplication {
-        ToastMessage(text: "이미 신고처리가 되었습니다.", paddingBottom: 78, showToast: $showDuplication)
+        ToastMessage(text: "이미 신고처리가 되었습니다.", toastPadding: 78, showToast: $showDuplication)
       }
       if showFailLoad {
-        ToastMessage(text: "신고 처리가 정상적으로 되지 않았습니다.", paddingBottom: 78, showToast: $showFailLoad)
+        ToastMessage(text: "신고 처리가 정상적으로 되지 않았습니다.", toastPadding: 78, showToast: $showFailLoad)
       }
     }
     .toolbar {

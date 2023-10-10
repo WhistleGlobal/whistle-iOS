@@ -17,6 +17,7 @@ protocol PostFeedProtocol {
   func requestReportedConent() async
   func postFeedPlayerChanged()
   func actionBookmark(contentId: Int) async -> Bool
+  func actionBookmarkCancel(contentId: Int) async -> Bool
   func actionWhistle(contentId: Int) async
   func actionWhistleCancel(contentId: Int) async
   func actionContentHate(contentId: Int) async

@@ -354,13 +354,13 @@ struct MainView: View {
     }
     .overlay {
       if showPasteToast {
-        ToastMessage(text: "클립보드에 복사되었어요", paddingBottom: 78, showToast: $showPasteToast)
+        ToastMessage(text: "클립보드에 복사되었어요", toastPadding: 70, isTopAlignment: true, showToast: $showPasteToast)
       }
       if showBookmarkToast {
-        ToastMessage(text: "저장되었습니다!", paddingBottom: 78, showToast: $showBookmarkToast)
+        ToastMessage(text: "저장되었습니다!", toastPadding: 70, isTopAlignment: true, showToast: $showBookmarkToast)
       }
       if showFollowToast.0 {
-        ToastMessage(text: showFollowToast.1, paddingBottom: 78, showToast: $showFollowToast.0)
+        ToastMessage(text: showFollowToast.1, toastPadding: 70, isTopAlignment: true, showToast: $showFollowToast.0)
       }
       if showHideContentToast {
         CancelableToastMessage(text: "해당 콘텐츠를 숨겼습니다", paddingBottom: 78, action: {
