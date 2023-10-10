@@ -54,7 +54,7 @@ struct UserProfileView: View {
           width: .infinity,
           height: 418 + (240 * progress),
           cornerRadius: profileCornerRadius,
-          overlayed: profileInfo(height: 418 + (240 * progress)))
+          overlayed: profileInfo())
           .padding(.horizontal, profileHorizontalPadding)
           .zIndex(1)
           .padding(.bottom, 12)
@@ -152,7 +152,7 @@ struct UserProfileView: View {
 extension UserProfileView {
 
   @ViewBuilder
-  func profileInfo(height: CGFloat) -> some View {
+  func profileInfo() -> some View {
     VStack(spacing: 0) {
       Spacer().frame(height: 64)
       profileImageView(url: apiViewModel.userProfile.profileImg, size: profileImageSize)
@@ -220,7 +220,7 @@ extension UserProfileView {
       .frame(height: whistleFollowerTabHeight)
       Spacer()
     }
-    .frame(height: height)
+    .frame(height: 418 + (240 * progress))
     .frame(maxWidth: .infinity)
     .overlay {
       VStack(spacing: 0) {
@@ -254,6 +254,8 @@ extension UserProfileView {
                   .frame(width: 48, height: 48))
           }
         }
+        .offset(y: 64 - topSpacerHeight)
+        .padding(.horizontal, 16 - profileHorizontalPadding)
         Spacer()
       }
       .padding(16)
