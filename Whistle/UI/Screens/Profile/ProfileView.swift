@@ -140,9 +140,11 @@ struct ProfileView: View {
               GridItem(.flexible()),
               GridItem(.flexible()),
             ], spacing: 20) {
-              ForEach(apiViewModel.bookmark, id: \.self) { content in
-                Button {
-                  log("video clicked")
+              ForEach(Array(apiViewModel.bookmark.enumerated()), id: \.element) { index ,content in
+
+                NavigationLink {
+                  MyBookmarkView(currentIndex: index)
+                    .environmentObject(apiViewModel)
                 } label: {
                   videoThumbnailView(thumbnailUrl: content.thumbnailUrl, viewCount: content.viewCount)
                 }
@@ -203,10 +205,10 @@ struct ProfileView: View {
         SignoutAlert {
           showSignoutAlert = false
         } signOutAction: {
-          apiViewModel.myProfile.userName.removeAll()
+          apiViewModel.reset()
           GIDSignIn.sharedInstance.signOut()
           userAuth.appleSignout()
-          isFirstProfileLoaded = true
+          isFirstProfileLoaded = false
         }
       }
       if showDeleteAlert {
@@ -225,7 +227,7 @@ struct ProfileView: View {
     }
     .overlay {
       if showPasteToast {
-        ToastMessage(text: "클립보드에 복사되었어요", paddingBottom: 78, showToast: $showPasteToast)
+        ToastMessage(text: "클립보드에 복사되었어요", toastPadding: 78, showToast: $showPasteToast)
       }
     }
     .onChange(of: bottomSheetPosition) { newValue in
@@ -351,6 +353,8 @@ extension ProfileView {
       NavigationLink {
         ProfileEditView()
           .environmentObject(apiViewModel)
+          .environmentObject(tabbarModel)
+
       } label: {
         Text("프로필 편집")
           .fontSystem(fontDesignSystem: .subtitle2_KO)

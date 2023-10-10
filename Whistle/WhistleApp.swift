@@ -52,14 +52,14 @@ struct WhistleApp: App {
             if isAccess {
               appleSignInViewModel.userAuth.loadData { }
             }
-//        NavigationStack {
-//          PickerConfigViewControllerWrapper(options: $pickerOptions)
-//            .environmentObject(rootVM)
+            //        NavigationStack {
+            //          PickerConfigViewControllerWrapper(options: $pickerOptions)
+            //            .environmentObject(rootVM)
             //       }
-//        MusicListView()
-//        .task {
-//          if isAccess {
-//            appleSignInViewModel.userAuth.loadData { }
+            //        MusicListView()
+            //        .task {
+            //          if isAccess {
+            //            appleSignInViewModel.userAuth.loadData { }
           }
           .onOpenURL { url in
             log(url)
@@ -92,6 +92,7 @@ struct WhistleApp: App {
           SignInView()
             .environmentObject(apiViewModel)
             .environmentObject(userAuth)
+            .environmentObject(universalRoutingModel)
         }
         .tint(.black)
       }

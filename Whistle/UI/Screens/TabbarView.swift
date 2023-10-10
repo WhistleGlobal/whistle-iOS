@@ -23,8 +23,8 @@ struct TabbarView: View {
 
   var body: some View {
     ZStack {
-      NavigationStack {
-        if isAccess {
+      if isAccess {
+        NavigationStack {
           MainView(mainOpacity: $mainOpacity, isRootStacked: $isRootStacked)
             .environmentObject(apiViewModel)
             .environmentObject(tabbarModel)
@@ -33,18 +33,19 @@ struct TabbarView: View {
             .onChange(of: tabbarModel.tabSelectionNoAnimation) { newValue in
               mainOpacity = newValue == .main ? 1 : 0
             }
-        } else {
-          NoSignInMainView(mainOpacity: $mainOpacity)
-            .environmentObject(apiViewModel)
-            .environmentObject(tabbarModel)
-            .environmentObject(userAuth)
-            .opacity(mainOpacity)
-            .onChange(of: tabbarModel.tabSelectionNoAnimation) { newValue in
-              mainOpacity = newValue == .main ? 1 : 0
-            }
         }
+        .tint(.black)
+      } else {
+        NoSignInMainView(mainOpacity: $mainOpacity)
+          .environmentObject(apiViewModel)
+          .environmentObject(tabbarModel)
+          .environmentObject(userAuth)
+          .opacity(mainOpacity)
+          .onChange(of: tabbarModel.tabSelectionNoAnimation) { newValue in
+            mainOpacity = newValue == .main ? 1 : 0
+          }
       }
-      .tint(.black)
+
       switch tabbarModel.tabSelectionNoAnimation {
       case .main:
         Color.clear
@@ -67,21 +68,20 @@ struct TabbarView: View {
           }
         }
       case .profile:
-        NavigationStack {
-          if isAccess {
+        if isAccess {
+          NavigationStack {
             ProfileView(isFirstProfileLoaded: $isFirstProfileLoaded)
               .environmentObject(apiViewModel)
               .environmentObject(tabbarModel)
               .environmentObject(userAuth)
-          } else {
-            NoSignInProfileView()
-              .environmentObject(tabbarModel)
-              .environmentObject(userAuth)
-              .environmentObject(apiViewModel)
           }
+          .tint(.black)
+        } else {
+          NoSignInProfileView()
+            .environmentObject(tabbarModel)
+            .environmentObject(userAuth)
+            .environmentObject(apiViewModel)
         }
-
-        .tint(.black)
       }
       VStack {
         Spacer()

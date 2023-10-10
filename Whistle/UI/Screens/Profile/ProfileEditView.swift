@@ -15,10 +15,12 @@ struct ProfileEditView: View {
 
   @Environment(\.dismiss) var dismiss
   @State var editProfileImage = false
-  @State var showToast = false
+  @State var showIdToast = false
+  @State var showIntroductionToast = false
   @State var showGallery = false
   @State var showAuthAlert = false
   @EnvironmentObject var apiViewModel: APIViewModel
+  @EnvironmentObject var tabbarModel: TabbarModel
   @ObservedObject var photoCollection = PhotoCollection(smartAlbum: .smartAlbumUserLibrary)
   var body: some View {
     VStack(spacing: 0) {
@@ -37,20 +39,30 @@ struct ProfileEditView: View {
       .padding(.bottom, 40)
       Divider()
       profileEditLink(
-        destination: ProfileEditIDView(showToast: $showToast).environmentObject(apiViewModel),
+        destination: ProfileEditIDView(showToast: $showIdToast)
+          .environmentObject(apiViewModel)
+          .environmentObject(tabbarModel),
         title: "사용자 ID",
         content: apiViewModel.myProfile.userName)
       Divider().padding(.leading, 96)
       profileEditLink(
-        destination: ProfileEditIntroduceView(showToast: $showToast, introduce: apiViewModel.myProfile.introduce ?? " ")
-          .environmentObject(apiViewModel),
+        destination: ProfileEditIntroduceView(
+          showToast: $showIntroductionToast,
+          introduce: apiViewModel.myProfile.introduce ?? " ")
+          .environmentObject(apiViewModel)
+          .environmentObject(tabbarModel),
         title: "소개",
         content: apiViewModel.myProfile.introduce ?? " ")
       Divider()
       Spacer()
     }
     .overlay {
-      ToastMessage(text: "소개가 수정되었습니다.", paddingBottom: 32, showToast: $showToast)
+      if showIdToast {
+        ToastMessage(text: "사용자 ID가 수정되었습니다.", toastPadding: 32, showToast: $showIdToast)
+      }
+      if showIntroductionToast {
+        ToastMessage(text: "소개가 수정되었습니다.", toastPadding: 32, showToast: $showIntroductionToast)
+      }
     }
     .fullScreenCover(isPresented: $showGallery) {
       PhotoCollectionView(photoCollection: photoCollection)
@@ -84,6 +96,7 @@ struct ProfileEditView: View {
     .toolbar {
       ToolbarItem(placement: .cancellationAction) {
         Button {
+          tabbarModel.tabbarOpacity = 1.0
           dismiss()
         } label: {
           Image(systemName: "chevron.backward")
@@ -97,6 +110,7 @@ struct ProfileEditView: View {
       ToolbarItem(placement: .confirmationAction) {
         Button {
           log("Update Profile")
+          tabbarModel.tabbarOpacity = 1.0
           dismiss()
         } label: {
           Text("완료")
@@ -107,6 +121,9 @@ struct ProfileEditView: View {
     }
     .task {
       await apiViewModel.requestMyProfile()
+    }
+    .onAppear {
+      tabbarModel.tabbarOpacity = 0.0
     }
   }
 }

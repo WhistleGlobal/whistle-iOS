@@ -175,7 +175,7 @@ struct UserProfileView: View {
     }
     .overlay {
       if showPasteToast {
-        ToastMessage(text: "클립보드에 복사되었어요", paddingBottom: 78, showToast: $showPasteToast)
+        ToastMessage(text: "클립보드에 복사되었어요", toastPadding: 78, showToast: $showPasteToast)
       }
     }
     .onAppear {

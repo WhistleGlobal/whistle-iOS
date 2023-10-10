@@ -31,6 +31,8 @@ struct ProfileEditIDView: View {
   @Binding var showToast: Bool
   @State var originalUsername = ""
   @EnvironmentObject var apiViewModel: APIViewModel
+  @EnvironmentObject var tabbarModel: TabbarModel
+
 
   var body: some View {
     VStack(spacing: 0) {
@@ -112,6 +114,7 @@ struct ProfileEditIDView: View {
     }
     .onAppear {
       originalUsername = apiViewModel.myProfile.userName
+      tabbarModel.tabbarOpacity = 0.0
     }
   }
 }

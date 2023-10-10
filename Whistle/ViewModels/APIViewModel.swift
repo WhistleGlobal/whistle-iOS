@@ -34,6 +34,23 @@ class APIViewModel: ObservableObject {
 
   let decoder = JSONDecoder()
 
+  func reset() {
+    myProfile = .init()
+    userProfile = .init()
+    myWhistleCount = 0
+    userWhistleCount = 0
+    myFollow = Follow()
+    userFollow = UserFollow()
+    myPostFeed = []
+    userPostFeed = []
+    bookmark = []
+    notiSetting = .init()
+    contentList = []
+    noSignInContentList = []
+    reportedContent = []
+    userCreatedDate = ""
+  }
+
 }
 
 // MARK: - Computed Property

@@ -207,6 +207,26 @@ extension APIViewModel: PostFeedProtocol {
     }
   }
 
+  func actionBookmarkCancel(contentId: Int) async -> Bool {
+    await withCheckedContinuation { continuation in
+      AF.request(
+        "\(domainURL)/action/\(contentId)/bookmark",
+        method: .delete,
+        headers: contentTypeXwwwForm)
+        .validate(statusCode: 200...300)
+        .response { response in
+          switch response.result {
+          case .success(let data):
+            log(data)
+            continuation.resume(returning: true)
+          case .failure(let error):
+            log(error)
+            continuation.resume(returning: false)
+          }
+        }
+    }
+  }
+
   func actionWhistle(contentId: Int) async {
     await withCheckedContinuation { continuation in
       AF.request(
@@ -272,7 +292,7 @@ extension APIViewModel: PostFeedProtocol {
       AF.request(
         "\(domainURL)/content/\(contentId)",
         method: .delete,
-        headers: contentTypeXwwwForm)
+        headers: contentTypeJson)
         .validate(statusCode: 200...300)
         .response { response in
           switch response.result {

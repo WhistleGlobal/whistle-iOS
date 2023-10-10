@@ -24,6 +24,7 @@ struct SignInView: View {
   @State var loginOpacity = 0.0
   @EnvironmentObject var apiViewModel: APIViewModel
   @EnvironmentObject var userAuth: UserAuth
+  @EnvironmentObject var universalRoutingModel: UniversalRoutingModel
   let keychain = KeychainSwift()
 
   var domainURL: String {
@@ -38,20 +39,21 @@ struct SignInView: View {
         .ignoresSafeArea()
         .allowsTightening(false)
       VStack(spacing: 0) {
-        NavigationLink {
-          TabbarView()
-            .environmentObject(apiViewModel)
-            .environmentObject(userAuth)
-        } label: {
-          HStack(spacing: 0) {
-            Spacer()
+        HStack(spacing: 0) {
+          Spacer()
+          NavigationLink {
+            TabbarView()
+              .environmentObject(apiViewModel)
+              .environmentObject(userAuth)
+              .environmentObject(universalRoutingModel)
+          } label: {
             Text("건너뛰기")
               .fontSystem(fontDesignSystem: .subtitle2_KO)
               .foregroundColor(.LabelColor_Secondary_Dark)
           }
-          .padding(.horizontal, 24)
-          .padding(.vertical, 12)
         }
+        .padding(.horizontal, 24)
+        .padding(.vertical, 12)
         Spacer()
         Button {
           handleSignInButton()
