@@ -12,6 +12,7 @@ import UIKit
 struct CustomNavigationBarViewController: UIViewControllerRepresentable {
   var title: String
   var backButtonAction: () -> Void
+  var nextButtonAction: () -> Void
 
   func makeUIViewController(context: Context) -> UINavigationController {
     let navigationController = UINavigationController()
@@ -33,8 +34,8 @@ struct CustomNavigationBarViewController: UIViewControllerRepresentable {
     viewController.navigationItem.rightBarButtonItem = UIBarButtonItem(
       title: "다음",
       style: .plain,
-      target: nil,
-      action: nil)
+      target: context.coordinator,
+      action: #selector(Coordinator.nextButtonTapped))
     viewController.navigationItem.rightBarButtonItem?.tintColor = UIColor(Color.Info)
     viewController.navigationItem.rightBarButtonItem?.style = .done
     navigationController.pushViewController(viewController, animated: false)
@@ -58,6 +59,11 @@ struct CustomNavigationBarViewController: UIViewControllerRepresentable {
     @objc
     func backButtonTapped() {
       parent.backButtonAction()
+    }
+
+    @objc
+    func nextButtonTapped() {
+      parent.nextButtonAction()
     }
   }
 }

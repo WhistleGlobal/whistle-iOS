@@ -44,6 +44,23 @@ final class PickerConfigViewController: UIViewController {
 
 extension PickerConfigViewController: ImagePickerControllerDelegate {
   /// Picker에서 선택된 asset을 MainEditorview로 전달해 줍니다.
+//  func imagePicker(_ picker: ImagePickerController, didFinishPicking result: PickerResult) {
+//    var videoURL: URL?
+//    result.assets[0].phAsset.loadURL { result in
+//      switch result {
+//      case .success(let url):
+//        videoURL = url
+//        DispatchQueue.main.async {
+//          let editorView = MainEditorView(selectedVideoURL: videoURL)
+//          self.show(UIHostingController(rootView: editorView), sender: nil)
+//          picker.dismiss(animated: true, completion: nil)
+//          self.parent?.dismiss(animated: false)
+//        }
+//      case .failure(let error):
+//        print("Error: \(error)")
+//      }
+//    }
+//  }
   func imagePicker(_ picker: ImagePickerController, didFinishPicking result: PickerResult) {
     var videoURL: URL?
     result.assets[0].phAsset.loadURL { result in
@@ -52,9 +69,11 @@ extension PickerConfigViewController: ImagePickerControllerDelegate {
         videoURL = url
         DispatchQueue.main.async {
           let editorView = MainEditorView(selectedVideoURL: videoURL)
-          self.show(UIHostingController(rootView: editorView), sender: nil)
-          picker.dismiss(animated: true, completion: nil)
-          self.parent?.dismiss(animated: false)
+
+          if let navigationController = self.navigationController {
+            navigationController.pushViewController(UIHostingController(rootView: editorView), animated: true)
+            picker.dismiss(animated: true, completion: nil)
+          }
         }
       case .failure(let error):
         print("Error: \(error)")

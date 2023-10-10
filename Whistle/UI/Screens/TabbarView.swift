@@ -52,17 +52,19 @@ struct TabbarView: View {
       case .upload:
         // FIXME: - uploadview로 교체하기
 //        Color.pink.ignoresSafeArea()]
-        NavigationStack {
+        NavigationView {
           ZStack {
             Color.pink.ignoresSafeArea()
             PickerConfigViewControllerWrapper()
+              .onAppear {
+                withAnimation {
+                  tabbarModel.tabWidth = 56
+                }
+              }
+//              .onDisappear {
+//                tabbarModel.tabbarOpacity = 1.0
+//              }
           }
-        }
-        .onAppear {
-          tabbarModel.tabbarOpacity = 0.0
-        }
-        .onDisappear {
-          tabbarModel.tabbarOpacity = 1.0
         }
       case .profile:
         NavigationStack {

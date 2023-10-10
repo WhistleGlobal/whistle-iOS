@@ -14,6 +14,7 @@
 		1B0A29AC2AA64AF3009077A1 /* MusicNote.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B0A29AB2AA64AF3009077A1 /* MusicNote.swift */; };
 		1B0A29AE2AA662CB009077A1 /* HapticsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B0A29AD2AA662CB009077A1 /* HapticsManager.swift */; };
 		1B21C9ED2AA0AB8A0036158F /* .swiftformat in Resources */ = {isa = PBXBuildFile; fileRef = 1B21C9EC2AA0AB8A0036158F /* .swiftformat */; };
+		1B2CFECB2AD412D000F34AA3 /* UploadView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B2CFECA2AD412D000F34AA3 /* UploadView.swift */; };
 		1B3895202AB9CB6000B4C8DD /* SheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B3895152AB9CB6000B4C8DD /* SheetView.swift */; };
 		1B3895212AB9CB6000B4C8DD /* EditablePlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B3895172AB9CB6000B4C8DD /* EditablePlayerView.swift */; };
 		1B3895222AB9CB6000B4C8DD /* CustomSlider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B3895192AB9CB6000B4C8DD /* CustomSlider.swift */; };
@@ -298,7 +299,7 @@
 		1BD4E7C62ABA68D500ADB783 /* PickerConfigViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BD4E7C52ABA68D500ADB783 /* PickerConfigViewController.swift */; };
 		1BD4E7D02ABA68FA00ADB783 /* EnableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BD4E7CF2ABA68FA00ADB783 /* EnableCell.swift */; };
 		1BD4E7D22ABA690400ADB783 /* Extension+UITableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BD4E7D12ABA690400ADB783 /* Extension+UITableViewCell.swift */; };
-		1BD4E7D42ABA6B2A00ADB783 /* VideoPickerTestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BD4E7D32ABA6B2A00ADB783 /* VideoPickerTestView.swift */; };
+		1BD4E7D42ABA6B2A00ADB783 /* PickerConfigViewControllerWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BD4E7D32ABA6B2A00ADB783 /* PickerConfigViewControllerWrapper.swift */; };
 		1BD4E7D62ABBF2B500ADB783 /* Picker+UIScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BD4E7D52ABBF2B500ADB783 /* Picker+UIScreen.swift */; };
 		1BD4E7D82ABC4B6300ADB783 /* Picker+Color.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BD4E7D72ABC4B6300ADB783 /* Picker+Color.swift */; };
 		1BD4E7DA2ABC706A00ADB783 /* Picker+UIVisualEffectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BD4E7D92ABC706A00ADB783 /* Picker+UIVisualEffectView.swift */; };
@@ -446,6 +447,7 @@
 		1B0A29AF2AA75087009077A1 /* WhistleDebug.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = WhistleDebug.entitlements; sourceTree = "<group>"; };
 		1B21C9E82AA034500036158F /* Whistle.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Whistle.entitlements; sourceTree = "<group>"; };
 		1B21C9EC2AA0AB8A0036158F /* .swiftformat */ = {isa = PBXFileReference; lastKnownFileType = text; path = .swiftformat; sourceTree = "<group>"; };
+		1B2CFECA2AD412D000F34AA3 /* UploadView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadView.swift; sourceTree = "<group>"; };
 		1B3895152AB9CB6000B4C8DD /* SheetView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SheetView.swift; sourceTree = "<group>"; };
 		1B3895172AB9CB6000B4C8DD /* EditablePlayerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditablePlayerView.swift; sourceTree = "<group>"; };
 		1B3895192AB9CB6000B4C8DD /* CustomSlider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomSlider.swift; sourceTree = "<group>"; };
@@ -726,7 +728,7 @@
 		1BD4E7C52ABA68D500ADB783 /* PickerConfigViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PickerConfigViewController.swift; sourceTree = "<group>"; };
 		1BD4E7CF2ABA68FA00ADB783 /* EnableCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnableCell.swift; sourceTree = "<group>"; };
 		1BD4E7D12ABA690400ADB783 /* Extension+UITableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Extension+UITableViewCell.swift"; sourceTree = "<group>"; };
-		1BD4E7D32ABA6B2A00ADB783 /* VideoPickerTestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoPickerTestView.swift; sourceTree = "<group>"; };
+		1BD4E7D32ABA6B2A00ADB783 /* PickerConfigViewControllerWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PickerConfigViewControllerWrapper.swift; sourceTree = "<group>"; };
 		1BD4E7D52ABBF2B500ADB783 /* Picker+UIScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Picker+UIScreen.swift"; sourceTree = "<group>"; };
 		1BD4E7D72ABC4B6300ADB783 /* Picker+Color.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Picker+Color.swift"; sourceTree = "<group>"; };
 		1BD4E7D92ABC706A00ADB783 /* Picker+UIVisualEffectView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Picker+UIVisualEffectView.swift"; sourceTree = "<group>"; };
@@ -864,6 +866,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		1B2CFEC92AD412A400F34AA3 /* Upload */ = {
+			isa = PBXGroup;
+			children = (
+				1B2CFECA2AD412D000F34AA3 /* UploadView.swift */,
+			);
+			path = Upload;
+			sourceTree = "<group>";
+		};
 		1B3895162AB9CB6000B4C8DD /* Player */ = {
 			isa = PBXGroup;
 			children = (
@@ -1109,6 +1119,7 @@
 		1B39554D2A9506B300BCB4DF /* Screens */ = {
 			isa = PBXGroup;
 			children = (
+				1B2CFEC92AD412A400F34AA3 /* Upload */,
 				785258552ACC6C440024E466 /* NoSignIn */,
 				1BD4E7C42ABA689E00ADB783 /* VideoPicker */,
 				1BE8EA182AB205CE00EB0A55 /* VideoEditor */,
@@ -1927,8 +1938,8 @@
 			isa = PBXGroup;
 			children = (
 				1BD4E7C52ABA68D500ADB783 /* PickerConfigViewController.swift */,
+				1BD4E7D32ABA6B2A00ADB783 /* PickerConfigViewControllerWrapper.swift */,
 				1BD4E7CF2ABA68FA00ADB783 /* EnableCell.swift */,
-				1BD4E7D32ABA6B2A00ADB783 /* VideoPickerTestView.swift */,
 			);
 			path = VideoPicker;
 			sourceTree = "<group>";
@@ -2388,7 +2399,7 @@
 				1B3895412AB9CB7500B4C8DD /* PlayerHolderView.swift in Sources */,
 				789BCB432ABBF2E1002164C4 /* UserContentListView.swift in Sources */,
 				78BECCE52AAAE597003FA7B5 /* APIViewModel+Upload.swift in Sources */,
-				1BD4E7D42ABA6B2A00ADB783 /* VideoPickerTestView.swift in Sources */,
+				1BD4E7D42ABA6B2A00ADB783 /* PickerConfigViewControllerWrapper.swift in Sources */,
 				1BD4E7D22ABA690400ADB783 /* Extension+UITableViewCell.swift in Sources */,
 				787AF56F2AA884B700C190E6 /* User.swift in Sources */,
 				787AF5732AA888FC00C190E6 /* UserPostFeed.swift in Sources */,
@@ -2442,6 +2453,7 @@
 				1B0A29AC2AA64AF3009077A1 /* MusicNote.swift in Sources */,
 				1B3895862AB9CC4300B4C8DD /* CoreDataManager.swift in Sources */,
 				1B38954C2AB9CB7500B4C8DD /* FramesToolView.swift in Sources */,
+				1B2CFECB2AD412D000F34AA3 /* UploadView.swift in Sources */,
 				1B3895262AB9CB6000B4C8DD /* RangeSliderView.swift in Sources */,
 				1B3895572AB9CB8C00B4C8DD /* RootViewModel.swift in Sources */,
 				1B3895252AB9CB6000B4C8DD /* SliderView.swift in Sources */,

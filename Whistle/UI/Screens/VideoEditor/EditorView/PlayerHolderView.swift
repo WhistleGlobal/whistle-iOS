@@ -17,7 +17,6 @@ struct PlayerHolderView: View {
 
   let videoScale: CGFloat = 16 / 9
   let videoWidth: CGFloat = 203
-  var scale: CGFloat = 0.5
 
   var body: some View {
     VStack(spacing: 0) {
@@ -88,7 +87,6 @@ extension PlayerHolderView {
             musicVM.stopAudio()
           }
         }
-        .scaleEffect(editorVM.frames.scale)
         .onAppear {
           Task {
             guard let size = await editorVM.currentVideo?.asset.naturalSize() else { return }
