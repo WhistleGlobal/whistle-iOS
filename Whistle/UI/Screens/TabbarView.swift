@@ -68,10 +68,20 @@ struct TabbarView: View {
       case .profile:
         if isAccess {
           NavigationStack {
-            ProfileView(isFirstProfileLoaded: $isFirstProfileLoaded)
-              .environmentObject(apiViewModel)
-              .environmentObject(tabbarModel)
-              .environmentObject(userAuth)
+            if UIDevice.current.userInterfaceIdiom == .phone {
+              switch UIScreen.main.nativeBounds.height {
+              case 1334: // iPhone SE 3rd generation
+                SEProfileView(isFirstProfileLoaded: $isFirstProfileLoaded)
+                  .environmentObject(apiViewModel)
+                  .environmentObject(tabbarModel)
+                  .environmentObject(userAuth)
+              default:
+                ProfileView(isFirstProfileLoaded: $isFirstProfileLoaded)
+                  .environmentObject(apiViewModel)
+                  .environmentObject(tabbarModel)
+                  .environmentObject(userAuth)
+              }
+            }
           }
           .tint(.black)
         } else {
