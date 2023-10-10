@@ -11,7 +11,7 @@ struct ProfileTabItem: ButtonStyle {
 
   // MARK: Lifecycle
 
-  init(systemName: String, tab: String, selectedTab: Binding<ProfileView.profileTabCase>) {
+  init(systemName: String, tab: String, selectedTab: Binding<profileTabCase>) {
     self.systemName = systemName
     self.tab = tab
     _selectedTab = selectedTab
@@ -21,7 +21,7 @@ struct ProfileTabItem: ButtonStyle {
 
   let systemName: String
   let tab: String
-  @Binding var selectedTab: ProfileView.profileTabCase
+  @Binding var selectedTab: profileTabCase
 
   func makeBody(configuration: Configuration) -> some View {
     configuration.label

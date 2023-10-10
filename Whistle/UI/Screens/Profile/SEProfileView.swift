@@ -1,8 +1,8 @@
 //
-//  ProfileView.swift
+//  SEProfileView.swift
 //  Whistle
 //
-//  Created by ChoiYujin on 8/29/23.
+//  Created by ChoiYujin on 10/10/23.
 //
 
 import AVKit
@@ -12,16 +12,9 @@ import GoogleSignInSwift
 import Kingfisher
 import SwiftUI
 
-// MARK: - profileTabCase
+// MARK: - SEProfileView
 
-public enum profileTabCase: String {
-  case myVideo
-  case bookmark
-}
-
-// MARK: - ProfileView
-
-struct ProfileView: View {
+struct SEProfileView: View {
 
   // MARK: Internal
 
@@ -65,10 +58,10 @@ struct ProfileView: View {
           Spacer().frame(height: topSpacerHeight)
           glassProfile(
             width: .infinity,
-            height: 418 + (240 * progress),
+            height: 278 + (146 * progress),
             cornerRadius: profileCornerRadius,
             overlayed: profileInfo())
-            .padding(.bottom, 12)
+            .padding(.bottom, 8)
         }
         .padding(.horizontal, profileHorizontalPadding)
         .zIndex(1)
@@ -298,36 +291,37 @@ struct ProfileView: View {
   }
 }
 
-extension ProfileView {
+extension SEProfileView {
 
   @ViewBuilder
   func profileInfo() -> some View {
     VStack(spacing: 0) {
-      Spacer().frame(height: 64)
+      Spacer().frame(height: 48)
       profileImageView(url: apiViewModel.myProfile.profileImage, size: profileImageSize)
-        .padding(.bottom, 16)
+        .padding(.bottom, 12)
       Text(apiViewModel.myProfile.userName)
+        .font(.system(size: 18, weight: .semibold).width(.expanded))
         .foregroundColor(Color.LabelColor_Primary_Dark)
-        .fontSystem(fontDesignSystem: .title2_Expanded)
-        .padding(.bottom, 4)
+        .frame(height: 28)
+      Spacer().frame(minHeight: 10)
       Color.clear.overlay {
         Text(apiViewModel.myProfile.introduce ?? " ")
           .foregroundColor(Color.LabelColor_Secondary_Dark)
+          .font(.system(size: 14, weight: .regular))
           .fontSystem(fontDesignSystem: .body2_KO)
           .lineLimit(nil)
           .multilineTextAlignment(.center)
           .fixedSize(horizontal: false, vertical: true)
           .scaleEffect(introduceScale)
       }
-      .frame(height: introduceHeight)
-      .padding(.bottom, 16)
+      .frame(height: introduceHeight) // 20 max
+      .padding(.bottom, 8)
       .padding(.horizontal, 48)
       Spacer()
       NavigationLink {
         ProfileEditView()
           .environmentObject(apiViewModel)
           .environmentObject(tabbarModel)
-
       } label: {
         Text("프로필 편집")
           .fontSystem(fontDesignSystem: .subtitle2_KO)
@@ -336,17 +330,17 @@ extension ProfileView {
           .frame(width: profileEditButtonWidth, height: profileEditButtonHeight)
       }
       .frame(width: profileEditButtonWidth, height: profileEditButtonHeight)
-      .padding(.bottom, 24)
+      .padding(.bottom, 16)
       .buttonStyle(ProfileEditButtonStyle())
       HStack(spacing: 48) {
         VStack(spacing: 4) {
           Text("\(apiViewModel.myWhistleCount)")
             .foregroundColor(Color.LabelColor_Primary_Dark)
-            .fontSystem(fontDesignSystem: .title2_Expanded)
+            .font(.system(size: 16, weight: .semibold).width(.expanded))
             .scaleEffect(whistleFollowerTextScale)
           Text("whistle")
             .foregroundColor(Color.LabelColor_Secondary_Dark)
-            .fontSystem(fontDesignSystem: .caption_SemiBold)
+            .font(.system(size: 10, weight: .semibold))
             .scaleEffect(whistleFollowerTextScale)
         }
         Rectangle().frame(width: 1 , height: .infinity).foregroundColor(.white)
@@ -358,19 +352,20 @@ extension ProfileView {
           VStack(spacing: 4) {
             Text("\(apiViewModel.myFollow.followerCount)")
               .foregroundColor(Color.LabelColor_Primary_Dark)
-              .fontSystem(fontDesignSystem: .title2_Expanded)
+              .font(.system(size: 16, weight: .semibold).width(.expanded))
               .scaleEffect(whistleFollowerTextScale)
             Text("follower")
               .foregroundColor(Color.LabelColor_Secondary_Dark)
-              .fontSystem(fontDesignSystem: .caption_SemiBold)
+              .font(.system(size: 10, weight: .semibold))
               .scaleEffect(whistleFollowerTextScale)
           }
         }
       }
-      .frame(height: whistleFollowerTabHeight)
-      .padding(.bottom, 32)
+      .frame(height: whistleFollowerTabHeight) // 42 max
+      .padding(.bottom, 10)
+      Spacer()
     }
-    .frame(height: 418 + (240 * progress))
+    .frame(height: 278 + (146 * progress))
     .frame(maxWidth: .infinity)
     .overlay {
       VStack(spacing: 0) {
@@ -383,7 +378,7 @@ extension ProfileView {
           } label: {
             Circle()
               .foregroundColor(.Gray_Default)
-              .frame(width: 48, height: 48)
+              .frame(width: 40, height: 40)
               .overlay {
                 Image(systemName: "ellipsis")
                   .resizable()
@@ -393,12 +388,14 @@ extension ProfileView {
                   .frame(width: 20, height: 20)
               }
           }
-          .offset(y: 64 - topSpacerHeight)
+          .offset(y: 28 - topSpacerHeight)
+          .padding(.top, 16)
           .padding(.horizontal, 16 - profileHorizontalPadding)
         }
         Spacer()
       }
-      .padding(16)
+      .padding(.horizontal, 16)
+      .padding(.top, 8)
     }
   }
 
@@ -428,7 +425,7 @@ extension ProfileView {
         .frame(maxWidth: .infinity, alignment: .leading)
       }
     }
-    .frame(height: 204)
+    .frame(height: UIScreen.getHeight(204))
     .cornerRadius(12)
   }
 
@@ -455,7 +452,7 @@ extension ProfileView {
   }
 }
 
-extension ProfileView {
+extension SEProfileView {
 
   @ViewBuilder
   func bottomSheetRowWithIcon(
@@ -510,9 +507,9 @@ extension ProfileView {
 
 // MARK: - Sticky Header Computed Properties
 
-extension ProfileView {
+extension SEProfileView {
   var progress: CGFloat {
-    -(offsetY / 177) > 1 ? -1 : (offsetY > 0 ? 0 : (offsetY / 177))
+    -(offsetY / 132) > 1 ? -1 : (offsetY > 0 ? 0 : (offsetY / 132))
   }
 
   var progressOpacity: CGFloat {
@@ -523,8 +520,8 @@ extension ProfileView {
     switch -offsetY {
     case ..<0:
       return 16
-    case 0..<64:
-      return 16 + (16 * (offsetY / 64))
+    case 0..<28:
+      return 16 + (16 * (offsetY / 28))
     default:
       return 0
     }
@@ -534,8 +531,8 @@ extension ProfileView {
     switch -offsetY {
     case ..<0:
       return 32
-    case 0..<64:
-      return 32 + (32 * (offsetY / 64))
+    case 0..<28:
+      return 32 + (32 * (offsetY / 28))
     default:
       return 0
     }
@@ -544,9 +541,9 @@ extension ProfileView {
   var topSpacerHeight: CGFloat {
     switch -offsetY {
     case ..<0:
-      return 64
-    case 0..<64:
-      return 64 + offsetY
+      return 28
+    case 0..<28:
+      return 28 + offsetY
     default:
       return 0
     }
@@ -555,9 +552,9 @@ extension ProfileView {
   var profileImageSize: CGFloat {
     switch -offsetY {
     case ..<0:
-      return 100
-    case 0..<122:
-      return 100 + (100 * (offsetY / 122))
+      return 56
+    case 0..<68:
+      return 56 + (56 * (offsetY / 68))
     default:
       return 0
     }
@@ -565,10 +562,10 @@ extension ProfileView {
 
   var whistleFollowerTabHeight: CGFloat {
     switch -offsetY {
-    case ..<122:
-      return 54
-    case 122..<200:
-      return 54 + (54 * ((offsetY + 122) / 78))
+    case ..<68:
+      return 42
+    case 68..<126:
+      return 42 + (42 * ((offsetY + 68) / 58))
     default:
       return 0
     }
@@ -578,8 +575,8 @@ extension ProfileView {
     switch -offsetY {
     case ..<122:
       return 1
-    case 122..<200:
-      return 1 - abs((offsetY + 122) / 78)
+    case 68..<126:
+      return 1 - abs((offsetY + 68) / 58)
     default:
       return 0
     }
@@ -587,10 +584,10 @@ extension ProfileView {
 
   var profileEditButtonHeight: CGFloat {
     switch -offsetY {
-    case ..<200:
+    case ..<126:
       return 36
-    case 200..<252:
-      return 36 + (36 * ((offsetY + 200) / 52))
+    case 126..<146:
+      return 28 + (28 * ((offsetY + 126) / 20))
     default:
       return 0
     }
@@ -598,10 +595,10 @@ extension ProfileView {
 
   var profileEditButtonWidth: CGFloat {
     switch -offsetY {
-    case ..<200:
+    case ..<126:
       return 114
-    case 200..<252:
-      return 114 + (114 * ((offsetY + 200) / 52))
+    case 126..<146:
+      return 79 + (79 * ((offsetY + 126) / 20))
     default:
       return 0
     }
@@ -609,10 +606,10 @@ extension ProfileView {
 
   var profileEditButtonScale: CGFloat {
     switch -offsetY {
-    case ..<200:
+    case ..<126:
       return 1
-    case 200..<252:
-      return 1 - abs((offsetY + 200) / 52)
+    case 126..<146:
+      return 1 - abs((offsetY + 126) / 20)
     default:
       return 0
     }
@@ -620,10 +617,10 @@ extension ProfileView {
 
   var introduceHeight: CGFloat {
     switch -offsetY {
-    case ..<252:
+    case ..<146:
       return 20
-    case 252..<305:
-      return 20 + (20 * ((offsetY + 252) / 53))
+    case 146..<202:
+      return 20 + (20 * ((offsetY + 146) / 56))
     default:
       return 0
     }
@@ -631,10 +628,10 @@ extension ProfileView {
 
   var introduceScale: CGFloat {
     switch -offsetY {
-    case ..<252:
+    case ..<146:
       return 1
-    case 252..<305:
-      return 1 - abs((offsetY + 252) / 53)
+    case 146..<202:
+      return 1 - abs((offsetY + 146) / 56)
     default:
       return 0
     }
@@ -642,12 +639,12 @@ extension ProfileView {
 
   var tabOffset: CGFloat {
     switch -offsetY {
-    case ..<252:
+    case ..<146:
       return 0
-    case 252..<305:
-      return 36 * ((offsetY + 252) / 53)
-    case 305...:
-      return -36
+    case 146..<202:
+      return 32 * ((offsetY + 146) / 56)
+    case 202...:
+      return -32
     default:
       return 0
     }
@@ -655,11 +652,11 @@ extension ProfileView {
 
   var tabPadding: CGFloat {
     switch -offsetY {
-    case ..<252:
+    case ..<146:
       return 16
-    case 252..<305:
-      return 16 + (16 * ((offsetY + 252) / 53))
-    case 305...:
+    case 146..<202:
+      return 8 + (8 * ((offsetY + 146) / 56))
+    case 202...:
       return 0
     default:
       return 0
@@ -668,11 +665,11 @@ extension ProfileView {
 
   var tabHeight: CGFloat {
     switch -offsetY {
-    case ..<252:
+    case ..<146:
       return 48
-    case 252..<305:
-      return 48 + (48 * ((offsetY + 252) / 53))
-    case 305...:
+    case 146..<202:
+      return 48 + (48 * ((offsetY + 146) / 56))
+    case 202...:
       return 0
     default:
       return 0
@@ -680,7 +677,7 @@ extension ProfileView {
   }
 
   var videoOffset: CGFloat {
-    log("\(offsetY < -305 ? 305 : -offsetY)")
-    return offsetY < -305 ? 305 : -offsetY
+    log("\(offsetY < -202 ? 202 : -offsetY)")
+    return offsetY < -202 ? 202 : -offsetY
   }
 }

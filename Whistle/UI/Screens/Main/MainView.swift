@@ -424,16 +424,37 @@ struct MainView: View {
     }
     .navigationDestination(isPresented: $isRootStacked) {
       if universalRoutingModel.isUniversalProfile {
-        UserProfileView(players: $players, currentIndex: $currentIndex, userId: universalRoutingModel.userId)
-          .environmentObject(apiViewModel)
-          .environmentObject(tabbarModel)
-          .onDisappear {
-            universalRoutingModel.isUniversalProfile = false
+        if UIDevice.current.userInterfaceIdiom == .phone {
+          switch UIScreen.main.nativeBounds.height {
+          case 1334: // iPhone SE 3rd generation
+            SEUserProfileView(players: $players, currentIndex: $currentIndex, userId: universalRoutingModel.userId)
+              .environmentObject(apiViewModel)
+              .environmentObject(tabbarModel)
+              .onDisappear {
+                universalRoutingModel.isUniversalProfile = false
+              }
+          default:
+            UserProfileView(players: $players, currentIndex: $currentIndex, userId: universalRoutingModel.userId)
+              .environmentObject(apiViewModel)
+              .environmentObject(tabbarModel)
+              .onDisappear {
+                universalRoutingModel.isUniversalProfile = false
+              }
           }
+        }
       } else {
-        UserProfileView(players: $players, currentIndex: $currentIndex, userId: currentVideoUserId)
-          .environmentObject(apiViewModel)
-          .environmentObject(tabbarModel)
+        if UIDevice.current.userInterfaceIdiom == .phone {
+          switch UIScreen.main.nativeBounds.height {
+          case 1334: // iPhone SE 3rd generation
+            SEUserProfileView(players: $players, currentIndex: $currentIndex, userId: currentVideoUserId)
+              .environmentObject(apiViewModel)
+              .environmentObject(tabbarModel)
+          default:
+            UserProfileView(players: $players, currentIndex: $currentIndex, userId: currentVideoUserId)
+              .environmentObject(apiViewModel)
+              .environmentObject(tabbarModel)
+          }
+        }
       }
     }
   }

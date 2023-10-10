@@ -151,9 +151,20 @@ extension UserFollowView {
   func userFollowerList() -> some View {
     ForEach(userFollower, id: \.userName) { follower in
       NavigationLink {
-        UserProfileView(players: .constant([]), currentIndex: .constant(0), userId: follower.followerId)
-          .environmentObject(apiViewModel)
-          .environmentObject(tabbarModel)
+        if UIDevice.current.userInterfaceIdiom == .phone {
+          switch UIScreen.main.nativeBounds.height {
+          case 1334: // iPhone SE 3rd generation
+            SEUserProfileView(players: .constant([]), currentIndex: .constant(0), userId: follower.followerId)
+              .environmentObject(apiViewModel)
+              .environmentObject(tabbarModel)
+              .id(UUID())
+          default:
+            UserProfileView(players: .constant([]), currentIndex: .constant(0), userId: follower.followerId)
+              .environmentObject(apiViewModel)
+              .environmentObject(tabbarModel)
+              .id(UUID())
+          }
+        }
       } label: {
         personRow(
           isFollowed: Binding(get: {
@@ -166,6 +177,7 @@ extension UserFollowView {
           profileImage: follower.profileImg ?? "",
           userId: follower.followerId)
       }
+      .id(UUID())
     }
   }
 
@@ -173,9 +185,20 @@ extension UserFollowView {
   func userFollowingList() -> some View {
     ForEach(userFollowing, id: \.userName) { following in
       NavigationLink {
-        UserProfileView(players: .constant([]), currentIndex: .constant(0), userId: following.followingId)
-          .environmentObject(apiViewModel)
-          .environmentObject(tabbarModel)
+        if UIDevice.current.userInterfaceIdiom == .phone {
+          switch UIScreen.main.nativeBounds.height {
+          case 1334: // iPhone SE 3rd generation
+            SEUserProfileView(players: .constant([]), currentIndex: .constant(0), userId: following.followingId)
+              .environmentObject(apiViewModel)
+              .environmentObject(tabbarModel)
+              .id(UUID())
+          default:
+            UserProfileView(players: .constant([]), currentIndex: .constant(0), userId: following.followingId)
+              .environmentObject(apiViewModel)
+              .environmentObject(tabbarModel)
+              .id(UUID())
+          }
+        }
       } label: {
         personRow(
           isFollowed: Binding(get: {
@@ -188,6 +211,7 @@ extension UserFollowView {
           profileImage: following.profileImg ?? "",
           userId: following.followingId)
       }
+      .id(UUID())
     }
   }
 }
