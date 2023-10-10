@@ -52,7 +52,7 @@ struct UserProfileView: View {
         Spacer().frame(height: topSpacerHeight)
         glassProfile(
           width: .infinity,
-          height: 418 + (240 * progress),
+          height: 418 + (240 * progress) + profileHeightLast,
           cornerRadius: profileCornerRadius,
           overlayed: profileInfo())
           .padding(.horizontal, profileHorizontalPadding)
@@ -220,7 +220,7 @@ extension UserProfileView {
       .frame(height: whistleFollowerTabHeight)
       Spacer()
     }
-    .frame(height: 418 + (240 * progress))
+    .frame(height: 418 + (240 * progress) + profileHeightLast)
     .frame(maxWidth: .infinity)
     .overlay {
       VStack(spacing: 0) {
@@ -431,6 +431,19 @@ extension UserProfileView {
       return offsetY + 252
     case 305...:
       return -60
+    default:
+      return 0
+    }
+  }
+
+  var profileHeightLast: CGFloat {
+    switch -offsetY {
+    case ..<252:
+      return 0
+    case 252..<305:
+      return (offsetY + 252) / 53 * 36
+    case 305...:
+      return -36
     default:
       return 0
     }
