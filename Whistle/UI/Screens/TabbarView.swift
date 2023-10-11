@@ -21,12 +21,12 @@ struct TabbarView: View {
   @State private var isMicrophoneAuthorized = false
   @State private var isNavigationActive = false
 
+  @State private var pickerOptions = PickerOptionsInfo()
   @AppStorage("isAccess") var isAccess = false
   @EnvironmentObject var apiViewModel: APIViewModel
   @EnvironmentObject var userAuth: UserAuth
   @EnvironmentObject var universalRoutingModel: UniversalRoutingModel
   @StateObject var tabbarModel: TabbarModel = .init()
-  @State private var pickerOptions = PickerOptionsInfo()
 
   var body: some View {
     ZStack {
@@ -69,13 +69,6 @@ struct TabbarView: View {
               isAlbumAuthorized: $isAlbumAuthorized,
               isMicrophoneAuthorized: $isMicrophoneAuthorized,
               isNavigationActive: $isNavigationActive)
-          }
-        }
-        .onAppear {
-          tabbarModel.tabbarOpacity = 0.0
-        }
-        .onDisappear {
-          tabbarModel.tabbarOpacity = 1.0
         }
       case .profile:
         if isAccess {

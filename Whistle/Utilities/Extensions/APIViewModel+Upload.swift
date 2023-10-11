@@ -34,4 +34,40 @@ extension APIViewModel: UploadProtocol {
         }
     }
   }
+
+  func uploadPost(
+    video: String,
+    thumbnail: String,
+    caption: String,
+    musicID: Int,
+    videoLength: Double,
+    hashtags: [String])
+  {
+    let params: [String: Any] = [
+      "video" : "\(video)",
+      "thumbnail" : "\(thumbnail)",
+      "caption" : "\(caption)",
+      "music_id" : "\(musicID)",
+      "video_length" : "\(videoLength)",
+      "content_hashtags" : "\(hashtags)",
+    ]
+
+    AF.request(
+      "\(domainURL)/content/upload",
+      method: .post,
+      parameters: params,
+      headers: contentTypeXwwwForm)
+      .validate(statusCode: 200...500)
+      .response { response in
+        switch response.result {
+        case .success(let data):
+          guard let data else {
+            return
+          }
+          log("Success: \(data)")
+        case .failure(let error):
+          log("\(error)")
+        }
+      }
+  }
 }
