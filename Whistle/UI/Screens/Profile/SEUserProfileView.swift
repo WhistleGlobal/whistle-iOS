@@ -176,6 +176,7 @@ extension SEUserProfileView {
       .padding(.bottom, 8)
       .padding(.horizontal, 48)
       Spacer()
+      Capsule()
       Button("") {
         Task {
           if isFollow {
