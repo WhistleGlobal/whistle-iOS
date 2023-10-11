@@ -24,11 +24,14 @@ struct VideoContentView: View {
 
   @State var showSetting = false
   @State var showGallery = false
+  @State var showPreparingView = false
+
   @State private var buttonState: CameraButtonState = .idle
   @State var captureMode: AssetType = .video
   @State private var animatedProgress = 0.0
   @ObservedObject private var viewModel = VideoContentViewModel()
 
+  @State var count: CGFloat = 0
   @State var bottomSheetPosition: BottomSheetPosition = .hidden
   @State var selectedSec: SelectedSecond = .sec3
   @State var timerSec = (8, false)
@@ -182,6 +185,20 @@ struct VideoContentView: View {
         .frame(height: 114)
         .padding(.horizontal, 42)
         .padding(.bottom, 64)
+      }
+      .opacity(showPreparingView ? 0 : 1)
+      .allowsHitTesting(!showPreparingView)
+
+      if showPreparingView {
+        Circle()
+          .trim(from: 0, to: min(count / CGFloat(timerSec.0), 1.0))
+          .stroke(Color.white, style: StrokeStyle(lineWidth: 4, lineCap: .square))
+          .frame(width: 84)
+          .rotationEffect(Angle(degrees: -90))
+          .rotation3DEffect(.degrees(180), axis: (x: 0.0, y: 1.0, z: 0.0))
+        Text("\(Int(count))")
+          .fontSystem(fontDesignSystem: .largeTitle_Expanded)
+          .foregroundColor(.white)
       }
     }
     .navigationBarBackButtonHidden()
@@ -609,6 +626,24 @@ extension VideoContentView {
     }
   }
 
+  private func startPreparingTimer() {
+    count = CGFloat(timerSec.0)
+    showPreparingView = true
+    recordingTimer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { _ in
+      withAnimation(.linear(duration: 0.5)) {
+        count -= 1
+      }
+      if count == 0 {
+        showPreparingView = false
+        timerSec.0 = 0
+        buttonState = .recording
+        viewModel.aespaSession.startRecording()
+        startRecordingTimer()
+        isRecording = true
+      }
+    }
+  }
+
   private func startRecordingTimer() {
     recordingTimer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { _ in
       recordingDuration += 1
@@ -661,10 +696,14 @@ extension VideoContentView {
             .frame(width: 72, height: 72, alignment: .center)
         }
         .onTapGesture {
-          buttonState = .recording
-          viewModel.aespaSession.startRecording()
-          startRecordingTimer()
-          isRecording = true
+          if timerSec.1 {
+            startPreparingTimer()
+          } else {
+            buttonState = .recording
+            viewModel.aespaSession.startRecording()
+            startRecordingTimer()
+            isRecording = true
+          }
         }
       case .recording:
         VStack {
