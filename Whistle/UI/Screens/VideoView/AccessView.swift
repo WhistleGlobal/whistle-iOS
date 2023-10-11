@@ -104,6 +104,26 @@ struct AccessView: View {
           }
         }
       }
+      VStack {
+        HStack {
+          Button {
+            tabbarModel.tabSelectionNoAnimation = .main
+            withAnimation {
+              tabbarModel.tabSelection = .main
+            }
+          } label: {
+            Image(systemName: "xmark")
+              .resizable()
+              .scaledToFit()
+              .frame(width: 20)
+              .foregroundColor(.white)
+          }
+          Spacer()
+        }
+        .frame(height: 52)
+        .padding(.horizontal, 16)
+        Spacer()
+      }
     }
   }
 }

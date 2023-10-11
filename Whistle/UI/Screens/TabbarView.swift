@@ -69,7 +69,15 @@ struct TabbarView: View {
               isAlbumAuthorized: $isAlbumAuthorized,
               isMicrophoneAuthorized: $isMicrophoneAuthorized,
               isNavigationActive: $isNavigationActive)
+              .environmentObject(apiViewModel)
+              .environmentObject(tabbarModel)
           }
+        }
+        .onAppear {
+          tabbarModel.tabbarOpacity = 0.0
+        }
+        .onDisappear {
+          tabbarModel.tabbarOpacity = 1.0
         }
       case .profile:
         if isAccess {
