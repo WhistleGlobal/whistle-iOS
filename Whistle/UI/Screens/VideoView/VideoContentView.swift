@@ -268,27 +268,27 @@ struct VideoContentView: View {
               Text("3s")
                 .fontSystem(fontDesignSystem: .subtitle3_KO)
                 .foregroundColor(selectedSec == .sec3 ? .White : Color.LabelColor_DisablePlaceholder)
+                .frame(width: 58, height: 30)
                 .onTapGesture {
                   withAnimation {
-                    let dragValue = Int(dragOffset + defaultWidth)
+                    timerSec.0 = 3
                     let multiplier = 6 + barSpacing
                     selectedSec = .sec3
                     dragOffset = -5.0 * CGFloat(multiplier)
                   }
                 }
-                .frame(width: 58, height: 30)
               Text("10s")
                 .fontSystem(fontDesignSystem: .subtitle3_KO)
                 .foregroundColor(selectedSec == .sec10 ? .White : Color.LabelColor_DisablePlaceholder)
+                .frame(width: 58, height: 30)
                 .onTapGesture {
                   withAnimation {
-                    let dragValue = Int(dragOffset + defaultWidth)
+                    timerSec.0 = 10
                     let multiplier = 6 + barSpacing
                     dragOffset = 2.0 * CGFloat(multiplier)
                     selectedSec = .sec10
                   }
                 }
-                .frame(width: 58, height: 30)
               Spacer()
             }
             .frame(width: 120, height: 34)
@@ -636,6 +636,7 @@ extension VideoContentView {
       if count == 0 {
         showPreparingView = false
         timerSec.0 = 0
+        timerSec.1 = false
         buttonState = .recording
         viewModel.aespaSession.startRecording()
         startRecordingTimer()
