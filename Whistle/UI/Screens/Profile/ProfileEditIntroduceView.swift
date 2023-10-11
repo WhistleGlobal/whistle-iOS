@@ -32,6 +32,7 @@ struct ProfileEditIntroduceView: View {
             .foregroundColor(.Disable_Placeholder)
             .frame(maxWidth: .infinity, alignment: .trailing)
         }
+        .tint(.Info)
         .padding(.vertical, 20)
       Divider().frame(width: UIScreen.width)
       Spacer()
