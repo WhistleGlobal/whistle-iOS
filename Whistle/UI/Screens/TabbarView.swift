@@ -55,6 +55,9 @@ struct TabbarView: View {
         NavigationView {
           ZStack {
             Color.pink.ignoresSafeArea()
+              .onTapGesture {
+                print("Tapped!!")
+              }
             PickerConfigViewControllerWrapper()
               .onAppear {
                 withAnimation {

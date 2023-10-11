@@ -149,16 +149,16 @@ struct MusicListView: View {
         isShowingMusicTrimView: $isShowingMusicTrimView)
     }
     .onAppear {
-      let fileManager = FileManager.default
-      let temporaryDirectory = FileManager.default.temporaryDirectory
-
-      do {
-        let files = try fileManager.contentsOfDirectory(atPath: temporaryDirectory.path)
-        for file in files {
-          let filePath = temporaryDirectory.appendingPathComponent(file)
-          try fileManager.removeItem(at: filePath)
-        }
-      } catch { }
+//      let fileManager = FileManager.default
+//      let temporaryDirectory = FileManager.default.temporaryDirectory
+//
+//      do {
+//        let files = try fileManager.contentsOfDirectory(atPath: temporaryDirectory.path)
+//        for file in files {
+//          let filePath = temporaryDirectory.appendingPathComponent(file)
+//          try fileManager.removeItem(at: filePath)
+//        }
+//      } catch { }
       // Music 목록을 가져오는 함수를 호출하고 musicList 배열을 업데이트합니다.
       Task {
         musicList = await apiViewModel.requestMusicList()
@@ -259,7 +259,6 @@ extension MusicListView {
         return (fileURL, [.createIntermediateDirectories])
       }
     }
-
     downloadStatus[music] = .inProgress
 
     if !FileManager.default.fileExists(atPath: fileURL.path) {
@@ -278,6 +277,9 @@ extension MusicListView {
           }
         }
       downloadRequests[music] = request
+    } else {
+      downloadStatus[music] = .playing
+      playAudioFromTemporaryDirectory(for: music, fileURL: fileDirectories[music]!)
     }
   }
 

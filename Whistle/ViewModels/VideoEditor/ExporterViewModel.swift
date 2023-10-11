@@ -17,11 +17,12 @@ class ExporterViewModel: ObservableObject {
   @Published var renderState: ExportState = .unknown
   @Published var showAlert = false
   @Published var progressTimer: TimeInterval = .zero
-  @Published var selectedQuality: VideoQuality = .medium
+  @Published var selectedQuality: VideoQuality = .low
   private var cancellable = Set<AnyCancellable>()
   private var action: ActionEnum = .save
   private let editorHelper = VideoEditor()
   private var timer: Timer?
+  var base64String = ""
 
   init(video: EditableVideo) {
     self.video = video
@@ -34,19 +35,26 @@ class ExporterViewModel: ObservableObject {
   }
 
   @MainActor
-  private func renderVideo() async {
+  private func renderVideo(start: Double) async {
     renderState = .loading
     do {
-      let url = try await editorHelper.startRender(video: video, videoQuality: selectedQuality)
+      let url = try await editorHelper.startRender(video: video, videoQuality: selectedQuality, start: start)
+      if let videoData = try? Data(contentsOf: url) {
+        base64String = videoData.base64EncodedString()
+//        return base64String
+        // base64String을 사용하거나 전송하려는 곳에 전달할 수 있습니다.
+      }
       renderState = .loaded(url)
     } catch {
       renderState = .failed(error)
     }
+//    return ""
   }
 
-  func action(_ action: ActionEnum) async {
+  func action(_ action: ActionEnum, start: Double) async {
     self.action = action
-    await renderVideo()
+//    return await renderVideo(start: start)
+    await renderVideo(start: start)
   }
 
   private func startRenderStateSubs() {
@@ -110,7 +118,9 @@ class ExporterViewModel: ObservableObject {
       case .unknown: return 0
       case .loading: return 1
       case .loaded: return 2
-      case .failed: return 3
+      case .failed(let error):
+        print("Fail Error", error)
+        return 3
       case .saved: return 4
       }
     }

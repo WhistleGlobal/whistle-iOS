@@ -17,6 +17,7 @@ struct EditableVideo: Identifiable {
   let originalDuration: Double
   var rangeDuration: ClosedRange<Double>
   var thumbnailsImages = [ThumbnailImage]()
+  var thumbHQImages = [ThumbnailImage]()
   var rate: Float = 1.0
   var rotation: Double = 0
   var frameSize: CGSize = .zero
@@ -60,6 +61,17 @@ struct EditableVideo: Identifiable {
       thumbnailsImages.append(thumbnailImage)
     }
     thumbnailsImages.remove(at: 0)
+  }
+
+  mutating func generateHQThumbnails() {
+    let imagesCount = 21
+    var offset: Float64 = 0
+    for i in 0 ... imagesCount {
+      let thumbnailImage = ThumbnailImage(image: asset.getImage(Int(offset), compressionQuality: 1.0))
+      offset = Double(i) * (originalDuration / Double(imagesCount))
+      thumbHQImages.append(thumbnailImage)
+    }
+    thumbHQImages.remove(at: 0)
   }
 
   /// reset and update

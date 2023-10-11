@@ -56,7 +56,7 @@ extension APIViewModel: UploadProtocol {
       "\(domainURL)/content/upload",
       method: .post,
       parameters: params,
-      headers: contentTypeXwwwForm)
+      headers: contentTypeMultipart)
       .validate(statusCode: 200...500)
       .response { response in
         switch response.result {

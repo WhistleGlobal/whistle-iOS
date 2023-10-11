@@ -12,9 +12,11 @@ import SwiftUI
 // MARK: - UploadView
 
 struct UploadView: View {
+  let video: EditableVideo
   @Environment(\.dismiss) private var dismiss
   @StateObject var tagsViewModel = TagsViewModel()
   @StateObject var apiViewModel = APIViewModel()
+  @StateObject var exporterVM: ExporterViewModel
   @ObservedObject var editorVM: EditorViewModel
   @ObservedObject var videoPlayer: VideoPlayerManager
   @ObservedObject var musicVM: MusicViewModel
@@ -25,6 +27,24 @@ struct UploadView: View {
   let videoScale: CGFloat = 16 / 9
   let videoWidth: CGFloat = 203
   let textLimit = 40
+//
+//  init(video: EditableVideo) {
+//    _exporterVM = StateObject(wrappedValue: ExporterViewModel(video: video))
+//  }
+  init(
+    video: EditableVideo,
+    editorVM: EditorViewModel,
+    videoPlayer: VideoPlayerManager,
+    musicVM: MusicViewModel,
+    isInitial: Binding<Bool>)
+  {
+    self.video = video
+    _exporterVM = StateObject(wrappedValue: ExporterViewModel(video: video))
+    self.editorVM = editorVM
+    self.videoPlayer = videoPlayer
+    self.musicVM = musicVM
+    _isInitial = isInitial
+  }
 
   var body: some View {
     ZStack(alignment: .top) {
@@ -37,13 +57,21 @@ struct UploadView: View {
         isInitial = false
         dismiss()
       } nextButtonAction: {
-//        apiViewModel.uploadPost(
-//          video: <#T##String#>,
-//          thumbnail: <#T##String#>,
-//          caption: content,
-//          musicID: musicVM.musicInfo?.id,
-//          videoLength: editorVM.currentVideo?.totalDuration,
-//          hashtags: tagsViewModel.getTags())
+        Task {
+          await exporterVM.action(.save, start: (editorVM.currentVideo?.rangeDuration.lowerBound)!)
+          let video = exporterVM.base64String
+          let thumbnail = editorVM
+            .returnThumbnail(Int(
+              (editorVM.currentVideo?.rangeDuration.lowerBound)! / (editorVM.currentVideo?.originalDuration)! *
+                21))
+          apiViewModel.uploadPost(
+            video: video,
+            thumbnail: thumbnail,
+            caption: content,
+            musicID: musicVM.musicInfo?.musicID ?? 0,
+            videoLength: editorVM.currentVideo!.totalDuration,
+            hashtags: tagsViewModel.getTags())
+        }
       }
       .frame(height: UIScreen.getHeight(44))
       .overlay(alignment: .bottom) {
@@ -54,6 +82,7 @@ struct UploadView: View {
       .background(Rectangle().fill(.white).ignoresSafeArea())
       .ignoresSafeArea(.keyboard)
       .zIndex(1000)
+
       ScrollView {
         VStack(spacing: 16) {
           EditablePlayerView(player: videoPlayer.videoPlayer)
@@ -100,7 +129,7 @@ struct UploadView: View {
       .onTapGesture {
         isFocused = false
       }
-      .scrollIndicators(.never)
+      .scrollIndicators(.visible)
       .offset(y: isFocused ? UIScreen.getHeight(-300) : 0)
       .animation(.easeInOut)
       .ignoresSafeArea(edges: .bottom)
@@ -161,10 +190,11 @@ struct UploadView: View {
   }
 }
 
-#Preview {
-  UploadView(
-    editorVM: EditorViewModel(),
-    videoPlayer: VideoPlayerManager(),
-    musicVM: MusicViewModel(),
-    isInitial: .constant(false))
-}
+//
+// #Preview {
+//  UploadView(
+//    editorVM: EditorViewModel(),
+//    videoPlayer: VideoPlayerManager(),
+//    musicVM: MusicViewModel(),
+//    isInitial: .constant(false))
+// }

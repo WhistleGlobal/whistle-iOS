@@ -24,7 +24,17 @@ class EditorViewModel: ObservableObject {
   func setNewVideo(_ url: URL, geo: GeometryProxy) {
     currentVideo = .init(url: url)
     currentVideo?.updateThumbnails(geo)
+    currentVideo?.generateHQThumbnails()
     createProject()
+  }
+
+  func returnThumbnail(_ index: Int) -> String {
+    currentVideo?.generateHQThumbnails()
+    if let image = currentVideo?.thumbHQImages[index].image, let imageData = image.pngData() {
+      // Data를 Base64로 인코딩
+      return imageData.base64EncodedString(options: [])
+    }
+    return ""
   }
 
   func setProject(_ project: ProjectEntity, geo: GeometryProxy) {
@@ -121,8 +131,8 @@ extension EditorViewModel {
   }
 
   func removeAudio() {
-    guard let url = currentVideo?.audio?.url else { return }
-    FileManager.default.removefileExists(for: url)
+//    guard let url = currentVideo?.audio?.url else { return }
+//    FileManager.default.removefileExists(for: url)
     currentVideo?.audio = nil
     isSelectVideo = true
     removeTool()

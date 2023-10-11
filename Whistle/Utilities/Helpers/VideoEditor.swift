@@ -16,9 +16,9 @@ class VideoEditor {
   @Published var currentTimePublisher: TimeInterval = 0.0
 
   /// The renderer is made up of half-sequential operations:
-  func startRender(video: EditableVideo, videoQuality: VideoQuality) async throws -> URL {
+  func startRender(video: EditableVideo, videoQuality: VideoQuality, start: Double) async throws -> URL {
     do {
-      let url = try await resizeAndLayerOperation(video: video, videoQuality: videoQuality)
+      let url = try await resizeAndLayerOperation(video: video, videoQuality: videoQuality, start: start)
       let finalURL = try await applyFiltersOperations(video, fromURL: url)
       return finalURL
     } catch {
@@ -29,7 +29,8 @@ class VideoEditor {
   /// Cut, resizing, rotate and set quality
   private func resizeAndLayerOperation(
     video: EditableVideo,
-    videoQuality: VideoQuality)
+    videoQuality: VideoQuality,
+    start: Double)
     async throws -> URL
   {
     let composition = AVMutableComposition()
@@ -43,7 +44,8 @@ class VideoEditor {
       from: asset,
       audio: video.audio,
       timeScale: Float64(video.rate),
-      videoVolume: video.volume)
+      videoVolume: video.volume,
+      start: start)
 
     /// Get new timeScale video track
     guard let videoTrack = try await composition.loadTracks(withMediaType: .video).first else {
@@ -209,7 +211,8 @@ extension VideoEditor {
     from asset: AVAsset,
     audio: Audio?,
     timeScale: Float64,
-    videoVolume: Float)
+    videoVolume: Float,
+    start: Double)
     async throws
   {
     let videoTracks = try await asset.loadTracks(withMediaType: .video)
@@ -255,7 +258,11 @@ extension VideoEditor {
         withMediaType: AVMediaType.audio,
         preferredTrackID: kCMPersistentTrackID_Invalid)
       compositionAudioTrack?.preferredVolume = audio.volume
-      try compositionAudioTrack?.insertTimeRange(oldTimeRange, of: secondAudioTrack, at: CMTime.zero)
+//      try compositionAudioTrack?.insertTimeRange(oldTimeRange, of: secondAudioTrack, at: CMTime.zero)
+      try compositionAudioTrack?.insertTimeRange(
+        oldTimeRange,
+        of: secondAudioTrack,
+        at: CMTimeMakeWithSeconds(start, preferredTimescale: 1000))
       compositionAudioTrack?.scaleTimeRange(oldTimeRange, toDuration: destinationTimeRange)
     }
   }
