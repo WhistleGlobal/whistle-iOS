@@ -160,6 +160,7 @@ struct MainView: View {
         }
         if newValue == 1 {
           if !isRootStacked {
+            log("play")
             player.play()
           }
         } else {
@@ -178,6 +179,7 @@ struct MainView: View {
     .navigationBarBackButtonHidden()
     .background(.black)
     .task {
+      log("task")
       if apiViewModel.myProfile.userName.isEmpty {
         await apiViewModel.requestMyProfile()
       }
@@ -201,6 +203,7 @@ struct MainView: View {
                 currentVideoUserId = apiViewModel.contentList[currentIndex].userId ?? 0
                 currentVideoContentId = apiViewModel.contentList[currentIndex].contentId ?? 0
                 isCurrentVideoWhistled = apiViewModel.contentList[currentIndex].isWhistled
+                log("play")
                 await player.seek(to: .zero)
                 player.play()
                 withAnimation {
@@ -246,6 +249,9 @@ struct MainView: View {
       }
     }
     .onChange(of: currentIndex) { newValue in
+      if universalRoutingModel.isUniversalContent {
+        return
+      }
       guard let url = apiViewModel.contentList[newValue].videoUrl else {
         return
       }
@@ -282,7 +288,7 @@ struct MainView: View {
       }
     }
     .onChange(of: universalRoutingModel.isUniversalContent) { newValue in
-      if newValue {
+      if newValue, !apiViewModel.contentList.isEmpty {
         tabbarModel.tabSelectionNoAnimation = .main
         tabbarModel.tabSelection = .main
         var currentIndex = 0
@@ -290,6 +296,7 @@ struct MainView: View {
         currentVideoUserId = 0
         currentVideoContentId = 0
         players.removeAll()
+        apiViewModel.contentList.removeAll()
         if universalRoutingModel.isUniversalContent {
           apiViewModel.requestUniversalContent(contentId: universalRoutingModel.contentId) {
             Task {
