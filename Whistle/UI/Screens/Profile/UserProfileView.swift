@@ -186,6 +186,7 @@ extension UserProfileView {
       .buttonStyle(FollowButtonStyle(isFollowed: $isFollow))
       .scaleEffect(profileEditButtonScale)
       .padding(.bottom, 24)
+      .disabled(userId == apiViewModel.myProfile.userId)
       HStack(spacing: 48) {
         VStack(spacing: 4) {
           Text("\(apiViewModel.userWhistleCount)")
