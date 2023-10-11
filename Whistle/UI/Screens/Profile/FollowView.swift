@@ -58,6 +58,10 @@ struct FollowView: View {
           followEmptyView()
         } else {
           myFollowerList()
+            .onReceive(apiViewModel.publisher) { id in
+              newId = id
+            }
+            .id(newId)
         }
       } else {
         if apiViewModel.myFollow.followingCount == 0 {
@@ -65,6 +69,10 @@ struct FollowView: View {
           followEmptyView()
         } else {
           myFollowingList()
+            .onReceive(apiViewModel.publisher) { id in
+              newId = id
+            }
+            .id(newId)
         }
       }
       Spacer()
@@ -126,6 +134,8 @@ extension FollowView {
             } else {
               await apiViewModel.followUser(userId: userId)
             }
+            isFollowed.wrappedValue.toggle()
+            apiViewModel.postFeedPlayerChanged()
           }
         }
         .buttonStyle(FollowButtonStyle(isFollowed: isFollowed))

@@ -19,11 +19,12 @@ struct FollowButtonStyle: ButtonStyle {
 
     var body: some View {
       Text(isFollowed ? "following" : "follow")
-        .frame(width: 112, height: 36)
-        .foregroundColor(.LabelColor_Primary_Dark)
+        .frame(width: isFollowed ? 112 : 88, height: 36)
+        .foregroundColor(isFollowed ? .Gray30_Dark : .LabelColor_Primary_Dark)
+        .fontSystem(fontDesignSystem: .subtitle2_KO)
         .background(
           Capsule()
-            .frame(width: 112, height: 36)
+            .frame(width: isFollowed ? 112 : 88, height: 36)
             .foregroundColor(followButtonColor()))
     }
 
@@ -38,15 +39,16 @@ struct FollowButtonStyle: ButtonStyle {
       // Follow/Disable
       case (false, false, _):
         return .Blue_Disabled
+
       // Following/Pressed
       case (true, true, true):
-        return .Gray_Pressed
+        return .Blue_Pressed
       // Following/Not pressed
       case (true, true, false):
-        return .Gray_Default
+        return .Blue_Disabled
       // Following/Disable
       case (true, false, _):
-        return .Gray_Disabled
+        return .Blue_Disabled
       }
     }
   }

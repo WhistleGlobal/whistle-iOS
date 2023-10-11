@@ -22,6 +22,7 @@ struct UserProfileView: View {
   @State var goReport = false
   @State var showPasteToast = false
   @State var offsetY: CGFloat = 0
+  @State var isProfileLoaded = false
   @Binding var players: [AVPlayer?]
   @Binding var currentIndex: Int
   let userId: Int
@@ -128,9 +129,10 @@ struct UserProfileView: View {
     }
     .task {
       await apiViewModel.requestUserProfile(userId: userId)
+      isFollow = apiViewModel.userProfile.isFollowed == 1 ? true : false
+      isProfileLoaded = true
       await apiViewModel.requestUserFollow(userId: userId)
       await apiViewModel.requestUserWhistlesCount(userId: userId)
-      isFollow = apiViewModel.userProfile.isFollowed == 1 ? true : false
     }
     .task {
       log(userId)
@@ -172,20 +174,28 @@ extension UserProfileView {
           .padding(.bottom, 16)
       }
       .frame(height: introduceHeight)
-      Button("") {
-        Task {
-          if isFollow {
-            isFollow.toggle()
-            await apiViewModel.unfollowUser(userId: userId)
-          } else {
-            isFollow.toggle()
-            await apiViewModel.followUser(userId: userId)
+      Capsule()
+        .frame(width: 112, height: 36)
+        .foregroundColor(isProfileLoaded ? .clear : .Gray_Default)
+        .overlay {
+          Button("") {
+            Task {
+              if isFollow {
+                isFollow.toggle()
+                await apiViewModel.unfollowUser(userId: userId)
+              } else {
+                isFollow.toggle()
+                await apiViewModel.followUser(userId: userId)
+              }
+            }
           }
+          .buttonStyle(FollowButtonStyle(isFollowed: $isFollow))
+          .scaleEffect(profileEditButtonScale)
+          .opacity(isProfileLoaded ? 1 : 0)
+          .disabled(userId == apiViewModel.myProfile.userId)
         }
-      }
-      .buttonStyle(FollowButtonStyle(isFollowed: $isFollow))
-      .scaleEffect(profileEditButtonScale)
-      .padding(.bottom, 24)
+        .padding(.bottom, 24)
+        .scaleEffect(profileEditButtonScale)
       HStack(spacing: 48) {
         VStack(spacing: 4) {
           Text("\(apiViewModel.userWhistleCount)")

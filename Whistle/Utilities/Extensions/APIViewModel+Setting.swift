@@ -152,7 +152,7 @@ extension APIViewModel: SettingProtocol {
     ]
 
     AF.request(
-      "\(domainURL)/auth/device-token",
+      "\(domainURL)/system/device-token",
       method: .post,
       parameters: params,
       headers: contentTypeXwwwForm)
