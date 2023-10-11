@@ -14,12 +14,12 @@ struct TabbarView: View {
   @State var isFirstProfileLoaded = true
   @State var mainOpacity = 1.0
   @State var isRootStacked = false
+  @State private var pickerOptions = PickerOptionsInfo()
   @AppStorage("isAccess") var isAccess = false
   @EnvironmentObject var apiViewModel: APIViewModel
   @EnvironmentObject var userAuth: UserAuth
   @EnvironmentObject var universalRoutingModel: UniversalRoutingModel
   @StateObject var tabbarModel: TabbarModel = .init()
-  @State private var pickerOptions = PickerOptionsInfo()
 
   var body: some View {
     ZStack {
@@ -52,7 +52,6 @@ struct TabbarView: View {
 
       case .upload:
         // FIXME: - uploadview로 교체하기
-//        Color.pink.ignoresSafeArea()]
         NavigationView {
           ZStack {
             Color.pink.ignoresSafeArea()
@@ -62,9 +61,6 @@ struct TabbarView: View {
                   tabbarModel.tabWidth = 56
                 }
               }
-//              .onDisappear {
-//                tabbarModel.tabbarOpacity = 1.0
-//              }
           }
         }
       case .profile:

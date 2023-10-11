@@ -77,6 +77,10 @@
 		1B6C04302AC2B93400DF4045 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 1B6C042F2AC2B93400DF4045 /* SnapKit */; };
 		1B6C04322AC2B93A00DF4045 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = 1B6C04312AC2B93A00DF4045 /* Kingfisher */; };
 		1B7D801D2AC881490030CAC3 /* CustomNavigationBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B7D801C2AC881490030CAC3 /* CustomNavigationBarViewController.swift */; };
+		1BAC07F12AD559880087D8CD /* Tags.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BAC07F02AD559880087D8CD /* Tags.swift */; };
+		1BAC07F32AD559A70087D8CD /* TagsContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BAC07F22AD559A70087D8CD /* TagsContent.swift */; };
+		1BAC07F52AD559CE0087D8CD /* TagsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BAC07F42AD559CE0087D8CD /* TagsViewModel.swift */; };
+		1BAC07F72AD559E60087D8CD /* TagsDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BAC07F62AD559E60087D8CD /* TagsDataModel.swift */; };
 		1BB7A06A2A9514B4002DD86F /* .swiftlint.yml in Resources */ = {isa = PBXBuildFile; fileRef = 1BB7A0692A9514B4002DD86F /* .swiftlint.yml */; };
 		1BD4E56B2ABA275200ADB783 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 1BD4E56A2ABA275200ADB783 /* SnapKit */; };
 		1BD4E5B62ABA2F5600ADB783 /* VideoPicker.h in Headers */ = {isa = PBXBuildFile; fileRef = 1BD4E5B52ABA2F5600ADB783 /* VideoPicker.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -310,7 +314,6 @@
 		1BE8EA032AAE321200EB0A55 /* MusicProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BE8EA022AAE321200EB0A55 /* MusicProtocol.swift */; };
 		1BE8EA052AAE4D8B00EB0A55 /* Music.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BE8EA042AAE4D8B00EB0A55 /* Music.swift */; };
 		1BE8EA082AAE595000EB0A55 /* MusicListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BE8EA072AAE595000EB0A55 /* MusicListView.swift */; };
-		1BE8EA102AB0F7B100EB0A55 /* SearchBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BE8EA0F2AB0F7B100EB0A55 /* SearchBar.swift */; };
 		1BE8EA122AB0F7E800EB0A55 /* CircularProgressBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BE8EA112AB0F7E800EB0A55 /* CircularProgressBar.swift */; };
 		7801398A2AA127AE00D5FBDB /* SignInView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 780139892AA127AE00D5FBDB /* SignInView.swift */; };
 		7819532E2ABA261A0053B975 /* MyContentListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7819532D2ABA261A0053B975 /* MyContentListView.swift */; };
@@ -510,6 +513,10 @@
 		1B39555C2A95098100BCB4DF /* VideoModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoModel.swift; sourceTree = "<group>"; };
 		1B39555E2A9509A700BCB4DF /* SubmitButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubmitButton.swift; sourceTree = "<group>"; };
 		1B7D801C2AC881490030CAC3 /* CustomNavigationBarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomNavigationBarViewController.swift; sourceTree = "<group>"; };
+		1BAC07F02AD559880087D8CD /* Tags.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tags.swift; sourceTree = "<group>"; };
+		1BAC07F22AD559A70087D8CD /* TagsContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagsContent.swift; sourceTree = "<group>"; };
+		1BAC07F42AD559CE0087D8CD /* TagsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagsViewModel.swift; sourceTree = "<group>"; };
+		1BAC07F62AD559E60087D8CD /* TagsDataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagsDataModel.swift; sourceTree = "<group>"; };
 		1BB7A0692A9514B4002DD86F /* .swiftlint.yml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = .swiftlint.yml; sourceTree = "<group>"; };
 		1BD4E5B32ABA2F5600ADB783 /* VideoPicker.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = VideoPicker.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		1BD4E5B52ABA2F5600ADB783 /* VideoPicker.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VideoPicker.h; sourceTree = "<group>"; };
@@ -743,7 +750,6 @@
 		1BE8EA022AAE321200EB0A55 /* MusicProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MusicProtocol.swift; sourceTree = "<group>"; };
 		1BE8EA042AAE4D8B00EB0A55 /* Music.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Music.swift; sourceTree = "<group>"; };
 		1BE8EA072AAE595000EB0A55 /* MusicListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MusicListView.swift; sourceTree = "<group>"; };
-		1BE8EA0F2AB0F7B100EB0A55 /* SearchBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchBar.swift; sourceTree = "<group>"; };
 		1BE8EA112AB0F7E800EB0A55 /* CircularProgressBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircularProgressBar.swift; sourceTree = "<group>"; };
 		780139892AA127AE00D5FBDB /* SignInView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInView.swift; sourceTree = "<group>"; };
 		7819532D2ABA261A0053B975 /* MyContentListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyContentListView.swift; sourceTree = "<group>"; };
@@ -876,6 +882,10 @@
 			isa = PBXGroup;
 			children = (
 				1B2CFECA2AD412D000F34AA3 /* UploadView.swift */,
+				1BAC07F02AD559880087D8CD /* Tags.swift */,
+				1BAC07F22AD559A70087D8CD /* TagsContent.swift */,
+				1BAC07F42AD559CE0087D8CD /* TagsViewModel.swift */,
+				1BAC07F62AD559E60087D8CD /* TagsDataModel.swift */,
 			);
 			path = Upload;
 			sourceTree = "<group>";
@@ -1225,7 +1235,6 @@
 			isa = PBXGroup;
 			children = (
 				1B3895592AB9CBBA00B4C8DD /* VideoEditor */,
-				1BE8EA0F2AB0F7B100EB0A55 /* SearchBar.swift */,
 				1B39555E2A9509A700BCB4DF /* SubmitButton.swift */,
 				78D148E82A9E13A800DDCE48 /* CustomBlurView.swift */,
 				78F980882A9F5B2500AD542A /* RoundedCorners.swift */,
@@ -2368,6 +2377,7 @@
 				7874CB942AA0B5430081DE54 /* ProfileReportView.swift in Sources */,
 				1B38958A2AB9CC4300B4C8DD /* PersistenceController.swift in Sources */,
 				78D85E4F2AB2B52C00B3AD6E /* SignoutAlert.swift in Sources */,
+				1BAC07F12AD559880087D8CD /* Tags.swift in Sources */,
 				7861E68E2ACD266B00612E2F /* ViewCount.swift in Sources */,
 				1B3895652AB9CBD300B4C8DD /* EditableVideo.swift in Sources */,
 				1B3895872AB9CC4300B4C8DD /* ProjectEntity+Ext.swift in Sources */,
@@ -2388,6 +2398,7 @@
 				1B3895222AB9CB6000B4C8DD /* CustomSlider.swift in Sources */,
 				78E175642ABBEF4500731259 /* SignInPlayerView.swift in Sources */,
 				1B39555B2A95095500BCB4DF /* ColorManager.swift in Sources */,
+				1BAC07F52AD559CE0087D8CD /* TagsViewModel.swift in Sources */,
 				1B38954E2AB9CB7500B4C8DD /* ToolsSectionView.swift in Sources */,
 				1B38958B2AB9CC4300B4C8DD /* VideoPlayerManager.swift in Sources */,
 				786CFEAF2AAC4DCF00DB2ADD /* UserProfileView.swift in Sources */,
@@ -2420,6 +2431,7 @@
 				1B0A29AA2AA64ADC009077A1 /* MusicService.swift in Sources */,
 				78370B8B2AB87C7D00090522 /* Enums.swift in Sources */,
 				1B39555F2A9509A700BCB4DF /* SubmitButton.swift in Sources */,
+				1BAC07F32AD559A70087D8CD /* TagsContent.swift in Sources */,
 				1BD4E7D02ABA68FA00ADB783 /* EnableCell.swift in Sources */,
 				78D85E542AB2DF1000B3AD6E /* ReportPostView.swift in Sources */,
 				78BECCE12AAAE539003FA7B5 /* APIViewModel+PostFeed.swift in Sources */,
@@ -2468,12 +2480,12 @@
 				1B2CFECB2AD412D000F34AA3 /* UploadView.swift in Sources */,
 				1B3895262AB9CB6000B4C8DD /* RangeSliderView.swift in Sources */,
 				1B3895572AB9CB8C00B4C8DD /* RootViewModel.swift in Sources */,
+				1BAC07F72AD559E60087D8CD /* TagsDataModel.swift in Sources */,
 				1B3895252AB9CB6000B4C8DD /* SliderView.swift in Sources */,
 				78D148E02A9E0D1B00DDCE48 /* AppleSDGothic.swift in Sources */,
 				1B08DCC32AA1872200CA1DE1 /* MusicTrimView.swift in Sources */,
 				1B38957A2AB9CC2C00B4C8DD /* Helpers.swift in Sources */,
 				787173B62AA47A510018CB14 /* ProfileAlert.swift in Sources */,
-				1BE8EA102AB0F7B100EB0A55 /* SearchBar.swift in Sources */,
 				787AF5792AA8930700C190E6 /* NotiSetting.swift in Sources */,
 				787AF56D2AA8846100C190E6 /* Follow.swift in Sources */,
 				78730CF12ACE8F23008B9981 /* PhotoLibrary.swift in Sources */,
@@ -2854,14 +2866,15 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Whistle/Info.plist;
 				INFOPLIST_KEY_LSApplicationCategoryType = "";
-				INFOPLIST_KEY_NSCameraUsageDescription = "";
+				INFOPLIST_KEY_NSCameraUsageDescription = "업로드 기능 사용 시 사용자가 원하는 컨텐츠를 업로드하기 위한 카메라 권한 요청";
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "업로드 기능 사용 시 사용자가 원하는 컨텐츠를 업로드하기 위한 마이크 권한 요청";
 				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "";
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UIStatusBarStyle = UIStatusBarStyleLightContent;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -2898,14 +2911,15 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Whistle/Info.plist;
 				INFOPLIST_KEY_LSApplicationCategoryType = "";
-				INFOPLIST_KEY_NSCameraUsageDescription = "";
+				INFOPLIST_KEY_NSCameraUsageDescription = "업로드 기능 사용 시 사용자가 원하는 컨텐츠를 업로드하기 위한 카메라 권한 요청";
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "업로드 기능 사용 시 사용자가 원하는 컨텐츠를 업로드하기 위한 마이크 권한 요청";
 				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "";
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UIStatusBarStyle = UIStatusBarStyleLightContent;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",

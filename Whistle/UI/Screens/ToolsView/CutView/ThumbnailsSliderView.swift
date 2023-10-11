@@ -14,6 +14,7 @@ struct ThumbnailsSliderView: View {
   @State var rangeDuration: ClosedRange<Double> = 0 ... 1
   @Binding var currentTime: Double
   @Binding var video: EditableVideo?
+  @Binding var isInitial: Bool
   @ObservedObject var editorVM: EditorViewModel
   @ObservedObject var videoPlayer: VideoPlayerManager
 
@@ -50,7 +51,9 @@ struct ThumbnailsSliderView: View {
               self.video?.rangeDuration = newValue
             }
             .onAppear {
-              setVideoRange()
+              if isInitial {
+                setVideoRange()
+              }
             }
         }
       }

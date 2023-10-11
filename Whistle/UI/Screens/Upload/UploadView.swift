@@ -5,70 +5,153 @@
 //  Created by 박상원 on 10/9/23.
 //
 
+import BottomSheet
 import Combine
 import SwiftUI
 
-struct UploadView: View {
-  private enum Field: Int, CaseIterable {
-    case content, hashtag
-  }
+// MARK: - UploadView
 
+struct UploadView: View {
   @Environment(\.dismiss) private var dismiss
+  @StateObject var tagsViewModel = TagsViewModel()
   @StateObject var apiViewModel = APIViewModel()
   @ObservedObject var editorVM: EditorViewModel
   @ObservedObject var videoPlayer: VideoPlayerManager
-  @FocusState private var focusedField: Field?
+  @ObservedObject var musicVM: MusicViewModel
+  @FocusState private var isFocused: Bool
   @State var content = ""
+  @State var sheetPosition: BottomSheetPosition = .hidden
+  @Binding var isInitial: Bool
   let videoScale: CGFloat = 16 / 9
   let videoWidth: CGFloat = 203
   let textLimit = 40
 
   var body: some View {
-    ZStack {
-      Color.white.ignoresSafeArea()
+    ZStack(alignment: .top) {
+      Color.white
+        .ignoresSafeArea()
         .onTapGesture {
-          focusedField = nil
+          isFocused = false
         }
-      VStack {
-        CustomNavigationBarViewController(title: "새 게시물") {
-          dismiss()
-        } nextButtonAction: { }
-          .frame(height: UIScreen.getHeight(44))
-        EditablePlayerView(player: videoPlayer.videoPlayer)
-          .frame(width: UIScreen.getWidth(videoWidth), height: UIScreen.getHeight(videoWidth * videoScale))
-          .cornerRadius(12)
-          .hCenter()
-          .vCenter()
-        TextField(text: $content, axis: .vertical) {
-          Text("내용을 입력해 주세요. (40자 내)")
-        }
-        .onReceive(Just(content)) { _ in
-          limitText(textLimit)
-        }
-        .frame(height: UIScreen.getHeight(160), alignment: .topLeading)
-        .contentShape(Rectangle())
-        .onTapGesture {
-          focusedField = .content
-        }
-        .padding(UIScreen.getWidth(16))
-        .focused($focusedField, equals: .content)
-        .background(
-          RoundedRectangle(cornerRadius: 8)
-            .strokeBorder(Color.Border_Default))
-        .padding(.horizontal, UIScreen.getWidth(16))
-//        Button {
-//          apiViewModel.uploadPost(video: String, thumbnail: String, caption: String, musicID: Int, videoLength: Double, hashtags: [String]) {
-//
-//          }
-//        } label: {
-//          Text("완료")
-//            .padding(.vertical, 10)
-//            .padding(.horizontal, 100)
-//            .background(Color.Blue_Default)
-//        }
+      CustomNavigationBarViewController(title: "새 게시물", nextText: "게시", backgroundColor: .white) {
+        isInitial = false
+        dismiss()
+      } nextButtonAction: {
+//        apiViewModel.uploadPost(
+//          video: <#T##String#>,
+//          thumbnail: <#T##String#>,
+//          caption: content,
+//          musicID: musicVM.musicInfo?.id,
+//          videoLength: editorVM.currentVideo?.totalDuration,
+//          hashtags: tagsViewModel.getTags())
       }
+      .frame(height: UIScreen.getHeight(44))
+      .overlay(alignment: .bottom) {
+        Rectangle()
+          .frame(height: 1)
+          .foregroundStyle(Color.Border_Default_Dark)
+      }
+      .background(Rectangle().fill(.white).ignoresSafeArea())
+      .ignoresSafeArea(.keyboard)
+      .zIndex(1000)
+      ScrollView {
+        VStack(spacing: 16) {
+          EditablePlayerView(player: videoPlayer.videoPlayer)
+            .frame(width: UIScreen.getWidth(videoWidth), height: UIScreen.getHeight(videoWidth * videoScale))
+            .cornerRadius(12)
+          TextField(
+            "",
+            text: $content,
+            prompt: Text("내용을 입력해 주세요. (40자 내)")
+              .foregroundColor(Color.Disable_Placeholder_Light)
+              .font(.custom("AppleSDGothicNeo-Regular", size: 16)),
+            axis: .vertical)
+            .foregroundStyle(Color.black)
+            .onReceive(Just(content)) { _ in
+              limitText(textLimit)
+            }
+            .frame(height: UIScreen.getHeight(160), alignment: .topLeading)
+            .contentShape(Rectangle())
+            .onTapGesture {
+              isFocused = true
+            }
+            .padding(UIScreen.getWidth(16))
+            .focused($isFocused)
+            .background(
+              RoundedRectangle(cornerRadius: 8)
+                .strokeBorder(Color.Border_Default_Dark))
+            .overlay(alignment: .bottomTrailing) {
+              Text("\(content.count)자 / 40자")
+                .padding()
+                .foregroundStyle(Color.Disable_Placeholder_Light)
+                .fontSystem(fontDesignSystem: .body2_KO)
+            }
+            .padding(.horizontal, UIScreen.getWidth(16))
+
+          ZStack(alignment: .topLeading) {
+            TagsContent(viewModel: tagsViewModel, sheetPosition: $sheetPosition) {
+              EmptyView()
+            }
+          }
+          .padding(.bottom, CGFloat(tagsViewModel.getEditableCount()) * 0.5 * 100)
+        }
+        .padding(.top, UIScreen.getHeight(54))
+      }
+      .onTapGesture {
+        isFocused = false
+      }
+      .scrollIndicators(.never)
+      .offset(y: isFocused ? UIScreen.getHeight(-300) : 0)
+      .animation(.easeInOut)
+      .ignoresSafeArea(edges: .bottom)
     }
+    .bottomSheet(bottomSheetPosition: $sheetPosition, switchablePositions: [.hidden, .dynamicTop], headerContent: {
+      ZStack(alignment: .center) {
+        HStack {
+          Text("취소")
+            .fontSystem(fontDesignSystem: .subtitle2_KO)
+            .foregroundStyle(Color.black)
+            .contentShape(Rectangle())
+            .onTapGesture {
+              sheetPosition = .hidden
+            }
+          Spacer()
+          Text("완료")
+            .fontSystem(fontDesignSystem: .subtitle2_KO)
+            .foregroundStyle(Color.Info)
+            .contentShape(Rectangle())
+            .onTapGesture {
+              sheetPosition = .hidden
+            }
+        }
+        Text("해시태그")
+          .fontSystem(fontDesignSystem: .subtitle1_KO)
+          .foregroundStyle(Color.black)
+      }
+      .padding(.top, 10)
+      .padding(.horizontal, 16)
+      .padding(.bottom, 14)
+      .overlay(alignment: .bottom) {
+        Rectangle().fill(Color.Border_Default_Dark).frame(height: 1)
+      }
+    }, mainContent: {
+      ZStack(alignment: .topLeading) {
+        TagsContent(viewModel: tagsViewModel, sheetPosition: $sheetPosition) {
+          Text("")
+        }
+      }
+    })
+    .enableTapToDismiss()
+    .enableSwipeToDismiss()
+    .enableBackgroundBlur(true)
+    .backgroundBlurMaterial(.systemDark)
+    .customBackground(
+      Rectangle()
+        .cornerRadius(24, corners: [.topLeft, .topRight])
+        .foregroundStyle(Color.white))
     .toolbar(.hidden)
+    .ignoresSafeArea(.keyboard)
+    .scrollDismissesKeyboard(.interactively)
   }
 
   func limitText(_ upper: Int) {
@@ -79,5 +162,9 @@ struct UploadView: View {
 }
 
 #Preview {
-  UploadView(editorVM: EditorViewModel(), videoPlayer: VideoPlayerManager())
+  UploadView(
+    editorVM: EditorViewModel(),
+    videoPlayer: VideoPlayerManager(),
+    musicVM: MusicViewModel(),
+    isInitial: .constant(false))
 }

@@ -18,6 +18,7 @@ struct MainEditorView: View {
   @Environment(\.dismiss) private var dismiss
   var project: ProjectEntity?
   var selectedVideoURL: URL?
+  @State var isInitial = true
   @State var isFullScreen = false
   @State var showVideoQualitySheet = false
   @State var isShowingMusicTrimView = false
@@ -36,16 +37,20 @@ struct MainEditorView: View {
           CustomNavigationBarViewController(title: "새 게시물") {
             dismiss()
           } nextButtonAction: {
+            if let video = editorVM.currentVideo {
+              if videoPlayer.isPlaying {
+                videoPlayer.action(video)
+              }
+            }
             goUpload = true
           }
           .frame(height: UIScreen.getHeight(44))
-          NavigationLink(destination: UploadView(editorVM: editorVM, videoPlayer: videoPlayer), isActive: $goUpload) {
+          NavigationLink(
+            destination: UploadView(editorVM: editorVM, videoPlayer: videoPlayer, musicVM: musicVM, isInitial: $isInitial),
+            isActive: $goUpload)
+          {
             EmptyView()
           }
-//          NavigationLink(destination: UploadView(editorVM: editorVM, videoPlayer: videoPlayer)) {
-//            Rectangle().fill(.red)
-//              .frame(width: 100, height: 100)
-//          }
           ZStack(alignment: .top) {
             PlayerHolderView(isFullScreen: $isFullScreen, editorVM: editorVM, videoPlayer: videoPlayer, musicVM: musicVM)
             musicInfo()
@@ -55,6 +60,7 @@ struct MainEditorView: View {
           ThumbnailsSliderView(
             currentTime: $videoPlayer.currentTime,
             video: $editorVM.currentVideo,
+            isInitial: $isInitial,
             editorVM: editorVM,
             videoPlayer: videoPlayer)
           {
@@ -67,7 +73,9 @@ struct MainEditorView: View {
           ToolsSectionView(videoPlayer: videoPlayer, editorVM: editorVM)
         }
         .onAppear {
-          setVideo(proxy)
+          if isInitial {
+            setVideo(proxy)
+          }
         }
       }
 

@@ -41,8 +41,7 @@ extension APIViewModel: UploadProtocol {
     caption: String,
     musicID: Int,
     videoLength: Double,
-    hashtags: [String],
-    completion: @escaping () -> Void)
+    hashtags: [String])
   {
     let params: [String: Any] = [
       "video" : "\(video)",
@@ -66,7 +65,6 @@ extension APIViewModel: UploadProtocol {
             return
           }
           log("Success: \(data)")
-          completion()
         case .failure(let error):
           log("\(error)")
         }
