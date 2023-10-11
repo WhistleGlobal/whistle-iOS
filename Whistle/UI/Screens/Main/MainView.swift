@@ -435,7 +435,7 @@ extension MainView {
                   .foregroundColor(.Gray10)
                   .background {
                     Capsule()
-                      .stroke(Color.Border_Default, lineWidth: 1)
+                      .stroke(Color.Gray10, lineWidth: 1)
                       .frame(width: isFollowed.wrappedValue ? 78 : 60, height: 26)
                   }
                   .frame(width: isFollowed.wrappedValue ? 78 : 60, height: 26)
