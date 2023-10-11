@@ -45,6 +45,19 @@ struct TabbarView: View {
             mainOpacity = newValue == .main ? 1 : 0
           }
       }
+      if tabbarModel.tabSelectionNoAnimation == .upload {
+        NavigationView {
+          AccessView()
+            .environmentObject(apiViewModel)
+            .environmentObject(tabbarModel)
+        }
+        .onAppear {
+          tabbarModel.tabbarOpacity = 0.0
+        }
+        .onDisappear {
+          tabbarModel.tabbarOpacity = 1.0
+        }
+      }
 
       switch tabbarModel.tabSelectionNoAnimation {
       case .main:
@@ -53,18 +66,7 @@ struct TabbarView: View {
       case .upload:
         // FIXME: - uploadview로 교체하기
 //        Color.pink.ignoresSafeArea()]
-        NavigationStack {
-          ZStack {
-            Color.pink.ignoresSafeArea()
-            PickerConfigViewControllerWrapper()
-          }
-        }
-        .onAppear {
-          tabbarModel.tabbarOpacity = 0.0
-        }
-        .onDisappear {
-          tabbarModel.tabbarOpacity = 1.0
-        }
+        Color.clear
       case .profile:
         if isAccess {
           NavigationStack {
