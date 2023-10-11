@@ -24,9 +24,9 @@ struct VideoContentView: View {
 
   @State var showSetting = false
   @State var showGallery = false
-    @State private var buttonState: CameraButtonState = .idle
+  @State private var buttonState: CameraButtonState = .idle
   @State var captureMode: AssetType = .video
-
+  @State private var animatedProgress = 0.0
   @ObservedObject private var viewModel = VideoContentViewModel()
 
   @State var bottomSheetPosition: BottomSheetPosition = .hidden
@@ -62,7 +62,7 @@ struct VideoContentView: View {
         HStack(spacing: 24) {
           Button {
             withAnimation {
-                tabbarModel.tabSelectionNoAnimation = .main
+              tabbarModel.tabSelectionNoAnimation = .main
               tabbarModel.tabSelection = .main
             }
           } label: {
@@ -149,32 +149,10 @@ struct VideoContentView: View {
 
           Spacer()
           // Shutter + button
-          ZStack {
-            Circle()
-              .stroke(lineWidth: 4)
-              .foregroundColor(.White)
-              .frame(width: 84, height: 84, alignment: .center)
-            Circle()
-              .fill(LinearGradient(
-                gradient: Gradient(colors: [Color.Primary_Default, Color.Secondary_Default]),
-                startPoint: .trailing,
-                endPoint: .leading))
-              .frame(width: 72, height: 72, alignment: .center)
-          }
-          .onTapGesture {
-            switch captureMode {
-            case .video:
-              if isRecording {
-                viewModel.aespaSession.stopRecording()
-                isRecording = false
-              } else {
-                viewModel.aespaSession.startRecording()
-                isRecording = true
-              }
-            case .photo:
-              log("viewModel.aespaSession.capturePhoto()")
-            }
-          }
+          recordingButton(
+            state: buttonState,
+            timerText: timeStringFromTimeInterval(recordingDuration),
+            progress: min(recordingDuration / maxRecordingDuration, 1.0))
           Spacer()
           // Position change + button
           Button(action: {
@@ -201,6 +179,7 @@ struct VideoContentView: View {
           }
           .contentShape(Rectangle())
         }
+        .frame(height: 114)
         .padding(.horizontal, 42)
         .padding(.bottom, 64)
       }
@@ -634,7 +613,10 @@ extension VideoContentView {
     recordingTimer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { _ in
       recordingDuration += 1
       if recordingDuration >= maxRecordingDuration {
-        stopRecordingTimer() // 녹화 타이머 중지
+        buttonState = .completed
+        viewModel.aespaSession.stopRecording()
+        stopRecordingTimer()
+        isRecording = false
       }
     }
   }
@@ -652,8 +634,91 @@ extension VideoContentView {
   }
 }
 
+// MARK: - CameraButtonState
+
 enum CameraButtonState {
   case idle
   case recording
   case completed
+}
+
+extension VideoContentView {
+  @ViewBuilder
+  func recordingButton(state: CameraButtonState, timerText: String, progress: Double) -> some View {
+    ZStack {
+      switch state {
+      case .idle:
+        ZStack {
+          Circle()
+            .stroke(lineWidth: 4)
+            .foregroundColor(.White)
+            .frame(width: 84, height: 84, alignment: .center)
+          Circle()
+            .fill(LinearGradient(
+              gradient: Gradient(colors: [Color.Primary_Default, Color.Secondary_Default]),
+              startPoint: .trailing,
+              endPoint: .leading))
+            .frame(width: 72, height: 72, alignment: .center)
+        }
+        .onTapGesture {
+          buttonState = .recording
+          viewModel.aespaSession.startRecording()
+          startRecordingTimer()
+          isRecording = true
+        }
+      case .recording:
+        VStack {
+          Text(timerText) // 시간을 표시할 텍스트
+            .font(.custom("SFProText-Semibold", size: 16))
+            .foregroundColor(.Gray10)
+          ZStack {
+            Circle()
+              .foregroundColor(.Dim_Thick)
+              .frame(width: 114, height: 114, alignment: .center)
+            Circle()
+              .trim(from: 0.0, to: CGFloat(min(progress, 1.0)))
+              .stroke(lineWidth: 5)
+              .foregroundColor(.Primary_Default)
+              .frame(width: 109, height: 109, alignment: .center)
+              .rotationEffect(Angle(degrees: -90))
+              .animation(.linear(duration: 0.1))
+            Rectangle()
+              .foregroundColor(.White)
+              .cornerRadius(8)
+              .frame(width: 36, height: 36, alignment: .center)
+          }
+        }
+        .onAppear {
+          withAnimation(.linear(duration: 0.5)) {
+            animatedProgress = progress
+          }
+        }
+        .onChange(of: progress) { newValue in
+          withAnimation(.linear(duration: 0.5)) {
+            animatedProgress = newValue
+          }
+        }
+        .onTapGesture {
+          buttonState = .completed
+          viewModel.aespaSession.stopRecording()
+          stopRecordingTimer()
+          isRecording = false
+        }
+      case .completed:
+
+        Circle()
+          .stroke(lineWidth: 4)
+          .foregroundColor(.White)
+          .frame(width: 84, height: 84, alignment: .center)
+          .overlay {
+            Circle()
+              .foregroundColor(.Primary_Default)
+              .frame(width: 72, height: 72, alignment: .center)
+            Image(systemName: "checkmark")
+              .font(.custom("SFCompactText-Regular", size: 44))
+              .foregroundColor(.White)
+          }
+      }
+    }
+  }
 }
