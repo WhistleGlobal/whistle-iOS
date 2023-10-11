@@ -33,7 +33,6 @@ struct ProfileEditIDView: View {
   @EnvironmentObject var apiViewModel: APIViewModel
   @EnvironmentObject var tabbarModel: TabbarModel
 
-
   var body: some View {
     VStack(spacing: 0) {
       Divider().frame(width: UIScreen.width)
@@ -41,7 +40,6 @@ struct ProfileEditIDView: View {
         .frame(height: 56)
         .frame(maxWidth: .infinity)
         .modifier(ClearButton(text: $apiViewModel.myProfile.userName))
-        .background(.white)
         .onReceive(Just(apiViewModel.myProfile.userName).delay(for: 0.5, scheduler: RunLoop.current)) { _ in
           Task {
             if originalUsername != apiViewModel.myProfile.userName {

@@ -25,7 +25,6 @@ struct ProfileEditIntroduceView: View {
         .fontSystem(fontDesignSystem: .body1_KO)
         .frame(height: 100, alignment: .top)
         .multilineTextAlignment(.leading)
-        .background(.white)
         .onReceive(Just(introduce)) { _ in limitText(40) }
         .overlay(alignment: .bottom) {
           Text("\(introduce.count)/40자")
