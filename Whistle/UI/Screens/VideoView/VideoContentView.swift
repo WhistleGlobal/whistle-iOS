@@ -187,8 +187,6 @@ struct VideoContentView: View {
         .padding(.bottom, 64)
       }
       .opacity(showPreparingView ? 0 : 1)
-      .allowsHitTesting(!showPreparingView)
-
       if showPreparingView {
         Circle()
           .trim(from: 0, to: min(count / CGFloat(timerSec.0), 1.0))

@@ -73,7 +73,6 @@ class VideoContentViewModel: ObservableObject {
   }
 }
 
-
 // MARK: VideoContentViewModel.WideColorCameraTuner
 
 extension VideoContentViewModel {
@@ -84,4 +83,3 @@ extension VideoContentViewModel {
     }
   }
 }
-

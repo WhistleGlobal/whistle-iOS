@@ -5,6 +5,7 @@
 //  Created by ChoiYujin on 8/30/23.
 //
 
+import Photos
 import SwiftUI
 import VideoPicker
 
@@ -14,6 +15,12 @@ struct TabbarView: View {
   @State var isFirstProfileLoaded = true
   @State var mainOpacity = 1.0
   @State var isRootStacked = false
+  // upload
+  @State private var isCameraAuthorized = false
+  @State private var isAlbumAuthorized = false
+  @State private var isMicrophoneAuthorized = false
+  @State private var isNavigationActive = false
+
   @AppStorage("isAccess") var isAccess = false
   @EnvironmentObject var apiViewModel: APIViewModel
   @EnvironmentObject var userAuth: UserAuth
@@ -52,9 +59,17 @@ struct TabbarView: View {
 
       case .upload:
         NavigationView {
-          AccessView()
-            .environmentObject(apiViewModel)
-            .environmentObject(tabbarModel)
+          if isNavigationActive {
+            VideoContentView()
+              .environmentObject(apiViewModel)
+              .environmentObject(tabbarModel)
+          } else {
+            AccessView(
+              isCameraAuthorized: $isCameraAuthorized,
+              isAlbumAuthorized: $isAlbumAuthorized,
+              isMicrophoneAuthorized: $isMicrophoneAuthorized,
+              isNavigationActive: $isNavigationActive)
+          }
         }
         .onAppear {
           tabbarModel.tabbarOpacity = 0.0
@@ -135,6 +150,10 @@ struct TabbarView: View {
       .opacity(tabbarModel.tabbarOpacity)
     }
     .navigationBarBackButtonHidden()
+    .onAppear {
+      requestPermissions()
+      checkAllPermissions()
+    }
   }
 }
 
@@ -263,4 +282,46 @@ class TabbarModel: ObservableObject {
   @Published var tabSelectionNoAnimation: TabSelection = .main
   @Published var tabbarOpacity = 1.0
   @Published var tabWidth = UIScreen.width - 32
+}
+
+extension TabbarView {
+  private func requestPermissions() {
+    // Request camera, album, and microphone permissions
+    requestCameraPermission()
+    requestAlbumPermission()
+    requestMicrophonePermission()
+  }
+
+  private func requestAlbumPermission() {
+    PHPhotoLibrary.requestAuthorization { status in
+      DispatchQueue.main.async {
+        isAlbumAuthorized = status == .authorized
+        checkAllPermissions()
+      }
+    }
+  }
+
+  private func requestCameraPermission() {
+    AVCaptureDevice.requestAccess(for: .video) { granted in
+      DispatchQueue.main.async {
+        isCameraAuthorized = granted
+        checkAllPermissions()
+      }
+    }
+  }
+
+  private func requestMicrophonePermission() {
+    AVCaptureDevice.requestAccess(for: .audio) { granted in
+      DispatchQueue.main.async {
+        isMicrophoneAuthorized = granted
+        checkAllPermissions()
+      }
+    }
+  }
+
+  private func checkAllPermissions() {
+    if isAlbumAuthorized, isCameraAuthorized, isMicrophoneAuthorized {
+      isNavigationActive = true
+    }
+  }
 }
