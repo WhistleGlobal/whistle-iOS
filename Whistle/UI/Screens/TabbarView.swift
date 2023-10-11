@@ -45,7 +45,12 @@ struct TabbarView: View {
             mainOpacity = newValue == .main ? 1 : 0
           }
       }
-      if tabbarModel.tabSelectionNoAnimation == .upload {
+
+      switch tabbarModel.tabSelectionNoAnimation {
+      case .main:
+        Color.clear
+
+      case .upload:
         NavigationView {
           AccessView()
             .environmentObject(apiViewModel)
@@ -57,16 +62,6 @@ struct TabbarView: View {
         .onDisappear {
           tabbarModel.tabbarOpacity = 1.0
         }
-      }
-
-      switch tabbarModel.tabSelectionNoAnimation {
-      case .main:
-        Color.clear
-
-      case .upload:
-        // FIXME: - uploadview로 교체하기
-//        Color.pink.ignoresSafeArea()]
-        Color.clear
       case .profile:
         if isAccess {
           NavigationStack {
