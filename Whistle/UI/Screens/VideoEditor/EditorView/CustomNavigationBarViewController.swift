@@ -11,14 +11,21 @@ import UIKit
 
 struct CustomNavigationBarViewController: UIViewControllerRepresentable {
   var title: String
+  var nextText = "다음"
+  var backgroundColor = Color.Background_Default_Dark
   var backButtonAction: () -> Void
+  var nextButtonAction: () -> Void
 
   func makeUIViewController(context: Context) -> UINavigationController {
     let navigationController = UINavigationController()
     let appearance = UINavigationBarAppearance()
-    appearance.titleTextAttributes = [.foregroundColor: UIColor.white]
-    appearance.backgroundColor = UIColor(Color.Background_Default_Dark)
-
+    appearance.titleTextAttributes = [
+      .foregroundColor: backgroundColor == .Background_Default_Dark
+        ? UIColor.white
+        : UIColor.black,
+    ]
+    appearance.backgroundColor = UIColor(backgroundColor)
+    navigationController.hidesBarsWhenKeyboardAppears = false
     navigationController.navigationBar.standardAppearance = appearance
     navigationController.navigationBar.scrollEdgeAppearance = appearance
 
@@ -29,12 +36,15 @@ struct CustomNavigationBarViewController: UIViewControllerRepresentable {
       style: .plain,
       target: context.coordinator,
       action: #selector(Coordinator.backButtonTapped))
-    viewController.navigationItem.leftBarButtonItem?.tintColor = UIColor(Color.white)
+    viewController.navigationItem.leftBarButtonItem?.tintColor = UIColor(
+      backgroundColor == .Background_Default_Dark
+        ? Color.white
+        : Color.black)
     viewController.navigationItem.rightBarButtonItem = UIBarButtonItem(
-      title: "다음",
+      title: nextText,
       style: .plain,
-      target: nil,
-      action: nil)
+      target: context.coordinator,
+      action: #selector(Coordinator.nextButtonTapped))
     viewController.navigationItem.rightBarButtonItem?.tintColor = UIColor(Color.Info)
     viewController.navigationItem.rightBarButtonItem?.style = .done
     navigationController.pushViewController(viewController, animated: false)
@@ -58,6 +68,11 @@ struct CustomNavigationBarViewController: UIViewControllerRepresentable {
     @objc
     func backButtonTapped() {
       parent.backButtonAction()
+    }
+
+    @objc
+    func nextButtonTapped() {
+      parent.nextButtonAction()
     }
   }
 }

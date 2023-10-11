@@ -28,6 +28,7 @@ struct MusicListView: View {
   @ObservedObject var editorVM: EditorViewModel
   @ObservedObject var videoPlayer: VideoPlayerManager
   @Binding var bottomSheetPosition: BottomSheetPosition
+  @Binding var isShowingMusicTrimView: Bool
   @State var searchQueryString = ""
   @State var isSearching = false
   @State var musicList: [Music] = []
@@ -36,7 +37,6 @@ struct MusicListView: View {
   @State var downloadRequests: [Music: DownloadRequest] = [:]
   @State var fileDirectories: [Music: URL] = [:]
   @State var audioPlayer: AVAudioPlayer?
-  @Binding var isShowingMusicTrimView: Bool
   @State var currentMusic: Music? = nil {
     didSet(oldValue) {
       if let oldValue {
