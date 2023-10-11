@@ -69,6 +69,7 @@ struct TabbarView: View {
               isAlbumAuthorized: $isAlbumAuthorized,
               isMicrophoneAuthorized: $isMicrophoneAuthorized,
               isNavigationActive: $isNavigationActive)
+          }
         }
       case .profile:
         if isAccess {

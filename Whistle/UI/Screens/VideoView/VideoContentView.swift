@@ -201,7 +201,9 @@ struct VideoContentView: View {
     }
     .navigationBarBackButtonHidden()
     .sheet(isPresented: $showGallery) {
-      PickerConfigViewControllerWrapper()
+      NavigationView {
+        PickerConfigViewControllerWrapper()
+      }
     }
     .bottomSheet(
       bottomSheetPosition: $bottomSheetPosition,
