@@ -135,6 +135,7 @@ extension ProfileEditView {
     NavigationLink(destination: destination) {
       HStack(spacing: 0) {
         Text(title)
+          .multilineTextAlignment(.leading)
           .fontSystem(fontDesignSystem: .subtitle1_KO)
           .foregroundColor(.LabelColor_Primary)
           .frame(width: 96, height: 56, alignment: .leading)
