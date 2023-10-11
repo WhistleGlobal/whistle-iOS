@@ -187,63 +187,12 @@ struct MainView: View {
         if universalRoutingModel.isUniversalContent {
           log("universalRoutingModel.isUniversalContent \(universalRoutingModel.isUniversalContent)")
           apiViewModel.requestUniversalContent(contentId: universalRoutingModel.contentId) {
-            Task {
-              if !apiViewModel.contentList.isEmpty {
-                players.removeAll()
-                for _ in 0..<apiViewModel.contentList.count {
-                  players.append(nil)
-                }
-                log(players)
-                players[currentIndex] =
-                  AVPlayer(url: URL(string: apiViewModel.contentList[currentIndex].videoUrl ?? "")!)
-                playerIndex = currentIndex
-                guard let player = players[currentIndex] else {
-                  return
-                }
-                currentVideoUserId = apiViewModel.contentList[currentIndex].userId ?? 0
-                currentVideoContentId = apiViewModel.contentList[currentIndex].contentId ?? 0
-                isCurrentVideoWhistled = apiViewModel.contentList[currentIndex].isWhistled
-                log("play")
-                await player.seek(to: .zero)
-                player.play()
-                withAnimation {
-                  isSplashOn = false
-                }
-                if universalRoutingModel.isUniversalProfile {
-                  isRootStacked = true
-                }
-              }
-            }
+            setupPlayers()
             universalRoutingModel.isUniversalContent = false
           }
         } else {
           apiViewModel.requestContentList {
-            Task {
-              if !apiViewModel.contentList.isEmpty {
-                players.removeAll()
-                for _ in 0..<apiViewModel.contentList.count {
-                  players.append(nil)
-                }
-                log(players)
-                players[currentIndex] =
-                  AVPlayer(url: URL(string: apiViewModel.contentList[currentIndex].videoUrl ?? "")!)
-                playerIndex = currentIndex
-                guard let player = players[currentIndex] else {
-                  return
-                }
-                currentVideoUserId = apiViewModel.contentList[currentIndex].userId ?? 0
-                currentVideoContentId = apiViewModel.contentList[currentIndex].contentId ?? 0
-                isCurrentVideoWhistled = apiViewModel.contentList[currentIndex].isWhistled
-                await player.seek(to: .zero)
-                player.play()
-                withAnimation {
-                  isSplashOn = false
-                }
-                if universalRoutingModel.isUniversalProfile {
-                  isRootStacked = true
-                }
-              }
-            }
+            setupPlayers()
           }
         }
       }
@@ -291,69 +240,20 @@ struct MainView: View {
       if newValue, !apiViewModel.contentList.isEmpty {
         tabbarModel.tabSelectionNoAnimation = .main
         tabbarModel.tabSelection = .main
-        var currentIndex = 0
-        var playerIndex = 0
+        currentIndex = 0
+        playerIndex = 0
         currentVideoUserId = 0
         currentVideoContentId = 0
         players.removeAll()
         apiViewModel.contentList.removeAll()
         if universalRoutingModel.isUniversalContent {
           apiViewModel.requestUniversalContent(contentId: universalRoutingModel.contentId) {
-            Task {
-              if !apiViewModel.contentList.isEmpty {
-                for _ in 0..<apiViewModel.contentList.count {
-                  players.append(nil)
-                }
-                log(players)
-                players[currentIndex] =
-                  AVPlayer(url: URL(string: apiViewModel.contentList[currentIndex].videoUrl ?? "")!)
-                playerIndex = currentIndex
-                guard let player = players[currentIndex] else {
-                  return
-                }
-                currentVideoUserId = apiViewModel.contentList[currentIndex].userId ?? 0
-                currentVideoContentId = apiViewModel.contentList[currentIndex].contentId ?? 0
-                isCurrentVideoWhistled = apiViewModel.contentList[currentIndex].isWhistled
-                await player.seek(to: .zero)
-                player.play()
-                withAnimation {
-                  isSplashOn = false
-                }
-                if universalRoutingModel.isUniversalProfile {
-                  isRootStacked = true
-                }
-              }
-            }
+            setupPlayers()
             universalRoutingModel.isUniversalContent = false
           }
         } else {
           apiViewModel.requestContentList {
-            Task {
-              if !apiViewModel.contentList.isEmpty {
-                players.removeAll()
-                for _ in 0..<apiViewModel.contentList.count {
-                  players.append(nil)
-                }
-                log(players)
-                players[currentIndex] =
-                  AVPlayer(url: URL(string: apiViewModel.contentList[currentIndex].videoUrl ?? "")!)
-                playerIndex = currentIndex
-                guard let player = players[currentIndex] else {
-                  return
-                }
-                currentVideoUserId = apiViewModel.contentList[currentIndex].userId ?? 0
-                currentVideoContentId = apiViewModel.contentList[currentIndex].contentId ?? 0
-                isCurrentVideoWhistled = apiViewModel.contentList[currentIndex].isWhistled
-                await player.seek(to: .zero)
-                player.play()
-                withAnimation {
-                  isSplashOn = false
-                }
-                if universalRoutingModel.isUniversalProfile {
-                  isRootStacked = true
-                }
-              }
-            }
+            setupPlayers()
             universalRoutingModel.isUniversalContent = false
           }
         }
@@ -645,5 +545,36 @@ extension Date {
     dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
     dateFormatter.timeZone = TimeZone(identifier: "UTC")
     return dateFormatter.string(from: self)
+  }
+}
+
+extension MainView {
+  func setupPlayers() {
+    Task {
+      if !apiViewModel.contentList.isEmpty {
+        players.removeAll()
+        for _ in 0..<apiViewModel.contentList.count {
+          players.append(nil)
+        }
+        log(players)
+        players[currentIndex] =
+          AVPlayer(url: URL(string: apiViewModel.contentList[currentIndex].videoUrl ?? "")!)
+        playerIndex = currentIndex
+        guard let player = players[currentIndex] else {
+          return
+        }
+        currentVideoUserId = apiViewModel.contentList[currentIndex].userId ?? 0
+        currentVideoContentId = apiViewModel.contentList[currentIndex].contentId ?? 0
+        isCurrentVideoWhistled = apiViewModel.contentList[currentIndex].isWhistled
+        await player.seek(to: .zero)
+        player.play()
+        withAnimation {
+          isSplashOn = false
+        }
+        if universalRoutingModel.isUniversalProfile {
+          isRootStacked = true
+        }
+      }
+    }
   }
 }
