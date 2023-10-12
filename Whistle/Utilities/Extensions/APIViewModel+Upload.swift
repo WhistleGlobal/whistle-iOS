@@ -7,6 +7,7 @@
 
 import Alamofire
 import Foundation
+import SwiftyJSON
 import UIKit
 
 extension APIViewModel: UploadProtocol {
@@ -15,16 +16,19 @@ extension APIViewModel: UploadProtocol {
       return
     }
     return await withCheckedContinuation { continuation in
-      AF.upload(multipartFormData: { multipartFormData in
-        multipartFormData.append(image, withName: "image", fileName: "image.jpg", mimeType: "image/jpeg")
-      }, to: "\(domainURL)/user/profile/image", headers: contentTypeMultipart)
-        .validate(statusCode: 200..<300)
+      AF.upload(
+        multipartFormData: { multipartFormData in
+          multipartFormData.append(image, withName: "image", fileName: "image.jpg", mimeType: "image/jpeg")
+        },
+        to: "\(domainURL)/user/profile/image",
+        headers: contentTypeMultipart)
+        .validate(statusCode: 200 ..< 300)
         .response { response in
           switch response.result {
           case .success(let data):
-            if let imageUrl = String(data: data!, encoding: .utf8) {
-              log("URL: \(imageUrl)")
-              completion(imageUrl)
+            if let imageURL = String(data: data!, encoding: .utf8) {
+              log("URL: \(imageURL)")
+              completion(imageURL)
               continuation.resume()
             }
           case .failure(let error):
@@ -36,38 +40,68 @@ extension APIViewModel: UploadProtocol {
   }
 
   func uploadPost(
-    video: String,
-    thumbnail: String,
+    video: Data,
+    thumbnail: Data,
     caption: String,
     musicID: Int,
     videoLength: Double,
     hashtags: [String])
   {
     let params: [String: Any] = [
-      "video" : "\(video)",
-      "thumbnail" : "\(thumbnail)",
-      "caption" : "\(caption)",
-      "music_id" : "\(musicID)",
-      "video_length" : "\(videoLength)",
-      "content_hashtags" : "\(hashtags)",
+      "caption": caption,
+      "music_id": musicID,
+      "video_length": videoLength,
+      //      "content_hashtags": "\(hashtags)",
     ]
+    do {
+//      let array = hashtags
+//
+//      func json(from object:Any) -> Data {
+//        guard let data = try? JSONSerialization.data(withJSONObject: object, options: []) else {
+//          return Data()
+//        }
+//        return data
+//      }
+      let jsonEncoder = JSONEncoder()
+      let jsonData = try jsonEncoder.encode(hashtags)
+      let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
+      let fileURL = documentsDirectory.appendingPathComponent("hashtags.json")
 
-    AF.request(
-      "\(domainURL)/content/upload",
-      method: .post,
-      parameters: params,
-      headers: contentTypeMultipart)
-      .validate(statusCode: 200...500)
-      .response { response in
-        switch response.result {
-        case .success(let data):
-          guard let data else {
-            return
+      // JSON 데이터를 파일로 저장
+      try jsonData.write(to: fileURL)
+      AF.upload(
+        multipartFormData: { multipartFormData in
+          multipartFormData.append(video, withName: "video", fileName: "video.mp4", mimeType: "video/mp4")
+          multipartFormData.append(thumbnail, withName: "thumbnail", fileName: "thumbnail.png", mimeType: "image/png")
+          for (key, value) in params {
+            if let data = "\(value)".data(using: .utf8) {
+              multipartFormData.append(data, withName: key)
+            }
           }
-          log("Success: \(data)")
-        case .failure(let error):
-          log("\(error)")
+          multipartFormData.append(jsonData, withName: "content_hashtags", mimeType: "application/json")
+//          multipartFormData.append(json(from: array), withName: "tagJSON")
+//          print(multipartFormData)
+        },
+        to: "\(domainURL)/content/upload",
+        headers: contentTypeMultipart)
+        .uploadProgress { progress in
+          print("Upload Progress: \(progress.fractionCompleted)")
         }
-      }
+        //    .validate(statusCode: 200 ..< 501)
+        .validate(statusCode: 200 ..< 300)
+        .response { response in
+          switch response.result {
+          case .success(let data):
+            guard let data else {
+              return
+            }
+            log("Success: \(data)")
+          case .failure(let error):
+            log("\(error)")
+          }
+        }
+    } catch {
+      print("JSON ERROR")
+    }
   }
 }

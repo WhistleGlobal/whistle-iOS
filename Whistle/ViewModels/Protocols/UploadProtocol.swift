@@ -11,8 +11,8 @@ import UIKit
 protocol UploadProtocol {
   func uploadPhoto(image: UIImage, completion: @escaping (String) -> Void) async
   func uploadPost(
-    video: String,
-    thumbnail: String,
+    video: Data,
+    thumbnail: Data,
     caption: String,
     musicID: Int,
     videoLength: Double,

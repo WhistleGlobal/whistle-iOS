@@ -14,6 +14,7 @@ struct TabbarView: View {
   @State var isFirstProfileLoaded = true
   @State var mainOpacity = 1.0
   @State var isRootStacked = false
+  @State var isPresented = false
   @State private var pickerOptions = PickerOptionsInfo()
   @AppStorage("isAccess") var isAccess = false
   @EnvironmentObject var apiViewModel: APIViewModel
@@ -56,14 +57,21 @@ struct TabbarView: View {
           ZStack {
             Color.pink.ignoresSafeArea()
               .onTapGesture {
-                print("Tapped!!")
+                isPresented = true
+//                print("Tapped!!")
               }
-            PickerConfigViewControllerWrapper()
-              .onAppear {
-                withAnimation {
-                  tabbarModel.tabWidth = 56
+            if isPresented {
+              PickerConfigViewControllerWrapper()
+                .onAppear {
+                  withAnimation {
+                    tabbarModel.tabWidth = 56
+                  }
                 }
-              }
+                .onDisappear {
+                  isPresented = false
+                  print("disappeared")
+                }
+            }
           }
         }
       case .profile:

@@ -59,11 +59,22 @@ struct UploadView: View {
       } nextButtonAction: {
         Task {
           await exporterVM.action(.save, start: (editorVM.currentVideo?.rangeDuration.lowerBound)!)
-          let video = exporterVM.base64String
+//          let video = exporterVM.base64String
+          let video = exporterVM.videoData
           let thumbnail = editorVM
             .returnThumbnail(Int(
               (editorVM.currentVideo?.rangeDuration.lowerBound)! / (editorVM.currentVideo?.originalDuration)! *
                 21))
+//          do {
+//            let tagJSON = try JSONSerialization.data(withJSONObject: tagsViewModel.getTags(), options: .prettyPrinted)
+//            if let jsonString = String(data: tagJSON, encoding: .utf8) {
+//              print("JSON 데이터: \(jsonString)")
+//            } else {
+//              print("JSON 데이터를 문자열로 변환할 수 없습니다.")
+//            }
+          ////            print("json", tagJSON)
+//          } catch { }
+//          let hashtags = tagsViewModel.getTags().joined(separator: ",")
           apiViewModel.uploadPost(
             video: video,
             thumbnail: thumbnail,
