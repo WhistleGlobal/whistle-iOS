@@ -9,8 +9,8 @@ import Foundation
 
 class VersionCheck: ObservableObject {
 
-  @Published var needUpdate = true
+  @Published var needUpdate = false
   @Published var reason = ""
-  @Published var forceUpdate = true
+  @Published var forceUpdate = false
   @Published var latestAppVersion = ""
 }
