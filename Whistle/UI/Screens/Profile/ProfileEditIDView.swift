@@ -33,15 +33,14 @@ struct ProfileEditIDView: View {
   @EnvironmentObject var apiViewModel: APIViewModel
   @EnvironmentObject var tabbarModel: TabbarModel
 
-
   var body: some View {
     VStack(spacing: 0) {
       Divider().frame(width: UIScreen.width)
       TextField("사용자 ID를 입력해주세요.", text: $apiViewModel.myProfile.userName)
         .frame(height: 56)
         .frame(maxWidth: .infinity)
+        .tint(.Info)
         .modifier(ClearButton(text: $apiViewModel.myProfile.userName))
-        .background(.white)
         .onReceive(Just(apiViewModel.myProfile.userName).delay(for: 0.5, scheduler: RunLoop.current)) { _ in
           Task {
             if originalUsername != apiViewModel.myProfile.userName {

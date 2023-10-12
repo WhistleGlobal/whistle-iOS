@@ -315,6 +315,7 @@
 		1BE8EA052AAE4D8B00EB0A55 /* Music.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BE8EA042AAE4D8B00EB0A55 /* Music.swift */; };
 		1BE8EA082AAE595000EB0A55 /* MusicListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BE8EA072AAE595000EB0A55 /* MusicListView.swift */; };
 		1BE8EA122AB0F7E800EB0A55 /* CircularProgressBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BE8EA112AB0F7E800EB0A55 /* CircularProgressBar.swift */; };
+		780039082AD7E0020033B9F1 /* VersionCheck.swift in Sources */ = {isa = PBXBuildFile; fileRef = 780039072AD7E0020033B9F1 /* VersionCheck.swift */; };
 		7801398A2AA127AE00D5FBDB /* SignInView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 780139892AA127AE00D5FBDB /* SignInView.swift */; };
 		7819532E2ABA261A0053B975 /* MyContentListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7819532D2ABA261A0053B975 /* MyContentListView.swift */; };
 		782DD4732AA30BDD006183D3 /* FollowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 782DD4722AA30BDD006183D3 /* FollowView.swift */; };
@@ -370,6 +371,16 @@
 		788010872ABC7EF800116FD5 /* UserFollowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 788010862ABC7EF800116FD5 /* UserFollowView.swift */; };
 		7880108A2ABC82FC00116FD5 /* MainReportReasonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 788010892ABC82FC00116FD5 /* MainReportReasonView.swift */; };
 		7880108C2ABC837A00116FD5 /* MainReportDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7880108B2ABC837A00116FD5 /* MainReportDetailView.swift */; };
+		788E68642AD6B6710056C18B /* GalleryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 788E685C2AD6B6710056C18B /* GalleryView.swift */; };
+		788E68652AD6B6710056C18B /* VideoFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 788E685D2AD6B6710056C18B /* VideoFile.swift */; };
+		788E68662AD6B6710056C18B /* PhotoAssetModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 788E685E2AD6B6710056C18B /* PhotoAssetModel.swift */; };
+		788E68672AD6B6710056C18B /* VideoContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 788E685F2AD6B6710056C18B /* VideoContentView.swift */; };
+		788E68682AD6B6710056C18B /* VideoAsset.swift in Sources */ = {isa = PBXBuildFile; fileRef = 788E68602AD6B6710056C18B /* VideoAsset.swift */; };
+		788E68692AD6B6710056C18B /* VideoSettingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 788E68612AD6B6710056C18B /* VideoSettingView.swift */; };
+		788E686A2AD6B6710056C18B /* VideoConentViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 788E68622AD6B6710056C18B /* VideoConentViewModel.swift */; };
+		788E686B2AD6B6710056C18B /* PhotoFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 788E68632AD6B6710056C18B /* PhotoFile.swift */; };
+		788E686E2AD6B6A60056C18B /* Aespa in Frameworks */ = {isa = PBXBuildFile; productRef = 788E686D2AD6B6A60056C18B /* Aespa */; };
+		788E68702AD6C9DB0056C18B /* AccessView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 788E686F2AD6C9DB0056C18B /* AccessView.swift */; };
 		788F43F02AA5CD9F00718D38 /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 788F43EF2AA5CD9F00718D38 /* MainView.swift */; };
 		788F43F72AA6136F00718D38 /* Player.swift in Sources */ = {isa = PBXBuildFile; fileRef = 788F43F62AA6136F00718D38 /* Player.swift */; };
 		789BCB432ABBF2E1002164C4 /* UserContentListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 789BCB422ABBF2E1002164C4 /* UserContentListView.swift */; };
@@ -753,6 +764,7 @@
 		1BE8EA042AAE4D8B00EB0A55 /* Music.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Music.swift; sourceTree = "<group>"; };
 		1BE8EA072AAE595000EB0A55 /* MusicListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MusicListView.swift; sourceTree = "<group>"; };
 		1BE8EA112AB0F7E800EB0A55 /* CircularProgressBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircularProgressBar.swift; sourceTree = "<group>"; };
+		780039072AD7E0020033B9F1 /* VersionCheck.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VersionCheck.swift; sourceTree = "<group>"; };
 		780139892AA127AE00D5FBDB /* SignInView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInView.swift; sourceTree = "<group>"; };
 		7819532D2ABA261A0053B975 /* MyContentListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyContentListView.swift; sourceTree = "<group>"; };
 		782DD4722AA30BDD006183D3 /* FollowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FollowView.swift; sourceTree = "<group>"; };
@@ -805,6 +817,15 @@
 		788010862ABC7EF800116FD5 /* UserFollowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserFollowView.swift; sourceTree = "<group>"; };
 		788010892ABC82FC00116FD5 /* MainReportReasonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainReportReasonView.swift; sourceTree = "<group>"; };
 		7880108B2ABC837A00116FD5 /* MainReportDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainReportDetailView.swift; sourceTree = "<group>"; };
+		788E685C2AD6B6710056C18B /* GalleryView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GalleryView.swift; sourceTree = "<group>"; };
+		788E685D2AD6B6710056C18B /* VideoFile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoFile.swift; sourceTree = "<group>"; };
+		788E685E2AD6B6710056C18B /* PhotoAssetModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhotoAssetModel.swift; sourceTree = "<group>"; };
+		788E685F2AD6B6710056C18B /* VideoContentView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoContentView.swift; sourceTree = "<group>"; };
+		788E68602AD6B6710056C18B /* VideoAsset.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Video\U0010Asset.swift"; sourceTree = "<group>"; };
+		788E68612AD6B6710056C18B /* VideoSettingView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoSettingView.swift; sourceTree = "<group>"; };
+		788E68622AD6B6710056C18B /* VideoConentViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoConentViewModel.swift; sourceTree = "<group>"; };
+		788E68632AD6B6710056C18B /* PhotoFile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhotoFile.swift; sourceTree = "<group>"; };
+		788E686F2AD6C9DB0056C18B /* AccessView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccessView.swift; sourceTree = "<group>"; };
 		788F43EF2AA5CD9F00718D38 /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
 		788F43F62AA6136F00718D38 /* Player.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Player.swift; sourceTree = "<group>"; };
 		789BCB422ABBF2E1002164C4 /* UserContentListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserContentListView.swift; sourceTree = "<group>"; };
@@ -859,6 +880,7 @@
 				78A58E062AD1C287007F6A69 /* ReverseMask in Frameworks */,
 				1BD4E5B92ABA2F5600ADB783 /* VideoPicker.framework in Frameworks */,
 				78F780052AB34876005623CD /* GoogleSignIn in Frameworks */,
+				788E686E2AD6B6A60056C18B /* Aespa in Frameworks */,
 				1BD4E56B2ABA275200ADB783 /* SnapKit in Frameworks */,
 				78E1755E2ABA838200731259 /* MarkdownUI in Frameworks */,
 				78E738CA2AA9A90F00480046 /* Kingfisher in Frameworks */,
@@ -1139,6 +1161,7 @@
 		1B39554D2A9506B300BCB4DF /* Screens */ = {
 			isa = PBXGroup;
 			children = (
+				788E685B2AD6B6590056C18B /* VideoView */,
 				1B2CFEC92AD412A400F34AA3 /* Upload */,
 				785258552ACC6C440024E466 /* NoSignIn */,
 				1BD4E7C42ABA689E00ADB783 /* VideoPicker */,
@@ -1156,6 +1179,7 @@
 		1B39554E2A9506BD00BCB4DF /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				780039072AD7E0020033B9F1 /* VersionCheck.swift */,
 				1B3895662AB9CBD700B4C8DD /* VideoEditor */,
 				1BE8EA062AAE554400EB0A55 /* Music */,
 				787AF55E2AA85CA800C190E6 /* Profile */,
@@ -2056,6 +2080,22 @@
 			path = MainReport;
 			sourceTree = "<group>";
 		};
+		788E685B2AD6B6590056C18B /* VideoView */ = {
+			isa = PBXGroup;
+			children = (
+				788E685C2AD6B6710056C18B /* GalleryView.swift */,
+				788E685E2AD6B6710056C18B /* PhotoAssetModel.swift */,
+				788E68632AD6B6710056C18B /* PhotoFile.swift */,
+				788E68602AD6B6710056C18B /* VideoAsset.swift */,
+				788E68622AD6B6710056C18B /* VideoConentViewModel.swift */,
+				788E685F2AD6B6710056C18B /* VideoContentView.swift */,
+				788E685D2AD6B6710056C18B /* VideoFile.swift */,
+				788E68612AD6B6710056C18B /* VideoSettingView.swift */,
+				788E686F2AD6C9DB0056C18B /* AccessView.swift */,
+			);
+			path = VideoView;
+			sourceTree = "<group>";
+		};
 		788F43EE2AA5CD9300718D38 /* Main */ = {
 			isa = PBXGroup;
 			children = (
@@ -2182,6 +2222,7 @@
 				1BD4E56A2ABA275200ADB783 /* SnapKit */,
 				78E1755D2ABA838200731259 /* MarkdownUI */,
 				78A58E052AD1C287007F6A69 /* ReverseMask */,
+				788E686D2AD6B6A60056C18B /* Aespa */,
 			);
 			productName = Whistle;
 			productReference = 1B39553C2A95069C00BCB4DF /* Whistle.app */;
@@ -2247,6 +2288,7 @@
 				1BD4E5692ABA275200ADB783 /* XCRemoteSwiftPackageReference "SnapKit" */,
 				78E1755C2ABA838200731259 /* XCRemoteSwiftPackageReference "swift-markdown-ui" */,
 				78A58E042AD1C287007F6A69 /* XCRemoteSwiftPackageReference "ReverseMask" */,
+				788E686C2AD6B6A60056C18B /* XCRemoteSwiftPackageReference "Aespa" */,
 			);
 			productRefGroup = 1B39553D2A95069C00BCB4DF /* Products */;
 			projectDirPath = "";
@@ -2353,16 +2395,20 @@
 				782DD47C2AA32448006183D3 /* Extension+UINavigationController.swift in Sources */,
 				1B0A29AE2AA662CB009077A1 /* HapticsManager.swift in Sources */,
 				78730CEB2ACE8691008B9981 /* PhotoAssetCollection.swift in Sources */,
+				788E68642AD6B6710056C18B /* GalleryView.swift in Sources */,
 				1B3895452AB9CB7500B4C8DD /* MainEditorView.swift in Sources */,
 				787173B42AA472070018CB14 /* ToastMessage.swift in Sources */,
 				1B3895622AB9CBD300B4C8DD /* ToolModel.swift in Sources */,
 				1B3895472AB9CB7500B4C8DD /* FiltersView.swift in Sources */,
+				788E68662AD6B6710056C18B /* PhotoAssetModel.swift in Sources */,
+				780039082AD7E0020033B9F1 /* VersionCheck.swift in Sources */,
 				786A7D522ACD6E1B001CC4F2 /* NoSignInMainView.swift in Sources */,
 				1B3895272AB9CB6000B4C8DD /* ToolButtonView.swift in Sources */,
 				786A7D542ACD7278001CC4F2 /* NoSignInMainContent.swift in Sources */,
 				787173B42AA472070018CB14 /* ToastMessage.swift in Sources */,
 				7866694B2AA1287500448EC7 /* UserResponse.swift in Sources */,
 				782DD4732AA30BDD006183D3 /* FollowView.swift in Sources */,
+				788E68682AD6B6710056C18B /* VideoAsset.swift in Sources */,
 				1B38954D2AB9CB7500B4C8DD /* AudioSheetView.swift in Sources */,
 				78D148DD2A9E0CBA00DDCE48 /* Extension+View.swift in Sources */,
 				1B38958D2AB9CCCF00B4C8DD /* Color.swift in Sources */,
@@ -2383,6 +2429,7 @@
 				1B3895232AB9CB6000B4C8DD /* NewTimelineSlider.swift in Sources */,
 				7874CB942AA0B5430081DE54 /* ProfileReportView.swift in Sources */,
 				1B38958A2AB9CC4300B4C8DD /* PersistenceController.swift in Sources */,
+				788E686B2AD6B6710056C18B /* PhotoFile.swift in Sources */,
 				78D85E4F2AB2B52C00B3AD6E /* SignoutAlert.swift in Sources */,
 				1BAC07F12AD559880087D8CD /* Tags.swift in Sources */,
 				7861E68E2ACD266B00612E2F /* ViewCount.swift in Sources */,
@@ -2398,6 +2445,7 @@
 				78D85E522AB2D9F800B3AD6E /* ReportReasonView.swift in Sources */,
 				1BE8EA082AAE595000EB0A55 /* MusicListView.swift in Sources */,
 				788010872ABC7EF800116FD5 /* UserFollowView.swift in Sources */,
+				788E68702AD6C9DB0056C18B /* AccessView.swift in Sources */,
 				7880108A2ABC82FC00116FD5 /* MainReportReasonView.swift in Sources */,
 				1B39555D2A95098100BCB4DF /* VideoModel.swift in Sources */,
 				1B3895202AB9CB6000B4C8DD /* SheetView.swift in Sources */,
@@ -2421,6 +2469,7 @@
 				78D148E72A9E137100DDCE48 /* Extension+UIVisualEffectView.swift in Sources */,
 				786385742AA45ED4004F8EF4 /* ProfileEditIntroduceView.swift in Sources */,
 				78F41A5D2AA70626004A7BFC /* PhotoModel.swift in Sources */,
+				788E686A2AD6B6710056C18B /* VideoConentViewModel.swift in Sources */,
 				78F980872A9F5AAC00AD542A /* GlassBottomSheet.swift in Sources */,
 				1B3895552AB9CB8C00B4C8DD /* FiltersViewModel.swift in Sources */,
 				7801398A2AA127AE00D5FBDB /* SignInView.swift in Sources */,
@@ -2445,6 +2494,7 @@
 				78BECCE12AAAE539003FA7B5 /* APIViewModel+PostFeed.swift in Sources */,
 				1B3895742AB9CBFC00B4C8DD /* Extension+TimeInterval.swift in Sources */,
 				7874CB922AA0B53A0081DE54 /* ProfileInfoView.swift in Sources */,
+				788E68652AD6B6710056C18B /* VideoFile.swift in Sources */,
 				1B3895562AB9CB8C00B4C8DD /* EditorViewModel.swift in Sources */,
 				78BECCDD2AAAE204003FA7B5 /* UploadProtocol.swift in Sources */,
 				1BE8EA032AAE321200EB0A55 /* MusicProtocol.swift in Sources */,
@@ -2452,6 +2502,7 @@
 				78730CEF2ACE86EA008B9981 /* CachedImageManager.swift in Sources */,
 				788F43F72AA6136F00718D38 /* Player.swift in Sources */,
 				78DA58D72AA448A100F8D2F1 /* ProfileEditIDView.swift in Sources */,
+				788E68672AD6B6710056C18B /* VideoContentView.swift in Sources */,
 				787AF5752AA88F4000C190E6 /* BookMark.swift in Sources */,
 				1B3895882AB9CC4300B4C8DD /* CoreDataContainer.xcdatamodeld in Sources */,
 				78F980812A9F32C800AD542A /* TabbarView.swift in Sources */,
@@ -2500,6 +2551,7 @@
 				787C8B182AB33FC000723085 /* ReportAlert.swift in Sources */,
 				1BD4E7C62ABA68D500ADB783 /* PickerConfigViewController.swift in Sources */,
 				782DD4772AA30C5C006183D3 /* FollowTabbarStyle.swift in Sources */,
+				788E68692AD6B6710056C18B /* VideoSettingView.swift in Sources */,
 				1B3895492AB9CB7500B4C8DD /* ThumbnailsSliderView.swift in Sources */,
 				1BE8EA012AAE315200EB0A55 /* APIViewModel+Music.swift in Sources */,
 			);
@@ -2874,6 +2926,7 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Whistle/Info.plist;
 				INFOPLIST_KEY_LSApplicationCategoryType = "";
+				INFOPLIST_KEY_NSAppleMusicUsageDescription = "";
 				INFOPLIST_KEY_NSCameraUsageDescription = "업로드 기능 사용 시 사용자가 원하는 컨텐츠를 업로드하기 위한 카메라 권한 요청";
 				INFOPLIST_KEY_NSMicrophoneUsageDescription = "업로드 기능 사용 시 사용자가 원하는 컨텐츠를 업로드하기 위한 마이크 권한 요청";
 				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "";
@@ -2888,7 +2941,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.newcompany.Whistle;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -2919,6 +2972,7 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Whistle/Info.plist;
 				INFOPLIST_KEY_LSApplicationCategoryType = "";
+				INFOPLIST_KEY_NSAppleMusicUsageDescription = "";
 				INFOPLIST_KEY_NSCameraUsageDescription = "업로드 기능 사용 시 사용자가 원하는 컨텐츠를 업로드하기 위한 카메라 권한 요청";
 				INFOPLIST_KEY_NSMicrophoneUsageDescription = "업로드 기능 사용 시 사용자가 원하는 컨텐츠를 업로드하기 위한 마이크 권한 요청";
 				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "";
@@ -2933,7 +2987,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.newcompany.Whistle;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -3090,6 +3144,14 @@
 				minimumVersion = 5.0.1;
 			};
 		};
+		788E686C2AD6B6A60056C18B /* XCRemoteSwiftPackageReference "Aespa" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/enebin/Aespa.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.3.1;
+			};
+		};
 		78A58E042AD1C287007F6A69 /* XCRemoteSwiftPackageReference "ReverseMask" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/stateman92/ReverseMask.git";
@@ -3159,6 +3221,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 787AF5632AA85D2C00C190E6 /* XCRemoteSwiftPackageReference "SwiftyJSON" */;
 			productName = SwiftyJSON;
+		};
+		788E686D2AD6B6A60056C18B /* Aespa */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 788E686C2AD6B6A60056C18B /* XCRemoteSwiftPackageReference "Aespa" */;
+			productName = Aespa;
 		};
 		78A58E052AD1C287007F6A69 /* ReverseMask */ = {
 			isa = XCSwiftPackageProductDependency;
