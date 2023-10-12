@@ -12,9 +12,11 @@ import SwiftUI
 // MARK: - UploadView
 
 struct UploadView: View {
+  let video: EditableVideo
   @Environment(\.dismiss) private var dismiss
   @StateObject var tagsViewModel = TagsViewModel()
   @StateObject var apiViewModel = APIViewModel()
+  @StateObject var exporterVM: ExporterViewModel
   @ObservedObject var editorVM: EditorViewModel
   @ObservedObject var videoPlayer: VideoPlayerManager
   @ObservedObject var musicVM: MusicViewModel
@@ -25,6 +27,21 @@ struct UploadView: View {
   let videoScale: CGFloat = 16 / 9
   let videoWidth: CGFloat = 203
   let textLimit = 40
+
+  init(
+    video: EditableVideo,
+    editorVM: EditorViewModel,
+    videoPlayer: VideoPlayerManager,
+    musicVM: MusicViewModel,
+    isInitial: Binding<Bool>
+  ) {
+    self.video = video
+    _exporterVM = StateObject(wrappedValue: ExporterViewModel(video: video))
+    self.editorVM = editorVM
+    self.videoPlayer = videoPlayer
+    self.musicVM = musicVM
+    _isInitial = isInitial
+  }
 
   var body: some View {
     ZStack(alignment: .top) {
@@ -37,13 +54,22 @@ struct UploadView: View {
         isInitial = false
         dismiss()
       } nextButtonAction: {
-//        apiViewModel.uploadPost(
-//          video: <#T##String#>,
-//          thumbnail: <#T##String#>,
-//          caption: content,
-//          musicID: musicVM.musicInfo?.id,
-//          videoLength: editorVM.currentVideo?.totalDuration,
-//          hashtags: tagsViewModel.getTags())
+        Task {
+          await exporterVM.action(.save, start: (editorVM.currentVideo?.rangeDuration.lowerBound)!)
+          let video = exporterVM.videoData
+          let thumbnail = editorVM
+            .returnThumbnail(Int(
+              (editorVM.currentVideo?.rangeDuration.lowerBound)! / (editorVM.currentVideo?.originalDuration)! *
+                21))
+          apiViewModel.uploadPost(
+            video: video,
+            thumbnail: thumbnail.jpegData(compressionQuality: 0.5)!,
+            caption: content,
+            musicID: musicVM.musicInfo?.musicID ?? 0,
+            videoLength: editorVM.currentVideo!.totalDuration,
+            hashtags: tagsViewModel.getTags()
+          )
+        }
       }
       .frame(height: UIScreen.getHeight(44))
       .overlay(alignment: .bottom) {
@@ -54,39 +80,48 @@ struct UploadView: View {
       .background(Rectangle().fill(.white).ignoresSafeArea())
       .ignoresSafeArea(.keyboard)
       .zIndex(1000)
+
       ScrollView {
         VStack(spacing: 16) {
-          EditablePlayerView(player: videoPlayer.videoPlayer)
+          Image(
+            uiImage: editorVM
+              .returnThumbnail(Int((
+                (editorVM.currentVideo?.rangeDuration.lowerBound)! /
+                  (editorVM.currentVideo?.originalDuration)! * 21).rounded())))
+            .resizable()
+            .scaledToFit()
             .frame(width: UIScreen.getWidth(videoWidth), height: UIScreen.getHeight(videoWidth * videoScale))
             .cornerRadius(12)
+            .background(Color.black.clipShape(RoundedRectangle(cornerRadius: 12)))
           TextField(
             "",
             text: $content,
             prompt: Text("내용을 입력해 주세요. (40자 내)")
               .foregroundColor(Color.Disable_Placeholder_Light)
               .font(.custom("AppleSDGothicNeo-Regular", size: 16)),
-            axis: .vertical)
-            .foregroundStyle(Color.black)
-            .onReceive(Just(content)) { _ in
-              limitText(textLimit)
-            }
-            .frame(height: UIScreen.getHeight(160), alignment: .topLeading)
-            .contentShape(Rectangle())
-            .onTapGesture {
-              isFocused = true
-            }
-            .padding(UIScreen.getWidth(16))
-            .focused($isFocused)
-            .background(
-              RoundedRectangle(cornerRadius: 8)
-                .strokeBorder(Color.Border_Default_Dark))
-            .overlay(alignment: .bottomTrailing) {
-              Text("\(content.count)자 / 40자")
-                .padding()
-                .foregroundStyle(Color.Disable_Placeholder_Light)
-                .fontSystem(fontDesignSystem: .body2_KO)
-            }
-            .padding(.horizontal, UIScreen.getWidth(16))
+            axis: .vertical
+          )
+          .foregroundStyle(Color.black)
+          .onReceive(Just(content)) { _ in
+            limitText(textLimit)
+          }
+          .frame(height: UIScreen.getHeight(160), alignment: .topLeading)
+          .contentShape(Rectangle())
+          .onTapGesture {
+            isFocused = true
+          }
+          .padding(UIScreen.getWidth(16))
+          .focused($isFocused)
+          .background(
+            RoundedRectangle(cornerRadius: 8)
+              .strokeBorder(Color.Border_Default_Dark))
+          .overlay(alignment: .bottomTrailing) {
+            Text("\(content.count)자 / 40자")
+              .padding()
+              .foregroundStyle(Color.Disable_Placeholder_Light)
+              .fontSystem(fontDesignSystem: .body2_KO)
+          }
+          .padding(.horizontal, UIScreen.getWidth(16))
 
           ZStack(alignment: .topLeading) {
             TagsContent(viewModel: tagsViewModel, sheetPosition: $sheetPosition) {
@@ -100,7 +135,7 @@ struct UploadView: View {
       .onTapGesture {
         isFocused = false
       }
-      .scrollIndicators(.never)
+      .scrollIndicators(.visible)
       .offset(y: isFocused ? UIScreen.getHeight(-300) : 0)
       .animation(.easeInOut)
       .ignoresSafeArea(edges: .bottom)
@@ -161,10 +196,11 @@ struct UploadView: View {
   }
 }
 
-#Preview {
-  UploadView(
-    editorVM: EditorViewModel(),
-    videoPlayer: VideoPlayerManager(),
-    musicVM: MusicViewModel(),
-    isInitial: .constant(false))
-}
+//
+// #Preview {
+//  UploadView(
+//    editorVM: EditorViewModel(),
+//    videoPlayer: VideoPlayerManager(),
+//    musicVM: MusicViewModel(),
+//    isInitial: .constant(false))
+// }

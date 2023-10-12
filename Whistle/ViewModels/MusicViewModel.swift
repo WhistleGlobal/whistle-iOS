@@ -112,6 +112,23 @@ extension MusicViewModel {
     }
   }
 
+  func justPlayAudio() {
+    if isPlaying {
+      pauseAudio()
+    } else {
+      player = AVPlayer(url: url!)
+      player?.volume = musicVolume
+//      let start = CMTime(seconds: startTime, preferredTimescale: 1000)
+//      player?.seek(to: start) // 시작 시간으로 이동
+      player?.play()
+      startTimer()
+      count_duration { _ in }
+      DispatchQueue.main.async {
+        self.isPlaying.toggle()
+      }
+    }
+  }
+
   func setVolume(value: Float) {
 //    pauseAudio()
     musicVolume = value

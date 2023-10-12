@@ -81,7 +81,6 @@ struct MusicTrimView: View {
                 width: UIScreen.getWidth(max(CGFloat(273 / musicDuration * musicVM.trimDuration), 12)),
                 height: UIScreen.getHeight(8))
               .offset(x: UIScreen.getWidth(indicatorOffset))
-//              .offset(x: Double(288 * offset) / (Double(length) * 16.9) + draggedOffset)
 //              .gesture(
 //                DragGesture()
 //                  .onChanged { value in
@@ -181,6 +180,9 @@ extension MusicTrimView {
         Task {
           stopPlaying()
           isShowingMusicTrimView = false
+          trimAudio()
+//          editorVM.setAudio(Audio(url: musicVM.url!, duration: musicVM.trimDuration))
+//          print("url", musicVM.url)
         }
         musicVM.isTrimmed = true
       } label: {
@@ -327,9 +329,8 @@ extension MusicTrimView {
     }
 
     let asset = AVURLAsset(url: audioURL)
-
-    let startTime = CMTime(seconds: startTime, preferredTimescale: 1000)
-    let endTime = CMTime(seconds: endTime, preferredTimescale: 1000)
+    let startTime = CMTime(seconds: musicVM.startTime!, preferredTimescale: 1000)
+    let endTime = CMTime(seconds: musicVM.startTime! + musicVM.trimDuration, preferredTimescale: 1000)
     let timeRange = CMTimeRange(start: startTime, end: endTime)
 
     let exportSession = AVAssetExportSession(asset: asset, presetName: AVAssetExportPresetAppleM4A)
@@ -353,6 +354,8 @@ extension MusicTrimView {
     exportSession?.exportAsynchronously(completionHandler: {
       DispatchQueue.main.async {
         trimmedAudioURL = outputPath
+        musicVM.url = trimmedAudioURL
+        editorVM.setAudio(Audio(url: trimmedAudioURL!, duration: musicVM.trimDuration))
       }
     })
   }

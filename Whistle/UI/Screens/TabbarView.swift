@@ -5,6 +5,7 @@
 //  Created by ChoiYujin on 8/30/23.
 //
 
+import Combine
 import Photos
 import SwiftUI
 import VideoPicker
@@ -27,6 +28,9 @@ struct TabbarView: View {
   @EnvironmentObject var userAuth: UserAuth
   @EnvironmentObject var universalRoutingModel: UniversalRoutingModel
   @StateObject var tabbarModel: TabbarModel = .init()
+
+  @State var isImagePickerClosed = PassthroughSubject<Bool, Never>()
+  @State var isPresented = false
 
   var body: some View {
     ZStack {
@@ -59,6 +63,18 @@ struct TabbarView: View {
 
       case .upload:
         NavigationView {
+          //ZStack {
+           // Color.pink.ignoresSafeArea()
+             // .onTapGesture {
+              //  isImagePickerClosed.send(true)
+            //  }
+        //    if isPresented {
+          //    PickerConfigViewControllerWrapper(isImagePickerClosed: $isImagePickerClosed)
+           // }
+         //   Text(isPresented ? "Image Picker is closed" : "Image Picker is not closed")
+          //    .onReceive(isImagePickerClosed) { value in
+          //      isPresented = value
+           //   }
           if isNavigationActive {
             VideoContentView()
               .environmentObject(apiViewModel)

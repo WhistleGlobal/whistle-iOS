@@ -45,11 +45,18 @@ struct MainEditorView: View {
             goUpload = true
           }
           .frame(height: UIScreen.getHeight(44))
-          NavigationLink(
-            destination: UploadView(editorVM: editorVM, videoPlayer: videoPlayer, musicVM: musicVM, isInitial: $isInitial),
-            isActive: $goUpload)
-          {
-            EmptyView()
+          if let video = editorVM.currentVideo {
+            NavigationLink(
+              destination: UploadView(
+                video: video,
+                editorVM: editorVM,
+                videoPlayer: videoPlayer,
+                musicVM: musicVM,
+                isInitial: $isInitial),
+              isActive: $goUpload)
+            {
+              EmptyView()
+            }
           }
           ZStack(alignment: .top) {
             PlayerHolderView(isFullScreen: $isFullScreen, editorVM: editorVM, videoPlayer: videoPlayer, musicVM: musicVM)
@@ -67,7 +74,6 @@ struct MainEditorView: View {
             videoPlayer.scrubState = .scrubEnded(videoPlayer.currentTime)
             editorVM.setTools()
           }
-
           helpText
 
           ToolsSectionView(videoPlayer: videoPlayer, editorVM: editorVM)
@@ -83,67 +89,6 @@ struct MainEditorView: View {
         VideoExporterBottomSheetView(isPresented: $showVideoQualitySheet, video: video)
       }
     }
-//    .navigationDestination(isPresented: $goUpload, destination: {
-//      UploadView(editorVM: editorVM, videoPlayer: videoPlayer)
-//    })
-//    .onAppear {
-//      // 비디오 파일 및 오디오 파일 경로 설정
-//      let videoURL = Bundle.main.url(forResource: "video", withExtension: "mp4")!
-//      let audioURL = Bundle.main.url(forResource: "audio", withExtension: "mp3")!
-//
-//      // 비디오 및 오디오 asset 생성
-//      let videoAsset = AVAsset(url: videoURL)
-//      let audioAsset = AVAsset(url: audioURL)
-//
-//      // 비디오 트랙 및 오디오 트랙 생성
-//      let videoTrack = videoAsset.tracks(withMediaType: .video)[0]
-//      let audioTrack = audioAsset.tracks(withMediaType: .audio)[0]
-//
-//      // 합성을 위한 뮤터블 컴포지션 생성
-//      let composition = AVMutableComposition()
-//
-//      // 비디오 트랙 및 오디오 트랙 추가
-//      let videoCompositionTrack = composition.addMutableTrack(withMediaType: .video, preferredTrackID: kCMPersistentTrackID_Invalid)
-//      let audioCompositionTrack = composition.addMutableTrack(withMediaType: .audio, preferredTrackID: kCMPersistentTrackID_Invalid)
-//
-//      do {
-//        // 비디오 트랙 및 오디오 트랙에 콘텐츠 추가
-//        try videoCompositionTrack?.insertTimeRange(CMTimeRange(start: .zero, duration: videoAsset.duration), of: videoTrack, at: .zero)
-//        try audioCompositionTrack?.insertTimeRange(CMTimeRange(start: .zero, duration: videoAsset.duration), of: audioTrack, at: .zero)
-//
-//        // 비디오와 오디오 합성 믹서 생성
-//        let videoMix = AVMutableVideoComposition()
-//        videoMix.frameDuration = CMTimeMake(value: 1, timescale: 30) // 프레임 속도 설정
-//        videoMix.renderSize = CGSize(width: videoTrack.naturalSize.width, height: videoTrack.naturalSize.height)
-//
-//        // 합성 레이어 설정
-//        let videoLayer = CALayer()
-//        let parentLayer = CALayer()
-//
-//        parentLayer.frame = CGRect(x: 0, y: 0, width: videoTrack.naturalSize.width, height: videoTrack.naturalSize.height)
-//        videoLayer.frame = parentLayer.frame
-//        parentLayer.addSublayer(videoLayer)
-//
-//        videoMix.animationTool = AVVideoCompositionCoreAnimationTool(postProcessingAsVideoLayer: videoLayer, in: parentLayer)
-//
-//        // 합성 된 비디오 컴포지션 생성
-//        let videoComposition = AVAssetExportSession(asset: composition, presetName: AVAssetExportPresetHighestQuality)
-//        videoComposition?.outputFileType = .mp4
-//        videoComposition?.outputURL = FileManager.default.temporaryDirectory.appendingPathComponent("output.mp4")
-//        videoComposition?.videoComposition = videoMix
-//
-//        // 합성 실행
-//        videoComposition?.exportAsynchronously {
-//          DispatchQueue.main.async {
-//            if let outputURL = videoComposition?.outputURL {
-//              self.videoPlayer = AVPlayer(url: outputURL)
-//            }
-//          }
-//        }
-//      } catch {
-//        print("Error: \(error.localizedDescription)")
-//      }
-//    }
     .background(Color.Background_Default_Dark)
     .navigationBarHidden(true)
     .navigationBarBackButtonHidden(true)
@@ -326,6 +271,7 @@ extension MainEditorView {
           .contentShape(Rectangle())
           .onTapGesture {
             musicVM.removeMusic()
+            editorVM.removeAudio()
           }
       }
       .foregroundStyle(Color.White)

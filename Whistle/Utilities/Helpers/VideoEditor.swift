@@ -16,9 +16,9 @@ class VideoEditor {
   @Published var currentTimePublisher: TimeInterval = 0.0
 
   /// The renderer is made up of half-sequential operations:
-  func startRender(video: EditableVideo, videoQuality: VideoQuality) async throws -> URL {
+  func startRender(video: EditableVideo, videoQuality: VideoQuality, start: Double) async throws -> URL {
     do {
-      let url = try await resizeAndLayerOperation(video: video, videoQuality: videoQuality)
+      let url = try await resizeAndLayerOperation(video: video, videoQuality: videoQuality, start: start)
       let finalURL = try await applyFiltersOperations(video, fromURL: url)
       return finalURL
     } catch {
@@ -29,7 +29,9 @@ class VideoEditor {
   /// Cut, resizing, rotate and set quality
   private func resizeAndLayerOperation(
     video: EditableVideo,
-    videoQuality: VideoQuality)
+    videoQuality _: VideoQuality,
+    start: Double
+  )
     async throws -> URL
   {
     let composition = AVMutableComposition()
@@ -43,7 +45,9 @@ class VideoEditor {
       from: asset,
       audio: video.audio,
       timeScale: Float64(video.rate),
-      videoVolume: video.volume)
+      videoVolume: video.volume,
+      start: start
+    )
 
     /// Get new timeScale video track
     guard let videoTrack = try await composition.loadTracks(withMediaType: .video).first else {
@@ -53,9 +57,11 @@ class VideoEditor {
     /// Prepair new video size
     let naturalSize = videoTrack.naturalSize
     let videoTrackPreferredTransform = try await videoTrack.load(.preferredTransform)
+
     let outputSize = getSizeFromOrientation(
-      newSize: videoQuality.size,
-      videoTrackPreferredTransform: videoTrackPreferredTransform)
+      newSize: naturalSize,
+      videoTrackPreferredTransform: videoTrackPreferredTransform
+    )
 
     /// Create layerInstructions and set new size, scale, mirror
     let layerInstruction = videoCompositionInstructionForTrackWithSizeAndTime(
@@ -64,11 +70,12 @@ class VideoEditor {
       newSize: outputSize,
       track: videoTrack,
       scale: video.videoFrames?.scale ?? 1,
-      isMirror: video.isMirror)
+      isMirror: video.isMirror
+    )
 
     /// Create mutable video composition
     let videoComposition = AVMutableVideoComposition()
-    /// Set rander video  size
+    /// Set render video  size
     videoComposition.renderSize = outputSize
     /// Set frame duration 30fps
     videoComposition.frameDuration = CMTimeMake(value: 1, timescale: 30)
@@ -94,7 +101,8 @@ class VideoEditor {
       composition: composition,
       videoComposition: videoComposition,
       outputURL: outputURL,
-      timeRange: timeRange)
+      timeRange: timeRange
+    )
 
     await session.export()
 
@@ -125,7 +133,8 @@ class VideoEditor {
     guard
       let session = AVAssetExportSession(
         asset: asset,
-        presetName: isSimulator ? AVAssetExportPresetPassthrough : AVAssetExportPresetHighestQuality)
+        presetName: isSimulator ? AVAssetExportPresetPassthrough : AVAssetExportPresetHighestQuality
+      )
     else {
       print("Cannot create export session.")
       throw ExporterError.cannotCreateExportSession
@@ -154,13 +163,15 @@ extension VideoEditor {
     composition: AVMutableComposition,
     videoComposition: AVMutableVideoComposition,
     outputURL: URL,
-    timeRange: CMTimeRange)
+    timeRange: CMTimeRange
+  )
     throws -> AVAssetExportSession
   {
     guard
       let export = AVAssetExportSession(
         asset: composition,
-        presetName: isSimulator ? AVAssetExportPresetPassthrough : AVAssetExportPresetHighestQuality)
+        presetName: isSimulator ? AVAssetExportPresetPassthrough : AVAssetExportPresetHighestQuality
+      )
     else {
       print("Cannot create export session.")
       throw ExporterError.cannotCreateExportSession
@@ -177,8 +188,8 @@ extension VideoEditor {
     _ videoFrame: VideoFrames?,
     video _: EditableVideo,
     size: CGSize,
-    videoComposition: AVMutableVideoComposition)
-  {
+    videoComposition: AVMutableVideoComposition
+  ) {
     guard let videoFrame else { return }
 
     let color = videoFrame.frameColor
@@ -200,7 +211,8 @@ extension VideoEditor {
 
     videoComposition.animationTool = AVVideoCompositionCoreAnimationTool(
       postProcessingAsVideoLayer: videoLayer,
-      in: outputLayer)
+      in: outputLayer
+    )
   }
 
   /// Set new time scale for audio and video tracks
@@ -209,7 +221,9 @@ extension VideoEditor {
     from asset: AVAsset,
     audio: Audio?,
     timeScale: Float64,
-    videoVolume: Float)
+    videoVolume: Float,
+    start: Double
+  )
     async throws
   {
     let videoTracks = try await asset.loadTracks(withMediaType: .video)
@@ -223,7 +237,8 @@ extension VideoEditor {
     if !audioTracks.isEmpty {
       let compositionAudioTrack = composition.addMutableTrack(
         withMediaType: AVMediaType.audio,
-        preferredTrackID: kCMPersistentTrackID_Invalid)
+        preferredTrackID: kCMPersistentTrackID_Invalid
+      )
       compositionAudioTrack?.preferredVolume = videoVolume
       let audioTrack = audioTracks.first!
       try compositionAudioTrack?.insertTimeRange(oldTimeRange, of: audioTrack, at: CMTime.zero)
@@ -237,7 +252,8 @@ extension VideoEditor {
     if !videoTracks.isEmpty {
       let compositionVideoTrack = composition.addMutableTrack(
         withMediaType: AVMediaType.video,
-        preferredTrackID: kCMPersistentTrackID_Invalid)
+        preferredTrackID: kCMPersistentTrackID_Invalid
+      )
 
       let videoTrack = videoTracks.first!
       try compositionVideoTrack?.insertTimeRange(oldTimeRange, of: videoTrack, at: CMTime.zero)
@@ -253,9 +269,14 @@ extension VideoEditor {
       guard let secondAudioTrack = try await asset.loadTracks(withMediaType: .audio).first else { return }
       let compositionAudioTrack = composition.addMutableTrack(
         withMediaType: AVMediaType.audio,
-        preferredTrackID: kCMPersistentTrackID_Invalid)
+        preferredTrackID: kCMPersistentTrackID_Invalid
+      )
       compositionAudioTrack?.preferredVolume = audio.volume
-      try compositionAudioTrack?.insertTimeRange(oldTimeRange, of: secondAudioTrack, at: CMTime.zero)
+      try compositionAudioTrack?.insertTimeRange(
+        oldTimeRange,
+        of: secondAudioTrack,
+        at: CMTimeMakeWithSeconds(start, preferredTimescale: 1000)
+      )
       compositionAudioTrack?.scaleTimeRange(oldTimeRange, toDuration: destinationTimeRange)
     }
   }
@@ -279,7 +300,8 @@ extension VideoEditor {
     newSize: CGSize,
     track: AVAssetTrack,
     scale _: Double,
-    isMirror: Bool)
+    isMirror: Bool
+  )
     -> AVMutableVideoCompositionLayerInstruction
   {
     let instruction = AVMutableVideoCompositionLayerInstruction(assetTrack: track)
@@ -325,13 +347,11 @@ extension VideoEditor {
 
   private func getSizeFromOrientation(newSize: CGSize, videoTrackPreferredTransform: CGAffineTransform) -> CGSize {
     let orientation = orientationFromTransform(videoTrackPreferredTransform)
-
     var outputSize = newSize
-    if !orientation.isPortrait {
+    if orientation.isPortrait {
       outputSize.width = newSize.height
       outputSize.height = newSize.width
     }
-    print("OutputSize", outputSize)
     return outputSize
   }
 
@@ -364,17 +384,17 @@ extension VideoEditor {
   /// needed for simulator fix AVVideoCompositionCoreAnimationTool crash only in simulator
   private var isSimulator: Bool {
     #if targetEnvironment(simulator)
-    true
+      true
     #else
-    false
+      false
     #endif
   }
 
   private func addImage(
     to layer: CALayer,
     watermark: UIImage,
-    videoSize: CGSize)
-  {
+    videoSize: CGSize
+  ) {
     let imageLayer = CALayer()
     let aspect: CGFloat = watermark.size.width / watermark.size.height
     let width = videoSize.width / 4
@@ -383,7 +403,8 @@ extension VideoEditor {
       x: width,
       y: 0,
       width: width,
-      height: height)
+      height: height
+    )
     imageLayer.contents = watermark.cgImage
     layer.addSublayer(imageLayer)
   }
@@ -391,8 +412,8 @@ extension VideoEditor {
   func convertSize(
     _ size: CGSize,
     fromFrame frameSize1: CGSize,
-    toFrame frameSize2: CGSize) -> (size: CGSize, ratio: Double)
-  {
+    toFrame frameSize2: CGSize
+  ) -> (size: CGSize, ratio: Double) {
     let widthRatio = frameSize2.width / frameSize1.width
     let heightRatio = frameSize2.height / frameSize1.height
     let ratio = max(widthRatio, heightRatio)
