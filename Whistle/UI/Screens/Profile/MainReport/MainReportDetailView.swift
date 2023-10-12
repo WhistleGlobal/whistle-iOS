@@ -38,6 +38,7 @@ struct MainReportDetailView: View {
         .frame(height: 160, alignment: .top)
         .frame(maxWidth: .infinity)
         .cornerRadius(8)
+        .tint(.Info)
         .overlay {
           RoundedRectangle(cornerRadius: 8)
             .stroke(lineWidth: 1)

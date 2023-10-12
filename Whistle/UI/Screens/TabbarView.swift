@@ -6,6 +6,7 @@
 //
 
 import Combine
+import Photos
 import SwiftUI
 import VideoPicker
 
@@ -15,6 +16,12 @@ struct TabbarView: View {
   @State var isFirstProfileLoaded = true
   @State var mainOpacity = 1.0
   @State var isRootStacked = false
+  // upload
+  @State private var isCameraAuthorized = false
+  @State private var isAlbumAuthorized = false
+  @State private var isMicrophoneAuthorized = false
+  @State private var isNavigationActive = false
+
   @State private var pickerOptions = PickerOptionsInfo()
   @AppStorage("isAccess") var isAccess = false
   @EnvironmentObject var apiViewModel: APIViewModel
@@ -55,21 +62,38 @@ struct TabbarView: View {
         Color.clear
 
       case .upload:
-        // FIXME: - uploadview로 교체하기
         NavigationView {
-          ZStack {
-            Color.pink.ignoresSafeArea()
-              .onTapGesture {
-                isImagePickerClosed.send(true)
-              }
-            if isPresented {
-              PickerConfigViewControllerWrapper(isImagePickerClosed: $isImagePickerClosed)
-            }
-            Text(isPresented ? "Image Picker is closed" : "Image Picker is not closed")
-              .onReceive(isImagePickerClosed) { value in
-                isPresented = value
-              }
+          //ZStack {
+           // Color.pink.ignoresSafeArea()
+             // .onTapGesture {
+              //  isImagePickerClosed.send(true)
+            //  }
+        //    if isPresented {
+          //    PickerConfigViewControllerWrapper(isImagePickerClosed: $isImagePickerClosed)
+           // }
+         //   Text(isPresented ? "Image Picker is closed" : "Image Picker is not closed")
+          //    .onReceive(isImagePickerClosed) { value in
+          //      isPresented = value
+           //   }
+          if isNavigationActive {
+            VideoContentView()
+              .environmentObject(apiViewModel)
+              .environmentObject(tabbarModel)
+          } else {
+            AccessView(
+              isCameraAuthorized: $isCameraAuthorized,
+              isAlbumAuthorized: $isAlbumAuthorized,
+              isMicrophoneAuthorized: $isMicrophoneAuthorized,
+              isNavigationActive: $isNavigationActive)
+              .environmentObject(apiViewModel)
+              .environmentObject(tabbarModel)
           }
+        }
+        .onAppear {
+          tabbarModel.tabbarOpacity = 0.0
+        }
+        .onDisappear {
+          tabbarModel.tabbarOpacity = 1.0
         }
       case .profile:
         if isAccess {
@@ -144,6 +168,10 @@ struct TabbarView: View {
       .opacity(tabbarModel.tabbarOpacity)
     }
     .navigationBarBackButtonHidden()
+    .onAppear {
+      requestPermissions()
+      checkAllPermissions()
+    }
   }
 }
 
@@ -272,4 +300,46 @@ class TabbarModel: ObservableObject {
   @Published var tabSelectionNoAnimation: TabSelection = .main
   @Published var tabbarOpacity = 1.0
   @Published var tabWidth = UIScreen.width - 32
+}
+
+extension TabbarView {
+  private func requestPermissions() {
+    // Request camera, album, and microphone permissions
+    requestCameraPermission()
+    requestAlbumPermission()
+    requestMicrophonePermission()
+  }
+
+  private func requestAlbumPermission() {
+    PHPhotoLibrary.requestAuthorization { status in
+      DispatchQueue.main.async {
+        isAlbumAuthorized = status == .authorized
+        checkAllPermissions()
+      }
+    }
+  }
+
+  private func requestCameraPermission() {
+    AVCaptureDevice.requestAccess(for: .video) { granted in
+      DispatchQueue.main.async {
+        isCameraAuthorized = granted
+        checkAllPermissions()
+      }
+    }
+  }
+
+  private func requestMicrophonePermission() {
+    AVCaptureDevice.requestAccess(for: .audio) { granted in
+      DispatchQueue.main.async {
+        isMicrophoneAuthorized = granted
+        checkAllPermissions()
+      }
+    }
+  }
+
+  private func checkAllPermissions() {
+    if isAlbumAuthorized, isCameraAuthorized, isMicrophoneAuthorized {
+      isNavigationActive = true
+    }
+  }
 }

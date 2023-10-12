@@ -66,7 +66,6 @@ struct PhotoCollectionView: View {
           .frame(height: 54)
           .frame(maxWidth: .infinity)
           .padding(.horizontal, 16)
-          .background(.white)
           Divider().frame(width: UIScreen.width)
           List(photoCollection.albums, id: \.name) { album in
             Button {
@@ -104,6 +103,7 @@ struct PhotoCollectionView: View {
           }
           .listStyle(.plain)
         }
+        .background(Color.Background_Default)
         .padding(.horizontal, 16)
       } else {
         HStack(spacing: 0) {
@@ -142,7 +142,6 @@ struct PhotoCollectionView: View {
         }
         .frame(height: 54)
         .frame(maxWidth: .infinity)
-        .background(.white)
         .padding(.horizontal, 16)
         .zIndex(1)
         ZStack {
@@ -168,7 +167,6 @@ struct PhotoCollectionView: View {
         }
         .frame(height: 54)
         .frame(maxWidth: .infinity)
-        .background(.white)
         .padding(.horizontal, 16)
         ScrollView {
           LazyVGrid(columns: columns, spacing: 0) {
@@ -186,6 +184,7 @@ struct PhotoCollectionView: View {
         .ignoresSafeArea()
       }
     }
+    .background(Color.Background_Default)
     .task {
       let authorized = await PhotoLibrary.checkAuthorization()
       guard authorized else {
