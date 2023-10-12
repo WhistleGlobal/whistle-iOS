@@ -34,7 +34,7 @@ class PostFeed: ObservableObject, Codable, Hashable {
   var thumbnailUrl: String?
   var musicArtist: String?
   var musicTitle: String?
-  var hashtags: String?
+  var hashtags: [String]?
   var contentWhistleCount: Int?
   var contentViewCount: Int?
   var isWhistled: Int?

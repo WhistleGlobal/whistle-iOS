@@ -24,7 +24,7 @@ class MainContent: Hashable, ObservableObject {
     thumbnailUrl: String? = nil,
     musicArtist: String? = nil,
     musicTitle: String? = nil,
-    hashtags: String? = nil,
+    hashtags: [String]? = nil,
     whistleCount: Int? = nil,
     isWhistled: Bool = false,
     isFollowed: Bool = false,
@@ -61,7 +61,7 @@ class MainContent: Hashable, ObservableObject {
   var thumbnailUrl: String?
   var musicArtist: String?
   var musicTitle: String?
-  var hashtags: String?
+  var hashtags: [String]?
   @Published var whistleCount: Int?
   @Published var isWhistled: Bool
   var isFollowed = false
