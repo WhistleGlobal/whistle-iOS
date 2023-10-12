@@ -13,11 +13,7 @@ import SwiftUI
 
 struct AccessView: View {
   @State var showAlert = false
-  @Binding var isCameraAuthorized: Bool
-  @Binding var isAlbumAuthorized: Bool
-  @Binding var isMicrophoneAuthorized: Bool
-  @Binding var isNavigationActive: Bool
-  @EnvironmentObject var apiViewModel: APIViewModel
+  @State var opacity = 0.1
   @EnvironmentObject var tabbarModel: TabbarModel
 
   var body: some View {
@@ -46,7 +42,6 @@ struct AccessView: View {
         VStack(spacing: 16) {
           Button(action: {
             showAlert = true
-            checkAllPermissions()
           }) {
             glassMorphicView(width: UIScreen.width - 32, height: 56, cornerRadius: 12)
               .overlay {
@@ -67,7 +62,6 @@ struct AccessView: View {
 
           Button(action: {
             showAlert = true
-            checkAllPermissions()
           }) {
             glassMorphicView(width: UIScreen.width - 32, height: 56, cornerRadius: 12)
               .overlay {
@@ -88,7 +82,6 @@ struct AccessView: View {
 
           Button(action: {
             showAlert = true
-            checkAllPermissions()
           }) {
             glassMorphicView(width: UIScreen.width - 32, height: 56, cornerRadius: 12)
               .overlay {
@@ -143,47 +136,12 @@ struct AccessView: View {
           }
         }))
     }
+    .opacity(opacity)
+    .onAppear {
+      withAnimation {
+        opacity = 1.0
+      }
+    }
   }
 }
 
-extension AccessView {
-  private func requestPermissions() {
-    // Request camera, album, and microphone permissions
-    requestCameraPermission()
-    requestAlbumPermission()
-    requestMicrophonePermission()
-  }
-
-  private func requestAlbumPermission() {
-    PHPhotoLibrary.requestAuthorization { status in
-      DispatchQueue.main.async {
-        isAlbumAuthorized = status == .authorized
-        checkAllPermissions()
-      }
-    }
-  }
-
-  private func requestCameraPermission() {
-    AVCaptureDevice.requestAccess(for: .video) { granted in
-      DispatchQueue.main.async {
-        isCameraAuthorized = granted
-        checkAllPermissions()
-      }
-    }
-  }
-
-  private func requestMicrophonePermission() {
-    AVCaptureDevice.requestAccess(for: .audio) { granted in
-      DispatchQueue.main.async {
-        isMicrophoneAuthorized = granted
-        checkAllPermissions()
-      }
-    }
-  }
-
-  private func checkAllPermissions() {
-    if isAlbumAuthorized, isCameraAuthorized, isMicrophoneAuthorized {
-      isNavigationActive = true
-    }
-  }
-}

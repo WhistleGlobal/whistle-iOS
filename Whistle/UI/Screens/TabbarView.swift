@@ -19,7 +19,7 @@ struct TabbarView: View {
   @State private var isCameraAuthorized = false
   @State private var isAlbumAuthorized = false
   @State private var isMicrophoneAuthorized = false
-  @State private var isNavigationActive = false
+  @State private var isNavigationActive = true
 
   @State private var pickerOptions = PickerOptionsInfo()
   @AppStorage("isAccess") var isAccess = false
@@ -59,19 +59,15 @@ struct TabbarView: View {
 
       case .upload:
         NavigationView {
-          if isNavigationActive {
-            VideoContentView()
-              .environmentObject(apiViewModel)
-              .environmentObject(tabbarModel)
-          } else {
-            AccessView(
-              isCameraAuthorized: $isCameraAuthorized,
-              isAlbumAuthorized: $isAlbumAuthorized,
-              isMicrophoneAuthorized: $isMicrophoneAuthorized,
-              isNavigationActive: $isNavigationActive)
-              .environmentObject(apiViewModel)
-              .environmentObject(tabbarModel)
-          }
+          VideoContentView()
+            .environmentObject(apiViewModel)
+            .environmentObject(tabbarModel)
+            .overlay {
+              if !isNavigationActive {
+                AccessView()
+                  .environmentObject(tabbarModel)
+              }
+            }
         }
         .onAppear {
           requestPermissions()
@@ -81,6 +77,7 @@ struct TabbarView: View {
         .onDisappear {
           tabbarModel.tabbarOpacity = 1.0
         }
+
       case .profile:
         if isAccess {
           NavigationStack {
@@ -323,6 +320,8 @@ extension TabbarView {
   private func checkAllPermissions() {
     if isAlbumAuthorized, isCameraAuthorized, isMicrophoneAuthorized {
       isNavigationActive = true
+    } else {
+      isNavigationActive = false
     }
   }
 }
