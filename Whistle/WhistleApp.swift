@@ -50,7 +50,11 @@ struct WhistleApp: App {
           .environmentObject(universalRoutingModel)
           .task {
             if isAccess {
-              await apiViewModel.requestVersionCheck()
+              let updateAvailable = await apiViewModel.checkUpdateAvailable()
+              log(updateAvailable)
+              if updateAvailable {
+                await apiViewModel.requestVersionCheck()
+              }
               appleSignInViewModel.userAuth.loadData { }
             }
           }
@@ -87,7 +91,11 @@ struct WhistleApp: App {
             .environmentObject(userAuth)
             .environmentObject(universalRoutingModel)
             .task {
-              await apiViewModel.requestVersionCheck()
+              let updateAvailable = await apiViewModel.checkUpdateAvailable()
+              log(updateAvailable)
+              if updateAvailable {
+                await apiViewModel.requestVersionCheck()
+              }
             }
         }
         .tint(.black)

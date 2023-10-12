@@ -210,6 +210,31 @@ extension APIViewModel: SettingProtocol {
         }
     }
   }
+
+  func checkUpdateAvailable() async -> Bool {
+    guard
+      let currentVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String,
+      let bundleID = Bundle.main.infoDictionary?["CFBundleIdentifier"] as? String,
+      let url = URL(string: "http://itunes.apple.com/lookup?bundleId=" + bundleID),
+      let data = try? Data(contentsOf: url),
+      let jsonData = try? JSONSerialization.jsonObject(with: data, options: .fragmentsAllowed) as? [String: Any],
+      let results = jsonData["results"] as? [[String: Any]],
+      results.count > 0,
+      let appStoreVersion = results[0]["version"] as? String
+    else {
+      log("guard")
+      return false
+    }
+    let currentVersionArray = currentVersion.split(separator: ".").map { $0 }
+    let appStoreVersionArray = appStoreVersion.split(separator: ".").map { $0 }
+    if currentVersionArray[0] < appStoreVersionArray[0] {
+      log("return true")
+      return true
+    } else {
+      log("else return \(currentVersionArray[1] < appStoreVersionArray[1] ? true : false)")
+      return currentVersionArray[1] < appStoreVersionArray[1] ? true : false
+    }
+  }
 }
 
 extension Bundle {

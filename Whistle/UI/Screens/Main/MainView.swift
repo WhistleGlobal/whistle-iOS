@@ -191,10 +191,14 @@ struct MainView: View {
         }))
     }
     .task {
-      await apiViewModel.requestVersionCheck()
-      showUpdate = apiViewModel.versionCheck.forceUpdate
-      if showUpdate {
-        return
+      let updateAvailable = await apiViewModel.checkUpdateAvailable()
+      log(updateAvailable)
+      if updateAvailable {
+        await apiViewModel.requestVersionCheck()
+        showUpdate = apiViewModel.versionCheck.forceUpdate
+        if showUpdate {
+          return
+        }
       }
       if apiViewModel.myProfile.userName.isEmpty {
         await apiViewModel.requestMyProfile()
