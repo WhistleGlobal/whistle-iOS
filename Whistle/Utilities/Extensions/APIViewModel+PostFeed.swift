@@ -134,9 +134,7 @@ extension APIViewModel: PostFeedProtocol {
               tempContent.thumbnailUrl = jsonObject["thumbnail_url"] as? String
               tempContent.musicArtist = jsonObject["music_artist"] as? String
               tempContent.musicTitle = jsonObject["music_title"] as? String
-              tempContent.musicTitle = jsonObject["music_title"] as? String
-              tempContent.hashtags = jsonObject["hashtags"] as? String
-              tempContent.hashtags = jsonObject["hashtags"] as? String
+              tempContent.hashtags = jsonObject["hashtags"] as? [String]
               tempContent.whistleCount = jsonObject["content_whistle_count"] as? Int
               tempContent.isWhistled = (jsonObject["is_whistled"] as? Int) == 0 ? false : true
               tempContent.isFollowed = (jsonObject["is_followed"] as? Int) == 0 ? false : true
@@ -465,7 +463,7 @@ extension APIViewModel: PostFeedProtocol {
             singleContent.thumbnailUrl = singleContentJson["thumbnail_url"] as? String
             singleContent.musicArtist = singleContentJson["music_artist"] as? String
             singleContent.musicTitle = singleContentJson["music_title"] as? String
-            singleContent.hashtags = singleContentJson["hashtags"] as? String
+            singleContent.hashtags = singleContentJson["hashtags"] as? [String]
             singleContent.whistleCount = singleContentJson["content_whistle_count"] as? Int
             singleContent.isWhistled = (singleContentJson["is_whistled"] as? Int) == 0 ? false : true
             singleContent.isFollowed = (singleContentJson["is_followed"] as? Int) == 0 ? false : true
@@ -486,9 +484,7 @@ extension APIViewModel: PostFeedProtocol {
               tempContent.thumbnailUrl = jsonObject["thumbnail_url"] as? String
               tempContent.musicArtist = jsonObject["music_artist"] as? String
               tempContent.musicTitle = jsonObject["music_title"] as? String
-              tempContent.musicTitle = jsonObject["music_title"] as? String
-              tempContent.hashtags = jsonObject["hashtags"] as? String
-              tempContent.hashtags = jsonObject["hashtags"] as? String
+              tempContent.hashtags = jsonObject["hashtags"] as? [String]
               tempContent.whistleCount = jsonObject["content_whistle_count"] as? Int
               tempContent.isWhistled = (jsonObject["is_whistled"] as? Int) == 0 ? false : true
               tempContent.isFollowed = (jsonObject["is_followed"] as? Int) == 0 ? false : true
