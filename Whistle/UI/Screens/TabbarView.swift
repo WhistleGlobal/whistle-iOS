@@ -5,6 +5,7 @@
 //  Created by ChoiYujin on 8/30/23.
 //
 
+import Combine
 import SwiftUI
 import VideoPicker
 
@@ -14,13 +15,15 @@ struct TabbarView: View {
   @State var isFirstProfileLoaded = true
   @State var mainOpacity = 1.0
   @State var isRootStacked = false
-  @State var isPresented = false
   @State private var pickerOptions = PickerOptionsInfo()
   @AppStorage("isAccess") var isAccess = false
   @EnvironmentObject var apiViewModel: APIViewModel
   @EnvironmentObject var userAuth: UserAuth
   @EnvironmentObject var universalRoutingModel: UniversalRoutingModel
   @StateObject var tabbarModel: TabbarModel = .init()
+
+  @State var isImagePickerClosed = PassthroughSubject<Bool, Never>()
+  @State var isPresented = false
 
   var body: some View {
     ZStack {
@@ -57,21 +60,15 @@ struct TabbarView: View {
           ZStack {
             Color.pink.ignoresSafeArea()
               .onTapGesture {
-                isPresented = true
-//                print("Tapped!!")
+                isImagePickerClosed.send(true)
               }
             if isPresented {
-              PickerConfigViewControllerWrapper()
-                .onAppear {
-                  withAnimation {
-                    tabbarModel.tabWidth = 56
-                  }
-                }
-                .onDisappear {
-                  isPresented = false
-                  print("disappeared")
-                }
+              PickerConfigViewControllerWrapper(isImagePickerClosed: $isImagePickerClosed)
             }
+            Text(isPresented ? "Image Picker is closed" : "Image Picker is not closed")
+              .onReceive(isImagePickerClosed) { value in
+                isPresented = value
+              }
           }
         }
       case .profile:

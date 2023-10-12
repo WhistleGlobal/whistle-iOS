@@ -38,13 +38,11 @@ class EditorViewModel: ObservableObject {
 //    return ""
 //  }
 
-  func returnThumbnail(_ index: Int) -> Data {
-    currentVideo?.generateHQThumbnails()
-    if let image = currentVideo?.thumbHQImages[index].image, let imageData = image.pngData() {
-      // Data를 Base64로 인코딩
-      return imageData
+  func returnThumbnail(_ index: Int) -> UIImage {
+    if let image = currentVideo?.thumbHQImages[index].image {
+      return image
     }
-    return Data()
+    return UIImage()
   }
 
   func setProject(_ project: ProjectEntity, geo: GeometryProxy) {

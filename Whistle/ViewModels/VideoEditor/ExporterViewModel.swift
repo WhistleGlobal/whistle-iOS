@@ -17,7 +17,7 @@ class ExporterViewModel: ObservableObject {
   @Published var renderState: ExportState = .unknown
   @Published var showAlert = false
   @Published var progressTimer: TimeInterval = .zero
-  @Published var selectedQuality: VideoQuality = .low
+  @Published var selectedQuality: VideoQuality = .high
   private var cancellable = Set<AnyCancellable>()
   private var action: ActionEnum = .save
   private let editorHelper = VideoEditor()
@@ -42,14 +42,12 @@ class ExporterViewModel: ObservableObject {
       if let videoData = try? Data(contentsOf: url) {
         self.videoData = videoData
         base64String = videoData.base64EncodedString()
-//        return base64String
         // base64String을 사용하거나 전송하려는 곳에 전달할 수 있습니다.
       }
       renderState = .loaded(url)
     } catch {
       renderState = .failed(error)
     }
-//    return ""
   }
 
   func action(_ action: ActionEnum, start: Double) async {

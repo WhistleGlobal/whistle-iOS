@@ -27,17 +27,14 @@ struct UploadView: View {
   let videoScale: CGFloat = 16 / 9
   let videoWidth: CGFloat = 203
   let textLimit = 40
-//
-//  init(video: EditableVideo) {
-//    _exporterVM = StateObject(wrappedValue: ExporterViewModel(video: video))
-//  }
+
   init(
     video: EditableVideo,
     editorVM: EditorViewModel,
     videoPlayer: VideoPlayerManager,
     musicVM: MusicViewModel,
-    isInitial: Binding<Bool>)
-  {
+    isInitial: Binding<Bool>
+  ) {
     self.video = video
     _exporterVM = StateObject(wrappedValue: ExporterViewModel(video: video))
     self.editorVM = editorVM
@@ -59,29 +56,19 @@ struct UploadView: View {
       } nextButtonAction: {
         Task {
           await exporterVM.action(.save, start: (editorVM.currentVideo?.rangeDuration.lowerBound)!)
-//          let video = exporterVM.base64String
           let video = exporterVM.videoData
           let thumbnail = editorVM
             .returnThumbnail(Int(
               (editorVM.currentVideo?.rangeDuration.lowerBound)! / (editorVM.currentVideo?.originalDuration)! *
                 21))
-//          do {
-//            let tagJSON = try JSONSerialization.data(withJSONObject: tagsViewModel.getTags(), options: .prettyPrinted)
-//            if let jsonString = String(data: tagJSON, encoding: .utf8) {
-//              print("JSON 데이터: \(jsonString)")
-//            } else {
-//              print("JSON 데이터를 문자열로 변환할 수 없습니다.")
-//            }
-          ////            print("json", tagJSON)
-//          } catch { }
-//          let hashtags = tagsViewModel.getTags().joined(separator: ",")
           apiViewModel.uploadPost(
             video: video,
-            thumbnail: thumbnail,
+            thumbnail: thumbnail.jpegData(compressionQuality: 0.5)!,
             caption: content,
             musicID: musicVM.musicInfo?.musicID ?? 0,
             videoLength: editorVM.currentVideo!.totalDuration,
-            hashtags: tagsViewModel.getTags())
+            hashtags: tagsViewModel.getTags()
+          )
         }
       }
       .frame(height: UIScreen.getHeight(44))
@@ -96,37 +83,45 @@ struct UploadView: View {
 
       ScrollView {
         VStack(spacing: 16) {
-          EditablePlayerView(player: videoPlayer.videoPlayer)
+          Image(
+            uiImage: editorVM
+              .returnThumbnail(Int((
+                (editorVM.currentVideo?.rangeDuration.lowerBound)! /
+                  (editorVM.currentVideo?.originalDuration)! * 21).rounded())))
+            .resizable()
+            .scaledToFit()
             .frame(width: UIScreen.getWidth(videoWidth), height: UIScreen.getHeight(videoWidth * videoScale))
             .cornerRadius(12)
+            .background(Color.black.clipShape(RoundedRectangle(cornerRadius: 12)))
           TextField(
             "",
             text: $content,
             prompt: Text("내용을 입력해 주세요. (40자 내)")
               .foregroundColor(Color.Disable_Placeholder_Light)
               .font(.custom("AppleSDGothicNeo-Regular", size: 16)),
-            axis: .vertical)
-            .foregroundStyle(Color.black)
-            .onReceive(Just(content)) { _ in
-              limitText(textLimit)
-            }
-            .frame(height: UIScreen.getHeight(160), alignment: .topLeading)
-            .contentShape(Rectangle())
-            .onTapGesture {
-              isFocused = true
-            }
-            .padding(UIScreen.getWidth(16))
-            .focused($isFocused)
-            .background(
-              RoundedRectangle(cornerRadius: 8)
-                .strokeBorder(Color.Border_Default_Dark))
-            .overlay(alignment: .bottomTrailing) {
-              Text("\(content.count)자 / 40자")
-                .padding()
-                .foregroundStyle(Color.Disable_Placeholder_Light)
-                .fontSystem(fontDesignSystem: .body2_KO)
-            }
-            .padding(.horizontal, UIScreen.getWidth(16))
+            axis: .vertical
+          )
+          .foregroundStyle(Color.black)
+          .onReceive(Just(content)) { _ in
+            limitText(textLimit)
+          }
+          .frame(height: UIScreen.getHeight(160), alignment: .topLeading)
+          .contentShape(Rectangle())
+          .onTapGesture {
+            isFocused = true
+          }
+          .padding(UIScreen.getWidth(16))
+          .focused($isFocused)
+          .background(
+            RoundedRectangle(cornerRadius: 8)
+              .strokeBorder(Color.Border_Default_Dark))
+          .overlay(alignment: .bottomTrailing) {
+            Text("\(content.count)자 / 40자")
+              .padding()
+              .foregroundStyle(Color.Disable_Placeholder_Light)
+              .fontSystem(fontDesignSystem: .body2_KO)
+          }
+          .padding(.horizontal, UIScreen.getWidth(16))
 
           ZStack(alignment: .topLeading) {
             TagsContent(viewModel: tagsViewModel, sheetPosition: $sheetPosition) {

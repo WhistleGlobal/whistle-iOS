@@ -69,6 +69,7 @@ struct EditableVideo: Identifiable {
     for i in 0 ... imagesCount {
       let thumbnailImage = ThumbnailImage(image: asset.getImage(Int(offset), compressionQuality: 1.0))
       offset = Double(i) * (originalDuration / Double(imagesCount))
+
       thumbHQImages.append(thumbnailImage)
     }
     thumbHQImages.remove(at: 0)
@@ -154,9 +155,10 @@ struct ThumbnailImage: Identifiable {
   var id: UUID = .init()
   var image: UIImage?
 
-  init(image: UIImage? = nil) {
-    self.image = image?.resize(to: .init(width: 250, height: 350))
-  }
+//  init(image: UIImage? = nil) {
+//    self.image = image?.resize(to: .init(width: 500, height: 700))
+  ////    self.image = image?.resize
+//  }
 }
 
 // MARK: - VideoFrames

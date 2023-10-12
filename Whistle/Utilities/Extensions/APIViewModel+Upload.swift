@@ -51,57 +51,37 @@ extension APIViewModel: UploadProtocol {
       "caption": caption,
       "music_id": musicID,
       "video_length": videoLength,
-      //      "content_hashtags": "\(hashtags)",
     ]
-    do {
-//      let array = hashtags
-//
-//      func json(from object:Any) -> Data {
-//        guard let data = try? JSONSerialization.data(withJSONObject: object, options: []) else {
-//          return Data()
-//        }
-//        return data
-//      }
-      let jsonEncoder = JSONEncoder()
-      let jsonData = try jsonEncoder.encode(hashtags)
-      let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
-      let fileURL = documentsDirectory.appendingPathComponent("hashtags.json")
-
-      // JSON 데이터를 파일로 저장
-      try jsonData.write(to: fileURL)
-      AF.upload(
-        multipartFormData: { multipartFormData in
-          multipartFormData.append(video, withName: "video", fileName: "video.mp4", mimeType: "video/mp4")
-          multipartFormData.append(thumbnail, withName: "thumbnail", fileName: "thumbnail.png", mimeType: "image/png")
-          for (key, value) in params {
-            if let data = "\(value)".data(using: .utf8) {
-              multipartFormData.append(data, withName: key)
-            }
-          }
-          multipartFormData.append(jsonData, withName: "content_hashtags", mimeType: "application/json")
-//          multipartFormData.append(json(from: array), withName: "tagJSON")
-//          print(multipartFormData)
-        },
-        to: "\(domainURL)/content/upload",
-        headers: contentTypeMultipart)
-        .uploadProgress { progress in
-          print("Upload Progress: \(progress.fractionCompleted)")
-        }
-        //    .validate(statusCode: 200 ..< 501)
-        .validate(statusCode: 200 ..< 300)
-        .response { response in
-          switch response.result {
-          case .success(let data):
-            guard let data else {
-              return
-            }
-            log("Success: \(data)")
-          case .failure(let error):
-            log("\(error)")
+    AF.upload(
+      multipartFormData: { multipartFormData in
+        multipartFormData.append(video, withName: "video", fileName: "video.mp4", mimeType: "video/mp4")
+        multipartFormData.append(thumbnail, withName: "thumbnail", fileName: "thumbnail.png", mimeType: "image/png")
+        for (key, value) in params {
+          if let data = "\(value)".data(using: .utf8) {
+            multipartFormData.append(data, withName: key)
           }
         }
-    } catch {
-      print("JSON ERROR")
-    }
+        for hashtag in hashtags {
+          multipartFormData.append(hashtag.data(using: .utf8)!, withName: "content_hashtags[]")
+        }
+      },
+      to: "\(domainURL)/content/upload",
+      headers: contentTypeMultipart)
+      .uploadProgress { progress in
+        print("Upload Progress: \(progress.fractionCompleted)")
+      }
+      //    .validate(statusCode: 200 ..< 501)
+      .validate(statusCode: 200 ..< 300)
+      .response { response in
+        switch response.result {
+        case .success(let data):
+          guard let data else {
+            return
+          }
+          log("Success: \(data)")
+        case .failure(let error):
+          log("\(error)")
+        }
+      }
   }
 }

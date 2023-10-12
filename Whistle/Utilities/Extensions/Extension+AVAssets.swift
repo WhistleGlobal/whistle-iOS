@@ -22,6 +22,20 @@ extension AVAsset {
 
   func getImage(_ second: Int, compressionQuality: Double = 0.05) -> UIImage? {
     let imgGenerator = AVAssetImageGenerator(asset: self)
+    imgGenerator.appliesPreferredTrackTransform = true
+//    imgGenerator.requestedTimeToleranceBefore = CMTime.zero
+//    imgGenerator.requestedTimeToleranceAfter = CMTime.zero
+
+//    let time = CMTimeMake(value: Int64(second), timescale: 1)
+//    do {
+//      let cgImage = try imgGenerator.copyCGImage(at: time, actualTime: nil)
+//      let uiImage = UIImage(cgImage: cgImage)
+//      return uiImage
+//      // 이제 고화질 썸네일을 uiImage에 가지고 있습니다.
+//    } catch {
+//      print("썸네일 생성 오류: \(error)")
+//    }
+//    return nil
     guard
       let cgImage = try? imgGenerator.copyCGImage(
         at: .init(

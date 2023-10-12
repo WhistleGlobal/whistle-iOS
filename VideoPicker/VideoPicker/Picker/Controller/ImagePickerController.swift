@@ -6,6 +6,7 @@
 //  Copyright © 2019-2022 AnyImageKit.org. All rights reserved.
 //
 
+import Combine
 import SnapKit
 import SwiftUI
 import UIKit
@@ -32,18 +33,22 @@ open class ImagePickerController: AnyImageNavigationController {
   private var didFinishSelect = false
   private var didCallback = false
   private let workQueue = DispatchQueue(label: "org.AnyImageKit.DispatchQueue.ImagePickerController")
-
+  open var imagePickerClosedSubject: PassthroughSubject<Bool, Never>?
   private let manager: PickerManager = .init()
-
   public required init() {
     super.init(nibName: nil, bundle: nil)
   }
 
   /// Init Picker
-  public convenience init(options: PickerOptionsInfo, delegate: ImagePickerControllerDelegate) {
+  public convenience init(
+    options: PickerOptionsInfo,
+    delegate: ImagePickerControllerDelegate,
+    imagePickerClosedSubject: PassthroughSubject<Bool, Never>?)
+  {
     self.init()
     update(options: options)
     pickerDelegate = delegate
+    self.imagePickerClosedSubject = imagePickerClosedSubject
   }
 
   public required init?(coder aDecoder: NSCoder) {
@@ -101,6 +106,11 @@ open class ImagePickerController: AnyImageNavigationController {
     } else {
       super.dismiss(animated: flag, completion: completion)
     }
+  }
+
+  open override func viewDidDisappear(_: Bool) {
+    super.viewDidDisappear(true)
+    imagePickerClosedSubject?.send(false)
   }
 
   override open var shouldAutorotate: Bool {
