@@ -368,6 +368,9 @@ extension APIViewModel: PostFeedProtocol {
       tempViewCount.views = tempViewCount.views.filter { !notInclude.contains($0.contentId) }
       tempViewCount.views = viewCount.views.filter { Int($0.viewTime) ?? 0 >= 3 }
       tempViewCount.views = tempViewCount.views.filter { !$0.viewTime.isEmpty }
+      if tempViewCount.views.isEmpty {
+        return
+      }
       let data = try JSONEncoder().encode(tempViewCount)
       if let dictionary = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {
         log(dictionary)

@@ -50,16 +50,13 @@ struct WhistleApp: App {
           .environmentObject(universalRoutingModel)
           .task {
             if isAccess {
+              let updateAvailable = await apiViewModel.checkUpdateAvailable()
+              log(updateAvailable)
+              if updateAvailable {
+                await apiViewModel.requestVersionCheck()
+              }
               appleSignInViewModel.userAuth.loadData { }
             }
-            //        NavigationStack {
-            //          PickerConfigViewControllerWrapper(options: $pickerOptions)
-            //            .environmentObject(rootVM)
-            //       }
-            //        MusicListView()
-            //        .task {
-            //          if isAccess {
-            //            appleSignInViewModel.userAuth.loadData { }
           }
           .onOpenURL { url in
             log(url)
@@ -93,6 +90,13 @@ struct WhistleApp: App {
             .environmentObject(apiViewModel)
             .environmentObject(userAuth)
             .environmentObject(universalRoutingModel)
+            .task {
+              let updateAvailable = await apiViewModel.checkUpdateAvailable()
+              log(updateAvailable)
+              if updateAvailable {
+                await apiViewModel.requestVersionCheck()
+              }
+            }
         }
         .tint(.black)
       }

@@ -12,11 +12,8 @@ import SwiftUI
 // MARK: - AccessView
 
 struct AccessView: View {
-  @Binding var isCameraAuthorized: Bool
-  @Binding var isAlbumAuthorized: Bool
-  @Binding var isMicrophoneAuthorized: Bool
-  @Binding var isNavigationActive: Bool
-  @EnvironmentObject var apiViewModel: APIViewModel
+  @State var showAlert = false
+  @State var opacity = 0.1
   @EnvironmentObject var tabbarModel: TabbarModel
 
   var body: some View {
@@ -44,7 +41,7 @@ struct AccessView: View {
 
         VStack(spacing: 16) {
           Button(action: {
-            requestAlbumPermission()
+            showAlert = true
           }) {
             glassMorphicView(width: UIScreen.width - 32, height: 56, cornerRadius: 12)
               .overlay {
@@ -64,7 +61,7 @@ struct AccessView: View {
           }
 
           Button(action: {
-            requestCameraPermission()
+            showAlert = true
           }) {
             glassMorphicView(width: UIScreen.width - 32, height: 56, cornerRadius: 12)
               .overlay {
@@ -84,7 +81,7 @@ struct AccessView: View {
           }
 
           Button(action: {
-            requestMicrophonePermission()
+            showAlert = true
           }) {
             glassMorphicView(width: UIScreen.width - 32, height: 56, cornerRadius: 12)
               .overlay {
@@ -125,47 +122,26 @@ struct AccessView: View {
         Spacer()
       }
     }
+    .alert(isPresented: $showAlert) {
+      Alert(
+        title: Text("권한 없음"),
+        message: Text("권한 없어요."),
+        primaryButton: .cancel {
+          log("update")
+        }
+        ,secondaryButton: .default(Text("설정으로 가기"), action: {
+          guard let url = URL(string: UIApplication.openSettingsURLString) else { return }
+          if UIApplication.shared.canOpenURL(url) {
+            UIApplication.shared.open(url)
+          }
+        }))
+    }
+    .opacity(opacity)
+    .onAppear {
+      withAnimation {
+        opacity = 1.0
+      }
+    }
   }
 }
 
-extension AccessView {
-  private func requestPermissions() {
-    // Request camera, album, and microphone permissions
-    requestCameraPermission()
-    requestAlbumPermission()
-    requestMicrophonePermission()
-  }
-
-  private func requestAlbumPermission() {
-    PHPhotoLibrary.requestAuthorization { status in
-      DispatchQueue.main.async {
-        isAlbumAuthorized = status == .authorized
-        checkAllPermissions()
-      }
-    }
-  }
-
-  private func requestCameraPermission() {
-    AVCaptureDevice.requestAccess(for: .video) { granted in
-      DispatchQueue.main.async {
-        isCameraAuthorized = granted
-        checkAllPermissions()
-      }
-    }
-  }
-
-  private func requestMicrophonePermission() {
-    AVCaptureDevice.requestAccess(for: .audio) { granted in
-      DispatchQueue.main.async {
-        isMicrophoneAuthorized = granted
-        checkAllPermissions()
-      }
-    }
-  }
-
-  private func checkAllPermissions() {
-    if isAlbumAuthorized, isCameraAuthorized, isMicrophoneAuthorized {
-      isNavigationActive = true
-    }
-  }
-}

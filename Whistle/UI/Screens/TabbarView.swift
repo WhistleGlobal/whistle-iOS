@@ -20,7 +20,7 @@ struct TabbarView: View {
   @State private var isCameraAuthorized = false
   @State private var isAlbumAuthorized = false
   @State private var isMicrophoneAuthorized = false
-  @State private var isNavigationActive = false
+  @State private var isNavigationActive = true
 
   @State private var pickerOptions = PickerOptionsInfo()
   @AppStorage("isAccess") var isAccess = false
@@ -63,6 +63,15 @@ struct TabbarView: View {
 
       case .upload:
         NavigationView {
+          VideoContentView()
+            .environmentObject(apiViewModel)
+            .environmentObject(tabbarModel)
+            .overlay {
+              if !isNavigationActive {
+                AccessView()
+                  .environmentObject(tabbarModel)
+              }
+            }
           //ZStack {
            // Color.pink.ignoresSafeArea()
              // .onTapGesture {
@@ -75,26 +84,16 @@ struct TabbarView: View {
           //    .onReceive(isImagePickerClosed) { value in
           //      isPresented = value
            //   }
-          if isNavigationActive {
-            VideoContentView()
-              .environmentObject(apiViewModel)
-              .environmentObject(tabbarModel)
-          } else {
-            AccessView(
-              isCameraAuthorized: $isCameraAuthorized,
-              isAlbumAuthorized: $isAlbumAuthorized,
-              isMicrophoneAuthorized: $isMicrophoneAuthorized,
-              isNavigationActive: $isNavigationActive)
-              .environmentObject(apiViewModel)
-              .environmentObject(tabbarModel)
-          }
         }
         .onAppear {
+          requestPermissions()
+          checkAllPermissions()
           tabbarModel.tabbarOpacity = 0.0
         }
         .onDisappear {
           tabbarModel.tabbarOpacity = 1.0
         }
+
       case .profile:
         if isAccess {
           NavigationStack {
@@ -168,10 +167,6 @@ struct TabbarView: View {
       .opacity(tabbarModel.tabbarOpacity)
     }
     .navigationBarBackButtonHidden()
-    .onAppear {
-      requestPermissions()
-      checkAllPermissions()
-    }
   }
 }
 
@@ -340,6 +335,8 @@ extension TabbarView {
   private func checkAllPermissions() {
     if isAlbumAuthorized, isCameraAuthorized, isMicrophoneAuthorized {
       isNavigationActive = true
+    } else {
+      isNavigationActive = false
     }
   }
 }

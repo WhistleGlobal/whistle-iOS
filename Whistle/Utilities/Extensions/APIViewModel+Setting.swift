@@ -10,6 +10,8 @@ import Foundation
 import SwiftyJSON
 import UIKit
 
+// MARK: - APIViewModel + SettingProtocol
+
 extension APIViewModel: SettingProtocol {
   func requestNotiSetting() async {
     await withCheckedContinuation { continuation in
@@ -169,5 +171,74 @@ extension APIViewModel: SettingProtocol {
           log("\(error)")
         }
       }
+  }
+
+  func requestVersionCheck() async {
+    let params = ["appVersion" : "\(Bundle.main.appVersion ?? "Unknown")"]
+    return await withCheckedContinuation { continuation in
+      AF.request(
+        "\(domainURL)/system/versionCheck",
+        method: .get,
+        parameters: params,
+        headers: contentTypeJson)
+        .validate(statusCode: 200...300)
+        .response { response in
+          switch response.result {
+          case .success(let data):
+            do {
+              // tempContent.contentId = jsonObject["content_id"] as? Int
+              guard let data else { return }
+              let json = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any]
+              self.versionCheck.needUpdate = json?["needUpdate"] as? Bool ?? false
+              self.versionCheck.reason = json?["reason"] as? String ?? ""
+              self.versionCheck.forceUpdate = json?["forceUpdate"] as? Bool ?? false
+              self.versionCheck
+                .latestAppVersion = json?["latestAppVersion"] as? String ?? "\(Bundle.main.appVersion ?? "Unknown")"
+              log(self.versionCheck.needUpdate)
+              log(self.versionCheck.reason)
+              log(self.versionCheck.forceUpdate)
+              log(self.versionCheck.latestAppVersion)
+            } catch {
+              log(error)
+            }
+            log(data)
+            continuation.resume()
+          case .failure(let error):
+            log(error)
+            continuation.resume()
+          }
+        }
+    }
+  }
+
+  func checkUpdateAvailable() async -> Bool {
+    guard
+      let currentVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String,
+      let bundleID = Bundle.main.infoDictionary?["CFBundleIdentifier"] as? String,
+      let url = URL(string: "http://itunes.apple.com/lookup?bundleId=" + bundleID),
+      let data = try? Data(contentsOf: url),
+      let jsonData = try? JSONSerialization.jsonObject(with: data, options: .fragmentsAllowed) as? [String: Any],
+      let results = jsonData["results"] as? [[String: Any]],
+      results.count > 0,
+      let appStoreVersion = results[0]["version"] as? String
+    else {
+      log("guard")
+      return false
+    }
+    let currentVersionArray = currentVersion.split(separator: ".").map { $0 }
+    let appStoreVersionArray = appStoreVersion.split(separator: ".").map { $0 }
+    if currentVersionArray[0] < appStoreVersionArray[0] {
+      log("return true")
+      return true
+    } else {
+      log("else return \(currentVersionArray[1] < appStoreVersionArray[1] ? true : false)")
+      return currentVersionArray[1] < appStoreVersionArray[1] ? true : false
+    }
+  }
+}
+
+extension Bundle {
+  var appVersion: String? {
+    infoDictionary?["CFBundleShortVersionString"] as? String
   }
 }
