@@ -7,6 +7,7 @@
 
 import Alamofire
 import Foundation
+import SwiftyJSON
 import UIKit
 
 extension APIViewModel: UploadProtocol {
@@ -15,16 +16,19 @@ extension APIViewModel: UploadProtocol {
       return
     }
     return await withCheckedContinuation { continuation in
-      AF.upload(multipartFormData: { multipartFormData in
-        multipartFormData.append(image, withName: "image", fileName: "image.jpg", mimeType: "image/jpeg")
-      }, to: "\(domainURL)/user/profile/image", headers: contentTypeMultipart)
-        .validate(statusCode: 200..<300)
+      AF.upload(
+        multipartFormData: { multipartFormData in
+          multipartFormData.append(image, withName: "image", fileName: "image.jpg", mimeType: "image/jpeg")
+        },
+        to: "\(domainURL)/user/profile/image",
+        headers: contentTypeMultipart)
+        .validate(statusCode: 200 ..< 300)
         .response { response in
           switch response.result {
           case .success(let data):
-            if let imageUrl = String(data: data!, encoding: .utf8) {
-              log("URL: \(imageUrl)")
-              completion(imageUrl)
+            if let imageURL = String(data: data!, encoding: .utf8) {
+              log("URL: \(imageURL)")
+              completion(imageURL)
               continuation.resume()
             }
           case .failure(let error):
@@ -36,28 +40,38 @@ extension APIViewModel: UploadProtocol {
   }
 
   func uploadPost(
-    video: String,
-    thumbnail: String,
+    video: Data,
+    thumbnail: Data,
     caption: String,
     musicID: Int,
     videoLength: Double,
     hashtags: [String])
   {
     let params: [String: Any] = [
-      "video" : "\(video)",
-      "thumbnail" : "\(thumbnail)",
-      "caption" : "\(caption)",
-      "music_id" : "\(musicID)",
-      "video_length" : "\(videoLength)",
-      "content_hashtags" : "\(hashtags)",
+      "caption": caption,
+      "music_id": musicID,
+      "video_length": videoLength,
     ]
-
-    AF.request(
-      "\(domainURL)/content/upload",
-      method: .post,
-      parameters: params,
-      headers: contentTypeXwwwForm)
-      .validate(statusCode: 200...500)
+    AF.upload(
+      multipartFormData: { multipartFormData in
+        multipartFormData.append(video, withName: "video", fileName: "video.mp4", mimeType: "video/mp4")
+        multipartFormData.append(thumbnail, withName: "thumbnail", fileName: "thumbnail.png", mimeType: "image/png")
+        for (key, value) in params {
+          if let data = "\(value)".data(using: .utf8) {
+            multipartFormData.append(data, withName: key)
+          }
+        }
+        for hashtag in hashtags {
+          multipartFormData.append(hashtag.data(using: .utf8)!, withName: "content_hashtags[]")
+        }
+      },
+      to: "\(domainURL)/content/upload",
+      headers: contentTypeMultipart)
+      .uploadProgress { progress in
+        print("Upload Progress: \(progress.fractionCompleted)")
+      }
+      //    .validate(statusCode: 200 ..< 501)
+      .validate(statusCode: 200 ..< 300)
       .response { response in
         switch response.result {
         case .success(let data):

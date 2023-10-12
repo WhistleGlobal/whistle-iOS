@@ -155,7 +155,7 @@ extension VideoExporterBottomSheetView {
 
   private func mainAction(_ action: ExporterViewModel.ActionEnum) {
     Task {
-      await viewModel.action(action)
+      await viewModel.action(action, start: 0)
     }
   }
 }

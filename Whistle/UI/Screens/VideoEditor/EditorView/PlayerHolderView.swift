@@ -72,6 +72,7 @@ extension PlayerHolderView {
         }
         .onTapGesture {
           videoPlayer.action(video)
+          print(musicVM.url)
         }
         .onChange(of: videoPlayer.isPlaying) { value in
           switch value {
@@ -81,7 +82,7 @@ extension PlayerHolderView {
               let videoCurrentTime = videoPlayer.currentTime
               let timeOffset = duration.upperBound <= videoCurrentTime ? 0 : videoCurrentTime - minTime
               musicVM
-                .playAudio(startTime: startTime + timeOffset)
+                .playAudio(startTime: timeOffset)
             }
           case false:
             musicVM.stopAudio()

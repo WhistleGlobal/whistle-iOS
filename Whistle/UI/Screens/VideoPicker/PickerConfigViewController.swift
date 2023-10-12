@@ -5,6 +5,7 @@
 //  Created by 박상원 on 2023/09/20.
 //
 
+import Combine
 import SwiftUI
 import UIKit
 import VideoPicker
@@ -15,7 +16,8 @@ final class PickerConfigViewController: UIViewController {
   var options = PickerOptionsInfo()
 
   var isFullScreen = true
-
+  var isImagePickerClosed: PassthroughSubject<Bool, Never>?
+  var cancellables = Set<AnyCancellable>()
   override func viewDidLoad() {
     super.viewDidLoad()
   }
@@ -30,7 +32,7 @@ final class PickerConfigViewController: UIViewController {
   @objc
   public func openPickerTapped() {
     options.enableDebugLog = true
-    let controller = ImagePickerController(options: options, delegate: self)
+    let controller = ImagePickerController(options: options, delegate: self, imagePickerClosedSubject: isImagePickerClosed)
     controller.trackDelegate = self
     if #available(iOS 13.0, *) {
       // 모달 방식 설정
@@ -44,23 +46,6 @@ final class PickerConfigViewController: UIViewController {
 
 extension PickerConfigViewController: ImagePickerControllerDelegate {
   /// Picker에서 선택된 asset을 MainEditorview로 전달해 줍니다.
-//  func imagePicker(_ picker: ImagePickerController, didFinishPicking result: PickerResult) {
-//    var videoURL: URL?
-//    result.assets[0].phAsset.loadURL { result in
-//      switch result {
-//      case .success(let url):
-//        videoURL = url
-//        DispatchQueue.main.async {
-//          let editorView = MainEditorView(selectedVideoURL: videoURL)
-//          self.show(UIHostingController(rootView: editorView), sender: nil)
-//          picker.dismiss(animated: true, completion: nil)
-//          self.parent?.dismiss(animated: false)
-//        }
-//      case .failure(let error):
-//        print("Error: \(error)")
-//      }
-//    }
-//  }
   func imagePicker(_ picker: ImagePickerController, didFinishPicking result: PickerResult) {
     var videoURL: URL?
     result.assets[0].phAsset.loadURL { result in
