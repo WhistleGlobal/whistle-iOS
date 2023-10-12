@@ -33,8 +33,8 @@ struct UploadView: View {
     editorVM: EditorViewModel,
     videoPlayer: VideoPlayerManager,
     musicVM: MusicViewModel,
-    isInitial: Binding<Bool>
-  ) {
+    isInitial: Binding<Bool>)
+  {
     self.video = video
     _exporterVM = StateObject(wrappedValue: ExporterViewModel(video: video))
     self.editorVM = editorVM
@@ -67,8 +67,7 @@ struct UploadView: View {
             caption: content,
             musicID: musicVM.musicInfo?.musicID ?? 0,
             videoLength: editorVM.currentVideo!.totalDuration,
-            hashtags: tagsViewModel.getTags()
-          )
+            hashtags: tagsViewModel.getTags())
         }
       }
       .frame(height: UIScreen.getHeight(44))
@@ -99,29 +98,28 @@ struct UploadView: View {
             prompt: Text("내용을 입력해 주세요. (40자 내)")
               .foregroundColor(Color.Disable_Placeholder_Light)
               .font(.custom("AppleSDGothicNeo-Regular", size: 16)),
-            axis: .vertical
-          )
-          .foregroundStyle(Color.black)
-          .onReceive(Just(content)) { _ in
-            limitText(textLimit)
-          }
-          .frame(height: UIScreen.getHeight(160), alignment: .topLeading)
-          .contentShape(Rectangle())
-          .onTapGesture {
-            isFocused = true
-          }
-          .padding(UIScreen.getWidth(16))
-          .focused($isFocused)
-          .background(
-            RoundedRectangle(cornerRadius: 8)
-              .strokeBorder(Color.Border_Default_Dark))
-          .overlay(alignment: .bottomTrailing) {
-            Text("\(content.count)자 / 40자")
-              .padding()
-              .foregroundStyle(Color.Disable_Placeholder_Light)
-              .fontSystem(fontDesignSystem: .body2_KO)
-          }
-          .padding(.horizontal, UIScreen.getWidth(16))
+            axis: .vertical)
+            .foregroundStyle(Color.black)
+            .onReceive(Just(content)) { _ in
+              limitText(textLimit)
+            }
+            .frame(height: UIScreen.getHeight(160), alignment: .topLeading)
+            .contentShape(Rectangle())
+            .onTapGesture {
+              isFocused = true
+            }
+            .padding(UIScreen.getWidth(16))
+            .focused($isFocused)
+            .background(
+              RoundedRectangle(cornerRadius: 8)
+                .strokeBorder(Color.Border_Default_Dark))
+            .overlay(alignment: .bottomTrailing) {
+              Text("\(content.count)자 / 40자")
+                .padding()
+                .foregroundStyle(Color.Disable_Placeholder_Light)
+                .fontSystem(fontDesignSystem: .body2_KO)
+            }
+            .padding(.horizontal, UIScreen.getWidth(16))
 
           ZStack(alignment: .topLeading) {
             TagsContent(viewModel: tagsViewModel, sheetPosition: $sheetPosition) {

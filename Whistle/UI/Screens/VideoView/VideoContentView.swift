@@ -8,6 +8,7 @@
 import Aespa
 import AVFoundation
 import BottomSheet
+import Combine
 import ReverseMask
 import SwiftUI
 
@@ -30,7 +31,7 @@ struct VideoContentView: View {
   @State var captureMode: AssetType = .video
   @State private var animatedProgress = 0.0
   @ObservedObject private var viewModel = VideoContentViewModel()
-
+  @State var isPresented = false
   @State var count: CGFloat = 0
   @State var bottomSheetPosition: BottomSheetPosition = .hidden
   @State var selectedSec: SelectedSecond = .sec3
@@ -39,7 +40,7 @@ struct VideoContentView: View {
   @State private var recordingDuration: TimeInterval = 0
   @State private var recordingTimer: Timer?
   private let maxRecordingDuration: TimeInterval = 15
-
+  @State var isImagePickerClosed = PassthroughSubject<Bool, Never>()
   @Environment(\.dismiss) var dismiss
 
   var barSpacing: CGFloat {
@@ -53,6 +54,9 @@ struct VideoContentView: View {
   var body: some View {
     ZStack {
       Color.black.ignoresSafeArea()
+      if isPresented {
+        PickerConfigViewControllerWrapper(isImagePickerClosed: $isImagePickerClosed)
+      }
       viewModel.preview
         .padding(.bottom, 64)
         .frame(
@@ -139,7 +143,7 @@ struct VideoContentView: View {
         Spacer()
         HStack(spacing: 0) {
           // Album thumbnail + button
-          Button(action: { showGallery = true }) {
+          Button(action: { isImagePickerClosed.send(true) }) {
             let coverImage = (
               captureMode == .video
                 ? viewModel.videoAlbumCover
@@ -149,6 +153,9 @@ struct VideoContentView: View {
           }
           .shadow(radius: 5)
           .contentShape(Rectangle())
+          .onReceive(isImagePickerClosed) { value in
+            isPresented = value
+          }
 
           Spacer()
           // Shutter + button
@@ -200,11 +207,6 @@ struct VideoContentView: View {
       }
     }
     .navigationBarBackButtonHidden()
-    .sheet(isPresented: $showGallery) {
-      NavigationView {
-        PickerConfigViewControllerWrapper()
-      }
-    }
     .bottomSheet(
       bottomSheetPosition: $bottomSheetPosition,
       switchablePositions: [.hidden, .absolute(406)])
