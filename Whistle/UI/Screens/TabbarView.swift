@@ -74,6 +74,8 @@ struct TabbarView: View {
           }
         }
         .onAppear {
+          requestPermissions()
+          checkAllPermissions()
           tabbarModel.tabbarOpacity = 0.0
         }
         .onDisappear {
@@ -152,10 +154,6 @@ struct TabbarView: View {
       .opacity(tabbarModel.tabbarOpacity)
     }
     .navigationBarBackButtonHidden()
-    .onAppear {
-      requestPermissions()
-      checkAllPermissions()
-    }
   }
 }
 

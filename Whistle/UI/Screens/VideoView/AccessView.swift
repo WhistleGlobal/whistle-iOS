@@ -12,6 +12,7 @@ import SwiftUI
 // MARK: - AccessView
 
 struct AccessView: View {
+  @State var showAlert = false
   @Binding var isCameraAuthorized: Bool
   @Binding var isAlbumAuthorized: Bool
   @Binding var isMicrophoneAuthorized: Bool
@@ -44,7 +45,8 @@ struct AccessView: View {
 
         VStack(spacing: 16) {
           Button(action: {
-            requestAlbumPermission()
+            showAlert = true
+            checkAllPermissions()
           }) {
             glassMorphicView(width: UIScreen.width - 32, height: 56, cornerRadius: 12)
               .overlay {
@@ -64,7 +66,8 @@ struct AccessView: View {
           }
 
           Button(action: {
-            requestCameraPermission()
+            showAlert = true
+            checkAllPermissions()
           }) {
             glassMorphicView(width: UIScreen.width - 32, height: 56, cornerRadius: 12)
               .overlay {
@@ -84,7 +87,8 @@ struct AccessView: View {
           }
 
           Button(action: {
-            requestMicrophonePermission()
+            showAlert = true
+            checkAllPermissions()
           }) {
             glassMorphicView(width: UIScreen.width - 32, height: 56, cornerRadius: 12)
               .overlay {
@@ -124,6 +128,20 @@ struct AccessView: View {
         .padding(.horizontal, 16)
         Spacer()
       }
+    }
+    .alert(isPresented: $showAlert) {
+      Alert(
+        title: Text("권한 없음"),
+        message: Text("권한 없어요."),
+        primaryButton: .cancel {
+          log("update")
+        }
+        ,secondaryButton: .default(Text("설정으로 가기"), action: {
+          guard let url = URL(string: UIApplication.openSettingsURLString) else { return }
+          if UIApplication.shared.canOpenURL(url) {
+            UIApplication.shared.open(url)
+          }
+        }))
     }
   }
 }
