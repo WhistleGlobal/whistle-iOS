@@ -29,9 +29,6 @@ struct TabbarView: View {
   @EnvironmentObject var universalRoutingModel: UniversalRoutingModel
   @StateObject var tabbarModel: TabbarModel = .init()
 
-  @State var isImagePickerClosed = PassthroughSubject<Bool, Never>()
-  @State var isPresented = false
-
   var body: some View {
     ZStack {
       if isAccess {
@@ -72,18 +69,18 @@ struct TabbarView: View {
                   .environmentObject(tabbarModel)
               }
             }
-          //ZStack {
-           // Color.pink.ignoresSafeArea()
-             // .onTapGesture {
-              //  isImagePickerClosed.send(true)
-            //  }
-        //    if isPresented {
+          // ZStack {
+          // Color.pink.ignoresSafeArea()
+          // .onTapGesture {
+          //  isImagePickerClosed.send(true)
+          //  }
+          //    if isPresented {
           //    PickerConfigViewControllerWrapper(isImagePickerClosed: $isImagePickerClosed)
-           // }
-         //   Text(isPresented ? "Image Picker is closed" : "Image Picker is not closed")
+          // }
+          //   Text(isPresented ? "Image Picker is closed" : "Image Picker is not closed")
           //    .onReceive(isImagePickerClosed) { value in
           //      isPresented = value
-           //   }
+          //   }
         }
         .onAppear {
           requestPermissions()
