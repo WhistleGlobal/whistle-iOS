@@ -138,11 +138,14 @@ struct SignInView: View {
     }
     .alert(isPresented: $showUpdate) {
       Alert(
-        title: Text("업데이트 경고"),
-        message: Text("앱을 최신버전으로 업데이트해야 사용 가능합니다."),
-        dismissButton: .cancel {
-          log("update")
-        })
+        title: Text("업데이트 알림"),
+        message: Text("Whistle의 새로운 버전이 있습니다. 최신 버전으로 업데이트 해주세요."),
+        dismissButton: .default(Text("업데이트"), action: {
+          guard let url = URL(string: "itms-apps://itunes.apple.com/app/6463850354") else { return }
+          if UIApplication.shared.canOpenURL(url) {
+            UIApplication.shared.open(url)
+          }
+        }))
     }
     .onAppear {
       DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
