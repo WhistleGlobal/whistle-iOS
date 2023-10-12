@@ -31,6 +31,7 @@ class APIViewModel: ObservableObject {
   @Published var noSignInContentList: [NoSignInMainContent] = []
   @Published var reportedContent: [ReportedContent] = []
   @Published var userCreatedDate = ""
+  @Published var versionCheck = VersionCheck()
 
   let decoder = JSONDecoder()
 

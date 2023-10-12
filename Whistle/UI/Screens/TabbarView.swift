@@ -154,6 +154,7 @@ struct TabbarView: View {
       .opacity(tabbarModel.tabbarOpacity)
     }
     .navigationBarBackButtonHidden()
+    .allowsHitTesting(!apiViewModel.versionCheck.forceUpdate)
   }
 }
 

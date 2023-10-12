@@ -10,6 +10,8 @@ import Foundation
 import SwiftyJSON
 import UIKit
 
+// MARK: - APIViewModel + SettingProtocol
+
 extension APIViewModel: SettingProtocol {
   func requestNotiSetting() async {
     await withCheckedContinuation { continuation in
@@ -169,5 +171,49 @@ extension APIViewModel: SettingProtocol {
           log("\(error)")
         }
       }
+  }
+
+  func requestVersionCheck() async {
+    let params = ["appVersion" : "\(Bundle.main.appVersion ?? "Unknown")"]
+    return await withCheckedContinuation { continuation in
+      AF.request(
+        "\(domainURL)/system/versionCheck",
+        method: .get,
+        parameters: params,
+        headers: contentTypeJson)
+        .validate(statusCode: 200...300)
+        .response { response in
+          switch response.result {
+          case .success(let data):
+            do {
+              // tempContent.contentId = jsonObject["content_id"] as? Int
+              guard let data else { return }
+              let json = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any]
+              self.versionCheck.needUpdate = json?["needUpdate"] as? Bool ?? false
+              self.versionCheck.reason = json?["reason"] as? String ?? ""
+              self.versionCheck.forceUpdate = json?["forceUpdate"] as? Bool ?? false
+              self.versionCheck
+                .latestAppVersion = json?["latestAppVersion"] as? String ?? "\(Bundle.main.appVersion ?? "Unknown")"
+              log(self.versionCheck.needUpdate)
+              log(self.versionCheck.reason)
+              log(self.versionCheck.forceUpdate)
+              log(self.versionCheck.latestAppVersion)
+            } catch {
+              log(error)
+            }
+            log(data)
+            continuation.resume()
+          case .failure(let error):
+            log(error)
+            continuation.resume()
+          }
+        }
+    }
+  }
+}
+
+extension Bundle {
+  var appVersion: String? {
+    infoDictionary?["CFBundleShortVersionString"] as? String
   }
 }

@@ -28,6 +28,7 @@ struct MainView: View {
   @State var showReport = false
   @State var showFollowToast = (false, "")
   @State var showUserProfile = false
+  @State var showUpdate = false
   @State var currentVideoUserId = 0
   @State var currentVideoContentId = 0
   @State var isShowingBottomSheet = false
@@ -178,8 +179,24 @@ struct MainView: View {
     .ignoresSafeArea(.all, edges: .top)
     .navigationBarBackButtonHidden()
     .background(.black)
+    .alert(isPresented: $showUpdate) {
+      Alert(
+        title: Text("업데이트 경고"),
+        message: Text("앱을 최신버전으로 업데이트해야 사용 가능합니다."),
+        primaryButton: .cancel(),
+        secondaryButton: .default(Text("업데이트"), action: {
+          guard let url = URL(string: "itms-apps://itunes.apple.com/app/6463850354") else { return }
+          if UIApplication.shared.canOpenURL(url) {
+            UIApplication.shared.open(url)
+          }
+        }))
+    }
     .task {
-      log("task")
+      await apiViewModel.requestVersionCheck()
+      showUpdate = apiViewModel.versionCheck.forceUpdate
+      if showUpdate {
+        return
+      }
       if apiViewModel.myProfile.userName.isEmpty {
         await apiViewModel.requestMyProfile()
       }

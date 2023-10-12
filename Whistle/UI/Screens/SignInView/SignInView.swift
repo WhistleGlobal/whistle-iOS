@@ -21,6 +21,7 @@ struct SignInView: View {
   @StateObject var appleSignInViewModel = AppleSignInViewModel()
   @State var showTermsOfService = false
   @State var showPrivacyPolicy = false
+  @State var showUpdate = false
   @State var loginOpacity = 0.0
   @EnvironmentObject var apiViewModel: APIViewModel
   @EnvironmentObject var userAuth: UserAuth
@@ -135,10 +136,22 @@ struct SignInView: View {
       }
       .opacity(loginOpacity)
     }
+    .alert(isPresented: $showUpdate) {
+      Alert(
+        title: Text("업데이트 경고"),
+        message: Text("앱을 최신버전으로 업데이트해야 사용 가능합니다."),
+        dismissButton: .cancel {
+          log("update")
+        })
+    }
     .onAppear {
       DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-        withAnimation {
-          loginOpacity = 1.0
+        if apiViewModel.versionCheck.forceUpdate {
+          showUpdate = true
+        } else {
+          withAnimation {
+            loginOpacity = 1.0
+          }
         }
       }
     }
