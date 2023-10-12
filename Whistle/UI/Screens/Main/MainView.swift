@@ -10,6 +10,15 @@ import AVFoundation
 import Kingfisher
 import SwiftUI
 
+// MARK: - NavigationModel
+
+class NavigationModel: ObservableObject {
+  static var shared = NavigationModel()
+  private init() { }
+
+  @Published var navigate = false
+}
+
 // MARK: - MainView
 
 struct MainView: View {

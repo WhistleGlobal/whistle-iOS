@@ -280,6 +280,22 @@ extension MainEditorView {
       .padding(.vertical, 8)
       .background(glassMorphicView(cornerRadius: 8))
       .padding(.top, 8)
+    } else {
+      HStack {
+        Image(systemName: "music.note")
+        Text("음악 추가")
+          .frame(maxWidth: UIScreen.getWidth(90))
+          .lineLimit(1)
+          .truncationMode(.tail)
+          .fontSystem(fontDesignSystem: .body1)
+          .contentShape(Rectangle())
+      }
+      .foregroundStyle(Color.White)
+      .fixedSize()
+      .padding(.horizontal, 16)
+      .padding(.vertical, 8)
+      .background(glassMorphicView(cornerRadius: 8))
+      .padding(.top, 8)
     }
   }
 

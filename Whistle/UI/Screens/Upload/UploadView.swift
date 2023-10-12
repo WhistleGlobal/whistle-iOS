@@ -69,6 +69,7 @@ struct UploadView: View {
             videoLength: editorVM.currentVideo!.totalDuration,
             hashtags: tagsViewModel.getTags())
         }
+        NavigationModel.shared.navigate.toggle()
       }
       .frame(height: UIScreen.getHeight(44))
       .overlay(alignment: .bottom) {
