@@ -34,12 +34,13 @@ struct VideoContentView: View {
   @State var isPresented = false
   @State var count: CGFloat = 0
   @State var bottomSheetPosition: BottomSheetPosition = .hidden
-  @State var selectedSec: SelectedSecond = .sec3
+//  @State var selectedSec: SelectedSecond = .sec3
+  @State var selectedSec = (SelectedSecond.sec3, false)
   @State var timerSec = (8, false)
   @State var dragOffset: CGFloat = 0
   @State private var recordingDuration: TimeInterval = 0
   @State private var recordingTimer: Timer?
-  private let maxRecordingDuration: TimeInterval = 15
+//  private let maxRecordingDuration: TimeInterval = 15
   @State var isImagePickerClosed = PassthroughSubject<Bool, Never>()
   @Environment(\.dismiss) var dismiss
   @Environment(\.scenePhase) var scenePhase
@@ -89,16 +90,16 @@ struct VideoContentView: View {
                 .font(.system(size: 16))
                 .foregroundColor(.white)
                 .contentShape(Circle())
-              if timerSec.1 {
-                Text("\(timerSec.0)초")
+              if selectedSec.1 {
+                Text("\(selectedSec.0 == .sec3 ? 3 : 10)초")
                   .fontSystem(fontDesignSystem: .subtitle3_KO)
                   .foregroundColor(.white)
               }
             }
           }
-          .frame(width: timerSec.1 ? 89 : 36, height: 36)
+          .frame(width: selectedSec.1 ? 89 : 36, height: 36)
           .background {
-            if timerSec.1 {
+            if selectedSec.1 {
               Capsule()
                 .foregroundColor(Color.Primary_Default)
                 .frame(width: 89, height: 36)
@@ -161,7 +162,7 @@ struct VideoContentView: View {
           recordingButton(
             state: buttonState,
             timerText: timeStringFromTimeInterval(recordingDuration),
-            progress: min(recordingDuration / maxRecordingDuration, 1.0))
+            progress: min(recordingDuration / Double(timerSec.0), 1.0))
           Spacer()
           // Position change + button
           Button(action: {
@@ -195,7 +196,7 @@ struct VideoContentView: View {
       .opacity(showPreparingView ? 0 : 1)
       if showPreparingView {
         Circle()
-          .trim(from: 0, to: min(count / CGFloat(timerSec.0), 1.0))
+          .trim(from: 0, to: min(count / CGFloat(selectedSec.0 == .sec3 ? 3.0 : 10.0), 1.0))
           .stroke(Color.white, style: StrokeStyle(lineWidth: 4, lineCap: .square))
           .frame(width: 84)
           .rotationEffect(Angle(degrees: -90))
@@ -266,7 +267,7 @@ struct VideoContentView: View {
                   .frame(width: 120, height: 34)
                   .overlay {
                     HStack(spacing: 0) {
-                      if selectedSec == .sec10 {
+                      if selectedSec.0 == .sec10 {
                         Spacer()
                       }
                       Capsule()
@@ -277,7 +278,7 @@ struct VideoContentView: View {
                             .stroke(lineWidth: 1)
                             .foregroundStyle(LinearGradient.Border_Glass)
                         }
-                      if selectedSec == .sec3 {
+                      if selectedSec.0 == .sec3 {
                         Spacer()
                       }
                     }
@@ -289,29 +290,23 @@ struct VideoContentView: View {
               Spacer()
               Button {
                 withAnimation {
-                  timerSec.0 = 3
-                  let multiplier = 6 + barSpacing
-                  selectedSec = .sec3
-                  dragOffset = -5.0 * CGFloat(multiplier)
+                  selectedSec.0 = .sec3
                 }
               } label: {
                 Text("3s")
                   .fontSystem(fontDesignSystem: .subtitle3_KO)
-                  .foregroundColor(selectedSec == .sec3 ? .White : Color.LabelColor_DisablePlaceholder)
+                  .foregroundColor(selectedSec.0 == .sec3 ? .White : Color.LabelColor_DisablePlaceholder)
                   .frame(width: 58, height: 30)
               }
               .frame(width: 58, height: 30)
               Button {
                 withAnimation {
-                  timerSec.0 = 10
-                  let multiplier = 6 + barSpacing
-                  dragOffset = 2.0 * CGFloat(multiplier)
-                  selectedSec = .sec10
+                  selectedSec.0 = .sec10
                 }
               } label: {
                 Text("10s")
                   .fontSystem(fontDesignSystem: .subtitle3_KO)
-                  .foregroundColor(selectedSec == .sec10 ? .White : Color.LabelColor_DisablePlaceholder)
+                  .foregroundColor(selectedSec.0 == .sec10 ? .White : Color.LabelColor_DisablePlaceholder)
                   .frame(width: 58, height: 30)
               }
               .frame(width: 58, height: 30)
@@ -524,6 +519,7 @@ struct VideoContentView: View {
         .frame(height: 60)
         Button {
           timerSec.1 = true
+          selectedSec.1 = true
           bottomSheetPosition = .hidden
         } label: {
           Text("타이머 설정")
@@ -653,7 +649,7 @@ extension VideoContentView {
   }
 
   private func startPreparingTimer() {
-    count = CGFloat(timerSec.0)
+    count = CGFloat(selectedSec.0 == .sec3 ? 3 : 10)
     showPreparingView = true
     recordingTimer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { _ in
       withAnimation(.linear(duration: 0.5)) {
@@ -661,8 +657,8 @@ extension VideoContentView {
       }
       if count == 0 {
         showPreparingView = false
-        timerSec.0 = 0
-        timerSec.1 = false
+        selectedSec.0 = .sec3
+        selectedSec.1 = false
         buttonState = .recording
         viewModel.aespaSession.startRecording()
         startRecordingTimer()
@@ -674,7 +670,7 @@ extension VideoContentView {
   private func startRecordingTimer() {
     recordingTimer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { _ in
       recordingDuration += 1
-      if recordingDuration >= maxRecordingDuration {
+      if recordingDuration >= Double(timerSec.0) {
         buttonState = .completed
         viewModel.aespaSession.stopRecording()
         stopRecordingTimer()
@@ -686,6 +682,8 @@ extension VideoContentView {
   private func stopRecordingTimer() {
     recordingTimer?.invalidate()
     recordingTimer = nil
+    timerSec.0 = 8
+    timerSec.1 = false
   }
 
   // 시간을 TimeInterval에서 "00:00" 형식의 문자열로 변환
