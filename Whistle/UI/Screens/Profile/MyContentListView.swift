@@ -290,7 +290,7 @@ extension MyContentListView {
             .foregroundColor(.white)
         }
         Spacer()
-        VStack(spacing: 0) {
+        VStack(spacing: 28) {
           Spacer()
           Button {
             Task {
@@ -309,14 +309,13 @@ extension MyContentListView {
           } label: {
             VStack(spacing: 0) {
               Image(systemName: isWhistled.wrappedValue ? "heart.fill" : "heart")
-                .resizable()
-                .scaledToFit()
-                .frame(width: 28, height: 26)
+                .font(.system(size: 30))
+                .contentShape(Rectangle())
                 .foregroundColor(.Gray10)
                 .padding(.bottom, 2)
               Text("\(whistleCount.wrappedValue)")
                 .foregroundColor(.Gray10)
-                .fontSystem(fontDesignSystem: .caption_Regular)
+                .fontSystem(fontDesignSystem: .subtitle3_KO)
                 .padding(.bottom, 24)
             }
           }
@@ -327,27 +326,24 @@ extension MyContentListView {
               forPasteboardType: UTType.plainText.identifier)
           } label: {
             Image(systemName: "square.and.arrow.up")
-              .resizable()
-              .scaledToFit()
-              .frame(width: 25, height: 32)
+              .font(.system(size: 30))
+              .contentShape(Rectangle())
               .foregroundColor(.Gray10)
-              .padding(.bottom, 24)
           }
           .fontSystem(fontDesignSystem: .caption_Regular)
           Button {
             showDialog = true
           } label: {
             Image(systemName: "ellipsis")
-              .resizable()
-              .scaledToFit()
-              .frame(width: 30, height: 25)
+              .font(.system(size: 30))
+              .contentShape(Rectangle())
               .foregroundColor(.Gray10)
           }
         }
       }
     }
     .padding(.bottom, 64)
-    .padding(.horizontal, 20)
+    .padding(.horizontal, 12)
   }
 }
 
