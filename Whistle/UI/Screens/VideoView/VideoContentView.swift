@@ -86,10 +86,9 @@ struct VideoContentView: View {
           } label: {
             HStack(spacing: 8) {
               Image(systemName: "clock")
-                .resizable()
-                .scaledToFit()
+                .font(.system(size: 16))
                 .foregroundColor(.white)
-                .frame(width: 18, height: 16)
+                .contentShape(Circle())
               if timerSec.1 {
                 Text("\(timerSec.0)초")
                   .fontSystem(fontDesignSystem: .subtitle3_KO)
@@ -116,10 +115,9 @@ struct VideoContentView: View {
             toggleFlash()
           } label: {
             Image(systemName: isFlashOn ? "bolt" : "bolt.slash.fill")
-              .resizable()
-              .scaledToFit()
+              .font(.system(size: 16))
               .foregroundColor(.white)
-              .frame(width: 15, height: 16)
+              .contentShape(Circle())
           }
           .frame(width: 36, height: 36)
           .background {
