@@ -60,6 +60,11 @@ extension APIViewModel: PostFeedProtocol {
                 return
               }
               self.userPostFeed = try self.decoder.decode([UserPostFeed].self, from: data)
+              for test in self.userPostFeed {
+                log("\(test.isFollowed)")
+                log("\(test.isBookmarked)")
+                log("\(test.isHated)")
+              }
               continuation.resume()
             } catch {
               log("Error parsing JSON: \(error)")
@@ -424,6 +429,7 @@ extension APIViewModel: PostFeedProtocol {
               tempContent.whistleCount = jsonObject["content_whistle_count"] as? Int
               self.noSignInContentList.append(tempContent)
             }
+            self.noSignInContentList.removeSubrange(3...)
             completion()
           } catch {
             log(error)

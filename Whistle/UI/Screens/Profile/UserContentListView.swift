@@ -17,12 +17,13 @@ struct UserContentListView: View {
   @EnvironmentObject var apiViewModel: APIViewModel
   @EnvironmentObject var tabbarModel: TabbarModel
   @State var currentIndex = 0
+  @State var currentVideoIsBookmarked = false
   @State var newId = UUID()
   @State var playerIndex = 0
   @State var showDialog = false
   @State var showPasteToast = false
   @State var showDeleteToast = false
-  @State var showBookmarkToast = false
+  @State var showBookmarkToast = (false, "저장하기")
   @State var showHideContentToast = false
   @State var showReport = false
   @State var showFollowToast = (false, "")
@@ -82,17 +83,23 @@ struct UserContentListView: View {
                 .ignoresSafeArea(.all, edges: .top)
                 .tag(index)
             } else {
-              KFImage.url(URL(string: content.thumbnailUrl ?? ""))
-                .placeholder {
-                  Color.black
-                }
-                .resizable()
-                .scaledToFill()
+              Color.black
                 .tag(index)
                 .frame(width: proxy.size.width)
                 .padding()
                 .rotationEffect(Angle(degrees: -90))
                 .ignoresSafeArea(.all, edges: .top)
+//              KFImage.url(URL(string: content.thumbnailUrl ?? ""))
+//                .placeholder {
+//                  Color.black
+//                }
+//                .resizable()
+//                .scaledToFill()
+//                .tag(index)
+//                .frame(width: proxy.size.width)
+//                .padding()
+//                .rotationEffect(Angle(degrees: -90))
+//                .ignoresSafeArea(.all, edges: .top)
             }
           }
         }
@@ -110,21 +117,18 @@ struct UserContentListView: View {
     .navigationBarBackButtonHidden()
     .background(.black)
     .onAppear {
-      log("apiViewModel.userPostFeed : \(apiViewModel.userPostFeed)")
-      log("apiViewModel.userPostFeed.count : \(apiViewModel.userPostFeed.count)")
       log("currentIndex : \(currentIndex)")
-      log("")
       for _ in 0..<apiViewModel.userPostFeed.count {
         players.append(nil)
       }
-      log("players : \(players)")
       players[currentIndex] = AVPlayer(url: URL(string: apiViewModel.userPostFeed[currentIndex].videoUrl ?? "")!)
-      log("players : \(players)")
       playerIndex = currentIndex
+      currentVideoIsBookmarked = apiViewModel.userPostFeed[currentIndex].isBookmarked == 1
+      log("\(apiViewModel.userPostFeed[currentIndex].isBookmarked)")
+      log("\(currentVideoIsBookmarked)")
       players[currentIndex]?.seek(to: .zero)
       players[currentIndex]?.play()
       apiViewModel.postFeedPlayerChanged()
-      log("onchange end")
     }
     .onChange(of: currentIndex) { newValue in
       if apiViewModel.userPostFeed.isEmpty {
@@ -142,6 +146,7 @@ struct UserContentListView: View {
         players[playerIndex]?.pause()
         players[playerIndex] = nil
       }
+      currentVideoIsBookmarked = apiViewModel.userPostFeed[newValue].isBookmarked == 1
       players[newValue]?.seek(to: .zero)
       players[newValue]?.play()
       playerIndex = newValue
@@ -151,8 +156,8 @@ struct UserContentListView: View {
       if showPasteToast {
         ToastMessage(text: "클립보드에 복사되었어요", toastPadding: 70, isTopAlignment: true, showToast: $showPasteToast)
       }
-      if showBookmarkToast {
-        ToastMessage(text: "저장되었습니다!", toastPadding: 70, isTopAlignment: true, showToast: $showBookmarkToast)
+      if showBookmarkToast.0 {
+        ToastMessage(text: showBookmarkToast.1, toastPadding: 70, isTopAlignment: true, showToast: $showBookmarkToast.0)
       }
       if showFollowToast.0 {
         ToastMessage(text: showFollowToast.1, toastPadding: 70, isTopAlignment: true, showToast: $showFollowToast.0)
@@ -205,12 +210,22 @@ struct UserContentListView: View {
         .environmentObject(apiViewModel)
     }
     .confirmationDialog("", isPresented: $showDialog) {
-      Button("저장하기", role: .none) {
+      Button(currentVideoIsBookmarked ? "저장 취소" : "저장하기", role: .none) {
         Task {
-          guard let contentId = apiViewModel.userPostFeed[currentIndex].contentId else {
-            return
+          guard let contentId = apiViewModel.userPostFeed[currentIndex].contentId else { return }
+          guard let currentVideoContentId = apiViewModel.userPostFeed[currentIndex].contentId else { return }
+          if apiViewModel.userPostFeed[currentIndex].isBookmarked == 1 {
+            showBookmarkToast.1 = "저장 취소 했습니다."
+            showBookmarkToast.0 = await apiViewModel.actionBookmarkCancel(contentId: currentVideoContentId)
+            apiViewModel.userPostFeed[currentIndex].isBookmarked = 0
+            currentVideoIsBookmarked = false
+          } else {
+            showBookmarkToast.1 = "저장 했습니다."
+            showBookmarkToast.0 = await apiViewModel.actionBookmark(contentId: currentVideoContentId)
+            apiViewModel.userPostFeed[currentIndex].isBookmarked = 1
+            currentVideoIsBookmarked = true
           }
-          showBookmarkToast = await apiViewModel.actionBookmark(contentId: contentId)
+          apiViewModel.postFeedPlayerChanged()
         }
       }
       Button("관심없음", role: .none) {
@@ -294,22 +309,20 @@ extension UserContentListView {
             .foregroundColor(.white)
         }
         Spacer()
-        VStack(spacing: 0) {
+        VStack(spacing: 28) {
           Spacer()
           Button {
             whistleToggle()
           } label: {
             VStack(spacing: 0) {
               Image(systemName: isWhistled.wrappedValue ? "heart.fill" : "heart")
-                .resizable()
-                .scaledToFit()
-                .frame(width: 28, height: 26)
+                .font(.system(size: 30))
+                .contentShape(Rectangle())
                 .foregroundColor(.Gray10)
                 .padding(.bottom, 2)
               Text("\(whistleCount.wrappedValue)")
                 .foregroundColor(.Gray10)
-                .fontSystem(fontDesignSystem: .caption_Regular)
-                .padding(.bottom, 24)
+                .fontSystem(fontDesignSystem: .subtitle3_KO)
             }
           }
           Button {
@@ -322,27 +335,24 @@ extension UserContentListView {
               forPasteboardType: UTType.plainText.identifier)
           } label: {
             Image(systemName: "square.and.arrow.up")
-              .resizable()
-              .scaledToFit()
-              .frame(width: 25, height: 32)
+              .font(.system(size: 30))
+              .contentShape(Rectangle())
               .foregroundColor(.Gray10)
-              .padding(.bottom, 24)
           }
           .fontSystem(fontDesignSystem: .caption_Regular)
           Button {
             showDialog = true
           } label: {
             Image(systemName: "ellipsis")
-              .resizable()
-              .scaledToFit()
-              .frame(width: 30, height: 25)
+              .font(.system(size: 30))
+              .contentShape(Rectangle())
               .foregroundColor(.Gray10)
           }
         }
       }
     }
     .padding(.bottom, 64)
-    .padding(.horizontal, 20)
+    .padding(.horizontal, 12)
   }
 }
 
