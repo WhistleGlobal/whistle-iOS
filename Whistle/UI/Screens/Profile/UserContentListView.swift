@@ -83,17 +83,23 @@ struct UserContentListView: View {
                 .ignoresSafeArea(.all, edges: .top)
                 .tag(index)
             } else {
-              KFImage.url(URL(string: content.thumbnailUrl ?? ""))
-                .placeholder {
-                  Color.black
-                }
-                .resizable()
-                .scaledToFill()
-                .tag(index)
-                .frame(width: proxy.size.width)
-                .padding()
-                .rotationEffect(Angle(degrees: -90))
-                .ignoresSafeArea(.all, edges: .top)
+                Color.black
+                  .tag(index)
+                  .frame(width: proxy.size.width)
+                  .padding()
+                  .rotationEffect(Angle(degrees: -90))
+                  .ignoresSafeArea(.all, edges: .top)
+//              KFImage.url(URL(string: content.thumbnailUrl ?? ""))
+//                .placeholder {
+//                  Color.black
+//                }
+//                .resizable()
+//                .scaledToFill()
+//                .tag(index)
+//                .frame(width: proxy.size.width)
+//                .padding()
+//                .rotationEffect(Angle(degrees: -90))
+//                .ignoresSafeArea(.all, edges: .top)
             }
           }
         }
