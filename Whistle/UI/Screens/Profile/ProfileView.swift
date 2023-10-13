@@ -117,7 +117,7 @@ struct ProfileView: View {
                   MyContentListView(currentIndex: index)
                     .environmentObject(apiViewModel)
                 } label: {
-                  videoThumbnailView(thumbnailUrl: content.thumbnailUrl ?? "", viewCount: content.contentViewCount ?? 0)
+                  videoThumbnailView(thumbnailUrl: content.thumbnailUrl ?? "", viewCount: content.contentWhistleCount ?? 0)
                 }
               }
             }
