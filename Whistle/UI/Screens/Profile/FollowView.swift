@@ -154,7 +154,7 @@ extension FollowView {
       .frame(width: 48, height: 48)
       .foregroundColor(.LabelColor_Primary)
       .padding(.bottom, 32)
-    Text("아직 회원님을 팔로우하는 사람이 없습니다")
+    Text("아직 회원님이 팔로우하는 사람이 없습니다")
       .fontSystem(fontDesignSystem: .body1_KO)
       .foregroundColor(.LabelColor_Secondary)
       .padding(.bottom, 64)
