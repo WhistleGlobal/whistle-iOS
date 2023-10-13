@@ -138,12 +138,12 @@ struct MainView: View {
 //                .padding()
 //                .rotationEffect(Angle(degrees: -90))
 //                .ignoresSafeArea(.all, edges: .top)
-                Color.black
-                  .tag(index)
-                  .frame(width: proxy.size.width)
-                  .padding()
-                  .rotationEffect(Angle(degrees: -90))
-                  .ignoresSafeArea(.all, edges: .top)
+              Color.black
+                .tag(index)
+                .frame(width: proxy.size.width)
+                .padding()
+                .rotationEffect(Angle(degrees: -90))
+                .ignoresSafeArea(.all, edges: .top)
             }
           }
         }
