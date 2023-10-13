@@ -128,8 +128,22 @@ extension UserFollowView {
             log(isFollowed.wrappedValue)
             if isFollowed.wrappedValue {
               await apiViewModel.unfollowUser(userId: userId)
+              apiViewModel.contentList = apiViewModel.contentList.map { content in
+                let updatedContent = content
+                if content.userId == userId {
+                  updatedContent.isFollowed.toggle()
+                }
+                return updatedContent
+              }
             } else {
               await apiViewModel.followUser(userId: userId)
+              apiViewModel.contentList = apiViewModel.contentList.map { content in
+                let updatedContent = content
+                if content.userId == userId {
+                  updatedContent.isFollowed.toggle()
+                }
+                return updatedContent
+              }
             }
             isFollowed.wrappedValue.toggle()
             apiViewModel.postFeedPlayerChanged()
