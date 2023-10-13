@@ -42,6 +42,7 @@ struct VideoContentView: View {
   private let maxRecordingDuration: TimeInterval = 15
   @State var isImagePickerClosed = PassthroughSubject<Bool, Never>()
   @Environment(\.dismiss) var dismiss
+  @Environment(\.scenePhase) var scenePhase
 
   var barSpacing: CGFloat {
     CGFloat((UIScreen.width - 32 - 12 - (14 * 6)) / 15)
@@ -207,6 +208,27 @@ struct VideoContentView: View {
       }
     }
     .navigationBarBackButtonHidden()
+    .onChange(of: scenePhase) { newValue in
+      if newValue == .background {
+        guard let device = AVCaptureDevice.default(for: .video) else { return }
+
+        if device.hasTorch {
+          do {
+            try device.lockForConfiguration()
+
+            if device.torchMode == .on {
+              device.torchMode = .off
+              isFlashOn = false
+            }
+            device.unlockForConfiguration()
+          } catch {
+            print("Flash could not be used")
+          }
+        } else {
+          print("Device does not have a Torch")
+        }
+      }
+    }
     .bottomSheet(
       bottomSheetPosition: $bottomSheetPosition,
       switchablePositions: [.hidden, .absolute(406)])
