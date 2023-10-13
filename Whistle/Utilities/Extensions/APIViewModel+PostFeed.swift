@@ -60,6 +60,11 @@ extension APIViewModel: PostFeedProtocol {
                 return
               }
               self.userPostFeed = try self.decoder.decode([UserPostFeed].self, from: data)
+              for test in self.userPostFeed {
+                log("\(test.isFollowed)")
+                log("\(test.isBookmarked)")
+                log("\(test.isHated)")
+              }
               continuation.resume()
             } catch {
               log("Error parsing JSON: \(error)")

@@ -23,7 +23,7 @@ struct MainView: View {
   @State var playerIndex = 0
   @State var showDialog = false
   @State var showPasteToast = false
-  @State var showBookmarkToast = false
+  @State var showBookmarkToast = (false, "저장하기")
   @State var showHideContentToast = false
   @State var showReport = false
   @State var showFollowToast = (false, "")
@@ -31,6 +31,7 @@ struct MainView: View {
   @State var showUpdate = false
   @State var currentVideoUserId = 0
   @State var currentVideoContentId = 0
+  @State var currentVideoIsBookmarked = false
   @State var isShowingBottomSheet = false
   @State var players: [AVPlayer?] = []
   @State var newId = UUID()
@@ -233,6 +234,7 @@ struct MainView: View {
       playerIndex = newValue
       currentVideoUserId = apiViewModel.contentList[newValue].userId ?? 0
       currentVideoContentId = apiViewModel.contentList[newValue].contentId ?? 0
+      currentVideoIsBookmarked = apiViewModel.contentList[newValue].isBookmarked ?? false
       apiViewModel.postFeedPlayerChanged()
     }
     .onChange(of: scenePhase) { newValue in
@@ -283,8 +285,8 @@ struct MainView: View {
       if showPasteToast {
         ToastMessage(text: "클립보드에 복사되었어요", toastPadding: 70, isTopAlignment: true, showToast: $showPasteToast)
       }
-      if showBookmarkToast {
-        ToastMessage(text: "저장되었습니다!", toastPadding: 70, isTopAlignment: true, showToast: $showBookmarkToast)
+      if showBookmarkToast.0 {
+        ToastMessage(text: showBookmarkToast.1, toastPadding: 70, isTopAlignment: true, showToast: $showBookmarkToast.0)
       }
       if showFollowToast.0 {
         ToastMessage(text: showFollowToast.1, toastPadding: 70, isTopAlignment: true, showToast: $showFollowToast.0)
@@ -326,9 +328,23 @@ struct MainView: View {
       }
     }
     .confirmationDialog("", isPresented: $showDialog) {
-      Button("저장하기", role: .none) {
+      Button(
+        currentVideoIsBookmarked ? "저장 취소" : "저장하기",
+        role: .none)
+      {
         Task {
-          showBookmarkToast = await apiViewModel.actionBookmark(contentId: currentVideoContentId)
+          if apiViewModel.contentList[currentIndex].isBookmarked ?? false {
+            showBookmarkToast.1 = "저장 취소했습니다."
+            showBookmarkToast.0 = await apiViewModel.actionBookmarkCancel(contentId: currentVideoContentId)
+            apiViewModel.contentList[currentIndex].isBookmarked = false
+            currentVideoIsBookmarked = false
+          } else {
+            showBookmarkToast.1 = "저장 했습니다."
+            showBookmarkToast.0 = await apiViewModel.actionBookmark(contentId: currentVideoContentId)
+            apiViewModel.contentList[currentIndex].isBookmarked = true
+            currentVideoIsBookmarked = true
+          }
+          apiViewModel.postFeedPlayerChanged()
         }
       }
       Button("관심없음", role: .none) {
@@ -586,6 +602,7 @@ extension MainView {
         currentVideoUserId = apiViewModel.contentList[currentIndex].userId ?? 0
         currentVideoContentId = apiViewModel.contentList[currentIndex].contentId ?? 0
         isCurrentVideoWhistled = apiViewModel.contentList[currentIndex].isWhistled
+        currentVideoIsBookmarked = apiViewModel.contentList[currentIndex].isBookmarked ?? false
         await player.seek(to: .zero)
         player.play()
         withAnimation {
