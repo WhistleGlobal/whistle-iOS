@@ -65,22 +65,13 @@ struct TabbarView: View {
             .environmentObject(tabbarModel)
             .overlay {
               if !isNavigationActive {
-                AccessView()
+                AccessView(
+                  isCameraAuthorized: $isCameraAuthorized,
+                  isAlbumAuthorized: $isAlbumAuthorized,
+                  isMicrophoneAuthorized: $isMicrophoneAuthorized)
                   .environmentObject(tabbarModel)
               }
             }
-          // ZStack {
-          // Color.pink.ignoresSafeArea()
-          // .onTapGesture {
-          //  isImagePickerClosed.send(true)
-          //  }
-          //    if isPresented {
-          //    PickerConfigViewControllerWrapper(isImagePickerClosed: $isImagePickerClosed)
-          // }
-          //   Text(isPresented ? "Image Picker is closed" : "Image Picker is not closed")
-          //    .onReceive(isImagePickerClosed) { value in
-          //      isPresented = value
-          //   }
         }
         .onAppear {
           requestPermissions()
