@@ -55,13 +55,7 @@ struct PhotoCollectionView: View {
               .fontSystem(fontDesignSystem: .subtitle1_KO)
               .foregroundColor(.LabelColor_Primary)
             Spacer()
-            Button {
-              dismiss()
-            } label: {
-              Text("완료")
-                .fontSystem(fontDesignSystem: .subtitle2_KO)
-                .foregroundColor(.Info)
-            }
+            EmptyView()
           }
           .frame(height: 54)
           .frame(maxWidth: .infinity)
@@ -71,7 +65,11 @@ struct PhotoCollectionView: View {
             Button {
               Task {
                 albumName = album.name
-                await photoCollection.fetchAssetsInAlbum(albumName: album.name)
+                if album.isSmartAlbum {
+                  await photoCollection.fetchAssetsInSmartAlbum(albumName: album.name)
+                } else {
+                  await photoCollection.fetchAssetsInAlbum(albumName: album.name)
+                }
               }
               showAlbumList = false
             } label: {

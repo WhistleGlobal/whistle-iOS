@@ -233,6 +233,43 @@ class PhotoCollection: NSObject, ObservableObject {
     }
   }
 
+  func fetchAssetsInSmartAlbum(albumName: String) async {
+    let albumOptions = PHFetchOptions()
+    albumOptions.predicate = NSPredicate(format: "localizedTitle = %@", albumName)
+
+    let smartAlbums = PHAssetCollection.fetchAssetCollections(
+      with: .smartAlbum,
+      subtype: .albumRegular,
+      options: nil)
+
+    var albumCollection: PHAssetCollection?
+
+    smartAlbums.enumerateObjects { collection, _, _ in
+      if collection.localizedTitle == albumName {
+        albumCollection = collection
+      }
+    }
+
+    guard let album = albumCollection else {
+      print("Smart album not found.")
+      return
+    }
+
+    // Fetch assets from the smart album
+    let fetchOptions = PHFetchOptions()
+    fetchOptions.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
+    fetchOptions.predicate = NSPredicate(format: "mediaType == %d", PHAssetMediaType.image.rawValue)
+
+    let fetchResult = PHAsset.fetchAssets(in: album, options: fetchOptions)
+
+    await MainActor.run {
+      photoAssets = PhotoAssetCollection(fetchResult)
+      logger.debug("Images fetched from smart album '\(albumName)'. Count: \(self.photoAssets.count)")
+    }
+  }
+
+
+
 
 
   private static func getAlbum(identifier: String) -> PHAssetCollection? {
@@ -276,33 +313,36 @@ class PhotoCollection: NSObject, ObservableObject {
   func fetchAlbumList() {
     albums.removeAll()
     var albums = [AlbumModel]()
+
     let options = PHFetchOptions()
-    let userAlbums = PHAssetCollection.fetchAssetCollections(with: .album, subtype: .any, options: options)
-    userAlbums.enumerateObjects { object, _, _ in
+
+    // Fetch smart albums
+    let smartAlbums = PHAssetCollection.fetchAssetCollections(with: .smartAlbum, subtype: .any, options: options)
+    smartAlbums.enumerateObjects { object, _, _ in
       if let albumCollection = object as? PHAssetCollection {
+        // Fetch assets from smart albums
         let fetchOptions = PHFetchOptions()
         fetchOptions.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
         fetchOptions.predicate = NSPredicate(format: "mediaType = %d", PHAssetMediaType.image.rawValue)
-
         let assets = PHAsset.fetchAssets(in: albumCollection, options: fetchOptions)
 
+        // Fetch the first asset as the thumbnail
         if let firstAsset = assets.firstObject {
           let imageManager = PHImageManager.default()
           let targetSize = CGSize(width: 300, height: 300)
-
-          imageManager
-            .requestImage(
-              for: firstAsset,
-              targetSize: targetSize,
-              contentMode: .aspectFit,
-              options: nil)
+          imageManager.requestImage(
+            for: firstAsset,
+            targetSize: targetSize,
+            contentMode: .aspectFit,
+            options: nil)
           { image, _ in
             if let thumbnailImage = image {
               let newAlbum = AlbumModel(
                 name: albumCollection.localizedTitle ?? "",
                 count: assets.count,
                 collection: albumCollection,
-                thumbnail: thumbnailImage)
+                thumbnail: thumbnailImage,
+                isSmartAlbum: true)
               albums.append(newAlbum)
             }
           }
@@ -311,13 +351,57 @@ class PhotoCollection: NSObject, ObservableObject {
             name: albumCollection.localizedTitle ?? "",
             count: assets.count,
             collection: albumCollection,
-            thumbnail: nil)
+            thumbnail: nil,
+            isSmartAlbum: true)
           albums.append(newAlbum)
         }
       }
     }
+    // Fetch user albums
+    let userAlbums = PHAssetCollection.fetchAssetCollections(with: .album, subtype: .any, options: options)
+    userAlbums.enumerateObjects { object, _, _ in
+      if let albumCollection = object as? PHAssetCollection {
+        // Fetch assets from user albums
+        let fetchOptions = PHFetchOptions()
+        fetchOptions.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
+        fetchOptions.predicate = NSPredicate(format: "mediaType = %d", PHAssetMediaType.image.rawValue)
+        let assets = PHAsset.fetchAssets(in: albumCollection, options: fetchOptions)
+
+        // Fetch the first asset as the thumbnail
+        if let firstAsset = assets.firstObject {
+          let imageManager = PHImageManager.default()
+          let targetSize = CGSize(width: 300, height: 300)
+          imageManager.requestImage(
+            for: firstAsset,
+            targetSize: targetSize,
+            contentMode: .aspectFit,
+            options: nil)
+          { image, _ in
+            if let thumbnailImage = image {
+              let newAlbum = AlbumModel(
+                name: albumCollection.localizedTitle ?? "",
+                count: assets.count,
+                collection: albumCollection,
+                thumbnail: thumbnailImage,
+                isSmartAlbum: false)
+              albums.append(newAlbum)
+            }
+          }
+        } else {
+          let newAlbum = AlbumModel(
+            name: albumCollection.localizedTitle ?? "",
+            count: assets.count,
+            collection: albumCollection,
+            thumbnail: nil,
+            isSmartAlbum: false)
+          albums.append(newAlbum)
+        }
+      }
+    }
+    albums = albums.filter { $0.count != 0 }
     self.albums = albums
   }
+
 
   func fetchPhotoByLocalIdentifier(localIdentifier: String, completion: @escaping (Photo?) -> Void) {
     let fetchResult: PHFetchResult = PHAsset.fetchAssets(withLocalIdentifiers: [localIdentifier], options: nil)
