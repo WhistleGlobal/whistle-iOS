@@ -30,6 +30,7 @@ extension APIViewModel: PostFeedProtocol {
               }
               let decoder = JSONDecoder()
               self.myPostFeed = try decoder.decode([PostFeed].self, from: data)
+              self.myPostFeed = self.myPostFeed.filter { $0.contentId != nil }
               continuation.resume()
             } catch {
               log("Error parsing JSON: \(error)")

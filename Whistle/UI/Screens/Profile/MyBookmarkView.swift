@@ -269,7 +269,7 @@ extension MyBookmarkView {
           Spacer()
           HStack(spacing: 0) {
             Group {
-              profileImageView(url: apiViewModel.myProfile.profileImage, size: 36)
+              profileImageView(url: apiViewModel.bookmark[currentIndex].profileImg, size: 36)
                 .padding(.trailing, 12)
               Text(userName)
                 .foregroundColor(.white)
