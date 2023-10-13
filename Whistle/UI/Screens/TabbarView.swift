@@ -194,7 +194,9 @@ extension TabbarView {
       .overlay {
         Button {
           if tabbarModel.tabSelectionNoAnimation == .main {
-            NavigationUtil.popToRootView()
+            if isAccess {
+              NavigationUtil.popToRootView()
+            }
           } else {
             switchTab(to: .main)
           }
