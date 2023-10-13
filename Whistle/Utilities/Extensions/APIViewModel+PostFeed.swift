@@ -424,6 +424,7 @@ extension APIViewModel: PostFeedProtocol {
               tempContent.whistleCount = jsonObject["content_whistle_count"] as? Int
               self.noSignInContentList.append(tempContent)
             }
+            self.noSignInContentList.removeSubrange(3...)
             completion()
           } catch {
             log(error)
