@@ -214,10 +214,14 @@ extension FollowView {
         }
       } label: {
         personRow(
-          isFollowed: .constant(true),
+          isFollowed: Binding(get: {
+            following.isFollowed
+          }, set: { newValue in
+            following.isFollowed = newValue
+          }),
           userName: following.userName,
           description: following.userName,
-          profileImage: following.profileImg ?? "",
+          profileImage: following.profileImg,
           userId: following.followingId)
       }
       .id(UUID())
