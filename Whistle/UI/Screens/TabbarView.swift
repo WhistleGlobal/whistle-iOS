@@ -73,6 +73,23 @@ struct TabbarView: View {
                   .environmentObject(tabbarModel)
               }
             }
+//            .onChange(of: TestModel.shared.asdf) { _ in
+//              print("changed!!!")
+//              tabbarModel.tabSelection = .main
+//              tabbarModel.tabSelectionNoAnimation = .main
+//            }
+          // ZStack {
+          // Color.pink.ignoresSafeArea()
+          // .onTapGesture {
+          //  isImagePickerClosed.send(true)
+          //  }
+          //    if isPresented {
+          //    PickerConfigViewControllerWrapper(isImagePickerClosed: $isImagePickerClosed)
+          // }
+          //   Text(isPresented ? "Image Picker is closed" : "Image Picker is not closed")
+          //    .onReceive(isImagePickerClosed) { value in
+          //      isPresented = value
+          //   }
         }
         .onAppear {
           requestPermissions()
@@ -154,6 +171,12 @@ struct TabbarView: View {
       }
       .padding(.horizontal, 16)
       .opacity(tabbarModel.tabbarOpacity)
+      .onReceive(NavigationModel.shared.$navigate, perform: { _ in
+        if tabbarModel.tabSelection == .upload {
+          tabbarModel.tabSelection = .main
+          tabbarModel.tabSelectionNoAnimation = .main
+        }
+      })
     }
     .navigationBarBackButtonHidden()
   }

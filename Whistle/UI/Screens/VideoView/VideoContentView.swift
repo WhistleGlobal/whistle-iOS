@@ -15,13 +15,18 @@ import SwiftUI
 // MARK: - VideoContentView
 
 struct VideoContentView: View {
-
+  @Environment(\.dismiss) var dismiss
   @EnvironmentObject var apiViewModel: APIViewModel
   @EnvironmentObject var tabbarModel: TabbarModel
+  @ObservedObject private var viewModel = VideoContentViewModel()
+  @StateObject var editorVM = EditorViewModel()
+  @StateObject var videoPlayer = VideoPlayerManager()
+  @StateObject var musicVM = MusicViewModel()
 
   @State var isRecording = false
   @State var isFront = false
   @State var isFlashOn = false
+  // @State var i
 
   @State var showSetting = false
   @State var showGallery = false
@@ -30,7 +35,6 @@ struct VideoContentView: View {
   @State private var buttonState: CameraButtonState = .idle
   @State var captureMode: AssetType = .video
   @State private var animatedProgress = 0.0
-  @ObservedObject private var viewModel = VideoContentViewModel()
   @State var isPresented = false
   @State var count: CGFloat = 0
   @State var bottomSheetPosition: BottomSheetPosition = .hidden
@@ -42,7 +46,8 @@ struct VideoContentView: View {
   @State private var recordingTimer: Timer?
 //  private let maxRecordingDuration: TimeInterval = 15
   @State var isImagePickerClosed = PassthroughSubject<Bool, Never>()
-  @Environment(\.dismiss) var dismiss
+  @State var showAlert = false
+
   @Environment(\.scenePhase) var scenePhase
 
   var barSpacing: CGFloat {
@@ -68,86 +73,107 @@ struct VideoContentView: View {
           maxHeight: .infinity)
         .allowsHitTesting(false)
       VStack {
-        HStack(spacing: 24) {
-          Button {
-            withAnimation {
-              tabbarModel.tabSelectionNoAnimation = .main
-              tabbarModel.tabSelection = .main
+        switch buttonState {
+        case .idle:
+          HStack(spacing: 24) {
+            Button {
+              bottomSheetPosition = .absolute(UIScreen.getHeight(406))
+            } label: {
+              HStack(spacing: 8) {
+                Image(systemName: "clock")
+                  .font(.system(size: 16))
+                  .foregroundColor(.white)
+                  .contentShape(Circle())
+                if selectedSec.1 {
+                  Text("\(selectedSec.0 == .sec3 ? 3 : 10)초")
+                    .fontSystem(fontDesignSystem: .subtitle3_KO)
+                    .foregroundColor(.white)
+                }
+              }
+              .padding(.horizontal, selectedSec.1 ? 20 : 10)
+              .frame(height: UIScreen.getHeight(36))
+              .background {
+                if selectedSec.1 {
+                  Capsule()
+                    .foregroundColor(Color.Primary_Default)
+                } else {
+                  glassMoriphicCircleView()
+                    .overlay {
+                      Circle()
+                        .stroke(lineWidth: 1)
+                        .foregroundStyle(LinearGradient.Border_Glass)
+                    }
+                }
+              }
             }
-          } label: {
-            Image(systemName: "xmark")
-              .resizable()
-              .scaledToFit()
-              .frame(width: 20)
-              .foregroundColor(.white)
-          }
-          Spacer()
-          Button {
-            bottomSheetPosition = .absolute(406)
-          } label: {
-            HStack(spacing: 8) {
-              Image(systemName: "clock")
+            Button {
+              if !isFront {
+                toggleFlash()
+              }
+            } label: {
+              Image(systemName: isFlashOn ? "bolt" : "bolt.slash.fill")
                 .font(.system(size: 16))
+                .padding(10)
                 .foregroundColor(.white)
                 .contentShape(Circle())
-              if selectedSec.1 {
-                Text("\(selectedSec.0 == .sec3 ? 3 : 10)초")
-                  .fontSystem(fontDesignSystem: .subtitle3_KO)
-                  .foregroundColor(.white)
+                .background {
+                  if isFlashOn {
+                    Circle()
+                      .foregroundColor(Color.Primary_Default)
+                  } else {
+                    glassMoriphicCircleView()
+                      .overlay {
+                        Circle()
+                          .stroke(lineWidth: 1)
+                          .foregroundStyle(LinearGradient.Border_Glass)
+                      }
+                  }
+                }
+            }
+            .frame(width: UIScreen.getWidth(36), height: UIScreen.getHeight(36))
+            .allowsHitTesting(!isFront)
+            .overlay {
+              if isFront {
+                Circle().frame(width: 36, height: 36).foregroundColor(.black.opacity(0.4))
               }
             }
           }
-          .frame(width: selectedSec.1 ? 89 : 36, height: 36)
-          .background {
-            if selectedSec.1 {
-              Capsule()
-                .foregroundColor(Color.Primary_Default)
-                .frame(width: 89, height: 36)
-            } else {
-              glassMoriphicCircleView(width: 36, height: 36)
-                .overlay {
-                  Circle()
-                    .stroke(lineWidth: 1)
-                    .foregroundStyle(LinearGradient.Border_Glass)
-                }
+          .frame(height: 52)
+          .hCenter()
+          .overlay(alignment: .leading) {
+            Button {
+              withAnimation {
+                tabbarModel.tabSelectionNoAnimation = .main
+                tabbarModel.tabSelection = .main
+              }
+            } label: {
+              Image(systemName: "xmark")
+                .font(.system(size: 24))
+                .foregroundColor(.white)
             }
+            .padding(.leading, 16)
           }
-          Button {
-            if !isFront {
-              toggleFlash()
+        case .recording:
+          EmptyView()
+        case .completed:
+          HStack(spacing: 24) {
+            Text("새 게시물")
+              .fontSystem(fontDesignSystem: .subtitle1_KO)
+              .foregroundStyle(Color.white)
+          }
+          .frame(height: 52)
+          .hCenter()
+          .overlay(alignment: .leading) {
+            Button {
+              showAlert = true
+            } label: {
+              Image(systemName: "xmark")
+                .font(.system(size: 24))
+                .foregroundColor(.white)
             }
-          } label: {
-            Image(systemName: isFlashOn ? "bolt" : "bolt.slash.fill")
-              .font(.system(size: 16))
-              .foregroundColor(.white)
-              .contentShape(Circle())
+            .padding(.leading, 16)
           }
-          .frame(width: 36, height: 36)
-          .background {
-            if isFlashOn {
-              Circle()
-                .frame(width: 36)
-                .foregroundColor(Color.Primary_Default)
-            } else {
-              glassMoriphicCircleView(width: 36, height: 36)
-                .overlay {
-                  Circle()
-                    .stroke(lineWidth: 1)
-                    .foregroundStyle(LinearGradient.Border_Glass)
-                }
-            }
-          }
-          .allowsHitTesting(!isFront)
-          .overlay {
-            if isFront {
-              Circle().frame(width: 36, height: 36).foregroundColor(.black.opacity(0.4))
-            }
-          }
-          Spacer()
-          Spacer().frame(width: 20)
         }
-        .frame(height: 52)
-        .padding(.horizontal, 16)
         Spacer()
         HStack(spacing: 0) {
           // Album thumbnail + button
@@ -158,13 +184,14 @@ struct VideoContentView: View {
                 : viewModel.photoAlbumCover)
               ?? Image("")
             roundRectangleShape(with: coverImage, size: 56)
+              .vBottom()
           }
           .shadow(radius: 5)
           .contentShape(Rectangle())
           .onReceive(isImagePickerClosed) { value in
             isPresented = value
           }
-
+          .opacity(buttonState == .idle ? 1 : 0)
           Spacer()
           // Shutter + button
           recordingButton(
@@ -196,25 +223,30 @@ struct VideoContentView: View {
           }) {
             VStack(spacing: 8) {
               ZStack {
-                glassMoriphicCircleView(width: 56, height: 56)
-                  .overlay {
-                    Circle()
-                      .stroke(lineWidth: 1)
-                      .foregroundStyle(LinearGradient.Border_Glass)
-                  }
                 Image(systemName: "arrow.triangle.2.circlepath")
-                  .resizable()
-                  .scaledToFit()
+                  .font(.system(size: 24))
                   .foregroundColor(.white)
-                  .frame(width: 27, height: 20)
+                  .padding(16)
+                  .background {
+                    glassMoriphicCircleView()
+                      .overlay {
+                        Circle()
+                          .stroke(lineWidth: 1)
+                          .foregroundStyle(LinearGradient.Border_Glass)
+                      }
+                  }
               }
               Text("화면 전환")
                 .foregroundColor(.white)
+                .fontSystem(fontDesignSystem: .body2_KO)
             }
+            .vBottom()
           }
-          .contentShape(Rectangle())
+          .contentShape(Circle())
+          .opacity(buttonState == .idle ? 1 : 0)
         }
-        .frame(height: 114)
+        .hCenter()
+        .frame(height: UIScreen.getHeight(96))
         .padding(.horizontal, 42)
         .padding(.bottom, 64)
       }
@@ -235,7 +267,6 @@ struct VideoContentView: View {
     .onChange(of: scenePhase) { newValue in
       if newValue == .background {
         guard let device = AVCaptureDevice.default(for: .video) else { return }
-
         if device.hasTorch {
           do {
             try device.lockForConfiguration()
@@ -344,7 +375,9 @@ struct VideoContentView: View {
         .frame(width: UIScreen.width - 32, alignment: .leading)
         .padding(.horizontal, 16)
         .frame(height: 64)
+
         // MARK: - 드래그
+
         HStack(alignment: .bottom) {
           RoundedRectangle(cornerRadius: 8)
             .foregroundColor(Color.Gray30_Dark)
@@ -358,7 +391,7 @@ struct VideoContentView: View {
             .overlay {
               HStack(spacing: 0) {
                 Spacer().frame(minWidth: 0)
-                ForEach(0..<14) { i in
+                ForEach(0 ..< 14) { i in
                   Capsule()
                     .frame(width: 6, height: i % 2 == 0 ? 22 : 42)
                     .foregroundColor(Color.Gray30_Dark)
@@ -386,6 +419,120 @@ struct VideoContentView: View {
                             .foregroundColor(.white)
                             .frame(width: 4, height: 22)
                         }
+                        .gesture(
+                          DragGesture()
+                            .onChanged { value in
+                              if
+                                CGFloat(defaultWidth + value.translation.width) >
+                                CGFloat(UIScreen.width - 32)
+                              {
+                                dragOffset = CGFloat((6 + barSpacing) * 7)
+                              } else if defaultWidth + value.translation.width < 6 {
+                                dragOffset = -CGFloat((6 + barSpacing) * 8)
+                              } else {
+                                dragOffset = value.translation.width
+                              }
+                            }
+                            .onEnded { _ in
+                              let dragValue = Int(dragOffset + defaultWidth)
+                              let multiplier = 6 + barSpacing
+                              switch dragValue {
+                              case .min ..< 6 + Int(barSpacing):
+                                withAnimation {
+                                  dragOffset = -8.0 * CGFloat(multiplier)
+                                  timerSec.0 = 0
+                                }
+                              case 6 - Int(barSpacing) ..< Int(multiplier) + Int(barSpacing):
+                                withAnimation {
+                                  dragOffset = -7.0 * CGFloat(multiplier)
+                                  timerSec.0 = 1
+                                }
+                              case Int(multiplier) - Int(barSpacing) ..< Int(2 * multiplier) + Int(barSpacing):
+                                withAnimation {
+                                  dragOffset = -6.0 * CGFloat(multiplier)
+                                  timerSec.0 = 2
+                                }
+                              case Int(2 * multiplier) - Int(barSpacing) ..< Int(3 * multiplier) +
+                                Int(barSpacing):
+                                withAnimation {
+                                  dragOffset = -5.0 * CGFloat(multiplier)
+                                  timerSec.0 = 3
+                                }
+                              case Int(3 * multiplier) - Int(barSpacing) ..< Int(4 * multiplier) +
+                                Int(barSpacing):
+                                withAnimation {
+                                  dragOffset = -4.0 * CGFloat(multiplier)
+                                  timerSec.0 = 4
+                                }
+                              case Int(4 * multiplier) - Int(barSpacing) ..< Int(5 * multiplier) +
+                                Int(barSpacing):
+                                withAnimation {
+                                  dragOffset = -3.0 * CGFloat(multiplier)
+                                  timerSec.0 = 5
+                                }
+                              case Int(5 * multiplier) - Int(barSpacing) ..< Int(6 * multiplier) +
+                                Int(barSpacing):
+                                withAnimation {
+                                  dragOffset = -2.0 * CGFloat(multiplier)
+                                  timerSec.0 = 6
+                                }
+                              case Int(6 * multiplier) - Int(barSpacing) ..< Int(7 * multiplier) +
+                                Int(barSpacing):
+                                withAnimation {
+                                  dragOffset = -CGFloat(multiplier)
+                                  timerSec.0 = 7
+                                }
+                              case Int(7 * multiplier) - Int(barSpacing) ..< Int(8 * multiplier) +
+                                Int(barSpacing):
+                                withAnimation {
+                                  dragOffset = 0.0
+                                  timerSec.0 = 8
+                                }
+                              case Int(8 * multiplier) - Int(barSpacing) ..< Int(9 * multiplier) +
+                                Int(barSpacing):
+                                withAnimation {
+                                  dragOffset = CGFloat(multiplier)
+                                  timerSec.0 = 9
+                                }
+                              case Int(9 * multiplier) - Int(barSpacing) ..< Int(10 * multiplier) +
+                                Int(barSpacing):
+                                withAnimation {
+                                  dragOffset = 2.0 * CGFloat(multiplier)
+                                  timerSec.0 = 10
+                                }
+                              case Int(10 * multiplier) - Int(barSpacing) ..< Int(11 * multiplier) +
+                                Int(barSpacing):
+                                withAnimation {
+                                  dragOffset = 3.0 * CGFloat(multiplier)
+                                  timerSec.0 = 11
+                                }
+                              case Int(11 * multiplier) - Int(barSpacing) ..< Int(12 * multiplier) +
+                                Int(barSpacing):
+                                withAnimation {
+                                  dragOffset = 4.0 * CGFloat(multiplier)
+                                  timerSec.0 = 12
+                                }
+                              case Int(12 * multiplier) - Int(barSpacing) ..< Int(13 * multiplier) +
+                                Int(barSpacing):
+                                withAnimation {
+                                  dragOffset = 5.0 * CGFloat(multiplier)
+                                  timerSec.0 = 13
+                                }
+                              case Int(13 * multiplier) - Int(barSpacing) ..< Int(14 * multiplier) +
+                                Int(barSpacing):
+                                withAnimation {
+                                  dragOffset = 6.0 * CGFloat(multiplier)
+                                  timerSec.0 = 14
+                                }
+                              case Int(14 * multiplier) - Int(barSpacing) ... Int.max:
+                                withAnimation {
+                                  dragOffset = 7.0 * CGFloat(multiplier)
+                                  timerSec.0 = 15
+                                }
+                              default:
+                                log("")
+                              }
+                            })
                     }
                   }
                   .reverseMask {
@@ -415,94 +562,94 @@ struct VideoContentView: View {
                         let dragValue = Int(dragOffset + defaultWidth)
                         let multiplier = 6 + barSpacing
                         switch dragValue {
-                        case .min..<6 + Int(barSpacing):
+                        case .min ..< 6 + Int(barSpacing):
                           withAnimation {
                             dragOffset = -8.0 * CGFloat(multiplier)
                             timerSec.0 = 0
                           }
-                        case 6 - Int(barSpacing)..<Int(multiplier) + Int(barSpacing):
+                        case 6 - Int(barSpacing) ..< Int(multiplier) + Int(barSpacing):
                           withAnimation {
                             dragOffset = -7.0 * CGFloat(multiplier)
                             timerSec.0 = 1
                           }
-                        case Int(multiplier) - Int(barSpacing)..<Int(2 * multiplier) + Int(barSpacing):
+                        case Int(multiplier) - Int(barSpacing) ..< Int(2 * multiplier) + Int(barSpacing):
                           withAnimation {
                             dragOffset = -6.0 * CGFloat(multiplier)
                             timerSec.0 = 2
                           }
-                        case Int(2 * multiplier) - Int(barSpacing)..<Int(3 * multiplier) +
+                        case Int(2 * multiplier) - Int(barSpacing) ..< Int(3 * multiplier) +
                           Int(barSpacing):
                           withAnimation {
                             dragOffset = -5.0 * CGFloat(multiplier)
                             timerSec.0 = 3
                           }
-                        case Int(3 * multiplier) - Int(barSpacing)..<Int(4 * multiplier) +
+                        case Int(3 * multiplier) - Int(barSpacing) ..< Int(4 * multiplier) +
                           Int(barSpacing):
                           withAnimation {
                             dragOffset = -4.0 * CGFloat(multiplier)
                             timerSec.0 = 4
                           }
-                        case Int(4 * multiplier) - Int(barSpacing)..<Int(5 * multiplier) +
+                        case Int(4 * multiplier) - Int(barSpacing) ..< Int(5 * multiplier) +
                           Int(barSpacing):
                           withAnimation {
                             dragOffset = -3.0 * CGFloat(multiplier)
                             timerSec.0 = 5
                           }
-                        case Int(5 * multiplier) - Int(barSpacing)..<Int(6 * multiplier) +
+                        case Int(5 * multiplier) - Int(barSpacing) ..< Int(6 * multiplier) +
                           Int(barSpacing):
                           withAnimation {
                             dragOffset = -2.0 * CGFloat(multiplier)
                             timerSec.0 = 6
                           }
-                        case Int(6 * multiplier) - Int(barSpacing)..<Int(7 * multiplier) +
+                        case Int(6 * multiplier) - Int(barSpacing) ..< Int(7 * multiplier) +
                           Int(barSpacing):
                           withAnimation {
                             dragOffset = -CGFloat(multiplier)
                             timerSec.0 = 7
                           }
-                        case Int(7 * multiplier) - Int(barSpacing)..<Int(8 * multiplier) +
+                        case Int(7 * multiplier) - Int(barSpacing) ..< Int(8 * multiplier) +
                           Int(barSpacing):
                           withAnimation {
                             dragOffset = 0.0
                             timerSec.0 = 8
                           }
-                        case Int(8 * multiplier) - Int(barSpacing)..<Int(9 * multiplier) +
+                        case Int(8 * multiplier) - Int(barSpacing) ..< Int(9 * multiplier) +
                           Int(barSpacing):
                           withAnimation {
                             dragOffset = CGFloat(multiplier)
                             timerSec.0 = 9
                           }
-                        case Int(9 * multiplier) - Int(barSpacing)..<Int(10 * multiplier) +
+                        case Int(9 * multiplier) - Int(barSpacing) ..< Int(10 * multiplier) +
                           Int(barSpacing):
                           withAnimation {
                             dragOffset = 2.0 * CGFloat(multiplier)
                             timerSec.0 = 10
                           }
-                        case Int(10 * multiplier) - Int(barSpacing)..<Int(11 * multiplier) +
+                        case Int(10 * multiplier) - Int(barSpacing) ..< Int(11 * multiplier) +
                           Int(barSpacing):
                           withAnimation {
                             dragOffset = 3.0 * CGFloat(multiplier)
                             timerSec.0 = 11
                           }
-                        case Int(11 * multiplier) - Int(barSpacing)..<Int(12 * multiplier) +
+                        case Int(11 * multiplier) - Int(barSpacing) ..< Int(12 * multiplier) +
                           Int(barSpacing):
                           withAnimation {
                             dragOffset = 4.0 * CGFloat(multiplier)
                             timerSec.0 = 12
                           }
-                        case Int(12 * multiplier) - Int(barSpacing)..<Int(13 * multiplier) +
+                        case Int(12 * multiplier) - Int(barSpacing) ..< Int(13 * multiplier) +
                           Int(barSpacing):
                           withAnimation {
                             dragOffset = 5.0 * CGFloat(multiplier)
                             timerSec.0 = 13
                           }
-                        case Int(13 * multiplier) - Int(barSpacing)..<Int(14 * multiplier) +
+                        case Int(13 * multiplier) - Int(barSpacing) ..< Int(14 * multiplier) +
                           Int(barSpacing):
                           withAnimation {
                             dragOffset = 6.0 * CGFloat(multiplier)
                             timerSec.0 = 14
                           }
-                        case Int(14 * multiplier) - Int(barSpacing)...Int.max:
+                        case Int(14 * multiplier) - Int(barSpacing) ... Int.max:
                           withAnimation {
                             dragOffset = 7.0 * CGFloat(multiplier)
                             timerSec.0 = 15
@@ -543,9 +690,11 @@ struct VideoContentView: View {
         .padding([.horizontal, .bottom], 16)
         .frame(height: 60)
         Button {
-          timerSec.1 = true
-          selectedSec.1 = true
-          bottomSheetPosition = .hidden
+          withAnimation {
+            timerSec.1 = true
+            selectedSec.1 = true
+            bottomSheetPosition = .hidden
+          }
         } label: {
           Text("타이머 설정")
             .fontSystem(fontDesignSystem: .subtitle2_KO)
@@ -597,20 +746,20 @@ extension VideoContentView {
         .foregroundColor(.LabelColor_Primary_Dark)
     }
   }
-
-  @ViewBuilder
-  func recordingButtonShape(width: CGFloat) -> some View {
-    ZStack {
-      Circle()
-        .strokeBorder(isRecording ? .red : .white, lineWidth: 3)
-        .frame(width: width)
-
-      Circle()
-        .fill(isRecording ? .red : .white)
-        .frame(width: width * 0.8)
-    }
-    .frame(height: width)
-  }
+//
+//  @ViewBuilder
+//  func recordingButtonShape(width: CGFloat) -> some View {
+//    ZStack {
+//      Circle()
+//        .strokeBorder(isRecording ? .red : .white, lineWidth: 3)
+//        .frame(width: width)
+//
+//      Circle()
+//        .fill(isRecording ? .red : .white)
+//        .frame(width: width * 0.8)
+//    }
+//    .frame(height: width)
+//  }
 }
 
 // MARK: - AssetType
@@ -794,7 +943,6 @@ extension VideoContentView {
           isRecording = false
         }
       case .completed:
-
         Circle()
           .stroke(lineWidth: 4)
           .foregroundColor(.White)
