@@ -162,7 +162,7 @@ struct VideoContentView: View {
           recordingButton(
             state: buttonState,
             timerText: timeStringFromTimeInterval(recordingDuration),
-            progress: min(recordingDuration / Double(timerSec.0), 1.0))
+            progress: min(recordingDuration / Double(timerSec.1 ? Double(timerSec.0) : 15.0), 1.0))
           Spacer()
           // Position change + button
           Button(action: {
@@ -670,7 +670,7 @@ extension VideoContentView {
   private func startRecordingTimer() {
     recordingTimer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { _ in
       recordingDuration += 1
-      if recordingDuration >= Double(timerSec.0) {
+      if recordingDuration >= Double(timerSec.1 ? Double(timerSec.0) : 15.0) {
         buttonState = .completed
         viewModel.aespaSession.stopRecording()
         stopRecordingTimer()
