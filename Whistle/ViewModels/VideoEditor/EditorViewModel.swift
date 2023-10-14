@@ -21,9 +21,9 @@ class EditorViewModel: ObservableObject {
 
   private var projectEntity: ProjectEntity?
 
-  func setNewVideo(_ url: URL, geo: GeometryProxy) {
+  func setNewVideo(_ url: URL) {
     currentVideo = .init(url: url)
-    currentVideo?.updateThumbnails(geo)
+    currentVideo?.updateThumbnails()
     currentVideo?.generateHQThumbnails()
     createProject()
   }
@@ -45,7 +45,7 @@ class EditorViewModel: ObservableObject {
     return UIImage()
   }
 
-  func setProject(_ project: ProjectEntity, geo: GeometryProxy) {
+  func setProject(_ project: ProjectEntity) {
     projectEntity = project
 
     guard let url = project.videoURL else { return }
@@ -64,7 +64,7 @@ class EditorViewModel: ObservableObject {
     let frame = VideoFrames(scaleValue: project.frameScale, frameColor: project.wrappedColor)
     currentVideo?.videoFrames = frame
     frames = frame
-    currentVideo?.updateThumbnails(geo)
+    currentVideo?.updateThumbnails()
     if let audio = project.audio?.audioModel {
       currentVideo?.audio = audio
     }

@@ -10,7 +10,6 @@ import SwiftUI
 // MARK: - PlayerHolderView
 
 struct PlayerHolderView: View {
-  @Binding var isFullScreen: Bool
   @ObservedObject var editorVM: EditorViewModel
   @ObservedObject var videoPlayer: VideoPlayerManager
   @ObservedObject var musicVM: MusicViewModel
@@ -126,7 +125,6 @@ extension PlayerHolderView {
 // MARK: - PlayerControl
 
 struct PlayerControl: View {
-  @Binding var isFullScreen: Bool
   @ObservedObject var editorVM: EditorViewModel
   @ObservedObject var videoPlayer: VideoPlayerManager
   var body: some View {

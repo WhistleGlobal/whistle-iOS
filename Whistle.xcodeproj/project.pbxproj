@@ -315,6 +315,7 @@
 		1BE8EA052AAE4D8B00EB0A55 /* Music.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BE8EA042AAE4D8B00EB0A55 /* Music.swift */; };
 		1BE8EA082AAE595000EB0A55 /* MusicListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BE8EA072AAE595000EB0A55 /* MusicListView.swift */; };
 		1BE8EA122AB0F7E800EB0A55 /* CircularProgressBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BE8EA112AB0F7E800EB0A55 /* CircularProgressBar.swift */; };
+		1BED4F562ADAE81D00A96C58 /* Aespa in Frameworks */ = {isa = PBXBuildFile; productRef = 1BED4F552ADAE81D00A96C58 /* Aespa */; };
 		780039082AD7E0020033B9F1 /* VersionCheck.swift in Sources */ = {isa = PBXBuildFile; fileRef = 780039072AD7E0020033B9F1 /* VersionCheck.swift */; };
 		7801398A2AA127AE00D5FBDB /* SignInView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 780139892AA127AE00D5FBDB /* SignInView.swift */; };
 		7819532E2ABA261A0053B975 /* MyContentListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7819532D2ABA261A0053B975 /* MyContentListView.swift */; };
@@ -379,7 +380,6 @@
 		788E68692AD6B6710056C18B /* VideoSettingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 788E68612AD6B6710056C18B /* VideoSettingView.swift */; };
 		788E686A2AD6B6710056C18B /* VideoConentViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 788E68622AD6B6710056C18B /* VideoConentViewModel.swift */; };
 		788E686B2AD6B6710056C18B /* PhotoFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 788E68632AD6B6710056C18B /* PhotoFile.swift */; };
-		788E686E2AD6B6A60056C18B /* Aespa in Frameworks */ = {isa = PBXBuildFile; productRef = 788E686D2AD6B6A60056C18B /* Aespa */; };
 		788E68702AD6C9DB0056C18B /* AccessView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 788E686F2AD6C9DB0056C18B /* AccessView.swift */; };
 		788F43F02AA5CD9F00718D38 /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 788F43EF2AA5CD9F00718D38 /* MainView.swift */; };
 		788F43F72AA6136F00718D38 /* Player.swift in Sources */ = {isa = PBXBuildFile; fileRef = 788F43F62AA6136F00718D38 /* Player.swift */; };
@@ -764,6 +764,7 @@
 		1BE8EA042AAE4D8B00EB0A55 /* Music.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Music.swift; sourceTree = "<group>"; };
 		1BE8EA072AAE595000EB0A55 /* MusicListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MusicListView.swift; sourceTree = "<group>"; };
 		1BE8EA112AB0F7E800EB0A55 /* CircularProgressBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircularProgressBar.swift; sourceTree = "<group>"; };
+		1BED4F542ADAE7F200A96C58 /* Aespa */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = Aespa; path = ../../Downloads/Aespa; sourceTree = "<group>"; };
 		780039072AD7E0020033B9F1 /* VersionCheck.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VersionCheck.swift; sourceTree = "<group>"; };
 		780139892AA127AE00D5FBDB /* SignInView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInView.swift; sourceTree = "<group>"; };
 		7819532D2ABA261A0053B975 /* MyContentListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyContentListView.swift; sourceTree = "<group>"; };
@@ -880,7 +881,7 @@
 				78A58E062AD1C287007F6A69 /* ReverseMask in Frameworks */,
 				1BD4E5B92ABA2F5600ADB783 /* VideoPicker.framework in Frameworks */,
 				78F780052AB34876005623CD /* GoogleSignIn in Frameworks */,
-				788E686E2AD6B6A60056C18B /* Aespa in Frameworks */,
+				1BED4F562ADAE81D00A96C58 /* Aespa in Frameworks */,
 				1BD4E56B2ABA275200ADB783 /* SnapKit in Frameworks */,
 				78E1755E2ABA838200731259 /* MarkdownUI in Frameworks */,
 				78E738CA2AA9A90F00480046 /* Kingfisher in Frameworks */,
@@ -1974,6 +1975,7 @@
 		1BD4E7BF2ABA31B600ADB783 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				1BED4F542ADAE7F200A96C58 /* Aespa */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -2222,7 +2224,7 @@
 				1BD4E56A2ABA275200ADB783 /* SnapKit */,
 				78E1755D2ABA838200731259 /* MarkdownUI */,
 				78A58E052AD1C287007F6A69 /* ReverseMask */,
-				788E686D2AD6B6A60056C18B /* Aespa */,
+				1BED4F552ADAE81D00A96C58 /* Aespa */,
 			);
 			productName = Whistle;
 			productReference = 1B39553C2A95069C00BCB4DF /* Whistle.app */;
@@ -2288,7 +2290,6 @@
 				1BD4E5692ABA275200ADB783 /* XCRemoteSwiftPackageReference "SnapKit" */,
 				78E1755C2ABA838200731259 /* XCRemoteSwiftPackageReference "swift-markdown-ui" */,
 				78A58E042AD1C287007F6A69 /* XCRemoteSwiftPackageReference "ReverseMask" */,
-				788E686C2AD6B6A60056C18B /* XCRemoteSwiftPackageReference "Aespa" */,
 			);
 			productRefGroup = 1B39553D2A95069C00BCB4DF /* Products */;
 			projectDirPath = "";
@@ -3144,14 +3145,6 @@
 				minimumVersion = 5.0.1;
 			};
 		};
-		788E686C2AD6B6A60056C18B /* XCRemoteSwiftPackageReference "Aespa" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/enebin/Aespa.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 0.3.1;
-			};
-		};
 		78A58E042AD1C287007F6A69 /* XCRemoteSwiftPackageReference "ReverseMask" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/stateman92/ReverseMask.git";
@@ -3207,6 +3200,10 @@
 			package = 1BD4E5692ABA275200ADB783 /* XCRemoteSwiftPackageReference "SnapKit" */;
 			productName = SnapKit;
 		};
+		1BED4F552ADAE81D00A96C58 /* Aespa */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Aespa;
+		};
 		7866694D2AA1289900448EC7 /* Alamofire */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 7866694C2AA1289900448EC7 /* XCRemoteSwiftPackageReference "Alamofire" */;
@@ -3221,11 +3218,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 787AF5632AA85D2C00C190E6 /* XCRemoteSwiftPackageReference "SwiftyJSON" */;
 			productName = SwiftyJSON;
-		};
-		788E686D2AD6B6A60056C18B /* Aespa */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 788E686C2AD6B6A60056C18B /* XCRemoteSwiftPackageReference "Aespa" */;
-			productName = Aespa;
 		};
 		78A58E052AD1C287007F6A69 /* ReverseMask */ = {
 			isa = XCSwiftPackageProductDependency;

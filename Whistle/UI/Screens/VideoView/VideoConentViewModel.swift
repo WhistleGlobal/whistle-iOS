@@ -5,11 +5,11 @@
 //  Created by ChoiYujin on 10/11/23.
 //
 
+import Aespa
+import AVFoundation
 import Combine
 import Foundation
 import SwiftUI
-
-import Aespa
 
 // MARK: - VideoContentViewModel
 
@@ -22,9 +22,6 @@ class VideoContentViewModel: ObservableObject {
 
   private var subscription = Set<AnyCancellable>()
 
-  @Published var videoAlbumCover: Image?
-  @Published var photoAlbumCover: Image?
-
   @Published var videoFiles: [VideoAssetModel] = []
   @Published var photoFiles: [PhotoAssetModel] = []
 
@@ -34,7 +31,7 @@ class VideoContentViewModel: ObservableObject {
 
     // Common setting
     aespaSession
-      .focus(mode: .locked)
+      .focus(mode: .continuousAutoFocus)
       .changeMonitoring(enabled: true)
       .orientation(to: .portrait)
       .quality(to: .high)
@@ -43,33 +40,10 @@ class VideoContentViewModel: ObservableObject {
           print("Error: ", error)
         }
       }
+      .unmute()
 
     aespaSession
       .stabilization(mode: .auto)
-
-    aespaSession.videoFilePublisher
-      .receive(on: DispatchQueue.main)
-      .map { result -> Image? in
-        if case .success(let file) = result {
-          return file.thumbnailImage
-        } else {
-          return nil
-        }
-      }
-      .assign(to: \.videoAlbumCover, on: self)
-      .store(in: &subscription)
-
-    aespaSession.photoFilePublisher
-      .receive(on: DispatchQueue.main)
-      .map { result -> Image? in
-        if case .success(let file) = result {
-          return file.thumbnailImage
-        } else {
-          return nil
-        }
-      }
-      .assign(to: \.photoAlbumCover, on: self)
-      .store(in: &subscription)
   }
 }
 
