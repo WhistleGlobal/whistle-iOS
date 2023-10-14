@@ -113,7 +113,9 @@ struct VideoContentView: View {
             }
           }
           Button {
-            toggleFlash()
+            if !isFront {
+              toggleFlash()
+            }
           } label: {
             Image(systemName: isFlashOn ? "bolt" : "bolt.slash.fill")
               .font(.system(size: 16))
@@ -133,6 +135,12 @@ struct VideoContentView: View {
                     .stroke(lineWidth: 1)
                     .foregroundStyle(LinearGradient.Border_Glass)
                 }
+            }
+          }
+          .allowsHitTesting(!isFront)
+          .overlay {
+            if isFront {
+              Circle().frame(width: 36, height: 36).foregroundColor(.black.opacity(0.4))
             }
           }
           Spacer()
@@ -162,10 +170,27 @@ struct VideoContentView: View {
           recordingButton(
             state: buttonState,
             timerText: timeStringFromTimeInterval(recordingDuration),
-            progress: min(recordingDuration / Double(timerSec.0), 1.0))
+            progress: min(recordingDuration / Double(timerSec.1 ? Double(timerSec.0) : 15.0), 1.0))
           Spacer()
           // Position change + button
           Button(action: {
+            guard let device = AVCaptureDevice.default(for: .video) else { return }
+
+            if device.hasTorch {
+              do {
+                try device.lockForConfiguration()
+
+                if device.torchMode == .on {
+                  device.torchMode = .off
+                  isFlashOn = false
+                }
+                device.unlockForConfiguration()
+              } catch {
+                print("Flash could not be used")
+              }
+            } else {
+              print("Device does not have a Torch")
+            }
             viewModel.aespaSession.position(to: isFront ? .back : .front)
             isFront.toggle()
           }) {
@@ -361,120 +386,6 @@ struct VideoContentView: View {
                             .foregroundColor(.white)
                             .frame(width: 4, height: 22)
                         }
-                        .gesture(
-                          DragGesture()
-                            .onChanged { value in
-                              if
-                                CGFloat(defaultWidth + value.translation.width) >
-                                CGFloat(UIScreen.width - 32)
-                              {
-                                dragOffset = CGFloat((6 + barSpacing) * 7)
-                              } else if defaultWidth + value.translation.width < 6 {
-                                dragOffset = -CGFloat((6 + barSpacing) * 8)
-                              } else {
-                                dragOffset = value.translation.width
-                              }
-                            }
-                            .onEnded { _ in
-                              let dragValue = Int(dragOffset + defaultWidth)
-                              let multiplier = 6 + barSpacing
-                              switch dragValue {
-                              case .min..<6 + Int(barSpacing):
-                                withAnimation {
-                                  dragOffset = -8.0 * CGFloat(multiplier)
-                                  timerSec.0 = 0
-                                }
-                              case 6 - Int(barSpacing)..<Int(multiplier) + Int(barSpacing):
-                                withAnimation {
-                                  dragOffset = -7.0 * CGFloat(multiplier)
-                                  timerSec.0 = 1
-                                }
-                              case Int(multiplier) - Int(barSpacing)..<Int(2 * multiplier) + Int(barSpacing):
-                                withAnimation {
-                                  dragOffset = -6.0 * CGFloat(multiplier)
-                                  timerSec.0 = 2
-                                }
-                              case Int(2 * multiplier) - Int(barSpacing)..<Int(3 * multiplier) +
-                                Int(barSpacing):
-                                withAnimation {
-                                  dragOffset = -5.0 * CGFloat(multiplier)
-                                  timerSec.0 = 3
-                                }
-                              case Int(3 * multiplier) - Int(barSpacing)..<Int(4 * multiplier) +
-                                Int(barSpacing):
-                                withAnimation {
-                                  dragOffset = -4.0 * CGFloat(multiplier)
-                                  timerSec.0 = 4
-                                }
-                              case Int(4 * multiplier) - Int(barSpacing)..<Int(5 * multiplier) +
-                                Int(barSpacing):
-                                withAnimation {
-                                  dragOffset = -3.0 * CGFloat(multiplier)
-                                  timerSec.0 = 5
-                                }
-                              case Int(5 * multiplier) - Int(barSpacing)..<Int(6 * multiplier) +
-                                Int(barSpacing):
-                                withAnimation {
-                                  dragOffset = -2.0 * CGFloat(multiplier)
-                                  timerSec.0 = 6
-                                }
-                              case Int(6 * multiplier) - Int(barSpacing)..<Int(7 * multiplier) +
-                                Int(barSpacing):
-                                withAnimation {
-                                  dragOffset = -CGFloat(multiplier)
-                                  timerSec.0 = 7
-                                }
-                              case Int(7 * multiplier) - Int(barSpacing)..<Int(8 * multiplier) +
-                                Int(barSpacing):
-                                withAnimation {
-                                  dragOffset = 0.0
-                                  timerSec.0 = 8
-                                }
-                              case Int(8 * multiplier) - Int(barSpacing)..<Int(9 * multiplier) +
-                                Int(barSpacing):
-                                withAnimation {
-                                  dragOffset = CGFloat(multiplier)
-                                  timerSec.0 = 9
-                                }
-                              case Int(9 * multiplier) - Int(barSpacing)..<Int(10 * multiplier) +
-                                Int(barSpacing):
-                                withAnimation {
-                                  dragOffset = 2.0 * CGFloat(multiplier)
-                                  timerSec.0 = 10
-                                }
-                              case Int(10 * multiplier) - Int(barSpacing)..<Int(11 * multiplier) +
-                                Int(barSpacing):
-                                withAnimation {
-                                  dragOffset = 3.0 * CGFloat(multiplier)
-                                  timerSec.0 = 11
-                                }
-                              case Int(11 * multiplier) - Int(barSpacing)..<Int(12 * multiplier) +
-                                Int(barSpacing):
-                                withAnimation {
-                                  dragOffset = 4.0 * CGFloat(multiplier)
-                                  timerSec.0 = 12
-                                }
-                              case Int(12 * multiplier) - Int(barSpacing)..<Int(13 * multiplier) +
-                                Int(barSpacing):
-                                withAnimation {
-                                  dragOffset = 5.0 * CGFloat(multiplier)
-                                  timerSec.0 = 13
-                                }
-                              case Int(13 * multiplier) - Int(barSpacing)..<Int(14 * multiplier) +
-                                Int(barSpacing):
-                                withAnimation {
-                                  dragOffset = 6.0 * CGFloat(multiplier)
-                                  timerSec.0 = 14
-                                }
-                              case Int(14 * multiplier) - Int(barSpacing)...Int.max:
-                                withAnimation {
-                                  dragOffset = 7.0 * CGFloat(multiplier)
-                                  timerSec.0 = 15
-                                }
-                              default:
-                                log("")
-                              }
-                            })
                     }
                   }
                   .reverseMask {
@@ -486,6 +397,120 @@ struct VideoContentView: View {
                       Spacer().frame(width: 34)
                     }
                   }
+                  .gesture(
+                    DragGesture()
+                      .onChanged { value in
+                        if
+                          CGFloat(defaultWidth + value.translation.width) >
+                          CGFloat(UIScreen.width - 32)
+                        {
+                          dragOffset = CGFloat((6 + barSpacing) * 7)
+                        } else if defaultWidth + value.translation.width < 6 {
+                          dragOffset = -CGFloat((6 + barSpacing) * 8)
+                        } else {
+                          dragOffset = value.translation.width
+                        }
+                      }
+                      .onEnded { _ in
+                        let dragValue = Int(dragOffset + defaultWidth)
+                        let multiplier = 6 + barSpacing
+                        switch dragValue {
+                        case .min..<6 + Int(barSpacing):
+                          withAnimation {
+                            dragOffset = -8.0 * CGFloat(multiplier)
+                            timerSec.0 = 0
+                          }
+                        case 6 - Int(barSpacing)..<Int(multiplier) + Int(barSpacing):
+                          withAnimation {
+                            dragOffset = -7.0 * CGFloat(multiplier)
+                            timerSec.0 = 1
+                          }
+                        case Int(multiplier) - Int(barSpacing)..<Int(2 * multiplier) + Int(barSpacing):
+                          withAnimation {
+                            dragOffset = -6.0 * CGFloat(multiplier)
+                            timerSec.0 = 2
+                          }
+                        case Int(2 * multiplier) - Int(barSpacing)..<Int(3 * multiplier) +
+                          Int(barSpacing):
+                          withAnimation {
+                            dragOffset = -5.0 * CGFloat(multiplier)
+                            timerSec.0 = 3
+                          }
+                        case Int(3 * multiplier) - Int(barSpacing)..<Int(4 * multiplier) +
+                          Int(barSpacing):
+                          withAnimation {
+                            dragOffset = -4.0 * CGFloat(multiplier)
+                            timerSec.0 = 4
+                          }
+                        case Int(4 * multiplier) - Int(barSpacing)..<Int(5 * multiplier) +
+                          Int(barSpacing):
+                          withAnimation {
+                            dragOffset = -3.0 * CGFloat(multiplier)
+                            timerSec.0 = 5
+                          }
+                        case Int(5 * multiplier) - Int(barSpacing)..<Int(6 * multiplier) +
+                          Int(barSpacing):
+                          withAnimation {
+                            dragOffset = -2.0 * CGFloat(multiplier)
+                            timerSec.0 = 6
+                          }
+                        case Int(6 * multiplier) - Int(barSpacing)..<Int(7 * multiplier) +
+                          Int(barSpacing):
+                          withAnimation {
+                            dragOffset = -CGFloat(multiplier)
+                            timerSec.0 = 7
+                          }
+                        case Int(7 * multiplier) - Int(barSpacing)..<Int(8 * multiplier) +
+                          Int(barSpacing):
+                          withAnimation {
+                            dragOffset = 0.0
+                            timerSec.0 = 8
+                          }
+                        case Int(8 * multiplier) - Int(barSpacing)..<Int(9 * multiplier) +
+                          Int(barSpacing):
+                          withAnimation {
+                            dragOffset = CGFloat(multiplier)
+                            timerSec.0 = 9
+                          }
+                        case Int(9 * multiplier) - Int(barSpacing)..<Int(10 * multiplier) +
+                          Int(barSpacing):
+                          withAnimation {
+                            dragOffset = 2.0 * CGFloat(multiplier)
+                            timerSec.0 = 10
+                          }
+                        case Int(10 * multiplier) - Int(barSpacing)..<Int(11 * multiplier) +
+                          Int(barSpacing):
+                          withAnimation {
+                            dragOffset = 3.0 * CGFloat(multiplier)
+                            timerSec.0 = 11
+                          }
+                        case Int(11 * multiplier) - Int(barSpacing)..<Int(12 * multiplier) +
+                          Int(barSpacing):
+                          withAnimation {
+                            dragOffset = 4.0 * CGFloat(multiplier)
+                            timerSec.0 = 12
+                          }
+                        case Int(12 * multiplier) - Int(barSpacing)..<Int(13 * multiplier) +
+                          Int(barSpacing):
+                          withAnimation {
+                            dragOffset = 5.0 * CGFloat(multiplier)
+                            timerSec.0 = 13
+                          }
+                        case Int(13 * multiplier) - Int(barSpacing)..<Int(14 * multiplier) +
+                          Int(barSpacing):
+                          withAnimation {
+                            dragOffset = 6.0 * CGFloat(multiplier)
+                            timerSec.0 = 14
+                          }
+                        case Int(14 * multiplier) - Int(barSpacing)...Int.max:
+                          withAnimation {
+                            dragOffset = 7.0 * CGFloat(multiplier)
+                            timerSec.0 = 15
+                          }
+                        default:
+                          log("")
+                        }
+                      })
               }
               .frame(width: UIScreen.width - 32, alignment: .leading)
               HStack {
@@ -670,7 +695,7 @@ extension VideoContentView {
   private func startRecordingTimer() {
     recordingTimer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { _ in
       recordingDuration += 1
-      if recordingDuration >= Double(timerSec.0) {
+      if recordingDuration >= Double(timerSec.1 ? Double(timerSec.0) : 15.0) {
         buttonState = .completed
         viewModel.aespaSession.stopRecording()
         stopRecordingTimer()
