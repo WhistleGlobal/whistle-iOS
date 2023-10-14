@@ -113,7 +113,9 @@ struct VideoContentView: View {
             }
           }
           Button {
-            toggleFlash()
+            if !isFront {
+              toggleFlash()
+            }
           } label: {
             Image(systemName: isFlashOn ? "bolt" : "bolt.slash.fill")
               .font(.system(size: 16))
@@ -133,6 +135,12 @@ struct VideoContentView: View {
                     .stroke(lineWidth: 1)
                     .foregroundStyle(LinearGradient.Border_Glass)
                 }
+            }
+          }
+          .allowsHitTesting(!isFront)
+          .overlay {
+            if isFront {
+              Circle().frame(width: 36, height: 36).foregroundColor(.black.opacity(0.4))
             }
           }
           Spacer()
@@ -166,6 +174,23 @@ struct VideoContentView: View {
           Spacer()
           // Position change + button
           Button(action: {
+            guard let device = AVCaptureDevice.default(for: .video) else { return }
+
+            if device.hasTorch {
+              do {
+                try device.lockForConfiguration()
+
+                if device.torchMode == .on {
+                  device.torchMode = .off
+                  isFlashOn = false
+                }
+                device.unlockForConfiguration()
+              } catch {
+                print("Flash could not be used")
+              }
+            } else {
+              print("Device does not have a Torch")
+            }
             viewModel.aespaSession.position(to: isFront ? .back : .front)
             isFront.toggle()
           }) {
