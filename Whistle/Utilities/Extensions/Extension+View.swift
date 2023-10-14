@@ -169,7 +169,7 @@ extension View {
   }
 
   @ViewBuilder
-  func glassMoriphicCircleView(width: CGFloat, height: CGFloat) -> some View {
+  func glassMoriphicCircleView() -> some View {
     ZStack {
       Circle()
         .fill(Color.black.opacity(0.3))
@@ -180,7 +180,7 @@ extension View {
       }
       .clipShape(Circle())
     }
-    .frame(width: width, height: height)
+//    .frame(width: UIScreen.getWidth(width), height: UIScreen.getHeight(height))
   }
 }
 
