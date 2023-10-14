@@ -60,7 +60,15 @@ struct MainEditorView: View {
           }
           ZStack(alignment: .top) {
             PlayerHolderView(isFullScreen: $isFullScreen, editorVM: editorVM, videoPlayer: videoPlayer, musicVM: musicVM)
-            musicInfo()
+            if let music = musicVM.musicInfo {
+              MusicInfo(musicTitle: music.musicTitle, musicVM: musicVM, isShowingMusicTrimView: $isShowingMusicTrimView) {
+                isShowingMusicTrimView = true
+              } onTapXmark: {
+                musicVM.removeMusic()
+                editorVM.removeAudio()
+              }
+
+            } else { }
           }
           .padding(.top, 4)
 
@@ -236,7 +244,7 @@ extension MainEditorView {
   }
 
   private var helpText: some View {
-    Text("최소 1초, 최대 15초 동영상을 올릴 수 있어요.")
+    Text("최대 15초까지 동영상을 올릴 수 있어요.")
       .foregroundStyle(Color.white)
       .fontSystem(fontDesignSystem: .body2_KO)
       .padding(.vertical, 32)
@@ -251,53 +259,8 @@ extension MainEditorView {
     }
   }
 
-  @ViewBuilder
-  private func musicInfo() -> some View {
-    if let music = musicVM.musicInfo {
-      HStack(spacing: 12) {
-        Image(systemName: "music.note")
-        Text(music.musicTitle)
-          .frame(maxWidth: UIScreen.getWidth(90))
-          .lineLimit(1)
-          .truncationMode(.tail)
-          .fontSystem(fontDesignSystem: .body1)
-          .contentShape(Rectangle())
-          .onTapGesture {
-            isShowingMusicTrimView = true
-          }
-        Divider()
-          .overlay { Color.White }
-        Image(systemName: "xmark")
-          .contentShape(Rectangle())
-          .onTapGesture {
-            musicVM.removeMusic()
-            editorVM.removeAudio()
-          }
-      }
-      .foregroundStyle(Color.White)
-      .fixedSize()
-      .padding(.horizontal, 16)
-      .padding(.vertical, 8)
-      .background(glassMorphicView(cornerRadius: 8))
-      .padding(.top, 8)
-    } else {
-      HStack {
-        Image(systemName: "music.note")
-        Text("음악 추가")
-          .frame(maxWidth: UIScreen.getWidth(90))
-          .lineLimit(1)
-          .truncationMode(.tail)
-          .fontSystem(fontDesignSystem: .body1)
-          .contentShape(Rectangle())
-      }
-      .foregroundStyle(Color.White)
-      .fixedSize()
-      .padding(.horizontal, 16)
-      .padding(.vertical, 8)
-      .background(glassMorphicView(cornerRadius: 8))
-      .padding(.top, 8)
-    }
-  }
+//  @ViewBuilder
+//  private func musicInfo() -> some View {}
 
   private func setVideo(_ proxy: GeometryProxy) {
     if let selectedVideoURL {
@@ -314,5 +277,63 @@ extension MainEditorView {
           colorCorrection: editorVM.currentVideo?.colorCorrection)
       }
     }
+  }
+}
+
+// MARK: - MusicInfo
+
+struct MusicInfo: View {
+
+  var musicTitle: String
+  @ObservedObject var musicVM: MusicViewModel
+  @Binding var isShowingMusicTrimView: Bool
+
+  let onTapMusic: () -> Void
+  let onTapXmark: () -> Void
+
+  var body: some View {
+//    if let music = musicVM.musicInfo {
+    HStack(spacing: 12) {
+      Image(systemName: "music.note")
+      Text(musicTitle)
+        .frame(maxWidth: UIScreen.getWidth(90))
+        .lineLimit(1)
+        .truncationMode(.tail)
+        .fontSystem(fontDesignSystem: .body1)
+        .contentShape(Rectangle())
+        .onTapGesture {
+          onTapMusic()
+        }
+      Divider()
+        .overlay { Color.White }
+      Image(systemName: "xmark")
+        .contentShape(Rectangle())
+        .onTapGesture {
+          onTapXmark()
+        }
+    }
+    .foregroundStyle(Color.White)
+    .fixedSize()
+    .padding(.horizontal, 16)
+    .padding(.vertical, 8)
+    .background(glassMorphicView(cornerRadius: 8))
+    .padding(.top, 8)
+//    } else {
+//      HStack {
+//        Image(systemName: "music.note")
+//        Text("음악 추가")
+//          .frame(maxWidth: UIScreen.getWidth(90))
+//          .lineLimit(1)
+//          .truncationMode(.tail)
+//          .fontSystem(fontDesignSystem: .body1)
+//          .contentShape(Rectangle())
+//      }
+//      .foregroundStyle(Color.White)
+//      .fixedSize()
+//      .padding(.horizontal, 16)
+//      .padding(.vertical, 8)
+//      .background(glassMorphicView(cornerRadius: 8))
+//      .padding(.top, 8)
+//    }
   }
 }

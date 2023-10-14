@@ -16,12 +16,18 @@ import SwiftUI
 
 struct VideoContentView: View {
 
+  @Environment(\.dismiss) var dismiss
   @EnvironmentObject var apiViewModel: APIViewModel
   @EnvironmentObject var tabbarModel: TabbarModel
+  @ObservedObject private var viewModel = VideoContentViewModel()
+  @StateObject var editorVM = EditorViewModel()
+  @StateObject var videoPlayer = VideoPlayerManager()
+  @StateObject var musicVM = MusicViewModel()
 
   @State var isRecording = false
   @State var isFront = false
   @State var isFlashOn = false
+  // @State var i
 
   @State var showSetting = false
   @State var showGallery = false
@@ -30,7 +36,6 @@ struct VideoContentView: View {
   @State private var buttonState: CameraButtonState = .idle
   @State var captureMode: AssetType = .video
   @State private var animatedProgress = 0.0
-  @ObservedObject private var viewModel = VideoContentViewModel()
   @State var isPresented = false
   @State var count: CGFloat = 0
   @State var bottomSheetPosition: BottomSheetPosition = .hidden
@@ -41,7 +46,6 @@ struct VideoContentView: View {
   @State private var recordingTimer: Timer?
   private let maxRecordingDuration: TimeInterval = 15
   @State var isImagePickerClosed = PassthroughSubject<Bool, Never>()
-  @Environment(\.dismiss) var dismiss
 
   var barSpacing: CGFloat {
     CGFloat((UIScreen.width - 32 - 12 - (14 * 6)) / 15)
