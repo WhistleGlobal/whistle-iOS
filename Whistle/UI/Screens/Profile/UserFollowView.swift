@@ -102,7 +102,7 @@ extension UserFollowView {
   func personRow(
     isFollowed: Binding<Bool>,
     userName: String,
-    description: String,
+    description _: String,
     profileImage: String,
     userId: Int)
     -> some View
@@ -114,10 +114,10 @@ extension UserFollowView {
           .fontSystem(fontDesignSystem: .subtitle2_KO)
           .foregroundColor(.LabelColor_Primary)
           .frame(maxWidth: .infinity, alignment: .leading)
-        Text(description)
-          .fontSystem(fontDesignSystem: .body2_KO)
-          .foregroundColor(.LabelColor_Secondary)
-          .frame(maxWidth: .infinity, alignment: .leading)
+//        Text(description)
+//          .fontSystem(fontDesignSystem: .body2_KO)
+//          .foregroundColor(.LabelColor_Secondary)
+//          .frame(maxWidth: .infinity, alignment: .leading)
       }
       .padding(.leading, 16)
       if userName != apiViewModel.myProfile.userName {
@@ -128,8 +128,22 @@ extension UserFollowView {
             log(isFollowed.wrappedValue)
             if isFollowed.wrappedValue {
               await apiViewModel.unfollowUser(userId: userId)
+              apiViewModel.contentList = apiViewModel.contentList.map { content in
+                let updatedContent = content
+                if content.userId == userId {
+                  updatedContent.isFollowed.toggle()
+                }
+                return updatedContent
+              }
             } else {
               await apiViewModel.followUser(userId: userId)
+              apiViewModel.contentList = apiViewModel.contentList.map { content in
+                let updatedContent = content
+                if content.userId == userId {
+                  updatedContent.isFollowed.toggle()
+                }
+                return updatedContent
+              }
             }
             isFollowed.wrappedValue.toggle()
             apiViewModel.postFeedPlayerChanged()
@@ -151,7 +165,7 @@ extension UserFollowView {
       .frame(width: 48, height: 48)
       .foregroundColor(.LabelColor_Primary)
       .padding(.bottom, 32)
-    Text("아직 회원님을 팔로우하는 사람이 없습니다")
+    Text("아직 회원님이 팔로우하는 사람이 없습니다")
       .fontSystem(fontDesignSystem: .body1_KO)
       .foregroundColor(.LabelColor_Secondary)
       .padding(.bottom, 64)

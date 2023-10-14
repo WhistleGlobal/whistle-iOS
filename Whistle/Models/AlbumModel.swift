@@ -13,11 +13,12 @@ class AlbumModel {
 
   // MARK: Lifecycle
 
-  init(name: String, count: Int, collection: PHAssetCollection, thumbnail: UIImage?) {
+  init(name: String, count: Int, collection: PHAssetCollection, thumbnail: UIImage?, isSmartAlbum: Bool) {
     self.name = name
     self.count = count
     self.collection = collection
     self.thumbnail = thumbnail
+    self.isSmartAlbum = isSmartAlbum
   }
 
   // MARK: Internal
@@ -26,4 +27,5 @@ class AlbumModel {
   let count: Int
   let collection: PHAssetCollection
   var thumbnail: UIImage?
+  var isSmartAlbum: Bool
 }

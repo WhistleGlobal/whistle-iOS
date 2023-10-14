@@ -12,9 +12,14 @@ import SwiftUI
 // MARK: - AccessView
 
 struct AccessView: View {
+
+  @EnvironmentObject var tabbarModel: TabbarModel
   @State var showAlert = false
   @State var opacity = 0.1
-  @EnvironmentObject var tabbarModel: TabbarModel
+
+  @Binding var isCameraAuthorized: Bool
+  @Binding var isAlbumAuthorized: Bool
+  @Binding var isMicrophoneAuthorized: Bool
 
   var body: some View {
     ZStack {
@@ -40,9 +45,10 @@ struct AccessView: View {
           .frame(height: 156)
 
         VStack(spacing: 16) {
-          Button(action: {
+          Button {
+            videoUsageAuth = .photoLibraryAccess
             showAlert = true
-          }) {
+          } label: {
             glassMorphicView(width: UIScreen.width - 32, height: 56, cornerRadius: 12)
               .overlay {
                 RoundedRectangle(cornerRadius: 12)
@@ -59,10 +65,17 @@ struct AccessView: View {
                 }
               }
           }
-
-          Button(action: {
+          .overlay {
+            if isAlbumAuthorized {
+              RoundedRectangle(cornerRadius: 12)
+                .foregroundColor(.black.opacity(0.4))
+            }
+          }
+          .disabled(isAlbumAuthorized)
+          Button {
+            videoUsageAuth = .cameraAccess
             showAlert = true
-          }) {
+          } label: {
             glassMorphicView(width: UIScreen.width - 32, height: 56, cornerRadius: 12)
               .overlay {
                 RoundedRectangle(cornerRadius: 12)
@@ -79,10 +92,17 @@ struct AccessView: View {
                 }
               }
           }
-
-          Button(action: {
+          .overlay {
+            if isCameraAuthorized {
+              RoundedRectangle(cornerRadius: 12)
+                .foregroundColor(.black.opacity(0.4))
+            }
+          }
+          .disabled(isCameraAuthorized)
+          Button {
+            videoUsageAuth = .microphoneAccess
             showAlert = true
-          }) {
+          } label: {
             glassMorphicView(width: UIScreen.width - 32, height: 56, cornerRadius: 12)
               .overlay {
                 RoundedRectangle(cornerRadius: 12)
@@ -99,6 +119,13 @@ struct AccessView: View {
                 }
               }
           }
+          .overlay {
+            if isMicrophoneAuthorized {
+              RoundedRectangle(cornerRadius: 12)
+                .foregroundColor(.black.opacity(0.4))
+            }
+          }
+          .disabled(isMicrophoneAuthorized)
         }
       }
       VStack {
@@ -124,8 +151,8 @@ struct AccessView: View {
     }
     .alert(isPresented: $showAlert) {
       Alert(
-        title: Text("권한 없음"),
-        message: Text("권한 없어요."),
+        title: Text("설정"),
+        message: Text("Whistle이 \(videoUsageAuth.rawValue)이 허용되어 있지않습니다.\r\n 설정화면으로 가시겠습니까?"),
         primaryButton: .cancel {
           log("update")
         }
@@ -145,3 +172,13 @@ struct AccessView: View {
   }
 }
 
+private var videoUsageAuth: VideoUsageAuth = .none
+
+// MARK: - VideoUsageAuth
+
+enum VideoUsageAuth: String {
+  case photoLibraryAccess = "엘범 접근 권한"
+  case cameraAccess = "카메라 접근 권한"
+  case microphoneAccess = "마이크 접근 권한"
+  case none = ""
+}

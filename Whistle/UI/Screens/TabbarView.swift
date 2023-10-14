@@ -63,9 +63,13 @@ struct TabbarView: View {
           VideoContentView()
             .environmentObject(apiViewModel)
             .environmentObject(tabbarModel)
+            .opacity(isNavigationActive ? 1 : 0)
             .overlay {
               if !isNavigationActive {
-                AccessView()
+                AccessView(
+                  isCameraAuthorized: $isCameraAuthorized,
+                  isAlbumAuthorized: $isAlbumAuthorized,
+                  isMicrophoneAuthorized: $isMicrophoneAuthorized)
                   .environmentObject(tabbarModel)
               }
             }
@@ -205,7 +209,9 @@ extension TabbarView {
       .overlay {
         Button {
           if tabbarModel.tabSelectionNoAnimation == .main {
-            NavigationUtil.popToRootView()
+            if isAccess {
+              NavigationUtil.popToRootView()
+            }
           } else {
             switchTab(to: .main)
           }
@@ -261,8 +267,9 @@ extension TabbarView {
 extension TabbarView {
   var profileTabClicked: () -> Void {
     {
-      switchTab(to: .profile)
-      if isFirstProfileLoaded {
+      if tabbarModel.tabSelectionNoAnimation == .profile {
+        switchTab(to: .profile)
+        HapticManager.instance.impact(style: .medium)
         Task {
           await apiViewModel.requestMyFollow()
         }
@@ -276,6 +283,23 @@ extension TabbarView {
           await apiViewModel.requestMyPostFeed()
         }
         isFirstProfileLoaded = false
+      } else {
+        switchTab(to: .profile)
+        if isFirstProfileLoaded {
+          Task {
+            await apiViewModel.requestMyFollow()
+          }
+          Task {
+            await apiViewModel.requestMyWhistlesCount()
+          }
+          Task {
+            await apiViewModel.requestMyBookmark()
+          }
+          Task {
+            await apiViewModel.requestMyPostFeed()
+          }
+          isFirstProfileLoaded = false
+        }
       }
     }
   }

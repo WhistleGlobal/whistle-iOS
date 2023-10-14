@@ -17,15 +17,15 @@ import SwiftUI
 // MARK: - SignInView
 
 struct SignInView: View {
-
+  @Environment(\.scenePhase) var scenePhase
+  @EnvironmentObject var apiViewModel: APIViewModel
+  @EnvironmentObject var userAuth: UserAuth
+  @EnvironmentObject var universalRoutingModel: UniversalRoutingModel
   @StateObject var appleSignInViewModel = AppleSignInViewModel()
   @State var showTermsOfService = false
   @State var showPrivacyPolicy = false
   @State var showUpdate = false
   @State var loginOpacity = 0.0
-  @EnvironmentObject var apiViewModel: APIViewModel
-  @EnvironmentObject var userAuth: UserAuth
-  @EnvironmentObject var universalRoutingModel: UniversalRoutingModel
   let keychain = KeychainSwift()
 
   var domainURL: String {
@@ -36,9 +36,11 @@ struct SignInView: View {
 
   var body: some View {
     ZStack {
-      SignInPlayerView()
-        .ignoresSafeArea()
-        .allowsTightening(false)
+      if scenePhase == .active || scenePhase == .inactive {
+        SignInPlayerView()
+          .ignoresSafeArea()
+          .allowsTightening(false)
+      }
       VStack(spacing: 0) {
         HStack(spacing: 0) {
           Spacer()

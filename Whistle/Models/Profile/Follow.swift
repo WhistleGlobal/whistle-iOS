@@ -91,6 +91,7 @@ class FollowingData: Decodable {
     case profileImg = "profile_img"
   }
 
+  var isFollowed = true
   var followingId: Int
   var userName: String
   var profileImg: String
