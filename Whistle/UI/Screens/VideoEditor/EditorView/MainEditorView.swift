@@ -61,7 +61,7 @@ struct MainEditorView: View {
           ZStack(alignment: .top) {
             PlayerHolderView(isFullScreen: $isFullScreen, editorVM: editorVM, videoPlayer: videoPlayer, musicVM: musicVM)
             if let music = musicVM.musicInfo {
-              MusicInfo(musicTitle: music.musicTitle, musicVM: musicVM, isShowingMusicTrimView: $isShowingMusicTrimView) {
+              MusicInfo(musicVM: musicVM, isShowingMusicTrimView: $isShowingMusicTrimView) {
                 isShowingMusicTrimView = true
               } onTapXmark: {
                 musicVM.removeMusic()
@@ -283,8 +283,6 @@ extension MainEditorView {
 // MARK: - MusicInfo
 
 struct MusicInfo: View {
-
-  var musicTitle: String
   @ObservedObject var musicVM: MusicViewModel
   @Binding var isShowingMusicTrimView: Bool
 
@@ -292,48 +290,51 @@ struct MusicInfo: View {
   let onTapXmark: () -> Void
 
   var body: some View {
-//    if let music = musicVM.musicInfo {
-    HStack(spacing: 12) {
-      Image(systemName: "music.note")
-      Text(musicTitle)
-        .frame(maxWidth: UIScreen.getWidth(90))
-        .lineLimit(1)
-        .truncationMode(.tail)
-        .fontSystem(fontDesignSystem: .body1)
-        .contentShape(Rectangle())
-        .onTapGesture {
-          onTapMusic()
-        }
-      Divider()
-        .overlay { Color.White }
-      Image(systemName: "xmark")
-        .contentShape(Rectangle())
-        .onTapGesture {
-          onTapXmark()
-        }
+    if let music = musicVM.musicInfo {
+      HStack(spacing: 12) {
+        Image(systemName: "music.note")
+        Text(music.musicTitle)
+          .frame(maxWidth: UIScreen.getWidth(90))
+          .lineLimit(1)
+          .truncationMode(.tail)
+          .fontSystem(fontDesignSystem: .body1)
+          .contentShape(Rectangle())
+          .onTapGesture {
+            isShowingMusicTrimView = true
+          }
+        Divider()
+          .overlay { Color.White }
+        Image(systemName: "xmark")
+          .contentShape(Rectangle())
+          .onTapGesture {
+            onTapXmark()
+          }
+      }
+      .foregroundStyle(Color.White)
+      .fixedSize()
+      .padding(.horizontal, 16)
+      .padding(.vertical, 8)
+      .background(glassMorphicView(cornerRadius: 8))
+      .padding(.top, 8)
+    } else {
+      HStack {
+        Image(systemName: "music.note")
+        Text("음악 추가")
+          .frame(maxWidth: UIScreen.getWidth(90))
+          .lineLimit(1)
+          .truncationMode(.tail)
+          .fontSystem(fontDesignSystem: .body1)
+          .contentShape(Rectangle())
+      }
+      .foregroundStyle(Color.White)
+      .fixedSize()
+      .padding(.horizontal, 16)
+      .padding(.vertical, 8)
+      .background(glassMorphicView(cornerRadius: 8))
+      .onTapGesture {
+        onTapMusic()
+      }
+      .padding(.top, 8)
     }
-    .foregroundStyle(Color.White)
-    .fixedSize()
-    .padding(.horizontal, 16)
-    .padding(.vertical, 8)
-    .background(glassMorphicView(cornerRadius: 8))
-    .padding(.top, 8)
-//    } else {
-//      HStack {
-//        Image(systemName: "music.note")
-//        Text("음악 추가")
-//          .frame(maxWidth: UIScreen.getWidth(90))
-//          .lineLimit(1)
-//          .truncationMode(.tail)
-//          .fontSystem(fontDesignSystem: .body1)
-//          .contentShape(Rectangle())
-//      }
-//      .foregroundStyle(Color.White)
-//      .fixedSize()
-//      .padding(.horizontal, 16)
-//      .padding(.vertical, 8)
-//      .background(glassMorphicView(cornerRadius: 8))
-//      .padding(.top, 8)
-//    }
   }
 }
