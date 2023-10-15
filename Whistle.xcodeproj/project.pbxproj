@@ -13,8 +13,6 @@
 		1B0A29AA2AA64ADC009077A1 /* MusicService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B0A29A92AA64ADC009077A1 /* MusicService.swift */; };
 		1B0A29AC2AA64AF3009077A1 /* MusicNote.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B0A29AB2AA64AF3009077A1 /* MusicNote.swift */; };
 		1B0A29AE2AA662CB009077A1 /* HapticsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B0A29AD2AA662CB009077A1 /* HapticsManager.swift */; };
-		1B18B7C32ADBFBD400B089C0 /* Aespa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1B18B7C22ADBFBCC00B089C0 /* Aespa.framework */; };
-		1B18B7C42ADBFBD400B089C0 /* Aespa.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 1B18B7C22ADBFBCC00B089C0 /* Aespa.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		1B21C9ED2AA0AB8A0036158F /* .swiftformat in Resources */ = {isa = PBXBuildFile; fileRef = 1B21C9EC2AA0AB8A0036158F /* .swiftformat */; };
 		1B2CFECB2AD412D000F34AA3 /* UploadView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B2CFECA2AD412D000F34AA3 /* UploadView.swift */; };
 		1B3895202AB9CB6000B4C8DD /* SheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B3895152AB9CB6000B4C8DD /* SheetView.swift */; };
@@ -317,8 +315,6 @@
 		1BE8EA052AAE4D8B00EB0A55 /* Music.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BE8EA042AAE4D8B00EB0A55 /* Music.swift */; };
 		1BE8EA082AAE595000EB0A55 /* MusicListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BE8EA072AAE595000EB0A55 /* MusicListView.swift */; };
 		1BE8EA122AB0F7E800EB0A55 /* CircularProgressBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BE8EA112AB0F7E800EB0A55 /* CircularProgressBar.swift */; };
-		1BFF20302ADBF19A0090A9C2 /* Aespa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1BFF202F2ADBF1790090A9C2 /* Aespa.framework */; };
-		1BFF20312ADBF19A0090A9C2 /* Aespa.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 1BFF202F2ADBF1790090A9C2 /* Aespa.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		780039082AD7E0020033B9F1 /* VersionCheck.swift in Sources */ = {isa = PBXBuildFile; fileRef = 780039072AD7E0020033B9F1 /* VersionCheck.swift */; };
 		7801398A2AA127AE00D5FBDB /* SignInView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 780139892AA127AE00D5FBDB /* SignInView.swift */; };
 		7819532E2ABA261A0053B975 /* MyContentListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7819532D2ABA261A0053B975 /* MyContentListView.swift */; };
@@ -436,9 +432,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		1B18B7C12ADBFBCC00B089C0 /* PBXContainerItemProxy */ = {
+		1BA24AAD2ADBFD9700DB0992 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = 1B18B7BD2ADBFBCC00B089C0 /* Aespa.xcodeproj */;
+			containerPortal = 1BA24AA82ADBFD9600DB0992 /* Aespa.xcodeproj */;
 			proxyType = 2;
 			remoteGlobalIDString = 1BFF1F902ADBF06F0090A9C2;
 			remoteInfo = Aespa;
@@ -450,13 +446,6 @@
 			remoteGlobalIDString = 1BD4E5B22ABA2F5600ADB783;
 			remoteInfo = VideoPicker;
 		};
-		1BFF202E2ADBF1790090A9C2 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 1BFF20292ADBF1780090A9C2 /* Aespa.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 1BFF1F902ADBF06F0090A9C2;
-			remoteInfo = Aespa;
-		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -467,7 +456,6 @@
 			dstSubfolderSpec = 10;
 			files = (
 				1BD4E5BA2ABA2F5600ADB783 /* VideoPicker.framework in Embed Frameworks */,
-				1BFF20312ADBF19A0090A9C2 /* Aespa.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -482,7 +470,6 @@
 		1B0A29AB2AA64AF3009077A1 /* MusicNote.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MusicNote.swift; sourceTree = "<group>"; };
 		1B0A29AD2AA662CB009077A1 /* HapticsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HapticsManager.swift; sourceTree = "<group>"; };
 		1B0A29AF2AA75087009077A1 /* WhistleDebug.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = WhistleDebug.entitlements; sourceTree = "<group>"; };
-		1B18B7BD2ADBFBCC00B089C0 /* Aespa.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = Aespa.xcodeproj; sourceTree = "<group>"; };
 		1B21C9E82AA034500036158F /* Whistle.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Whistle.entitlements; sourceTree = "<group>"; };
 		1B21C9EC2AA0AB8A0036158F /* .swiftformat */ = {isa = PBXFileReference; lastKnownFileType = text; path = .swiftformat; sourceTree = "<group>"; };
 		1B2CFECA2AD412D000F34AA3 /* UploadView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadView.swift; sourceTree = "<group>"; };
@@ -545,6 +532,7 @@
 		1B39555C2A95098100BCB4DF /* VideoModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoModel.swift; sourceTree = "<group>"; };
 		1B39555E2A9509A700BCB4DF /* SubmitButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubmitButton.swift; sourceTree = "<group>"; };
 		1B7D801C2AC881490030CAC3 /* CustomNavigationBarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomNavigationBarViewController.swift; sourceTree = "<group>"; };
+		1BA24AA82ADBFD9600DB0992 /* Aespa.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = Aespa.xcodeproj; sourceTree = "<group>"; };
 		1BAC07F02AD559880087D8CD /* Tags.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tags.swift; sourceTree = "<group>"; };
 		1BAC07F22AD559A70087D8CD /* TagsContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagsContent.swift; sourceTree = "<group>"; };
 		1BAC07F42AD559CE0087D8CD /* TagsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagsViewModel.swift; sourceTree = "<group>"; };
@@ -783,7 +771,6 @@
 		1BE8EA042AAE4D8B00EB0A55 /* Music.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Music.swift; sourceTree = "<group>"; };
 		1BE8EA072AAE595000EB0A55 /* MusicListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MusicListView.swift; sourceTree = "<group>"; };
 		1BE8EA112AB0F7E800EB0A55 /* CircularProgressBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircularProgressBar.swift; sourceTree = "<group>"; };
-		1BFF20292ADBF1780090A9C2 /* Aespa.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Aespa.xcodeproj; path = ../Aespa/Aespa.xcodeproj; sourceTree = "<group>"; };
 		780039072AD7E0020033B9F1 /* VersionCheck.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VersionCheck.swift; sourceTree = "<group>"; };
 		780139892AA127AE00D5FBDB /* SignInView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInView.swift; sourceTree = "<group>"; };
 		7819532D2ABA261A0053B975 /* MyContentListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyContentListView.swift; sourceTree = "<group>"; };
@@ -906,7 +893,6 @@
 				1B3895902AB9E16E00B4C8DD /* BottomSheet in Frameworks */,
 				787AF5652AA85D2C00C190E6 /* SwiftyJSON in Frameworks */,
 				78F780072AB34876005623CD /* GoogleSignInSwift in Frameworks */,
-				1BFF20302ADBF19A0090A9C2 /* Aespa.framework in Frameworks */,
 				786669552AA12F7F00448EC7 /* KeychainSwift in Frameworks */,
 				7866694E2AA1289900448EC7 /* Alamofire in Frameworks */,
 			);
@@ -924,14 +910,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		1B18B7BE2ADBFBCC00B089C0 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				1B18B7C22ADBFBCC00B089C0 /* Aespa.framework */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
 		1B2CFEC92AD412A400F34AA3 /* Upload */ = {
 			isa = PBXGroup;
 			children = (
@@ -1143,7 +1121,7 @@
 		1B3955332A95069C00BCB4DF = {
 			isa = PBXGroup;
 			children = (
-				1BFF20292ADBF1780090A9C2 /* Aespa.xcodeproj */,
+				1BA24AA82ADBFD9600DB0992 /* Aespa.xcodeproj */,
 				1B21C9EC2AA0AB8A0036158F /* .swiftformat */,
 				1BB7A0692A9514B4002DD86F /* .swiftlint.yml */,
 				1B39553E2A95069C00BCB4DF /* Whistle */,
@@ -1321,6 +1299,14 @@
 				1B39555A2A95095500BCB4DF /* ColorManager.swift */,
 			);
 			path = Colors;
+			sourceTree = "<group>";
+		};
+		1BA24AA92ADBFD9600DB0992 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				1BA24AAE2ADBFD9700DB0992 /* Aespa.framework */,
+			);
+			name = Products;
 			sourceTree = "<group>";
 		};
 		1BC32C392ACF3013004AC3C1 /* Music */ = {
@@ -2037,14 +2023,6 @@
 			path = VideoEditor;
 			sourceTree = "<group>";
 		};
-		1BFF202A2ADBF1780090A9C2 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				1BFF202F2ADBF1790090A9C2 /* Aespa.framework */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
 		780139882AA1279600D5FBDB /* SignInView */ = {
 			isa = PBXGroup;
 			children = (
@@ -2329,8 +2307,8 @@
 			projectDirPath = "";
 			projectReferences = (
 				{
-					ProductGroup = 1BFF202A2ADBF1780090A9C2 /* Products */;
-					ProjectRef = 1BFF20292ADBF1780090A9C2 /* Aespa.xcodeproj */;
+					ProductGroup = 1BA24AA92ADBFD9600DB0992 /* Products */;
+					ProjectRef = 1BA24AA82ADBFD9600DB0992 /* Aespa.xcodeproj */;
 				},
 			);
 			projectRoot = "";
@@ -2342,11 +2320,11 @@
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
-		1BFF202F2ADBF1790090A9C2 /* Aespa.framework */ = {
+		1BA24AAE2ADBFD9700DB0992 /* Aespa.framework */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.framework;
 			path = Aespa.framework;
-			remoteRef = 1BFF202E2ADBF1790090A9C2 /* PBXContainerItemProxy */;
+			remoteRef = 1BA24AAD2ADBFD9700DB0992 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 /* End PBXReferenceProxy section */
