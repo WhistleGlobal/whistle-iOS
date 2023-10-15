@@ -13,6 +13,8 @@ struct MainReportDetailView: View {
   @Binding var goReport: Bool
   @State var goComplete = false
   @State var showAlert = false
+  @State var showDuplication = false
+  @State var showFailLoad = false
   @State var inputReportDetail = ""
   @EnvironmentObject var apiViewModel: APIViewModel
   let reportReason: Int
@@ -51,6 +53,17 @@ struct MainReportDetailView: View {
     .navigationDestination(isPresented: $goComplete) {
       ReportCompleteView(goReport: $goReport)
     }
+    .alert(isPresented: $showDuplication) {
+      Alert(
+        title: Text("같은 사유로 한 번만 신고할 수 있습니다."),
+        message: Text("같은 사유로 신고가 중복되어 신청이 취소되었습니다."),
+        dismissButton: .cancel(Text("확인")))
+    }
+    .alert(isPresented: $showFailLoad) {
+      Alert(
+        title: Text("신고 처리 중 문제가 생겼습니다. 잠시후 다시 시도해주세요."),
+        dismissButton: .cancel(Text("확인")))
+    }
     .overlay {
       if showAlert {
         ReportAlert {
@@ -66,11 +79,12 @@ struct MainReportDetailView: View {
               goComplete = true
             } else if reportSuccess == 400 {
               log("중복")
-              showAlert = false
+              showDuplication = false
             } else {
               log("서버 통신 실패")
-              showAlert = false
+              showFailLoad = false
             }
+            showAlert = false
           }
         }
       }

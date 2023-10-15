@@ -151,17 +151,14 @@ struct AccessView: View {
     }
     .alert(isPresented: $showAlert) {
       Alert(
-        title: Text("설정"),
-        message: Text("Whistle이 \(videoUsageAuth.rawValue)이 허용되어 있지않습니다.\r\n 설정화면으로 가시겠습니까?"),
-        primaryButton: .cancel {
-          log("update")
-        }
-        ,secondaryButton: .default(Text("설정으로 가기"), action: {
+        title: Text("'Whistle'에 대해 \(videoUsageAuth.rawValue)이 없습니다. 설정에서 \(videoUsageAuth.rawValue) 권한을 켜시겠습니까?"),
+        primaryButton: .default(Text("설정으로 가기"), action: {
           guard let url = URL(string: UIApplication.openSettingsURLString) else { return }
           if UIApplication.shared.canOpenURL(url) {
             UIApplication.shared.open(url)
           }
-        }))
+        })
+        ,secondaryButton: .cancel())
     }
     .opacity(opacity)
     .onAppear {
@@ -177,8 +174,8 @@ private var videoUsageAuth: VideoUsageAuth = .none
 // MARK: - VideoUsageAuth
 
 enum VideoUsageAuth: String {
-  case photoLibraryAccess = "엘범 접근 권한"
-  case cameraAccess = "카메라 접근 권한"
-  case microphoneAccess = "마이크 접근 권한"
+  case photoLibraryAccess = "라이브러리 읽기/쓰기 권한"
+  case cameraAccess = "카메라 사용권한"
+  case microphoneAccess = "마이크 사용 권한"
   case none = ""
 }

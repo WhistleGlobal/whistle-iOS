@@ -22,7 +22,7 @@ struct ReportReasonView: View {
   var body: some View {
     VStack(spacing: 0) {
       Divider().frame(width: UIScreen.width)
-      Text("이 계정을 신고하는 이유는 무엇인가요?")
+      Text(reportCategory == .user ? "이 계정을 신고하는 이유는 무엇인가요?" : "이 콘텐츠를 신고하는 이유는 무엇인가요?")
         .fontSystem(fontDesignSystem: .subtitle2_KO)
         .foregroundColor(.LabelColor_Primary)
         .frame(maxWidth: .infinity, alignment: .leading)
@@ -50,13 +50,23 @@ struct ReportReasonView: View {
       } else {
         ForEach(UserReportReason.allCases, id: \.self) { reason in
           NavigationLink {
-            ReportPostView(
-              selectedContentId: $selectedContentId,
-              goReport: $goReport,
-              userId: userId,
-              reportCategory: .user,
-              reportReason: reason.numericValue)
-              .environmentObject(apiViewModel)
+            if apiViewModel.userPostFeed.isEmpty {
+              ReportDetailView(
+                goReport: $goReport,
+                selectedContentId: .constant(0),
+                reportCategory: .user,
+                reportReason: reason.numericValue,
+                userId: userId)
+                .environmentObject(apiViewModel)
+            } else {
+              ReportPostView(
+                selectedContentId: $selectedContentId,
+                goReport: $goReport,
+                userId: userId,
+                reportCategory: .user,
+                reportReason: reason.numericValue)
+                .environmentObject(apiViewModel)
+            }
           } label: {
             reportRow(text: reason.rawValue)
           }
