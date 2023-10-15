@@ -71,6 +71,7 @@ struct ReportDetailView: View {
                 goComplete = true
               } else if reportSuccess == 400 {
                 showDuplication = true
+                log(showDuplication)
               } else {
                 showFailLoad = true
               }
@@ -82,25 +83,33 @@ struct ReportDetailView: View {
                 contentId: apiViewModel.userPostFeed.isEmpty ? 0 : selectedContentId,
                 reportReason: reportReason,
                 reportDescription: inputReportDetail)
-              log(statusCode)
+                log(statusCode)
+                log(type(of: statusCode))
               if statusCode == 200 {
                 goReport = true
                 goComplete = true
               } else if statusCode == 400 {
-                showDuplication = true
+                  showDuplication = true
+                  log(showDuplication)
               } else {
                 showFailLoad = true
               }
+              showAlert = false
             }
           }
         }
       }
-      if showDuplication {
-        ToastMessage(text: "이미 신고처리가 되었습니다.", toastPadding: 78, showToast: $showDuplication)
-      }
-      if showFailLoad {
-        ToastMessage(text: "신고 처리가 정상적으로 되지 않았습니다.", toastPadding: 78, showToast: $showFailLoad)
-      }
+    }
+    .alert(isPresented: $showDuplication) {
+      Alert(
+        title: Text("같은 사유로 한 번만 신고할 수 있습니다."),
+        message: Text("같은 사유로 신고가 중복되어 신청이 취소되었습니다."),
+        dismissButton: .cancel(Text("확인")))
+    }
+    .alert(isPresented: $showFailLoad) {
+      Alert(
+        title: Text("신고 처리 중 문제가 생겼습니다. 잠시후 다시 시도해주세요."),
+        dismissButton: .cancel(Text("확인")))
     }
     .toolbar {
       ToolbarItem(placement: .cancellationAction) {
