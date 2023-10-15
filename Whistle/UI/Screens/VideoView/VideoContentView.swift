@@ -52,7 +52,9 @@ struct VideoContentView: View {
   @State var showPreparingView = false
   @State var isPresented = false
   @State var timerSec = (8, false)
+  /// 작업물 삭제 alert용
   @State var showAlert = false
+  /// 음악 편집기 띄우기용
   @State var showMusicTrimView = false
 
   // MARK: - Computed
@@ -190,7 +192,7 @@ struct VideoContentView: View {
           }
         }
         if buttonState == .completed {
-          MusicInfo(musicVM: musicVM, isShowingMusicTrimView: $showMusicTrimView) {
+          MusicInfo(musicVM: musicVM, showMusicTrimView: $showMusicTrimView) {
             sheetPositions = [.absolute(UIScreen.getHeight(400)), .hidden, .relative(1)]
             bottomSheetPosition = .absolute(UIScreen.getHeight(400))
           } onTapXmark: {
@@ -325,7 +327,7 @@ struct VideoContentView: View {
           editorVM: editorVM,
           videoPlayer: videoPlayer,
           bottomSheetPosition: $bottomSheetPosition,
-          isShowingMusicTrimView: $showMusicTrimView)
+          showMusicTrimView: $showMusicTrimView)
         {
           bottomSheetPosition = .relative(1)
         }

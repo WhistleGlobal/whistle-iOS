@@ -22,7 +22,7 @@ struct MusicTrimView: View {
   @ObservedObject var editorVM: EditorViewModel
   @ObservedObject var videoPlayer: VideoPlayerManager
 
-  @Binding var isShowingMusicTrimView: Bool
+  @Binding var showMusicTrimView: Bool
   @State private var audioURL: URL?
   @State private var startTime: TimeInterval = 0
   @State private var endTime: TimeInterval = 0
@@ -164,7 +164,7 @@ extension MusicTrimView {
       Button {
         Task {
           stopPlaying()
-          isShowingMusicTrimView = false
+          showMusicTrimView = false
           if !musicVM.isTrimmed {
             musicVM.musicInfo = nil
           }
@@ -179,7 +179,7 @@ extension MusicTrimView {
         musicVM.startTime = (offset / 16.0) * (musicVM.trimDuration / 10)
         Task {
           stopPlaying()
-          isShowingMusicTrimView = false
+          showMusicTrimView = false
           trimAudio()
 //          editorVM.setAudio(Audio(url: musicVM.url!, duration: musicVM.trimDuration))
 //          print("url", musicVM.url)
