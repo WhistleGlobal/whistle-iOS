@@ -1312,6 +1312,14 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		1BA24AB92ADBFED900DB0992 /* AespaFrameWork */ = {
+			isa = PBXGroup;
+			children = (
+				1BA24AA82ADBFD9600DB0992 /* Aespa.xcodeproj */,
+			);
+			name = AespaFrameWork;
+			sourceTree = "<group>";
+		};
 		1BC32C392ACF3013004AC3C1 /* Music */ = {
 			isa = PBXGroup;
 			children = (
@@ -1992,7 +2000,7 @@
 		1BD4E7BF2ABA31B600ADB783 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				1BA24AA82ADBFD9600DB0992 /* Aespa.xcodeproj */,
+				1BA24AB92ADBFED900DB0992 /* AespaFrameWork */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
