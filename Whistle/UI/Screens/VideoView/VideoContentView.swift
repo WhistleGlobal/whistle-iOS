@@ -159,9 +159,9 @@ struct VideoContentView: View {
           .hCenter()
           .overlay(alignment: .leading) {
             Button {
+              tabbarModel.tabSelectionNoAnimation = tabbarModel.prevTabSelection ?? .main
               withAnimation {
-                tabbarModel.tabSelectionNoAnimation = .main
-                tabbarModel.tabSelection = .main
+                tabbarModel.tabSelection = tabbarModel.prevTabSelection ?? .main
               }
             } label: {
               Image(systemName: "xmark")
