@@ -85,6 +85,14 @@ struct ReportUserView: View {
         Spacer()
       }
       .navigationBarBackButtonHidden()
+      .navigationDestination(isPresented: .constant(apiViewModel.userPostFeed.isEmpty)) {
+        ReportReasonView(
+          goReport: $goReport,
+          selectedContentId: $selectedContentId,
+          userId: userId,
+          reportCategory: .user)
+          .environmentObject(apiViewModel)
+      }
     }
   }
 }

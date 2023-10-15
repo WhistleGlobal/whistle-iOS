@@ -173,8 +173,8 @@ struct TabbarView: View {
       .opacity(tabbarModel.tabbarOpacity)
       .onReceive(NavigationModel.shared.$navigate, perform: { _ in
         if tabbarModel.tabSelection == .upload {
-          tabbarModel.tabSelection = .main
-          tabbarModel.tabSelectionNoAnimation = .main
+          tabbarModel.tabSelection = tabbarModel.prevTabSelection ?? .main
+          tabbarModel.tabSelectionNoAnimation = tabbarModel.prevTabSelection ?? .main
         }
       })
     }
@@ -305,6 +305,11 @@ extension TabbarView {
   }
 
   func switchTab(to tabSelection: TabSelection) {
+    if tabbarModel.prevTabSelection == nil {
+      tabbarModel.prevTabSelection = .main
+    } else {
+      tabbarModel.prevTabSelection = tabbarModel.tabSelectionNoAnimation
+    }
     tabbarModel.tabSelectionNoAnimation = tabSelection
     withAnimation {
       tabbarModel.tabSelection = tabSelection
@@ -325,6 +330,7 @@ public enum TabSelection: CGFloat {
 class TabbarModel: ObservableObject {
   @Published var tabSelection: TabSelection = .main
   @Published var tabSelectionNoAnimation: TabSelection = .main
+  @Published var prevTabSelection: TabSelection?
   @Published var tabbarOpacity = 1.0
   @Published var tabWidth = UIScreen.width - 32
 }

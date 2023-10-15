@@ -90,7 +90,7 @@ struct FollowView: View {
         }
       }
       ToolbarItem(placement: .principal) {
-        Text("Whistle")
+        Text("\(apiViewModel.myProfile.userName)")
           .fontSystem(fontDesignSystem: .subtitle2_KO)
       }
     }
