@@ -79,7 +79,7 @@ struct ReportDetailView: View {
             Task {
               let statusCode = await apiViewModel.reportUser(
                 usedId: userId,
-                contentId: selectedContentId,
+                contentId: apiViewModel.userPostFeed.isEmpty ? 0 : selectedContentId,
                 reportReason: reportReason,
                 reportDescription: inputReportDetail)
               log(statusCode)
