@@ -50,7 +50,7 @@ struct EditableVideo: Identifiable {
     self.rotation = rotation
   }
 
-  mutating func updateThumbnails(_: GeometryProxy) {
+  mutating func updateThumbnails() {
 //    let imagesCount = thumbnailCount(geo)
     let imagesCount = 21
 

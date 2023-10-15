@@ -15,7 +15,10 @@ import SwiftUI
 // MARK: - VideoContentView
 
 struct VideoContentView: View {
+  // MARK: - Objects
+
   @Environment(\.dismiss) var dismiss
+  @Environment(\.scenePhase) var scenePhase
   @EnvironmentObject var apiViewModel: APIViewModel
   @EnvironmentObject var tabbarModel: TabbarModel
   @ObservedObject private var viewModel = VideoContentViewModel()
@@ -23,33 +26,36 @@ struct VideoContentView: View {
   @StateObject var videoPlayer = VideoPlayerManager()
   @StateObject var musicVM = MusicViewModel()
 
+  // MARK: - Datas
+
+  @State var isImagePickerClosed = PassthroughSubject<Bool, Never>()
+  @State private var buttonState: CameraButtonState = .idle
+  @State var captureMode: AssetType = .video
+  @State var selectedSec = (SelectedSecond.sec3, false)
+  @State private var recordingDuration: TimeInterval = 0
+  @State private var recordingTimer: Timer?
+  @State var selectedVideoURL: URL?
+  @State var project: ProjectEntity?
+  @State private var animatedProgress = 0.0
+  @State var count: CGFloat = 0
+  @State var dragOffset: CGFloat = 0
+  @State var sheetPositions: [BottomSheetPosition] = [.hidden, .absolute(406)]
+  @State var bottomSheetPosition: BottomSheetPosition = .hidden
+  @State var albumCover = Image("")
+  // MARK: - Bools
+
   @State var isRecording = false
   @State var isFront = false
   @State var isFlashOn = false
-
   @State var showSetting = false
   @State var showGallery = false
   @State var showPreparingView = false
-
-  @State private var buttonState: CameraButtonState = .idle
-  @State var captureMode: AssetType = .video
-  @State private var animatedProgress = 0.0
   @State var isPresented = false
-  @State var count: CGFloat = 0
-  @State var bottomSheetPosition: BottomSheetPosition = .hidden
-//  @State var selectedSec: SelectedSecond = .sec3
-  @State var selectedSec = (SelectedSecond.sec3, false)
   @State var timerSec = (8, false)
-  @State var dragOffset: CGFloat = 0
-  @State private var recordingDuration: TimeInterval = 0
-  @State private var recordingTimer: Timer?
-//  private let maxRecordingDuration: TimeInterval = 15
-  @State var isImagePickerClosed = PassthroughSubject<Bool, Never>()
   @State var showAlert = false
   @State var showMusicTrimView = false
-  @State var sheetPositions: [BottomSheetPosition] = [.hidden, .absolute(406)]
 
-  @Environment(\.scenePhase) var scenePhase
+  // MARK: - Computed
 
   var barSpacing: CGFloat {
     CGFloat((UIScreen.width - 32 - 12 - (14 * 6)) / 15)
@@ -59,20 +65,28 @@ struct VideoContentView: View {
     CGFloat(6 + (6 + barSpacing) * 8)
   }
 
+  // MARK: - Body
+
   var body: some View {
     ZStack {
       Color.black.ignoresSafeArea()
       if isPresented {
         PickerConfigViewControllerWrapper(isImagePickerClosed: $isImagePickerClosed)
       }
-      viewModel.preview
-        .padding(.bottom, 64)
-        .frame(
-          minWidth: 0,
-          maxWidth: .infinity,
-          minHeight: 0,
-          maxHeight: .infinity)
-        .allowsHitTesting(false)
+      if buttonState != .completed {
+        viewModel.preview
+          .padding(.bottom, 64)
+          .frame(
+            minWidth: 0,
+            maxWidth: .infinity,
+            minHeight: 0,
+            maxHeight: .infinity)
+          .allowsHitTesting(false)
+      } else {
+        if let video = editorVM.currentVideo {
+          EditablePlayerView(player: videoPlayer.videoPlayer)
+        }
+      }
       VStack {
         switch buttonState {
         case .idle:
@@ -188,12 +202,7 @@ struct VideoContentView: View {
         HStack(spacing: 0) {
           // Album thumbnail + button
           Button(action: { isImagePickerClosed.send(true) }) {
-            let coverImage = (
-              captureMode == .video
-                ? viewModel.videoAlbumCover
-                : viewModel.photoAlbumCover)
-              ?? Image("")
-            roundRectangleShape(with: coverImage, size: 56)
+            roundRectangleShape(with: albumCover, size: 56)
               .vBottom()
           }
           .shadow(radius: 5)
@@ -274,6 +283,13 @@ struct VideoContentView: View {
       }
     }
     .navigationBarBackButtonHidden()
+    .onAppear {
+      Task {
+        let video = await viewModel.aespaSession.fetchVideoFiles(limit: 1)[0]
+        albumCover = video.thumbnailImage
+        print("cover", video.thumbnailImage)
+      }
+    }
     .onChange(of: scenePhase) { newValue in
       if newValue == .background {
         guard let device = AVCaptureDevice.default(for: .video) else { return }
@@ -331,6 +347,8 @@ struct VideoContentView: View {
         })
   }
 }
+
+// MARK: - Extension for ViewBuilders
 
 extension VideoContentView {
   @ViewBuilder
@@ -776,20 +794,20 @@ extension VideoContentView {
         .foregroundColor(.LabelColor_Primary_Dark)
     }
   }
-//
-//  @ViewBuilder
-//  func recordingButtonShape(width: CGFloat) -> some View {
-//    ZStack {
-//      Circle()
-//        .strokeBorder(isRecording ? .red : .white, lineWidth: 3)
-//        .frame(width: width)
-//
-//      Circle()
-//        .fill(isRecording ? .red : .white)
-//        .frame(width: width * 0.8)
-//    }
-//    .frame(height: width)
-//  }
+
+  @ViewBuilder
+  func glassToggle(width: CGFloat, height: CGFloat) -> some View {
+    ZStack {
+      Capsule()
+        .fill(Color.black.opacity(0.3))
+      CustomBlurView(effect: .systemUltraThinMaterialLight) { view in
+        view.saturationAmout = 2.2
+        view.gaussianBlurRadius = 32
+      }
+      .clipShape(Capsule())
+    }
+    .frame(width: width, height: height)
+  }
 }
 
 // MARK: - AssetType
@@ -814,21 +832,9 @@ enum SelectedSecond: Int {
   case sec10 = 1
 }
 
-extension VideoContentView {
-  @ViewBuilder
-  func glassToggle(width: CGFloat, height: CGFloat) -> some View {
-    ZStack {
-      Capsule()
-        .fill(Color.black.opacity(0.3))
-      CustomBlurView(effect: .systemUltraThinMaterialLight) { view in
-        view.saturationAmout = 2.2
-        view.gaussianBlurRadius = 32
-      }
-      .clipShape(Capsule())
-    }
-    .frame(width: width, height: height)
-  }
+// MARK: - Extension for Timer Functions
 
+extension VideoContentView {
   func toggleFlash() {
     guard let device = AVCaptureDevice.default(for: .video) else { return }
 
@@ -876,7 +882,6 @@ extension VideoContentView {
       recordingDuration += 1
       if recordingDuration >= Double(timerSec.1 ? Double(timerSec.0) : 15.0) {
         buttonState = .completed
-        viewModel.aespaSession.stopRecording()
         stopRecordingTimer()
         isRecording = false
       }
@@ -905,6 +910,8 @@ enum CameraButtonState {
   case recording
   case completed
 }
+
+// MARK: - Extension for Recording Button ViewBuilder
 
 extension VideoContentView {
   @ViewBuilder
@@ -968,7 +975,14 @@ extension VideoContentView {
         }
         .onTapGesture {
           buttonState = .completed
-          viewModel.aespaSession.stopRecording()
+          viewModel.aespaSession.stopRecording { result in
+            switch result {
+            case .success(let videoURL):
+              setVideo(videoURL)
+            case .failure(let error):
+              print("Error: \(error)")
+            }
+          }
           stopRecordingTimer()
           isRecording = false
         }
@@ -985,6 +999,28 @@ extension VideoContentView {
               .font(.custom("SFCompactText-Regular", size: 44))
               .foregroundColor(.White)
           }
+      }
+    }
+  }
+}
+
+// MARK: - Extension for Video Functions
+
+extension VideoContentView {
+  private func setVideo(_ url: URL) {
+    selectedVideoURL = url
+    if let selectedVideoURL {
+      videoPlayer.loadState = .loaded(selectedVideoURL)
+      editorVM.setNewVideo(selectedVideoURL)
+    }
+
+    if let project, let url = project.videoURL {
+      videoPlayer.loadState = .loaded(url)
+      editorVM.setProject(project)
+      DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+        videoPlayer.setFilters(
+          mainFilter: CIFilter(name: project.filterName ?? ""),
+          colorCorrection: editorVM.currentVideo?.colorCorrection)
       }
     }
   }

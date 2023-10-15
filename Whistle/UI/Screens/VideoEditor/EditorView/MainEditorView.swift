@@ -19,7 +19,6 @@ struct MainEditorView: View {
   var project: ProjectEntity?
   var selectedVideoURL: URL?
   @State var isInitial = true
-  @State var isFullScreen = false
   @State var showVideoQualitySheet = false
   @State var isShowingMusicTrimView = false
   @State var bottomSheetTitle = ""
@@ -32,64 +31,62 @@ struct MainEditorView: View {
 
   var body: some View {
     ZStack {
-      GeometryReader { proxy in
-        VStack(spacing: 0) {
-          CustomNavigationBarViewController(title: "새 게시물") {
-            dismiss()
-          } nextButtonAction: {
-            if let video = editorVM.currentVideo {
-              if videoPlayer.isPlaying {
-                videoPlayer.action(video)
-              }
-            }
-            goUpload = true
-          }
-          .frame(height: UIScreen.getHeight(44))
+      VStack(spacing: 0) {
+        CustomNavigationBarViewController(title: "새 게시물") {
+          dismiss()
+        } nextButtonAction: {
           if let video = editorVM.currentVideo {
-            NavigationLink(
-              destination: UploadView(
-                video: video,
-                editorVM: editorVM,
-                videoPlayer: videoPlayer,
-                musicVM: musicVM,
-                isInitial: $isInitial),
-              isActive: $goUpload)
-            {
-              EmptyView()
+            if videoPlayer.isPlaying {
+              videoPlayer.action(video)
             }
           }
-          ZStack(alignment: .top) {
-            PlayerHolderView(isFullScreen: $isFullScreen, editorVM: editorVM, videoPlayer: videoPlayer, musicVM: musicVM)
-            if let music = musicVM.musicInfo {
-              MusicInfo(musicVM: musicVM, isShowingMusicTrimView: $isShowingMusicTrimView) {
-                isShowingMusicTrimView = true
-              } onTapXmark: {
-                musicVM.removeMusic()
-                editorVM.removeAudio()
-              }
-
-            } else { }
-          }
-          .padding(.top, 4)
-
-          ThumbnailsSliderView(
-            currentTime: $videoPlayer.currentTime,
-            video: $editorVM.currentVideo,
-            isInitial: $isInitial,
-            editorVM: editorVM,
-            videoPlayer: videoPlayer)
-          {
-            videoPlayer.scrubState = .scrubEnded(videoPlayer.currentTime)
-            editorVM.setTools()
-          }
-          helpText
-
-          ToolsSectionView(videoPlayer: videoPlayer, editorVM: editorVM)
+          goUpload = true
         }
-        .onAppear {
-          if isInitial {
-            setVideo(proxy)
+        .frame(height: UIScreen.getHeight(44))
+        if let video = editorVM.currentVideo {
+          NavigationLink(
+            destination: UploadView(
+              video: video,
+              editorVM: editorVM,
+              videoPlayer: videoPlayer,
+              musicVM: musicVM,
+              isInitial: $isInitial),
+            isActive: $goUpload)
+          {
+            EmptyView()
           }
+        }
+        ZStack(alignment: .top) {
+          PlayerHolderView(editorVM: editorVM, videoPlayer: videoPlayer, musicVM: musicVM)
+          if let music = musicVM.musicInfo {
+            MusicInfo(musicVM: musicVM, isShowingMusicTrimView: $isShowingMusicTrimView) {
+              isShowingMusicTrimView = true
+            } onTapXmark: {
+              musicVM.removeMusic()
+              editorVM.removeAudio()
+            }
+
+          } else { }
+        }
+        .padding(.top, 4)
+
+        ThumbnailsSliderView(
+          currentTime: $videoPlayer.currentTime,
+          video: $editorVM.currentVideo,
+          isInitial: $isInitial,
+          editorVM: editorVM,
+          videoPlayer: videoPlayer)
+        {
+          videoPlayer.scrubState = .scrubEnded(videoPlayer.currentTime)
+          editorVM.setTools()
+        }
+        helpText
+
+        ToolsSectionView(videoPlayer: videoPlayer, editorVM: editorVM)
+      }
+      .onAppear {
+        if isInitial {
+          setVideo()
         }
       }
 
@@ -259,18 +256,15 @@ extension MainEditorView {
     }
   }
 
-//  @ViewBuilder
-//  private func musicInfo() -> some View {}
-
-  private func setVideo(_ proxy: GeometryProxy) {
+  private func setVideo() {
     if let selectedVideoURL {
       videoPlayer.loadState = .loaded(selectedVideoURL)
-      editorVM.setNewVideo(selectedVideoURL, geo: proxy)
+      editorVM.setNewVideo(selectedVideoURL)
     }
 
     if let project, let url = project.videoURL {
       videoPlayer.loadState = .loaded(url)
-      editorVM.setProject(project, geo: proxy)
+      editorVM.setProject(project)
       DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
         videoPlayer.setFilters(
           mainFilter: CIFilter(name: project.filterName ?? ""),
