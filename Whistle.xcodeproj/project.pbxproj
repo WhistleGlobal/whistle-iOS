@@ -315,7 +315,8 @@
 		1BE8EA052AAE4D8B00EB0A55 /* Music.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BE8EA042AAE4D8B00EB0A55 /* Music.swift */; };
 		1BE8EA082AAE595000EB0A55 /* MusicListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BE8EA072AAE595000EB0A55 /* MusicListView.swift */; };
 		1BE8EA122AB0F7E800EB0A55 /* CircularProgressBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BE8EA112AB0F7E800EB0A55 /* CircularProgressBar.swift */; };
-		1BED4F562ADAE81D00A96C58 /* Aespa in Frameworks */ = {isa = PBXBuildFile; productRef = 1BED4F552ADAE81D00A96C58 /* Aespa */; };
+		1BFF20302ADBF19A0090A9C2 /* Aespa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1BFF202F2ADBF1790090A9C2 /* Aespa.framework */; };
+		1BFF20312ADBF19A0090A9C2 /* Aespa.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 1BFF202F2ADBF1790090A9C2 /* Aespa.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		780039082AD7E0020033B9F1 /* VersionCheck.swift in Sources */ = {isa = PBXBuildFile; fileRef = 780039072AD7E0020033B9F1 /* VersionCheck.swift */; };
 		7801398A2AA127AE00D5FBDB /* SignInView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 780139892AA127AE00D5FBDB /* SignInView.swift */; };
 		7819532E2ABA261A0053B975 /* MyContentListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7819532D2ABA261A0053B975 /* MyContentListView.swift */; };
@@ -440,6 +441,13 @@
 			remoteGlobalIDString = 1BD4E5B22ABA2F5600ADB783;
 			remoteInfo = VideoPicker;
 		};
+		1BFF202E2ADBF1790090A9C2 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 1BFF20292ADBF1780090A9C2 /* Aespa.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 1BFF1F902ADBF06F0090A9C2;
+			remoteInfo = Aespa;
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -450,6 +458,7 @@
 			dstSubfolderSpec = 10;
 			files = (
 				1BD4E5BA2ABA2F5600ADB783 /* VideoPicker.framework in Embed Frameworks */,
+				1BFF20312ADBF19A0090A9C2 /* Aespa.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -764,7 +773,7 @@
 		1BE8EA042AAE4D8B00EB0A55 /* Music.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Music.swift; sourceTree = "<group>"; };
 		1BE8EA072AAE595000EB0A55 /* MusicListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MusicListView.swift; sourceTree = "<group>"; };
 		1BE8EA112AB0F7E800EB0A55 /* CircularProgressBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircularProgressBar.swift; sourceTree = "<group>"; };
-		1BED4F542ADAE7F200A96C58 /* Aespa */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = Aespa; path = ../../Downloads/Aespa; sourceTree = "<group>"; };
+		1BFF20292ADBF1780090A9C2 /* Aespa.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Aespa.xcodeproj; path = ../Aespa/Aespa.xcodeproj; sourceTree = "<group>"; };
 		780039072AD7E0020033B9F1 /* VersionCheck.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VersionCheck.swift; sourceTree = "<group>"; };
 		780139892AA127AE00D5FBDB /* SignInView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInView.swift; sourceTree = "<group>"; };
 		7819532D2ABA261A0053B975 /* MyContentListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyContentListView.swift; sourceTree = "<group>"; };
@@ -881,13 +890,13 @@
 				78A58E062AD1C287007F6A69 /* ReverseMask in Frameworks */,
 				1BD4E5B92ABA2F5600ADB783 /* VideoPicker.framework in Frameworks */,
 				78F780052AB34876005623CD /* GoogleSignIn in Frameworks */,
-				1BED4F562ADAE81D00A96C58 /* Aespa in Frameworks */,
 				1BD4E56B2ABA275200ADB783 /* SnapKit in Frameworks */,
 				78E1755E2ABA838200731259 /* MarkdownUI in Frameworks */,
 				78E738CA2AA9A90F00480046 /* Kingfisher in Frameworks */,
 				1B3895902AB9E16E00B4C8DD /* BottomSheet in Frameworks */,
 				787AF5652AA85D2C00C190E6 /* SwiftyJSON in Frameworks */,
 				78F780072AB34876005623CD /* GoogleSignInSwift in Frameworks */,
+				1BFF20302ADBF19A0090A9C2 /* Aespa.framework in Frameworks */,
 				786669552AA12F7F00448EC7 /* KeychainSwift in Frameworks */,
 				7866694E2AA1289900448EC7 /* Alamofire in Frameworks */,
 			);
@@ -1116,6 +1125,7 @@
 		1B3955332A95069C00BCB4DF = {
 			isa = PBXGroup;
 			children = (
+				1BFF20292ADBF1780090A9C2 /* Aespa.xcodeproj */,
 				1B21C9EC2AA0AB8A0036158F /* .swiftformat */,
 				1BB7A0692A9514B4002DD86F /* .swiftlint.yml */,
 				1B39553E2A95069C00BCB4DF /* Whistle */,
@@ -1975,7 +1985,6 @@
 		1BD4E7BF2ABA31B600ADB783 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				1BED4F542ADAE7F200A96C58 /* Aespa */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -2008,6 +2017,14 @@
 				1B3895302AB9CB7400B4C8DD /* ToolsView */,
 			);
 			path = VideoEditor;
+			sourceTree = "<group>";
+		};
+		1BFF202A2ADBF1780090A9C2 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				1BFF202F2ADBF1790090A9C2 /* Aespa.framework */,
+			);
+			name = Products;
 			sourceTree = "<group>";
 		};
 		780139882AA1279600D5FBDB /* SignInView */ = {
@@ -2224,7 +2241,6 @@
 				1BD4E56A2ABA275200ADB783 /* SnapKit */,
 				78E1755D2ABA838200731259 /* MarkdownUI */,
 				78A58E052AD1C287007F6A69 /* ReverseMask */,
-				1BED4F552ADAE81D00A96C58 /* Aespa */,
 			);
 			productName = Whistle;
 			productReference = 1B39553C2A95069C00BCB4DF /* Whistle.app */;
@@ -2293,6 +2309,12 @@
 			);
 			productRefGroup = 1B39553D2A95069C00BCB4DF /* Products */;
 			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = 1BFF202A2ADBF1780090A9C2 /* Products */;
+					ProjectRef = 1BFF20292ADBF1780090A9C2 /* Aespa.xcodeproj */;
+				},
+			);
 			projectRoot = "";
 			targets = (
 				1B39553B2A95069C00BCB4DF /* Whistle */,
@@ -2300,6 +2322,16 @@
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		1BFF202F2ADBF1790090A9C2 /* Aespa.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = Aespa.framework;
+			remoteRef = 1BFF202E2ADBF1790090A9C2 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		1B39553A2A95069C00BCB4DF /* Resources */ = {
@@ -3199,10 +3231,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 1BD4E5692ABA275200ADB783 /* XCRemoteSwiftPackageReference "SnapKit" */;
 			productName = SnapKit;
-		};
-		1BED4F552ADAE81D00A96C58 /* Aespa */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = Aespa;
 		};
 		7866694D2AA1289900448EC7 /* Alamofire */ = {
 			isa = XCSwiftPackageProductDependency;
