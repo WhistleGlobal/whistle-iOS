@@ -287,6 +287,9 @@ struct VideoContentView: View {
     .navigationBarBackButtonHidden()
     .onAppear {
       Task {
+        if await viewModel.aespaSession.fetchVideoFiles(limit: 1).isEmpty {
+          return
+        }
         let video = await viewModel.aespaSession.fetchVideoFiles(limit: 1)[0]
         albumCover = video.thumbnailImage
         print("cover", video.thumbnailImage)
