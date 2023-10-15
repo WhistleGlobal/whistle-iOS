@@ -73,6 +73,40 @@ struct VideoContentView: View {
   var body: some View {
     ZStack {
       Color.black.ignoresSafeArea()
+      if musicVM.isTrimmed {
+        AlertPopup(
+          alertStyle: .linear,
+          title: "수정 내용을 삭제하시겠어요?",
+          content: "삭제를 선택하면 방금 수정한 내용이 사라집니다.",
+          cancelText: "계속 수정",
+          destructiveText: "삭제",
+          cancelAction: { withAnimation(.easeInOut) { showAlert = false } },
+          destructiveAction: {
+            withAnimation(.easeInOut) {
+              musicVM.removeMusic()
+              editorVM.removeAudio()
+              showAlert = false
+            }
+          })
+          .zIndex(1000)
+          .opacity(showAlert ? 1 : 0)
+      } else {
+        AlertPopup(
+          alertStyle: .linear,
+          title: "미디어를 삭제하시겠어요?",
+          content: "지금 돌아가면 변경 사항이 삭제됩니다.",
+          cancelText: "취소",
+          destructiveText: "삭제",
+          cancelAction: { withAnimation(.easeInOut) { showAlert = false } },
+          destructiveAction: {
+            withAnimation(.easeInOut) {
+              tabbarModel.tabSelectionNoAnimation = .main
+              tabbarModel.tabSelection = .main
+            }
+          })
+          .zIndex(1000)
+          .opacity(showAlert ? 1 : 0)
+      }
       if isPresented {
         PickerConfigViewControllerWrapper(isImagePickerClosed: $isImagePickerClosed)
       }
@@ -230,8 +264,8 @@ struct VideoContentView: View {
                   musicVM.stopAudio()
                 }
               }
-              tabbarModel.tabSelectionNoAnimation = .main
-              tabbarModel.tabSelection = .main
+//              tabbarModel.tabSelectionNoAnimation = .main
+//              tabbarModel.tabSelection = .main
             } label: {
               Image(systemName: "xmark")
                 .font(.system(size: 24))
@@ -247,8 +281,10 @@ struct VideoContentView: View {
               bottomSheetPosition = .absolute(UIScreen.getHeight(400))
             }
           } onDelete: {
-            musicVM.removeMusic()
-            editorVM.removeAudio()
+            withAnimation(.easeInOut) {
+              musicVM.removeMusic()
+              editorVM.removeAudio()
+            }
           }
         }
         Spacer()
@@ -350,7 +386,6 @@ struct VideoContentView: View {
         }
         let video = await viewModel.aespaSession.fetchVideoFiles(limit: 1)[0]
         albumCover = video.thumbnailImage
-        print("cover", video.thumbnailImage)
       }
     }
     .onChange(of: scenePhase) { newValue in

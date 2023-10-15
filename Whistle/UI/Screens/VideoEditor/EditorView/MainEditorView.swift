@@ -25,15 +25,28 @@ struct MainEditorView: View {
   @State var bottomSheetPosition: BottomSheetPosition = .hidden
   @State var sheetPositions: [BottomSheetPosition] = [.hidden, .dynamic]
   @State var goUpload = false
+  @State var showAlert = false
   @StateObject var musicVM = MusicViewModel()
   @StateObject var editorVM = EditorViewModel()
   @StateObject var videoPlayer = VideoPlayerManager()
 
   var body: some View {
     ZStack {
+      AlertPopup(
+        alertStyle: .stack,
+        title: "처음부터 시작하시겠어요?",
+        content: "지금 돌아가면 해당 작업물이 삭제됩니다.",
+        cancelText: "계속 수정",
+        destructiveText: "처음부터 시작",
+        cancelAction: { withAnimation(.easeInOut) { showAlert = false } },
+        destructiveAction: { dismiss() })
+        .zIndex(1000)
+        .opacity(showAlert ? 1 : 0)
       VStack(spacing: 0) {
         CustomNavigationBarViewController(title: "새 게시물") {
-          dismiss()
+          withAnimation(.easeInOut) {
+            showAlert = true
+          }
         } nextButtonAction: {
           if let video = editorVM.currentVideo {
             if videoPlayer.isPlaying {
@@ -298,16 +311,19 @@ struct MusicInfo: View {
             }
           Divider()
             .overlay { Color.White }
-          Image(systemName: "xmark")
-            .contentShape(Rectangle())
-            .onTapGesture {
-              onDelete()
-            }
+          Button {
+            onDelete()
+          } label: {
+            Image(systemName: "xmark")
+              .contentShape(Rectangle())
+              .padding(.vertical, 8)
+              .padding(.trailing, 16)
+          }
         }
         .foregroundStyle(Color.White)
         .fixedSize()
-        .padding(.horizontal, 16)
         .padding(.vertical, 8)
+        .padding(.leading, 16)
         .background(glassMorphicView(cornerRadius: 8))
         .padding(.top, 8)
       }

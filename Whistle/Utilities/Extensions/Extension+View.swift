@@ -108,6 +108,7 @@ extension View {
   func glassMorphicView(cornerRadius: CGFloat) -> some View {
     ZStack {
       Rectangle()
+//        .fill(Color.Gray30_Light.opacity(0.24))
         .fill(Color.black.opacity(0.3))
         .cornerRadius(cornerRadius, corners: .allCorners)
       CustomBlurView(effect: .systemUltraThinMaterialLight) { view in
