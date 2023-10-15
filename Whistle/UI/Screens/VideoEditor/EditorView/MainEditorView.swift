@@ -20,7 +20,7 @@ struct MainEditorView: View {
   var selectedVideoURL: URL?
   @State var isInitial = true
   @State var showVideoQualitySheet = false
-  @State var isShowingMusicTrimView = false
+  @State var showMusicTrimView = false
   @State var bottomSheetTitle = ""
   @State var bottomSheetPosition: BottomSheetPosition = .hidden
   @State var sheetPositions: [BottomSheetPosition] = [.hidden, .dynamic]
@@ -59,8 +59,8 @@ struct MainEditorView: View {
         ZStack(alignment: .top) {
           PlayerHolderView(editorVM: editorVM, videoPlayer: videoPlayer, musicVM: musicVM)
           if let music = musicVM.musicInfo {
-            MusicInfo(musicVM: musicVM, isShowingMusicTrimView: $isShowingMusicTrimView) {
-              isShowingMusicTrimView = true
+            MusicInfo(musicVM: musicVM, showMusicTrimView: $showMusicTrimView) {
+              showMusicTrimView = true
             } onTapXmark: {
               musicVM.removeMusic()
               editorVM.removeAudio()
@@ -97,12 +97,12 @@ struct MainEditorView: View {
     .background(Color.Background_Default_Dark)
     .navigationBarHidden(true)
     .navigationBarBackButtonHidden(true)
-    .fullScreenCover(isPresented: $isShowingMusicTrimView) {
+    .fullScreenCover(isPresented: $showMusicTrimView) {
       MusicTrimView(
         musicVM: musicVM,
         editorVM: editorVM,
         videoPlayer: videoPlayer,
-        isShowingMusicTrimView: $isShowingMusicTrimView)
+        showMusicTrimView: $showMusicTrimView)
     }
     .onChange(of: scenePhase) { phase in
       saveProject(phase)
@@ -187,7 +187,7 @@ struct MainEditorView: View {
           editorVM: editorVM,
           videoPlayer: videoPlayer,
           bottomSheetPosition: $bottomSheetPosition,
-          isShowingMusicTrimView: $isShowingMusicTrimView)
+          showMusicTrimView: $showMusicTrimView)
         {
           bottomSheetPosition = .relative(1)
         }
@@ -278,7 +278,7 @@ extension MainEditorView {
 
 struct MusicInfo: View {
   @ObservedObject var musicVM: MusicViewModel
-  @Binding var isShowingMusicTrimView: Bool
+  @Binding var showMusicTrimView: Bool
 
   let onTapMusic: () -> Void
   let onTapXmark: () -> Void
@@ -294,7 +294,7 @@ struct MusicInfo: View {
           .fontSystem(fontDesignSystem: .body1)
           .contentShape(Rectangle())
           .onTapGesture {
-            isShowingMusicTrimView = true
+            showMusicTrimView = true
           }
         Divider()
           .overlay { Color.White }

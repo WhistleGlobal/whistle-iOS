@@ -28,7 +28,7 @@ struct MusicListView: View {
   @ObservedObject var editorVM: EditorViewModel
   @ObservedObject var videoPlayer: VideoPlayerManager
   @Binding var bottomSheetPosition: BottomSheetPosition
-  @Binding var isShowingMusicTrimView: Bool
+  @Binding var showMusicTrimView: Bool
   @State var searchQueryString = ""
   @State var isSearching = false
   @State var musicList: [Music] = []
@@ -114,7 +114,7 @@ struct MusicListView: View {
                       await musicVM.visualizeAudio()
                       bottomSheetPosition = .hidden
                       editorVM.selectedTools = nil
-                      isShowingMusicTrimView = true
+                      showMusicTrimView = true
                     }
                   }
 //                default: break
@@ -141,12 +141,12 @@ struct MusicListView: View {
         }
       }
     }
-    .fullScreenCover(isPresented: $isShowingMusicTrimView) {
+    .fullScreenCover(isPresented: $showMusicTrimView) {
       MusicTrimView(
         musicVM: musicVM,
         editorVM: editorVM,
         videoPlayer: videoPlayer,
-        isShowingMusicTrimView: $isShowingMusicTrimView)
+        showMusicTrimView: $showMusicTrimView)
     }
     .onAppear {
 //      let fileManager = FileManager.default
