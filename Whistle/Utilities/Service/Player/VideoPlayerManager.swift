@@ -66,6 +66,15 @@ final class VideoPlayerManager: ObservableObject {
     isSetAudio = true
   }
 
+  func playLoop(_ video: EditableVideo) {
+    NotificationCenter.default
+      .addObserver(forName: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: nil, queue: nil) { [weak self] _ in
+        self!.action(video)
+      }
+
+    action(video)
+  }
+
   private func onSubsURL() {
     $loadState
       .dropFirst()
@@ -79,7 +88,6 @@ final class VideoPlayerManager: ObservableObject {
           pause()
           videoPlayer = AVPlayer(url: url)
           startStatusSubscriptions()
-//          print("AVPlayer set url:", url.absoluteString)
         case .failed, .loading, .unknown:
           break
         }

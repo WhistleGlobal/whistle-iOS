@@ -42,6 +42,7 @@ struct VideoContentView: View {
   @State var sheetPositions: [BottomSheetPosition] = [.hidden, .absolute(406)]
   @State var bottomSheetPosition: BottomSheetPosition = .hidden
   @State var albumCover = Image("")
+
   // MARK: - Bools
 
   @State var isRecording = false
@@ -87,6 +88,46 @@ struct VideoContentView: View {
       } else {
         if let video = editorVM.currentVideo {
           EditablePlayerView(player: videoPlayer.videoPlayer)
+            .overlay(alignment: .bottom) {
+              Rectangle()
+                .frame(height: UIScreen.getHeight(2))
+                .foregroundStyle(.white)
+                .overlay(alignment: .leading) {
+                  Rectangle()
+                    .frame(width: UIScreen.getWidth(UIScreen.width / video.totalDuration * videoPlayer.currentTime))
+                    .foregroundStyle(Color.Blue_Default)
+                }
+                .onAppear {
+                  DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.1) {
+                    if videoPlayer.isPlaying == false {
+                      videoPlayer.playLoop(video)
+                    }
+                  }
+                }
+                .onChange(of: videoPlayer.isPlaying) { value in
+                  if musicVM.musicInfo != nil {
+                    switch value {
+                    case true:
+                      musicVM
+                        .playAudio(startTime: 0)
+                    case false:
+                      musicVM.stopAudio()
+                    }
+                  }
+                }
+                .onChange(of: musicVM.isTrimmed) { value in
+                  switch value {
+                  case true:
+                    videoPlayer.action(video)
+                    musicVM.playAudio(startTime: 0)
+                  case false:
+                    videoPlayer.action(video)
+                  }
+                }
+            }
+            .onTapGesture {
+              videoPlayer.playLoop(video)
+            }
         }
       }
       VStack {
@@ -183,6 +224,14 @@ struct VideoContentView: View {
           .overlay(alignment: .leading) {
             Button {
               showAlert = true
+              if videoPlayer.isPlaying {
+                if let video = editorVM.currentVideo {
+                  videoPlayer.action(video)
+                  musicVM.stopAudio()
+                }
+              }
+              tabbarModel.tabSelectionNoAnimation = .main
+              tabbarModel.tabSelection = .main
             } label: {
               Image(systemName: "xmark")
                 .font(.system(size: 24))
@@ -193,9 +242,11 @@ struct VideoContentView: View {
         }
         if buttonState == .completed {
           MusicInfo(musicVM: musicVM, showMusicTrimView: $showMusicTrimView) {
-            sheetPositions = [.absolute(UIScreen.getHeight(400)), .hidden, .relative(1)]
-            bottomSheetPosition = .absolute(UIScreen.getHeight(400))
-          } onTapXmark: {
+            if musicVM.musicInfo == nil {
+              sheetPositions = [.absolute(UIScreen.getHeight(400)), .hidden, .relative(1)]
+              bottomSheetPosition = .absolute(UIScreen.getHeight(400))
+            }
+          } onDelete: {
             musicVM.removeMusic()
             editorVM.removeAudio()
           }
@@ -283,6 +334,13 @@ struct VideoContentView: View {
           .fontSystem(fontDesignSystem: .largeTitle_Expanded)
           .foregroundColor(.white)
       }
+    }
+    .fullScreenCover(isPresented: $showMusicTrimView) {
+      MusicTrimView(
+        musicVM: musicVM,
+        editorVM: editorVM,
+        videoPlayer: videoPlayer,
+        showMusicTrimView: $showMusicTrimView)
     }
     .navigationBarBackButtonHidden()
     .onAppear {
@@ -1000,6 +1058,27 @@ extension VideoContentView {
             Image(systemName: "checkmark")
               .font(.custom("SFCompactText-Regular", size: 44))
               .foregroundColor(.White)
+          }
+          .onTapGesture {
+            Task {
+              if let video = editorVM.currentVideo {
+                let exporterVM = ExporterViewModel(video: video)
+                await exporterVM.action(.save, start: (editorVM.currentVideo?.rangeDuration.lowerBound)!)
+                let thumbnail = editorVM
+                  .returnThumbnail(Int(
+                    (editorVM.currentVideo?.rangeDuration.lowerBound)! / (editorVM.currentVideo?.originalDuration)! *
+                      21))
+                apiViewModel.uploadPost(
+                  video: exporterVM.videoData,
+                  thumbnail: thumbnail.jpegData(compressionQuality: 0.5)!,
+                  caption: "",
+                  musicID: musicVM.musicInfo?.musicID ?? 0,
+                  videoLength: editorVM.currentVideo!.totalDuration,
+                  hashtags: [""])
+              }
+              tabbarModel.tabSelectionNoAnimation = .main
+              tabbarModel.tabSelection = .main
+            }
           }
       }
     }
