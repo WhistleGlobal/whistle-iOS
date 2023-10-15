@@ -62,6 +62,7 @@ extension Color {
   static let Gray40_Light = Color("Gray40_Light")
   static let Gray50_Dark = Color("Gray50_Dark")
   static let Gray60_Light = Color("Gray60_Light")
+  static let Gray60_Dark = Color("Gray60_Dark")
   static let Gray70_Dark = Color("Gray70_Dark")
 
   // MARK: - Button Blue Color
