@@ -58,15 +58,14 @@ struct MainEditorView: View {
         }
         ZStack(alignment: .top) {
           PlayerHolderView(editorVM: editorVM, videoPlayer: videoPlayer, musicVM: musicVM)
-          if let music = musicVM.musicInfo {
+          if musicVM.isTrimmed {
             MusicInfo(musicVM: musicVM, showMusicTrimView: $showMusicTrimView) {
               showMusicTrimView = true
-            } onTapXmark: {
+            } onDelete: {
               musicVM.removeMusic()
               editorVM.removeAudio()
             }
-
-          } else { }
+          }
         }
         .padding(.top, 4)
 
@@ -280,36 +279,38 @@ struct MusicInfo: View {
   @ObservedObject var musicVM: MusicViewModel
   @Binding var showMusicTrimView: Bool
 
-  let onTapMusic: () -> Void
-  let onTapXmark: () -> Void
+  let onClick: () -> Void
+  let onDelete: () -> Void
 
   var body: some View {
-    if let music = musicVM.musicInfo {
-      HStack(spacing: 12) {
-        Image(systemName: "music.note")
-        Text(music.musicTitle)
-          .frame(maxWidth: UIScreen.getWidth(90))
-          .lineLimit(1)
-          .truncationMode(.tail)
-          .fontSystem(fontDesignSystem: .body1)
-          .contentShape(Rectangle())
-          .onTapGesture {
-            showMusicTrimView = true
-          }
-        Divider()
-          .overlay { Color.White }
-        Image(systemName: "xmark")
-          .contentShape(Rectangle())
-          .onTapGesture {
-            onTapXmark()
-          }
+    if musicVM.isTrimmed {
+      if let music = musicVM.musicInfo {
+        HStack(spacing: 12) {
+          Image(systemName: "music.note")
+          Text(music.musicTitle)
+            .frame(maxWidth: UIScreen.getWidth(90))
+            .lineLimit(1)
+            .truncationMode(.tail)
+            .fontSystem(fontDesignSystem: .body1)
+            .contentShape(Rectangle())
+            .onTapGesture {
+              showMusicTrimView = true
+            }
+          Divider()
+            .overlay { Color.White }
+          Image(systemName: "xmark")
+            .contentShape(Rectangle())
+            .onTapGesture {
+              onDelete()
+            }
+        }
+        .foregroundStyle(Color.White)
+        .fixedSize()
+        .padding(.horizontal, 16)
+        .padding(.vertical, 8)
+        .background(glassMorphicView(cornerRadius: 8))
+        .padding(.top, 8)
       }
-      .foregroundStyle(Color.White)
-      .fixedSize()
-      .padding(.horizontal, 16)
-      .padding(.vertical, 8)
-      .background(glassMorphicView(cornerRadius: 8))
-      .padding(.top, 8)
     } else {
       HStack {
         Image(systemName: "music.note")
@@ -326,7 +327,7 @@ struct MusicInfo: View {
       .padding(.vertical, 8)
       .background(glassMorphicView(cornerRadius: 8))
       .onTapGesture {
-        onTapMusic()
+        onClick()
       }
       .padding(.top, 8)
     }

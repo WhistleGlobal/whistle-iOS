@@ -141,24 +141,14 @@ struct MusicListView: View {
         }
       }
     }
-    .fullScreenCover(isPresented: $showMusicTrimView) {
-      MusicTrimView(
-        musicVM: musicVM,
-        editorVM: editorVM,
-        videoPlayer: videoPlayer,
-        showMusicTrimView: $showMusicTrimView)
-    }
+//    .fullScreenCover(isPresented: $showMusicTrimView) {
+//      MusicTrimView(
+//        musicVM: musicVM,
+//        editorVM: editorVM,
+//        videoPlayer: videoPlayer,
+//        showMusicTrimView: $showMusicTrimView)
+//    }
     .onAppear {
-//      let fileManager = FileManager.default
-//      let temporaryDirectory = FileManager.default.temporaryDirectory
-//
-//      do {
-//        let files = try fileManager.contentsOfDirectory(atPath: temporaryDirectory.path)
-//        for file in files {
-//          let filePath = temporaryDirectory.appendingPathComponent(file)
-//          try fileManager.removeItem(at: filePath)
-//        }
-//      } catch { }
       // Music 목록을 가져오는 함수를 호출하고 musicList 배열을 업데이트합니다.
       Task {
         musicList = await apiViewModel.requestMusicList()

@@ -181,8 +181,6 @@ extension MusicTrimView {
           stopPlaying()
           showMusicTrimView = false
           trimAudio()
-//          editorVM.setAudio(Audio(url: musicVM.url!, duration: musicVM.trimDuration))
-//          print("url", musicVM.url)
         }
         musicVM.isTrimmed = true
       } label: {

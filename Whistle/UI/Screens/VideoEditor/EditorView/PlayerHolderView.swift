@@ -71,7 +71,6 @@ extension PlayerHolderView {
         }
         .onTapGesture {
           videoPlayer.action(video)
-          print(musicVM.url)
         }
         .onChange(of: videoPlayer.isPlaying) { value in
           switch value {
