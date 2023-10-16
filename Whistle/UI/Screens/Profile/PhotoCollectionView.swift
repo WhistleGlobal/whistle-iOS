@@ -48,7 +48,11 @@ struct PhotoCollectionView: View {
           dismiss()
         } label: {
           Image(systemName: "xmark")
+            .font(.system(size: 20))
+            .contentShape(Rectangle())
+            .foregroundColor(.LabelColor_Primary)
         }
+        .frame(width: 24, height: 24)
         Spacer()
         Text("갤러리")
           .fontSystem(fontDesignSystem: .subtitle1_KO)
@@ -100,6 +104,7 @@ struct PhotoCollectionView: View {
             .fontSystem(fontDesignSystem: .subtitle2_KO)
             .foregroundColor(.LabelColor_Primary)
           Image(systemName: "chevron.down")
+            .foregroundColor(.LabelColor_Primary)
         }
         Spacer()
       }
@@ -348,6 +353,9 @@ struct AlbumListView: View {
           showAlbumList = false
         } label: {
           Image(systemName: "xmark")
+            .font(.system(size: 20))
+            .contentShape(Rectangle())
+            .foregroundColor(.LabelColor_Primary)
         }
         Spacer()
         Text("갤러리")
