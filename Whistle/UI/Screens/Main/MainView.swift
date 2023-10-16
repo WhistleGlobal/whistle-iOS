@@ -38,6 +38,7 @@ struct MainView: View {
   @State var showFollowToast = (false, "")
   @State var showUserProfile = false
   @State var showUpdate = false
+  @State var showPlayButton = false
   @State var currentVideoUserId = 0
   @State var currentVideoContentId = 0
   @State var currentVideoIsBookmarked = false
@@ -49,6 +50,7 @@ struct MainView: View {
   @State var viewTimer: Timer? = nil
   @State var isSplashOn = true
   @State var processedContentId: Set<Int> = []
+
   @Binding var mainOpacity: Double
   @Binding var isRootStacked: Bool
 
@@ -66,8 +68,20 @@ struct MainView: View {
                 .onTapGesture {
                   if player.rate == 0.0 {
                     player.play()
+                    showPlayButton = true
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
+                      withAnimation {
+                        showPlayButton = false
+                      }
+                    }
                   } else {
                     player.pause()
+                    showPlayButton = true
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
+                      withAnimation {
+                        showPlayButton = false
+                      }
+                    }
                   }
                 }
                 .onLongPressGesture {
@@ -106,6 +120,9 @@ struct MainView: View {
                         content.whistleCount = newValue
                       }))
                   }
+                  playButton(toPlay: player.rate == 0)
+                    .opacity(showPlayButton ? 1 : 0)
+                    .allowsHitTesting(false)
                 }
                 .padding()
                 .rotationEffect(Angle(degrees: -90))
