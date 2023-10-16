@@ -24,6 +24,7 @@ struct UserContentListView: View {
   @State var showPasteToast = false
   @State var showDeleteToast = false
   @State var showBookmarkToast = (false, "저장하기")
+  @State var showPlayButton = false
   @State var showHideContentToast = false
   @State var showReport = false
   @State var showFollowToast = (false, "")
@@ -44,8 +45,20 @@ struct UserContentListView: View {
                 .onTapGesture {
                   if player.rate == 0.0 {
                     player.play()
+                    showPlayButton = true
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
+                      withAnimation {
+                        showPlayButton = false
+                      }
+                    }
                   } else {
                     player.pause()
+                    showPlayButton = true
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
+                      withAnimation {
+                        showPlayButton = false
+                      }
+                    }
                   }
                 }
                 .onLongPressGesture {
@@ -77,6 +90,9 @@ struct UserContentListView: View {
                     }, set: { newValue in
                       content.contentWhistleCount = newValue
                     }))
+                  playButton(toPlay: player.rate == 0)
+                    .opacity(showPlayButton ? 1 : 0)
+                    .allowsHitTesting(false)
                 }
                 .padding()
                 .rotationEffect(Angle(degrees: -90))
