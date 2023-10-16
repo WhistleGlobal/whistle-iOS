@@ -103,8 +103,8 @@ struct ReportDetailView: View {
       if showDuplication {
         AlertPopup(
           alertStyle: .submit,
-          title: "같은 아이디로 이미 접수된 신고사유가 있습니다.",
-          content: "같은 아이디로 이미 접수된 신고사유가 있어 신청이 취소되었습니다.",
+          title: "중복 접수되었습니다.",
+          content: "같은 아이디로 접수된 신고 사유가 있습니다.",
           submitText: "확인",
           submitAction: {
             showDuplication = false
