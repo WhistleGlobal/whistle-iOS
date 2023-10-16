@@ -166,8 +166,7 @@ extension UserFollowView {
       .foregroundColor(.LabelColor_Primary)
       .padding(.bottom, 32)
     Text(
-        tabStatus == .follower ? "아직 회원님을 팔로우하는 사람이 없습니다" : "아직 회원님이 팔로우하는 사람이 없습니다"
-    )
+      tabStatus == .follower ? "아직 회원님을 팔로우하는 사람이 없습니다" : "아직 회원님이 팔로우하는 사람이 없습니다")
       .fontSystem(fontDesignSystem: .body1_KO)
       .foregroundColor(.LabelColor_Secondary)
       .padding(.bottom, 64)

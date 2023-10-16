@@ -6,7 +6,10 @@
 //
 
 import BottomSheet
+import Combine
 import SwiftUI
+
+// MARK: - TagsContent
 
 struct TagsContent<Overlay>: View where Overlay: View {
   private let zwsp = "\u{200B}"
@@ -14,6 +17,8 @@ struct TagsContent<Overlay>: View where Overlay: View {
   @FocusState private var isFocused: Bool
   @State private var inputText = "\u{200B}"
   @Binding var sheetPosition: BottomSheetPosition
+  @Binding var showTagCountMax: Bool
+  @Binding var showTagTextCountMax: Bool
   let overlayContent: () -> Overlay
 
   var body: some View {
@@ -63,6 +68,14 @@ struct TagsContent<Overlay>: View where Overlay: View {
                 .overlay(alignment: .leading) {
                   if tagsData.id == viewModel.getEditableAndTextfieldLastID(), viewModel.getEditableCount() < 5 {
                     tagTextField()
+                      .onAppear {
+                        log("onAppear")
+                      }
+                      .onDisappear {
+                        if sheetPosition != .hidden {
+                          showTagCountMax = true
+                        }
+                      }
                   }
                 }
               }
@@ -143,6 +156,9 @@ struct TagsContent<Overlay>: View where Overlay: View {
       .padding(.horizontal, 16)
       .frame(maxWidth: UIScreen.getWidth(361))
       .fixedSize()
+      .onReceive(Just($inputText)) { _ in
+        limitText(15)
+      }
       .background(
         Capsule()
           .fill(Color.Gray20_Light))
@@ -180,3 +196,15 @@ struct TagsContent<Overlay>: View where Overlay: View {
 // #Preview {
 //  TagsContent(viewModel: TagsViewModel(), overlayContent: { Text("") })
 // }
+
+extension TagsContent {
+
+  // Function to keep text length in limits
+  func limitText(_ upper: Int) {
+    if inputText.filter({ $0 != " " }).count > upper {
+      showTagTextCountMax = true
+      inputText = String(inputText.prefix(upper))
+    }
+  }
+
+}
