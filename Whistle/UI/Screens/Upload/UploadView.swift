@@ -61,15 +61,15 @@ struct UploadView: View {
             .returnThumbnail(Int(
               (editorVM.currentVideo?.rangeDuration.lowerBound)! / (editorVM.currentVideo?.originalDuration)! *
                 21))
-//          apiViewModel.uploadPost(
-//            video: video,
-//            thumbnail: thumbnail.jpegData(compressionQuality: 0.5)!,
-//            caption: content,
-//            musicID: musicVM.musicInfo?.musicID ?? 0,
-//            videoLength: editorVM.currentVideo!.totalDuration,
-//            hashtags: tagsViewModel.getTags())
+          apiViewModel.uploadPost(
+            video: video,
+            thumbnail: thumbnail.jpegData(compressionQuality: 0.5)!,
+            caption: content,
+            musicID: musicVM.musicInfo?.musicID ?? 0,
+            videoLength: editorVM.currentVideo!.totalDuration,
+            hashtags: tagsViewModel.getTags())
         }
-//        NavigationModel.shared.navigate.toggle()
+        NavigationModel.shared.navigate.toggle()
       }
       .frame(height: UIScreen.getHeight(44))
       .overlay(alignment: .bottom) {

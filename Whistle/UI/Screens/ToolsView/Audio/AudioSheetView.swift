@@ -56,30 +56,39 @@ struct AudioSheetView: View {
       if musicVM.isTrimmed {
         subtitleText(text: "추가된 음악 사운드")
           .padding(.top, 12)
-        CustomSlider(
-          value: audioValue,
-          in: 0 ... 1,
-          onChanged: {
-            onChange()
-          },
-          track: {
-            RoundedRectangle(cornerRadius: 12)
-              .foregroundColor(Color.Dim_Default)
-              .frame(width: UIScreen.getWidth(361), height: UIScreen.getHeight(56))
-          },
-          thumb: {
-            RoundedRectangle(cornerRadius: 12)
-              .foregroundColor(.white)
-              .shadow(radius: 20 / 1)
-          },
-          thumbSize: CGSize(width: UIScreen.getWidth(16), height: UIScreen.getHeight(56)))
+        RoundedRectangle(cornerRadius: 12)
+          .foregroundColor(Color.Gray30_Light)
           .frame(width: UIScreen.getWidth(361), height: UIScreen.getHeight(56))
           .overlay(alignment: .leading) {
-            Text("\(Int(audioValue.wrappedValue * 100))")
+            Text("100")
               .fontSystem(fontDesignSystem: .subtitle3)
               .vCenter()
               .padding(.leading, UIScreen.getWidth(24))
           }
+//        CustomSlider(
+//          value: audioValue,
+//          in: 0 ... 1,
+//          onChanged: {
+//            onChange()
+//          },
+//          track: {
+//            RoundedRectangle(cornerRadius: 12)
+//              .foregroundColor(Color.Dim_Default)
+//              .frame(width: UIScreen.getWidth(361), height: UIScreen.getHeight(56))
+//          },
+//          thumb: {
+//            RoundedRectangle(cornerRadius: 12)
+//              .foregroundColor(.white)
+//              .shadow(radius: 20 / 1)
+//          },
+//          thumbSize: CGSize(width: UIScreen.getWidth(16), height: UIScreen.getHeight(56)))
+//          .frame(width: UIScreen.getWidth(361), height: UIScreen.getHeight(56))
+//          .overlay(alignment: .leading) {
+//            Text("\(Int(audioValue.wrappedValue * 100))")
+//              .fontSystem(fontDesignSystem: .subtitle3)
+//              .vCenter()
+//              .padding(.leading, UIScreen.getWidth(24))
+//          }
       }
       completeButton()
     }

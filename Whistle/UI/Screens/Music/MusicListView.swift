@@ -128,7 +128,6 @@ struct MusicListView: View {
               })
               handleDownloadButton(for: music)
                 .fixedSize(horizontal: true, vertical: false)
-                .border(.red)
             }
             .listRowSeparator(.hidden)
             .listRowBackground(Color.clear)

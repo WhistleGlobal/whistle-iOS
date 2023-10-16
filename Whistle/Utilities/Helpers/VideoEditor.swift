@@ -37,6 +37,7 @@ class VideoEditor {
 
     let timeRange = getTimeRange(for: video.originalDuration, with: video.rangeDuration)
     let asset = video.asset
+    let audioMix = AVMutableAudioMix()
 
     /// Set new timeScale
     try await setTimeScaleAndAddTracks(
@@ -45,7 +46,8 @@ class VideoEditor {
       audio: video.audio,
       timeScale: Float64(video.rate),
       videoVolume: video.volume,
-      start: start)
+      start: start,
+      audioMix: audioMix)
 
     /// Get new timeScale video track
     guard let videoTrack = try await composition.loadTracks(withMediaType: .video).first else {
@@ -76,12 +78,9 @@ class VideoEditor {
     /// Set frame duration 30fps
     videoComposition.frameDuration = CMTimeMake(value: 1, timescale: 30)
 
-    let audioMix = AVMutableAudioMix()
     let videoAudioMixInputParams = AVMutableAudioMixInputParameters(track: asset.tracks(withMediaType: .video).first)
     videoAudioMixInputParams.setVolume(video.volume, at: CMTime.zero)
-
-    print("audio track", video.audio?.asset.tracks)
-    audioMix.inputParameters = [videoAudioMixInputParams]
+    audioMix.inputParameters.append(videoAudioMixInputParams)
 
     /// Create background layer color and scale video
     createLayers(video.videoFrames, video: video, size: outputSize, videoComposition: videoComposition)
@@ -223,7 +222,8 @@ extension VideoEditor {
     audio: Audio?,
     timeScale: Float64,
     videoVolume: Float,
-    start: Double)
+    start: Double,
+    audioMix _: AVMutableAudioMix)
     async throws
   {
     let videoTracks = try await asset.loadTracks(withMediaType: .video)
@@ -265,6 +265,11 @@ extension VideoEditor {
     if let audio {
       let asset = AVAsset(url: audio.url)
       guard let secondAudioTrack = try await asset.loadTracks(withMediaType: .audio).first else { return }
+//      let audioMixInputParam = AVMutableAudioMixInputParameters(track: secondAudioTrack)
+//      print("audio track", secondAudioTrack)
+//      audioMixInputParam.setVolume(0, at: CMTime.zero)
+//      audioMix.inputParameters.append(audioMixInputParam)
+      ////print("audio track 2", audioMixInputParam)
       let compositionAudioTrack = composition.addMutableTrack(
         withMediaType: AVMediaType.audio,
         preferredTrackID: kCMPersistentTrackID_Invalid)
