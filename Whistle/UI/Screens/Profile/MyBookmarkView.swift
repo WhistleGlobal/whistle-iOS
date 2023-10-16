@@ -180,7 +180,7 @@ struct MyBookmarkView: View {
         ToastMessage(text: "클립보드에 복사되었어요", toastPadding: 78, showToast: $showPasteToast)
       }
       if showDeleteToast {
-        CancelableToastMessage(text: "북마크 해제되었습니다.", paddingBottom: 78, action: {
+        CancelableToastMessage(text: "저장 해제되었습니다.", paddingBottom: 78, action: {
           Task {
             if apiViewModel.bookmark.count - 1 != currentIndex { // 삭제하려는 컨텐츠가 배열 마지막이 아님
               let contentId = apiViewModel.bookmark[currentIndex].contentId
@@ -220,7 +220,7 @@ struct MyBookmarkView: View {
       }
     }
     .confirmationDialog("", isPresented: $showDialog) {
-      Button("북마크 해제", role: .destructive) {
+      Button("저장 해제", role: .destructive) {
         showDeleteToast = true
       }
       Button("닫기", role: .cancel) {
