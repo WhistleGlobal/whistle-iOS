@@ -33,16 +33,22 @@ struct ProfileInfoView: View {
         .listRowSeparator(.hidden)
         NavigationLink {
           PrivacyPolicyView()
+            .id(UUID())
         } label: {
           Text("개인정보처리방침")
             .listRowSeparator(.hidden)
+            .id(UUID())
         }
+        .id(UUID())
         NavigationLink {
           TermsOfServiceView()
+            .id(UUID())
         } label: {
           Text("이용약관")
             .listRowSeparator(.hidden)
+            .id(UUID())
         }
+        .id(UUID())
       }
       .listStyle(.plain)
       Spacer()

@@ -44,6 +44,7 @@ enum PostReportReason: String, CaseIterable {
   case violentOrHatefulContent = "폭력적 또는 혐오스러운 콘텐츠"
   case sexualContent = "성적인 콘텐츠"
   case none = "해당 문제 없음"
+  case copyrightInfringement = "저작권 침해 콘텐츠"
 
   var numericValue: Int {
     switch self {
@@ -53,6 +54,7 @@ enum PostReportReason: String, CaseIterable {
     case .spamOrConfusion: return 203
     case .violentOrHatefulContent: return 204
     case .sexualContent: return 205
+    case .copyrightInfringement: return 206
     }
   }
 }

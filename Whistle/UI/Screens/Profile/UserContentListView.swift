@@ -24,6 +24,7 @@ struct UserContentListView: View {
   @State var showPasteToast = false
   @State var showDeleteToast = false
   @State var showBookmarkToast = (false, "저장하기")
+  @State var showPlayButton = false
   @State var showHideContentToast = false
   @State var showReport = false
   @State var showFollowToast = (false, "")
@@ -44,8 +45,20 @@ struct UserContentListView: View {
                 .onTapGesture {
                   if player.rate == 0.0 {
                     player.play()
+                    showPlayButton = true
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
+                      withAnimation {
+                        showPlayButton = false
+                      }
+                    }
                   } else {
                     player.pause()
+                    showPlayButton = true
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
+                      withAnimation {
+                        showPlayButton = false
+                      }
+                    }
                   }
                 }
                 .onLongPressGesture {
@@ -77,6 +90,9 @@ struct UserContentListView: View {
                     }, set: { newValue in
                       content.contentWhistleCount = newValue
                     }))
+                  playButton(toPlay: player.rate == 0)
+                    .opacity(showPlayButton ? 1 : 0)
+                    .allowsHitTesting(false)
                 }
                 .padding()
                 .rotationEffect(Angle(degrees: -90))
@@ -220,7 +236,7 @@ struct UserContentListView: View {
             apiViewModel.userPostFeed[currentIndex].isBookmarked = 0
             currentVideoIsBookmarked = false
           } else {
-            showBookmarkToast.1 = "저장 했습니다."
+            showBookmarkToast.1 = "저장했습니다."
             showBookmarkToast.0 = await apiViewModel.actionBookmark(contentId: currentVideoContentId)
             apiViewModel.userPostFeed[currentIndex].isBookmarked = 1
             currentVideoIsBookmarked = true
@@ -297,6 +313,37 @@ extension UserContentListView {
                 .foregroundColor(.white)
                 .fontSystem(fontDesignSystem: .subtitle1)
                 .padding(.trailing, 16)
+            }
+            Button {
+              Task {
+                if apiViewModel.userProfile.isFollowed == 1 {
+                  await apiViewModel.unfollowUser(userId: apiViewModel.userProfile.userId)
+                  apiViewModel.userProfile.isFollowed = 0
+                  showFollowToast = (true, "\(userName)님을 팔로우 취소함")
+                } else {
+                  await apiViewModel.followUser(userId: apiViewModel.userProfile.userId)
+                  showFollowToast = (true, "\(userName)님을 팔로우 중")
+                  apiViewModel.userProfile.isFollowed = 1
+                }
+                apiViewModel.userPostFeed = apiViewModel.userPostFeed.map { item in
+                  let mutableItem = item
+                  if mutableItem.userId == apiViewModel.userProfile.userId {
+                    mutableItem.isFollowed = apiViewModel.userProfile.isFollowed
+                  }
+                  return mutableItem
+                }
+                apiViewModel.postFeedPlayerChanged()
+              }
+            } label: {
+              Text(apiViewModel.userProfile.isFollowed == 1 ? "following" : "follow")
+                .fontSystem(fontDesignSystem: .caption_SemiBold)
+                .foregroundColor(.Gray10)
+                .background {
+                  Capsule()
+                    .stroke(Color.Gray10, lineWidth: 1)
+                    .frame(width: apiViewModel.userProfile.isFollowed == 1 ? 78 : 60, height: 26)
+                }
+                .frame(width: apiViewModel.userProfile.isFollowed == 1 ? 78 : 60, height: 26)
             }
           }
           HStack(spacing: 0) {

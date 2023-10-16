@@ -132,7 +132,7 @@ struct ProfileView: View {
           .coordinateSpace(name: "SCROLL")
           .zIndex(0)
           Spacer()
-        // 북마크 탭 & 올린 컨텐츠 있음
+        // O 탭 & 올린 컨텐츠 있음
         case (.bookmark, _, false):
           ScrollView {
             LazyVGrid(columns: [
@@ -167,7 +167,7 @@ struct ProfileView: View {
             .padding(.horizontal, 16)
         // 북마크 탭 & 올린 컨텐츠 없음
         case (.bookmark, _, true):
-          listEmptyView()
+          bookmarkEmptyView()
             .padding(.horizontal, 16)
         }
       }
@@ -310,6 +310,7 @@ extension ProfileView {
         .foregroundColor(Color.LabelColor_Primary_Dark)
         .fontSystem(fontDesignSystem: .title2_Expanded)
         .padding(.bottom, 4)
+      Spacer()
       Color.clear.overlay {
         Text(apiViewModel.myProfile.introduce ?? " ")
           .foregroundColor(Color.LabelColor_Secondary_Dark)
@@ -451,6 +452,16 @@ extension ProfileView {
     }
     .buttonStyle(ProfileEditButtonStyle())
     .padding(.bottom, 76)
+    Spacer()
+  }
+
+  @ViewBuilder
+  func bookmarkEmptyView() -> some View {
+    Spacer()
+    Text("저장한 콘텐츠가 없습니다")
+      .fontSystem(fontDesignSystem: .body1_KO)
+      .foregroundColor(.LabelColor_Primary_Dark)
+      .padding(.bottom, 64)
     Spacer()
   }
 }

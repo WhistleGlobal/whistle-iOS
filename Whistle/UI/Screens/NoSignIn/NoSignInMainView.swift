@@ -17,7 +17,7 @@ import SwiftUI
 // MARK: - NoSignInMainView
 
 struct NoSignInMainView: View {
-
+  @AppStorage("showGuide") var showGuide = true
   @EnvironmentObject var apiViewModel: APIViewModel
   @EnvironmentObject var tabbarModel: TabbarModel
   @EnvironmentObject var userAuth: UserAuth
@@ -115,6 +115,45 @@ struct NoSignInMainView: View {
           player.pause()
         }
       }
+      .overlay {
+        if showGuide {
+          VStack {
+            Spacer()
+            Button {
+              showGuide = false
+            } label: {
+              Text("닫기")
+                .fontSystem(fontDesignSystem: .subtitle2_KO)
+                .foregroundColor(Color.LabelColor_Primary_Dark)
+                .background {
+                  glassMorphicView(width: UIScreen.width - 32, height: 56, cornerRadius: 12)
+                    .overlay {
+                      RoundedRectangle(cornerRadius: 12)
+                        .stroke(lineWidth: 1)
+                        .foregroundStyle(
+                          LinearGradient.Border_Glass)
+                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    }
+                }
+            }
+            .frame(width: UIScreen.width - 32, height: 56)
+            .padding(.bottom, 32)
+          }
+          .ignoresSafeArea()
+          .ignoresSafeArea(.all, edges: .top)
+          .background {
+            Color.clear.overlay {
+              Image("gestureGuide")
+                .resizable()
+                .scaledToFill()
+                .ignoresSafeArea()
+                .ignoresSafeArea(.all, edges: .top)
+            }
+            .ignoresSafeArea()
+            .ignoresSafeArea(.all, edges: .top)
+          }
+        }
+      }
     }
     .ignoresSafeArea(.all, edges: .top)
     .navigationBarBackButtonHidden()
@@ -137,10 +176,18 @@ struct NoSignInMainView: View {
         }
         .frame(height: 52)
         .padding(.bottom, 56)
-        Text("Whistle에 로그인")
-          .fontSystem(fontDesignSystem: .title2)
-          .foregroundColor(.LabelColor_Primary_Dark)
-          .padding(.bottom, 12)
+        Group {
+          Text("Whistle")
+            .font(.system(size: 24, weight: .semibold)) +
+            Text("에 로그인")
+            .font(.custom("AppleSDGothicNeo-SemiBold", size: 24))
+        }
+        .fontWidth(.expanded)
+        .lineSpacing(8)
+        .padding(.vertical, 4)
+        .padding(.bottom, 12)
+        .foregroundColor(.LabelColor_Primary_Dark)
+
         Text("더 많은 스포츠 콘텐츠를 즐겨보세요")
           .fontSystem(fontDesignSystem: .body1_KO)
           .foregroundColor(.LabelColor_Secondary_Dark)

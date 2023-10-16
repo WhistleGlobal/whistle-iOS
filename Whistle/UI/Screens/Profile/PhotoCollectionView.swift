@@ -37,6 +37,7 @@ struct PhotoCollectionView: View {
   @State private var lastStoredOffset: CGSize = .zero
   @State private var albumName = "최근 항목"
   @State var showAlbumList = false
+  @Binding var showProfileImageToast: Bool
   @GestureState private var isInteracting = false
   @EnvironmentObject var apiViewModel: APIViewModel
 
@@ -47,7 +48,11 @@ struct PhotoCollectionView: View {
           dismiss()
         } label: {
           Image(systemName: "xmark")
+            .font(.system(size: 20))
+            .contentShape(Rectangle())
+            .foregroundColor(.LabelColor_Primary)
         }
+        .frame(width: 24, height: 24)
         Spacer()
         Text("갤러리")
           .fontSystem(fontDesignSystem: .subtitle1_KO)
@@ -68,6 +73,7 @@ struct PhotoCollectionView: View {
             }
             await apiViewModel.uploadPhoto(image: image) { url in log(url) }
             await apiViewModel.requestMyProfile()
+            showProfileImageToast = true
             dismiss()
           }
         } label: {
@@ -98,6 +104,7 @@ struct PhotoCollectionView: View {
             .fontSystem(fontDesignSystem: .subtitle2_KO)
             .foregroundColor(.LabelColor_Primary)
           Image(systemName: "chevron.down")
+            .foregroundColor(.LabelColor_Primary)
         }
         Spacer()
       }
@@ -346,6 +353,9 @@ struct AlbumListView: View {
           showAlbumList = false
         } label: {
           Image(systemName: "xmark")
+            .font(.system(size: 20))
+            .contentShape(Rectangle())
+            .foregroundColor(.LabelColor_Primary)
         }
         Spacer()
         Text("갤러리")

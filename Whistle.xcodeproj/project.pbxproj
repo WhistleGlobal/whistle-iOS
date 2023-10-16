@@ -66,7 +66,6 @@
 		1B38958D2AB9CCCF00B4C8DD /* Color.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B38958C2AB9CCCF00B4C8DD /* Color.swift */; };
 		1B3895902AB9E16E00B4C8DD /* BottomSheet in Frameworks */ = {isa = PBXBuildFile; productRef = 1B38958F2AB9E16E00B4C8DD /* BottomSheet */; };
 		1B3955402A95069C00BCB4DF /* WhistleApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B39553F2A95069C00BCB4DF /* WhistleApp.swift */; };
-		1B3955422A95069C00BCB4DF /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B3955412A95069C00BCB4DF /* ContentView.swift */; };
 		1B3955442A95069D00BCB4DF /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1B3955432A95069D00BCB4DF /* Assets.xcassets */; };
 		1B3955472A95069D00BCB4DF /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1B3955462A95069D00BCB4DF /* Preview Assets.xcassets */; };
 		1B3955532A9507E300BCB4DF /* Extension+UIScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B3955522A9507E300BCB4DF /* Extension+UIScreen.swift */; };
@@ -376,6 +375,7 @@
 		780039082AD7E0020033B9F1 /* VersionCheck.swift in Sources */ = {isa = PBXBuildFile; fileRef = 780039072AD7E0020033B9F1 /* VersionCheck.swift */; };
 		7801398A2AA127AE00D5FBDB /* SignInView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 780139892AA127AE00D5FBDB /* SignInView.swift */; };
 		7819532E2ABA261A0053B975 /* MyContentListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7819532D2ABA261A0053B975 /* MyContentListView.swift */; };
+		7822B23A2ADD509C000B15AB /* NotionWebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7822B2392ADD509C000B15AB /* NotionWebView.swift */; };
 		782DD4732AA30BDD006183D3 /* FollowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 782DD4722AA30BDD006183D3 /* FollowView.swift */; };
 		782DD4752AA30C22006183D3 /* FollowButtonStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 782DD4742AA30C22006183D3 /* FollowButtonStyle.swift */; };
 		782DD4772AA30C5C006183D3 /* FollowTabbarStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 782DD4762AA30C5C006183D3 /* FollowTabbarStyle.swift */; };
@@ -583,7 +583,6 @@
 		1B38958C2AB9CCCF00B4C8DD /* Color.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Color.swift; sourceTree = "<group>"; };
 		1B39553C2A95069C00BCB4DF /* Whistle.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Whistle.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1B39553F2A95069C00BCB4DF /* WhistleApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WhistleApp.swift; sourceTree = "<group>"; };
-		1B3955412A95069C00BCB4DF /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		1B3955432A95069D00BCB4DF /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		1B3955462A95069D00BCB4DF /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		1B3955522A9507E300BCB4DF /* Extension+UIScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Extension+UIScreen.swift"; sourceTree = "<group>"; };
@@ -889,6 +888,7 @@
 		780039072AD7E0020033B9F1 /* VersionCheck.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VersionCheck.swift; sourceTree = "<group>"; };
 		780139892AA127AE00D5FBDB /* SignInView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInView.swift; sourceTree = "<group>"; };
 		7819532D2ABA261A0053B975 /* MyContentListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyContentListView.swift; sourceTree = "<group>"; };
+		7822B2392ADD509C000B15AB /* NotionWebView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotionWebView.swift; sourceTree = "<group>"; };
 		782DD4722AA30BDD006183D3 /* FollowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FollowView.swift; sourceTree = "<group>"; };
 		782DD4742AA30C22006183D3 /* FollowButtonStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FollowButtonStyle.swift; sourceTree = "<group>"; };
 		782DD4762AA30C5C006183D3 /* FollowTabbarStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FollowTabbarStyle.swift; sourceTree = "<group>"; };
@@ -1300,7 +1300,6 @@
 				788F43EE2AA5CD9300718D38 /* Main */,
 				780139882AA1279600D5FBDB /* SignInView */,
 				78D148E12A9E132700DDCE48 /* Profile */,
-				1B3955412A95069C00BCB4DF /* ContentView.swift */,
 				78F980802A9F32C800AD542A /* TabbarView.swift */,
 				1BC32C392ACF3013004AC3C1 /* Music */,
 			);
@@ -1403,6 +1402,7 @@
 				787C8B172AB33FC000723085 /* ReportAlert.swift */,
 				785E9E692AB9DCB1003A93E8 /* CancelableToastMessage.swift */,
 				1BA24B532ADC336200DB0992 /* AlertPopup.swift */,
+				7822B2392ADD509C000B15AB /* NotionWebView.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -2822,7 +2822,6 @@
 				78BECCD92AAAE1E6003FA7B5 /* PostFeedProtocol.swift in Sources */,
 				1B38954A2AB9CB7500B4C8DD /* CropperRatio.swift in Sources */,
 				785258572ACC6D680024E466 /* NoSignInProfileView.swift in Sources */,
-				1B3955422A95069C00BCB4DF /* ContentView.swift in Sources */,
 				782DD47C2AA32448006183D3 /* Extension+UINavigationController.swift in Sources */,
 				1B0A29AE2AA662CB009077A1 /* HapticsManager.swift in Sources */,
 				78730CEB2ACE8691008B9981 /* PhotoAssetCollection.swift in Sources */,
@@ -2866,6 +2865,7 @@
 				7861E68E2ACD266B00612E2F /* ViewCount.swift in Sources */,
 				1B3895652AB9CBD300B4C8DD /* EditableVideo.swift in Sources */,
 				1B3895872AB9CC4300B4C8DD /* ProjectEntity+Ext.swift in Sources */,
+				7822B23A2ADD509C000B15AB /* NotionWebView.swift in Sources */,
 				1B38954B2AB9CB7500B4C8DD /* CropView.swift in Sources */,
 				7830281B2AB8918B00127D76 /* DeleteAccountAlert.swift in Sources */,
 				786669492AA1284F00448EC7 /* UserAuth.swift in Sources */,
