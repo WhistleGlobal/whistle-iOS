@@ -132,7 +132,7 @@ struct ProfileView: View {
           .coordinateSpace(name: "SCROLL")
           .zIndex(0)
           Spacer()
-        // 북마크 탭 & 올린 컨텐츠 있음
+        // O 탭 & 올린 컨텐츠 있음
         case (.bookmark, _, false):
           ScrollView {
             LazyVGrid(columns: [

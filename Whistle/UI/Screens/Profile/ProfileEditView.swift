@@ -17,6 +17,7 @@ struct ProfileEditView: View {
   @State var editProfileImage = false
   @State var showIdToast = false
   @State var showIntroductionToast = false
+  @State var showProfileImageToast = false
   @State var showGallery = false
   @State var showAuthAlert = false
   @EnvironmentObject var apiViewModel: APIViewModel
@@ -63,9 +64,12 @@ struct ProfileEditView: View {
       if showIntroductionToast {
         ToastMessage(text: "소개가 수정되었습니다.", toastPadding: 32, showToast: $showIntroductionToast)
       }
+      if showProfileImageToast {
+        ToastMessage(text: "프로필 사진이 수정되었습니다.", toastPadding: 32, showToast: $showProfileImageToast)
+      }
     }
     .fullScreenCover(isPresented: $showGallery) {
-      PhotoCollectionView(photoCollection: photoCollection)
+      PhotoCollectionView(photoCollection: photoCollection, showProfileImageToast: $showProfileImageToast)
         .environmentObject(apiViewModel)
     }
     .padding(.horizontal, 16)

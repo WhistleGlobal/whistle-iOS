@@ -236,7 +236,7 @@ struct UserContentListView: View {
             apiViewModel.userPostFeed[currentIndex].isBookmarked = 0
             currentVideoIsBookmarked = false
           } else {
-            showBookmarkToast.1 = "저장 했습니다."
+            showBookmarkToast.1 = "저장했습니다."
             showBookmarkToast.0 = await apiViewModel.actionBookmark(contentId: currentVideoContentId)
             apiViewModel.userPostFeed[currentIndex].isBookmarked = 1
             currentVideoIsBookmarked = true
