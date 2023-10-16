@@ -371,7 +371,7 @@ struct MainView: View {
             apiViewModel.contentList[currentIndex].isBookmarked = false
             currentVideoIsBookmarked = false
           } else {
-            showBookmarkToast.1 = "저장 했습니다."
+            showBookmarkToast.1 = "저장했습니다."
             showBookmarkToast.0 = await apiViewModel.actionBookmark(contentId: currentVideoContentId)
             apiViewModel.contentList[currentIndex].isBookmarked = true
             currentVideoIsBookmarked = true
