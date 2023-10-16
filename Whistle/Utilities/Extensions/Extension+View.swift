@@ -475,7 +475,7 @@ extension View {
         Circle()
           .stroke(lineWidth: 1)
           .foregroundStyle(LinearGradient.Border_Glass)
-        Image(systemName: toPlay ? "play" : "pause")
+        Image(systemName: toPlay ? "play.fill" : "pause.fill")
           .font(.system(size: 20))
           .contentShape(Circle())
           .foregroundColor(.White)

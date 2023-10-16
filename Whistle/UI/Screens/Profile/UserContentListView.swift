@@ -298,6 +298,37 @@ extension UserContentListView {
                 .fontSystem(fontDesignSystem: .subtitle1)
                 .padding(.trailing, 16)
             }
+            Button {
+              Task {
+                if apiViewModel.userProfile.isFollowed == 1 {
+                  await apiViewModel.unfollowUser(userId: apiViewModel.userProfile.userId)
+                  apiViewModel.userProfile.isFollowed = 0
+                  showFollowToast = (true, "\(userName)님을 팔로우 취소함")
+                } else {
+                  await apiViewModel.followUser(userId: apiViewModel.userProfile.userId)
+                  showFollowToast = (true, "\(userName)님을 팔로우 중")
+                  apiViewModel.userProfile.isFollowed = 1
+                }
+                apiViewModel.userPostFeed = apiViewModel.userPostFeed.map { item in
+                  let mutableItem = item
+                  if mutableItem.userId == apiViewModel.userProfile.userId {
+                    mutableItem.isFollowed = apiViewModel.userProfile.isFollowed
+                  }
+                  return mutableItem
+                }
+                apiViewModel.postFeedPlayerChanged()
+              }
+            } label: {
+              Text(apiViewModel.userProfile.isFollowed == 1 ? "following" : "follow")
+                .fontSystem(fontDesignSystem: .caption_SemiBold)
+                .foregroundColor(.Gray10)
+                .background {
+                  Capsule()
+                    .stroke(Color.Gray10, lineWidth: 1)
+                    .frame(width: apiViewModel.userProfile.isFollowed == 1 ? 78 : 60, height: 26)
+                }
+                .frame(width: apiViewModel.userProfile.isFollowed == 1 ? 78 : 60, height: 26)
+            }
           }
           HStack(spacing: 0) {
             Text(caption)
