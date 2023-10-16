@@ -12,6 +12,8 @@ import SwiftUI
 
 struct PrivacyPolicyView: View {
 
+  @Environment(\.dismiss) var dismiss
+
   var body: some View {
     ScrollView {
       VStack {
@@ -218,6 +220,18 @@ struct PrivacyPolicyView: View {
       .tint(.Primary_Lighten)
     }
     .navigationTitle("개인정보 처리 방침")
+    .navigationBarBackButtonHidden()
+    .toolbar {
+      ToolbarItem(placement: .cancellationAction) {
+        Button {
+          dismiss()
+        } label: {
+          Image(systemName: "chevron.backward")
+            .font(.system(size: 20))
+            .foregroundColor(.LabelColor_Primary)
+        }
+      }
+    }
   }
 }
 
