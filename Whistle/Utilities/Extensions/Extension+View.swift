@@ -69,7 +69,7 @@ extension View {
       ZStack(alignment: .bottomTrailing) { // alignment 변경
         RoundedRectangle(cornerRadius: 32, style: .continuous)
           .fill(Color.black.opacity(0.3))
-        CustomBlurView(effect: .systemUltraThinMaterial) { view in
+        CustomBlurView(effect: .systemUltraThinMaterialLight) { view in
           view.saturationAmout = 2.2
           view.gaussianBlurRadius = 36
         }

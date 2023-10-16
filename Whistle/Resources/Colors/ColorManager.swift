@@ -42,6 +42,7 @@ extension Color {
 
   static let Dim_Thick = Color("Gray80").opacity(0.56)
   static let Dim_Default = Color("Gray80").opacity(0.36)
+  static let Dim_Default_Light = Color("Gray80_Light").opacity(0.36)
   static let Dim_Thin = Color("Gray80").opacity(0.16)
 
   static let LabelColor_Primary_Dark: Color = .init("Gray10_Dark")
