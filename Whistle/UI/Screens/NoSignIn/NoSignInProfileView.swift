@@ -78,6 +78,7 @@ struct NoSignInProfileView: View {
       VStack(spacing: 0) {
         HStack {
           Button {
+            tabbarModel.tabbarOpacity = 1.0
             bottomSheetPosition = .hidden
           } label: {
             Image(systemName: "xmark")
@@ -89,11 +90,17 @@ struct NoSignInProfileView: View {
         }
         .frame(height: 52)
         .padding(.bottom, 56)
-        Text("Whistle에 로그인")
-          .fontSystem(fontDesignSystem: .title2_KO_SemiBold)
-          .foregroundColor(.LabelColor_Primary_Dark)
-          .fontWidth(.expanded)
-          .padding(.bottom, 12)
+        Group {
+          Text("Whistle")
+            .font(.system(size: 24, weight: .semibold)) +
+            Text("에 로그인")
+            .font(.custom("AppleSDGothicNeo-SemiBold", size: 24))
+        }
+        .fontWidth(.expanded)
+        .lineSpacing(8)
+        .padding(.vertical, 4)
+        .padding(.bottom, 12)
+        .foregroundColor(.LabelColor_Primary_Dark)
         Text("더 많은 스포츠 콘텐츠를 즐겨보세요")
           .fontSystem(fontDesignSystem: .body1_KO)
           .foregroundColor(.LabelColor_Secondary_Dark)
