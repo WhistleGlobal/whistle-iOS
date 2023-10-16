@@ -25,6 +25,7 @@ struct UploadView: View {
   @State var sheetPosition: BottomSheetPosition = .hidden
   @State var showTagCountMax = false
   @State var showTagTextCountMax = false
+  @State private var inputText = "\u{200B}"
   @Binding var isInitial: Bool
   let videoScale: CGFloat = 16 / 9
   let videoWidth: CGFloat = 203
@@ -127,6 +128,7 @@ struct UploadView: View {
           ZStack(alignment: .topLeading) {
             TagsContent(
               viewModel: tagsViewModel,
+              inputText: $inputText,
               sheetPosition: $sheetPosition,
               showTagCountMax: $showTagCountMax,
               showTagTextCountMax: $showTagTextCountMax)
@@ -162,6 +164,13 @@ struct UploadView: View {
             .foregroundStyle(Color.Info)
             .contentShape(Rectangle())
             .onTapGesture {
+//              log("inputText: ->\(inputText)<-")
+              if !inputText.isEmpty, inputText != "\u{200B}" {
+                tagsViewModel.dataObject.insert(
+                  TagsDataModel(titleKey: inputText),
+                  at: max(0, tagsViewModel.dataObject.count - 2))
+                inputText = "\u{200B}"
+              }
               sheetPosition = .hidden
             }
         }
@@ -179,6 +188,7 @@ struct UploadView: View {
       ZStack(alignment: .topLeading) {
         TagsContent(
           viewModel: tagsViewModel,
+          inputText: $inputText,
           sheetPosition: $sheetPosition,
           showTagCountMax: $showTagCountMax,
           showTagTextCountMax: $showTagTextCountMax)
