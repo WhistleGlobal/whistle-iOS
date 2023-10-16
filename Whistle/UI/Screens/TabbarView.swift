@@ -13,6 +13,9 @@ import VideoPicker
 // MARK: - TabbarView
 
 struct TabbarView: View {
+
+  @AppStorage("showGuide") var showGuide = true
+
   @State var isFirstProfileLoaded = true
   @State var mainOpacity = 1.0
   @State var isRootStacked = false
@@ -170,7 +173,7 @@ struct TabbarView: View {
               })
       }
       .padding(.horizontal, 16)
-      .opacity(tabbarModel.tabbarOpacity)
+      .opacity(showGuide ? 0.0 : tabbarModel.tabbarOpacity)
       .onReceive(NavigationModel.shared.$navigate, perform: { _ in
         if tabbarModel.tabSelection == .upload {
           tabbarModel.tabSelection = tabbarModel.prevTabSelection ?? .main

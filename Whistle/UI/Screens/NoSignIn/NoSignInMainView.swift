@@ -17,7 +17,7 @@ import SwiftUI
 // MARK: - NoSignInMainView
 
 struct NoSignInMainView: View {
-
+  @AppStorage("showGuide") var showGuide = true
   @EnvironmentObject var apiViewModel: APIViewModel
   @EnvironmentObject var tabbarModel: TabbarModel
   @EnvironmentObject var userAuth: UserAuth
@@ -113,6 +113,45 @@ struct NoSignInMainView: View {
           player.play()
         } else {
           player.pause()
+        }
+      }
+      .overlay {
+        if showGuide {
+          VStack {
+            Spacer()
+            Button {
+              showGuide = false
+            } label: {
+              Text("닫기")
+                .fontSystem(fontDesignSystem: .subtitle2_KO)
+                .foregroundColor(Color.LabelColor_Primary_Dark)
+                .background {
+                  glassMorphicView(width: UIScreen.width - 32, height: 56, cornerRadius: 12)
+                    .overlay {
+                      RoundedRectangle(cornerRadius: 12)
+                        .stroke(lineWidth: 1)
+                        .foregroundStyle(
+                          LinearGradient.Border_Glass)
+                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    }
+                }
+            }
+            .frame(width: UIScreen.width - 32, height: 56)
+            .padding(.bottom, 32)
+          }
+          .ignoresSafeArea()
+          .ignoresSafeArea(.all, edges: .top)
+          .background {
+            Color.clear.overlay {
+              Image("gestureGuide")
+                .resizable()
+                .scaledToFill()
+                .ignoresSafeArea()
+                .ignoresSafeArea(.all, edges: .top)
+            }
+            .ignoresSafeArea()
+            .ignoresSafeArea(.all, edges: .top)
+          }
         }
       }
     }
