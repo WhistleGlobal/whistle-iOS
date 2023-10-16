@@ -73,40 +73,23 @@ struct VideoContentView: View {
   var body: some View {
     ZStack {
       Color.black.ignoresSafeArea()
-      if musicVM.isTrimmed {
-        AlertPopup(
-          alertStyle: .linear,
-          title: "수정 내용을 삭제하시겠어요?",
-          content: "삭제를 선택하면 방금 수정한 내용이 사라집니다.",
-          cancelText: "계속 수정",
-          destructiveText: "삭제",
-          cancelAction: { withAnimation(.easeInOut) { showAlert = false } },
-          destructiveAction: {
-            withAnimation(.easeInOut) {
-              musicVM.removeMusic()
-              editorVM.removeAudio()
-              showAlert = false
-            }
-          })
-          .zIndex(1000)
-          .opacity(showAlert ? 1 : 0)
-      } else {
-        AlertPopup(
-          alertStyle: .linear,
-          title: "미디어를 삭제하시겠어요?",
-          content: "지금 돌아가면 변경 사항이 삭제됩니다.",
-          cancelText: "취소",
-          destructiveText: "삭제",
-          cancelAction: { withAnimation(.easeInOut) { showAlert = false } },
-          destructiveAction: {
-            withAnimation(.easeInOut) {
-              tabbarModel.tabSelectionNoAnimation = .main
-              tabbarModel.tabSelection = .main
-            }
-          })
-          .zIndex(1000)
-          .opacity(showAlert ? 1 : 0)
-      }
+      AlertPopup(
+        alertStyle: .linear,
+        title: "영상을 삭제하시겠어요?",
+        content: "지금 돌아가면 변경 사항이 모두 삭제됩니다.",
+        cancelText: "계속 수정",
+        destructiveText: "삭제",
+        cancelAction: { withAnimation(.easeInOut) { showAlert = false } },
+        destructiveAction: {
+          withAnimation(.easeInOut) {
+            showAlert = false
+            musicVM.removeMusic()
+            buttonState = .idle
+          }
+        })
+        .zIndex(1000)
+        .opacity(showAlert ? 1 : 0)
+
       if isPresented {
         PickerConfigViewControllerWrapper(isImagePickerClosed: $isImagePickerClosed)
       }
@@ -545,7 +528,6 @@ extension VideoContentView {
         .frame(height: 52)
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(.horizontal, 16)
-
 
       // MARK: - 드래그
 
