@@ -75,16 +75,16 @@ struct MainReportDetailView: View {
           }
         }
       }
-        if showDuplication {
-          AlertPopup(
-            alertStyle: .submit,
-            title: "중복 접수되었습니다.",
-            content: "같은 아이디로 접수된 신고 사유가 있습니다.",
-            submitText: "확인",
-            submitAction: {
-              showDuplication = false
-            })
-        }
+      if showDuplication {
+        AlertPopup(
+          alertStyle: .submit,
+          title: "중복 접수되었습니다.",
+          content: "같은 아이디로 접수된 신고 사유가 있습니다.",
+          submitText: "확인",
+          submitAction: {
+            showDuplication = false
+          })
+      }
       if showFailLoad {
         AlertPopup(
           alertStyle: .submit,

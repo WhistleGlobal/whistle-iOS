@@ -366,12 +366,14 @@ extension UserContentListView {
                 .font(.system(size: 30))
                 .contentShape(Rectangle())
                 .foregroundColor(.Gray10)
+                .frame(width: 36, height: 36)
                 .padding(.bottom, 2)
               Text("\(whistleCount.wrappedValue)")
                 .foregroundColor(.Gray10)
                 .fontSystem(fontDesignSystem: .subtitle3_KO)
             }
           }
+          .frame(width: 36, height: 36)
           Button {
             guard let contentId = apiViewModel.userPostFeed[currentIndex].contentId else {
               return
@@ -385,8 +387,10 @@ extension UserContentListView {
               .font(.system(size: 30))
               .contentShape(Rectangle())
               .foregroundColor(.Gray10)
+              .frame(width: 36, height: 36)
           }
           .fontSystem(fontDesignSystem: .caption_Regular)
+          .frame(width: 36, height: 36)
           Button {
             showDialog = true
           } label: {
@@ -394,7 +398,9 @@ extension UserContentListView {
               .font(.system(size: 30))
               .contentShape(Rectangle())
               .foregroundColor(.Gray10)
+              .frame(width: 36, height: 36)
           }
+          .frame(width: 36, height: 36)
         }
       }
     }
