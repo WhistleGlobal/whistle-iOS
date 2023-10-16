@@ -75,6 +75,7 @@ struct ReportDetailView: View {
               } else {
                 showFailLoad = true
               }
+              showAlert = false
             }
           } else {
             Task {
@@ -99,17 +100,25 @@ struct ReportDetailView: View {
           }
         }
       }
-    }
-    .alert(isPresented: $showDuplication) {
-      Alert(
-        title: Text("같은 사유로 한 번만 신고할 수 있습니다."),
-        message: Text("같은 사유로 신고가 중복되어 신청이 취소되었습니다."),
-        dismissButton: .cancel(Text("확인")))
-    }
-    .alert(isPresented: $showFailLoad) {
-      Alert(
-        title: Text("신고 처리 중 문제가 생겼습니다. 잠시후 다시 시도해주세요."),
-        dismissButton: .cancel(Text("확인")))
+      if showDuplication {
+        AlertPopup(
+          alertStyle: .submit,
+          title: "같은 사유로 한 번만 신고할 수 있습니다.",
+          content: "같은 사유로 신고가 중복되어 신청이 취소되었습니다.",
+          submitText: "확인",
+          submitAction: {
+            showDuplication = false
+          })
+      }
+      if showFailLoad {
+        AlertPopup(
+          alertStyle: .submit,
+          title: "신고 처리 중 문제가 생겼습니다. 잠시후 다시 시도해주세요.",
+          submitText: "확인",
+          submitAction: {
+            showFailLoad = false
+          })
+      }
     }
     .toolbar {
       ToolbarItem(placement: .cancellationAction) {

@@ -6,14 +6,19 @@
 //
 
 import BottomSheet
+import Combine
 import SwiftUI
+
+// MARK: - TagsContent
 
 struct TagsContent<Overlay>: View where Overlay: View {
   private let zwsp = "\u{200B}"
   @ObservedObject var viewModel = TagsViewModel()
   @FocusState private var isFocused: Bool
-  @State private var inputText = "\u{200B}"
+  @Binding var inputText: String
   @Binding var sheetPosition: BottomSheetPosition
+  @Binding var showTagCountMax: Bool
+  @Binding var showTagTextCountMax: Bool
   let overlayContent: () -> Overlay
 
   var body: some View {
@@ -22,57 +27,60 @@ struct TagsContent<Overlay>: View where Overlay: View {
     return GeometryReader { geo in
       if sheetPosition != .hidden {
         VStack(alignment: .leading, spacing: 0) {
-          ScrollView {
-            ZStack(alignment: .topLeading) {
-              ForEach(viewModel.editableDataObject()) { tagsData in
-                Tags(titleKey: tagsData.titleKey, editable: tagsData.role == .editable ? true : false) {
-                  if viewModel.dataObject.count > 1 {
-                    withAnimation {
-                      viewModel.dataObject.removeAll(where: { $0.id == tagsData.id })
+          ZStack(alignment: .topLeading) {
+            ForEach(viewModel.editableDataObject()) { tagsData in
+              Tags(titleKey: tagsData.titleKey, editable: tagsData.role == .editable ? true : false) {
+                if viewModel.dataObject.count > 1 {
+                  withAnimation {
+                    viewModel.dataObject.removeAll(where: { $0.id == tagsData.id })
+                  }
+                }
+              }
+              .foregroundColor(Color.Gray60_Light)
+              .background(Capsule().fill(Color.Gray20_Light))
+              .opacity(tagsData.role == .textfield ? 0 : 1)
+              .padding(.all, 4)
+              .alignmentGuide(.leading) { dimension in
+                if abs(width - dimension.width) > geo.size.width - 28 {
+                  width = 0
+                  height -= dimension.height
+                }
+                let result = width
+                if
+                  tagsData.id == (viewModel.getEditableAndTextfieldLastID())
+                {
+                  width = 0
+                } else {
+                  width -= dimension.width
+                }
+                return result
+              }
+              .alignmentGuide(.top) { _ in
+                let result = height
+                if
+                  tagsData.id == (viewModel.getEditableAndTextfieldLastID())
+                {
+                  height = 0
+                }
+                return result
+              }
+              .overlay(alignment: .leading) {
+                if tagsData.id == viewModel.getEditableAndTextfieldLastID(), viewModel.getEditableCount() < 5 {
+                  tagTextField()
+                    .onAppear {
+                      log("onAppear")
                     }
-                  }
-                }
-                .foregroundColor(Color.Gray60_Light)
-                .background(Capsule().fill(Color.Gray20_Light))
-                .opacity(tagsData.role == .textfield ? 0 : 1)
-                .padding(.all, 4)
-                .alignmentGuide(.leading) { dimension in
-                  if abs(width - dimension.width) > geo.size.width {
-                    width = 0
-                    height -= dimension.height
-                  }
-                  let result = width
-                  if
-                    tagsData.id == (viewModel.getEditableAndTextfieldLastID())
-                  {
-                    width = 0
-                  } else {
-                    width -= dimension.width
-                  }
-                  return result
-                }
-                .alignmentGuide(.top) { _ in
-                  let result = height
-                  if
-                    tagsData.id == (viewModel.getEditableAndTextfieldLastID())
-                  {
-                    height = 0
-                  }
-                  return result
-                }
-                .overlay(alignment: .leading) {
-                  if tagsData.id == viewModel.getEditableAndTextfieldLastID(), viewModel.getEditableCount() < 5 {
-                    tagTextField()
-                  }
+                    .onDisappear {
+                      if sheetPosition != .hidden {
+                        showTagCountMax = true
+                      }
+                    }
                 }
               }
             }
           }
-          .frame(height: UIScreen.getHeight(104))
           .padding(.top, 16)
           .padding(.horizontal, 12)
-          .scrollIndicators(.never)
-          Rectangle().fill(Color.Border_Default_Dark).frame(height: 1)
         }
       } else {
         ZStack(alignment: .topLeading) {
@@ -94,7 +102,7 @@ struct TagsContent<Overlay>: View where Overlay: View {
             .opacity(tagsData.role == .noneditable && viewModel.getEditableCount() >= 5 ? 0 : 1)
             .padding(.all, 4)
             .alignmentGuide(.leading) { dimension in
-              if abs(width - dimension.width) > geo.size.width {
+              if abs(width - dimension.width) > geo.size.width - 28 {
                 width = 0
                 height -= dimension.height
               }
@@ -143,6 +151,9 @@ struct TagsContent<Overlay>: View where Overlay: View {
       .padding(.horizontal, 16)
       .frame(maxWidth: UIScreen.getWidth(361))
       .fixedSize()
+      .onReceive(Just($inputText)) { _ in
+        limitText(15)
+      }
       .background(
         Capsule()
           .fill(Color.Gray20_Light))
@@ -180,3 +191,15 @@ struct TagsContent<Overlay>: View where Overlay: View {
 // #Preview {
 //  TagsContent(viewModel: TagsViewModel(), overlayContent: { Text("") })
 // }
+
+extension TagsContent {
+
+  // Function to keep text length in limits
+  func limitText(_ upper: Int) {
+    if inputText.filter({ $0 != " " }).count > upper {
+      showTagTextCountMax = true
+      inputText = String(inputText.prefix(upper))
+    }
+  }
+
+}

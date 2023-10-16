@@ -181,7 +181,6 @@ extension View {
       }
       .clipShape(Circle())
     }
-//    .frame(width: UIScreen.getWidth(width), height: UIScreen.getHeight(height))
   }
 }
 
@@ -464,4 +463,24 @@ extension View {
   func frame(_ size: CGSize) -> some View {
     frame(width: size.width, height: size.height)
   }
+}
+
+extension View {
+
+  @ViewBuilder
+  func playButton(toPlay: Bool) -> some View {
+    glassMoriphicCircleView()
+      .frame(width: 56, height: 56)
+      .overlay {
+        Circle()
+          .stroke(lineWidth: 1)
+          .foregroundStyle(LinearGradient.Border_Glass)
+        Image(systemName: toPlay ? "play.fill" : "pause.fill")
+          .font(.system(size: 20))
+          .contentShape(Circle())
+          .foregroundColor(.White)
+      }
+  }
+
+
 }

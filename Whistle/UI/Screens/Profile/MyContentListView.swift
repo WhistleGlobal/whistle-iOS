@@ -20,6 +20,7 @@ struct MyContentListView: View {
   @State var showDialog = false
   @State var showPasteToast = false
   @State var showDeleteToast = false
+  @State var showPlayButton = false
   @State var timer: Timer? = nil
   @EnvironmentObject var apiViewModel: APIViewModel
   @EnvironmentObject var tabbarModel: TabbarModel
@@ -80,8 +81,20 @@ struct MyContentListView: View {
                   .onTapGesture {
                     if player.rate == 0.0 {
                       player.play()
+                      showPlayButton = true
+                      DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
+                        withAnimation {
+                          showPlayButton = false
+                        }
+                      }
                     } else {
                       player.pause()
+                      showPlayButton = true
+                      DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
+                        withAnimation {
+                          showPlayButton = false
+                        }
+                      }
                     }
                   }
                   .onLongPressGesture {
@@ -112,6 +125,9 @@ struct MyContentListView: View {
                       }, set: { newValue in
                         content.contentWhistleCount = newValue
                       }))
+                    playButton(toPlay: player.rate == 0)
+                      .opacity(showPlayButton ? 1 : 0)
+                      .allowsHitTesting(false)
                   }
                   .padding()
                   .rotationEffect(Angle(degrees: -90))

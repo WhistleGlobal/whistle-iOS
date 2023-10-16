@@ -1,17 +1,17 @@
 {
   "images" : [
     {
-      "filename" : "whistleLogo.png",
+      "filename" : "gestureGuide.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "filename" : "whistleLogo@2x.png",
+      "filename" : "gestureGuide@2x.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
-      "filename" : "whistleLogo@3x.png",
+      "filename" : "gestureGuide@3x.png",
       "idiom" : "universal",
       "scale" : "3x"
     }

@@ -23,6 +23,9 @@ struct UploadView: View {
   @FocusState private var isFocused: Bool
   @State var content = ""
   @State var sheetPosition: BottomSheetPosition = .hidden
+  @State var showTagCountMax = false
+  @State var showTagTextCountMax = false
+  @State private var inputText = "\u{200B}"
   @Binding var isInitial: Bool
   let videoScale: CGFloat = 16 / 9
   let videoWidth: CGFloat = 203
@@ -123,7 +126,13 @@ struct UploadView: View {
             .padding(.horizontal, UIScreen.getWidth(16))
 
           ZStack(alignment: .topLeading) {
-            TagsContent(viewModel: tagsViewModel, sheetPosition: $sheetPosition) {
+            TagsContent(
+              viewModel: tagsViewModel,
+              inputText: $inputText,
+              sheetPosition: $sheetPosition,
+              showTagCountMax: $showTagCountMax,
+              showTagTextCountMax: $showTagTextCountMax)
+            {
               EmptyView()
             }
           }
@@ -155,6 +164,13 @@ struct UploadView: View {
             .foregroundStyle(Color.Info)
             .contentShape(Rectangle())
             .onTapGesture {
+//              log("inputText: ->\(inputText)<-")
+              if !inputText.isEmpty, inputText != "\u{200B}" {
+                tagsViewModel.dataObject.insert(
+                  TagsDataModel(titleKey: inputText),
+                  at: max(0, tagsViewModel.dataObject.count - 2))
+                inputText = "\u{200B}"
+              }
               sheetPosition = .hidden
             }
         }
@@ -170,8 +186,22 @@ struct UploadView: View {
       }
     }, mainContent: {
       ZStack(alignment: .topLeading) {
-        TagsContent(viewModel: tagsViewModel, sheetPosition: $sheetPosition) {
+        TagsContent(
+          viewModel: tagsViewModel,
+          inputText: $inputText,
+          sheetPosition: $sheetPosition,
+          showTagCountMax: $showTagCountMax,
+          showTagTextCountMax: $showTagTextCountMax)
+        {
           Text("")
+        }
+      }
+      .overlay {
+        if showTagCountMax {
+          ToastMessage(text: "해시태그는 최대 5개까지만 가능합니다", toastPadding: 32, showToast: $showTagCountMax)
+        }
+        if showTagTextCountMax {
+          ToastMessage(text: "해시태그는 최대 16글자까지 가능합니다", toastPadding: 32, showToast: $showTagTextCountMax)
         }
       }
     })
@@ -184,7 +214,7 @@ struct UploadView: View {
         .cornerRadius(24, corners: [.topLeft, .topRight])
         .foregroundStyle(Color.white))
     .toolbar(.hidden)
-    .ignoresSafeArea(.keyboard)
+//    .ignoresSafeArea(.keyboard)
     .scrollDismissesKeyboard(.interactively)
   }
 

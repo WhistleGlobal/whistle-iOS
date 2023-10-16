@@ -27,6 +27,7 @@ struct MainView: View {
   @EnvironmentObject var apiViewModel: APIViewModel
   @EnvironmentObject var tabbarModel: TabbarModel
   @EnvironmentObject var universalRoutingModel: UniversalRoutingModel
+  @AppStorage("showGuide") var showGuide = true
   @State var viewCount: ViewCount = .init()
   @State var currentIndex = 0
   @State var playerIndex = 0
@@ -38,6 +39,7 @@ struct MainView: View {
   @State var showFollowToast = (false, "")
   @State var showUserProfile = false
   @State var showUpdate = false
+  @State var showPlayButton = false
   @State var currentVideoUserId = 0
   @State var currentVideoContentId = 0
   @State var currentVideoIsBookmarked = false
@@ -49,6 +51,7 @@ struct MainView: View {
   @State var viewTimer: Timer? = nil
   @State var isSplashOn = true
   @State var processedContentId: Set<Int> = []
+
   @Binding var mainOpacity: Double
   @Binding var isRootStacked: Bool
 
@@ -66,8 +69,20 @@ struct MainView: View {
                 .onTapGesture {
                   if player.rate == 0.0 {
                     player.play()
+                    showPlayButton = true
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
+                      withAnimation {
+                        showPlayButton = false
+                      }
+                    }
                   } else {
                     player.pause()
+                    showPlayButton = true
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
+                      withAnimation {
+                        showPlayButton = false
+                      }
+                    }
                   }
                 }
                 .onLongPressGesture {
@@ -106,6 +121,9 @@ struct MainView: View {
                         content.whistleCount = newValue
                       }))
                   }
+                  playButton(toPlay: player.rate == 0)
+                    .opacity(showPlayButton ? 1 : 0)
+                    .allowsHitTesting(false)
                 }
                 .padding()
                 .rotationEffect(Angle(degrees: -90))
@@ -188,6 +206,45 @@ struct MainView: View {
               tempSet.insert(view.contentId)
             }
             processedContentId = processedContentId.union(tempSet)
+          }
+        }
+      }
+      .overlay {
+        if showGuide {
+          VStack {
+            Spacer()
+            Button {
+              showGuide = false
+            } label: {
+              Text("닫기")
+                .fontSystem(fontDesignSystem: .subtitle2_KO)
+                .foregroundColor(Color.LabelColor_Primary_Dark)
+                .background {
+                  glassMorphicView(width: UIScreen.width - 32, height: 56, cornerRadius: 12)
+                    .overlay {
+                      RoundedRectangle(cornerRadius: 12)
+                        .stroke(lineWidth: 1)
+                        .foregroundStyle(
+                          LinearGradient.Border_Glass)
+                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    }
+                }
+            }
+            .frame(width: UIScreen.width - 32, height: 56)
+            .padding(.bottom, 32)
+          }
+          .ignoresSafeArea()
+          .ignoresSafeArea(.all, edges: .top)
+          .background {
+            Color.clear.overlay {
+              Image("gestureGuide")
+                .resizable()
+                .scaledToFill()
+                .ignoresSafeArea()
+                .ignoresSafeArea(.all, edges: .top)
+            }
+            .ignoresSafeArea()
+            .ignoresSafeArea(.all, edges: .top)
           }
         }
       }
@@ -354,7 +411,7 @@ struct MainView: View {
             apiViewModel.contentList[currentIndex].isBookmarked = false
             currentVideoIsBookmarked = false
           } else {
-            showBookmarkToast.1 = "저장 했습니다."
+            showBookmarkToast.1 = "저장했습니다."
             showBookmarkToast.0 = await apiViewModel.actionBookmark(contentId: currentVideoContentId)
             apiViewModel.contentList[currentIndex].isBookmarked = true
             currentVideoIsBookmarked = true

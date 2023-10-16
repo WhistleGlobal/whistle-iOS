@@ -852,7 +852,7 @@ extension VideoContentView {
     count = CGFloat(selectedSec.0 == .sec3 ? 3 : 10)
     showPreparingView = true
     recordingTimer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { _ in
-      withAnimation(.linear(duration: 0.5)) {
+      withAnimation(.linear(duration: 1.0)) {
         count -= 1
       }
       if count == 0 {
@@ -946,7 +946,7 @@ extension VideoContentView {
               .foregroundColor(.Primary_Default)
               .frame(width: 109, height: 109, alignment: .center)
               .rotationEffect(Angle(degrees: -90))
-              .animation(.linear(duration: 0.1))
+              .animation(.linear(duration: 1.0))
             Rectangle()
               .foregroundColor(.White)
               .cornerRadius(8)
