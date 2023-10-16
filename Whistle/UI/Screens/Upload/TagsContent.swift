@@ -41,7 +41,7 @@ struct TagsContent<Overlay>: View where Overlay: View {
               .opacity(tagsData.role == .textfield ? 0 : 1)
               .padding(.all, 4)
               .alignmentGuide(.leading) { dimension in
-                if abs(width - dimension.width) > geo.size.width {
+                if abs(width - dimension.width) > geo.size.width - 28 {
                   width = 0
                   height -= dimension.height
                 }
@@ -102,7 +102,7 @@ struct TagsContent<Overlay>: View where Overlay: View {
             .opacity(tagsData.role == .noneditable && viewModel.getEditableCount() >= 5 ? 0 : 1)
             .padding(.all, 4)
             .alignmentGuide(.leading) { dimension in
-              if abs(width - dimension.width) > geo.size.width {
+              if abs(width - dimension.width) > geo.size.width - 28 {
                 width = 0
                 height -= dimension.height
               }
