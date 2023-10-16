@@ -107,6 +107,7 @@ struct MainEditorView: View {
       }
     }
     .background(Color.Background_Default_Dark)
+    .ignoresSafeArea()
     .navigationBarHidden(true)
     .navigationBarBackButtonHidden(true)
     .fullScreenCover(isPresented: $showMusicTrimView) {

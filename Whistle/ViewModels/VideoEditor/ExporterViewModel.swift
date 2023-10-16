@@ -68,7 +68,7 @@ class ExporterViewModel: ObservableObject {
         case .loaded(let url):
           if action == .save {
             renderState = .saved
-//            saveVideoInLib(url)
+            saveVideoInLib(url)
           } else {
             showShareSheet(data: url)
           }

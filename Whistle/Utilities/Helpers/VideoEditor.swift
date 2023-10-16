@@ -76,6 +76,13 @@ class VideoEditor {
     /// Set frame duration 30fps
     videoComposition.frameDuration = CMTimeMake(value: 1, timescale: 30)
 
+    let audioMix = AVMutableAudioMix()
+    let videoAudioMixInputParams = AVMutableAudioMixInputParameters(track: asset.tracks(withMediaType: .video).first)
+    videoAudioMixInputParams.setVolume(video.volume, at: CMTime.zero)
+
+    print("audio track", video.audio?.asset.tracks)
+    audioMix.inputParameters = [videoAudioMixInputParams]
+
     /// Create background layer color and scale video
     createLayers(video.videoFrames, video: video, size: outputSize, videoComposition: videoComposition)
 
@@ -94,6 +101,7 @@ class VideoEditor {
 
     /// Create exportSession
     let session = try exportSession(
+      audioMix: audioMix,
       composition: composition,
       videoComposition: videoComposition,
       outputURL: outputURL,
@@ -154,6 +162,7 @@ class VideoEditor {
 
 extension VideoEditor {
   private func exportSession(
+    audioMix: AVMutableAudioMix,
     composition: AVMutableComposition,
     videoComposition: AVMutableVideoComposition,
     outputURL: URL,
@@ -168,6 +177,7 @@ extension VideoEditor {
       print("Cannot create export session.")
       throw ExporterError.cannotCreateExportSession
     }
+    export.audioMix = audioMix
     export.videoComposition = videoComposition
     export.outputFileType = .mp4
     export.outputURL = outputURL
@@ -251,14 +261,14 @@ extension VideoEditor {
       compositionVideoTrack?.preferredTransform = videoPreferredTransform
     }
 
-    // Adding audio
+//     Adding audio
     if let audio {
       let asset = AVAsset(url: audio.url)
       guard let secondAudioTrack = try await asset.loadTracks(withMediaType: .audio).first else { return }
       let compositionAudioTrack = composition.addMutableTrack(
         withMediaType: AVMediaType.audio,
         preferredTrackID: kCMPersistentTrackID_Invalid)
-      compositionAudioTrack?.preferredVolume = audio.volume
+      compositionAudioTrack?.preferredVolume = 0
       try compositionAudioTrack?.insertTimeRange(
         oldTimeRange,
         of: secondAudioTrack,

@@ -146,6 +146,7 @@ extension AudioSheetView {
     videoPlayer.setVolume(editorVM.isSelectVideo, value: videoValue.wrappedValue)
     if musicVM.isTrimmed {
       musicVM.setVolume(value: audioValue.wrappedValue)
+      editorVM.currentVideo?.audio?.setVolume(audioValue.wrappedValue)
     }
   }
 }

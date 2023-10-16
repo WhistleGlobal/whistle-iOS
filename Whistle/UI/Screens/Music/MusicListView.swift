@@ -79,29 +79,34 @@ struct MusicListView: View {
         if !filteredMusicList.isEmpty {
           List(filteredMusicList, id: \.musicID) { music in
             HStack(spacing: 0) {
-              KFImage(URL(string: music.albumCover))
-                .cancelOnDisappear(true)
-                .placeholder {
-                  ProgressView()
-                }
-                .retry(maxCount: 3, interval: .seconds(0.5))
-                .onSuccess { _ in
-                }
-                .onFailure { _ in
-                }
-                .resizable()
-                .frame(width: UIScreen.getWidth(64), height: UIScreen.getWidth(64))
-                .cornerRadius(8)
-                .padding(.trailing, 16)
               HStack {
+                KFImage(URL(string: music.albumCover))
+                  .cancelOnDisappear(true)
+                  .placeholder {
+                    ProgressView()
+                  }
+                  .retry(maxCount: 3, interval: .seconds(0.5))
+                  .onSuccess { _ in
+                  }
+                  .onFailure { _ in
+                  }
+                  .resizable()
+                  .frame(width: UIScreen.getWidth(64), height: UIScreen.getWidth(64))
+                  .cornerRadius(8)
+                  .padding(.trailing, 16)
+
                 Text("\(music.musicTitle)")
-                Rectangle().foregroundStyle(.ultraThinMaterial.opacity(0.001))
+                  .foregroundStyle(Color.LabelColor_Primary_Dark)
+                  .fontSystem(fontDesignSystem: .subtitle1)
+                Rectangle().fill(.white).opacity(0.0001)
               }
+              .hLeading()
               .highPriorityGesture(TapGesture().onEnded {
-                switch downloadStatus[music] {
-                case .beforeDownload:
-                  downloadAudioUsingAlamofire(for: music)
-                default:
+                let directoryURL = FileManager.default.temporaryDirectory
+                let uniqueFileName = music.musicTitle + ".mp3"
+                let fileURL = directoryURL.appendingPathComponent(uniqueFileName)
+                fileDirectories[music] = fileURL
+                if FileManager.default.fileExists(atPath: fileURL.path) {
                   audioPlayer?.stop()
                   DispatchQueue.main.async {
                     musicVM.musicInfo = music
@@ -117,10 +122,13 @@ struct MusicListView: View {
                       showMusicTrimView = true
                     }
                   }
-//                default: break
+                } else {
+                  downloadAudioUsingAlamofire(for: music)
                 }
               })
               handleDownloadButton(for: music)
+                .fixedSize(horizontal: true, vertical: false)
+                .border(.red)
             }
             .listRowSeparator(.hidden)
             .listRowBackground(Color.clear)
@@ -141,13 +149,6 @@ struct MusicListView: View {
         }
       }
     }
-//    .fullScreenCover(isPresented: $showMusicTrimView) {
-//      MusicTrimView(
-//        musicVM: musicVM,
-//        editorVM: editorVM,
-//        videoPlayer: videoPlayer,
-//        showMusicTrimView: $showMusicTrimView)
-//    }
     .onAppear {
       // Music 목록을 가져오는 함수를 호출하고 musicList 배열을 업데이트합니다.
       Task {
