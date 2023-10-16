@@ -310,6 +310,7 @@ extension ProfileView {
         .foregroundColor(Color.LabelColor_Primary_Dark)
         .fontSystem(fontDesignSystem: .title2_Expanded)
         .padding(.bottom, 4)
+      Spacer()
       Color.clear.overlay {
         Text(apiViewModel.myProfile.introduce ?? " ")
           .foregroundColor(Color.LabelColor_Secondary_Dark)
