@@ -472,7 +472,6 @@
 		78DA58D72AA448A100F8D2F1 /* ProfileEditIDView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78DA58D62AA448A100F8D2F1 /* ProfileEditIDView.swift */; };
 		78DDADFA2AA1A37F00960552 /* AppKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78DDADF92AA1A37F00960552 /* AppKeys.swift */; };
 		78E1755B2ABA802000731259 /* PrivacyPolicyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78E1755A2ABA802000731259 /* PrivacyPolicyView.swift */; };
-		78E1755E2ABA838200731259 /* MarkdownUI in Frameworks */ = {isa = PBXBuildFile; productRef = 78E1755D2ABA838200731259 /* MarkdownUI */; };
 		78E175602ABA8DE100731259 /* TermsOfServiceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78E1755F2ABA8DE100731259 /* TermsOfServiceView.swift */; };
 		78E175642ABBEF4500731259 /* SignInPlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78E175632ABBEF4500731259 /* SignInPlayerView.swift */; };
 		78E175662ABBF0D300731259 /* whistleSignInBackground.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = 78E175652ABBF0D300731259 /* whistleSignInBackground.mp4 */; };
@@ -1003,7 +1002,6 @@
 				1BD4E5B92ABA2F5600ADB783 /* VideoPicker.framework in Frameworks */,
 				78F780052AB34876005623CD /* GoogleSignIn in Frameworks */,
 				1BD4E56B2ABA275200ADB783 /* SnapKit in Frameworks */,
-				78E1755E2ABA838200731259 /* MarkdownUI in Frameworks */,
 				78E738CA2AA9A90F00480046 /* Kingfisher in Frameworks */,
 				1B3895902AB9E16E00B4C8DD /* BottomSheet in Frameworks */,
 				787AF5652AA85D2C00C190E6 /* SwiftyJSON in Frameworks */,
@@ -2623,7 +2621,6 @@
 				78F780062AB34876005623CD /* GoogleSignInSwift */,
 				1B38958F2AB9E16E00B4C8DD /* BottomSheet */,
 				1BD4E56A2ABA275200ADB783 /* SnapKit */,
-				78E1755D2ABA838200731259 /* MarkdownUI */,
 				78A58E052AD1C287007F6A69 /* ReverseMask */,
 			);
 			productName = Whistle;
@@ -2710,7 +2707,6 @@
 				78F780032AB34876005623CD /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */,
 				1B38958E2AB9E16E00B4C8DD /* XCRemoteSwiftPackageReference "BottomSheet" */,
 				1BD4E5692ABA275200ADB783 /* XCRemoteSwiftPackageReference "SnapKit" */,
-				78E1755C2ABA838200731259 /* XCRemoteSwiftPackageReference "swift-markdown-ui" */,
 				78A58E042AD1C287007F6A69 /* XCRemoteSwiftPackageReference "ReverseMask" */,
 			);
 			productRefGroup = 1B39553D2A95069C00BCB4DF /* Products */;
@@ -3739,14 +3735,6 @@
 				minimumVersion = 0.0.1;
 			};
 		};
-		78E1755C2ABA838200731259 /* XCRemoteSwiftPackageReference "swift-markdown-ui" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/gonzalezreal/swift-markdown-ui.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 2.2.0;
-			};
-		};
 		78E738C82AA9A90E00480046 /* XCRemoteSwiftPackageReference "Kingfisher" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/onevcat/Kingfisher.git";
@@ -3805,11 +3793,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 78A58E042AD1C287007F6A69 /* XCRemoteSwiftPackageReference "ReverseMask" */;
 			productName = ReverseMask;
-		};
-		78E1755D2ABA838200731259 /* MarkdownUI */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 78E1755C2ABA838200731259 /* XCRemoteSwiftPackageReference "swift-markdown-ui" */;
-			productName = MarkdownUI;
 		};
 		78E738C92AA9A90F00480046 /* Kingfisher */ = {
 			isa = XCSwiftPackageProductDependency;

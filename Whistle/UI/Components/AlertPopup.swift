@@ -85,6 +85,7 @@ struct AlertPopup: View {
             .foregroundStyle(Color.LabelColor_Primary_Dark)
             .padding(.bottom, UIScreen.getHeight(8))
             .padding(.horizontal, UIScreen.getWidth(16))
+            .multilineTextAlignment(.center)
         }
         if let content {
           Text(content)
