@@ -103,7 +103,7 @@ extension APIViewModel: PostFeedProtocol {
               continuation.resume()
             } catch {
               log("Error parsing JSON: \(error)")
-              log("북마크를 불러올 수 없습니다.")
+              log("저장된 컨텐츠를 불러올 수 없습니다.")
               continuation.resume()
             }
           case .failure(let error):
