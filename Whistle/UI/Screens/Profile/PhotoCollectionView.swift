@@ -37,6 +37,7 @@ struct PhotoCollectionView: View {
   @State private var lastStoredOffset: CGSize = .zero
   @State private var albumName = "최근 항목"
   @State var showAlbumList = false
+  @Binding var showProfileImageToast: Bool
   @GestureState private var isInteracting = false
   @EnvironmentObject var apiViewModel: APIViewModel
 
@@ -68,6 +69,7 @@ struct PhotoCollectionView: View {
             }
             await apiViewModel.uploadPhoto(image: image) { url in log(url) }
             await apiViewModel.requestMyProfile()
+            showProfileImageToast = true
             dismiss()
           }
         } label: {
