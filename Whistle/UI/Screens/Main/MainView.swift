@@ -570,12 +570,14 @@ extension MainView {
                 .font(.system(size: 30))
                 .contentShape(Rectangle())
                 .foregroundColor(.Gray10)
+                .frame(width: 36, height: 36)
                 .padding(.bottom, 2)
               Text("\(whistleCount.wrappedValue)")
                 .foregroundColor(.Gray10)
                 .fontSystem(fontDesignSystem: .subtitle3_KO)
             }
           }
+          .frame(width: 36, height: 36)
           Button {
             showPasteToast = true
             UIPasteboard.general.setValue(
@@ -586,7 +588,9 @@ extension MainView {
               .font(.system(size: 30))
               .contentShape(Rectangle())
               .foregroundColor(.Gray10)
+              .frame(width: 36, height: 36)
           }
+          .frame(width: 36, height: 36)
           Button {
             showDialog = true
           } label: {
@@ -594,7 +598,9 @@ extension MainView {
               .font(.system(size: 30))
               .contentShape(Rectangle())
               .foregroundColor(.Gray10)
+              .frame(width: 36, height: 36)
           }
+          .frame(width: 36, height: 36)
         }
       }
     }

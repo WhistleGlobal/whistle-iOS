@@ -334,6 +334,7 @@ extension MyContentListView {
                 .font(.system(size: 30))
                 .contentShape(Rectangle())
                 .foregroundColor(.Gray10)
+                .frame(width: 36, height: 36)
                 .padding(.bottom, 2)
               Text("\(whistleCount.wrappedValue)")
                 .foregroundColor(.Gray10)
@@ -341,6 +342,7 @@ extension MyContentListView {
                 .padding(.bottom, 24)
             }
           }
+          .frame(width: 36, height: 36)
           Button {
             showPasteToast = true
             UIPasteboard.general.setValue(
@@ -351,7 +353,9 @@ extension MyContentListView {
               .font(.system(size: 30))
               .contentShape(Rectangle())
               .foregroundColor(.Gray10)
+              .frame(width: 36, height: 36)
           }
+          .frame(width: 36, height: 36)
           .fontSystem(fontDesignSystem: .caption_Regular)
           Button {
             showDialog = true
@@ -360,8 +364,10 @@ extension MyContentListView {
               .font(.system(size: 30))
               .contentShape(Rectangle())
               .foregroundColor(.Gray10)
+              .frame(width: 36, height: 36)
           }
         }
+        .frame(width: 36, height: 36)
       }
     }
     .padding(.bottom, 64)

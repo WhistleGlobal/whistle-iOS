@@ -103,9 +103,12 @@ struct PhotoCollectionView: View {
           Text(albumName)
             .fontSystem(fontDesignSystem: .subtitle2_KO)
             .foregroundColor(.LabelColor_Primary)
+            .frame(height: 54)
           Image(systemName: "chevron.down")
             .foregroundColor(.LabelColor_Primary)
+            .frame(height: 54)
         }
+        .frame(height: 54)
         Spacer()
       }
       .frame(height: 54)
