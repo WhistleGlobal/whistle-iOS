@@ -367,7 +367,6 @@ extension MyContentListView {
               .frame(width: 36, height: 36)
           }
         }
-        .frame(width: 36, height: 36)
       }
     }
     .padding(.bottom, 64)

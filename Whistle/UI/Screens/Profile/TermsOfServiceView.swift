@@ -5,7 +5,6 @@
 //  Created by ChoiYujin on 9/20/23.
 //
 
-import MarkdownUI
 import SwiftUI
 
 struct TermsOfServiceView: View {
