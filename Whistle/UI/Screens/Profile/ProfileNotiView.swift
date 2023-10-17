@@ -18,7 +18,7 @@ struct ProfileNotiView: View {
       Toggle("게시글 휘슬 알림", isOn: $apiViewModel.notiSetting.whistleEnabled)
       Toggle("팔로워 알림", isOn: $apiViewModel.notiSetting.followEnabled)
       Toggle("Whistle에서 보내는 알림", isOn: $apiViewModel.notiSetting.infoEnabled)
-      Toggle("이메일 알림", isOn: $apiViewModel.notiSetting.adEnabled)
+      Toggle("광고 알림", isOn: $apiViewModel.notiSetting.adEnabled)
     }
     .scrollDisabled(true)
     .foregroundColor(.LabelColor_Primary)

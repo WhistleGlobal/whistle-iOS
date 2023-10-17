@@ -34,7 +34,7 @@ struct MainReportDetailView: View {
         .frame(maxWidth: .infinity, alignment: .leading)
         .foregroundColor(.LabelColor_Secondary)
         .padding(.bottom, 16)
-      TextField("기타 참고사항을 알려주세요 (선택사항)", text: $inputReportDetail)
+      TextField("기타 참고사항을 알려주세요 (선택사항)", text: $inputReportDetail, axis: .vertical)
         .padding(16)
         .frame(height: 160, alignment: .top)
         .frame(maxWidth: .infinity)
