@@ -111,7 +111,9 @@ struct VideoContentView: View {
                 .foregroundStyle(.white)
                 .overlay(alignment: .leading) {
                   Rectangle()
-                    .frame(width: UIScreen.getWidth(UIScreen.width / video.totalDuration * videoPlayer.currentTime))
+                    .frame(
+                      width: UIScreen
+                        .getWidth(UIScreen.width / video.totalDuration * videoPlayer.currentTime))
                     .foregroundStyle(Color.Blue_Default)
                 }
                 .onAppear {
@@ -223,10 +225,10 @@ struct VideoContentView: View {
               }
             } label: {
               Image(systemName: "xmark")
-                .font(.system(size: 24))
+                .font(.system(size: 20))
                 .foregroundColor(.white)
+                .padding(16)
             }
-            .padding(.leading, 16)
           }
         case .recording:
           EmptyView()
@@ -251,10 +253,10 @@ struct VideoContentView: View {
 //              tabbarModel.tabSelection = .main
             } label: {
               Image(systemName: "xmark")
-                .font(.system(size: 24))
+                .font(.system(size: 20))
                 .foregroundColor(.white)
+                .padding(16)
             }
-            .padding(.leading, 16)
           }
         }
         if buttonState == .completed {
@@ -1004,7 +1006,8 @@ extension VideoContentView {
                 await exporterVM.action(.save, start: (editorVM.currentVideo?.rangeDuration.lowerBound)!)
                 let thumbnail = editorVM
                   .returnThumbnail(Int(
-                    (editorVM.currentVideo?.rangeDuration.lowerBound)! / (editorVM.currentVideo?.originalDuration)! *
+                    (editorVM.currentVideo?.rangeDuration.lowerBound)! /
+                      (editorVM.currentVideo?.originalDuration)! *
                       21))
                 apiViewModel.uploadPost(
                   video: exporterVM.videoData,

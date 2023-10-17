@@ -9,7 +9,6 @@
 import UIKit
 
 extension CALayer {
-
   func removeSketchShadow() {
     shadowColor = nil
     shadowOpacity = 0

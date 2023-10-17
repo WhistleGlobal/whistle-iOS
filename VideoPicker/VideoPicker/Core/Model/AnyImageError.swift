@@ -9,7 +9,6 @@
 import Foundation
 
 public enum AnyImageError: Error {
-
   case invalidMediaType
   case invalidInfo
   case invalidURL

@@ -9,7 +9,6 @@
 import AVFoundation
 
 extension Permission {
-
   func _checkMicrophone() -> Status {
     AVAudioSession.sharedInstance().recordPermission._status
   }
@@ -33,7 +32,6 @@ extension Permission {
 }
 
 extension AVAudioSession.RecordPermission {
-
   fileprivate var _status: Permission.Status {
     switch self {
     case .denied:
@@ -47,6 +45,5 @@ extension AVAudioSession.RecordPermission {
 }
 
 extension String {
-
   fileprivate static let _microphoneUsageDescription = "NSMicrophoneUsageDescription"
 }

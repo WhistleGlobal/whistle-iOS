@@ -11,7 +11,6 @@ import UIKit
 // MARK: - TextMask
 
 struct TextMask {
-
   let data: TextData
   let scale: CGFloat
 
@@ -24,14 +23,13 @@ struct TextMask {
 // MARK: GraphicsDrawing
 
 extension TextMask: GraphicsDrawing {
-
   func draw(in context: CGContext, size: CGSize) {
     guard let cgImage = data.image.cgImage else { return }
     guard
       let cgLayer = CGLayer(context, size: size, auxiliaryInfo: nil),
       let layerContext = cgLayer.context
     else {
-      assert(false, "Failed to create CGLayer")
+      assertionFailure("Failed to create CGLayer")
       return
     }
 

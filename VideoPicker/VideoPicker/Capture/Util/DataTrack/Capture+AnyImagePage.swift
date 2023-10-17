@@ -9,6 +9,5 @@
 import Foundation
 
 extension AnyImagePage {
-
   public static let capture: AnyImagePage = "ANYIMAGEKIT_PAGE_CAPTURE"
 }

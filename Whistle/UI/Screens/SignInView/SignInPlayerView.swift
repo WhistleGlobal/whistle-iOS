@@ -1,5 +1,5 @@
 //
-//  File.swift
+//  SignInPlayerView.swift
 //  Whistle
 //
 //  Created by ChoiYujin on 9/21/23.
@@ -24,6 +24,7 @@ struct SignInPlayerView: UIViewRepresentable {
 class PlayerUIView: UIView {
   private let playerLayer = AVPlayerLayer()
 
+  @available(*, unavailable)
   required init?(coder _: NSCoder) {
     fatalError("init(coder:) has not been implemented")
   }

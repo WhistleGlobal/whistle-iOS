@@ -8,7 +8,6 @@
 import Foundation
 
 class UserPostFeed: ObservableObject, Codable, Hashable {
-
   enum CodingKeys: String, CodingKey {
     case contentId = "content_id"
     case userId = "user_id"

@@ -1,5 +1,5 @@
 //
-//  VideoFilePathProvidingService.swift
+//  FilePathProvider.swift
 //
 //
 //  Created by Young Bin on 2023/05/25.

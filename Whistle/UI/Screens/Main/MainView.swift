@@ -22,7 +22,6 @@ class NavigationModel: ObservableObject {
 // MARK: - MainView
 
 struct MainView: View {
-
   @Environment(\.scenePhase) var scenePhase
   @EnvironmentObject var apiViewModel: APIViewModel
   @EnvironmentObject var tabbarModel: TabbarModel
@@ -108,7 +107,7 @@ struct MainView: View {
                         content.isFollowed = newValue
                       }),
                       caption: content.caption ?? "",
-                      musicTitle: content.musicTitle ?? "",
+                      musicTitle: content.musicTitle ?? "원본 오디오",
                       isWhistled: Binding(get: {
                         content.isWhistled
                       }, set: { newValue in
@@ -500,7 +499,7 @@ extension MainView {
               } label: {
                 Group {
                   profileImageView(url: profileImg, size: 36)
-                    .padding(.trailing, 12)
+                    .padding(.trailing, UIScreen.getWidth(8))
                   Text(userName)
                     .foregroundColor(.white)
                     .fontSystem(fontDesignSystem: .subtitle1)
@@ -538,27 +537,32 @@ extension MainView {
                   apiViewModel.postFeedPlayerChanged()
                 }
               } label: {
-                Text(isFollowed.wrappedValue ? "following" : "follow")
-                  .fontSystem(fontDesignSystem: .caption_SemiBold)
+                Text(isFollowed.wrappedValue ? "팔로잉" : "팔로우")
+                  .fontSystem(fontDesignSystem: .caption_KO_Semibold)
                   .foregroundColor(.Gray10)
                   .background {
                     Capsule()
                       .stroke(Color.Gray10, lineWidth: 1)
-                      .frame(width: isFollowed.wrappedValue ? 78 : 60, height: 26)
+                      .frame(width: 58, height: 26)
                   }
-                  .frame(width: isFollowed.wrappedValue ? 78 : 60, height: 26)
+                  .frame(width: 58, height: 26)
               }
             }
           }
-          HStack(spacing: 0) {
-            Text(caption)
-              .fontSystem(fontDesignSystem: .body2_KO)
-              .foregroundColor(.white)
+          if !caption.isEmpty {
+            HStack(spacing: 0) {
+              Text(caption)
+                .fontSystem(fontDesignSystem: .body2_KO)
+                .foregroundColor(.white)
+            }
           }
           Label(musicTitle, systemImage: "music.note")
             .fontSystem(fontDesignSystem: .body2_KO)
             .foregroundColor(.white)
+            .padding(.top, 4)
         }
+        .padding(.bottom, 4)
+        .padding(.leading, 4)
         Spacer()
         VStack(spacing: 28) {
           Spacer()
@@ -571,13 +575,12 @@ extension MainView {
                 .contentShape(Rectangle())
                 .foregroundColor(.Gray10)
                 .frame(width: 36, height: 36)
-                .padding(.bottom, 2)
               Text("\(whistleCount.wrappedValue)")
                 .foregroundColor(.Gray10)
                 .fontSystem(fontDesignSystem: .subtitle3_KO)
             }
+            .padding(.bottom, -4)
           }
-          .frame(width: 36, height: 36)
           Button {
             showPasteToast = true
             UIPasteboard.general.setValue(
@@ -590,7 +593,6 @@ extension MainView {
               .foregroundColor(.Gray10)
               .frame(width: 36, height: 36)
           }
-          .frame(width: 36, height: 36)
           Button {
             showDialog = true
           } label: {
@@ -600,16 +602,17 @@ extension MainView {
               .foregroundColor(.Gray10)
               .frame(width: 36, height: 36)
           }
-          .frame(width: 36, height: 36)
         }
       }
     }
-    .padding(.bottom, 64)
-    .padding(.horizontal, 12)
+    .padding(.bottom, UIScreen.getHeight(48))
+    .padding(.trailing, UIScreen.getWidth(12))
+    .padding(.leading, UIScreen.getWidth(16))
   }
 }
 
 // MARK: - Timer
+
 extension MainView {
   func whistleToggle() {
     HapticManager.instance.impact(style: .medium)
@@ -661,7 +664,7 @@ extension MainView {
     Task {
       if !apiViewModel.contentList.isEmpty {
         players.removeAll()
-        for _ in 0..<apiViewModel.contentList.count {
+        for _ in 0 ..< apiViewModel.contentList.count {
           players.append(nil)
         }
         log(players)

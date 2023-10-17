@@ -11,7 +11,6 @@ import SwiftUI
 // MARK: - ReportPostView
 
 struct ReportPostView: View {
-
   @Environment(\.dismiss) var dismiss
   @EnvironmentObject var apiViewModel: APIViewModel
   @State var isSelected = false
@@ -92,7 +91,6 @@ struct ReportPostView: View {
 }
 
 extension ReportPostView {
-
   @ViewBuilder
   func videoThumbnail(url: String, index: Int) -> some View {
     Color.black.overlay {
@@ -118,5 +116,4 @@ extension ReportPostView {
     .frame(height: 204)
     .cornerRadius(12)
   }
-
 }

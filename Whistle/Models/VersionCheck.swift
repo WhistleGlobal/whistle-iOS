@@ -8,7 +8,6 @@
 import Foundation
 
 class VersionCheck: ObservableObject {
-
   @Published var needUpdate = false
   @Published var reason = ""
   @Published var forceUpdate = false

@@ -9,14 +9,12 @@
 import CoreMedia
 
 extension CMAudioFormatDescription {
-
   var streamBasicDescription: AudioStreamBasicDescription? {
     CMAudioFormatDescriptionGetStreamBasicDescription(self)?.pointee
   }
 }
 
 extension CMVideoFormatDescription {
-
   var dimensions: CMVideoDimensions {
     CMVideoFormatDescriptionGetDimensions(self)
   }

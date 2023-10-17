@@ -11,7 +11,6 @@ import UIKit
 // MARK: - CropGridView
 
 final class CropGridView: UIView {
-
   private(set) lazy var bgLayer: CAShapeLayer = {
     let layer = CAShapeLayer()
     layer.opacity = 0
@@ -49,6 +48,7 @@ final class CropGridView: UIView {
     isUserInteractionEnabled = false
   }
 
+  @available(*, unavailable)
   required init?(coder _: NSCoder) {
     fatalError("init(coder:) has not been implemented")
   }
@@ -68,7 +68,7 @@ final class CropGridView: UIView {
     let linePath = UIBezierPath()
     let widthSpace = cropRect.width / 3
     let heightSpace = cropRect.height / 3
-    for i in 1...2 {
+    for i in 1 ... 2 {
       let x = widthSpace * CGFloat(i) + cropRect.origin.x
       let y = heightSpace * CGFloat(i) + cropRect.origin.y
       // 竖线
@@ -95,7 +95,6 @@ final class CropGridView: UIView {
 }
 
 extension CropGridView {
-
   func setRect(_ rect: CGRect, animated: Bool = false) {
     self.animated = animated
     cropRect = rect

@@ -9,13 +9,14 @@
 import UIKit
 
 extension UIColor {
-
   // MARK: - main color
+
   static var primaryColor: UIColor {
     UIColor.color(hex: 0x57BE6A)
   }
 
   // MARK: - main text
+
   static var primaryText: UIColor {
     UIColor.create(light: primaryTextLight, dark: primaryTextDark)
   }
@@ -29,6 +30,7 @@ extension UIColor {
   }
 
   // MARK: - sub text
+
   static var subText: UIColor {
     UIColor.create(light: subTextLight, dark: subTextDark)
   }
@@ -42,6 +44,7 @@ extension UIColor {
   }
 
   // MARK: - toolBar
+
   static var toolBar: UIColor {
     UIColor.create(light: toolBarLight, dark: toolBarDark)
   }
@@ -55,6 +58,7 @@ extension UIColor {
   }
 
   // MARK: - background
+
   static var background: UIColor {
     UIColor.create(light: backgroundLight, dark: backgroundDark)
   }
@@ -68,6 +72,7 @@ extension UIColor {
   }
 
   // MARK: - selected cell
+
   static var selectedCell: UIColor {
     UIColor.create(light: selectedCellLight, dark: selectedCellDark)
   }

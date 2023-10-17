@@ -11,7 +11,6 @@ import Foundation
 // MARK: - AnyImageEvent
 
 public struct AnyImageEvent: Equatable, RawRepresentable {
-
   public let rawValue: String
 
   public init(rawValue: String) {
@@ -22,7 +21,6 @@ public struct AnyImageEvent: Equatable, RawRepresentable {
 // MARK: ExpressibleByStringLiteral
 
 extension AnyImageEvent: ExpressibleByStringLiteral {
-
   public init(stringLiteral value: String) {
     rawValue = value
   }
@@ -31,7 +29,6 @@ extension AnyImageEvent: ExpressibleByStringLiteral {
 // MARK: - AnyImageEventUserInfoKey
 
 public struct AnyImageEventUserInfoKey: Hashable, RawRepresentable {
-
   public let rawValue: String
 
   public init(rawValue: String) {
@@ -42,14 +39,12 @@ public struct AnyImageEventUserInfoKey: Hashable, RawRepresentable {
 // MARK: ExpressibleByStringLiteral
 
 extension AnyImageEventUserInfoKey: ExpressibleByStringLiteral {
-
   public init(stringLiteral value: String) {
     rawValue = value
   }
 }
 
 extension AnyImageEventUserInfoKey {
-
   /// Value: Bool
   public static let isOn: AnyImageEventUserInfoKey = "ANYIMAGEKIT_USERINFO_IS_ON"
 

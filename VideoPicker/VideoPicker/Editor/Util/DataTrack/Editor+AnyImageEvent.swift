@@ -9,8 +9,8 @@
 import Foundation
 
 extension AnyImageEvent {
-
   // MARK: - Common
+
   /// UserInfo: [page: (editorPhoto|editorVideo)]
   public static let editorBack: AnyImageEvent = "ANYIMAGEKIT_EVENT_EDITOR_BACK"
 
@@ -52,7 +52,6 @@ extension AnyImageEvent {
 }
 
 extension AnyImageEvent {
-
   @available(
     *,
     deprecated,

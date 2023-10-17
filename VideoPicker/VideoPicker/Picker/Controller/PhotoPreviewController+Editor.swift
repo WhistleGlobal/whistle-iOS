@@ -69,7 +69,9 @@ extension PhotoPreviewController {
     toolBar.leftButton.isHidden = true
     guard let data = dataSource?.previewController(self, assetOfIndex: currentIndex) else { return }
     guard
-      let cell = (collectionView.visibleCells.compactMap { $0 as? PreviewCell }.filter { $0.asset == data.asset }.first),
+      let cell = (
+        collectionView.visibleCells.compactMap { $0 as? PreviewCell }.filter { $0.asset == data.asset }
+          .first),
       cell.isDownloaded
     else { return }
 

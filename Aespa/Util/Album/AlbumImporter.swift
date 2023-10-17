@@ -1,5 +1,5 @@
 //
-//  VideoAlbumProvider.swift
+//  AlbumImporter.swift
 //
 //
 //  Created by Young Bin on 2023/05/27.
@@ -9,7 +9,6 @@ import Foundation
 
 import Photos
 import UIKit
-
 
 struct AlbumImporter {
   private static let lock = NSRecursiveLock()
@@ -38,7 +37,7 @@ struct AlbumImporter {
     }
   }
 
-  static private func createAlbum(
+  private static func createAlbum(
     name: String,
     in photoLibrary: some AespaAssetLibraryRepresentable)
     throws

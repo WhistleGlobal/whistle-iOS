@@ -80,6 +80,7 @@ final class PhotoPreviewController: AnyImageViewController, PickerOptionsConfigu
   var imageZoomScaleForDoubleTap: CGFloat = 2.0
 
   // MARK: - Private
+
   private var relatedView: UIView? {
     dataSource?.previewController(self, thumbnailViewForIndex: currentIndex)
   }

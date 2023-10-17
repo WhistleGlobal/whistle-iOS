@@ -99,6 +99,7 @@ extension Color {
   static var Disable_Placeholder_Light: Color = .Gray40_Light
 
   static var Disable_Placeholder_Dark: Color = .Gray30_Dark
+
   // MARK: - Background_Default
 
   static var Background_Default: Color {

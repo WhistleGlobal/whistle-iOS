@@ -8,7 +8,6 @@
 import Foundation
 
 class Bookmark: ObservableObject, Codable, Hashable {
-
   enum CodingKeys: String, CodingKey {
     case contentId = "content_id"
     case userId = "user_id"
@@ -36,7 +35,7 @@ class Bookmark: ObservableObject, Codable, Hashable {
   var thumbnailUrl = ""
   var musicArtist: String?
   var musicTitle: String?
-  var hashtags: String?
+  var hashtags: [String]
   var whistleCount = 0
   var viewCount = 0
   var isWhistled = 0

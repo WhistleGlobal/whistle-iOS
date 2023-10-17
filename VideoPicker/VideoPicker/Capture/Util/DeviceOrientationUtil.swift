@@ -11,14 +11,12 @@ import CoreMotion
 // MARK: - DeviceOrientationUtilDelegate
 
 protocol DeviceOrientationUtilDelegate: AnyObject {
-
   func device(_ util: DeviceOrientationUtil, didUpdate orientation: DeviceOrientation)
 }
 
 // MARK: - DeviceOrientationUtil
 
 final class DeviceOrientationUtil {
-
   weak var delegate: DeviceOrientationUtilDelegate?
 
   private lazy var motionManager: CMMotionManager = {

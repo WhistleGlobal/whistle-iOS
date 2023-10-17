@@ -10,7 +10,6 @@ import SwiftUI
 // MARK: - DeleteAccountAlert
 
 struct DeleteAccountAlert: View {
-
   let cancelAction: () -> Void
   let deleteAction: () -> Void
 
@@ -46,7 +45,6 @@ struct DeleteAccountAlert: View {
 }
 
 extension DeleteAccountAlert {
-
   @ViewBuilder
   func glassMorphicCard(width: CGFloat, height: CGFloat) -> some View {
     ZStack {
@@ -116,7 +114,6 @@ extension DeleteAccountAlert {
       }
     }
   }
-
 }
 
 // #Preview {

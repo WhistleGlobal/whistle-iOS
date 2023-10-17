@@ -8,8 +8,8 @@
 import Foundation
 
 enum ToolEnum: Int, CaseIterable {
-//  case cut, speed, music, audio, filters, corrections, frames
-//  case speed, music, audio, filters, corrections, frames
+  //  case cut, speed, music, audio, filters, corrections, frames
+  //  case speed, music, audio, filters, corrections, frames
   case music, audio
 
   var title: String {

@@ -12,13 +12,12 @@ import SwiftUI
 // MARK: - UserContentListView
 
 struct UserContentListView: View {
-
   @Environment(\.dismiss) var dismiss
   @EnvironmentObject var apiViewModel: APIViewModel
   @EnvironmentObject var tabbarModel: TabbarModel
   @State var currentIndex = 0
   @State var currentVideoIsBookmarked = false
-  @State var newId = UUID()
+  @State var newID = UUID()
   @State var playerIndex = 0
   @State var showDialog = false
   @State var showPasteToast = false
@@ -120,9 +119,9 @@ struct UserContentListView: View {
           }
         }
         .onReceive(apiViewModel.publisher) { id in
-          newId = id
+          newID = id
         }
-        .id(newId)
+        .id(newID)
       }
       .rotationEffect(Angle(degrees: 90))
       .frame(width: proxy.size.height)
@@ -134,7 +133,7 @@ struct UserContentListView: View {
     .background(.black)
     .onAppear {
       log("currentIndex : \(currentIndex)")
-      for _ in 0..<apiViewModel.userPostFeed.count {
+      for _ in 0 ..< apiViewModel.userPostFeed.count {
         players.append(nil)
       }
       players[currentIndex] = AVPlayer(url: URL(string: apiViewModel.userPostFeed[currentIndex].videoUrl ?? "")!)
@@ -190,7 +189,8 @@ struct UserContentListView: View {
               players[currentIndex]?.pause()
               players.remove(at: currentIndex)
               if !players.isEmpty {
-                players[currentIndex] = AVPlayer(url: URL(string: apiViewModel.userPostFeed[currentIndex].videoUrl ?? "")!)
+                players[currentIndex] =
+                  AVPlayer(url: URL(string: apiViewModel.userPostFeed[currentIndex].videoUrl ?? "")!)
                 await players[currentIndex]?.seek(to: .zero)
                 players[currentIndex]?.play()
               }
@@ -229,15 +229,15 @@ struct UserContentListView: View {
       Button(currentVideoIsBookmarked ? "저장 취소" : "저장하기", role: .none) {
         Task {
           guard let contentId = apiViewModel.userPostFeed[currentIndex].contentId else { return }
-          guard let currentVideoContentId = apiViewModel.userPostFeed[currentIndex].contentId else { return }
+          guard let currentVideocontentId = apiViewModel.userPostFeed[currentIndex].contentId else { return }
           if apiViewModel.userPostFeed[currentIndex].isBookmarked == 1 {
             showBookmarkToast.1 = "저장 취소 했습니다."
-            showBookmarkToast.0 = await apiViewModel.actionBookmarkCancel(contentId: currentVideoContentId)
+            showBookmarkToast.0 = await apiViewModel.actionBookmarkCancel(contentId: currentVideocontentId)
             apiViewModel.userPostFeed[currentIndex].isBookmarked = 0
             currentVideoIsBookmarked = false
           } else {
             showBookmarkToast.1 = "저장했습니다."
-            showBookmarkToast.0 = await apiViewModel.actionBookmark(contentId: currentVideoContentId)
+            showBookmarkToast.0 = await apiViewModel.actionBookmark(contentId: currentVideocontentId)
             apiViewModel.userPostFeed[currentIndex].isBookmarked = 1
             currentVideoIsBookmarked = true
           }
@@ -267,7 +267,6 @@ struct UserContentListView: View {
 }
 
 extension UserContentListView {
-
   @ViewBuilder
   func userInfo(
     contentId _: Int?,
@@ -286,20 +285,15 @@ extension UserContentListView {
           players.removeAll()
           dismiss()
         } label: {
-          Color.clear
-            .frame(width: 24, height: 24)
-            .overlay {
-              Image(systemName: "chevron.backward")
-                .resizable()
-                .scaledToFit()
-                .frame(width: 24, height: 20)
-                .foregroundColor(.white)
-            }
+          Image(systemName: "chevron.backward")
+            .font(.system(size: 20))
+            .foregroundColor(.white)
+            .padding(.vertical, 16)
+            .padding(.trailing, 16)
         }
         Spacer()
       }
-      .frame(height: 52)
-      .padding(.top, 54)
+      .padding(.top, 38)
 
       Spacer()
       HStack(spacing: 0) {
@@ -335,15 +329,15 @@ extension UserContentListView {
                 apiViewModel.postFeedPlayerChanged()
               }
             } label: {
-              Text(apiViewModel.userProfile.isFollowed == 1 ? "following" : "follow")
+              Text(apiViewModel.userProfile.isFollowed == 1 ? "팔로잉" : "팔로워")
                 .fontSystem(fontDesignSystem: .caption_SemiBold)
                 .foregroundColor(.Gray10)
                 .background {
                   Capsule()
                     .stroke(Color.Gray10, lineWidth: 1)
-                    .frame(width: apiViewModel.userProfile.isFollowed == 1 ? 78 : 60, height: 26)
+                    .frame(width: 58, height: 26)
                 }
-                .frame(width: apiViewModel.userProfile.isFollowed == 1 ? 78 : 60, height: 26)
+                .frame(width: 58, height: 26)
             }
           }
           HStack(spacing: 0) {
@@ -410,6 +404,7 @@ extension UserContentListView {
 }
 
 // MARK: - Timer
+
 extension UserContentListView {
   func whistleToggle() {
     HapticManager.instance.impact(style: .medium)

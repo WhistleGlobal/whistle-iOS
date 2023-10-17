@@ -9,7 +9,6 @@
 import UIKit
 
 final class PhotoEditorCropContext {
-
   /// 正在裁剪
   var isCrop = false
   /// 图片已经裁剪

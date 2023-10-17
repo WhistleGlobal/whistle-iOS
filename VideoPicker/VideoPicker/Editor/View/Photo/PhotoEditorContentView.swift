@@ -11,7 +11,6 @@ import UIKit
 // MARK: - PhotoEditorContentView
 
 final class PhotoEditorContentView: UIView {
-
   private(set) lazy var scrollView: UIScrollView = {
     let view = UIScrollView()
     view.clipsToBounds = false
@@ -139,6 +138,7 @@ final class PhotoEditorContentView: UIView {
     updateSubviewFrame()
   }
 
+  @available(*, unavailable)
   required init?(coder _: NSCoder) {
     fatalError("init(coder:) has not been implemented")
   }
@@ -211,8 +211,8 @@ final class PhotoEditorContentView: UIView {
 }
 
 // MARK: - Target
-extension PhotoEditorContentView {
 
+extension PhotoEditorContentView {
   @objc
   private func onSingleTapped() {
     context.action(.empty)
@@ -222,7 +222,6 @@ extension PhotoEditorContentView {
 // MARK: UIScrollViewDelegate
 
 extension PhotoEditorContentView: UIScrollViewDelegate {
-
   func viewForZooming(in _: UIScrollView) -> UIView? {
     imageView
   }

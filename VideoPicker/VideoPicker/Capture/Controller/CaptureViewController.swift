@@ -310,7 +310,11 @@ extension CaptureViewController: RecorderDelegate {
     #if ANYIMAGEKIT_ENABLE_EDITOR
     var editorOptions = options.editorVideoOptions
     editorOptions.enableDebugLog = options.enableDebugLog
-    let controller = ImageEditorController(video: url, placeholderImage: thumbnail, options: editorOptions, delegate: self)
+    let controller = ImageEditorController(
+      video: url,
+      placeholderImage: thumbnail,
+      options: editorOptions,
+      delegate: self)
     present(controller, animated: false) { [weak self] in
       guard let self else { return }
       toolView.captureButton.stopProcessing()

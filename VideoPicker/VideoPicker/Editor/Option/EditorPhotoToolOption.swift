@@ -12,7 +12,6 @@ import Foundation
 
 /// Photo tool option
 public enum EditorPhotoToolOption: Equatable {
-
   case brush
   case text
   case crop
@@ -22,14 +21,12 @@ public enum EditorPhotoToolOption: Equatable {
 // MARK: CaseIterable
 
 extension EditorPhotoToolOption: CaseIterable {
-
   public static var allCases: [EditorPhotoToolOption] {
     [.brush, .text, .crop, .mosaic]
   }
 }
 
 extension EditorPhotoToolOption {
-
   var iconKey: EditorTheme.IconConfigKey {
     switch self {
     case .brush:
@@ -47,7 +44,6 @@ extension EditorPhotoToolOption {
 // MARK: CustomStringConvertible
 
 extension EditorPhotoToolOption: CustomStringConvertible {
-
   public var description: String {
     switch self {
     case .brush:
@@ -76,8 +72,8 @@ extension EditorPhotoToolOption: CustomStringConvertible {
 }
 
 // MARK: - Deprecated
-extension EditorPhotoToolOption {
 
+extension EditorPhotoToolOption {
   @available(*, deprecated, renamed: "brush", message: "Will be removed in version 1.0, Please use `.brush` instead.")
   public static var pen: EditorPhotoToolOption {
     .brush

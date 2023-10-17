@@ -18,7 +18,6 @@ public protocol EditorVideoResource {
 // MARK: - URL + EditorVideoResource
 
 extension URL: EditorVideoResource {
-
   public func loadURL(completion: @escaping (Result<URL, AnyImageError>) -> Void) {
     if isFileURL {
       completion(.success(self))
@@ -31,7 +30,6 @@ extension URL: EditorVideoResource {
 // MARK: - PHAsset + EditorVideoResource
 
 extension PHAsset: EditorVideoResource {
-
   public func loadURL(completion: @escaping (Result<URL, AnyImageError>) -> Void) {
     guard mediaType == .video || mediaSubtypes == .photoLive else {
       completion(.failure(.invalidMediaType))

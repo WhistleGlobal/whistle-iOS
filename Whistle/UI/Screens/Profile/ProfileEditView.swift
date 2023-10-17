@@ -12,7 +12,6 @@ import SwiftUI
 // MARK: - ProfileEditView
 
 struct ProfileEditView: View {
-
   @Environment(\.dismiss) var dismiss
   @State var editProfileImage = false
   @State var showIdToast = false
@@ -133,7 +132,6 @@ struct ProfileEditView: View {
 }
 
 extension ProfileEditView {
-
   @ViewBuilder
   func profileEditLink(destination: some View, title: String, content: String) -> some View {
     NavigationLink(destination: destination) {

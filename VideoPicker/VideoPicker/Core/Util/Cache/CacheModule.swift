@@ -11,7 +11,6 @@ import UIKit
 // MARK: - CacheModule
 
 enum CacheModule {
-
   case picker(CacheModulePicker)
   case editor(CacheModuleEditor)
 }
@@ -19,20 +18,17 @@ enum CacheModule {
 // MARK: - CacheModulePicker
 
 enum CacheModulePicker: String {
-
   case `default` = "Default"
 }
 
 // MARK: - CacheModuleEditor
 
 enum CacheModuleEditor: String {
-
   case `default` = "Default"
   case bezierPath = "BezierPath"
 }
 
 extension CacheModule {
-
   var title: String {
     switch self {
     case .picker:
@@ -58,7 +54,6 @@ extension CacheModule {
 }
 
 extension CacheModuleEditor {
-
   static var imageModule: [CacheModuleEditor] {
     [.default, .bezierPath]
   }

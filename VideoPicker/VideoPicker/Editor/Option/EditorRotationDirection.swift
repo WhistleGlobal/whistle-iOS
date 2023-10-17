@@ -11,7 +11,6 @@ import Foundation
 // MARK: - EditorRotationDirection
 
 public enum EditorRotationDirection: Equatable {
-
   /// Turn off rotation feature
   case turnOff
 
@@ -23,7 +22,6 @@ public enum EditorRotationDirection: Equatable {
 }
 
 extension EditorRotationDirection {
-
   var iconKey: EditorTheme.IconConfigKey {
     switch self {
     case .turnOff:

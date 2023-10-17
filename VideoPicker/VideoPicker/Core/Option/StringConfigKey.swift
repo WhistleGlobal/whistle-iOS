@@ -11,7 +11,6 @@ import Foundation
 // MARK: - StringConfigKey
 
 public struct StringConfigKey: Hashable {
-
   public let rawValue: String
 
   public init(rawValue: String) {
@@ -20,7 +19,6 @@ public struct StringConfigKey: Hashable {
 }
 
 extension StringConfigKey {
-
   public static let ok = StringConfigKey(rawValue: "OK")
   public static let back = StringConfigKey(rawValue: "BACK")
   public static let done = StringConfigKey(rawValue: "DONE")

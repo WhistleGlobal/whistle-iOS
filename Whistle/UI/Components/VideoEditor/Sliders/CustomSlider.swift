@@ -144,7 +144,8 @@ struct CustomSlider<Value, Track, Thumb>: View
             xOffset = max(0, min(lastOffset + gestureValue.translation.width, availableWidth))
             // update the value by mapping xOffset to the track width and then to the provided bounds
             // also make sure that the value changes discretely based on the `step` para
-            let newValue = (bounds.upperBound - bounds.lowerBound) * Value(xOffset / availableWidth) + bounds.lowerBound
+            let newValue = (bounds.upperBound - bounds.lowerBound) * Value(xOffset / availableWidth) + bounds
+              .lowerBound
             let steppedNewValue = (round(newValue / step) * step)
             value = min(bounds.upperBound, max(bounds.lowerBound, steppedNewValue))
             onChanged?()

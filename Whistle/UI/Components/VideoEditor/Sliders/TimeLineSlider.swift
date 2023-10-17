@@ -1,5 +1,5 @@
 //
-//  LineSlider.swift
+//  TimeLineSlider.swift
 //  VideoEditorSwiftUI
 //
 //  Created by Bogdan Zykov on 17.04.2023.
@@ -40,7 +40,7 @@ struct LineSlider: View {
 
 struct TimeLineSlider_Previews: PreviewProvider {
   static var previews: some View {
-    LineSlider(value: .constant(100), range: 14...100) { }
+    LineSlider(value: .constant(100), range: 14 ... 100) { }
       .frame(width: 250, height: 60)
       .background(Color.secondary)
   }

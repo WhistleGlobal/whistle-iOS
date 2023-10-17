@@ -12,10 +12,9 @@ import SwiftUI
 // MARK: - MyContentListView
 
 struct MyContentListView: View {
-
   @Environment(\.dismiss) var dismiss
   @State var currentIndex = 0
-  @State var newId = UUID()
+  @State var newID = UUID()
   @State var playerIndex = 0
   @State var showDialog = false
   @State var showPasteToast = false
@@ -40,19 +39,14 @@ struct MyContentListView: View {
                 }
                 dismiss()
               } label: {
-                Color.clear
-                  .frame(width: 24, height: 24)
-                  .overlay {
-                    Image(systemName: "chevron.backward")
-                      .resizable()
-                      .scaledToFit()
-                      .frame(width: 24, height: 20)
-                      .foregroundColor(.white)
-                  }
+                Image(systemName: "chevron.backward")
+                  .font(.system(size: 20))
+                  .foregroundColor(.white)
+                  .padding(.vertical, 16)
+                  .padding(.trailing, 16)
               }
               Spacer()
             }
-            .frame(height: 52)
             .padding(.top, 54)
             .padding(.horizontal, 16)
             Spacer()
@@ -112,7 +106,7 @@ struct MyContentListView: View {
                     userInfo(
                       contentId: content.contentId ?? 0,
                       caption: content.caption ?? "",
-                      musicTitle: content.musicTitle ?? "",
+                      musicTitle: content.musicTitle ?? "원본 오디오",
                       isWhistled:
                       Binding(get: {
                         content.isWhistled == 1 ? true : false
@@ -155,9 +149,9 @@ struct MyContentListView: View {
             }
           }
           .onReceive(apiViewModel.publisher) { id in
-            newId = id
+            newID = id
           }
-          .id(newId)
+          .id(newID)
         }
         .rotationEffect(Angle(degrees: 90))
         .frame(width: proxy.size.height)
@@ -169,7 +163,7 @@ struct MyContentListView: View {
     .navigationBarBackButtonHidden()
     .background(.black)
     .onAppear {
-      for _ in 0..<apiViewModel.myPostFeed.count {
+      for _ in 0 ..< apiViewModel.myPostFeed.count {
         players.append(nil)
       }
       players[currentIndex] = AVPlayer(url: URL(string: apiViewModel.myPostFeed[currentIndex].videoUrl ?? "")!)
@@ -257,7 +251,6 @@ struct MyContentListView: View {
 }
 
 extension MyContentListView {
-
   @ViewBuilder
   func userInfo(
     contentId: Int?,
@@ -274,20 +267,15 @@ extension MyContentListView {
           players.removeAll()
           dismiss()
         } label: {
-          Color.clear
-            .frame(width: 24, height: 24)
-            .overlay {
-              Image(systemName: "chevron.backward")
-                .resizable()
-                .scaledToFit()
-                .frame(width: 24, height: 20)
-                .foregroundColor(.white)
-            }
+          Image(systemName: "chevron.backward")
+            .font(.system(size: 20))
+            .foregroundColor(.white)
+            .padding(.vertical, 16)
+            .padding(.trailing, 16)
         }
         Spacer()
       }
-      .frame(height: 52)
-      .padding(.top, 54)
+      .padding(.top, 38)
       Spacer()
       HStack(spacing: 0) {
         VStack(alignment: .leading, spacing: 12) {
@@ -295,22 +283,27 @@ extension MyContentListView {
           HStack(spacing: 0) {
             Group {
               profileImageView(url: apiViewModel.myProfile.profileImage, size: 36)
-                .padding(.trailing, 12)
+                .padding(.trailing, UIScreen.getWidth(8))
               Text(apiViewModel.myProfile.userName)
                 .foregroundColor(.white)
                 .fontSystem(fontDesignSystem: .subtitle1)
                 .padding(.trailing, 16)
             }
           }
-          HStack(spacing: 0) {
-            Text(caption)
-              .fontSystem(fontDesignSystem: .body2_KO)
-              .foregroundColor(.white)
+          if !caption.isEmpty {
+            HStack(spacing: 0) {
+              Text(caption)
+                .fontSystem(fontDesignSystem: .body2_KO)
+                .foregroundColor(.white)
+            }
           }
           Label(musicTitle, systemImage: "music.note")
             .fontSystem(fontDesignSystem: .body2_KO)
             .foregroundColor(.white)
+            .padding(.top, 4)
         }
+        .padding(.bottom, 4)
+        .padding(.leading, 4)
         Spacer()
         VStack(spacing: 28) {
           Spacer()
@@ -335,14 +328,12 @@ extension MyContentListView {
                 .contentShape(Rectangle())
                 .foregroundColor(.Gray10)
                 .frame(width: 36, height: 36)
-                .padding(.bottom, 2)
               Text("\(whistleCount.wrappedValue)")
                 .foregroundColor(.Gray10)
                 .fontSystem(fontDesignSystem: .subtitle3_KO)
-                .padding(.bottom, 24)
             }
+            .padding(.bottom, -4)
           }
-          .frame(width: 36, height: 36)
           Button {
             showPasteToast = true
             UIPasteboard.general.setValue(
@@ -355,8 +346,6 @@ extension MyContentListView {
               .foregroundColor(.Gray10)
               .frame(width: 36, height: 36)
           }
-          .frame(width: 36, height: 36)
-          .fontSystem(fontDesignSystem: .caption_Regular)
           Button {
             showDialog = true
           } label: {
@@ -369,12 +358,14 @@ extension MyContentListView {
         }
       }
     }
-    .padding(.bottom, 64)
-    .padding(.horizontal, 12)
+    .padding(.bottom, UIScreen.getHeight(48))
+    .padding(.trailing, UIScreen.getWidth(12))
+    .padding(.leading, UIScreen.getWidth(16))
   }
 }
 
 // MARK: - Timer
+
 extension MyContentListView {
   func whistleToggle() {
     HapticManager.instance.impact(style: .medium)

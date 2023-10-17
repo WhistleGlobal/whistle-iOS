@@ -11,7 +11,6 @@ import UIKit
 // MARK: - LivePhotoTipView
 
 final class LivePhotoTipView: UIView {
-
   private lazy var imageView: UIImageView = {
     let view = UIImageView(frame: .zero)
     return view
@@ -29,6 +28,7 @@ final class LivePhotoTipView: UIView {
     setupView()
   }
 
+  @available(*, unavailable)
   required init?(coder _: NSCoder) {
     fatalError("init(coder:) has not been implemented")
   }
@@ -52,7 +52,6 @@ final class LivePhotoTipView: UIView {
 // MARK: PickerOptionsConfigurable
 
 extension LivePhotoTipView: PickerOptionsConfigurable {
-
   func update(options: PickerOptionsInfo) {
 //        imageView.image = options.theme[icon: .livePhoto]
     let color = UIColor.create(

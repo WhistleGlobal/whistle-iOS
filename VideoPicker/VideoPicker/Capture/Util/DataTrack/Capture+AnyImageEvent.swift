@@ -9,7 +9,6 @@
 import Foundation
 
 extension AnyImageEvent {
-
   public static let capturePhoto: AnyImageEvent = "ANYIMAGEKIT_EVENT_CAPTURE_PHOTO"
   public static let captureVideo: AnyImageEvent = "ANYIMAGEKIT_EVENT_CAPTURE_VIDEO"
   public static let captureCancel: AnyImageEvent = "ANYIMAGEKIT_EVENT_CAPTURE_CANCEL"

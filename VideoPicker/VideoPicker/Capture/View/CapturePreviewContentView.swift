@@ -11,7 +11,6 @@ import CoreMedia
 import UIKit
 
 final class CapturePreviewContentView: UIView {
-
   var displayLayer: AVSampleBufferDisplayLayer {
     layer as! AVSampleBufferDisplayLayer
   }

@@ -9,7 +9,6 @@
 import CoreMedia
 
 extension CMSampleBuffer {
-
   var presentationTimeStamp: CMTime {
     CMSampleBufferGetPresentationTimeStamp(self)
   }

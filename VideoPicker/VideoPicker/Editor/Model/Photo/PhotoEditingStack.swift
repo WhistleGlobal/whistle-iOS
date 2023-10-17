@@ -208,7 +208,11 @@ extension PhotoEditingStack {
       }
       context.draw(
         cgImage,
-        in: CGRect(x: -image.size.width / 2, y: -image.size.height / 2, width: image.size.width, height: image.size.height))
+        in: CGRect(
+          x: -image.size.width / 2,
+          y: -image.size.height / 2,
+          width: image.size.width,
+          height: image.size.height))
     }
   }
 

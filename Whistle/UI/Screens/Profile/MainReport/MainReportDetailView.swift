@@ -8,7 +8,6 @@
 import SwiftUI
 
 struct MainReportDetailView: View {
-
   @Environment(\.dismiss) var dismiss
   @Binding var goReport: Bool
   @State var goComplete = false

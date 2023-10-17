@@ -11,7 +11,6 @@ import Foundation
 // MARK: - AnyImagePage
 
 public struct AnyImagePage: Equatable, RawRepresentable {
-
   public let rawValue: String
 
   public init(rawValue: String) {
@@ -22,21 +21,18 @@ public struct AnyImagePage: Equatable, RawRepresentable {
 // MARK: ExpressibleByStringLiteral
 
 extension AnyImagePage: ExpressibleByStringLiteral {
-
   public init(stringLiteral value: String) {
     rawValue = value
   }
 }
 
 extension AnyImagePage {
-
   static let undefined: AnyImagePage = "ANYIMAGEKIT_PAGE_CORE_UNDEFINED"
 }
 
 // MARK: - AnyImagePageState
 
 public enum AnyImagePageState: Equatable {
-
   case enter
   case leave
 }

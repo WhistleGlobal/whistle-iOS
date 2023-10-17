@@ -10,7 +10,6 @@ import SwiftUI
 // MARK: - ReportReasonView
 
 struct ReportReasonView: View {
-
   @Environment(\.dismiss) var dismiss
   @EnvironmentObject var apiViewModel: APIViewModel
   @Binding var goReport: Bool
@@ -97,7 +96,6 @@ struct ReportReasonView: View {
 }
 
 extension ReportReasonView {
-
   @ViewBuilder
   func reportRow(text: String) -> some View {
     HStack {

@@ -11,7 +11,6 @@ import SwiftUI
 // MARK: - UserFollowView
 
 struct UserFollowView: View {
-
   // MARK: Internal
 
   @Environment(\.dismiss) var dismiss
@@ -240,5 +239,3 @@ extension UserFollowView {
     }
   }
 }
-
-

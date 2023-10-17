@@ -12,14 +12,12 @@ import Foundation
 
 /// The preferred presets of the camera.
 public struct CapturePreset: Equatable {
-
   public let width: Int32
   public let height: Int32
   public let frameRate: Int32
 }
 
 extension CapturePreset {
-
   public static func createPresets(enableHighResolution: Bool, enableHighFrameRate: Bool) -> [CapturePreset] {
     switch (enableHighResolution, enableHighFrameRate) {
     case (true, true):
@@ -35,7 +33,6 @@ extension CapturePreset {
 }
 
 extension CapturePreset {
-
   /// 3840*2160@60
   public static let hd3840x2160_60 = CapturePreset(width: 3840, height: 2160, frameRate: 60)
   /// 3840*2160@30

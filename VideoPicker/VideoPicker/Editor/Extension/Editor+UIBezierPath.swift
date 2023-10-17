@@ -9,11 +9,10 @@
 import UIKit
 
 extension UIBezierPath {
-
   static func create(with points: [CGPoint]) -> UIBezierPath {
     let path = UIBezierPath()
     path.move(to: points.first!)
-    for i in 1..<points.count {
+    for i in 1 ..< points.count {
       path.addLine(to: points[i])
     }
     return path

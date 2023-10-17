@@ -12,10 +12,9 @@ import SwiftUI
 // MARK: - MyBookmarkView
 
 struct MyBookmarkView: View {
-
   @Environment(\.dismiss) var dismiss
   @State var currentIndex = 0
-  @State var newId = UUID()
+  @State var newID = UUID()
   @State var playerIndex = 0
   @State var showDialog = false
   @State var showPasteToast = false
@@ -39,19 +38,14 @@ struct MyBookmarkView: View {
                 }
                 dismiss()
               } label: {
-                Color.clear
-                  .frame(width: 24, height: 24)
-                  .overlay {
-                    Image(systemName: "chevron.backward")
-                      .resizable()
-                      .scaledToFit()
-                      .frame(width: 24, height: 20)
-                      .foregroundColor(.white)
-                  }
+                Image(systemName: "chevron.backward")
+                  .font(.system(size: 20))
+                  .foregroundColor(.white)
+                  .padding(.vertical, 16)
+                  .padding(.trailing, 16)
               }
               Spacer()
             }
-            .frame(height: 52)
             .padding(.top, 54)
             .padding(.horizontal, 16)
             Spacer()
@@ -110,7 +104,7 @@ struct MyBookmarkView: View {
                       contentId: content.contentId,
                       userName: content.userName,
                       caption: content.caption ?? "",
-                      musicTitle: content.musicTitle ?? "",
+                      musicTitle: content.musicTitle ?? "원본 오디오",
                       isWhistled:
                       Binding(get: {
                         content.isWhistled == 1 ? true : false
@@ -147,9 +141,9 @@ struct MyBookmarkView: View {
             }
           }
           .onReceive(apiViewModel.publisher) { id in
-            newId = id
+            newID = id
           }
-          .id(newId)
+          .id(newID)
         }
         .rotationEffect(Angle(degrees: 90))
         .frame(width: proxy.size.height)
@@ -161,7 +155,7 @@ struct MyBookmarkView: View {
     .navigationBarBackButtonHidden()
     .background(.black)
     .onAppear {
-      for _ in 0..<apiViewModel.bookmark.count {
+      for _ in 0 ..< apiViewModel.bookmark.count {
         players.append(nil)
       }
       players[currentIndex] = AVPlayer(url: URL(string: apiViewModel.bookmark[currentIndex].videoUrl)!)
@@ -247,7 +241,6 @@ struct MyBookmarkView: View {
 }
 
 extension MyBookmarkView {
-
   @ViewBuilder
   func userInfo(
     contentId: Int,
@@ -265,20 +258,15 @@ extension MyBookmarkView {
           players.removeAll()
           dismiss()
         } label: {
-          Color.clear
-            .frame(width: 24, height: 24)
-            .overlay {
-              Image(systemName: "chevron.backward")
-                .resizable()
-                .scaledToFit()
-                .frame(width: 24, height: 20)
-                .foregroundColor(.white)
-            }
+          Image(systemName: "chevron.backward")
+            .font(.system(size: 20))
+            .foregroundColor(.white)
+            .padding(.vertical, 16)
+            .padding(.trailing, 16)
         }
         Spacer()
       }
-      .frame(height: 52)
-      .padding(.top, 54)
+      .padding(.top, 38)
       Spacer()
       HStack(spacing: 0) {
         VStack(alignment: .leading, spacing: 12) {
@@ -286,24 +274,29 @@ extension MyBookmarkView {
           HStack(spacing: 0) {
             Group {
               profileImageView(url: apiViewModel.bookmark[currentIndex].profileImg, size: 36)
-                .padding(.trailing, 12)
+                .padding(.trailing, UIScreen.getWidth(8))
               Text(userName)
                 .foregroundColor(.white)
                 .fontSystem(fontDesignSystem: .subtitle1)
                 .padding(.trailing, 16)
             }
           }
-          HStack(spacing: 0) {
-            Text(caption)
-              .fontSystem(fontDesignSystem: .body2_KO)
-              .foregroundColor(.white)
+          if !caption.isEmpty {
+            HStack(spacing: 0) {
+              Text(caption)
+                .fontSystem(fontDesignSystem: .body2_KO)
+                .foregroundColor(.white)
+            }
           }
           Label(musicTitle, systemImage: "music.note")
             .fontSystem(fontDesignSystem: .body2_KO)
             .foregroundColor(.white)
+            .padding(.top, 4)
         }
+        .padding(.bottom, 4)
+        .padding(.leading, 4)
         Spacer()
-        VStack(spacing: 0) {
+        VStack(spacing: 28) {
           Spacer()
           Button {
             Task {
@@ -320,16 +313,15 @@ extension MyBookmarkView {
           } label: {
             VStack(spacing: 0) {
               Image(systemName: isWhistled.wrappedValue ? "heart.fill" : "heart")
-                .resizable()
-                .scaledToFit()
-                .frame(width: 28, height: 26)
+                .font(.system(size: 30))
+                .contentShape(Rectangle())
                 .foregroundColor(.Gray10)
-                .padding(.bottom, 2)
+                .frame(width: 36, height: 36)
               Text("\(whistleCount.wrappedValue)")
                 .foregroundColor(.Gray10)
                 .fontSystem(fontDesignSystem: .caption_Regular)
-                .padding(.bottom, 24)
             }
+            .padding(.bottom, -4)
           }
           Button {
             showPasteToast = true
@@ -338,31 +330,32 @@ extension MyBookmarkView {
               forPasteboardType: UTType.plainText.identifier)
           } label: {
             Image(systemName: "square.and.arrow.up")
-              .resizable()
-              .scaledToFit()
-              .frame(width: 25, height: 32)
+              .font(.system(size: 30))
+              .contentShape(Rectangle())
               .foregroundColor(.Gray10)
-              .padding(.bottom, 24)
+              .frame(width: 36, height: 36)
           }
-          .fontSystem(fontDesignSystem: .caption_Regular)
           Button {
             showDialog = true
           } label: {
             Image(systemName: "ellipsis")
-              .resizable()
-              .scaledToFit()
-              .frame(width: 30, height: 25)
+              .font(.system(size: 30))
+              .contentShape(Rectangle())
               .foregroundColor(.Gray10)
+              .frame(width: 36, height: 36)
           }
         }
       }
     }
-    .padding(.bottom, 64)
-    .padding(.horizontal, 20)
+    .ignoresSafeArea(.all, edges: .bottom)
+    .padding(.bottom, UIScreen.getHeight(48))
+    .padding(.trailing, UIScreen.getWidth(12))
+    .padding(.leading, UIScreen.getWidth(16))
   }
 }
 
 // MARK: - Timer
+
 extension MyBookmarkView {
   func whistleToggle() {
     HapticManager.instance.impact(style: .medium)

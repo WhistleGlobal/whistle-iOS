@@ -11,7 +11,6 @@ import AVFoundation
 // MARK: - AudioIOComponentDelegate
 
 protocol AudioIOComponentDelegate: AnyObject {
-
   func audioIO(_ component: AudioIOComponent, didUpdate property: AudioIOComponent.ObservableProperty)
   func audioIO(_ component: AudioIOComponent, didOutput sampleBuffer: CMSampleBuffer)
 }
@@ -19,7 +18,6 @@ protocol AudioIOComponentDelegate: AnyObject {
 // MARK: - AudioIOComponent
 
 final class AudioIOComponent: DeviceIOComponent {
-
   weak var delegate: AudioIOComponentDelegate?
 
   private let audioOutput = AVCaptureAudioDataOutput()
@@ -65,8 +63,8 @@ final class AudioIOComponent: DeviceIOComponent {
 }
 
 // MARK: - Writer Settings
-extension AudioIOComponent {
 
+extension AudioIOComponent {
   var recommendedWriterSettings: [String: Any]? {
     #if swift(>=5.5)
     return audioOutput.recommendedAudioSettingsForAssetWriter(writingTo: .mp4)
@@ -79,7 +77,6 @@ extension AudioIOComponent {
 // MARK: AVCaptureAudioDataOutputSampleBufferDelegate
 
 extension AudioIOComponent: AVCaptureAudioDataOutputSampleBufferDelegate {
-
   func captureOutput(_: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer, from _: AVCaptureConnection) {
     delegate?.audioIO(self, didOutput: sampleBuffer)
   }
@@ -88,6 +85,5 @@ extension AudioIOComponent: AVCaptureAudioDataOutputSampleBufferDelegate {
 // MARK: AudioIOComponent.ObservableProperty
 
 extension AudioIOComponent {
-
   enum ObservableProperty: Equatable { }
 }

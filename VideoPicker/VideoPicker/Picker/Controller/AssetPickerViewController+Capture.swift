@@ -12,8 +12,8 @@ import UIKit
 #if ANYIMAGEKIT_ENABLE_CAPTURE
 
 // MARK: - Capture
-extension AssetPickerViewController {
 
+extension AssetPickerViewController {
   /// 打开相机
   func showCapture() {
     #if !targetEnvironment(simulator)
@@ -22,7 +22,10 @@ extension AssetPickerViewController {
     let controller = ImageCaptureController(options: options, delegate: self)
     present(controller, animated: true, completion: nil)
     #else
-    let alert = UIAlertController(title: "Error", message: "Camera is unavailable on simulator", preferredStyle: .alert)
+    let alert = UIAlertController(
+      title: "Error",
+      message: "Camera is unavailable on simulator",
+      preferredStyle: .alert)
     alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
     present(alert, animated: true, completion: nil)
     #endif
@@ -56,13 +59,13 @@ extension AssetPickerViewController {
     let asset: Asset
     switch sortType {
     case .asc:
-      asset = Asset(idx: album.assets.count-1, asset: phAsset, selectOptions: manager.options.selectOptions)
+      asset = Asset(idx: album.assets.count - 1, asset: phAsset, selectOptions: manager.options.selectOptions)
       album.addAsset(asset, atLast: false)
       if #available(iOS 14.0, *) {
         // iOS 14 将会监听相册，自动刷新
       } else {
         collectionView.performBatchUpdates { [weak self] in
-          self?.collectionView.insertItems(at: [IndexPath(item: album.assets.count-2, section: 0)])
+          self?.collectionView.insertItems(at: [IndexPath(item: album.assets.count - 2, section: 0)])
         } completion: { [weak self] _ in
           self?.collectionView.reloadData()
         }
@@ -96,8 +99,8 @@ extension AssetPickerViewController {
 }
 
 // MARK: - ImageCaptureControllerDelegate
-extension AssetPickerViewController: ImageCaptureControllerDelegate {
 
+extension AssetPickerViewController: ImageCaptureControllerDelegate {
   func imageCapture(_ capture: ImageCaptureController, didFinishCapturing result: CaptureResult) {
     capture.dismiss(animated: true, completion: nil)
     view.hud.show()

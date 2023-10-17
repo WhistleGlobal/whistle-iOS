@@ -10,7 +10,6 @@ import Photos
 import UIKit
 
 class AlbumModel {
-
   // MARK: Lifecycle
 
   init(name: String, count: Int, collection: PHAssetCollection, thumbnail: UIImage?, isSmartAlbum: Bool) {

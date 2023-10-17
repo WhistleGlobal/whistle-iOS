@@ -11,7 +11,6 @@ import Photos
 // MARK: - PhotoLibrary
 
 class PhotoLibrary {
-
   static func checkAuthorization() async -> Bool {
     switch PHPhotoLibrary.authorizationStatus(for: .readWrite) {
     case .authorized:

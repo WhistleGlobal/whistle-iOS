@@ -9,7 +9,6 @@
 import UIKit
 
 extension UIView {
-
   func screenshot(_ imageSize: CGSize = .zero) -> UIImage {
     let size = CGSize(width: bounds.size.width.roundTo(places: 5), height: bounds.size.height.roundTo(places: 5))
     let renderer: UIGraphicsImageRenderer

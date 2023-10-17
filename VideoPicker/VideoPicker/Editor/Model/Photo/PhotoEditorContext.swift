@@ -11,7 +11,6 @@ import Foundation
 // MARK: - PhotoEditorContext
 
 final class PhotoEditorContext {
-
   var toolOption: EditorPhotoToolOption?
 
   let options: EditorPhotoOptionsInfo
@@ -24,7 +23,6 @@ final class PhotoEditorContext {
 }
 
 extension PhotoEditorContext {
-
   func didReceiveAction(_ callback: @escaping ((PhotoEditorAction) -> Bool)) {
     if didReceiveAction == nil {
       didReceiveAction = callback

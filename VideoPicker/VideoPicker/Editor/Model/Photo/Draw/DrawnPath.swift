@@ -13,7 +13,6 @@ import UIKit
 /// 画笔路径
 /// 由于 UIBezierPath 不能遵守 Codable，所以通过 NSKeyedArchiver 存储。
 struct DrawnPath: Codable {
-
   let brush: Brush
   let scale: CGFloat
   let bezierPath: UIBezierPath
@@ -61,7 +60,7 @@ struct DrawnPath: Codable {
     }
   }
 
-  static private func loadBezierPath(uuid: String) throws -> UIBezierPath {
+  private static func loadBezierPath(uuid: String) throws -> UIBezierPath {
     let path = CacheModule.editor(.bezierPath).path
     let file = "\(path)\(uuid)"
     if #available(iOS 11.0, macCatalyst 13.0, *) {
@@ -77,7 +76,6 @@ struct DrawnPath: Codable {
 // MARK: GraphicsDrawing
 
 extension DrawnPath: GraphicsDrawing {
-
   func draw(in context: CGContext, size: CGSize) {
     draw(in: context, size: size, scale: 1.0)
   }
@@ -112,7 +110,6 @@ extension DrawnPath: GraphicsDrawing {
 // MARK: Equatable
 
 extension DrawnPath: Equatable {
-
   static func == (lhs: DrawnPath, rhs: DrawnPath) -> Bool {
     lhs.uuid == rhs.uuid
   }

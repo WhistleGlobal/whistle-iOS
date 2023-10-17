@@ -11,7 +11,6 @@ import UIKit
 // MARK: - PhotoEditorContentView + CanvasDelegate
 
 extension PhotoEditorContentView: CanvasDelegate {
-
   func canvasDidBeginDraw() {
     context.action(.brushBeginDraw)
   }
@@ -24,7 +23,6 @@ extension PhotoEditorContentView: CanvasDelegate {
 // MARK: - PhotoEditorContentView + CanvasDataSource
 
 extension PhotoEditorContentView: CanvasDataSource {
-
   func canvasGetLineWidth(_: Canvas) -> CGFloat {
     let scale = scrollView.zoomScale
     return options.brushWidth / scale

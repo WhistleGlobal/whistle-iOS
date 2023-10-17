@@ -11,7 +11,6 @@ import UIKit
 // MARK: - EditorCropToolViewDelegate
 
 protocol EditorCropToolViewDelegate: AnyObject {
-
   @discardableResult
   func cropToolView(_ toolView: EditorCropToolView, didClickCropOption option: EditorCropOption) -> Bool
   func cropToolViewCancelButtonTapped(_ cropToolView: EditorCropToolView)
@@ -24,7 +23,6 @@ protocol EditorCropToolViewDelegate: AnyObject {
 // MARK: - EditorCropToolView
 
 final class EditorCropToolView: UIView {
-
   weak var delegate: EditorCropToolViewDelegate?
 
   var currentOptionIdx: Int {
@@ -110,6 +108,7 @@ final class EditorCropToolView: UIView {
     setupView()
   }
 
+  @available(*, unavailable)
   required init?(coder _: NSCoder) {
     fatalError("init(coder:) has not been implemented")
   }
@@ -174,8 +173,8 @@ final class EditorCropToolView: UIView {
 }
 
 // MARK: - Target
-extension EditorCropToolView {
 
+extension EditorCropToolView {
   @objc
   private func cancelButtonTapped(_: UIButton) {
     delegate?.cropToolViewCancelButtonTapped(self)
@@ -210,7 +209,6 @@ extension EditorCropToolView {
 // MARK: UICollectionViewDataSource
 
 extension EditorCropToolView: UICollectionViewDataSource {
-
   func collectionView(_: UICollectionView, numberOfItemsInSection _: Int) -> Int {
     options.cropOptions.count
   }
@@ -225,7 +223,6 @@ extension EditorCropToolView: UICollectionViewDataSource {
 // MARK: UICollectionViewDelegate
 
 extension EditorCropToolView: UICollectionViewDelegate {
-
   func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
     guard currentOption != options.cropOptions[indexPath.row] else { return }
     let nextOption = options.cropOptions[indexPath.row]

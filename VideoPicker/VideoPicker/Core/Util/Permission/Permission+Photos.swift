@@ -9,7 +9,6 @@
 import Photos
 
 extension Permission {
-
   func _checkPhotos() -> Status {
     if #available(iOS 14.0, *) {
       return PHPhotoLibrary.authorizationStatus(for: .readWrite)._status
@@ -41,7 +40,6 @@ extension Permission {
 }
 
 extension PHAuthorizationStatus {
-
   fileprivate var _status: Permission.Status {
     switch self {
     case .notDetermined:
@@ -57,6 +55,5 @@ extension PHAuthorizationStatus {
 }
 
 extension String {
-
   fileprivate static let _photoLibraryUsageDescription = "NSPhotoLibraryUsageDescription"
 }

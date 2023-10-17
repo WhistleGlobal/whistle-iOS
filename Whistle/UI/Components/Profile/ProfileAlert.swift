@@ -10,7 +10,6 @@ import SwiftUI
 // MARK: - ProfileAlert
 
 struct ProfileAlert: View {
-
   let cancelAction: () -> Void
   let updateAction: () -> Void
 
@@ -47,7 +46,6 @@ struct ProfileAlert: View {
 }
 
 extension ProfileAlert {
-
   @ViewBuilder
   func glassMorphicCard(width: CGFloat, height: CGFloat) -> some View {
     ZStack {

@@ -12,7 +12,6 @@ import UIKit
 
 /// UI Theme for Capture
 public final class CaptureTheme: ThemeConfigurable {
-
   /// Custom color storage
   private var colors: [ColorConfigKey: UIColor] = [:]
 
@@ -65,9 +64,7 @@ public final class CaptureTheme: ThemeConfigurable {
 // MARK: CaptureTheme.ColorConfigKey
 
 extension CaptureTheme {
-
   public enum ColorConfigKey: Hashable {
-
     /// Main Color
     case primary
 
@@ -88,9 +85,7 @@ extension CaptureTheme {
 // MARK: CaptureTheme.IconConfigKey
 
 extension CaptureTheme {
-
   public enum IconConfigKey: String, Hashable {
-
     /// 48*48
     case cameraSwitch = "CameraSwitch"
     /// 27*27
@@ -103,15 +98,14 @@ extension CaptureTheme {
 }
 
 // MARK: - String
-extension CaptureTheme {
 
+extension CaptureTheme {
   private func defaultStringValue(for key: StringConfigKey) -> String {
     BundleHelper.localizedString(key: key.rawValue, module: .capture)
   }
 }
 
 extension StringConfigKey {
-
   public static let captureSwitchToFrontCamera = StringConfigKey(rawValue: "SWITCH_TO_FRONT_CAMERA")
   public static let captureSwitchToBackCamera = StringConfigKey(rawValue: "SWITCH_TO_BACK_CAMERA")
   public static let captureTapForPhoto = StringConfigKey(rawValue: "TAP_FOR_PHOTO")
@@ -120,8 +114,8 @@ extension StringConfigKey {
 }
 
 // MARK: - Label
-extension CaptureTheme {
 
+extension CaptureTheme {
   struct LabelConfigObject: Equatable {
     let key: LabelConfigKey
     let configuration: (UILabel) -> Void
@@ -132,14 +126,13 @@ extension CaptureTheme {
   }
 
   public enum LabelConfigKey: Hashable {
-
     case tips
   }
 }
 
 // MARK: - Button
-extension CaptureTheme {
 
+extension CaptureTheme {
   struct ButtonConfigObject: Equatable {
     let key: ButtonConfigKey
     let configuration: (UIButton) -> Void
@@ -150,7 +143,6 @@ extension CaptureTheme {
   }
 
   public enum ButtonConfigKey: Hashable {
-
     case cancel
     case switchCamera
   }

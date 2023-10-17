@@ -8,7 +8,6 @@
 import SwiftUI
 
 struct ReportCompleteView: View {
-
   @Binding var goReport: Bool
 
   var body: some View {

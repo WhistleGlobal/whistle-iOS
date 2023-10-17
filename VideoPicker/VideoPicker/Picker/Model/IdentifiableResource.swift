@@ -11,21 +11,20 @@ import Foundation
 // MARK: - IdentifiableResource
 
 public protocol IdentifiableResource: Hashable {
-
   var identifier: String { get }
 }
 
 // MARK: - Equatable
-extension IdentifiableResource {
 
+extension IdentifiableResource {
   public static func == (lhs: Self, rhs: Self) -> Bool {
     lhs.identifier == rhs.identifier
   }
 }
 
 // MARK: - Hashable
-extension IdentifiableResource {
 
+extension IdentifiableResource {
   public func hash(into hasher: inout Hasher) {
     hasher.combine(identifier)
   }

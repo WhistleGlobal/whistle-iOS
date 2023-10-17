@@ -9,6 +9,5 @@
 import UIKit
 
 protocol GraphicsDrawing {
-
   func draw(in context: CGContext, size: CGSize)
 }

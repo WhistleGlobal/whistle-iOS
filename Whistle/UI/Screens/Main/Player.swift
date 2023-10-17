@@ -13,7 +13,6 @@ import SwiftUI
 // MARK: - Player
 
 struct Player: UIViewControllerRepresentable {
-
   var player: AVPlayer
 
   func makeUIViewController(context _: Context) -> AVPlayerViewController {

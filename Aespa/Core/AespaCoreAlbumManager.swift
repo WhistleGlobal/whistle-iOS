@@ -86,7 +86,7 @@ extension AespaCoreAlbumManager {
     do {
       let assets = try await run(loader: loader)
       return await cachingProxy.fetchPhoto(assets)
-    } catch let error {
+    } catch {
       Logger.log(error: error)
       return []
     }
@@ -98,7 +98,7 @@ extension AespaCoreAlbumManager {
     do {
       let assets = try await run(loader: processor)
       return await cachingProxy.fetchVideo(assets)
-    } catch let error {
+    } catch {
       Logger.log(error: error)
       return []
     }

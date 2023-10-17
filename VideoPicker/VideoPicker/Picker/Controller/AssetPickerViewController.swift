@@ -476,7 +476,8 @@ extension AssetPickerViewController {
       guard let _ = sender.object as? String else { return }
       guard self.manager.options.selectLimit == 1, self.manager.options.selectionTapAction.hideToolBar else { return }
       guard let asset = self.manager.selectedAssets.first else { return }
-      guard let cell = self.collectionView.cellForItem(at: IndexPath(row: asset.idx, section: 0)) as? AssetCell else { return }
+      guard let cell = self.collectionView.cellForItem(at: IndexPath(row: asset.idx, section: 0)) as? AssetCell
+      else { return }
       cell.selectEvent.call()
     }
   }

@@ -8,9 +8,7 @@
 import SwiftUI
 
 struct ProfileEditButtonStyle: ButtonStyle {
-
   struct ProfileEditButton: View {
-
     // MARK: Internal
 
     let configuration: ButtonStyle.Configuration
@@ -38,7 +36,6 @@ struct ProfileEditButtonStyle: ButtonStyle {
     // MARK: Private
 
     @Environment(\.isEnabled) private var isEnabled: Bool
-
   }
 
   func makeBody(configuration: Configuration) -> some View {

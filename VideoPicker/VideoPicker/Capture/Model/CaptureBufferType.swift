@@ -9,7 +9,6 @@
 import Foundation
 
 enum CaptureBufferType: Equatable {
-
   case audio
   case video
 }

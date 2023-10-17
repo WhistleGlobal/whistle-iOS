@@ -11,7 +11,6 @@ import UIKit
 // MARK: - CodableCacheTool
 
 struct CodableCacheTool: Cacheable {
-
   let module: CacheModule
   let path: String
   let workQueue: DispatchQueue
@@ -25,7 +24,6 @@ struct CodableCacheTool: Cacheable {
 }
 
 extension CodableCacheTool {
-
   /// 写入缓存
   /// - Parameters:
   ///   - model: 模型

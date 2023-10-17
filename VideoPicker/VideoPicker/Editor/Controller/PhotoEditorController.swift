@@ -11,7 +11,6 @@ import UIKit
 // MARK: - PhotoEditorControllerDelegate
 
 protocol PhotoEditorControllerDelegate: AnyObject {
-
   func photoEditorDidCancel(_ editor: PhotoEditorController)
   func photoEditor(_ editor: PhotoEditorController, didFinishEditing photo: UIImage, isEdited: Bool)
 }
@@ -19,7 +18,6 @@ protocol PhotoEditorControllerDelegate: AnyObject {
 // MARK: - PhotoEditorController
 
 final class PhotoEditorController: AnyImageViewController {
-
   private lazy var contentView: PhotoEditorContentView = {
     let view = PhotoEditorContentView(frame: self.view.bounds, image: image, context: context)
     view.canvas.setBrush(color: options.brushColors[options.defaultBrushIndex].color)
@@ -78,6 +76,7 @@ final class PhotoEditorController: AnyImageViewController {
     super.init(nibName: nil, bundle: nil)
   }
 
+  @available(*, unavailable)
   required init?(coder _: NSCoder) {
     fatalError("init(coder:) has not been implemented")
   }
@@ -196,8 +195,8 @@ final class PhotoEditorController: AnyImageViewController {
 }
 
 // MARK: - Target
-extension PhotoEditorController {
 
+extension PhotoEditorController {
   /// 返回按钮
   @objc
   private func backButtonTapped(_: UIButton) {
@@ -206,8 +205,8 @@ extension PhotoEditorController {
 }
 
 // MARK: - Private
-extension PhotoEditorController {
 
+extension PhotoEditorController {
   /// 获取最终的图片
   private func getResultImage() -> UIImage? {
     stack.cropRect = contentView.cropContext.cropRealRect
@@ -253,8 +252,8 @@ extension PhotoEditorController {
 }
 
 // MARK: - Crop
-extension PhotoEditorController {
 
+extension PhotoEditorController {
   /// 准备开始裁剪
   private func willBeginCrop() {
     backButton.isHidden = true
@@ -279,8 +278,8 @@ extension PhotoEditorController {
 }
 
 // MARK: - InputText
-extension PhotoEditorController {
 
+extension PhotoEditorController {
   /// 打开文本编辑器
   private func openInputController(_ data: TextData? = nil) {
     let textData: TextData
@@ -328,7 +327,6 @@ extension PhotoEditorController {
 // MARK: - Action
 
 extension PhotoEditorController {
-
   private func bindAction() {
     context.didReceiveAction { [weak self] action in
       self?.didReceive(action: action) ?? false
@@ -468,7 +466,6 @@ extension PhotoEditorController {
 // MARK: PhotoEditingStackDelegate
 
 extension PhotoEditorController: PhotoEditingStackDelegate {
-
   func editingStack(_: PhotoEditingStack, needUpdatePreview edit: PhotoEditingStack.Edit) {
     toolView.brushToolView.undoButton.isEnabled = edit.canvasCanUndo
     toolView.mosaicToolView.undoButton.isEnabled = edit.mosaicCanUndo

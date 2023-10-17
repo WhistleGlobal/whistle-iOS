@@ -9,8 +9,8 @@
 import UIKit
 
 // MARK: - Internal function
-extension PhotoEditorContentView {
 
+extension PhotoEditorContentView {
   /// 在子线程创建马赛克图片
   func setupMosaicView(completion: @escaping ((Bool) -> Void)) {
     guard mosaic == nil else { completion(false); return }
@@ -59,7 +59,6 @@ extension PhotoEditorContentView {
 // MARK: - PhotoEditorContentView + MosaicDelegate
 
 extension PhotoEditorContentView: MosaicDelegate {
-
   func mosaicDidBeginDraw() {
     context.action(.mosaicBeginDraw)
   }
@@ -73,7 +72,6 @@ extension PhotoEditorContentView: MosaicDelegate {
 // MARK: - PhotoEditorContentView + MosaicDataSource
 
 extension PhotoEditorContentView: MosaicDataSource {
-
   func mosaicGetLineWidth() -> CGFloat {
     let scale = scrollView.zoomScale
     return options.mosaicWidth / scale

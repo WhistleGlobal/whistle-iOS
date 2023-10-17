@@ -11,7 +11,6 @@ import UIKit
 // MARK: - EditorBrushToolViewDelegate
 
 protocol EditorBrushToolViewDelegate: AnyObject {
-
   func brushToolView(_ brushToolView: EditorBrushToolView, colorDidChange color: UIColor)
 
   func brushToolViewUndoButtonTapped(_ brushToolView: EditorBrushToolView)
@@ -20,7 +19,6 @@ protocol EditorBrushToolViewDelegate: AnyObject {
 // MARK: - EditorBrushToolView
 
 final class EditorBrushToolView: UIView {
-
   weak var delegate: EditorBrushToolViewDelegate?
 
   private(set) var currentIdx: Int
@@ -49,6 +47,7 @@ final class EditorBrushToolView: UIView {
     setupView()
   }
 
+  @available(*, unavailable)
   required init?(coder _: NSCoder) {
     fatalError("init(coder:) has not been implemented")
   }
@@ -142,8 +141,8 @@ final class EditorBrushToolView: UIView {
 }
 
 // MARK: - Target
-extension EditorBrushToolView {
 
+extension EditorBrushToolView {
   @objc
   private func undoButtonTapped(_: UIButton) {
     delegate?.brushToolViewUndoButtonTapped(self)

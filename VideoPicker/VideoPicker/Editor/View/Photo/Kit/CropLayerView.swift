@@ -9,7 +9,6 @@
 import UIKit
 
 final class CropLayerView: UIView {
-
   var path: CGPath? {
     get {
       cropLayer.path
@@ -35,6 +34,7 @@ final class CropLayerView: UIView {
     layer.addSublayer(cropLayer)
   }
 
+  @available(*, unavailable)
   required init?(coder _: NSCoder) {
     fatalError("init(coder:) has not been implemented")
   }

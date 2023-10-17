@@ -1,5 +1,5 @@
 //
-//  ProfileToastMessage.swift
+//  ToastMessage.swift
 //  Whistle
 //
 //  Created by ChoiYujin on 9/3/23.
@@ -10,7 +10,6 @@ import SwiftUI
 // MARK: - ProfileToastMessage
 
 struct ToastMessage: View {
-
   // MARK: Internal
 
   let text: String
@@ -55,5 +54,4 @@ struct ToastMessage: View {
   // MARK: Private
 
   @State private var toastOpacity = 0.0
-
 }

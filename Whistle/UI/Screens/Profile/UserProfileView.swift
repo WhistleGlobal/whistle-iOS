@@ -13,7 +13,6 @@ import UniformTypeIdentifiers
 // MARK: - UserProfileView
 
 struct UserProfileView: View {
-
   @Environment(\.dismiss) var dismiss
   @EnvironmentObject var apiViewModel: APIViewModel
   @EnvironmentObject var tabbarModel: TabbarModel
@@ -79,7 +78,7 @@ struct UserProfileView: View {
               GridItem(.flexible()),
               GridItem(.flexible()),
             ], spacing: 20) {
-              ForEach(Array(apiViewModel.userPostFeed.enumerated()), id: \.element) { index ,content in
+              ForEach(Array(apiViewModel.userPostFeed.enumerated()), id: \.element) { index, content in
                 NavigationLink {
                   UserContentListView(currentIndex: index)
                     .environmentObject(apiViewModel)
@@ -152,7 +151,6 @@ struct UserProfileView: View {
 }
 
 extension UserProfileView {
-
   @ViewBuilder
   func profileInfo() -> some View {
     VStack(spacing: 0) {
@@ -207,7 +205,7 @@ extension UserProfileView {
             .fontSystem(fontDesignSystem: .caption_SemiBold)
             .scaleEffect(whistleFollowerTextScale)
         }
-        Rectangle().frame(width: 1 , height: .infinity).foregroundColor(.white)
+        Rectangle().frame(width: 1, height: .infinity).foregroundColor(.white)
         NavigationLink {
           UserFollowView(userId: userId)
             .environmentObject(apiViewModel)
@@ -316,7 +314,7 @@ extension UserProfileView {
     switch -offsetY {
     case ..<0:
       return 16
-    case 0..<64:
+    case 0 ..< 64:
       return 16 + (16 * (offsetY / 64))
     default:
       return 0
@@ -327,7 +325,7 @@ extension UserProfileView {
     switch -offsetY {
     case ..<0:
       return 32
-    case 0..<64:
+    case 0 ..< 64:
       return 32 + (32 * (offsetY / 64))
     default:
       return 0
@@ -338,7 +336,7 @@ extension UserProfileView {
     switch -offsetY {
     case ..<0:
       return 64
-    case 0..<64:
+    case 0 ..< 64:
       return 64 + offsetY
     default:
       return 0
@@ -349,7 +347,7 @@ extension UserProfileView {
     switch -offsetY {
     case ..<0:
       return 100
-    case 0..<122:
+    case 0 ..< 122:
       return 100 + (100 * (offsetY / 122))
     default:
       return 0
@@ -360,7 +358,7 @@ extension UserProfileView {
     switch -offsetY {
     case ..<122:
       return 54
-    case 122..<200:
+    case 122 ..< 200:
       return 54 + (54 * ((offsetY + 122) / 78))
     default:
       return 0
@@ -371,7 +369,7 @@ extension UserProfileView {
     switch -offsetY {
     case ..<122:
       return 1
-    case 122..<200:
+    case 122 ..< 200:
       return 1 - abs((offsetY + 122) / 78)
     default:
       return 0
@@ -382,7 +380,7 @@ extension UserProfileView {
     switch -offsetY {
     case ..<200:
       return 36
-    case 200..<252:
+    case 200 ..< 252:
       return 36 + (36 * ((offsetY + 200) / 52))
     default:
       return 0
@@ -393,7 +391,7 @@ extension UserProfileView {
     switch -offsetY {
     case ..<200:
       return 114
-    case 200..<252:
+    case 200 ..< 252:
       return 114 + (114 * ((offsetY + 200) / 52))
     default:
       return 0
@@ -404,7 +402,7 @@ extension UserProfileView {
     switch -offsetY {
     case ..<200:
       return 1
-    case 200..<252:
+    case 200 ..< 252:
       return 1 - abs((offsetY + 200) / 52)
     default:
       return 0
@@ -415,7 +413,7 @@ extension UserProfileView {
     switch -offsetY {
     case ..<252:
       return 20
-    case 252..<305:
+    case 252 ..< 305:
       return 20 + (20 * ((offsetY + 252) / 53))
     default:
       return 0
@@ -426,7 +424,7 @@ extension UserProfileView {
     switch -offsetY {
     case ..<252:
       return 1
-    case 252..<305:
+    case 252 ..< 305:
       return 1 - abs((offsetY + 252) / 53)
     default:
       return 0
@@ -437,7 +435,7 @@ extension UserProfileView {
     switch -offsetY {
     case ..<252:
       return 0
-    case 252..<305:
+    case 252 ..< 305:
       return offsetY + 252
     case 305...:
       return -60
@@ -450,7 +448,7 @@ extension UserProfileView {
     switch -offsetY {
     case ..<252:
       return 0
-    case 252..<305:
+    case 252 ..< 305:
       return (offsetY + 252) / 53 * 36
     case 305...:
       return -36

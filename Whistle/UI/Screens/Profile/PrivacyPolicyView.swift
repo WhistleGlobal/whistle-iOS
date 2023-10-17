@@ -13,7 +13,6 @@ import WebKit
 // MARK: - PrivacyPolicyView
 
 struct PrivacyPolicyView: View {
-
   @Environment(\.dismiss) var dismiss
 
   var body: some View {

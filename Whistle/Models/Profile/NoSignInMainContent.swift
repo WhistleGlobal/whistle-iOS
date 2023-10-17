@@ -9,7 +9,6 @@ import AVFoundation
 import Foundation
 
 class NoSignInMainContent: Hashable, ObservableObject {
-
   // MARK: Lifecycle
 
   init(

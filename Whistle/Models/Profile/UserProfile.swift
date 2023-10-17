@@ -8,7 +8,6 @@
 import Foundation
 
 class UserProfile: ObservableObject, Codable {
-
   enum CodingKeys: String, CodingKey {
     case userId = "user_id"
     case userName = "user_name"

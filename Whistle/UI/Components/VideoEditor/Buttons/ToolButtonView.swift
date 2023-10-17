@@ -15,9 +15,9 @@ struct ToolButtonView: View {
   let isChange: Bool
   let action: () -> Void
 
-//  private var bgColor: Color {
+  //  private var bgColor: Color {
   ////    Color(isChange ? .systemGray5 : .systemGray6)
-//  }
+  //  }
 
   var body: some View {
     Button {

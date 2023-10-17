@@ -161,7 +161,7 @@ extension InteractivePreview {
 
   private var pinchZoomGesture: some Gesture {
     guard session.isRunning, option.enableZoom else {
-      return MagnificationGesture().onChanged { _ in } .onEnded { _ in }
+      return MagnificationGesture().onChanged { _ in }.onEnded { _ in }
     }
 
     let maxZoomFactor = session.maxZoomFactor ?? 1.0

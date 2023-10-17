@@ -10,7 +10,6 @@ import SwiftUI
 // MARK: - ReportUserView
 
 struct ReportUserView: View {
-
   public enum ReportCategory {
     case post
     case user
@@ -98,7 +97,6 @@ struct ReportUserView: View {
 }
 
 extension ReportUserView {
-
   @ViewBuilder
   func reportRow(text: String) -> some View {
     HStack {

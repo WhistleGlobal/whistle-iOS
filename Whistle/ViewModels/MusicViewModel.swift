@@ -55,14 +55,17 @@ extension MusicViewModel {
   func startTimer() {
     count_duration { duration in
       let time_interval = duration / Double(self.sample_count)
-      self.timer = Timer.scheduledTimer(withTimeInterval: time_interval * self.trimDuration / 10, repeats: true, block: { _ in
-        if self.index < self.soundSamples.count {
+      self.timer = Timer.scheduledTimer(
+        withTimeInterval: time_interval * self.trimDuration / 10,
+        repeats: true,
+        block: { _ in
+          if self.index < self.soundSamples.count {
 //          withAnimation(.linear) {
 //            self.soundSamples[self.index].color = Color.Secondary_Default
 //          }
-          self.index += 1
-        }
-      })
+            self.index += 1
+          }
+        })
     }
   }
 

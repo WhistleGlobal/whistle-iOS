@@ -8,7 +8,6 @@
 import SwiftUI
 
 struct ProfileTabItem: ButtonStyle {
-
   // MARK: Lifecycle
 
   init(systemName: String, tab: String, selectedTab: Binding<profileTabCase>) {

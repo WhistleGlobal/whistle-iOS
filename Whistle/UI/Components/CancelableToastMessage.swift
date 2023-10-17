@@ -8,7 +8,6 @@
 import SwiftUI
 
 struct CancelableToastMessage: View {
-
   let text: String
   let paddingBottom: CGFloat
   let action: () -> Void
@@ -63,4 +62,3 @@ struct CancelableToastMessage: View {
   @State private var toastOpacity = 0.0
   @State private var isExecutable = true
 }
-

@@ -10,9 +10,7 @@ import SwiftUI
 // MARK: - FollowButtonStyle
 
 struct FollowButtonStyle: ButtonStyle {
-
   struct FollowButton: View {
-
     let configuration: ButtonStyle.Configuration
     @Environment(\.isEnabled) private var isEnabled: Bool
     @Binding var isFollowed: Bool

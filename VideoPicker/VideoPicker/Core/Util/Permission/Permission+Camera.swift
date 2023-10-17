@@ -9,7 +9,6 @@
 import AVFoundation
 
 extension Permission {
-
   func _checkCamera() -> Status {
     AVCaptureDevice.authorizationStatus(for: .video)._status
   }
@@ -33,7 +32,6 @@ extension Permission {
 }
 
 extension AVAuthorizationStatus {
-
   fileprivate var _status: Permission.Status {
     switch self {
     case .authorized:
@@ -47,6 +45,5 @@ extension AVAuthorizationStatus {
 }
 
 extension String {
-
   fileprivate static let _cameraUsageDescription = "NSCameraUsageDescription"
 }

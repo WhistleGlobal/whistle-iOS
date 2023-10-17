@@ -10,7 +10,6 @@ import SwiftUI
 // MARK: - FollowTabbarStyle
 
 struct FollowTabbarStyle: ButtonStyle {
-
   // MARK: Lifecycle
 
   init(followNum: Int, tab: String, selectedTab: Binding<profileTabStatus>) {
@@ -22,7 +21,6 @@ struct FollowTabbarStyle: ButtonStyle {
   // MARK: Internal
 
   struct FollowTabItem: View {
-
     let followNum: Int
     let tab: String
     @Binding var selectedTab: profileTabStatus

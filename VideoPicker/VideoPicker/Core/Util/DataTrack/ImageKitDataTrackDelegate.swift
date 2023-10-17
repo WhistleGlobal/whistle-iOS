@@ -11,13 +11,11 @@ import Foundation
 // MARK: - ImageKitDataTrackDelegate
 
 public protocol ImageKitDataTrackDelegate: AnyObject {
-
   func dataTrack(page: AnyImagePage, state: AnyImagePageState)
   func dataTrack(event: AnyImageEvent, userInfo: [AnyImageEventUserInfoKey: Any])
 }
 
 extension ImageKitDataTrackDelegate {
-
   func dataTrack(page _: AnyImagePage, state _: AnyImagePageState) { }
   func dataTrack(event _: AnyImageEvent, userInfo _: [AnyImageEventUserInfoKey: Any]) { }
 }

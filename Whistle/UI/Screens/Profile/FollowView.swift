@@ -18,7 +18,6 @@ enum profileTabStatus: String {
 // MARK: - FollowView
 
 struct FollowView: View {
-
   // MARK: Internal
 
   @Environment(\.dismiss) var dismiss

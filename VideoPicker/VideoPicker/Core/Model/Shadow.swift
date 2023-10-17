@@ -9,7 +9,6 @@
 import UIKit
 
 public struct Shadow: Equatable, Hashable {
-
   public let color: UIColor
   public let alpha: Float
   public let x: CGFloat

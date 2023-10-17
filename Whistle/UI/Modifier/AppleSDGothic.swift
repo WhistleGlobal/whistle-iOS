@@ -28,7 +28,6 @@ struct AppleSDGothic: ViewModifier {
 }
 
 extension Font {
-
   // MARK: Lifecycle
 
   public init(uiFont: UIFont) {

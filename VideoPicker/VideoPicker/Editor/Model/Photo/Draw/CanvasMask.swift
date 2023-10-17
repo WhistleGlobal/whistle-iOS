@@ -11,7 +11,6 @@ import UIKit
 // MARK: - CanvasMask
 
 struct CanvasMask {
-
   let paths: [DrawnPath]
   let scale: CGFloat
 
@@ -24,14 +23,13 @@ struct CanvasMask {
 // MARK: GraphicsDrawing
 
 extension CanvasMask: GraphicsDrawing {
-
   func draw(in context: CGContext, size: CGSize) {
     guard !paths.isEmpty else { return }
     guard
       let cgLayer = CGLayer(context, size: size, auxiliaryInfo: nil),
       let layerContext = cgLayer.context
     else {
-      assert(false, "Failed to create CGLayer")
+      assertionFailure("Failed to create CGLayer")
       return
     }
 

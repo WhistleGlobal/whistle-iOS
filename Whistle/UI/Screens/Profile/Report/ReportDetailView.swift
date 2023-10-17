@@ -8,7 +8,6 @@
 import SwiftUI
 
 struct ReportDetailView: View {
-
   @Environment(\.dismiss) var dismiss
   @EnvironmentObject var apiViewModel: APIViewModel
   @Binding var goReport: Bool

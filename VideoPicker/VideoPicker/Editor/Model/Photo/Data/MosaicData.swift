@@ -9,7 +9,6 @@
 import UIKit
 
 struct MosaicData: Codable, Equatable {
-
   let idx: Int
   let drawnPaths: [DrawnPath]
 

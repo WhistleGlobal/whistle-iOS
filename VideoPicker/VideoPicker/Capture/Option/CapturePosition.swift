@@ -12,7 +12,6 @@ import AVFoundation
 
 /// Preferred position of capture, also a wrapper for AVCaptureDevice.Position.
 public enum CapturePosition: RawRepresentable, Equatable {
-
   case front
   case back
 
@@ -47,7 +46,6 @@ public enum CapturePosition: RawRepresentable, Equatable {
 }
 
 extension CapturePosition {
-
   var localizedTipsKey: StringConfigKey {
     switch self {
     case .back:

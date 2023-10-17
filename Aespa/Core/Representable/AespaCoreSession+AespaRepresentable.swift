@@ -74,6 +74,7 @@ public protocol AespaCoreSessionRepresentable {
 
 extension AespaCoreSession: AespaCoreSessionRepresentable {
   // MARK: - Vars
+
   var avCaptureSession: AVCaptureSession { self }
 
   var audioDeviceInput: AVCaptureDeviceInput? {
@@ -190,6 +191,7 @@ extension AespaCoreSession: AespaCoreSessionRepresentable {
   }
 
   // MARK: - Option related
+
   func cameraPosition(
     to position: AVCaptureDevice.Position,
     device deviceType: AVCaptureDevice.DeviceType?)

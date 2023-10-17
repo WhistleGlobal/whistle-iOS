@@ -11,7 +11,6 @@ import Foundation
 import ImageIO
 
 extension CGImage {
-
   func jpegData(compressionQuality: CGFloat) -> Data? {
     let options: [CFString: Any] = [kCGImageDestinationLossyCompressionQuality: compressionQuality as CFNumber]
     return data(fileType: .jpeg, options: options)

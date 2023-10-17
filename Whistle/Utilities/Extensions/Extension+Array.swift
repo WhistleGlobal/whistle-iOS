@@ -8,6 +8,7 @@
 import Foundation
 
 // MARK: - AudioVisualizer 관련 코드
+
 extension Array {
   func chunked(into size: Int) -> [[Element]] {
     stride(from: 0, to: count, by: size).map {

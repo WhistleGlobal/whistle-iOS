@@ -11,7 +11,6 @@ import UIKit
 
 /// Flash mode, also a wrapper for AVCaptureDevice.FlashMode.
 public enum CaptureFlashMode: RawRepresentable, Equatable {
-
   case auto
   case on
   case off

@@ -97,7 +97,6 @@ public enum VideoExportPreset: RawRepresentable, Equatable {
 }
 
 extension VideoExportPreset {
-
   public static func isH265ExportPresetSupported() -> Bool {
     if #available(iOS 11.0, *) {
       return VTIsHardwareDecodeSupported(kCMVideoCodecType_HEVC)

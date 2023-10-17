@@ -11,7 +11,6 @@ import UIKit
 // MARK: - EditorVideoOptionsInfo
 
 public struct EditorVideoOptionsInfo {
-
   /// Theme
   public var theme: EditorTheme = .init()
 
@@ -26,7 +25,7 @@ public struct EditorVideoOptionsInfo {
   /// - Note: The value exceeding the range of 0 to 1 is not allowed.
   ///
   /// - Default: 0...1
-  public var clipRange: ClosedRange<CGFloat> = 0...1
+  public var clipRange: ClosedRange<CGFloat> = 0 ... 1
 
   /// Enable debug log
   /// - Default: false
@@ -36,8 +35,8 @@ public struct EditorVideoOptionsInfo {
 }
 
 // MARK: - Deprecated
-extension EditorVideoOptionsInfo {
 
+extension EditorVideoOptionsInfo {
   @available(*, deprecated, message: "Will be removed in version 1.0, Please set `theme[color: .primary]` instead.")
   public var tintColor: UIColor {
     get { theme[color: .primary] }

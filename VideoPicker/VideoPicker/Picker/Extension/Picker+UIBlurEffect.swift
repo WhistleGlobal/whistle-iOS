@@ -9,7 +9,6 @@
 import UIKit
 
 extension UIBlurEffect.Style {
-
   init(uiStyle: UserInterfaceStyle, traitCollection: UITraitCollection) {
     let style: UIBlurEffect.Style
     switch uiStyle {

@@ -51,7 +51,8 @@ extension AVCaptureDevice {
       #if !targetEnvironment(macCatalyst)
       return format.supportedColorSpaces.contains(colorSpace)
       #else
-      return format.__supportedColorSpaces.compactMap { AVCaptureColorSpace(rawValue: $0.intValue) }.contains(colorSpace)
+      return format.__supportedColorSpaces.compactMap { AVCaptureColorSpace(rawValue: $0.intValue) }
+        .contains(colorSpace)
       #endif
     }
   }

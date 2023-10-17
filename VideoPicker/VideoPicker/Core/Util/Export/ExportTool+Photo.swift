@@ -12,7 +12,6 @@ import UIKit
 // MARK: - PhotoFetchOptions
 
 public struct PhotoFetchOptions {
-
   public let size: CGSize
   public let resizeMode: PHImageRequestOptionsResizeMode
   public let version: PHImageRequestOptionsVersion
@@ -37,7 +36,6 @@ public struct PhotoFetchOptions {
 // MARK: - PhotoFetchResponse
 
 public struct PhotoFetchResponse {
-
   public let image: UIImage
   public let isDegraded: Bool
 }
@@ -46,7 +44,6 @@ public typealias PhotoFetchCompletion = (Result<PhotoFetchResponse, AnyImageErro
 public typealias PhotoSaveCompletion = (Result<PHAsset, AnyImageError>) -> Void
 
 extension ExportTool {
-
   /// Fetch local photo 获取本地图片资源
   /// - Note: Fetch local photo only. If you want to fetch iCloud photo, please use `requestPhotoData` instead.
   /// - Note: 该方法仅用于获取本地图片资源，若要获取iCloud图片，请使用`requestPhotoData`方法。

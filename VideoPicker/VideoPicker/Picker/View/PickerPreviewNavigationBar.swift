@@ -11,7 +11,6 @@ import UIKit
 // MARK: - PickerPreviewNavigationBar
 
 final class PickerPreviewNavigationBar: UIView {
-
   private(set) lazy var backButton: UIButton = {
     let view = UIButton(type: .custom)
     view.imageEdgeInsets = UIEdgeInsets(top: 0, left: -15, bottom: 0, right: 0)
@@ -28,6 +27,7 @@ final class PickerPreviewNavigationBar: UIView {
     setupView()
   }
 
+  @available(*, unavailable)
   required init?(coder _: NSCoder) {
     fatalError("init(coder:) has not been implemented")
   }
@@ -57,7 +57,6 @@ final class PickerPreviewNavigationBar: UIView {
 // MARK: PickerOptionsConfigurable
 
 extension PickerPreviewNavigationBar: PickerOptionsConfigurable {
-
   func update(options: PickerOptionsInfo) {
     backgroundColor = options.theme[color: .toolBar].withAlphaComponent(0.95)
     backButton.setImage(options.theme[icon: .returnButton], for: .normal)

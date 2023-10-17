@@ -11,7 +11,6 @@ import UIKit
 // MARK: - VideoEditorCropToolViewDelegate
 
 protocol VideoEditorCropToolViewDelegate: AnyObject {
-
   func cropTool(_ view: VideoEditorCropToolView, playButtonTapped button: UIButton)
   func cropTool(_ view: VideoEditorCropToolView, didUpdate progress: CGFloat)
   func cropToolDurationOfVideo(_ view: VideoEditorCropToolView) -> CGFloat
@@ -20,7 +19,6 @@ protocol VideoEditorCropToolViewDelegate: AnyObject {
 // MARK: - VideoEditorCropToolView
 
 final class VideoEditorCropToolView: UIView {
-
   public weak var delegate: VideoEditorCropToolViewDelegate?
   private let options: EditorVideoOptionsInfo
 
@@ -51,6 +49,7 @@ final class VideoEditorCropToolView: UIView {
     setupView()
   }
 
+  @available(*, unavailable)
   required init?(coder _: NSCoder) {
     fatalError("init(coder:) has not been implemented")
   }
@@ -79,8 +78,8 @@ final class VideoEditorCropToolView: UIView {
 }
 
 // MARK: - Target
-extension VideoEditorCropToolView {
 
+extension VideoEditorCropToolView {
   @objc
   private func playButtonTapped(_ sender: UIButton) {
     delegate?.cropTool(self, playButtonTapped: sender)
@@ -90,7 +89,6 @@ extension VideoEditorCropToolView {
 // MARK: VideoEditorCropProgressViewDelegate
 
 extension VideoEditorCropToolView: VideoEditorCropProgressViewDelegate {
-
   func cropProgress(_: VideoEditorCropProgressView, didUpdate progress: CGFloat) {
     delegate?.cropTool(self, didUpdate: progress)
   }

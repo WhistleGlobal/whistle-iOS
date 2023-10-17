@@ -51,10 +51,16 @@ struct MusicTrimView: View {
             .frame(height: UIScreen.getHeight(700))
             .overlay {
               VStack {
-                LinearGradient(colors: [.Gray50_Dark.opacity(0.8), .Gray50_Dark.opacity(0)], startPoint: .top, endPoint: .bottom)
+                LinearGradient(
+                  colors: [.Gray50_Dark.opacity(0.8), .Gray50_Dark.opacity(0)],
+                  startPoint: .top,
+                  endPoint: .bottom)
                   .frame(height: UIScreen.getHeight(150))
                 Spacer()
-                LinearGradient(colors: [.Gray50_Dark.opacity(0), .Gray50_Dark.opacity(0.36)], startPoint: .top, endPoint: .bottom)
+                LinearGradient(
+                  colors: [.Gray50_Dark.opacity(0), .Gray50_Dark.opacity(0.36)],
+                  startPoint: .top,
+                  endPoint: .bottom)
                   .frame(height: UIScreen.getHeight(350))
               }
             }
@@ -102,7 +108,12 @@ struct MusicTrimView: View {
               .frame(width: UIScreen.getWidth(175), height: UIScreen.getHeight(84))
               .mask(alignment: .leading) {
                 Rectangle()
-                  .frame(width: isAnimated ? max(0.1, UIScreen.getWidth(175 - (audioTimer / musicVM.trimDuration) * 175)) : 0)
+                  .frame(
+                    width: isAnimated
+                      ? max(
+                        0.1,
+                        UIScreen.getWidth(175 - (audioTimer / musicVM.trimDuration) * 175))
+                      : 0)
               }
 
             // MARK: - Audio Waveform

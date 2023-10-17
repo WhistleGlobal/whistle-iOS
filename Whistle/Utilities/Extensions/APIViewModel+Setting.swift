@@ -19,7 +19,7 @@ extension APIViewModel: SettingProtocol {
         "\(domainURL)/user/notification/setting",
         method: .get,
         headers: contentTypeJson)
-        .validate(statusCode: 200...500)
+        .validate(statusCode: 200 ... 500)
         .response { response in
           switch response.result {
           case .success(let data):
@@ -48,14 +48,14 @@ extension APIViewModel: SettingProtocol {
   // FIXME: - 코드 리팩토링이 필요함 (URL 뻬고 모든 코드가 중복)
 
   func updateSettingWhistle(newSetting: Bool) async {
-    let params = ["newSetting" : newSetting ? 1 : 0]
+    let params = ["newSetting": newSetting ? 1 : 0]
     return await withCheckedContinuation { continuation in
       AF.request(
         "\(domainURL)/user/notification/setting/whistle",
         method: .patch,
         parameters: params,
         headers: contentTypeXwwwForm)
-        .validate(statusCode: 200...300)
+        .validate(statusCode: 200 ... 300)
         .response { response in
           switch response.result {
           case .success(let data):
@@ -73,13 +73,13 @@ extension APIViewModel: SettingProtocol {
   }
 
   func updateSettingFollow(newSetting: Bool) async {
-    let params = ["newSetting" : newSetting ? 1 : 0]
+    let params = ["newSetting": newSetting ? 1 : 0]
     return await withCheckedContinuation { continuation in
       AF.request(
         "\(domainURL)/user/notification/setting/follow",
         method: .patch,
         parameters: params,
-        headers: contentTypeXwwwForm).validate(statusCode: 200...300).response { response in
+        headers: contentTypeXwwwForm).validate(statusCode: 200 ... 300).response { response in
         switch response.result {
         case .success(let data):
           guard let data else {
@@ -96,14 +96,14 @@ extension APIViewModel: SettingProtocol {
   }
 
   func updateSettingInfo(newSetting: Bool) async {
-    let params = ["newSetting" : newSetting ? 1 : 0]
+    let params = ["newSetting": newSetting ? 1 : 0]
     return await withCheckedContinuation { continuation in
       AF.request(
         "\(domainURL)/user/notification/setting/info",
         method: .patch,
         parameters: params,
         headers: contentTypeXwwwForm)
-        .validate(statusCode: 200...300)
+        .validate(statusCode: 200 ... 300)
         .response { response in
           switch response.result {
           case .success(let data):
@@ -121,14 +121,14 @@ extension APIViewModel: SettingProtocol {
   }
 
   func updateSettingAd(newSetting: Bool) async {
-    let params = ["newSetting" : newSetting ? 1 : 0]
+    let params = ["newSetting": newSetting ? 1 : 0]
     return await withCheckedContinuation { continuation in
       AF.request(
         "\(domainURL)/user/notification/setting/ad",
         method: .patch,
         parameters: params,
         headers: contentTypeXwwwForm)
-        .validate(statusCode: 200...300)
+        .validate(statusCode: 200 ... 300)
         .response { response in
           switch response.result {
           case .success(let data):
@@ -147,10 +147,10 @@ extension APIViewModel: SettingProtocol {
 
   func uploadDeviceToken(deviceToken: String, completion: @escaping () -> Void) {
     let params = [
-      "device_token" : "\(deviceToken)",
-      "system_name" : "\(UIDevice.current.systemName)",
-      "system_version" : "\(UIDevice.current.systemVersion)",
-      "device_model" : "\(UIDevice.current.name)",
+      "device_token": "\(deviceToken)",
+      "system_name": "\(UIDevice.current.systemName)",
+      "system_version": "\(UIDevice.current.systemVersion)",
+      "device_model": "\(UIDevice.current.name)",
     ]
 
     AF.request(
@@ -158,7 +158,7 @@ extension APIViewModel: SettingProtocol {
       method: .post,
       parameters: params,
       headers: contentTypeXwwwForm)
-      .validate(statusCode: 200...300)
+      .validate(statusCode: 200 ... 300)
       .response { response in
         switch response.result {
         case .success(let data):
@@ -174,14 +174,14 @@ extension APIViewModel: SettingProtocol {
   }
 
   func requestVersionCheck() async {
-    let params = ["appVersion" : "\(Bundle.main.appVersion ?? "Unknown")"]
+    let params = ["appVersion": "\(Bundle.main.appVersion ?? "Unknown")"]
     return await withCheckedContinuation { continuation in
       AF.request(
         "\(domainURL)/system/versionCheck",
         method: .get,
         parameters: params,
         headers: contentTypeJson)
-        .validate(statusCode: 200...300)
+        .validate(statusCode: 200 ... 300)
         .response { response in
           switch response.result {
           case .success(let data):

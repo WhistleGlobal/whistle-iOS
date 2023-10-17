@@ -11,7 +11,6 @@ import UIKit
 // MARK: - MosaicContentView
 
 final class MosaicContentView: DryDrawingView {
-
   weak var dataSource: MosaicDataSource?
   weak var delegate: MosaicDelegate?
 
@@ -54,6 +53,7 @@ final class MosaicContentView: DryDrawingView {
     imageView.image = mosaic
   }
 
+  @available(*, unavailable)
   required init?(coder _: NSCoder) {
     fatalError("init(coder:) has not been implemented")
   }
@@ -90,8 +90,8 @@ final class MosaicContentView: DryDrawingView {
 }
 
 // MARK: - Public
-extension MosaicContentView {
 
+extension MosaicContentView {
   func setDrawn(paths: [DrawnPath]) {
     drawnPaths = paths
   }
@@ -100,7 +100,6 @@ extension MosaicContentView {
 // MARK: - MaskLayer
 
 private class MaskLayer: CALayer {
-
   var didDraw: (() -> Void)?
   var scale: (() -> CGFloat)?
 

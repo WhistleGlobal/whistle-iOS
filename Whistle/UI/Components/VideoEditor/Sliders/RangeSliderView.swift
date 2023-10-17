@@ -139,8 +139,12 @@ struct RangedSliderView: View {
 
             // 범위를 변경하되, 범위가 sliderBounds 내에 머무르도록 제한
             if let totalduration = editorVM.currentVideo?.totalDuration {
-              let clampedLowerBound = min(max(newLowerBound, sliderBounds.lowerBound), sliderBounds.upperBound - totalduration)
-              let clampedUpperBound = min(max(newUpperBound, sliderBounds.lowerBound + totalduration), sliderBounds.upperBound)
+              let clampedLowerBound = min(
+                max(newLowerBound, sliderBounds.lowerBound),
+                sliderBounds.upperBound - totalduration)
+              let clampedUpperBound = min(
+                max(newUpperBound, sliderBounds.lowerBound + totalduration),
+                sliderBounds.upperBound)
               currentValue?.wrappedValue = clampedLowerBound ... clampedUpperBound
             }
           }.onEnded { _ in

@@ -8,7 +8,6 @@
 import Foundation
 
 class ReportedContent: Hashable, Decodable {
-
   // MARK: Public
 
   public enum ConentStatus: String, Codable {
@@ -52,7 +51,6 @@ class ReportedContent: Hashable, Decodable {
     case hashtags = "content_hashtags"
     case viewCounts = "content_view_count"
     case isWhistled = "is_whistled"
-
   }
 
   var userId = 0

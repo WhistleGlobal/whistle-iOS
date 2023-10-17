@@ -10,7 +10,6 @@ import SwiftUI
 // MARK: - ReportAlert
 
 struct ReportAlert: View {
-
   let cancelAction: () -> Void
   let reportAction: () -> Void
 
@@ -109,4 +108,3 @@ extension ReportAlert {
     }
   }
 }
-

@@ -11,7 +11,6 @@ import UIKit
 // MARK: - CaptureTipsView
 
 final class CaptureTipsView: UIView {
-
   private lazy var tipsLabel: UILabel = {
     let view = UILabel(frame: .zero)
     view.font = UIFont.systemFont(ofSize: 14, weight: .regular)
@@ -32,6 +31,7 @@ final class CaptureTipsView: UIView {
     setupView()
   }
 
+  @available(*, unavailable)
   required init?(coder _: NSCoder) {
     fatalError("init(coder:) has not been implemented")
   }
@@ -47,8 +47,8 @@ final class CaptureTipsView: UIView {
 }
 
 // MARK: - Animation
-extension CaptureTipsView {
 
+extension CaptureTipsView {
   func showTips(hideAfter second: TimeInterval, animated: Bool) {
     guard isHidden else { return }
     alpha = 0
@@ -59,7 +59,7 @@ extension CaptureTipsView {
     animator.addAnimations {
       self.alpha = 1
     }
-    animator.addCompletion { [weak self]_ in
+    animator.addCompletion { [weak self] _ in
       guard let self else { return }
       hideTips(afterDelay: second, animated: animated)
     }

@@ -10,7 +10,6 @@ import SwiftUI
 // MARK: - MainReportReasonView
 
 struct MainReportReasonView: View {
-
   @Environment(\.dismiss) var dismiss
   @EnvironmentObject var apiViewModel: APIViewModel
   @Binding var goReport: Bool
@@ -54,7 +53,11 @@ struct MainReportReasonView: View {
         Divider().frame(width: UIScreen.width)
         ForEach(PostReportReason.allCases, id: \.self) { reason in
           NavigationLink {
-            MainReportDetailView(goReport: $goReport ,reportReason: reason.numericValue, contentId: contentId, uesrId: userId)
+            MainReportDetailView(
+              goReport: $goReport,
+              reportReason: reason.numericValue,
+              contentId: contentId,
+              uesrId: userId)
               .environmentObject(apiViewModel)
           } label: {
             reportRow(text: reason.rawValue)
@@ -73,7 +76,6 @@ struct MainReportReasonView: View {
 }
 
 extension MainReportReasonView {
-
   @ViewBuilder
   func reportRow(text: String) -> some View {
     HStack {
@@ -89,4 +91,3 @@ extension MainReportReasonView {
     .frame(height: 56)
   }
 }
-

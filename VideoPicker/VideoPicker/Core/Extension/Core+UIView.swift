@@ -9,7 +9,6 @@
 import UIKit
 
 extension UIView {
-
   func getController() -> UIViewController? {
     var view: UIView? = superview
     while view != nil {

@@ -12,7 +12,6 @@ import UIKit
 // MARK: - FetchRecord
 
 struct FetchRecord {
-
   let identifier: String
   var requestIDs: [PHImageRequestID]
 }
@@ -20,7 +19,6 @@ struct FetchRecord {
 // MARK: - PickerManager
 
 final class PickerManager {
-
   var options: PickerOptionsInfo = .init()
 
   var isUpToLimit: Bool {
@@ -48,7 +46,6 @@ final class PickerManager {
 }
 
 extension PickerManager {
-
   func clearAll() {
     useOriginalImage = false
     selectedAssets.removeAll()
@@ -61,7 +58,6 @@ extension PickerManager {
 // MARK: - Fetch Queue
 
 extension PickerManager {
-
   func enqueueFetch(for identifier: String, requestID: PHImageRequestID) {
     workQueue.async { [weak self] in
       guard let self else { return }
@@ -106,7 +102,6 @@ extension PickerManager {
 // MARK: - Select
 
 extension PickerManager {
-
   @discardableResult
   func addSelectedAsset(_ asset: Asset) -> (success: Bool, message: String) {
     if selectedAssets.contains(asset) { return (false, "") }
@@ -230,8 +225,8 @@ extension PickerManager {
 }
 
 // MARK: - Private function
-extension PickerManager {
 
+extension PickerManager {
   private func didSyncAsset() {
     let isReady = selectedAssets.filter { !$0.isReady }.isEmpty
     if isReady {

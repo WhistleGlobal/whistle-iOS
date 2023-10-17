@@ -11,7 +11,6 @@ import UIKit
 // MARK: - CanvasDelegate
 
 protocol CanvasDelegate: AnyObject {
-
   func canvasDidBeginDraw()
   func canvasDidEndDraw()
 }
@@ -19,14 +18,12 @@ protocol CanvasDelegate: AnyObject {
 // MARK: - CanvasDataSource
 
 protocol CanvasDataSource: AnyObject {
-
   func canvasGetLineWidth(_ canvas: Canvas) -> CGFloat
 }
 
 // MARK: - Canvas
 
 final class Canvas: DryDrawingView {
-
   weak var delegate: CanvasDelegate?
   weak var dataSource: CanvasDataSource?
 
@@ -60,8 +57,8 @@ final class Canvas: DryDrawingView {
 }
 
 // MARK: - Public
-extension Canvas {
 
+extension Canvas {
   func setBrush(lineWidth: CGFloat) {
     brush.lineWidth = lineWidth
   }

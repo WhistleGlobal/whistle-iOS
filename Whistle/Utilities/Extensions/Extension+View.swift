@@ -18,6 +18,7 @@ extension View {
 }
 
 // MARK: - 추후 Sticky header
+
 extension View {
   @ViewBuilder
   func offset(coordinateSpace: CoordinateSpace, completion: @escaping (CGFloat) -> Void) -> some View {
@@ -466,7 +467,6 @@ extension View {
 }
 
 extension View {
-
   @ViewBuilder
   func playButton(toPlay: Bool) -> some View {
     glassMoriphicCircleView()
@@ -481,6 +481,4 @@ extension View {
           .foregroundColor(.White)
       }
   }
-
-
 }

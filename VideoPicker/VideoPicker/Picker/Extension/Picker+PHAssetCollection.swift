@@ -9,7 +9,6 @@
 import Photos
 import UIKit
 extension PHAssetCollection {
-
   var isCameraRoll: Bool {
     assetCollectionSubtype == .smartAlbumUserLibrary
   }
@@ -19,7 +18,7 @@ extension PHAssetCollection {
   }
 
   var isRecentlyDeleted: Bool {
-    assetCollectionSubtype.rawValue == 1000000201
+    assetCollectionSubtype.rawValue == 1_000_000_201
   }
 }
 
