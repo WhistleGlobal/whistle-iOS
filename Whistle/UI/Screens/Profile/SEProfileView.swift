@@ -108,6 +108,7 @@ struct SEProfileView: View {
                 NavigationLink {
                   MyContentListView(currentIndex: index)
                     .environmentObject(apiViewModel)
+                    .environmentObject(tabbarModel)
                 } label: {
                   videoThumbnailView(
                     thumbnailUrl: content.thumbnailUrl ?? "",

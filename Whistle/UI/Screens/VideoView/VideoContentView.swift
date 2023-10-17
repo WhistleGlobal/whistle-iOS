@@ -374,11 +374,13 @@ struct VideoContentView: View {
       viewModel.aespaSession = Aespa.session(with: AespaOption(albumName: "Whistle"))
       viewModel.preview = viewModel.aespaSession.interactivePreview()
       Task {
-        if await viewModel.aespaSession.fetchVideoFiles(limit: 1).isEmpty {
+        let videos: [VideoAsset] = await viewModel.aespaSession.fetchVideoFiles(limit: 1)
+        if videos.isEmpty {
           return
         }
-        let video = await viewModel.aespaSession.fetchVideoFiles(limit: 1)[0]
-        albumCover = video.thumbnailImage
+        albumCover = videos[0].thumbnailImage
+//        let video = await viewModel.aespaSession.fetchVideoFiles(limit: 1)[0]
+//        albumCover = video.thumbnailImage
       }
     }
     .onChange(of: scenePhase) { newValue in
@@ -1001,6 +1003,9 @@ extension VideoContentView {
           }
           .onTapGesture {
             Task {
+              if musicVM.isTrimmed {
+                editorVM.currentVideo?.setVolume(0)
+              }
               if let video = editorVM.currentVideo {
                 let exporterVM = ExporterViewModel(video: video)
                 await exporterVM.action(.save, start: (editorVM.currentVideo?.rangeDuration.lowerBound)!)

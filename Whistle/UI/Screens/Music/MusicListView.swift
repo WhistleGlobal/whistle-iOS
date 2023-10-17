@@ -98,6 +98,9 @@ struct MusicListView: View {
                 Text("\(music.musicTitle)")
                   .foregroundStyle(Color.LabelColor_Primary_Dark)
                   .fontSystem(fontDesignSystem: .subtitle1)
+                  .truncationMode(.tail)
+                  .lineLimit(1)
+                  .frame(width: UIScreen.getWidth(210), alignment: .leading)
                 Rectangle().fill(.white).opacity(0.0001)
               }
               .hLeading()
