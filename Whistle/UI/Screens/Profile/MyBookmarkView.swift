@@ -38,19 +38,14 @@ struct MyBookmarkView: View {
                 }
                 dismiss()
               } label: {
-                Color.clear
-                  .frame(width: 24, height: 24)
-                  .overlay {
-                    Image(systemName: "chevron.backward")
-                      .resizable()
-                      .scaledToFit()
-                      .frame(width: 24, height: 20)
-                      .foregroundColor(.white)
-                  }
+                Image(systemName: "chevron.backward")
+                  .font(.system(size: 20))
+                  .foregroundColor(.white)
+                  .padding(.vertical, 16)
+                  .padding(.trailing, 16)
               }
               Spacer()
             }
-            .frame(height: 52)
             .padding(.top, 54)
             .padding(.horizontal, 16)
             Spacer()
@@ -264,13 +259,14 @@ extension MyBookmarkView {
           dismiss()
         } label: {
           Image(systemName: "chevron.backward")
-            .font(.system(size: 24))
+            .font(.system(size: 20))
             .foregroundColor(.white)
+            .padding(.vertical, 16)
+            .padding(.trailing, 16)
         }
         Spacer()
       }
-      .frame(height: 52)
-//      .padding(.top, 54)
+      .padding(.top, 38)
       Spacer()
       HStack(spacing: 0) {
         VStack(alignment: .leading, spacing: 12) {
@@ -351,6 +347,7 @@ extension MyBookmarkView {
         }
       }
     }
+    .ignoresSafeArea(.all, edges: .bottom)
     .padding(.bottom, UIScreen.getHeight(48))
     .padding(.trailing, UIScreen.getWidth(12))
     .padding(.leading, UIScreen.getWidth(16))
