@@ -14,11 +14,9 @@ import SwiftUI
 // MARK: - VideoContentViewModel
 
 class VideoContentViewModel: ObservableObject {
-  let aespaSession: AespaSession
+  var aespaSession: AespaSession
 
-  var preview: some View {
-    aespaSession.interactivePreview()
-  }
+  var preview: InteractivePreview?
 
   private var subscription = Set<AnyCancellable>()
 
@@ -44,6 +42,8 @@ class VideoContentViewModel: ObservableObject {
 
     aespaSession
       .stabilization(mode: .auto)
+
+    preview = aespaSession.interactivePreview()
   }
 }
 
