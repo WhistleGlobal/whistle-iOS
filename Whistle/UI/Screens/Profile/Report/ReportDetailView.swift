@@ -136,7 +136,7 @@ struct ReportDetailView: View {
         Button {
           showAlert = true
         } label: {
-          if !showAlert {
+          if !showAlert, !showDuplication, !showFailLoad {
             Text("제출")
               .foregroundColor(.Info)
               .fontSystem(fontDesignSystem: .subtitle2_KO)

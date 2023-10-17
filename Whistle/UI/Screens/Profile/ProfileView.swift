@@ -146,6 +146,7 @@ struct ProfileView: View {
                 NavigationLink {
                   MyBookmarkView(currentIndex: index)
                     .environmentObject(apiViewModel)
+                    .environmentObject(tabbarModel)
                 } label: {
                   videoThumbnailView(thumbnailUrl: content.thumbnailUrl, viewCount: content.viewCount)
                 }
