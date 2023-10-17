@@ -421,9 +421,11 @@ struct MainView: View {
       Button("관심없음", role: .none) {
         showHideContentToast = true
       }
-      Button("신고", role: .destructive) {
-        log(currentVideoContentId)
-        showReport = true
+      if currentVideoUserId != apiViewModel.myProfile.userId {
+        Button("신고", role: .destructive) {
+          log(currentVideoContentId)
+          showReport = true
+        }
       }
       Button("닫기", role: .cancel) {
         log("Cancel")
