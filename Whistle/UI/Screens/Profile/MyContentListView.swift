@@ -103,22 +103,24 @@ struct MyContentListView: View {
                       endPoint: .bottom)
                       .frame(maxWidth: .infinity, maxHeight: .infinity)
                       .allowsHitTesting(false)
-                    userInfo(
-                      contentId: content.contentId ?? 0,
-                      caption: content.caption ?? "",
-                      musicTitle: content.musicTitle ?? "원본 오디오",
-                      isWhistled:
-                      Binding(get: {
-                        content.isWhistled == 1 ? true : false
-                      }, set: { newValue in
-                        content.isWhistled = newValue ? 1 : 0
-                      }),
-                      whistleCount:
-                      Binding(get: {
-                        content.contentWhistleCount ?? 0
-                      }, set: { newValue in
-                        content.contentWhistleCount = newValue
-                      }))
+                    if tabbarModel.tabWidth != 56 {
+                      userInfo(
+                        contentId: content.contentId ?? 0,
+                        caption: content.caption ?? "",
+                        musicTitle: content.musicTitle ?? "원본 오디오",
+                        isWhistled:
+                        Binding(get: {
+                          content.isWhistled == 1 ? true : false
+                        }, set: { newValue in
+                          content.isWhistled = newValue ? 1 : 0
+                        }),
+                        whistleCount:
+                        Binding(get: {
+                          content.contentWhistleCount ?? 0
+                        }, set: { newValue in
+                          content.contentWhistleCount = newValue
+                        }))
+                    }
                     playButton(toPlay: player.rate == 0)
                       .opacity(showPlayButton ? 1 : 0)
                       .allowsHitTesting(false)
