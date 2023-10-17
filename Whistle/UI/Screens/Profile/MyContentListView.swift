@@ -68,6 +68,11 @@ struct MyContentListView: View {
             if !players.isEmpty {
               if let player = players[index] {
                 Player(player: player)
+                  .onChange(of: tabbarModel.tabSelectionNoAnimation) { newValue in
+                    if newValue != .profile {
+                      player.pause()
+                    }
+                  }
                   .frame(width: proxy.size.width)
                   .onTapGesture(count: 2) {
                     whistleToggle()
