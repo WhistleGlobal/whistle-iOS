@@ -8,7 +8,6 @@
 import Kingfisher
 import SwiftUI
 
-
 // MARK: - profileTabStatus
 
 enum profileTabStatus: String {

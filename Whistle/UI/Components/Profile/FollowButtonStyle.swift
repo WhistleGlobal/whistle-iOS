@@ -18,13 +18,13 @@ struct FollowButtonStyle: ButtonStyle {
     @Binding var isFollowed: Bool
 
     var body: some View {
-      Text(isFollowed ? "following" : "follow")
-        .frame(width: isFollowed ? 112 : 88, height: 36)
+      Text(isFollowed ? "팔로잉" : "팔로우")
+        .frame(width: 85, height: 36)
         .foregroundColor(isFollowed ? .Gray30_Dark : .LabelColor_Primary_Dark)
         .fontSystem(fontDesignSystem: .subtitle2_KO)
         .background(
           Capsule()
-            .frame(width: isFollowed ? 112 : 88, height: 36)
+            .frame(width: 85, height: 36)
             .foregroundColor(followButtonColor()))
     }
 
