@@ -47,10 +47,11 @@ open class Aespa {
   /// If a session has been started, it stops the session and releases resources.
   /// After termination, a new session needs to be configured to start recording again.
   public static func terminate(_ onComplete: @escaping CompletionHandler = { _ in }) throws {
-    guard let core else {
-      return
-    }
+//    guard let core else {
+//      return
+//    }
 
-    core.terminateSession(onComplete)
+    core?.terminateSession(onComplete)
+    core = nil
   }
 }

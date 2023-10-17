@@ -354,6 +354,12 @@ struct VideoContentView: View {
           .foregroundColor(.white)
       }
     }
+    .onDisappear {
+      do {
+        try Aespa.terminate()
+        viewModel.preview = nil
+      } catch { }
+    }
     .fullScreenCover(isPresented: $showMusicTrimView) {
       MusicTrimView(
         musicVM: musicVM,
@@ -363,6 +369,8 @@ struct VideoContentView: View {
     }
     .navigationBarBackButtonHidden()
     .onAppear {
+      viewModel.aespaSession = Aespa.session(with: AespaOption(albumName: "Whistle"))
+      viewModel.preview = viewModel.aespaSession.interactivePreview()
       Task {
         if await viewModel.aespaSession.fetchVideoFiles(limit: 1).isEmpty {
           return
