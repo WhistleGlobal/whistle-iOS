@@ -11,14 +11,13 @@ import AVFoundation
 // MARK: - DeviceIOComponent
 
 class DeviceIOComponent: NSObject {
-
   var device: AVCaptureDevice?
   var input: AVCaptureDeviceInput?
 }
 
 // MARK: - Device Property
-extension DeviceIOComponent {
 
+extension DeviceIOComponent {
   func updateProperty(_ change: (AVCaptureDevice) -> Void) {
     guard let device else { return }
     do {

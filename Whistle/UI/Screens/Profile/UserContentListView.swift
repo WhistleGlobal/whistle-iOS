@@ -12,7 +12,6 @@ import SwiftUI
 // MARK: - UserContentListView
 
 struct UserContentListView: View {
-
   @Environment(\.dismiss) var dismiss
   @EnvironmentObject var apiViewModel: APIViewModel
   @EnvironmentObject var tabbarModel: TabbarModel
@@ -134,7 +133,7 @@ struct UserContentListView: View {
     .background(.black)
     .onAppear {
       log("currentIndex : \(currentIndex)")
-      for _ in 0..<apiViewModel.userPostFeed.count {
+      for _ in 0 ..< apiViewModel.userPostFeed.count {
         players.append(nil)
       }
       players[currentIndex] = AVPlayer(url: URL(string: apiViewModel.userPostFeed[currentIndex].videoUrl ?? "")!)
@@ -190,7 +189,8 @@ struct UserContentListView: View {
               players[currentIndex]?.pause()
               players.remove(at: currentIndex)
               if !players.isEmpty {
-                players[currentIndex] = AVPlayer(url: URL(string: apiViewModel.userPostFeed[currentIndex].videoUrl ?? "")!)
+                players[currentIndex] =
+                  AVPlayer(url: URL(string: apiViewModel.userPostFeed[currentIndex].videoUrl ?? "")!)
                 await players[currentIndex]?.seek(to: .zero)
                 players[currentIndex]?.play()
               }
@@ -267,7 +267,6 @@ struct UserContentListView: View {
 }
 
 extension UserContentListView {
-
   @ViewBuilder
   func userInfo(
     contentId _: Int?,
@@ -410,6 +409,7 @@ extension UserContentListView {
 }
 
 // MARK: - Timer
+
 extension UserContentListView {
   func whistleToggle() {
     HapticManager.instance.impact(style: .medium)

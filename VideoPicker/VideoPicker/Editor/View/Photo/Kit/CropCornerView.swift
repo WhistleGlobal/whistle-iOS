@@ -11,7 +11,6 @@ import UIKit
 // MARK: - CropCornerView
 
 final class CropCornerView: UIView {
-
   private let color: UIColor
   let position: CropCornerPosition
 
@@ -22,6 +21,7 @@ final class CropCornerView: UIView {
     setupView()
   }
 
+  @available(*, unavailable)
   required init?(coder _: NSCoder) {
     fatalError("init(coder:) has not been implemented")
   }
@@ -62,7 +62,6 @@ final class CropCornerView: UIView {
     shapeLayer.strokeColor = color.cgColor
     layer.addSublayer(shapeLayer)
   }
-
 }
 
 // MARK: - CropCornerPosition

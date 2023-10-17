@@ -11,7 +11,6 @@ import UIKit
 // MARK: - PermissionLimitedView
 
 final class PermissionLimitedView: UIView {
-
   private lazy var warningImageView: UIImageView = {
     let view = UIImageView(frame: .zero)
     return view
@@ -39,6 +38,7 @@ final class PermissionLimitedView: UIView {
     setupView()
   }
 
+  @available(*, unavailable)
   required init?(coder _: NSCoder) {
     fatalError("init(coder:) has not been implemented")
   }
@@ -71,7 +71,6 @@ final class PermissionLimitedView: UIView {
 // MARK: PickerOptionsConfigurable
 
 extension PermissionLimitedView: PickerOptionsConfigurable {
-
   func update(options: PickerOptionsInfo) {
     warningImageView.image = options.theme[icon: .warning]
     tipsLabel.textColor = options.theme[color: .whiteText]

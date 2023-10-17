@@ -8,7 +8,6 @@
 import Foundation
 
 class NotiSetting: ObservableObject, Codable {
-
   // MARK: Lifecycle
 
   required init(from decoder: Decoder) throws {

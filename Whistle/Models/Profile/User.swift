@@ -8,7 +8,6 @@
 import Foundation
 
 class User: ObservableObject, Codable, Hashable {
-
   var uuid = UUID()
   var userId = 0
   var userName = ""
@@ -29,5 +28,4 @@ class User: ObservableObject, Codable, Hashable {
   func hash(into hasher: inout Hasher) {
     hasher.combine(uuid)
   }
-
 }

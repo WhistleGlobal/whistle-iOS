@@ -42,7 +42,6 @@ enum PhotoEditorAction {
 }
 
 extension PhotoEditorAction {
-
   var duration: TimeInterval {
     switch self {
     case .toolOptionChanged(let option):

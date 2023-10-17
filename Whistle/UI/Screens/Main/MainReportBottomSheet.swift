@@ -10,7 +10,6 @@ import SwiftUI
 // MARK: - MainReportBottomSheet
 
 struct MainReportBottomSheet: View {
-
   @Binding var isShowing: Bool
   @EnvironmentObject var apiViewModel: APIViewModel
   var content: AnyView
@@ -74,7 +73,8 @@ struct MainReportBottomSheet: View {
                   .foregroundColor(.Gray10)
                   .frame(maxWidth: .infinity, alignment: .leading)
                   .padding(.horizontal, 16)
-                Text("지식재산권 침해를 신고하는 경우를 제외하고 회원님의 신고는 익명으로 처리됩니다. 누군가 위급한 상황에 있다고 생각된다면 즉시 현지 응급 서비스 기관에 연락하시기 바랍니다.")
+                Text(
+                  "지식재산권 침해를 신고하는 경우를 제외하고 회원님의 신고는 익명으로 처리됩니다. 누군가 위급한 상황에 있다고 생각된다면 즉시 현지 응급 서비스 기관에 연락하시기 바랍니다.")
                   .fontSystem(fontDesignSystem: .caption_KO_Regular)
                   .foregroundColor(.Gray30)
                   .padding(.horizontal, 16)
@@ -100,7 +100,6 @@ struct MainReportBottomSheet: View {
 }
 
 extension MainReportBottomSheet {
-
   @ViewBuilder
   func listRow(reportType: PostReportReason) -> some View {
     HStack {
@@ -132,4 +131,3 @@ extension MainReportBottomSheet {
 //        .scaledToFit()
 //    }
 // }
-

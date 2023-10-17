@@ -1,5 +1,5 @@
 //
-//  Alert.swift
+//  AlertPopup.swift
 //  Whistle
 //
 //  Created by 박상원 on 10/15/23.

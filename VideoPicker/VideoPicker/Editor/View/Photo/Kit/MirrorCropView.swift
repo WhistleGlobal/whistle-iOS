@@ -9,7 +9,6 @@
 import UIKit
 
 final class MirrorCropView: UIView {
-
   var color: UIColor = .black {
     didSet {
       topView.backgroundColor = color
@@ -48,6 +47,7 @@ final class MirrorCropView: UIView {
     setupView()
   }
 
+  @available(*, unavailable)
   required init?(coder _: NSCoder) {
     fatalError("init(coder:) has not been implemented")
   }
@@ -81,5 +81,4 @@ final class MirrorCropView: UIView {
       make.top.equalToSuperview().offset(rect.maxY)
     }
   }
-
 }

@@ -12,14 +12,12 @@ import UIKit
 // MARK: - RecorderDelegate
 
 protocol RecorderDelegate: AnyObject {
-
   func recorder(_ recorder: Recorder, didCreateMovieFileAt url: URL, thumbnail: UIImage?)
 }
 
 // MARK: - Recorder
 
 final class Recorder {
-
   weak var delegate: RecorderDelegate?
 
   var preferredAudioSettings: [String: Any]?
@@ -36,7 +34,6 @@ final class Recorder {
 }
 
 extension Recorder {
-
   var isReadyForStartWriting: Bool {
     guard let writer: AVAssetWriter = writer else { return false }
     return writer.inputs.count == 2
@@ -76,7 +73,6 @@ extension Recorder {
 }
 
 extension Recorder {
-
   func startRunning() {
     workQueue.async {
       guard !self.isRunning else { return }
@@ -94,7 +90,6 @@ extension Recorder {
 }
 
 extension Recorder {
-
   private func finishWriting() {
     guard let writer: AVAssetWriter = writer, writer.status == .writing else {
       return

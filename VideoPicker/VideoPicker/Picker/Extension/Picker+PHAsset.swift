@@ -9,7 +9,6 @@
 import Photos
 
 extension PHAsset {
-
   var isLivePhoto: Bool {
     mediaSubtypes.contains(.photoLive)
   }

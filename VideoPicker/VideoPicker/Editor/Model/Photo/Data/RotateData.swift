@@ -9,7 +9,6 @@
 import UIKit
 
 enum RotateState: Int, Codable, Equatable {
-
   case portrait = 0
   case upsideDown
   case landscapeLeft

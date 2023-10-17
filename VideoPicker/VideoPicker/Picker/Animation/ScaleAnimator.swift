@@ -10,7 +10,6 @@ import UIKit
 
 /// 缩放动画
 class ScaleAnimator: NSObject, UIViewControllerAnimatedTransitioning {
-
   /// 动画开始位置的视图
   var startView: UIView?
 

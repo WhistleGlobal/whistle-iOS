@@ -1,5 +1,5 @@
 //
-//  TagContent.swift
+//  TagsContent.swift
 //  Whistle
 //
 //  Created by 박상원 on 10/10/23.
@@ -193,7 +193,6 @@ struct TagsContent<Overlay>: View where Overlay: View {
 // }
 
 extension TagsContent {
-
   // Function to keep text length in limits
   func limitText(_ upper: Int) {
     if inputText.filter({ $0 != " " }).count > upper {
@@ -201,5 +200,4 @@ extension TagsContent {
       inputText = String(inputText.prefix(upper))
     }
   }
-
 }

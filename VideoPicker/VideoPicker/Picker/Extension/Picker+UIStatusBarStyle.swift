@@ -9,7 +9,6 @@
 import UIKit
 
 extension UIStatusBarStyle {
-
   init(style: UserInterfaceStyle) {
     switch style {
     case .light:

@@ -12,7 +12,6 @@ import UIKit
 // MARK: - AnyImageNavigationController
 
 open class AnyImageNavigationController: UINavigationController {
-
   private var hasOverrideGeneratingDeviceOrientation = false
 
   open weak var trackDelegate: ImageKitDataTrackDelegate?
@@ -21,23 +20,23 @@ open class AnyImageNavigationController: UINavigationController {
 
   open var enableForceUpdate = false
 
-  open override var childForStatusBarHidden: UIViewController? {
+  override open var childForStatusBarHidden: UIViewController? {
     topViewController
   }
 
-  open override var childForStatusBarStyle: UIViewController? {
+  override open var childForStatusBarStyle: UIViewController? {
     topViewController
   }
 
-  open override var shouldAutorotate: Bool {
+  override open var shouldAutorotate: Bool {
     topViewController?.shouldAutorotate ?? false
   }
 
-  open override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
+  override open var supportedInterfaceOrientations: UIInterfaceOrientationMask {
     topViewController?.supportedInterfaceOrientations ?? [.portrait]
   }
 
-  open override var preferredInterfaceOrientationForPresentation: UIInterfaceOrientation {
+  override open var preferredInterfaceOrientationForPresentation: UIInterfaceOrientation {
     topViewController?.preferredInterfaceOrientationForPresentation ?? .portrait
   }
 }
@@ -45,7 +44,6 @@ open class AnyImageNavigationController: UINavigationController {
 // MARK: DataTrackObserver
 
 extension AnyImageNavigationController: DataTrackObserver {
-
   func track(page: AnyImagePage, state: AnyImagePageState) {
     trackDelegate?.dataTrack(page: page, state: state)
   }
@@ -56,7 +54,6 @@ extension AnyImageNavigationController: DataTrackObserver {
 }
 
 extension AnyImageNavigationController {
-
   func beginGeneratingDeviceOrientationNotifications() {
     if !UIDevice.current.isGeneratingDeviceOrientationNotifications {
       hasOverrideGeneratingDeviceOrientation = true

@@ -9,7 +9,6 @@
 import AVFoundation
 
 struct CaptureWhiteBalance: Equatable {
-
   var temperature: Float
   var tint: Float
 

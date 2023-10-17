@@ -35,7 +35,7 @@ struct VideoFileGenerator {
 
       let thumbnail = UIImage(data: compressedData)
       return thumbnail
-    } catch let error {
+    } catch {
       Logger.log(error: error)
       return nil
     }

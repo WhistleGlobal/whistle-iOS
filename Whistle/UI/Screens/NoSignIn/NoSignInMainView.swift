@@ -299,7 +299,7 @@ struct NoSignInMainView: View {
         Task {
           if !apiViewModel.noSignInContentList.isEmpty {
             players.removeAll()
-            for _ in 0..<apiViewModel.noSignInContentList.count {
+            for _ in 0 ..< apiViewModel.noSignInContentList.count {
               players.append(nil)
             }
             players[currentIndex] =

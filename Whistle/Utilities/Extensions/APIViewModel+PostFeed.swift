@@ -20,7 +20,7 @@ extension APIViewModel: PostFeedProtocol {
         "\(domainURL)/user/post/feed",
         method: .get,
         headers: contentTypeJson)
-        .validate(statusCode: 200...300)
+        .validate(statusCode: 200 ... 300)
         .response { response in
           switch response.result {
           case .success(let data):
@@ -52,7 +52,7 @@ extension APIViewModel: PostFeedProtocol {
         "\(domainURL)/user/\(userId)/post/feed",
         method: .get,
         headers: contentTypeJson)
-        .validate(statusCode: 200...300)
+        .validate(statusCode: 200 ... 300)
         .response { response in
           switch response.result {
           case .success(let data):
@@ -88,7 +88,7 @@ extension APIViewModel: PostFeedProtocol {
         "\(domainURL)/user/post/bookmark",
         method: .get,
         headers: contentTypeJson)
-        .validate(statusCode: 200...300)
+        .validate(statusCode: 200 ... 300)
         .response { response in
           switch response.result {
           case .success(let data):
@@ -119,7 +119,7 @@ extension APIViewModel: PostFeedProtocol {
       "\(domainURL)/content/content-list",
       method: .get,
       headers: contentTypeJson)
-      .validate(statusCode: 200...300)
+      .validate(statusCode: 200 ... 300)
       .response { response in
         switch response.result {
         case .success(let data):
@@ -168,7 +168,7 @@ extension APIViewModel: PostFeedProtocol {
         "\(domainURL)/user/post/suspend-list",
         method: .get,
         headers: contentTypeJson)
-        .validate(statusCode: 200...300)
+        .validate(statusCode: 200 ... 300)
         .response { response in
           switch response.result {
           case .success(let data):
@@ -197,7 +197,7 @@ extension APIViewModel: PostFeedProtocol {
         "\(domainURL)/action/\(contentId)/bookmark",
         method: .post,
         headers: contentTypeXwwwForm)
-        .validate(statusCode: 200...300)
+        .validate(statusCode: 200 ... 300)
         .response { response in
           switch response.result {
           case .success(let data):
@@ -217,7 +217,7 @@ extension APIViewModel: PostFeedProtocol {
         "\(domainURL)/action/\(contentId)/bookmark",
         method: .delete,
         headers: contentTypeXwwwForm)
-        .validate(statusCode: 200...300)
+        .validate(statusCode: 200 ... 300)
         .response { response in
           switch response.result {
           case .success(let data):
@@ -237,7 +237,7 @@ extension APIViewModel: PostFeedProtocol {
         "\(domainURL)/action/\(contentId)/whistle",
         method: .post,
         headers: contentTypeXwwwForm)
-        .validate(statusCode: 200...300)
+        .validate(statusCode: 200 ... 300)
         .response { response in
           switch response.result {
           case .success(let data):
@@ -257,7 +257,7 @@ extension APIViewModel: PostFeedProtocol {
         "\(domainURL)/action/\(contentId)/whistle",
         method: .delete,
         headers: contentTypeXwwwForm)
-        .validate(statusCode: 200...300)
+        .validate(statusCode: 200 ... 300)
         .response { response in
           switch response.result {
           case .success(let data):
@@ -277,7 +277,7 @@ extension APIViewModel: PostFeedProtocol {
         "\(domainURL)/action/\(contentId)/hate",
         method: .post,
         headers: contentTypeXwwwForm)
-        .validate(statusCode: 200...300)
+        .validate(statusCode: 200 ... 300)
         .response { response in
           switch response.result {
           case .success(let data):
@@ -297,7 +297,7 @@ extension APIViewModel: PostFeedProtocol {
         "\(domainURL)/content/\(contentId)",
         method: .delete,
         headers: contentTypeJson)
-        .validate(statusCode: 200...300)
+        .validate(statusCode: 200 ... 300)
         .response { response in
           switch response.result {
           case .success(let data):
@@ -314,9 +314,9 @@ extension APIViewModel: PostFeedProtocol {
   // FIXME: - 중복신고 반환 처리하도록 추후 수정
   func reportContent(userId: Int, contentId: Int, reportReason: Int, reportDescription: String) async -> Int {
     let params: [String: Any] = [
-      "user_id" : "\(userId)",
-      "report_reason" : "\(reportReason)",
-      "report_description" : "\(reportDescription)",
+      "user_id": "\(userId)",
+      "report_reason": "\(reportReason)",
+      "report_description": "\(reportDescription)",
     ]
     return await withCheckedContinuation { continuation in
       AF.request(
@@ -325,7 +325,7 @@ extension APIViewModel: PostFeedProtocol {
         parameters: params,
         encoding: JSONEncoding.default,
         headers: contentTypeJson)
-        .validate(statusCode: 200...300)
+        .validate(statusCode: 200 ... 300)
         .response { response in
           switch response.result {
           case .success(let data):
@@ -341,9 +341,9 @@ extension APIViewModel: PostFeedProtocol {
 
   func reportUser(usedId: Int, contentId: Int, reportReason: Int, reportDescription: String) async -> Int {
     let params: [String: Any] = [
-      "content_id" : "\(contentId)",
-      "report_reason" : "\(reportReason)",
-      "report_description" : "\(reportDescription)",
+      "content_id": "\(contentId)",
+      "report_reason": "\(reportReason)",
+      "report_description": "\(reportDescription)",
     ]
     return await withCheckedContinuation { continuation in
       AF.request(
@@ -352,7 +352,7 @@ extension APIViewModel: PostFeedProtocol {
         parameters: params,
         encoding: JSONEncoding.default,
         headers: contentTypeJson)
-        .validate(statusCode: 200...300)
+        .validate(statusCode: 200 ... 300)
         .response { response in
           switch response.result {
           case .success(let data):
@@ -384,7 +384,7 @@ extension APIViewModel: PostFeedProtocol {
           parameters: dictionary,
           encoding: JSONEncoding.default,
           headers: contentTypeJson)
-          .validate(statusCode: 200..<300)
+          .validate(statusCode: 200 ..< 300)
           .response { response in
             switch response.result {
             case .success(let data):
@@ -405,7 +405,7 @@ extension APIViewModel: PostFeedProtocol {
       "\(domainURL)/content/all-content-list",
       method: .get,
       headers: contentTypeJson)
-      .validate(statusCode: 200..<300)
+      .validate(statusCode: 200 ..< 300)
       .response { response in
         switch response.result {
         case .success(let data):
@@ -441,12 +441,12 @@ extension APIViewModel: PostFeedProtocol {
       }
   }
 
-  func requestUniversalContent(contentId: Int,completion: @escaping () -> Void) {
+  func requestUniversalContent(contentId: Int, completion: @escaping () -> Void) {
     AF.request(
       "\(domainURL)/content/\(contentId)",
       method: .get,
       headers: contentTypeJson)
-      .validate(statusCode: 200...300)
+      .validate(statusCode: 200 ... 300)
       .response { response in
         switch response.result {
         case .success(let data):
@@ -501,7 +501,6 @@ extension APIViewModel: PostFeedProtocol {
               }
               self.contentList.append(tempContent)
             }
-
 
             completion()
           } catch {

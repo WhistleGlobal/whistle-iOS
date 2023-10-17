@@ -9,7 +9,6 @@
 import UIKit
 
 extension CGRect {
-
   func bigger(_ edge: UIEdgeInsets) -> CGRect {
     CGRect(
       x: origin.x - edge.left,

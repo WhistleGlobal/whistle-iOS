@@ -1,5 +1,5 @@
 //
-//  LoggingManager.swift
+//  Logger.swift
 //
 //
 //  Created by Young Bin on 2023/05/27.

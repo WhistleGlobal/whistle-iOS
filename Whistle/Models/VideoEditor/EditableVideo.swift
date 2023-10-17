@@ -155,10 +155,10 @@ struct ThumbnailImage: Identifiable {
   var id: UUID = .init()
   var image: UIImage?
 
-//  init(image: UIImage? = nil) {
+  //  init(image: UIImage? = nil) {
 //    self.image = image?.resize(to: .init(width: 500, height: 700))
   ////    self.image = image?.resize
-//  }
+  //  }
 }
 
 // MARK: - VideoFrames

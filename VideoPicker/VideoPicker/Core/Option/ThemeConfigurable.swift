@@ -18,7 +18,6 @@ public typealias ThemeConfigurable
 // MARK: - ThemeColorConfigurable
 
 public protocol ThemeColorConfigurable {
-
   associatedtype ColorKey: Hashable
 
   subscript(color _: ColorKey) -> UIColor { get set }
@@ -27,7 +26,6 @@ public protocol ThemeColorConfigurable {
 // MARK: - ThemeIconConfigurable
 
 public protocol ThemeIconConfigurable {
-
   associatedtype IconKey: Hashable
 
   subscript(icon _: IconKey) -> UIImage? { get set }
@@ -36,14 +34,12 @@ public protocol ThemeIconConfigurable {
 // MARK: - ThemeStringConfigurable
 
 public protocol ThemeStringConfigurable {
-
   subscript(string _: StringConfigKey) -> String { get set }
 }
 
 // MARK: - ThemeLabelConfigurable
 
 public protocol ThemeLabelConfigurable {
-
   associatedtype LabelKey: Hashable
 
   func configurationLabel(for key: LabelKey, configuration: @escaping ((UILabel) -> Void))
@@ -52,7 +48,6 @@ public protocol ThemeLabelConfigurable {
 // MARK: - ThemeButtonConfigurable
 
 public protocol ThemeButtonConfigurable {
-
   associatedtype ButtonKey: Hashable
 
   func configurationButton(for key: ButtonKey, configuration: @escaping ((UIButton) -> Void))

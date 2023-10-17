@@ -12,7 +12,6 @@ import MobileCoreServices
 // MARK: - FileHelper
 
 struct FileHelper {
-
   static func fileExtension(from dataUTI: CFString) -> String {
     guard
       let declaration = UTTypeCopyDeclaration(dataUTI)?.takeRetainedValue() as? [CFString: Any],
@@ -42,7 +41,6 @@ struct FileHelper {
 }
 
 extension FileHelper {
-
   @discardableResult
   static func write(photoData: Data, fileType: FileType, filename: String = "") -> URL? {
     write(photoData: photoData, utType: fileType.utType, filename: filename)
@@ -77,7 +75,6 @@ extension FileHelper {
 }
 
 extension FileHelper {
-
   static func dateString() -> String {
     let formatter = DateFormatter()
     formatter.dateFormat = "yyyyMMdd-HHmmss-SSS"

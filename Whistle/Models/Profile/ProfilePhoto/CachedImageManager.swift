@@ -13,7 +13,6 @@ import UIKit
 // MARK: - CachedImageManager
 
 actor CachedImageManager {
-
   private let imageManager = PHCachingImageManager()
 
   private var imageContentMode = PHImageContentMode.aspectFit
@@ -24,7 +23,7 @@ actor CachedImageManager {
     case failed
   }
 
-  private var cachedAssetIdentifiers = [String : Bool]()
+  private var cachedAssetIdentifiers = [String: Bool]()
 
   private lazy var requestOptions: PHImageRequestOptions = {
     let options = PHImageRequestOptions()

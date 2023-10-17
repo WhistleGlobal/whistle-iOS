@@ -78,7 +78,7 @@ extension AespaPhotoContext: PhotoContext {
       do {
         let photoFile = try await self.capturePhotoWithError()
         completionHandler(.success(photoFile))
-      } catch let error {
+      } catch {
         Logger.log(error: error)
         completionHandler(.failure(error))
       }

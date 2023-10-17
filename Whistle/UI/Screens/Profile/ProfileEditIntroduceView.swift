@@ -11,7 +11,6 @@ import SwiftUI
 // MARK: - ProfileEditIntroduceView
 
 struct ProfileEditIntroduceView: View {
-
   @Environment(\.dismiss) var dismiss
   @Binding var showToast: Bool
   @EnvironmentObject var apiViewModel: APIViewModel
@@ -78,12 +77,10 @@ struct ProfileEditIntroduceView: View {
 }
 
 extension ProfileEditIntroduceView {
-
   // Function to keep text length in limits
   func limitText(_ upper: Int) {
     if introduce.count > upper {
       introduce = String(introduce.prefix(upper))
     }
   }
-
 }

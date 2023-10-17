@@ -13,7 +13,6 @@ typealias PermissionCompletion = (Permission.Status) -> Void
 // MARK: - Permission
 
 enum Permission: Equatable {
-
   case photos
   case camera
   case microphone
@@ -42,7 +41,6 @@ enum Permission: Equatable {
 }
 
 extension Permission {
-
   var localizedTitleKey: StringConfigKey {
     switch self {
     case .photos:
@@ -69,9 +67,7 @@ extension Permission {
 // MARK: Permission.Status
 
 extension Permission {
-
   enum Status: Equatable {
-
     case notDetermined
     case denied
     case authorized

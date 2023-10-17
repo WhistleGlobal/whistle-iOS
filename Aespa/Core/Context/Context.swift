@@ -1,5 +1,5 @@
 //
-//  File.swift
+//  Context.swift
 //
 //
 //  Created by 이영빈 on 2023/06/24.
@@ -283,6 +283,7 @@ public protocol PhotoContext {
   func custom(_ setting: AVCapturePhotoSettings) -> PhotoContextType
 
   // MARK: - Utilities
+
   /// Asynchronously fetches a specified number of `PhotoAsset` instances from local album.
   ///
   /// - Parameter limit: The maximum number of photo files to fetch.

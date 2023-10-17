@@ -32,15 +32,16 @@ extension AssetPickerViewController {
         showEditor(image, identifier: asset.identifier, tag: indexPath.item)
       } else {
         view.hud.show(whiteText: manager.options.theme[string: .loading])
-        let options = _PhotoFetchOptions(sizeMode: .preview(manager.options.largePhotoMaxWidth)) { progress, _, _, _ in
-          DispatchQueue.main.async {
-            _print("Downloading photo from iCloud: \(progress)")
-            self.view.hud
-              .show(
-                whiteText: self.manager.options
-                  .theme[string: .pickerDownloadingFromiCloud] + "\(Int(progress * 100))%")
+        let options =
+          _PhotoFetchOptions(sizeMode: .preview(manager.options.largePhotoMaxWidth)) { progress, _, _, _ in
+            DispatchQueue.main.async {
+              _print("Downloading photo from iCloud: \(progress)")
+              self.view.hud
+                .show(
+                  whiteText: self.manager.options
+                    .theme[string: .pickerDownloadingFromiCloud] + "\(Int(progress * 100))%")
+            }
           }
-        }
         manager.requestPhoto(for: asset.phAsset, options: options) { [weak self] result in
           guard let self else { return }
           DispatchQueue.main.async {

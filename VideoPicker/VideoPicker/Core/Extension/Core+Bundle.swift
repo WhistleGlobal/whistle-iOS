@@ -10,7 +10,6 @@ import Foundation
 
 // #if !ANYIMAGEKIT_ENABLE_SPM
 extension Bundle {
-
   private class _BundleClass { }
 
   static let anyImageKitCore: Bundle = {

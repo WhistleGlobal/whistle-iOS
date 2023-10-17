@@ -11,14 +11,12 @@ import UIKit
 // MARK: - PickerOptionsConfigurable
 
 public protocol PickerOptionsConfigurable {
-
   var childrenConfigurable: [PickerOptionsConfigurable] { get }
   func update(options: PickerOptionsInfo)
   func updateChildrenConfigurable(options: PickerOptionsInfo)
 }
 
 extension PickerOptionsConfigurable {
-
   var childrenConfigurable: [PickerOptionsConfigurable] {
     []
   }
@@ -35,7 +33,6 @@ extension PickerOptionsConfigurable {
 }
 
 extension PickerOptionsConfigurable where Self: UIViewController {
-
   var childrenConfigurable: [PickerOptionsConfigurable] {
     preferredChildrenConfigurable
   }
@@ -46,7 +43,6 @@ extension PickerOptionsConfigurable where Self: UIViewController {
 }
 
 extension PickerOptionsConfigurable where Self: UIView {
-
   var childrenConfigurable: [PickerOptionsConfigurable] {
     preferredChildrenConfigurable
   }
@@ -57,7 +53,6 @@ extension PickerOptionsConfigurable where Self: UIView {
 }
 
 extension PickerOptionsConfigurable where Self: UICollectionViewCell {
-
   var childrenConfigurable: [PickerOptionsConfigurable] {
     preferredChildrenConfigurable
   }
@@ -68,7 +63,6 @@ extension PickerOptionsConfigurable where Self: UICollectionViewCell {
 }
 
 extension PickerOptionsConfigurable where Self: UITableViewCell {
-
   var childrenConfigurable: [PickerOptionsConfigurable] {
     preferredChildrenConfigurable
   }

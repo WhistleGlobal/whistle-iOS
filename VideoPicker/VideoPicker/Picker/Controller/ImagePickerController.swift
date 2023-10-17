@@ -108,7 +108,7 @@ open class ImagePickerController: AnyImageNavigationController {
     }
   }
 
-  open override func viewDidDisappear(_: Bool) {
+  override open func viewDidDisappear(_: Bool) {
     super.viewDidDisappear(true)
     imagePickerClosedSubject?.send(false)
   }

@@ -9,7 +9,6 @@
 import UIKit
 
 public enum Palette {
-
   public static var primary: UIColor {
     UIColor.color(hex: 0x56BF6A)
   }

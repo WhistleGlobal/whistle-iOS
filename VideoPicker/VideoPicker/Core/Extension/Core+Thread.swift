@@ -9,7 +9,6 @@
 import Foundation
 
 extension Thread {
-
   static func runOnMain(_ task: @escaping () -> Void) {
     if Thread.isMainThread {
       task()

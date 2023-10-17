@@ -1,5 +1,5 @@
 //
-//  APIViewModel+ProfileProtocol.swift
+//  APIViewModel+Profile.swift
 //  Whistle
 //
 //  Created by ChoiYujin on 9/8/23.
@@ -16,7 +16,7 @@ extension APIViewModel: ProfileProtocol {
         "\(domainURL)/user/profile",
         method: .get,
         headers: contentTypeJson)
-        .validate(statusCode: 200...500)
+        .validate(statusCode: 200 ... 500)
         .responseDecodable(of: Profile.self) { response in
           switch response.result {
           case .success(let success):
@@ -33,9 +33,9 @@ extension APIViewModel: ProfileProtocol {
 
   func updateMyProfile() async -> ProfileEditIDView.InputValidationStatus {
     let params = [
-      "user_name" : myProfile.userName,
-      "introduce" : myProfile.introduce,
-      "country" : "\(Locale.current.region?.identifier ?? "KR")",
+      "user_name": myProfile.userName,
+      "introduce": myProfile.introduce,
+      "country": "\(Locale.current.region?.identifier ?? "KR")",
     ]
     return await withCheckedContinuation { continuation in
       AF.request(
@@ -43,7 +43,7 @@ extension APIViewModel: ProfileProtocol {
         method: .put,
         parameters: params,
         headers: contentTypeXwwwForm)
-        .validate(statusCode: 200..<500)
+        .validate(statusCode: 200 ..< 500)
         .response { response in
           switch response.result {
           case .success:
@@ -66,7 +66,7 @@ extension APIViewModel: ProfileProtocol {
         "\(domainURL)/user/\(userId)/profile",
         method: .get,
         headers: contentTypeJson)
-        .validate(statusCode: 200...300)
+        .validate(statusCode: 200 ... 300)
         .responseDecodable(of: UserProfile.self) { response in
           switch response.result {
           case .success(let success):
@@ -86,7 +86,7 @@ extension APIViewModel: ProfileProtocol {
         "\(domainURL)/user/whistle/count",
         method: .get,
         headers: contentTypeJson)
-        .validate(statusCode: 200..<300) // Validate success status codes
+        .validate(statusCode: 200 ..< 300) // Validate success status codes
         .response { response in
           switch response.result {
           case .success(let data):
@@ -124,7 +124,7 @@ extension APIViewModel: ProfileProtocol {
         "\(domainURL)/user/\(userId)/whistle/count",
         method: .get,
         headers: contentTypeJson)
-        .validate(statusCode: 200..<300)
+        .validate(statusCode: 200 ..< 300)
         .response { response in
           switch response.result {
           case .success(let data):
@@ -159,7 +159,7 @@ extension APIViewModel: ProfileProtocol {
         "\(domainURL)/user/follow-list",
         method: .get,
         headers: contentTypeJson)
-        .validate(statusCode: 200...300)
+        .validate(statusCode: 200 ... 300)
         .responseData { response in
           switch response.result {
           case .success(let data):
@@ -184,7 +184,7 @@ extension APIViewModel: ProfileProtocol {
         "\(domainURL)/user/\(userId)/follow-list",
         method: .get,
         headers: contentTypeXwwwForm)
-        .validate(statusCode: 200...300)
+        .validate(statusCode: 200 ... 300)
         .response { response in
           switch response.result {
           case .success(let data):
@@ -208,14 +208,14 @@ extension APIViewModel: ProfileProtocol {
   }
 
   func isAvailableUsername() async -> Bool {
-    let params = ["user_name" : myProfile.userName]
+    let params = ["user_name": myProfile.userName]
     return await withUnsafeContinuation { continuation in
       AF.request(
         "\(domainURL)/user/check-username",
         method: .get,
         parameters: params,
         headers: contentTypeJson)
-        .validate(statusCode: 200...300)
+        .validate(statusCode: 200 ... 300)
         .response { response in
           switch response.result {
           case .success:
@@ -235,7 +235,7 @@ extension APIViewModel: ProfileProtocol {
         "\(domainURL)/user/profile/image",
         method: .delete,
         headers: contentTypeXwwwForm)
-        .validate(statusCode: 200...300)
+        .validate(statusCode: 200 ... 300)
         .responseData { response in
           switch response.result {
           case .success:
@@ -255,7 +255,7 @@ extension APIViewModel: ProfileProtocol {
         "\(domainURL)/action/\(userId)/follow",
         method: .post,
         headers: contentTypeXwwwForm)
-        .validate(statusCode: 200...300)
+        .validate(statusCode: 200 ... 300)
         .responseData { response in
           switch response.result {
           case .success:
@@ -275,7 +275,7 @@ extension APIViewModel: ProfileProtocol {
         "\(domainURL)/action/\(userId)/follow",
         method: .delete,
         headers: contentTypeXwwwForm)
-        .validate(statusCode: 200...300)
+        .validate(statusCode: 200 ... 300)
         .responseData { response in
           switch response.result {
           case .success:
@@ -294,7 +294,7 @@ extension APIViewModel: ProfileProtocol {
       "\(domainURL)/user/created-at",
       method: .get,
       headers: contentTypeXwwwForm)
-      .validate(statusCode: 200...300)
+      .validate(statusCode: 200 ... 300)
       .responseData { response in
         switch response.result {
         case .success(let data):
@@ -323,7 +323,7 @@ extension APIViewModel: ProfileProtocol {
 
   func rebokeAppleToken() async {
     let params = [
-      "refresh_token" : "\(keychain.get("refresh_token") ?? "")",
+      "refresh_token": "\(keychain.get("refresh_token") ?? "")",
     ]
     log("\(keychain.get("refresh_token") ?? "")")
     return await withCheckedContinuation { continuation in
@@ -332,7 +332,7 @@ extension APIViewModel: ProfileProtocol {
         method: .post,
         parameters: params,
         headers: contentTypeXwwwForm)
-        .validate(statusCode: 200...300)
+        .validate(statusCode: 200 ... 300)
         .response { response in
           switch response.result {
           case .success(let data):

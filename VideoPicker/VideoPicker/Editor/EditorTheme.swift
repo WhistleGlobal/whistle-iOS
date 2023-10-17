@@ -12,7 +12,6 @@ import UIKit
 
 /// UI Theme for Editor
 public final class EditorTheme: ThemeConfigurable {
-
   /// Custom color storage
   private var colors: [ColorConfigKey: UIColor] = [:]
 
@@ -65,9 +64,7 @@ public final class EditorTheme: ThemeConfigurable {
 // MARK: EditorTheme.ColorConfigKey
 
 extension EditorTheme {
-
   public enum ColorConfigKey: Hashable {
-
     /// Main Color
     case primary
 
@@ -83,9 +80,7 @@ extension EditorTheme {
 // MARK: EditorTheme.IconConfigKey
 
 extension EditorTheme {
-
   public enum IconConfigKey: String, Hashable {
-
     /// 25*25
     case checkMark = "CheckMark"
     /// 25*25
@@ -134,15 +129,14 @@ extension EditorTheme {
 }
 
 // MARK: - String
-extension EditorTheme {
 
+extension EditorTheme {
   private func defaultStringValue(for key: StringConfigKey) -> String {
     BundleHelper.localizedString(key: key.rawValue, module: .editor)
   }
 }
 
 extension StringConfigKey {
-
   public static let editorBrush = StringConfigKey(rawValue: "BRUSH")
   public static let editorCrop = StringConfigKey(rawValue: "CROP")
   public static let editorMosaic = StringConfigKey(rawValue: "MOSAIC")
@@ -154,8 +148,8 @@ extension StringConfigKey {
 }
 
 // MARK: - Label
-extension EditorTheme {
 
+extension EditorTheme {
   struct LabelConfigObject: Equatable {
     let key: LabelConfigKey
     let configuration: (UILabel) -> Void
@@ -166,7 +160,6 @@ extension EditorTheme {
   }
 
   public enum LabelConfigKey: Hashable {
-
     case cropOption
     case trash
     case videoTimeline
@@ -174,8 +167,8 @@ extension EditorTheme {
 }
 
 // MARK: - Button
-extension EditorTheme {
 
+extension EditorTheme {
   struct ButtonConfigObject: Equatable {
     let key: ButtonConfigKey
     let configuration: (UIButton) -> Void
@@ -186,7 +179,6 @@ extension EditorTheme {
   }
 
   public enum ButtonConfigKey: Hashable {
-
     case back
     case cancel
     case done

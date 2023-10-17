@@ -14,7 +14,7 @@ struct ToolsSectionView: View {
   @StateObject var filtersVM = FiltersViewModel()
   @ObservedObject var videoPlayer: VideoPlayerManager
   @ObservedObject var editorVM: EditorViewModel
-//  @State var bottomSheetPosition: BottomSheetPosition = .hidden
+  //  @State var bottomSheetPosition: BottomSheetPosition = .hidden
   private let columns = Array(repeating: GridItem(.flexible()), count: 4)
   var body: some View {
     ZStack {

@@ -11,14 +11,12 @@ import UIKit
 // MARK: - Cacheable
 
 protocol Cacheable {
-
   var module: CacheModule { get }
   var path: String { get }
   var workQueue: DispatchQueue { get }
 }
 
 extension Cacheable {
-
   /// 删除磁盘数据
   /// - Parameter key: 标识符
   func removeData(forKey key: String) {

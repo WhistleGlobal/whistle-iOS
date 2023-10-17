@@ -9,7 +9,6 @@
 import Photos
 
 extension PHFetchResult where ObjectType == PHAssetCollection {
-
   func objects() -> [PHAssetCollection] {
     var results = [PHAssetCollection]()
     enumerateObjects { object, _, _ in
@@ -20,7 +19,6 @@ extension PHFetchResult where ObjectType == PHAssetCollection {
 }
 
 extension PHFetchResult where ObjectType == PHCollection {
-
   func objects() -> [PHCollection] {
     var results = [PHCollection]()
     enumerateObjects { object, _, _ in
@@ -31,7 +29,6 @@ extension PHFetchResult where ObjectType == PHCollection {
 }
 
 extension PHFetchResult where ObjectType == PHAsset {
-
   func objects() -> [PHAsset] {
     var results = [PHAsset]()
     enumerateObjects { object, _, _ in

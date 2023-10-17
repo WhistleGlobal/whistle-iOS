@@ -13,8 +13,8 @@ import Foundation
 public final class ImageEditorCache { }
 
 // MARK: - Public static function
-extension ImageEditorCache {
 
+extension ImageEditorCache {
   /// Delete disk cache file by identifier.
   /// - Parameter identifier: Cache identifier
   public static func removeCache(identifier: String) {
@@ -47,8 +47,8 @@ extension ImageEditorCache {
 }
 
 // MARK: - Private static function
-extension ImageEditorCache {
 
+extension ImageEditorCache {
   private static func removeImageCache(model: PhotoEditingStack.Edit, mainFilePath: String) {
     var pathList = model.brushData.map { $0.drawnPath.uuid }
     pathList.append(contentsOf: model.mosaicData.flatMap { $0.drawnPaths.map { $0.uuid } })
@@ -73,8 +73,8 @@ extension ImageEditorCache {
 }
 
 // MARK: - Deprecated
-extension ImageEditorCache {
 
+extension ImageEditorCache {
   /// Delete disk cache file by identifier.
   /// - Parameter id: Cache identifier
   @available(

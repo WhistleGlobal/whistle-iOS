@@ -9,7 +9,6 @@
 import Foundation
 
 extension AnyImagePage {
-
   public static let editorPhoto: AnyImagePage = "ANYIMAGEKIT_PAGE_EDITOR_PHOTO"
 
   public static let editorVideo: AnyImagePage = "ANYIMAGEKIT_PAGE_EDITOR_VIDEO"
@@ -18,8 +17,8 @@ extension AnyImagePage {
 }
 
 // MARK: - Deprecated
-extension AnyImagePage {
 
+extension AnyImagePage {
   @available(
     *,
     deprecated,

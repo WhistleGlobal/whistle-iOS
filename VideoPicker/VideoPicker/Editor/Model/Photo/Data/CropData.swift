@@ -9,7 +9,6 @@
 import UIKit
 
 struct CropData: Codable, Equatable {
-
   var cropOptionIdx = 0
   var didCrop = false
   var rect: CGRect = .zero

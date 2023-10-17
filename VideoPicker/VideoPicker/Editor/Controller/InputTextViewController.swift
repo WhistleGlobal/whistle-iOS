@@ -11,7 +11,6 @@ import UIKit
 // MARK: - InputTextViewController
 
 final class InputTextViewController: AnyImageViewController {
-
   private lazy var coverImageView: UIImageView = {
     let view = UIImageView(image: coverImage)
     view.contentMode = .scaleAspectFill
@@ -69,7 +68,8 @@ final class InputTextViewController: AnyImageViewController {
     view.tintColor = options.theme[color: .primary]
     let color = options.textColors[data.colorIdx]
     view.textColor = data.isTextSelected ? color.subColor : color.color
-    view.frame = CGRect(x: hInset, y: 0, width: UIScreen.main.bounds.width-hInset*4, height: lineHeight+vInset*2) // 预设
+    view
+      .frame = CGRect(x: hInset, y: 0, width: UIScreen.main.bounds.width - hInset * 4, height: lineHeight + vInset * 2) // 预设
     view.textContainerInset = UIEdgeInsets.zero
     view.textContainer.lineFragmentPadding = 0
     return view
@@ -104,6 +104,7 @@ final class InputTextViewController: AnyImageViewController {
     modalPresentationStyle = .fullScreen
   }
 
+  @available(*, unavailable)
   required init?(coder _: NSCoder) {
     fatalError("init(coder:) has not been implemented")
   }
@@ -207,7 +208,7 @@ final class InputTextViewController: AnyImageViewController {
           maker.bottom.equalToSuperview().offset(-40)
         }
       } else {
-        maker.bottom.equalToSuperview().offset(-buttonOffset-20)
+        maker.bottom.equalToSuperview().offset(-buttonOffset - 20)
       }
       maker.height.equalTo(40)
     }
@@ -242,8 +243,8 @@ final class InputTextViewController: AnyImageViewController {
 }
 
 // MARK: - Target
-extension InputTextViewController {
 
+extension InputTextViewController {
   @objc
   private func cancelButtonTapped(_: UIButton) {
     context.action(.textCancel)
@@ -263,8 +264,8 @@ extension InputTextViewController {
 }
 
 // MARK: - Private
-extension InputTextViewController {
 
+extension InputTextViewController {
   /// 设置蒙层
   private func setupMaskLayer(_ height: CGFloat = 0) {
     let height = height == 0 ? textCoverView.bounds.height : height
@@ -303,13 +304,17 @@ extension InputTextViewController {
         byRoundingCorners: [.topLeft, .topRight, .bottomLeft],
         cornerRadii: CGSize(width: radius, height: radius))
       let cropBezier1 = UIBezierPath(
-        roundedRect: CGRect(x: lastLineWidth, y: height-lastLineHeight, width: width-lastLineWidth, height: lastLineHeight),
+        roundedRect: CGRect(
+          x: lastLineWidth,
+          y: height - lastLineHeight,
+          width: width - lastLineWidth,
+          height: lastLineHeight),
         byRoundingCorners: .topLeft,
         cornerRadii: CGSize(width: radius, height: radius))
       bezier.append(cropBezier1)
-      let cropBezier2 = createReversePath(CGPoint(x: lastLineWidth-radius, y: height-radius), radius: radius)
+      let cropBezier2 = createReversePath(CGPoint(x: lastLineWidth - radius, y: height - radius), radius: radius)
       bezier.append(cropBezier2)
-      let cropBezier3 = createReversePath(CGPoint(x: width-radius, y: height-lastLineHeight-radius), radius: radius)
+      let cropBezier3 = createReversePath(CGPoint(x: width - radius, y: height - lastLineHeight - radius), radius: radius)
       bezier.append(cropBezier3)
     } else {
       bezier = UIBezierPath(roundedRect: CGRect(x: 0, y: 0, width: width, height: height), cornerRadius: radius)
@@ -330,7 +335,7 @@ extension InputTextViewController {
     let rect = CGRect(origin: origin, size: CGSize(width: radius, height: radius))
     let cropBezier = UIBezierPath(rect: rect)
     cropBezier.move(to: origin)
-    cropBezier.addArc(withCenter: origin, radius: radius, startAngle: CGFloat.pi/2, endAngle: 0, clockwise: false)
+    cropBezier.addArc(withCenter: origin, radius: radius, startAngle: CGFloat.pi / 2, endAngle: 0, clockwise: false)
     return cropBezier.reversing()
   }
 
@@ -377,7 +382,6 @@ extension InputTextViewController {
 // MARK: UITextViewDelegate
 
 extension InputTextViewController: UITextViewDelegate {
-
   func textViewDidChange(_ textView: UITextView) {
     let line = CGFloat(textView.getSeparatedLines().count)
     let height: CGFloat = max(lineHeight * line, textView.contentSize.height) + vInset * 2
@@ -400,7 +404,6 @@ extension InputTextViewController: UITextViewDelegate {
 // MARK: EditorTextToolViewDelegate
 
 extension InputTextViewController: EditorTextToolViewDelegate {
-
   func textToolView(_: EditorTextToolView, textButtonTapped isSelected: Bool) {
     data.isTextSelected = isSelected
     let color = options.textColors[data.colorIdx]
@@ -422,8 +425,8 @@ extension InputTextViewController: EditorTextToolViewDelegate {
 }
 
 // MARK: - Notification
-extension InputTextViewController {
 
+extension InputTextViewController {
   private func addNotification() {
     NotificationCenter.default.addObserver(
       self,
@@ -451,7 +454,6 @@ extension InputTextViewController {
 }
 
 extension UITextView {
-
   /// 计算行数
   func getSeparatedLines() -> [String] {
     var linesArray: [String] = []
@@ -478,6 +480,5 @@ extension UITextView {
 // MARK: - MyUITextView
 
 private final class MyUITextView: UITextView {
-
   override func scrollRectToVisible(_: CGRect, animated _: Bool) { }
 }

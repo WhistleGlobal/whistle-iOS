@@ -9,7 +9,6 @@
 import Foundation
 
 struct BrushData: Codable, Equatable {
-
   let drawnPath: DrawnPath
 
   init(drawnPath: DrawnPath) {

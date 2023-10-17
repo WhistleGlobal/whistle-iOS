@@ -12,7 +12,6 @@ import UIKit
 
 /// Mosaic option
 public enum EditorMosaicOption: Equatable, Hashable {
-
   /// Default mosaic.
   /// Blurring the original image.
   case `default`
@@ -36,7 +35,6 @@ public enum EditorMosaicOption: Equatable, Hashable {
 // MARK: CaseIterable
 
 extension EditorMosaicOption: CaseIterable {
-
   public static var allCases: [EditorMosaicOption] {
     [.default, .colorful]
   }

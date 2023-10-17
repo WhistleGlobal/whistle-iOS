@@ -11,7 +11,6 @@ import UIKit
 // MARK: - EditorTextToolViewDelegate
 
 protocol EditorTextToolViewDelegate: AnyObject {
-
   func textToolView(_ toolView: EditorTextToolView, textButtonTapped isSelected: Bool)
   func textToolView(_ toolView: EditorTextToolView, colorDidChange idx: Int)
 }
@@ -19,7 +18,6 @@ protocol EditorTextToolViewDelegate: AnyObject {
 // MARK: - EditorTextToolView
 
 final class EditorTextToolView: UIView {
-
   weak var delegate: EditorTextToolViewDelegate?
 
   private var currentIdx = 0
@@ -49,6 +47,7 @@ final class EditorTextToolView: UIView {
     textButton.isSelected = isTextSelected
   }
 
+  @available(*, unavailable)
   required init?(coder _: NSCoder) {
     fatalError("init(coder:) has not been implemented")
   }
@@ -114,8 +113,8 @@ final class EditorTextToolView: UIView {
 }
 
 // MARK: - Target
-extension EditorTextToolView {
 
+extension EditorTextToolView {
   @objc
   private func textButtonTapped(_ sender: UIButton) {
     sender.isSelected = !sender.isSelected

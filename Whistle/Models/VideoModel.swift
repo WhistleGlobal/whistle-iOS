@@ -9,6 +9,7 @@ import AVFoundation
 import Foundation
 
 // MARK: - Video
+
 // FIXME: - API 연동시 Underscore -> lowerCamelCase
 struct Video: Identifiable {
   var id = UUID()

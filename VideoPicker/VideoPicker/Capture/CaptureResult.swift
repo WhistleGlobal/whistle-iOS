@@ -9,7 +9,6 @@
 import Foundation
 
 public struct CaptureResult: Equatable {
-
   /// Local media url. Store in temporary directory.
   /// If you want to keep this file, you should move it to your document directory.
   public let mediaURL: URL

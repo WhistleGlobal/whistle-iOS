@@ -9,7 +9,6 @@
 import UIKit
 
 extension UIImageView {
-
   func setImage(_ image: UIImage, animated: Bool) {
     self.image = image
     if animated {

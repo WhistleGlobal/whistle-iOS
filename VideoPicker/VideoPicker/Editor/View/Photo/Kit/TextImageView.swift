@@ -11,7 +11,6 @@ import UIKit
 // MARK: - TextImageView
 
 final class TextImageView: UIView {
-
   let data: TextData
 
   var isGestureEnded: Bool {
@@ -49,6 +48,7 @@ final class TextImageView: UIView {
     setupView()
   }
 
+  @available(*, unavailable)
   required init?(coder _: NSCoder) {
     fatalError("init(coder:) has not been implemented")
   }
@@ -90,7 +90,6 @@ final class TextImageView: UIView {
 }
 
 extension TextImageView {
-
   public func setActive(_ isActive: Bool) {
     self.isActive = isActive
     rectView.isHidden = !isActive
@@ -107,8 +106,8 @@ extension TextImageView {
 }
 
 // MARK: - Target
-extension TextImageView {
 
+extension TextImageView {
   @objc
   private func checkActive(_ timer: Timer) {
     if self.timer == nil || !isActive {
@@ -128,7 +127,6 @@ extension TextImageView {
 // MARK: TextImageView.Direction
 
 extension TextImageView {
-
   private enum Direction: CaseIterable {
     case origin
     case top

@@ -10,7 +10,6 @@ import Foundation
 import MobileCoreServices
 
 public enum MediaType: Equatable, CustomStringConvertible {
-
   case photo
   case video
   case photoLive

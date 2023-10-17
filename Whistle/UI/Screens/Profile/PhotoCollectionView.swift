@@ -1,5 +1,5 @@
 //
-//  CustomPhotoView.swift
+//  PhotoCollectionView.swift
 //  Whistle
 //
 //  Created by ChoiYujin on 9/5/23.
@@ -11,7 +11,7 @@ import SwiftUI
 // MARK: - PhotoCollectionView
 
 struct PhotoCollectionView: View {
-  @ObservedObject var photoCollection : PhotoCollection
+  @ObservedObject var photoCollection: PhotoCollection
 
   @Environment(\.displayScale) private var displayScale
   private static let itemSize = CGSize(width: UIScreen.width / 4, height: UIScreen.width / 4)
@@ -118,9 +118,10 @@ struct PhotoCollectionView: View {
         LazyVGrid(columns: columns, spacing: 0) {
           ForEach(photoCollection.photoAssets) { asset in
             Button {
-              photoCollection.fetchPhotoByLocalIdentifier(localIdentifier: asset.phAsset?.localIdentifier ?? "") { photo in
-                selectedImage = photo?.photo
-              }
+              photoCollection
+                .fetchPhotoByLocalIdentifier(localIdentifier: asset.phAsset?.localIdentifier ?? "") { photo in
+                  selectedImage = photo?.photo
+                }
             } label: {
               photoItemView(asset: asset)
             }
@@ -145,7 +146,7 @@ struct PhotoCollectionView: View {
           { photo in
             selectedImage = photo?.photo
           }
-        } catch let error {
+        } catch {
           log(error)
         }
       }
@@ -158,7 +159,6 @@ struct PhotoCollectionView: View {
 }
 
 extension PhotoCollectionView {
-
   private func photoItemView(asset: PhotoAsset) -> some View {
     PhotoItemView(asset: asset, cache: photoCollection.cache, imageSize: imageSize)
       .frame(width: Self.itemSize.width, height: Self.itemSize.height)
@@ -415,4 +415,3 @@ struct AlbumListView: View {
     .padding(.horizontal, 16)
   }
 }
-

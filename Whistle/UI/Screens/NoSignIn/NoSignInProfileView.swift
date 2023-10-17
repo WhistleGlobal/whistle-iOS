@@ -14,7 +14,6 @@ import SwiftUI
 // MARK: - NoSignInProfileView
 
 struct NoSignInProfileView: View {
-
   @EnvironmentObject var userAuth: UserAuth
   @EnvironmentObject var tabbarModel: TabbarModel
   @EnvironmentObject var apiViewModel: APIViewModel

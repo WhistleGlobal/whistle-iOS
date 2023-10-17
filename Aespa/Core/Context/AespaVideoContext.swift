@@ -108,7 +108,7 @@ extension AespaVideoContext: VideoContext {
 
         isRecording = false
         onCompelte(.success(videoFilePath))
-      } catch let error {
+      } catch {
         Logger.log(error: error)
         onCompelte(.failure(error))
       }

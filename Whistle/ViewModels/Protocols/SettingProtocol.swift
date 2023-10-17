@@ -8,7 +8,6 @@
 import Foundation
 
 protocol SettingProtocol {
-
   func requestNotiSetting() async
   func updateSettingWhistle(newSetting: Bool) async
   func updateSettingFollow(newSetting: Bool) async

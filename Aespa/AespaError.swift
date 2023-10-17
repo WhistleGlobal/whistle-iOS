@@ -1,5 +1,5 @@
 //
-//  VideoRecorderError.swift
+//  AespaError.swift
 //  YellowIsTheNewBlack
 //
 //  Created by 이영빈 on 2022/06/07.

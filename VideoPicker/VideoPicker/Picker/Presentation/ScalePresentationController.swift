@@ -9,7 +9,6 @@
 import UIKit
 
 final class ScalePresentationController: UIPresentationController {
-
   var maskAlpha: CGFloat {
     get {
       maskView.alpha

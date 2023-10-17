@@ -11,7 +11,6 @@ import Photos
 // MARK: - PhotoCollection
 
 class PhotoCollection: NSObject, ObservableObject {
-
   @Published var photoAssets = PhotoAssetCollection(PHFetchResult<PHAsset>())
   @Published var albums: [AlbumModel] = []
 
@@ -131,7 +130,7 @@ class PhotoCollection: NSObject, ObservableObject {
 
       await refreshPhotoAssets()
 
-    } catch let error {
+    } catch {
       logger.error("Error adding image to photo library: \(error.localizedDescription)")
       throw PhotoCollectionError.addImageError(error)
     }
@@ -151,7 +150,7 @@ class PhotoCollection: NSObject, ObservableObject {
 
       await refreshPhotoAssets()
 
-    } catch let error {
+    } catch {
       logger.error("Error removing all photos from the album: \(error.localizedDescription)")
       throw PhotoCollectionError.removeAllError(error)
     }
@@ -176,7 +175,7 @@ class PhotoCollection: NSObject, ObservableObject {
 
       await refreshPhotoAssets()
 
-    } catch let error {
+    } catch {
       logger.error("Error removing all photos from the album: \(error.localizedDescription)")
       throw PhotoCollectionError.removeAllError(error)
     }
@@ -268,10 +267,6 @@ class PhotoCollection: NSObject, ObservableObject {
     }
   }
 
-
-
-
-
   private static func getAlbum(identifier: String) -> PHAssetCollection? {
     let fetchOptions = PHFetchOptions()
     let collections = PHAssetCollection.fetchAssetCollections(withLocalIdentifiers: [identifier], options: fetchOptions)
@@ -298,7 +293,7 @@ class PhotoCollection: NSObject, ObservableObject {
         let createAlbumRequest = PHAssetCollectionChangeRequest.creationRequestForAssetCollection(withTitle: name)
         collectionPlaceholder = createAlbumRequest.placeholderForCreatedAssetCollection
       }
-    } catch let error {
+    } catch {
       logger.error("Error creating album in photo library: \(error.localizedDescription)")
       throw PhotoCollectionError.createAlbumError(error)
     }
@@ -402,7 +397,6 @@ class PhotoCollection: NSObject, ObservableObject {
     self.albums = albums
   }
 
-
   func fetchPhotoByLocalIdentifier(localIdentifier: String, completion: @escaping (Photo?) -> Void) {
     let fetchResult: PHFetchResult = PHAsset.fetchAssets(withLocalIdentifiers: [localIdentifier], options: nil)
 
@@ -435,7 +429,6 @@ class PhotoCollection: NSObject, ObservableObject {
 // MARK: PHPhotoLibraryChangeObserver
 
 extension PhotoCollection: PHPhotoLibraryChangeObserver {
-
   func photoLibraryDidChange(_ changeInstance: PHChange) {
     Task { @MainActor in
       guard let changes = changeInstance.changeDetails(for: self.photoAssets.fetchResult) else { return }

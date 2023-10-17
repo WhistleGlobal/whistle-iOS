@@ -12,7 +12,6 @@ import SwiftUI
 // MARK: - AccessView
 
 struct AccessView: View {
-
   @EnvironmentObject var tabbarModel: TabbarModel
   @State var showAlert = false
   @State var opacity = 0.1
@@ -157,8 +156,8 @@ struct AccessView: View {
           if UIApplication.shared.canOpenURL(url) {
             UIApplication.shared.open(url)
           }
-        })
-        ,secondaryButton: .cancel())
+        }),
+        secondaryButton: .cancel())
     }
     .opacity(opacity)
     .onAppear {

@@ -1,5 +1,5 @@
 //
-//  Content.swift
+//  MainContent.swift
 //  Whistle
 //
 //  Created by ChoiYujin on 9/9/23.
@@ -9,7 +9,6 @@ import AVFoundation
 import Foundation
 
 class MainContent: Hashable, ObservableObject {
-
   // MARK: Lifecycle
 
   init(

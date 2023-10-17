@@ -80,4 +80,3 @@ struct GalleryView_Previews: PreviewProvider {
     GalleryView(mediaType: .constant(.video), contentViewModel: .init())
   }
 }
-

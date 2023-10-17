@@ -11,7 +11,6 @@ import UIKit
 // MARK: - BlurredMask
 
 struct BlurredMask {
-
   let paths: [DrawnPath]
   let scale: CGFloat
   let blurImage: UIImage
@@ -26,14 +25,13 @@ struct BlurredMask {
 // MARK: GraphicsDrawing
 
 extension BlurredMask: GraphicsDrawing {
-
   func draw(in context: CGContext, size: CGSize) {
     guard !paths.isEmpty else { return }
     guard
       let cgLayer = CGLayer(context, size: size, auxiliaryInfo: nil),
       let layerContext = cgLayer.context
     else {
-      assert(false, "Failed to create CGLayer")
+      assertionFailure("Failed to create CGLayer")
       return
     }
 
@@ -46,7 +44,7 @@ extension BlurredMask: GraphicsDrawing {
 
     paths.forEach { path in
       layerContext.saveGState()
-      layerContext.scaleBy(x: scale , y: scale)
+      layerContext.scaleBy(x: scale, y: scale)
       path.draw(in: layerContext, size: size)
       layerContext.restoreGState()
     }

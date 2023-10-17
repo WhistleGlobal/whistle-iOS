@@ -9,7 +9,6 @@ import Kingfisher
 import SwiftUI
 
 struct ProfileReportView: View {
-
   @Environment(\.dismiss) var dismiss
   @EnvironmentObject var apiViewModel: APIViewModel
 

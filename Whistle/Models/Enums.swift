@@ -10,7 +10,6 @@ import Foundation
 // MARK: - UserReportReason
 
 enum UserReportReason: String, CaseIterable {
-
   case cyberbullying = "권리 침해 또는 사이버 괴롭힘"
   case identityTheft = "명의 도용"
   case violentThreat = "폭력적 위협"
@@ -37,7 +36,6 @@ enum UserReportReason: String, CaseIterable {
 // MARK: - PostReportReason
 
 enum PostReportReason: String, CaseIterable {
-
   case hatredOrAbuse = "증오 또는 학대하는 콘텐츠"
   case harmfulBehavior = "유해하거나 위험한 행위"
   case spamOrConfusion = "스팸 또는 혼동을 야기하는 콘텐츠"

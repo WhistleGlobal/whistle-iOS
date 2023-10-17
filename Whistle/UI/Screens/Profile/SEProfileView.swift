@@ -15,7 +15,6 @@ import SwiftUI
 // MARK: - SEProfileView
 
 struct SEProfileView: View {
-
   // MARK: Internal
 
   @State var isShowingBottomSheet = false
@@ -110,7 +109,9 @@ struct SEProfileView: View {
                   MyContentListView(currentIndex: index)
                     .environmentObject(apiViewModel)
                 } label: {
-                  videoThumbnailView(thumbnailUrl: content.thumbnailUrl ?? "", viewCount: content.contentViewCount ?? 0)
+                  videoThumbnailView(
+                    thumbnailUrl: content.thumbnailUrl ?? "",
+                    viewCount: content.contentViewCount ?? 0)
                 }
               }
             }
@@ -133,7 +134,7 @@ struct SEProfileView: View {
               GridItem(.flexible()),
               GridItem(.flexible()),
             ], spacing: 20) {
-              ForEach(Array(apiViewModel.bookmark.enumerated()), id: \.element) { index ,content in
+              ForEach(Array(apiViewModel.bookmark.enumerated()), id: \.element) { index, content in
 
                 NavigationLink {
                   MyBookmarkView(currentIndex: index)
@@ -292,7 +293,6 @@ struct SEProfileView: View {
 }
 
 extension SEProfileView {
-
   @ViewBuilder
   func profileInfo() -> some View {
     VStack(spacing: 0) {
@@ -343,7 +343,7 @@ extension SEProfileView {
             .font(.system(size: 10, weight: .semibold))
             .scaleEffect(whistleFollowerTextScale)
         }
-        Rectangle().frame(width: 1 , height: .infinity).foregroundColor(.white)
+        Rectangle().frame(width: 1, height: .infinity).foregroundColor(.white)
         NavigationLink {
           FollowView()
             .environmentObject(apiViewModel)
@@ -453,7 +453,6 @@ extension SEProfileView {
 }
 
 extension SEProfileView {
-
   @ViewBuilder
   func bottomSheetRowWithIcon(
     systemName: String,
@@ -530,7 +529,7 @@ extension SEProfileView {
     switch -offsetY {
     case ..<0:
       return 16
-    case 0..<28:
+    case 0 ..< 28:
       return 16 + (16 * (offsetY / 28))
     default:
       return 0
@@ -541,7 +540,7 @@ extension SEProfileView {
     switch -offsetY {
     case ..<0:
       return 32
-    case 0..<28:
+    case 0 ..< 28:
       return 32 + (32 * (offsetY / 28))
     default:
       return 0
@@ -552,7 +551,7 @@ extension SEProfileView {
     switch -offsetY {
     case ..<0:
       return 28
-    case 0..<28:
+    case 0 ..< 28:
       return 28 + offsetY
     default:
       return 0
@@ -563,7 +562,7 @@ extension SEProfileView {
     switch -offsetY {
     case ..<0:
       return 56
-    case 0..<68:
+    case 0 ..< 68:
       return 56 + (56 * (offsetY / 68))
     default:
       return 0
@@ -574,7 +573,7 @@ extension SEProfileView {
     switch -offsetY {
     case ..<68:
       return 42
-    case 68..<126:
+    case 68 ..< 126:
       return 42 + (42 * ((offsetY + 68) / 58))
     default:
       return 0
@@ -585,7 +584,7 @@ extension SEProfileView {
     switch -offsetY {
     case ..<122:
       return 1
-    case 68..<126:
+    case 68 ..< 126:
       return 1 - abs((offsetY + 68) / 58)
     default:
       return 0
@@ -596,7 +595,7 @@ extension SEProfileView {
     switch -offsetY {
     case ..<126:
       return 36
-    case 126..<146:
+    case 126 ..< 146:
       return 28 + (28 * ((offsetY + 126) / 20))
     default:
       return 0
@@ -607,7 +606,7 @@ extension SEProfileView {
     switch -offsetY {
     case ..<126:
       return 114
-    case 126..<146:
+    case 126 ..< 146:
       return 79 + (79 * ((offsetY + 126) / 20))
     default:
       return 0
@@ -618,7 +617,7 @@ extension SEProfileView {
     switch -offsetY {
     case ..<126:
       return 1
-    case 126..<146:
+    case 126 ..< 146:
       return 1 - abs((offsetY + 126) / 20)
     default:
       return 0
@@ -629,7 +628,7 @@ extension SEProfileView {
     switch -offsetY {
     case ..<146:
       return 20
-    case 146..<202:
+    case 146 ..< 202:
       return 20 + (20 * ((offsetY + 146) / 56))
     default:
       return 0
@@ -640,7 +639,7 @@ extension SEProfileView {
     switch -offsetY {
     case ..<146:
       return 1
-    case 146..<202:
+    case 146 ..< 202:
       return 1 - abs((offsetY + 146) / 56)
     default:
       return 0
@@ -651,7 +650,7 @@ extension SEProfileView {
     switch -offsetY {
     case ..<146:
       return 0
-    case 146..<202:
+    case 146 ..< 202:
       return 32 * ((offsetY + 146) / 56)
     case 202...:
       return -32
@@ -664,7 +663,7 @@ extension SEProfileView {
     switch -offsetY {
     case ..<146:
       return 16
-    case 146..<202:
+    case 146 ..< 202:
       return 8 + (8 * ((offsetY + 146) / 56))
     case 202...:
       return 0
@@ -677,7 +676,7 @@ extension SEProfileView {
     switch -offsetY {
     case ..<146:
       return 48
-    case 146..<202:
+    case 146 ..< 202:
       return 48 + (48 * ((offsetY + 146) / 56))
     case 202...:
       return 0

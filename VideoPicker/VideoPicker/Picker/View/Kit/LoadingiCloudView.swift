@@ -11,7 +11,6 @@ import UIKit
 // MARK: - LoadingiCloudView
 
 final class LoadingiCloudView: UIView {
-
   private lazy var effectView: UIVisualEffectView = {
     let effect = UIBlurEffect(style: .light)
     let view = UIVisualEffectView(effect: effect)
@@ -47,6 +46,7 @@ final class LoadingiCloudView: UIView {
     setupView()
   }
 
+  @available(*, unavailable)
   required init?(coder _: NSCoder) {
     fatalError("init(coder:) has not been implemented")
   }
@@ -80,7 +80,6 @@ final class LoadingiCloudView: UIView {
 // MARK: PickerOptionsConfigurable
 
 extension LoadingiCloudView: PickerOptionsConfigurable {
-
   func update(options: PickerOptionsInfo) {
     tipsLabel.text = options.theme[string: .pickerDownloadingFromiCloud]
     imageView.image = options.theme[icon: .iCloud]
@@ -92,8 +91,8 @@ extension LoadingiCloudView: PickerOptionsConfigurable {
 }
 
 // MARK: - Function
-extension LoadingiCloudView {
 
+extension LoadingiCloudView {
   func reset() {
     setProgress(0)
     isHidden = true

@@ -14,7 +14,6 @@ import UIKit
 /// One is no background color, the text color is main color.
 /// The other is that the background color is main color, and the text color is sub color(usually is white).
 public struct EditorTextColor: Equatable, Hashable {
-
   /// Main color
   public let color: UIColor
 

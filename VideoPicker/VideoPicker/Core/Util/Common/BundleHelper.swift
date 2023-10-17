@@ -11,7 +11,6 @@ import UIKit
 // MARK: - BundleHelper
 
 struct BundleHelper {
-
   static var appName: String {
     if let info = Bundle.main.localizedInfoDictionary {
       if let appName = info["CFBundleDisplayName"] as? String { return appName }
@@ -29,10 +28,9 @@ struct BundleHelper {
 }
 
 // MARK: - Module
+
 extension BundleHelper {
-
   enum Module: String, Equatable {
-
     case core = "Core"
 
 //        #if ANYIMAGEKIT_ENABLE_PICKER
@@ -76,8 +74,8 @@ extension BundleHelper {
 }
 
 // MARK: - Styled Image
-extension BundleHelper {
 
+extension BundleHelper {
   static func image(named: String, style: UserInterfaceStyle? = nil, module: Module) -> UIImage? {
     let nameStyled = styledName(named, style: style)
     return UIImage(named: nameStyled, in: bundle(for: module), compatibleWith: nil)
@@ -98,8 +96,8 @@ extension BundleHelper {
 }
 
 // MARK: - Localized String
-extension BundleHelper {
 
+extension BundleHelper {
   static func localizedString(key: String, module: Module) -> String {
     localizedString(key: key, value: nil, table: module.rawValue, bundle: bundle(for: module))
   }

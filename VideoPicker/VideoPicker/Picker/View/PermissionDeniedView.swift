@@ -11,7 +11,6 @@ import UIKit
 // MARK: - PermissionDeniedView
 
 final class PermissionDeniedView: UIView {
-
   private lazy var label: UILabel = {
     let view = UILabel(frame: .zero)
     view.textAlignment = .center
@@ -30,6 +29,7 @@ final class PermissionDeniedView: UIView {
     setupView()
   }
 
+  @available(*, unavailable)
   required init?(coder _: NSCoder) {
     fatalError("init(coder:) has not been implemented")
   }
@@ -49,8 +49,8 @@ final class PermissionDeniedView: UIView {
 }
 
 // MARK: - Target
-extension PermissionDeniedView {
 
+extension PermissionDeniedView {
   @objc
   private func settingsButtonTapped(_: UIButton) {
     guard let url = URL(string: UIApplication.openSettingsURLString) else { return }
@@ -61,7 +61,6 @@ extension PermissionDeniedView {
 // MARK: PickerOptionsConfigurable
 
 extension PermissionDeniedView: PickerOptionsConfigurable {
-
   func update(options: PickerOptionsInfo) {
     label.textColor = options.theme[color: .whiteText]
     label.text = String(format: options.theme[string: Permission.photos.localizedAlertMessageKey], BundleHelper.appName)

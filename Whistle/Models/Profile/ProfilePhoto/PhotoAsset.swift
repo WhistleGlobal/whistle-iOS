@@ -50,7 +50,7 @@ struct PhotoAsset: Identifiable {
           let request = PHAssetChangeRequest(for: phAsset)
           request.isFavorite = isFavorite
         }
-      } catch (let error) {
+      } catch {
         logger.error("Failed to change isFavorite: \(error.localizedDescription)")
       }
     }
@@ -63,7 +63,7 @@ struct PhotoAsset: Identifiable {
         PHAssetChangeRequest.deleteAssets([phAsset] as NSArray)
       }
       logger.debug("PhotoAsset asset deleted: \(index ?? -1)")
-    } catch (let error) {
+    } catch {
       logger.error("Failed to delete photo: \(error.localizedDescription)")
     }
   }
@@ -72,7 +72,7 @@ struct PhotoAsset: Identifiable {
 // MARK: Equatable
 
 extension PhotoAsset: Equatable {
-  static func ==(lhs: PhotoAsset, rhs: PhotoAsset) -> Bool {
+  static func == (lhs: PhotoAsset, rhs: PhotoAsset) -> Bool {
     (lhs.identifier == rhs.identifier) && (lhs.isFavorite == rhs.isFavorite)
   }
 }

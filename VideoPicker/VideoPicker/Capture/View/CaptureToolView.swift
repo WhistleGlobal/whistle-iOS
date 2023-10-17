@@ -11,7 +11,6 @@ import UIKit
 // MARK: - CaptureToolView
 
 final class CaptureToolView: UIView {
-
   private(set) lazy var captureButton: CaptureButton = {
     let view = CaptureButton(frame: .zero, options: options)
     view.limitInterval = options.videoMaximumDuration
@@ -45,6 +44,7 @@ final class CaptureToolView: UIView {
     setupView()
   }
 
+  @available(*, unavailable)
   required init?(coder _: NSCoder) {
     fatalError("init(coder:) has not been implemented")
   }
@@ -93,8 +93,8 @@ final class CaptureToolView: UIView {
 }
 
 // MARK: - Animation
-extension CaptureToolView {
 
+extension CaptureToolView {
   func rotate(to orientation: DeviceOrientation, animated: Bool) {
     let duration = animated ? 0.25 : 0
     let timingParameters = UICubicTimingParameters(animationCurve: .easeInOut)

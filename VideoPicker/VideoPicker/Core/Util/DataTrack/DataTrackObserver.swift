@@ -9,7 +9,6 @@
 import Foundation
 
 protocol DataTrackObserver: AnyObject {
-
   func track(page: AnyImagePage, state: AnyImagePageState)
   func track(event: AnyImageEvent, userInfo: [AnyImageEventUserInfoKey: Any])
 }

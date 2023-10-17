@@ -110,7 +110,6 @@ struct GlassBottomSheet: View {
 }
 
 extension GlassBottomSheet {
-
   @ViewBuilder
   func bottomSheetRowWithIcon(
     systemName: String,

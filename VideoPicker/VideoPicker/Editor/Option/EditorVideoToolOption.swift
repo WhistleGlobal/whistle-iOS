@@ -12,12 +12,10 @@ import Foundation
 
 /// Video tool option
 public enum EditorVideoToolOption: Equatable, CaseIterable {
-
   case clip
 }
 
 extension EditorVideoToolOption {
-
   var iconKey: EditorTheme.IconConfigKey {
     switch self {
     case .clip:
@@ -29,7 +27,6 @@ extension EditorVideoToolOption {
 // MARK: CustomStringConvertible
 
 extension EditorVideoToolOption: CustomStringConvertible {
-
   public var description: String {
     switch self {
     case .clip:

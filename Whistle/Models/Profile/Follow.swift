@@ -10,7 +10,6 @@ import Foundation
 // MARK: - Follow
 
 class Follow: Decodable {
-
   // MARK: Lifecycle
 
   init(
@@ -51,7 +50,6 @@ class Follow: Decodable {
 // MARK: - UserFollow
 
 class UserFollow: Decodable {
-
   // MARK: Lifecycle
 
   init(
@@ -84,7 +82,6 @@ class UserFollow: Decodable {
 // MARK: - FollowingData
 
 class FollowingData: Decodable {
-
   enum CodingKeys: String, CodingKey {
     case followingId = "following_id"
     case userName = "user_name"
@@ -107,7 +104,6 @@ class FollowingData: Decodable {
 // MARK: - FollowerData
 
 class FollowerData: Decodable {
-
   // MARK: Lifecycle
 
   init(followerId: Int, userName: String, profileImg: String?, isFollowed: Bool) {
@@ -143,7 +139,6 @@ class FollowerData: Decodable {
 // MARK: - UserFollowingData
 
 class UserFollowingData: Decodable {
-
   init(followingId: Int, userName: String, profileImg: String?, isFollowed: Bool) {
     self.followingId = followingId
     self.userName = userName

@@ -1,5 +1,5 @@
 //
-//  Extension+View.swift
+//  Extension+Int.swift
 //  Whistle
 //
 //  Created by 박상원 on 2023/09/11.

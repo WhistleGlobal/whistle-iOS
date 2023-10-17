@@ -11,7 +11,6 @@ import Foundation
 // MARK: - AssetDisableCheckRule
 
 public protocol AssetDisableCheckRule {
-
   /// Disable current asset
   /// - Parameters:
   ///   - asset: Current asset
@@ -28,7 +27,6 @@ public protocol AssetDisableCheckRule {
 // MARK: - VideoDurationDisableCheckRule
 
 public struct VideoDurationDisableCheckRule: AssetDisableCheckRule {
-
   public let minDuration: TimeInterval
   public let maxDuration: TimeInterval
 
@@ -51,7 +49,6 @@ public struct VideoDurationDisableCheckRule: AssetDisableCheckRule {
 // MARK: - PhotoOrVideoDisableCheckRule
 
 public struct PhotoOrVideoDisableCheckRule: AssetDisableCheckRule {
-
   public let photoCount: Int
   public let videoCount: Int
 

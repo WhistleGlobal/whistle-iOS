@@ -9,7 +9,6 @@
 import Foundation
 
 extension AnyImagePage {
-
   public static let pickerAlbum: AnyImagePage = "ANYIMAGEKIT_PAGE_PICKER_ALBUM"
 
   public static let pickerAsset: AnyImagePage = "ANYIMAGEKIT_PAGE_PICKER_ASSET"
@@ -18,8 +17,8 @@ extension AnyImagePage {
 }
 
 // MARK: - Deprecated
-extension AnyImagePage {
 
+extension AnyImagePage {
   @available(
     *,
     deprecated,

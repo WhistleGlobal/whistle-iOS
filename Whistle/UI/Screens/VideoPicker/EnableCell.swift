@@ -8,7 +8,6 @@
 import UIKit
 
 final class EnableCell: UITableViewCell {
-
   private(set) lazy var titleLabel: UILabel = {
     let view = UILabel(frame: .zero)
     view.font = UIFont.systemFont(ofSize: 15, weight: .regular)

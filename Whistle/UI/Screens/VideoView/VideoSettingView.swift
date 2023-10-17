@@ -1,5 +1,5 @@
 //
-//  SettingView.swift
+//  VideoSettingView.swift
 //  TestCamera
 //
 //  Created by ChoiYujin on 10/11/23.

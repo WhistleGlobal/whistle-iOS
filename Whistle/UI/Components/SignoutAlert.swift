@@ -10,7 +10,6 @@ import SwiftUI
 // MARK: - SignoutAlert
 
 struct SignoutAlert: View {
-
   let cancelAction: () -> Void
   let signOutAction: () -> Void
 

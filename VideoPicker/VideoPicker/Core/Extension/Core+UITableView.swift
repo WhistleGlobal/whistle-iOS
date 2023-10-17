@@ -9,7 +9,6 @@
 import UIKit
 
 extension UITableView {
-
   func registerCell(_ type: (some UITableViewCell).Type) {
     let identifier = String(describing: type.self)
     register(type, forCellReuseIdentifier: identifier)

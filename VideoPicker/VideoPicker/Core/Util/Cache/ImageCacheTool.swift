@@ -12,7 +12,6 @@ import UIKit
 // MARK: - ImageCacheTool
 
 struct ImageCacheTool: Cacheable {
-
   let module: CacheModule
   let path: String
   let workQueue: DispatchQueue
@@ -36,7 +35,6 @@ struct ImageCacheTool: Cacheable {
 }
 
 extension ImageCacheTool {
-
   /// 删除所有缓存
   func clearAll() {
     cache.clearDiskCache()
@@ -68,8 +66,8 @@ extension ImageCacheTool {
 }
 
 // MARK: - Private
-extension ImageCacheTool {
 
+extension ImageCacheTool {
   /// 将图片写入磁盘
   /// - Parameters:
   ///   - image: 图片
@@ -82,7 +80,7 @@ extension ImageCacheTool {
   /// 从磁盘读取图片
   /// - Parameter key: 标识符
   private func retrieveImageInDisk(forKey key: String) -> UIImage? {
-    var image: UIImage? = nil
+    var image: UIImage?
     let semaphore = DispatchSemaphore(value: 0)
     cache.retrieveImage(forKey: key) { result in
       switch result {

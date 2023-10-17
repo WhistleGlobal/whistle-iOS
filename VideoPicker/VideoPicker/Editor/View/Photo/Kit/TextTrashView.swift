@@ -9,7 +9,6 @@
 import UIKit
 
 final class TextTrashView: UIView {
-
   enum State {
     case idle
     case remove
@@ -44,6 +43,7 @@ final class TextTrashView: UIView {
     setupView()
   }
 
+  @available(*, unavailable)
   required init?(coder _: NSCoder) {
     fatalError("init(coder:) has not been implemented")
   }

@@ -11,7 +11,6 @@ import UIKit
 // MARK: - TextData
 
 final class TextData: Codable {
-
   var frame: CGRect = .zero
   var finalFrame: CGRect = .zero
 
@@ -28,7 +27,6 @@ final class TextData: Codable {
 }
 
 extension TextData {
-
   var image: UIImage {
     UIImage(data: imageData, scale: UIScreen.main.scale) ?? UIImage()
   }
@@ -37,7 +35,6 @@ extension TextData {
 // MARK: Equatable
 
 extension TextData: Equatable {
-
   static func == (lhs: TextData, rhs: TextData) -> Bool {
     lhs.frame == rhs.frame
       && lhs.text == rhs.text

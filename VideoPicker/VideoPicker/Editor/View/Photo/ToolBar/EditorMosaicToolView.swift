@@ -11,7 +11,6 @@ import UIKit
 // MARK: - EditorMosaicToolViewDelegate
 
 protocol EditorMosaicToolViewDelegate: AnyObject {
-
   func mosaicToolView(_ mosaicToolView: EditorMosaicToolView, mosaicDidChange idx: Int)
 
   func mosaicToolViewUndoButtonTapped(_ mosaicToolView: EditorMosaicToolView)
@@ -20,7 +19,6 @@ protocol EditorMosaicToolViewDelegate: AnyObject {
 // MARK: - EditorMosaicToolView
 
 final class EditorMosaicToolView: UIView {
-
   weak var delegate: EditorMosaicToolViewDelegate?
 
   private(set) var currentIdx = 0
@@ -47,6 +45,7 @@ final class EditorMosaicToolView: UIView {
     setupView()
   }
 
+  @available(*, unavailable)
   required init?(coder _: NSCoder) {
     fatalError("init(coder:) has not been implemented")
   }
@@ -115,8 +114,8 @@ final class EditorMosaicToolView: UIView {
 }
 
 // MARK: - Public function
-extension EditorMosaicToolView {
 
+extension EditorMosaicToolView {
   func setMosaicIdx(_ idx: Int) {
     guard idx < mosaicButtons.count else { return }
     mosaicButtonTapped(mosaicButtons[idx])
@@ -124,8 +123,8 @@ extension EditorMosaicToolView {
 }
 
 // MARK: - Private function
-extension EditorMosaicToolView {
 
+extension EditorMosaicToolView {
   private func updateState() {
     let option = options.mosaicOptions[currentIdx]
     switch option {
@@ -144,8 +143,8 @@ extension EditorMosaicToolView {
 }
 
 // MARK: - Target
-extension EditorMosaicToolView {
 
+extension EditorMosaicToolView {
   @objc
   private func mosaicButtonTapped(_ sender: UIButton) {
     if currentIdx != sender.tag {

@@ -13,7 +13,7 @@ struct Tags: View {
   let onDelete: () -> Void
 
   var body: some View {
-    HStack(alignment: .center,spacing: 8) {
+    HStack(alignment: .center, spacing: 8) {
       Text("#\(titleKey)")
         .fontSystem(fontDesignSystem: .body1_KO)
         .frame(minWidth: UIScreen.getWidth(28))

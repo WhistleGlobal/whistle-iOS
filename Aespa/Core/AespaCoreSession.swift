@@ -1,5 +1,5 @@
 //
-//  AespaCoreSessionManager.swift
+//  AespaCoreSession.swift
 //
 //
 //  Created by 이영빈 on 2023/06/02.
@@ -32,7 +32,7 @@ class AespaCoreSession: AVCaptureSession {
         }
 
         try tuner.tune(self)
-      } catch let error {
+      } catch {
         Logger.log(error: error, message: "in \(tuner)")
         onComplete(.failure(error))
       }
@@ -53,7 +53,7 @@ class AespaCoreSession: AVCaptureSession {
         }
 
         try tuner.tune(device)
-      } catch let error {
+      } catch {
         Logger.log(error: error, message: "in \(tuner)")
         onComplete(.failure(error))
       }
@@ -69,7 +69,7 @@ class AespaCoreSession: AVCaptureSession {
 
         try tuner.tune(connection)
         onComplete(.success(()))
-      } catch let error {
+      } catch {
         Logger.log(error: error, message: "in \(tuner)")
         onComplete(.failure(error))
       }
@@ -85,7 +85,7 @@ class AespaCoreSession: AVCaptureSession {
 
         try processor.process(output)
         onComplete(.success(()))
-      } catch let error {
+      } catch {
         Logger.log(error: error, message: "in \(processor)")
         onComplete(.failure(error))
       }

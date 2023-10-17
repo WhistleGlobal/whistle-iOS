@@ -13,7 +13,7 @@ class PhotoAssetCollection: RandomAccessCollection {
   private(set) var fetchResult: PHFetchResult<PHAsset>
   private var iteratorIndex = 0
 
-  private var cache = [Int : PhotoAsset]()
+  private var cache = [Int: PhotoAsset]()
 
   var startIndex: Int { 0 }
   var endIndex: Int { fetchResult.count }
@@ -43,7 +43,6 @@ class PhotoAssetCollection: RandomAccessCollection {
 // MARK: Sequence, IteratorProtocol
 
 extension PhotoAssetCollection: Sequence, IteratorProtocol {
-
   func next() -> PhotoAsset? {
     if iteratorIndex >= count {
       return nil

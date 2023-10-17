@@ -8,7 +8,6 @@
 import SwiftUI
 
 extension Font {
-
   // MARK: Public
 
   public static func registerFonts(fontName: String) {
@@ -46,7 +45,6 @@ extension Font {
 
     CTFontManagerRegisterGraphicsFont(font, &error)
   }
-
 }
 
 // MARK: - Font Family Name

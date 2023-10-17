@@ -9,7 +9,6 @@
 import UIKit
 
 extension UIImage {
-
   static func image(size: CGSize, backgroundColor: UIColor) -> UIImage? {
     UIGraphicsBeginImageContextWithOptions(size, true, 1.0)
     defer {

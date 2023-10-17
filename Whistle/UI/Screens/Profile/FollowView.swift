@@ -8,7 +8,6 @@
 import Kingfisher
 import SwiftUI
 
-
 // MARK: - profileTabStatus
 
 enum profileTabStatus: String {
@@ -19,7 +18,6 @@ enum profileTabStatus: String {
 // MARK: - FollowView
 
 struct FollowView: View {
-
   // MARK: Internal
 
   @Environment(\.dismiss) var dismiss

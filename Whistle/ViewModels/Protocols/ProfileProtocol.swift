@@ -8,7 +8,6 @@
 import Alamofire
 
 protocol ProfileProtocol {
-
   func requestMyProfile() async
   func updateMyProfile() async -> ProfileEditIDView.InputValidationStatus
   func requestUserProfile(userId: Int) async
@@ -21,5 +20,4 @@ protocol ProfileProtocol {
   func followUser(userId: Int) async
   func unfollowUser(userId: Int) async
   func rebokeAppleToken() async
-
 }

@@ -9,7 +9,6 @@
 import Photos
 
 extension PickerManager {
-
   private func createFetchOptions() -> PHFetchOptions {
     let fetchOptions = PHFetchOptions()
     if !options.selectOptions.mediaTypes.contains(.video) {

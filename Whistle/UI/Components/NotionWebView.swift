@@ -11,7 +11,6 @@ import UIKit
 import WebKit
 
 struct NotionWebView: UIViewRepresentable {
-
   var urlToLoad: String
   func makeUIView(context _: Context) -> WKWebView {
     guard let url = URL(string: urlToLoad) else {

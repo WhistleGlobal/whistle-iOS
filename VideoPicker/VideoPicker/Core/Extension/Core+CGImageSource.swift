@@ -9,7 +9,6 @@
 import CoreImage
 
 extension CGImageSource {
-
   var size: CGSize {
     if let properties = CGImageSourceCopyPropertiesAtIndex(self, 0, nil) as? [CFString: Any] {
       if

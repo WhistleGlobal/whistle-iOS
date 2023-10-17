@@ -9,7 +9,6 @@
 import UIKit
 
 final class BigButton: UIButton {
-
   let moreInsets: UIEdgeInsets
 
   init(moreInsets: UIEdgeInsets = .zero) {
@@ -17,6 +16,7 @@ final class BigButton: UIButton {
     super.init(frame: .zero)
   }
 
+  @available(*, unavailable)
   required init?(coder _: NSCoder) {
     fatalError("init(coder:) has not been implemented")
   }

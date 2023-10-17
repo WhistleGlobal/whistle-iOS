@@ -9,7 +9,6 @@
 import Foundation
 
 public struct PickerResult: Equatable {
-
   public let assets: [Asset]
   public let useOriginalImage: Bool
 

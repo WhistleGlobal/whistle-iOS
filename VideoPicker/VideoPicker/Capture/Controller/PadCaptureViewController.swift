@@ -12,7 +12,6 @@ import UIKit
 // MARK: - PadCaptureViewControllerDelegate
 
 protocol PadCaptureViewControllerDelegate: AnyObject {
-
   func captureDidCancel(_ capture: PadCaptureViewController)
   func capture(_ capture: PadCaptureViewController, didOutput mediaURL: URL, type: MediaType)
 }
@@ -20,7 +19,6 @@ protocol PadCaptureViewControllerDelegate: AnyObject {
 // MARK: - PadCaptureViewController
 
 final class PadCaptureViewController: AnyImageViewController {
-
   weak var delegate: PadCaptureViewControllerDelegate?
 
   private let options: CaptureOptionsInfo
@@ -30,6 +28,7 @@ final class PadCaptureViewController: AnyImageViewController {
     super.init(nibName: nil, bundle: nil)
   }
 
+  @available(*, unavailable)
   required init?(coder _: NSCoder) {
     fatalError("init(coder:) has not been implemented")
   }
@@ -53,7 +52,6 @@ final class PadCaptureViewController: AnyImageViewController {
 // MARK: UIImagePickerControllerDelegate, UINavigationControllerDelegate
 
 extension PadCaptureViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
-
   func imagePickerControllerDidCancel(_: UIImagePickerController) {
     delegate?.captureDidCancel(self)
   }
@@ -99,8 +97,8 @@ extension PadCaptureViewController: UIImagePickerControllerDelegate, UINavigatio
 }
 
 // MARK: - Private
-extension PadCaptureViewController {
 
+extension PadCaptureViewController {
   private func showPickerController() {
     var mediaTypes: [String] = []
     if options.mediaOptions.contains(.photo) {

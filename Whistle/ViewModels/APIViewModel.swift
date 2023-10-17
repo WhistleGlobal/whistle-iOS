@@ -1,5 +1,5 @@
 //
-//  ProfileViewModel.swift
+//  APIViewModel.swift
 //  Whistle
 //
 //  Created by ChoiYujin on 9/6/23.
@@ -51,13 +51,11 @@ class APIViewModel: ObservableObject {
     reportedContent = []
     userCreatedDate = ""
   }
-
 }
 
 // MARK: - Computed Property
 
 extension APIViewModel {
-
   var idToken: String {
     guard let idTokenKey = keychain.get("id_token") else {
       log("id_Token nil")

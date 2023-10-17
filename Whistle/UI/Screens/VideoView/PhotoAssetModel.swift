@@ -1,5 +1,5 @@
 //
-//  PhotoAsset.swift
+//  PhotoAssetModel.swift
 //
 //
 //  Created by 이영빈 on 2023/07/07.
