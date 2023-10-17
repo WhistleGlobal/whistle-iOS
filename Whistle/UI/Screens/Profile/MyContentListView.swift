@@ -14,7 +14,7 @@ import SwiftUI
 struct MyContentListView: View {
   @Environment(\.dismiss) var dismiss
   @State var currentIndex = 0
-  @State var newId = UUID()
+  @State var newID = UUID()
   @State var playerIndex = 0
   @State var showDialog = false
   @State var showPasteToast = false
@@ -39,19 +39,14 @@ struct MyContentListView: View {
                 }
                 dismiss()
               } label: {
-                Color.clear
-                  .frame(width: 24, height: 24)
-                  .overlay {
-                    Image(systemName: "chevron.backward")
-                      .resizable()
-                      .scaledToFit()
-                      .frame(width: 24, height: 20)
-                      .foregroundColor(.white)
-                  }
+                Image(systemName: "chevron.backward")
+                  .font(.system(size: 20))
+                  .foregroundColor(.white)
+                  .padding(.vertical, 16)
+                  .padding(.trailing, 16)
               }
               Spacer()
             }
-            .frame(height: 52)
             .padding(.top, 54)
             .padding(.horizontal, 16)
             Spacer()
@@ -139,7 +134,7 @@ struct MyContentListView: View {
                   .padding()
                   .rotationEffect(Angle(degrees: -90))
                   .ignoresSafeArea(.all, edges: .top)
-//                KFImage.url(URL(string: content.thumbnailURL ?? ""))
+//                KFImage.url(URL(string: content.thumbnailUrl ?? ""))
 //                  .placeholder {
 //                    Color.black
 //                  }
@@ -154,9 +149,9 @@ struct MyContentListView: View {
             }
           }
           .onReceive(apiViewModel.publisher) { id in
-            newId = id
+            newID = id
           }
-          .id(newId)
+          .id(newID)
         }
         .rotationEffect(Angle(degrees: 90))
         .frame(width: proxy.size.height)
@@ -272,20 +267,15 @@ extension MyContentListView {
           players.removeAll()
           dismiss()
         } label: {
-          Color.clear
-            .frame(width: 24, height: 24)
-            .overlay {
-              Image(systemName: "chevron.backward")
-                .resizable()
-                .scaledToFit()
-                .frame(width: 24, height: 20)
-                .foregroundColor(.white)
-            }
+          Image(systemName: "chevron.backward")
+            .font(.system(size: 20))
+            .foregroundColor(.white)
+            .padding(.vertical, 16)
+            .padding(.trailing, 16)
         }
         Spacer()
       }
-      .frame(height: 52)
-      .padding(.top, 54)
+      .padding(.top, 38)
       Spacer()
       HStack(spacing: 0) {
         VStack(alignment: .leading, spacing: 12) {

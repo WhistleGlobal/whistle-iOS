@@ -225,10 +225,10 @@ struct VideoContentView: View {
               }
             } label: {
               Image(systemName: "xmark")
-                .font(.system(size: 24))
+                .font(.system(size: 20))
                 .foregroundColor(.white)
+                .padding(16)
             }
-            .padding(.leading, 16)
           }
         case .recording:
           EmptyView()
@@ -253,10 +253,10 @@ struct VideoContentView: View {
 //              tabbarModel.tabSelection = .main
             } label: {
               Image(systemName: "xmark")
-                .font(.system(size: 24))
+                .font(.system(size: 20))
                 .foregroundColor(.white)
+                .padding(16)
             }
-            .padding(.leading, 16)
           }
         }
         if buttonState == .completed {
