@@ -376,11 +376,10 @@ struct VideoContentView: View {
       Task {
         let videos: [VideoAsset] = await viewModel.aespaSession.fetchVideoFiles(limit: 1)
         if videos.isEmpty {
+          albumCover = Image("noVideo")
           return
         }
         albumCover = videos[0].thumbnailImage
-//        let video = await viewModel.aespaSession.fetchVideoFiles(limit: 1)[0]
-//        albumCover = video.thumbnailImage
       }
     }
     .onChange(of: scenePhase) { newValue in
