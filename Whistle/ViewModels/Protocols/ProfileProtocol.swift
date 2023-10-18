@@ -20,4 +20,6 @@ protocol ProfileProtocol {
   func followUser(userId: Int) async
   func unfollowUser(userId: Int) async
   func rebokeAppleToken() async
+  func actionBlockUser(userId: Int) async
+  func actionBlockUserCancel(userId: Int) async
 }

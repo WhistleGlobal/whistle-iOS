@@ -11,18 +11,18 @@ class UserProfile: ObservableObject, Codable {
   enum CodingKeys: String, CodingKey {
     case userId = "user_id"
     case userName = "user_name"
-    case email
     case profileImg = "profile_img"
     case introduce
     case status
     case isFollowed = "is_followed"
+    case isBlocked = "is_blocked"
   }
 
   var userId = 0
   var userName = ""
-  var email = ""
   var profileImg: String?
   var introduce: String?
   var status: UserStatus = .active
   var isFollowed = 0
+  var isBlocked = 0
 }

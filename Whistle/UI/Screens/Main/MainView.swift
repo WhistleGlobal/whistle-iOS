@@ -28,7 +28,6 @@ struct MainView: View {
   @EnvironmentObject var universalRoutingModel: UniversalRoutingModel
   @AppStorage("showGuide") var showGuide = true
   @State var viewCount: ViewCount = .init()
-  @State var currentIndex = 0
   @State var playerIndex = 0
   @State var showDialog = false
   @State var showPasteToast = false
@@ -53,15 +52,18 @@ struct MainView: View {
 
   @Binding var mainOpacity: Double
   @Binding var isRootStacked: Bool
+  @State var currentIndex = 0
+  @Binding var refreshCount: Int
 
   var body: some View {
     GeometryReader { proxy in
       TabView(selection: $currentIndex) {
         ForEach(Array(apiViewModel.contentList.enumerated()), id: \.element) { index, content in
           if !players.isEmpty {
-            if let player = players[index] {
+            if let player = players[min(max(0, index), players.count - 1)] {
               Player(player: player)
                 .frame(width: proxy.size.width)
+                .opacity(BlockList.shared.userIds.contains(content.userId ?? 0) ? 0.3 : 1)
                 .onTapGesture(count: 2) {
                   whistleToggle()
                 }
@@ -119,10 +121,40 @@ struct MainView: View {
                       }, set: { newValue in
                         content.whistleCount = newValue
                       }))
+                      .opacity(BlockList.shared.userIds.contains(content.userId ?? 0) ? 0 : 1)
                   }
                   playButton(toPlay: player.rate == 0)
                     .opacity(showPlayButton ? 1 : 0)
                     .allowsHitTesting(false)
+                  if BlockList.shared.userIds.contains(content.userId ?? 0) {
+                    KFImage.url(URL(string: content.thumbnailUrl ?? ""))
+                      .placeholder {
+                        Color.black
+                      }
+                      .resizable()
+                      .scaledToFill()
+                      .tag(index)
+                      .frame(width: proxy.size.width)
+                      .padding()
+                      .rotationEffect(Angle(degrees: -90))
+                      .ignoresSafeArea(.all, edges: .top)
+                      .blur(radius: 30)
+                      .overlay {
+                        VStack {
+                          Image(systemName: "eye.slash.fill")
+                            .font(.system(size: 44))
+                            .foregroundColor(.Gray10)
+                            .padding(.bottom, 26)
+                          Text("차단된 계정의 콘텐츠입니다.")
+                            .fontSystem(fontDesignSystem: .subtitle1_KO)
+                            .foregroundColor(.LabelColor_Primary_Dark)
+                            .padding(.bottom, 12)
+                          Text("차단된 계정의 모든 콘텐츠는 \n회원님의 피드에 노출되지 않습니다.")
+                            .fontSystem(fontDesignSystem: .body2_KO)
+                            .foregroundColor(.LabelColor_Secondary_Dark)
+                        }
+                      }
+                  }
                 }
                 .padding()
                 .rotationEffect(Angle(degrees: -90))
@@ -194,8 +226,9 @@ struct MainView: View {
         }
         if newValue == 1 {
           if !isRootStacked {
-            log("play")
-            player.play()
+            if !BlockList.shared.userIds.contains(apiViewModel.contentList[currentIndex].userId ?? 0) {
+              player.play()
+            }
           }
         } else {
           player.pause()
@@ -254,7 +287,7 @@ struct MainView: View {
     .alert(isPresented: $showUpdate) {
       Alert(
         title: Text("업데이트 알림"),
-        message: Text("Whistle의 새로운 버전이 있습니다. 최신 버전으로 업데이트 해주세요."),
+        message: Text("Whistle의 새로운 버전이 있습니다. 최신 버전으로 ta데이트 해주세요."),
         dismissButton: .default(Text("업데이트"), action: {
           guard let url = URL(string: "itms-apps://itunes.apple.com/app/6463850354") else { return }
           if UIApplication.shared.canOpenURL(url) {
@@ -289,6 +322,21 @@ struct MainView: View {
         }
       }
     }
+    .onChange(of: refreshCount) { _ in
+      players[playerIndex]?.seek(to: .zero)
+      players[playerIndex]?.pause()
+      players[playerIndex] = nil
+      log("REF currentIndex: \(currentIndex)")
+      log("REF playerIndex: \(playerIndex)")
+      log("REF apiViewModel: \(apiViewModel.contentList)")
+      log("REF players: \(players)")
+      setupPlayers()
+      log("REF after Setup currentIndex: \(currentIndex)")
+      log("REF after Setup playerIndex: \(playerIndex)")
+      log("REF after Setup apiViewModel: \(apiViewModel.contentList)")
+      log("REF after Setup players: \(players)")
+      apiViewModel.postFeedPlayerChanged()
+    }
     .onChange(of: currentIndex) { newValue in
       if universalRoutingModel.isUniversalContent {
         return
@@ -301,7 +349,9 @@ struct MainView: View {
       players[playerIndex] = nil
       players[newValue] = AVPlayer(url: URL(string: url)!)
       players[newValue]?.seek(to: .zero)
-      players[newValue]?.play()
+      if !BlockList.shared.userIds.contains(apiViewModel.contentList[newValue].userId ?? 0) {
+        players[newValue]?.play()
+      }
       playerIndex = newValue
       currentVideoUserId = apiViewModel.contentList[newValue].userId ?? 0
       currentVideoContentId = apiViewModel.contentList[newValue].contentId ?? 0
@@ -681,7 +731,9 @@ extension MainView {
         isCurrentVideoWhistled = apiViewModel.contentList[currentIndex].isWhistled
         currentVideoIsBookmarked = apiViewModel.contentList[currentIndex].isBookmarked ?? false
         await player.seek(to: .zero)
-        player.play()
+        if !BlockList.shared.userIds.contains(apiViewModel.contentList[currentIndex].userId ?? 0) {
+          player.play()
+        }
         withAnimation {
           isSplashOn = false
         }

@@ -341,7 +341,7 @@ extension ProfileView {
       .frame(width: profileEditButtonWidth, height: profileEditButtonHeight)
       .padding(.bottom, 24)
       .buttonStyle(ProfileEditButtonStyle())
-      HStack(spacing: 48) {
+      HStack(spacing: 0) {
         VStack(spacing: 4) {
           Text("\(apiViewModel.myWhistleCount)")
             .foregroundColor(Color.LabelColor_Primary_Dark)
@@ -352,6 +352,7 @@ extension ProfileView {
             .fontSystem(fontDesignSystem: .caption_SemiBold)
             .scaleEffect(whistleFollowerTextScale)
         }
+        .hCenter()
         Rectangle().frame(width: 1, height: .infinity).foregroundColor(.white)
         NavigationLink {
           FollowView()
@@ -359,7 +360,7 @@ extension ProfileView {
             .environmentObject(tabbarModel)
         } label: {
           VStack(spacing: 4) {
-            Text("\(apiViewModel.myFollow.followerCount)")
+            Text("\(filteredFollower.count)")
               .foregroundColor(Color.LabelColor_Primary_Dark)
               .fontSystem(fontDesignSystem: .title2_Expanded)
               .scaleEffect(whistleFollowerTextScale)
@@ -368,6 +369,7 @@ extension ProfileView {
               .fontSystem(fontDesignSystem: .caption_SemiBold)
               .scaleEffect(whistleFollowerTextScale)
           }
+          .hCenter()
         }
       }
       .frame(height: whistleFollowerTabHeight)
@@ -694,5 +696,11 @@ extension ProfileView {
   var videoOffset: CGFloat {
     log("\(offsetY < -305 ? 305 : -offsetY)")
     return offsetY < -305 ? 305 : -offsetY
+  }
+}
+
+extension ProfileView {
+  var filteredFollower: [FollowerData] {
+    apiViewModel.myFollow.followerList.filter { !BlockList.shared.userIds.contains($0.followerId) }
   }
 }

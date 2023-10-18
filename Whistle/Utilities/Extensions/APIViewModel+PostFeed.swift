@@ -128,7 +128,7 @@ extension APIViewModel: PostFeedProtocol {
               return
             }
             let jsonArray = try JSONSerialization.jsonObject(with: data, options: []) as? [[String: Any]]
-            self.contentList.removeAll()
+            var tempArray: [MainContent] = []
             for jsonObject in jsonArray ?? [] {
               let tempContent: MainContent = .init()
               tempContent.contentId = jsonObject["content_id"] as? Int
@@ -148,8 +148,9 @@ extension APIViewModel: PostFeedProtocol {
               if self.contentList.count < 2 {
                 tempContent.player = AVPlayer(url: URL(string: tempContent.videoUrl ?? "")!)
               }
-              self.contentList.append(tempContent)
+              tempArray.append(tempContent)
             }
+            self.contentList = tempArray
             completion()
           } catch {
             log("Error parsing JSON: \(error)")
@@ -442,6 +443,7 @@ extension APIViewModel: PostFeedProtocol {
   }
 
   func requestUniversalContent(contentId: Int, completion: @escaping () -> Void) {
+    log("")
     AF.request(
       "\(domainURL)/content/\(contentId)",
       method: .get,
@@ -451,15 +453,14 @@ extension APIViewModel: PostFeedProtocol {
         switch response.result {
         case .success(let data):
           do {
+            log("data : \(data)")
             guard let data else {
               return
             }
             let jsonData = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any]
             self.contentList.removeAll()
-
-            guard let singleContentJson = jsonData?["singleContent"] as? [String: Any] else {
-              return
-            }
+            guard let singleContentJson = jsonData?["finalSingleContentRows"] as? [String: Any] else { return }
+            log("singleContentJson : \(singleContentJson)")
             let singleContent: MainContent = .init()
             singleContent.contentId = singleContentJson["content_id"] as? Int
             singleContent.userId = singleContentJson["user_id"] as? Int
@@ -477,9 +478,7 @@ extension APIViewModel: PostFeedProtocol {
             singleContent.isBookmarked = (singleContentJson["is_bookmarked"] as? Int) == 0 ? false : true
             self.contentList.append(singleContent)
 
-            guard let allContentsJson = jsonData?["allContents"] as? [[String: Any]] else {
-              return
-            }
+            guard let allContentsJson = jsonData?["finalAllContentRows"] as? [[String: Any]] else { return }
             for jsonObject in allContentsJson {
               let tempContent: MainContent = .init()
               tempContent.contentId = jsonObject["content_id"] as? Int
