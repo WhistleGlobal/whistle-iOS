@@ -33,13 +33,17 @@ protocol AespaAssetCollectionRepresentable {
 
 extension PHPhotoLibrary: AespaAssetLibraryRepresentable {
   func fetchAlbum<Collection: AespaAssetCollectionRepresentable>(
-    title: String,
+    title _: String,
     fetchOptions: PHFetchOptions)
     -> Collection?
   {
-    fetchOptions.predicate = NSPredicate(format: "title = %@", title)
+//    fetchOptions.predicate = NSPredicate(format: "title = %@", title)
     let collections = PHAssetCollection.fetchAssetCollections(
-      with: .album, subtype: .any, options: fetchOptions)
+      with: .smartAlbum,
+      subtype: .smartAlbumVideos,
+      options: fetchOptions)
+//    let collections = PHAssetCollection.fetchAssetCollections(
+//      with: .album, subtype: .any, options: fetchOptions)
 
     return collections.firstObject as? Collection
   }

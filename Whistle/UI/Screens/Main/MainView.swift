@@ -218,6 +218,7 @@ struct MainView: View {
               Text("닫기")
                 .fontSystem(fontDesignSystem: .subtitle2_KO)
                 .foregroundColor(Color.LabelColor_Primary_Dark)
+                .frame(width: UIScreen.width - 32, height: 56)
                 .background {
                   glassMorphicView(width: UIScreen.width - 32, height: 56, cornerRadius: 12)
                     .overlay {
@@ -229,7 +230,6 @@ struct MainView: View {
                     }
                 }
             }
-            .frame(width: UIScreen.width - 32, height: 56)
             .padding(.bottom, 32)
           }
           .ignoresSafeArea()
