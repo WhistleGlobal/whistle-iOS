@@ -28,7 +28,6 @@ struct MainView: View {
   @EnvironmentObject var universalRoutingModel: UniversalRoutingModel
   @AppStorage("showGuide") var showGuide = true
   @State var viewCount: ViewCount = .init()
-  @State var currentIndex = 0
   @State var playerIndex = 0
   @State var showDialog = false
   @State var showPasteToast = false
@@ -53,6 +52,7 @@ struct MainView: View {
 
   @Binding var mainOpacity: Double
   @Binding var isRootStacked: Bool
+  @Binding var currentIndex: Int
 
   var body: some View {
     GeometryReader { proxy in
@@ -294,6 +294,14 @@ struct MainView: View {
         return
       }
       guard let url = apiViewModel.contentList[newValue].videoUrl else {
+        return
+      }
+      if newValue == 0 {
+        players[playerIndex]?.seek(to: .zero)
+        players[playerIndex]?.pause()
+        players[playerIndex] = nil
+        setupPlayers()
+        apiViewModel.postFeedPlayerChanged()
         return
       }
       players[playerIndex]?.seek(to: .zero)
