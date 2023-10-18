@@ -115,15 +115,17 @@ struct UserProfileView: View {
     }
     .navigationBarBackButtonHidden()
     .confirmationDialog("", isPresented: $showDialog) {
-      Button(apiViewModel.userProfile.isBlocked == 1 ? "차단 해제" : "차단", role: .destructive) {
-        if apiViewModel.userProfile.isBlocked == 1 {
-          showUnblockAlert = true
-        } else {
-          showBlockAlert = true
+      if apiViewModel.myProfile.userId != userId {
+        Button(apiViewModel.userProfile.isBlocked == 1 ? "차단 해제" : "차단", role: .destructive) {
+          if apiViewModel.userProfile.isBlocked == 1 {
+            showUnblockAlert = true
+          } else {
+            showBlockAlert = true
+          }
         }
-      }
-      Button("신고", role: .destructive) {
-        goReport = true
+        Button("신고", role: .destructive) {
+          goReport = true
+        }
       }
       Button("프로필 URL 복사", role: .none) {
         UIPasteboard.general.setValue(
@@ -240,17 +242,6 @@ extension UserProfileView {
       if apiViewModel.userProfile.isBlocked == 1 {
         Button {
           showUnblockAlert = true
-//          Task {
-//            await apiViewModel.actionBlockUserCancel(userId: userId)
-//            Task {
-//              await apiViewModel.requestUserProfile(userId: userId)
-//              await apiViewModel.requestUserPostFeed(userId: userId)
-//            }
-//            Task {
-//              await apiViewModel.requestUserFollow(userId: userId)
-//              await apiViewModel.requestUserWhistlesCount(userId: userId)
-//            }
-//          }
         } label: {
           unblockButton
         }
