@@ -60,7 +60,7 @@ struct MainView: View {
       TabView(selection: $currentIndex) {
         ForEach(Array(apiViewModel.contentList.enumerated()), id: \.element) { index, content in
           if !players.isEmpty {
-            if let player = players[index] {
+            if let player = players[min(max(0, index), players.count - 1)] {
               Player(player: player)
                 .frame(width: proxy.size.width)
                 .onTapGesture(count: 2) {
@@ -125,7 +125,18 @@ struct MainView: View {
                     .opacity(showPlayButton ? 1 : 0)
                     .allowsHitTesting(false)
                   if BlockList.shared.userIds.contains(content.userId ?? 0) {
-                    Color.black
+                    KFImage.url(URL(string: content.thumbnailUrl ?? ""))
+                      .placeholder {
+                        Color.black
+                      }
+                      .resizable()
+                      .scaledToFill()
+                      .tag(index)
+                      .frame(width: proxy.size.width)
+                      .padding()
+                      .rotationEffect(Angle(degrees: -90))
+                      .ignoresSafeArea(.all, edges: .top)
+                      .blur(radius: 30)
                       .overlay {
                         Text("차단된 유저의 컨텐츠입니다.")
                           .foregroundColor(.LabelColor_Primary_Dark)
@@ -302,7 +313,15 @@ struct MainView: View {
       players[playerIndex]?.seek(to: .zero)
       players[playerIndex]?.pause()
       players[playerIndex] = nil
+      log("REF currentIndex: \(currentIndex)")
+      log("REF playerIndex: \(playerIndex)")
+      log("REF apiViewModel: \(apiViewModel.contentList)")
+      log("REF players: \(players)")
       setupPlayers()
+      log("REF after Setup currentIndex: \(currentIndex)")
+      log("REF after Setup playerIndex: \(playerIndex)")
+      log("REF after Setup apiViewModel: \(apiViewModel.contentList)")
+      log("REF after Setup players: \(players)")
       apiViewModel.postFeedPlayerChanged()
     }
     .onChange(of: currentIndex) { newValue in

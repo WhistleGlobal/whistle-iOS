@@ -128,7 +128,7 @@ extension APIViewModel: PostFeedProtocol {
               return
             }
             let jsonArray = try JSONSerialization.jsonObject(with: data, options: []) as? [[String: Any]]
-            self.contentList.removeAll()
+            var tempArray: [MainContent] = []
             for jsonObject in jsonArray ?? [] {
               let tempContent: MainContent = .init()
               tempContent.contentId = jsonObject["content_id"] as? Int
@@ -148,8 +148,9 @@ extension APIViewModel: PostFeedProtocol {
               if self.contentList.count < 2 {
                 tempContent.player = AVPlayer(url: URL(string: tempContent.videoUrl ?? "")!)
               }
-              self.contentList.append(tempContent)
+              tempArray.append(tempContent)
             }
+            self.contentList = tempArray
             completion()
           } catch {
             log("Error parsing JSON: \(error)")
