@@ -63,6 +63,7 @@ struct MainView: View {
             if let player = players[min(max(0, index), players.count - 1)] {
               Player(player: player)
                 .frame(width: proxy.size.width)
+                .opacity(BlockList.shared.userIds.contains(content.userId ?? 0) ? 0.3 : 1)
                 .onTapGesture(count: 2) {
                   whistleToggle()
                 }
@@ -120,6 +121,7 @@ struct MainView: View {
                       }, set: { newValue in
                         content.whistleCount = newValue
                       }))
+                      .opacity(BlockList.shared.userIds.contains(content.userId ?? 0) ? 0 : 1)
                   }
                   playButton(toPlay: player.rate == 0)
                     .opacity(showPlayButton ? 1 : 0)
@@ -138,8 +140,19 @@ struct MainView: View {
                       .ignoresSafeArea(.all, edges: .top)
                       .blur(radius: 30)
                       .overlay {
-                        Text("차단된 유저의 컨텐츠입니다.")
-                          .foregroundColor(.LabelColor_Primary_Dark)
+                        VStack {
+                          Image(systemName: "eye.slash.fill")
+                            .font(.system(size: 44))
+                            .foregroundColor(.Gray10)
+                            .padding(.bottom, 26)
+                          Text("차단된 계정의 콘텐츠입니다.")
+                            .fontSystem(fontDesignSystem: .subtitle1_KO)
+                            .foregroundColor(.LabelColor_Primary_Dark)
+                            .padding(.bottom, 12)
+                          Text("차단된 계정의 모든 콘텐츠는 \n회원님의 피드에 노출되지 않습니다.")
+                            .fontSystem(fontDesignSystem: .body2_KO)
+                            .foregroundColor(.LabelColor_Secondary_Dark)
+                        }
                       }
                   }
                 }
