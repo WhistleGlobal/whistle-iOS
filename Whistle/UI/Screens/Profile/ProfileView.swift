@@ -341,7 +341,7 @@ extension ProfileView {
       .frame(width: profileEditButtonWidth, height: profileEditButtonHeight)
       .padding(.bottom, 24)
       .buttonStyle(ProfileEditButtonStyle())
-      HStack(spacing: 48) {
+      HStack(spacing: 0) {
         VStack(spacing: 4) {
           Text("\(apiViewModel.myWhistleCount)")
             .foregroundColor(Color.LabelColor_Primary_Dark)
@@ -352,6 +352,7 @@ extension ProfileView {
             .fontSystem(fontDesignSystem: .caption_SemiBold)
             .scaleEffect(whistleFollowerTextScale)
         }
+        .hCenter()
         Rectangle().frame(width: 1, height: .infinity).foregroundColor(.white)
         NavigationLink {
           FollowView()
@@ -368,6 +369,7 @@ extension ProfileView {
               .fontSystem(fontDesignSystem: .caption_SemiBold)
               .scaleEffect(whistleFollowerTextScale)
           }
+          .hCenter()
         }
       }
       .frame(height: whistleFollowerTabHeight)
