@@ -345,4 +345,44 @@ extension APIViewModel: ProfileProtocol {
         }
     }
   }
+
+  func actionBlockUser(userId: Int) async {
+    await withCheckedContinuation { continuation in
+      AF.request(
+        "\(domainURL)/action/\(userId)/block",
+        method: .post,
+        headers: contentTypeXwwwForm)
+        .validate(statusCode: 200 ... 300)
+        .responseData { response in
+          switch response.result {
+          case .success:
+            log("success")
+            continuation.resume()
+          case .failure(let error):
+            log("Request failed with error: \(error)")
+            continuation.resume()
+          }
+        }
+    }
+  }
+
+  func actionBlockUserCancel(userId: Int) async {
+    await withCheckedContinuation { continuation in
+      AF.request(
+        "\(domainURL)/action/\(userId)/block",
+        method: .delete,
+        headers: contentTypeXwwwForm)
+        .validate(statusCode: 200 ... 300)
+        .responseData { response in
+          switch response.result {
+          case .success:
+            log("success")
+            continuation.resume()
+          case .failure(let error):
+            log("Request failed with error: \(error)")
+            continuation.resume()
+          }
+        }
+    }
+  }
 }
