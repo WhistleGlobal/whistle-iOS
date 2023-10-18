@@ -19,8 +19,7 @@ struct TabbarView: View {
   @State var mainOpacity = 1.0
   @State var isRootStacked = false
 
-  @State var currentIndex = 0
-
+  @State var refreshCount = 0
   // upload
   @State private var isCameraAuthorized = false
   @State private var isAlbumAuthorized = false
@@ -38,7 +37,10 @@ struct TabbarView: View {
     ZStack {
       if isAccess {
         NavigationStack {
-          MainView(mainOpacity: $mainOpacity, isRootStacked: $isRootStacked, currentIndex: $currentIndex)
+          MainView(
+            mainOpacity: $mainOpacity,
+            isRootStacked: $isRootStacked,
+            refreshCount: $refreshCount)
             .environmentObject(apiViewModel)
             .environmentObject(tabbarModel)
             .environmentObject(universalRoutingModel)
@@ -204,7 +206,8 @@ extension TabbarView {
                 NavigationUtil.popToRootView()
               } else {
                 apiViewModel.requestContentList {
-                  currentIndex = 0
+                  HapticManager.instance.impact(style: .medium)
+                  refreshCount += 1
                 }
               }
             }

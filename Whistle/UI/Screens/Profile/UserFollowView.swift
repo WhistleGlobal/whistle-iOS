@@ -240,20 +240,12 @@ extension UserFollowView {
   }
 }
 
-// MARK: - BlockedUserList
-
-class BlockedUserList: ObservableObject {
-  private init() { }
-  static let shared = BlockedUserList()
-  @Published var userIds: [Int] = []
-}
-
 extension UserFollowView {
   var filteredFollower: [FollowerData] {
-    userFollower.filter { !BlockedUserList.shared.userIds.contains($0.followerId) }
+    userFollower.filter { !BlockList.shared.userIds.contains($0.followerId) }
   }
 
   var filteredFollowing: [UserFollowingData] {
-    userFollowing.filter { !BlockedUserList.shared.userIds.contains($0.followingId) }
+    userFollowing.filter { !BlockList.shared.userIds.contains($0.followingId) }
   }
 }

@@ -245,10 +245,10 @@ extension FollowView {
 extension FollowView {
 
   var filteredFollower: [FollowerData] {
-    apiViewModel.myFollow.followerList.filter { !BlockedUserList.shared.userIds.contains($0.followerId) }
+    apiViewModel.myFollow.followerList.filter { !BlockList.shared.userIds.contains($0.followerId) }
   }
 
   var filteredFollowing: [FollowingData] {
-    apiViewModel.myFollow.followingList.filter { !BlockedUserList.shared.userIds.contains($0.followingId) }
+    apiViewModel.myFollow.followingList.filter { !BlockList.shared.userIds.contains($0.followingId) }
   }
 }

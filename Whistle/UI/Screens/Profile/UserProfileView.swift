@@ -175,8 +175,8 @@ struct UserProfileView: View {
             showUnblockAlert = false
             Task {
               await apiViewModel.actionBlockUserCancel(userId: userId)
-              BlockedUserList.shared.userIds.append(userId)
-              BlockedUserList.shared.userIds = BlockedUserList.shared.userIds.filter { $0 != userId }
+              BlockList.shared.userIds.append(userId)
+              BlockList.shared.userIds = BlockList.shared.userIds.filter { $0 != userId }
               Task {
                 await apiViewModel.requestUserProfile(userId: userId)
                 await apiViewModel.requestUserPostFeed(userId: userId)
@@ -199,7 +199,7 @@ struct UserProfileView: View {
             showBlockAlert = false
             Task {
               await apiViewModel.actionBlockUser(userId: userId)
-              BlockedUserList.shared.userIds.append(userId)
+              BlockList.shared.userIds.append(userId)
               Task {
                 await apiViewModel.requestUserProfile(userId: userId)
                 await apiViewModel.requestUserPostFeed(userId: userId)

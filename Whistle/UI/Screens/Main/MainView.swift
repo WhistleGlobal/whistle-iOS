@@ -52,7 +52,8 @@ struct MainView: View {
 
   @Binding var mainOpacity: Double
   @Binding var isRootStacked: Bool
-  @Binding var currentIndex: Int
+  @State var currentIndex = 0
+  @Binding var refreshCount: Int
 
   var body: some View {
     GeometryReader { proxy in
@@ -123,6 +124,13 @@ struct MainView: View {
                   playButton(toPlay: player.rate == 0)
                     .opacity(showPlayButton ? 1 : 0)
                     .allowsHitTesting(false)
+                  if BlockList.shared.userIds.contains(content.userId ?? 0) {
+                    Color.black
+                      .overlay {
+                        Text("차단된 유저의 컨텐츠입니다.")
+                          .foregroundColor(.LabelColor_Primary_Dark)
+                      }
+                  }
                 }
                 .padding()
                 .rotationEffect(Angle(degrees: -90))
@@ -194,8 +202,9 @@ struct MainView: View {
         }
         if newValue == 1 {
           if !isRootStacked {
-            log("play")
-            player.play()
+            if !BlockList.shared.userIds.contains(apiViewModel.contentList[currentIndex].userId ?? 0) {
+              player.play()
+            }
           }
         } else {
           player.pause()
@@ -289,6 +298,13 @@ struct MainView: View {
         }
       }
     }
+    .onChange(of: refreshCount) { _ in
+      players[playerIndex]?.seek(to: .zero)
+      players[playerIndex]?.pause()
+      players[playerIndex] = nil
+      setupPlayers()
+      apiViewModel.postFeedPlayerChanged()
+    }
     .onChange(of: currentIndex) { newValue in
       if universalRoutingModel.isUniversalContent {
         return
@@ -296,20 +312,14 @@ struct MainView: View {
       guard let url = apiViewModel.contentList[newValue].videoUrl else {
         return
       }
-      if newValue == 0 {
-        players[playerIndex]?.seek(to: .zero)
-        players[playerIndex]?.pause()
-        players[playerIndex] = nil
-        setupPlayers()
-        apiViewModel.postFeedPlayerChanged()
-        return
-      }
       players[playerIndex]?.seek(to: .zero)
       players[playerIndex]?.pause()
       players[playerIndex] = nil
       players[newValue] = AVPlayer(url: URL(string: url)!)
       players[newValue]?.seek(to: .zero)
-      players[newValue]?.play()
+      if !BlockList.shared.userIds.contains(apiViewModel.contentList[newValue].userId ?? 0) {
+        players[newValue]?.play()
+      }
       playerIndex = newValue
       currentVideoUserId = apiViewModel.contentList[newValue].userId ?? 0
       currentVideoContentId = apiViewModel.contentList[newValue].contentId ?? 0
@@ -689,7 +699,9 @@ extension MainView {
         isCurrentVideoWhistled = apiViewModel.contentList[currentIndex].isWhistled
         currentVideoIsBookmarked = apiViewModel.contentList[currentIndex].isBookmarked ?? false
         await player.seek(to: .zero)
-        player.play()
+        if !BlockList.shared.userIds.contains(apiViewModel.contentList[currentIndex].userId ?? 0) {
+          player.play()
+        }
         withAnimation {
           isSplashOn = false
         }

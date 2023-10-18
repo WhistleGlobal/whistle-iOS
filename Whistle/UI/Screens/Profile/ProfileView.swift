@@ -701,6 +701,6 @@ extension ProfileView {
 
 extension ProfileView {
   var filteredFollower: [FollowerData] {
-    apiViewModel.myFollow.followerList.filter { !BlockedUserList.shared.userIds.contains($0.followerId) }
+    apiViewModel.myFollow.followerList.filter { !BlockList.shared.userIds.contains($0.followerId) }
   }
 }
