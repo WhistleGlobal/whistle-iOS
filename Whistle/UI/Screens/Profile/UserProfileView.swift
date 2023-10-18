@@ -169,12 +169,14 @@ struct UserProfileView: View {
           alertStyle: .linear,
           title: "\(apiViewModel.userProfile.userName) 님을 해제하시겠어요?",
           content: "이제 상대방이 회원님의 게시물을 보거나 팔로우할 수 있습니다. 상대방에게 회원님이 차단을 해제했다는 정보를 알리지 않습니다.",
-          cancelText: "취소", destructiveText:"차단해제",cancelAction: {
+          cancelText: "취소", destructiveText: "차단해제",cancelAction: {
             showUnblockAlert = false
           }, destructiveAction: {
             showUnblockAlert = false
             Task {
               await apiViewModel.actionBlockUserCancel(userId: userId)
+              BlockedUserList.shared.userIds.append(userId)
+              BlockedUserList.shared.userIds = BlockedUserList.shared.userIds.filter { $0 != userId }
               Task {
                 await apiViewModel.requestUserProfile(userId: userId)
                 await apiViewModel.requestUserPostFeed(userId: userId)
@@ -197,6 +199,7 @@ struct UserProfileView: View {
             showBlockAlert = false
             Task {
               await apiViewModel.actionBlockUser(userId: userId)
+              BlockedUserList.shared.userIds.append(userId)
               Task {
                 await apiViewModel.requestUserProfile(userId: userId)
                 await apiViewModel.requestUserPostFeed(userId: userId)

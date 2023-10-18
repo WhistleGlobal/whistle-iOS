@@ -360,7 +360,7 @@ extension ProfileView {
             .environmentObject(tabbarModel)
         } label: {
           VStack(spacing: 4) {
-            Text("\(apiViewModel.myFollow.followerCount)")
+            Text("\(filteredFollower.count)")
               .foregroundColor(Color.LabelColor_Primary_Dark)
               .fontSystem(fontDesignSystem: .title2_Expanded)
               .scaleEffect(whistleFollowerTextScale)
@@ -696,5 +696,11 @@ extension ProfileView {
   var videoOffset: CGFloat {
     log("\(offsetY < -305 ? 305 : -offsetY)")
     return offsetY < -305 ? 305 : -offsetY
+  }
+}
+
+extension ProfileView {
+  var filteredFollower: [FollowerData] {
+    apiViewModel.myFollow.followerList.filter { !BlockedUserList.shared.userIds.contains($0.followerId) }
   }
 }

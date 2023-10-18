@@ -36,7 +36,7 @@ struct FollowView: View {
         }
         .buttonStyle(
           FollowTabbarStyle(
-            followNum: apiViewModel.myFollow.followerCount,
+            followNum: filteredFollower.count,
             tab: profileTabStatus.follower.rawValue,
             selectedTab: $tabStatus))
         Button("") {
@@ -44,7 +44,7 @@ struct FollowView: View {
         }
         .buttonStyle(
           FollowTabbarStyle(
-            followNum: apiViewModel.myFollow.followingCount,
+            followNum: filteredFollowing.count,
             tab: profileTabStatus.following.rawValue,
             selectedTab: $tabStatus))
       }
@@ -175,7 +175,7 @@ extension FollowView {
 
   @ViewBuilder
   func myFollowerList() -> some View {
-    ForEach(apiViewModel.myFollow.followerList, id: \.userName) { follower in
+    ForEach(filteredFollower, id: \.userName) { follower in
       NavigationLink {
         if UIDevice.current.userInterfaceIdiom == .phone {
           switch UIScreen.main.nativeBounds.height {
@@ -209,7 +209,7 @@ extension FollowView {
 
   @ViewBuilder
   func myFollowingList() -> some View {
-    ForEach(apiViewModel.myFollow.followingList, id: \.userName) { following in
+    ForEach(filteredFollowing, id: \.userName) { following in
       NavigationLink {
         if UIDevice.current.userInterfaceIdiom == .phone {
           switch UIScreen.main.nativeBounds.height {
@@ -239,5 +239,16 @@ extension FollowView {
       }
       .id(UUID())
     }
+  }
+}
+
+extension FollowView {
+
+  var filteredFollower: [FollowerData] {
+    apiViewModel.myFollow.followerList.filter { !BlockedUserList.shared.userIds.contains($0.followerId) }
+  }
+
+  var filteredFollowing: [FollowingData] {
+    apiViewModel.myFollow.followingList.filter { !BlockedUserList.shared.userIds.contains($0.followingId) }
   }
 }
