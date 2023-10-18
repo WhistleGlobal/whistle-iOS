@@ -119,7 +119,7 @@ struct ProfileView: View {
                 } label: {
                   videoThumbnailView(
                     thumbnailUrl: content.thumbnailUrl ?? "",
-                    viewCount: content.contentWhistleCount ?? 0)
+                    viewCount: content.contentViewCount ?? 0)
                 }
               }
             }

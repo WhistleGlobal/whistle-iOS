@@ -3423,7 +3423,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Whistle/Info.plist;
-				INFOPLIST_KEY_LSApplicationCategoryType = "";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.sports";
 				INFOPLIST_KEY_NSAppleMusicUsageDescription = "Seek through media library for content selection";
 				INFOPLIST_KEY_NSCameraUsageDescription = "Whistle에서 회원님의 기기 카메라를 사용하여 동영상을 녹화할 수 있도록 지원합니다.";
 				INFOPLIST_KEY_NSMicrophoneUsageDescription = "Whistle에서 회원님의 기기 마이크를 사용하여 동영상을 녹화할 수 있도록 지원합니다.";
@@ -3470,7 +3470,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Whistle/Info.plist;
-				INFOPLIST_KEY_LSApplicationCategoryType = "";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.sports";
 				INFOPLIST_KEY_NSAppleMusicUsageDescription = "Seek through media library for content selection";
 				INFOPLIST_KEY_NSCameraUsageDescription = "Whistle에서 회원님의 기기 카메라를 사용하여 동영상을 녹화할 수 있도록 지원합니다.";
 				INFOPLIST_KEY_NSMicrophoneUsageDescription = "Whistle에서 회원님의 기기 마이크를 사용하여 동영상을 녹화할 수 있도록 지원합니다.";
