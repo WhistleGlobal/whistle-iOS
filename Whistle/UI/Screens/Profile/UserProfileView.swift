@@ -18,6 +18,10 @@ struct UserProfileView: View {
   @EnvironmentObject var tabbarModel: TabbarModel
   @State var isFollow = false
   @State var showDialog = false
+  @State var showBlockAlert = false
+  @State var showUnblockAlert = false
+  @State var showBlockToast = false
+  @State var showUnblockToast = false
   @State var goReport = false
   @State var showPasteToast = false
   @State var offsetY: CGFloat = 0
@@ -59,17 +63,19 @@ struct UserProfileView: View {
           .zIndex(1)
           .padding(.bottom, 12)
         if apiViewModel.userPostFeed.isEmpty {
-          Spacer()
-          Image(systemName: "photo.fill")
-            .resizable()
-            .scaledToFit()
-            .frame(width: 48, height: 48)
-            .foregroundColor(.LabelColor_Primary_Dark)
-            .padding(.bottom, 24)
-          Text("아직 콘텐츠가 없습니다.")
-            .fontSystem(fontDesignSystem: .body1_KO)
-            .foregroundColor(.LabelColor_Primary_Dark)
-            .padding(.bottom, 76)
+          if !(apiViewModel.userProfile.isBlocked == 1) {
+            Spacer()
+            Image(systemName: "photo.fill")
+              .resizable()
+              .scaledToFit()
+              .frame(width: 48, height: 48)
+              .foregroundColor(.LabelColor_Primary_Dark)
+              .padding(.bottom, 24)
+            Text("아직 콘텐츠가 없습니다.")
+              .fontSystem(fontDesignSystem: .body1_KO)
+              .foregroundColor(.LabelColor_Primary_Dark)
+              .padding(.bottom, 76)
+          }
           Spacer()
         } else {
           ScrollView {
@@ -109,14 +115,21 @@ struct UserProfileView: View {
     }
     .navigationBarBackButtonHidden()
     .confirmationDialog("", isPresented: $showDialog) {
+      Button(apiViewModel.userProfile.isBlocked == 1 ? "차단 해제" : "차단", role: .destructive) {
+        if apiViewModel.userProfile.isBlocked == 1 {
+          showUnblockAlert = true
+        } else {
+          showBlockAlert = true
+        }
+      }
+      Button("신고", role: .destructive) {
+        goReport = true
+      }
       Button("프로필 URL 복사", role: .none) {
         UIPasteboard.general.setValue(
           "https://readywhistle.com/profile_uni?id=\(userId)",
           forPasteboardType: UTType.plainText.identifier)
         showPasteToast = true
-      }
-      Button("신고", role: .destructive) {
-        goReport = true
       }
       Button("취소", role: .cancel) {
         log("Cancel")
@@ -140,6 +153,58 @@ struct UserProfileView: View {
     .overlay {
       if showPasteToast {
         ToastMessage(text: "클립보드에 복사되었어요", toastPadding: 78, showToast: $showPasteToast)
+      }
+      if showBlockAlert {
+        ToastMessage(text: "\(apiViewModel.userProfile.userName)님이 차단되었습니다.", toastPadding: 72, showToast: $showBlockToast)
+      }
+      if showUnblockToast {
+        ToastMessage(text: "\(apiViewModel.userProfile.userName)님이 차단 해제되었습니다.", toastPadding: 72, showToast: $showUnblockToast)
+      }
+    }
+    .overlay {
+      if showUnblockAlert {
+        AlertPopup(
+          alertStyle: .linear,
+          title: "\(apiViewModel.userProfile.userName) 님을 해제하시겠어요?",
+          content: "이제 상대방이 회원님의 게시물을 보거나 팔로우할 수 있습니다. 상대방에게 회원님이 차단을 해제했다는 정보를 알리지 않습니다.",
+          cancelText: "취소", destructiveText:"차단해제",cancelAction: {
+            showUnblockAlert = false
+          }, destructiveAction: {
+            showUnblockAlert = false
+            Task {
+              await apiViewModel.actionBlockUserCancel(userId: userId)
+              Task {
+                await apiViewModel.requestUserProfile(userId: userId)
+                await apiViewModel.requestUserPostFeed(userId: userId)
+              }
+              Task {
+                await apiViewModel.requestUserFollow(userId: userId)
+                await apiViewModel.requestUserWhistlesCount(userId: userId)
+              }
+            }
+          })
+      }
+      if showBlockAlert {
+        AlertPopup(
+          alertStyle: .linear,
+          title: "\(apiViewModel.userProfile.userName) 님을 차단하시겠어요?",
+          content: "차단된 사람은 회원님의 프로필 또는 콘텐츠를 찾을 수 없게 되며, 상대방에게 차단되었다는 알림이 전송되지 않습니다.",
+          cancelText: "취소", destructiveText:"차단",cancelAction: {
+            showBlockAlert = false
+          }, destructiveAction: {
+            showBlockAlert = false
+            Task {
+              await apiViewModel.actionBlockUser(userId: userId)
+              Task {
+                await apiViewModel.requestUserProfile(userId: userId)
+                await apiViewModel.requestUserPostFeed(userId: userId)
+              }
+              Task {
+                await apiViewModel.requestUserFollow(userId: userId)
+                await apiViewModel.requestUserWhistlesCount(userId: userId)
+              }
+            }
+          })
       }
     }
     .onAppear {
@@ -172,39 +237,67 @@ extension UserProfileView {
           .padding(.bottom, 16)
       }
       .frame(height: introduceHeight)
-      Capsule()
-        .frame(width: 112, height: 36)
-        .foregroundColor(isProfileLoaded ? .clear : .Gray_Default)
-        .overlay {
-          Button("") {
-            Task {
-              if isFollow {
-                isFollow.toggle()
-                await apiViewModel.unfollowUser(userId: userId)
-              } else {
-                isFollow.toggle()
-                await apiViewModel.followUser(userId: userId)
-              }
-            }
-          }
-          .buttonStyle(FollowButtonStyle(isFollowed: $isFollow))
-          .scaleEffect(profileEditButtonScale)
-          .opacity(isProfileLoaded ? 1 : 0)
-          .disabled(userId == apiViewModel.myProfile.userId)
+      if apiViewModel.userProfile.isBlocked == 1 {
+        Button {
+          showUnblockAlert = true
+//          Task {
+//            await apiViewModel.actionBlockUserCancel(userId: userId)
+//            Task {
+//              await apiViewModel.requestUserProfile(userId: userId)
+//              await apiViewModel.requestUserPostFeed(userId: userId)
+//            }
+//            Task {
+//              await apiViewModel.requestUserFollow(userId: userId)
+//              await apiViewModel.requestUserWhistlesCount(userId: userId)
+//            }
+//          }
+        } label: {
+          unblockButton
         }
         .padding(.bottom, 24)
-        .scaleEffect(profileEditButtonScale)
-      HStack(spacing: 48) {
+      } else {
+        Capsule()
+          .frame(width: 112, height: 36)
+          .foregroundColor(isProfileLoaded ? .clear : .Gray_Default)
+          .overlay {
+            Button("") {
+              Task {
+                if isFollow {
+                  isFollow.toggle()
+                  await apiViewModel.unfollowUser(userId: userId)
+                } else {
+                  isFollow.toggle()
+                  await apiViewModel.followUser(userId: userId)
+                }
+              }
+            }
+            .buttonStyle(FollowButtonStyle(isFollowed: $isFollow))
+            .scaleEffect(profileEditButtonScale)
+            .opacity(isProfileLoaded ? 1 : 0)
+            .disabled(userId == apiViewModel.myProfile.userId)
+          }
+          .padding(.bottom, 24)
+          .scaleEffect(profileEditButtonScale)
+      }
+      HStack(spacing: 0) {
         VStack(spacing: 4) {
-          Text("\(apiViewModel.userWhistleCount)")
-            .foregroundColor(Color.LabelColor_Primary_Dark)
-            .fontSystem(fontDesignSystem: .title2_Expanded)
-            .scaleEffect(whistleFollowerTextScale)
+          if apiViewModel.userProfile.isBlocked == 1 {
+            Text("0")
+              .foregroundColor(Color.LabelColor_Primary_Dark)
+              .fontSystem(fontDesignSystem: .title2_Expanded)
+              .scaleEffect(whistleFollowerTextScale)
+          } else {
+            Text("\(apiViewModel.userWhistleCount)")
+              .foregroundColor(Color.LabelColor_Primary_Dark)
+              .fontSystem(fontDesignSystem: .title2_Expanded)
+              .scaleEffect(whistleFollowerTextScale)
+          }
           Text("휘슬")
             .foregroundColor(Color.LabelColor_Secondary_Dark)
             .fontSystem(fontDesignSystem: .caption_SemiBold)
             .scaleEffect(whistleFollowerTextScale)
         }
+        .hCenter()
         Rectangle().frame(width: 1, height: .infinity).foregroundColor(.white)
         NavigationLink {
           UserFollowView(userId: userId)
@@ -213,16 +306,25 @@ extension UserProfileView {
             .id(UUID())
         } label: {
           VStack(spacing: 4) {
-            Text("\(apiViewModel.userFollow.followerCount)")
-              .foregroundColor(Color.LabelColor_Primary_Dark)
-              .fontSystem(fontDesignSystem: .title2_Expanded)
-              .scaleEffect(whistleFollowerTextScale)
+            if apiViewModel.userProfile.isBlocked == 1 {
+              Text("0")
+                .foregroundColor(Color.LabelColor_Primary_Dark)
+                .fontSystem(fontDesignSystem: .title2_Expanded)
+                .scaleEffect(whistleFollowerTextScale)
+            } else {
+              Text("\(apiViewModel.userFollow.followerCount)")
+                .foregroundColor(Color.LabelColor_Primary_Dark)
+                .fontSystem(fontDesignSystem: .title2_Expanded)
+                .scaleEffect(whistleFollowerTextScale)
+            }
             Text("팔로워")
               .foregroundColor(Color.LabelColor_Secondary_Dark)
               .fontSystem(fontDesignSystem: .caption_SemiBold)
               .scaleEffect(whistleFollowerTextScale)
           }
+          .hCenter()
         }
+        .disabled(apiViewModel.userProfile.isBlocked == 1)
         .id(UUID())
       }
       .frame(height: whistleFollowerTabHeight)
@@ -298,6 +400,19 @@ extension UserProfileView {
     }
     .frame(height: 204)
     .cornerRadius(12)
+  }
+
+  @ViewBuilder
+  var unblockButton: some View {
+    Text("차단해제")
+      .fontSystem(fontDesignSystem: .subtitle3_KO)
+      .foregroundColor(.LabelColor_Primary_Dark)
+      .padding(.horizontal, 20)
+      .padding(.vertical, 6)
+      .background {
+        Capsule()
+          .foregroundColor(.Primary_Default)
+      }
   }
 }
 
