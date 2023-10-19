@@ -514,7 +514,7 @@ struct MainView: View {
           if apiViewModel.contentList[currentIndex].isBookmarked ?? false {
             showBookmarkToast.1 = "저장 취소했습니다."
             let tempBool = await apiViewModel.actionBookmarkCancel(contentId: currentVideoContentId)
-            withAnimation{
+            withAnimation {
               showBookmarkToast.0 = tempBool
             }
             apiViewModel.contentList[currentIndex].isBookmarked = false
@@ -522,7 +522,7 @@ struct MainView: View {
           } else {
             showBookmarkToast.1 = "저장했습니다."
             let tempBool = await apiViewModel.actionBookmark(contentId: currentVideoContentId)
-            withAnimation{
+            withAnimation {
               showBookmarkToast.0 = tempBool
             }
             apiViewModel.contentList[currentIndex].isBookmarked = true
@@ -532,7 +532,7 @@ struct MainView: View {
         }
       }
       Button("관심없음", role: .none) {
-        withAnimation{
+        withAnimation {
           showHideContentToast = true
         }
       }

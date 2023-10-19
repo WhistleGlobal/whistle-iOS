@@ -16,7 +16,7 @@ import SwiftUI
 class VideoContentViewModel: ObservableObject {
   var aespaSession: AespaSession
 
-  var preview: InteractivePreview?
+  @Published var preview: InteractivePreview?
 
   private var subscription = Set<AnyCancellable>()
 
@@ -26,6 +26,7 @@ class VideoContentViewModel: ObservableObject {
   init() {
     let option = AespaOption(albumName: "Whistle")
     aespaSession = Aespa.session(with: option)
+    preview = aespaSession.interactivePreview()
 
     // Common setting
     aespaSession
@@ -42,8 +43,6 @@ class VideoContentViewModel: ObservableObject {
 
     aespaSession
       .stabilization(mode: .auto)
-
-    preview = aespaSession.interactivePreview()
   }
 }
 

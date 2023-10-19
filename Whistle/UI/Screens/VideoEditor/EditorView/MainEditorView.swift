@@ -323,7 +323,7 @@ struct MusicInfo: View {
         }
         .foregroundStyle(Color.White)
         .fixedSize()
-        .padding(.vertical, 8)
+        .padding(.vertical, 6)
         .padding(.leading, 16)
         .background(glassMorphicView(cornerRadius: 8))
         .padding(.top, 8)
@@ -341,7 +341,7 @@ struct MusicInfo: View {
       .foregroundStyle(Color.White)
       .fixedSize()
       .padding(.horizontal, 16)
-      .padding(.vertical, 8)
+      .padding(.vertical, 6)
       .background(glassMorphicView(cornerRadius: 8))
       .onTapGesture {
         onClick()

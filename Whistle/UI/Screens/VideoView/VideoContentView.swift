@@ -87,6 +87,7 @@ struct VideoContentView: View {
         destructiveText: "삭제",
         cancelAction: { withAnimation(.easeInOut) { showAlert = false } },
         destructiveAction: {
+          recordingDuration = 0
           withAnimation(.easeInOut) {
             showAlert = false
             musicVM.removeMusic()
@@ -101,12 +102,7 @@ struct VideoContentView: View {
       }
       if buttonState != .completed {
         viewModel.preview
-          .padding(.bottom, 64)
-          .frame(
-            minWidth: 0,
-            maxWidth: .infinity,
-            minHeight: 0,
-            maxHeight: .infinity)
+          .frame(width: UIScreen.width, height: UIScreen.width * 16 / 9)
           .allowsHitTesting(false)
       } else {
         if let video = editorVM.currentVideo {
@@ -153,6 +149,8 @@ struct VideoContentView: View {
             .onTapGesture {
               videoPlayer.playLoop(video)
             }
+            .frame(width: UIScreen.width, height: UIScreen.width * 16 / 9)
+            .padding(.bottom, 68)
         }
       }
       VStack {
@@ -302,7 +300,7 @@ struct VideoContentView: View {
           recordingButton(
             state: buttonState,
             timerText: timeStringFromTimeInterval(recordingDuration),
-            progress: min(recordingDuration / Double(timerSec.1 ? Double(timerSec.0) : 15.0), 1.0))
+            progress: min(recordingDuration / Double(timerSec.1 ? Double(timerSec.0) : 14.0), 1.0))
           Spacer()
           // Position change + button
           Button(action: {
@@ -353,8 +351,10 @@ struct VideoContentView: View {
         .hCenter()
         .frame(height: UIScreen.getHeight(96))
         .padding(.horizontal, 42)
-        .padding(.bottom, 64)
+        .padding(.bottom, 24)
       }
+      .frame(width: UIScreen.width, height: UIScreen.width * 16 / 9)
+      .padding(.bottom, 74)
       .opacity(showPreparingView ? 0 : 1)
       if showPreparingView {
         Circle()
@@ -399,7 +399,6 @@ struct VideoContentView: View {
         albumCover = Image(uiImage: latestVideoThumbnail)
       }
       viewModel.aespaSession = Aespa.session(with: AespaOption(albumName: "Whistle"))
-      viewModel.preview = viewModel.aespaSession.interactivePreview()
       Task {
         log("직접 가져오기")
       }
@@ -885,9 +884,6 @@ extension VideoContentView {
     count = CGFloat(selectedSec.0 == .sec3 ? 3 : 10)
     showPreparingView = true
     recordingTimer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { _ in
-      withAnimation(.linear(duration: 1.0)) {
-        count -= 1
-      }
       if count == 0 {
         showPreparingView = false
         selectedSec.0 = .sec3
@@ -896,14 +892,17 @@ extension VideoContentView {
         viewModel.aespaSession.startRecording()
         startRecordingTimer()
         isRecording = true
+      } else {
+        withAnimation(.linear(duration: 1.0)) {
+          count -= 1
+        }
       }
     }
   }
 
   private func startRecordingTimer() {
     recordingTimer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { _ in
-      recordingDuration += 1
-      if recordingDuration >= Double(timerSec.1 ? Double(timerSec.0) : 15.0) {
+      if recordingDuration >= Double(timerSec.1 ? Double(timerSec.0) : 14.0) {
         buttonState = .completed
         stopRecordingTimer()
         isRecording = false
@@ -915,6 +914,8 @@ extension VideoContentView {
             print("Error: \(error)")
           }
         }
+      } else {
+        recordingDuration += 1
       }
     }
   }
@@ -966,7 +967,9 @@ extension VideoContentView {
           if timerSec.1 {
             startPreparingTimer()
           } else {
-            buttonState = .recording
+            withAnimation {
+              buttonState = .recording
+            }
             viewModel.aespaSession.startRecording()
             startRecordingTimer()
             isRecording = true
@@ -994,12 +997,14 @@ extension VideoContentView {
               .frame(width: 36, height: 36, alignment: .center)
           }
         }
+        .padding(.bottom, 40)
         .onAppear {
           withAnimation(.linear(duration: 0.5)) {
             animatedProgress = progress
           }
         }
         .onChange(of: progress) { newValue in
+          print("progress:", newValue)
           withAnimation(.linear(duration: 0.5)) {
             animatedProgress = newValue
           }
@@ -1020,19 +1025,22 @@ extension VideoContentView {
       case .completed:
         Button {
           disableUploadButton = true
-          print("button tapped")
-          print(Int(
-            (editorVM.currentVideo?.rangeDuration.lowerBound)! /
-              (editorVM.currentVideo?.originalDuration)! *
-              21))
           if musicVM.isTrimmed {
             editorVM.currentVideo?.setVolume(0)
           }
           Task {
+            UploadProgressViewModel.shared.uploadStarted()
+            tabbarModel.tabSelectionNoAnimation = .main
+            tabbarModel.tabSelection = .main
+          }
+          Task {
             if let video = editorVM.currentVideo {
+              let thumbnail = video.getFirstThumbnail()
+              if let thumbnail {
+                UploadProgressViewModel.shared.thumbnail = Image(uiImage: thumbnail)
+              }
               let exporterVM = ExporterViewModel(video: video)
               await exporterVM.action(.save, start: video.rangeDuration.lowerBound)
-              let thumbnail = video.getFirstThumbnail()
               apiViewModel.uploadPost(
                 video: exporterVM.videoData,
                 thumbnail: thumbnail?.jpegData(compressionQuality: 0.5)! ?? Data(),
@@ -1042,8 +1050,7 @@ extension VideoContentView {
                 hashtags: [""])
             }
           }
-          tabbarModel.tabSelectionNoAnimation = .main
-          tabbarModel.tabSelection = .main
+
         } label: {
           Circle()
             .stroke(lineWidth: 4)
