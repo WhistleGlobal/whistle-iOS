@@ -13,7 +13,7 @@ import Photos
 protocol AespaAssetLibraryRepresentable {
   func performChanges(_ changes: @escaping () -> Void) async throws
   func performChangesAndWait(_ changeBlock: @escaping () -> Void) throws
-  func requestAuthorization(for accessLevel: PHAccessLevel) async -> PHAuthorizationStatus
+//  func requestAuthorization(for accessLevel: PHAccessLevel) async -> PHAuthorizationStatus
 
   func fetchAlbum<Collection: AespaAssetCollectionRepresentable>(
     title: String,
@@ -48,9 +48,9 @@ extension PHPhotoLibrary: AespaAssetLibraryRepresentable {
     return collections.firstObject as? Collection
   }
 
-  func requestAuthorization(for accessLevel: PHAccessLevel) async -> PHAuthorizationStatus {
-    await PHPhotoLibrary.requestAuthorization(for: accessLevel)
-  }
+//  func requestAuthorization(for accessLevel: PHAccessLevel) async -> PHAuthorizationStatus {
+//    await PHPhotoLibrary.requestAuthorization(for: accessLevel)
+//  }
 }
 
 // MARK: - PHAssetCollection + AespaAssetCollectionRepresentable

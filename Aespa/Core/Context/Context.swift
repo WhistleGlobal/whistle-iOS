@@ -216,7 +216,7 @@ public protocol VideoContext {
   ///     Pass `0` to fetch all assets in the album.
   ///
   /// - Returns: An array of `VideoAsset` instances, representing the fetched video files.
-  func fetchVideoFiles(limit: Int) async -> [VideoAsset]
+//  func fetchVideoFiles(limit: Int) async -> [VideoAsset]
 }
 
 // MARK: - PhotoContext
@@ -290,5 +290,5 @@ public protocol PhotoContext {
   ///     Pass `0` to fetch all assets in the album.
   ///
   /// - Returns: An array of `PhotoAsset` instances, representing the fetched photo files.
-  func fetchPhotoFiles(limit: Int) async -> [PhotoAsset]
+//  func fetchPhotoFiles(limit: Int) async -> [PhotoAsset]
 }

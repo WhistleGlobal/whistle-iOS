@@ -75,7 +75,6 @@ struct TabbarView: View {
             VideoContentView()
               .environmentObject(apiViewModel)
               .environmentObject(tabbarModel)
-              .opacity(isNavigationActive ? 1 : 0)
           } else {
             if !isNavigationActive {
               AccessView(

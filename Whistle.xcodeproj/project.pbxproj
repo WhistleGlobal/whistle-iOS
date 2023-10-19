@@ -385,6 +385,7 @@
 		7830281B2AB8918B00127D76 /* DeleteAccountAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7830281A2AB8918B00127D76 /* DeleteAccountAlert.swift */; };
 		78370B892AB874CD00090522 /* MainReportBottomSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78370B882AB874CD00090522 /* MainReportBottomSheet.swift */; };
 		78370B8B2AB87C7D00090522 /* Enums.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78370B8A2AB87C7D00090522 /* Enums.swift */; };
+		7847A3172AE1311200C4FF61 /* AlbumAccessView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7847A3162AE1311200C4FF61 /* AlbumAccessView.swift */; };
 		785258572ACC6D680024E466 /* NoSignInProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 785258562ACC6D680024E466 /* NoSignInProfileView.swift */; };
 		785E82722AAC8FDD00EF3576 /* MainContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 785E82712AAC8FDD00EF3576 /* MainContent.swift */; };
 		785E9E6A2AB9DCB1003A93E8 /* CancelableToastMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 785E9E692AB9DCB1003A93E8 /* CancelableToastMessage.swift */; };
@@ -898,6 +899,7 @@
 		7830281A2AB8918B00127D76 /* DeleteAccountAlert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteAccountAlert.swift; sourceTree = "<group>"; };
 		78370B882AB874CD00090522 /* MainReportBottomSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainReportBottomSheet.swift; sourceTree = "<group>"; };
 		78370B8A2AB87C7D00090522 /* Enums.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Enums.swift; sourceTree = "<group>"; };
+		7847A3162AE1311200C4FF61 /* AlbumAccessView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlbumAccessView.swift; sourceTree = "<group>"; };
 		785258562ACC6D680024E466 /* NoSignInProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoSignInProfileView.swift; sourceTree = "<group>"; };
 		785E82712AAC8FDD00EF3576 /* MainContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainContent.swift; sourceTree = "<group>"; };
 		785E9E692AB9DCB1003A93E8 /* CancelableToastMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CancelableToastMessage.swift; sourceTree = "<group>"; };
@@ -2487,6 +2489,7 @@
 				788E685D2AD6B6710056C18B /* VideoFile.swift */,
 				788E68612AD6B6710056C18B /* VideoSettingView.swift */,
 				788E686F2AD6C9DB0056C18B /* AccessView.swift */,
+				7847A3162AE1311200C4FF61 /* AlbumAccessView.swift */,
 			);
 			path = VideoView;
 			sourceTree = "<group>";
@@ -2850,6 +2853,7 @@
 				1B3895702AB9CBFC00B4C8DD /* Extension+AVAudioSession.swift in Sources */,
 				1B38956F2AB9CBFC00B4C8DD /* Extension+Int.swift in Sources */,
 				78B6FD2E2AA719190043E461 /* AlbumModel.swift in Sources */,
+				7847A3172AE1311200C4FF61 /* AlbumAccessView.swift in Sources */,
 				78E175602ABA8DE100731259 /* TermsOfServiceView.swift in Sources */,
 				7874CB882AA0842D0081DE54 /* FontSystem.swift in Sources */,
 				786CFEB12AAC5D5100DB2ADD /* ReportUserView.swift in Sources */,

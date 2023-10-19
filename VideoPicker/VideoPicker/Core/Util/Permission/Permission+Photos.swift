@@ -17,25 +17,25 @@ extension Permission {
     }
   }
 
-  func _requestPhotos(completion: @escaping PermissionCompletion) {
+  func _requestPhotos(completion _: @escaping PermissionCompletion) {
     guard Bundle.main.object(forInfoDictionaryKey: ._photoLibraryUsageDescription) != nil else {
       _print("WARNING: \(String._photoLibraryUsageDescription) not found in Info.plist")
       return
     }
 
-    if #available(iOS 14.0, *) {
-      PHPhotoLibrary.requestAuthorization(for: .readWrite) { status in
-        Thread.runOnMain {
-          completion(status._status)
-        }
-      }
-    } else {
-      PHPhotoLibrary.requestAuthorization { status in
-        Thread.runOnMain {
-          completion(status._status)
-        }
-      }
-    }
+//    if #available(iOS 14.0, *) {
+//      PHPhotoLibrary.requestAuthorization(for: .readWrite) { status in
+//        Thread.runOnMain {
+//          completion(status._status)
+//        }
+//      }
+//    } else {
+//      PHPhotoLibrary.requestAuthorization { status in
+//        Thread.runOnMain {
+//          completion(status._status)
+//        }
+//      }
+//    }
   }
 }
 
