@@ -9,6 +9,7 @@ import Aespa
 import AVFoundation
 import BottomSheet
 import Combine
+import Photos
 import ReverseMask
 import SwiftUI
 
@@ -26,6 +27,10 @@ struct VideoContentView: View {
   @StateObject var videoPlayer = VideoPlayerManager()
   @StateObject var musicVM = MusicViewModel()
 
+  @State var authorizationStatus = PHPhotoLibrary.authorizationStatus(for: .readWrite)
+  @State var isAlbumAuthorized = false
+  @State var showAlbumAccessView = false
+
   // MARK: - Datas
 
   @State var isImagePickerClosed = PassthroughSubject<Bool, Never>()
@@ -41,7 +46,7 @@ struct VideoContentView: View {
   @State var dragOffset: CGFloat = 0
   @State var sheetPositions: [BottomSheetPosition] = [.hidden, .absolute(514)]
   @State var bottomSheetPosition: BottomSheetPosition = .hidden
-  @State var albumCover = Image("")
+  @State var albumCover = Image("noVideo")
 
   // MARK: - Bools
 
@@ -275,7 +280,13 @@ struct VideoContentView: View {
         Spacer()
         HStack(spacing: 0) {
           // Album thumbnail + button
-          Button(action: { isImagePickerClosed.send(true) }) {
+          Button {
+            if isAlbumAuthorized {
+              isImagePickerClosed.send(true)
+            } else {
+              showAlbumAccessView = true
+            }
+          } label: {
             roundRectangleShape(with: albumCover, size: 56)
               .vBottom()
           }
@@ -369,17 +380,27 @@ struct VideoContentView: View {
         videoPlayer: videoPlayer,
         showMusicTrimView: $showMusicTrimView)
     }
+    .fullScreenCover(isPresented: $showAlbumAccessView, onDismiss: {
+      if isAlbumAuthorized {
+        guard let latestVideoAsset = fetchLatestVideo() else { return }
+        guard let latestVideoThumbnail = generateThumbnail(for: latestVideoAsset) else { return }
+        albumCover = Image(uiImage: latestVideoThumbnail)
+      }
+    }) {
+      AlbumAccessView(isAlbumAuthorized: $isAlbumAuthorized, showAlbumAccessView: $showAlbumAccessView)
+    }
     .navigationBarBackButtonHidden()
     .onAppear {
+      getAlbumAuth()
+      if isAlbumAuthorized {
+        guard let latestVideoAsset = fetchLatestVideo() else { return }
+        guard let latestVideoThumbnail = generateThumbnail(for: latestVideoAsset) else { return }
+        albumCover = Image(uiImage: latestVideoThumbnail)
+      }
       viewModel.aespaSession = Aespa.session(with: AespaOption(albumName: "Whistle"))
       viewModel.preview = viewModel.aespaSession.interactivePreview()
       Task {
-        let videos: [VideoAsset] = await viewModel.aespaSession.fetchVideoFiles(limit: 1)
-        if videos.isEmpty {
-          albumCover = Image("noVideo")
-          return
-        }
-        albumCover = videos[0].thumbnailImage
+        log("직접 가져오기")
       }
     }
     .onChange(of: scenePhase) { newValue in
@@ -1050,4 +1071,51 @@ extension VideoContentView {
       }
     }
   }
+}
+
+extension VideoContentView {
+  func getAlbumAuth() {
+    switch authorizationStatus {
+    case .notDetermined:
+      log("notDetermined")
+    case .restricted:
+      log("restricted")
+    case .denied:
+      log("restricted")
+    case .authorized:
+      isAlbumAuthorized = true
+    case .limited:
+      isAlbumAuthorized = true
+    @unknown default:
+      log("unknown default")
+    }
+  }
+}
+
+extension VideoContentView {
+
+  func fetchLatestVideo() -> PHAsset? {
+    let fetchOptions = PHFetchOptions()
+    fetchOptions.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
+    let fetchResult = PHAsset.fetchAssets(with: .video, options: fetchOptions)
+    return fetchResult.firstObject
+  }
+
+  func generateThumbnail(for asset: PHAsset) -> UIImage? {
+    let imageManager = PHCachingImageManager()
+    let options = PHImageRequestOptions()
+    options.isSynchronous = true
+
+    var thumbnail: UIImage?
+    imageManager.requestImage(
+      for: asset,
+      targetSize: CGSize(width: 100, height: 100),
+      contentMode: .aspectFill,
+      options: options)
+    { result, _ in
+      thumbnail = result
+    }
+    return thumbnail
+  }
+
 }

@@ -75,6 +75,15 @@ struct UserProfileView: View {
               .fontSystem(fontDesignSystem: .body1_KO)
               .foregroundColor(.LabelColor_Primary_Dark)
               .padding(.bottom, 76)
+          } else {
+            Spacer()
+            Text("차단된 계정")
+              .fontSystem(fontDesignSystem: .subtitle1_KO)
+              .foregroundColor(.LabelColor_Primary_Dark)
+            Text("사용자에 의해 차단된 계정입니다")
+              .fontSystem(fontDesignSystem: .body1_KO)
+              .foregroundColor(.LabelColor_Primary_Dark)
+              .padding(.bottom, 56)
           }
           Spacer()
         } else {
@@ -93,7 +102,8 @@ struct UserProfileView: View {
                 } label: {
                   videoThumbnailView(
                     thumbnailUrl: content.thumbnailUrl ?? "",
-                    viewCount: content.contentViewCount ?? 0)
+                    viewCount: content.contentViewCount ?? 0,
+                    isHated: content.isHated ?? 0)
                 }
                 .id(UUID())
               }
@@ -367,14 +377,23 @@ extension UserProfileView {
   }
 
   @ViewBuilder
-  func videoThumbnailView(thumbnailUrl: String, viewCount: Int) -> some View {
-    Color.black.overlay {
+  func videoThumbnailView(thumbnailUrl: String, viewCount: Int, isHated: Int) -> some View {
+    Color.clear.overlay {
       KFImage.url(URL(string: thumbnailUrl))
         .placeholder { // 플레이스 홀더 설정
           Color.black
         }
         .resizable()
         .scaledToFit()
+        .blur(radius: isHated == 1 ? 30 : 0, opaque: false)
+        .scaleEffect(isHated == 1 ? 1.3 : 1)
+        .overlay {
+          if isHated == 1 {
+            Image(systemName: "eye.slash.fill")
+              .font(.system(size: 30))
+              .foregroundColor(.Gray10)
+          }
+        }
       VStack {
         Spacer()
         HStack(spacing: 4) {

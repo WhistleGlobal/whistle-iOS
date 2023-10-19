@@ -28,7 +28,6 @@ struct MyContentListView: View {
   var body: some View {
     GeometryReader { proxy in
       if apiViewModel.myPostFeed.isEmpty {
-        // FIXME: - 디자인수정
         Color.black.ignoresSafeArea().overlay {
           VStack(spacing: 16) {
             HStack(spacing: 0) {
@@ -61,7 +60,6 @@ struct MyContentListView: View {
             Spacer()
           }
         }
-
       } else {
         TabView(selection: $currentIndex) {
           ForEach(Array(apiViewModel.myPostFeed.enumerated()), id: \.element) { index, content in

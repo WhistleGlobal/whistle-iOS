@@ -154,8 +154,8 @@ struct FontSystem: ViewModifier {
         .padding(.vertical, 4)
     case .subtitle3_KO:
       content
-        .font(.custom("AppleSDGothicNeo-SemiBold", size: 14))
         .fontWeight(.semibold)
+        .font(.custom("AppleSDGothicNeo-SemiBold", size: 14))
         .lineSpacing(6)
         .padding(.vertical, 3)
     case .body1_KO:
