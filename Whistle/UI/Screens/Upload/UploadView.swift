@@ -58,12 +58,17 @@ struct UploadView: View {
         dismiss()
       } nextButtonAction: {
         Task {
-          await exporterVM.action(.save, start: (editorVM.currentVideo?.rangeDuration.lowerBound)!)
-          let video = exporterVM.videoData
+          UploadProgressViewModel.shared.uploadStarted()
+          NavigationModel.shared.navigate.toggle()
+        }
+        Task {
           let thumbnail = editorVM
             .returnThumbnail(Int(
               (editorVM.currentVideo?.rangeDuration.lowerBound)! / (editorVM.currentVideo?.originalDuration)! *
                 21))
+          UploadProgressViewModel.shared.thumbnail = Image(uiImage: thumbnail)
+          await exporterVM.action(.save, start: (editorVM.currentVideo?.rangeDuration.lowerBound)!)
+          let video = exporterVM.videoData
           apiViewModel.uploadPost(
             video: video,
             thumbnail: thumbnail.jpegData(compressionQuality: 0.5)!,
@@ -72,7 +77,6 @@ struct UploadView: View {
             videoLength: editorVM.currentVideo!.totalDuration,
             hashtags: tagsViewModel.getTags())
         }
-        NavigationModel.shared.navigate.toggle()
       }
       .frame(height: UIScreen.getHeight(44))
       .overlay(alignment: .bottom) {

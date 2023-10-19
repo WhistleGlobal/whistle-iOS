@@ -15,11 +15,18 @@ struct ProfileNotiView: View {
   var body: some View {
     List {
       Toggle("모두 일시 중단", isOn: $isAllOff)
+        .listRowSeparator(.hidden)
       Toggle("게시글 휘슬 알림", isOn: $apiViewModel.notiSetting.whistleEnabled)
+        .listRowSeparator(.hidden)
       Toggle("팔로워 알림", isOn: $apiViewModel.notiSetting.followEnabled)
+        .listRowSeparator(.hidden)
       Toggle("Whistle에서 보내는 알림", isOn: $apiViewModel.notiSetting.infoEnabled)
+        .listRowSeparator(.hidden)
       Toggle("광고 알림", isOn: $apiViewModel.notiSetting.adEnabled)
+        .listRowSeparator(.hidden)
     }
+    .fontSystem(fontDesignSystem: .subtitle2_KO)
+    .listRowSpacing(16)
     .scrollDisabled(true)
     .foregroundColor(.LabelColor_Primary)
     .tint(.Primary_Default)

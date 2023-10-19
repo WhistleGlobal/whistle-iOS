@@ -17,7 +17,7 @@ extension AespaSession {
   ///     .resizeAspectFill` by default, which scales the video to fill the layer bounds.
   ///
   /// - Returns: A SwiftUI `View` that displays the video feed.
-  public func preview(gravity: AVLayerVideoGravity = .resizeAspectFill) -> some View {
+  public func preview(gravity: AVLayerVideoGravity = .resizeAspect) -> some View {
     Preview(of: self, gravity: gravity)
   }
 
@@ -33,7 +33,7 @@ extension AespaSession {
   /// - Warning: Tap-to-focus works only in `autoFocus` mode.
   ///     Make sure you're using this mode for the feature to work.
   public func interactivePreview(
-    gravity: AVLayerVideoGravity = .resizeAspectFill,
+    gravity: AVLayerVideoGravity = .resizeAspect,
     option _: InteractivePreviewOption = .init())
     -> InteractivePreview
   {

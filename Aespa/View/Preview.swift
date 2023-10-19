@@ -33,8 +33,9 @@ struct Preview: UIViewControllerRepresentable {
   func updateUIViewController(_ uiViewController: UIViewController, context _: Context) {
     previewLayer.videoGravity = gravity
     uiViewController.view.layer.addSublayer(previewLayer)
-
-    previewLayer.frame = uiViewController.view.bounds
+    let viewWidth = uiViewController.view.bounds.width
+//    previewLayer.frame = uiViewController.view.bounds
+    previewLayer.frame = CGRect(x: 0, y: -34, width: viewWidth, height: viewWidth * 16 / 9)
   }
 
   func dismantleUIViewController(_: UIViewController, coordinator _: ()) {

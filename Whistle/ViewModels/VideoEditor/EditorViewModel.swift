@@ -13,6 +13,7 @@ import SwiftUI
 
 // MARK: - EditorViewModel
 
+@MainActor
 class EditorViewModel: ObservableObject {
   @Published var currentVideo: EditableVideo?
   @Published var selectedTools: ToolEnum?

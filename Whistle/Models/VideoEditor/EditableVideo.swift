@@ -56,7 +56,7 @@ struct EditableVideo: Identifiable {
 
     var offset: Float64 = 0
     for i in 0 ... imagesCount {
-      let thumbnailImage = ThumbnailImage(image: asset.getImage(Int(offset)))
+      let thumbnailImage = ThumbnailImage(image: asset.getImage(second: offset))
       offset = Double(i) * (originalDuration / Double(imagesCount))
       thumbnailsImages.append(thumbnailImage)
     }
@@ -67,12 +67,16 @@ struct EditableVideo: Identifiable {
     let imagesCount = 21
     var offset: Float64 = 0
     for i in 0 ... imagesCount {
-      let thumbnailImage = ThumbnailImage(image: asset.getImage(Int(offset), compressionQuality: 1.0))
+      let thumbnailImage = ThumbnailImage(image: asset.getImage(second: offset, compressionQuality: 1.0))
       offset = Double(i) * (originalDuration / Double(imagesCount))
 
       thumbHQImages.append(thumbnailImage)
     }
     thumbHQImages.remove(at: 0)
+  }
+
+  func getFirstThumbnail() -> UIImage? {
+    asset.getImage(second: 0, compressionQuality: 0.5)
   }
 
   /// reset and update

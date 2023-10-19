@@ -54,7 +54,7 @@ struct PhotoCollectionView: View {
         }
         .frame(width: 24, height: 24)
         Spacer()
-        Text("갤러리")
+        Text("앨범")
           .fontSystem(fontDesignSystem: .subtitle1_KO)
           .foregroundColor(.LabelColor_Primary)
         Spacer()
@@ -361,7 +361,7 @@ struct AlbumListView: View {
             .foregroundColor(.LabelColor_Primary)
         }
         Spacer()
-        Text("갤러리")
+        Text("앨범")
           .fontSystem(fontDesignSystem: .subtitle1_KO)
           .foregroundColor(.LabelColor_Primary)
         Spacer()

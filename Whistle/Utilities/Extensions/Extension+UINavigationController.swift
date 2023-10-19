@@ -10,19 +10,19 @@ import UIKit
 
 // MARK: - UINavigationController + ObservableObject, UIGestureRecognizerDelegate
 
-// extension UINavigationController: ObservableObject, UIGestureRecognizerDelegate {
-//
-//  // MARK: Open
-//
-//  override open func viewDidLoad() {
-//    super.viewDidLoad()
-////    navigationBar.isHidden = false
-////    interactivePopGestureRecognizer?.delegate = self
-//  }
-//
-//  // MARK: Public
-//
-//  public func gestureRecognizerShouldBegin(_: UIGestureRecognizer) -> Bool {
-//    viewControllers.count > 1
-//  }
-// }
+extension UINavigationController: ObservableObject, UIGestureRecognizerDelegate {
+
+  // MARK: Open
+
+  override open func viewDidLoad() {
+    super.viewDidLoad()
+    navigationBar.isHidden = false
+    interactivePopGestureRecognizer?.delegate = self
+  }
+
+  // MARK: Public
+
+  public func gestureRecognizerShouldBegin(_: UIGestureRecognizer) -> Bool {
+    viewControllers.count > 1
+  }
+}
