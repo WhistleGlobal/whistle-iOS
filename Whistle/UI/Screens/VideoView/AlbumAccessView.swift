@@ -1,23 +1,22 @@
 //
-//  AccessView.swift
+//  AlbumAccessView.swift
 //  Whistle
 //
-//  Created by ChoiYujin on 10/11/23.
+//  Created by ChoiYujin on 10/19/23.
 //
 
 import AVFoundation
 import Photos
 import SwiftUI
 
-// MARK: - AccessView
+// MARK: - AlbumAccessView
 
-struct AccessView: View {
-  @EnvironmentObject var tabbarModel: TabbarModel
-  @State var showAlert = (false, VideoUsageAuth.none)
-  @State var opacity = 0.1
+struct AlbumAccessView: View {
 
-  @Binding var isCameraAuthorized: Bool
-  @Binding var isMicrophoneAuthorized: Bool
+  let authorizationStatus = PHPhotoLibrary.authorizationStatus(for: .readWrite)
+  @State var showAlert = false
+  @Binding var isAlbumAuthorized: Bool
+  @Binding var showAlbumAccessView: Bool
 
   var body: some View {
     ZStack {
@@ -28,8 +27,22 @@ struct AccessView: View {
           .blur(radius: 50)
       }
       VStack(spacing: 0) {
+        HStack {
+          Button {
+            showAlbumAccessView = false
+          } label: {
+            Image(systemName: "xmark")
+              .font(.system(size: 20))
+              .foregroundColor(.White)
+              .padding(.vertical, 16)
+              .padding(.horizontal, 18)
+          }
+          Spacer()
+        }
+        .frame(height: 52)
+        .frame(maxWidth: .infinity)
         Spacer()
-        Text("Whistle의 카메라 및 마이크\n액세스를 허용해 주세요")
+        Text("Whistle의 사진 및 동영상 액세스를 허용해 주세요")
           .fontSystem(fontDesignSystem: .title2_KO_SemiBold)
           .foregroundColor(.LabelColor_Primary_Dark)
           .multilineTextAlignment(.center)
@@ -39,11 +52,11 @@ struct AccessView: View {
           labelTitleAndText(
             systemImage: "photo.fill.on.rectangle.fill",
             title: "회원님이 이 권한을 사용하는 방식",
-            text: "회원님이 Whistle에 15초 이내의 짧은 동영상을 녹화하고 오디오 효과를 미리 볼 수 있습니다.")
+            text: "Whistle에 카메라 롤의 사진과 동영상을 추가하여 효과를 미리 볼 수 있습니다.")
           labelTitleAndText(
             systemImage: "info.circle",
             title: "이 권한이 사용되는 방식",
-            text: "회원님이 Whistle에 직접 촬영한 동영상을 공유하고 오디오 효과를 적용할 수 있도록 지원하며 이에 대한 미리보기를 보여줍니다.")
+            text: "회원님이 Whistle에 카메라 롤의 사진과 동영상을 공유하고 오디오 효과를 적용할 수 있도록 지원하며 이에 대한 미리보기를 보여줍니다.")
           labelTitleAndText(
             systemImage: "gear",
             title: "이 설정 사용 방법",
@@ -54,9 +67,10 @@ struct AccessView: View {
         Spacer()
         VStack(spacing: 16) {
           Button {
-            requestCameraPermission()
-            requestMicrophonePermission()
-            showAuthAlert()
+            requestAlbumAuthorization()
+            if isAlbumAuthorized {
+              showAlbumAccessView = false
+            }
           } label: {
             glassMorphicView(width: UIScreen.width - 32, height: 56, cornerRadius: 12)
               .overlay {
@@ -70,30 +84,10 @@ struct AccessView: View {
           }
         }
       }
-      VStack {
-        HStack {
-          Button {
-            tabbarModel.tabSelectionNoAnimation = .main
-            withAnimation {
-              tabbarModel.tabSelection = .main
-            }
-          } label: {
-            Image(systemName: "xmark")
-              .resizable()
-              .scaledToFit()
-              .frame(width: 20)
-              .foregroundColor(.white)
-          }
-          Spacer()
-        }
-        .frame(height: 52)
-        .padding(.horizontal, 16)
-        Spacer()
-      }
     }
-    .alert(isPresented: $showAlert.0) {
+    .alert(isPresented: $showAlert) {
       Alert(
-        title: Text("'Whistle'에 대해 \(showAlert.1.rawValue)이 없습니다. 설정에서 \(showAlert.1.rawValue) 권한을 켜시겠습니까?"),
+        title: Text("'Whistle'에 대해 라이브러리 읽기/쓰기 권한이 없습니다. 설정에서 라이브러리 읽기/쓰기 권한을 켜시겠습니까?"),
         primaryButton: .default(Text("설정으로 가기"), action: {
           guard let url = URL(string: UIApplication.openSettingsURLString) else { return }
           if UIApplication.shared.canOpenURL(url) {
@@ -105,48 +99,44 @@ struct AccessView: View {
   }
 }
 
-private var videoUsageAuth: VideoUsageAuth = .none
+extension AlbumAccessView {
 
-// MARK: - VideoUsageAuth
-
-enum VideoUsageAuth: String {
-  case photoLibraryAccess = "라이브러리 읽기/쓰기 권한"
-  case cameraAccess = "카메라 사용 권한"
-  case microphoneAccess = "마이크 사용 권한"
-  case cameraAndMicrophoneAcess = "카메라/마이크 사용 권한"
-  case none = ""
-}
-
-extension AccessView {
-  private func requestCameraPermission() {
-    AVCaptureDevice.requestAccess(for: .video) { granted in
-      DispatchQueue.main.async {
-        isCameraAuthorized = granted
+  private func requestAlbumAuthorization() {
+    switch authorizationStatus {
+    case .notDetermined:
+      PHPhotoLibrary.requestAuthorization { status in
+        DispatchQueue.main.async {
+          switch status {
+          case .restricted:
+            print("restricted")
+          case .denied:
+            print("denied")
+          case .authorized:
+            isAlbumAuthorized = true
+            showAlbumAccessView = false
+          case .limited:
+            print("limited")
+          @unknown default:
+            print("unknown default")
+          }
+        }
       }
+    case .restricted:
+      print("restricted")
+    case .denied:
+      showAlert = true
+    case .authorized:
+      isAlbumAuthorized = true
+      showAlbumAccessView = false
+    case .limited:
+      print("limited")
+    @unknown default:
+      print("unknown default")
     }
   }
-
-  private func requestMicrophonePermission() {
-    AVCaptureDevice.requestAccess(for: .audio) { granted in
-      DispatchQueue.main.async {
-        isMicrophoneAuthorized = granted
-      }
-    }
-  }
-
-  private func showAuthAlert() {
-    if !isCameraAuthorized {
-      showAlert.1 = .cameraAccess
-      showAlert.0 = true
-    } else if !isMicrophoneAuthorized {
-      showAlert.1 = .microphoneAccess
-      showAlert.0 = true
-    } else { }
-  }
-
 }
 
-extension AccessView {
+extension AlbumAccessView {
   @ViewBuilder
   func labelTitleAndText(systemImage: String, title: String, text: String) -> some View {
     HStack(alignment: .top, spacing: 16) {

@@ -19,6 +19,11 @@ struct ProfileEditView: View {
   @State var showProfileImageToast = false
   @State var showGallery = false
   @State var showAuthAlert = false
+
+  @State var isAlbumAuthorized = false
+  @State var showAlbumAccessView = false
+  @State var authorizationStatus = PHPhotoLibrary.authorizationStatus(for: .readWrite)
+
   @EnvironmentObject var apiViewModel: APIViewModel
   @EnvironmentObject var tabbarModel: TabbarModel
   @ObservedObject var photoCollection = PhotoCollection(smartAlbum: .smartAlbumUserLibrary)
@@ -30,7 +35,11 @@ struct ProfileEditView: View {
       profileImageView(url: apiViewModel.myProfile.profileImage, size: 100)
         .padding(.bottom, 16)
       Button {
-        editProfileImage = true
+        if isAlbumAuthorized {
+          editProfileImage = true
+        } else {
+          showAlbumAccessView = true
+        }
       } label: {
         Text("프로필 사진 수정")
           .foregroundColor(.Info)
@@ -70,6 +79,9 @@ struct ProfileEditView: View {
     .fullScreenCover(isPresented: $showGallery) {
       PhotoCollectionView(photoCollection: photoCollection, showProfileImageToast: $showProfileImageToast)
         .environmentObject(apiViewModel)
+    }
+    .fullScreenCover(isPresented: $showAlbumAccessView) {
+      AlbumAccessView(isAlbumAuthorized: $isAlbumAuthorized, showAlbumAccessView: $showAlbumAccessView)
     }
     .padding(.horizontal, 16)
     .navigationBarBackButtonHidden()
@@ -127,6 +139,7 @@ struct ProfileEditView: View {
     }
     .onAppear {
       tabbarModel.tabbarOpacity = 0.0
+      getAlbumAuth()
     }
   }
 }
@@ -153,6 +166,25 @@ extension ProfileEditView {
           .foregroundColor(.secondary)
       }
       .frame(height: 56)
+    }
+  }
+}
+
+extension ProfileEditView {
+  func getAlbumAuth() {
+    switch authorizationStatus {
+    case .notDetermined:
+      log("notDetermined")
+    case .restricted:
+      log("restricted")
+    case .denied:
+      log("restricted")
+    case .authorized:
+      isAlbumAuthorized = true
+    case .limited:
+      isAlbumAuthorized = true
+    @unknown default:
+      log("unknown default")
     }
   }
 }

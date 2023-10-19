@@ -48,9 +48,9 @@ public class AespaVideoContext<Common: CommonContext> {
     // Add first video file to buffer if it exists
     if option.asset.synchronizeWithLocalAlbum {
       Task(priority: .utility) {
-        guard let firstVideoAsset = await albumManager.fetchVideoFile(limit: 1).first else {
-          return
-        }
+//        guard let firstVideoAsset = await albumManager.fetchVideoFile(limit: 1).first else {
+//          return
+//        }
 
 //                videoFileBufferSubject.send(.success(firstVideoAsset.toVideoFile))
       }
@@ -166,17 +166,17 @@ extension AespaVideoContext: VideoContext {
     return self
   }
 
-  public func fetchVideoFiles(limit: Int = 0) async -> [VideoAsset] {
-    guard option.asset.synchronizeWithLocalAlbum else {
-      Logger.log(
-        message:
-        "'option.asset.synchronizeWithLocalAlbum' is set to false" +
-          "so no photos will be fetched from the local album. " +
-          "If you intended to fetch photos," +
-          "please ensure 'option.asset.synchronizeWithLocalAlbum' is set to true.")
-      return []
-    }
-
-    return await albumManager.fetchVideoFile(limit: limit)
-  }
+//  public func fetchVideoFiles(limit: Int = 0) async -> [VideoAsset] {
+//    guard option.asset.synchronizeWithLocalAlbum else {
+//      Logger.log(
+//        message:
+//        "'option.asset.synchronizeWithLocalAlbum' is set to false" +
+//          "so no photos will be fetched from the local album. " +
+//          "If you intended to fetch photos," +
+//          "please ensure 'option.asset.synchronizeWithLocalAlbum' is set to true.")
+//      return []
+//    }
+//
+//    return await albumManager.fetchVideoFile(limit: limit)
+//  }
 }

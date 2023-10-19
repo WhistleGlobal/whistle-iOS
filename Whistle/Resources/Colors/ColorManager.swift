@@ -45,10 +45,9 @@ extension Color {
   static let Dim_Default_Light = Color("Gray80_Light").opacity(0.36)
   static let Dim_Thin = Color("Gray80").opacity(0.16)
 
-  static let LabelColor_Primary_Dark: Color = .init("Gray10_Dark")
+  static let LabelColor_Primary_Dark: Color = .white
   static let LabelColor_Primary_Light: Color = .init("Gray10_Light")
-
-  static let LabelColor_Secondary_Dark: Color = .init("Gray20_Dark")
+  static let LabelColor_Secondary_Dark: Color = .init("Gray10_Dark")
 
   // MARK: - etc
 

@@ -24,9 +24,13 @@ struct TabbarView: View {
   @State var isRootStacked = false
 
   @State var refreshCount = 0
+
+  @State private var albumAuthorizationStatus = PHPhotoLibrary.authorizationStatus(for: .readWrite)
+  @State private var videoAuthorizationStatus = AVCaptureDevice.authorizationStatus(for: .video)
+  @State private var microphoneAuthorizationStatus = AVCaptureDevice.authorizationStatus(for: .audio)
   // upload
-  @State private var isCameraAuthorized = false
   @State private var isAlbumAuthorized = false
+  @State private var isCameraAuthorized = false
   @State private var isMicrophoneAuthorized = false
   @State private var isNavigationActive = true
   @State var showTermsOfService = false
@@ -81,22 +85,22 @@ struct TabbarView: View {
 
       case .upload:
         NavigationView {
-          VideoContentView()
-            .environmentObject(apiViewModel)
-            .environmentObject(tabbarModel)
-            .opacity(isNavigationActive ? 1 : 0)
-            .overlay {
-              if !isNavigationActive {
-                AccessView(
-                  isCameraAuthorized: $isCameraAuthorized,
-                  isAlbumAuthorized: $isAlbumAuthorized,
-                  isMicrophoneAuthorized: $isMicrophoneAuthorized)
-                  .environmentObject(tabbarModel)
-              }
+          if isCameraAuthorized, isMicrophoneAuthorized {
+            VideoContentView()
+              .environmentObject(apiViewModel)
+              .environmentObject(tabbarModel)
+          } else {
+            if !isNavigationActive {
+              AccessView(
+                isCameraAuthorized: $isCameraAuthorized,
+                isMicrophoneAuthorized: $isMicrophoneAuthorized)
+                .environmentObject(tabbarModel)
             }
+          }
         }
         .onAppear {
-          requestPermissions()
+          getCameraPermission()
+          getMicrophonePermission()
           checkAllPermissions()
           tabbarModel.tabbarOpacity = 0.0
         }
@@ -501,20 +505,39 @@ class TabbarModel: ObservableObject {
   @Published var tabWidth = UIScreen.width - 32
 }
 
+
+// MARK: - 권한
 extension TabbarView {
-  private func requestPermissions() {
-    // Request camera, album, and microphone permissions
-    requestCameraPermission()
-    requestAlbumPermission()
-    requestMicrophonePermission()
+
+  private func getCameraPermission() {
+    let authorizationStatus = AVCaptureDevice.authorizationStatus(for: .video)
+    switch authorizationStatus {
+    case .notDetermined:
+      log("notDetermined")
+    case .restricted:
+      log("restricted")
+    case .denied:
+      log("restricted")
+    case .authorized:
+      isCameraAuthorized = true
+    @unknown default:
+      log("unknown default")
+    }
   }
 
-  private func requestAlbumPermission() {
-    PHPhotoLibrary.requestAuthorization { status in
-      DispatchQueue.main.async {
-        isAlbumAuthorized = status == .authorized
-        checkAllPermissions()
-      }
+  private func getMicrophonePermission() {
+    let authorizationStatus = AVCaptureDevice.authorizationStatus(for: .audio)
+    switch authorizationStatus {
+    case .notDetermined:
+      log("notDetermined")
+    case .restricted:
+      log("restricted")
+    case .denied:
+      log("restricted")
+    case .authorized:
+      isMicrophoneAuthorized = true
+    @unknown default:
+      log("unknown default")
     }
   }
 
@@ -537,7 +560,7 @@ extension TabbarView {
   }
 
   private func checkAllPermissions() {
-    if isAlbumAuthorized, isCameraAuthorized, isMicrophoneAuthorized {
+    if isCameraAuthorized, isMicrophoneAuthorized {
       isNavigationActive = true
     } else {
       isNavigationActive = false

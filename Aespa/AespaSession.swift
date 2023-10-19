@@ -348,9 +348,9 @@ extension AespaSession: VideoContext {
     videoContext.torch(mode: mode, level: level, onComplete)
   }
 
-  public func fetchVideoFiles(limit: Int = 0) async -> [VideoAsset] {
-    await videoContext.fetchVideoFiles(limit: limit)
-  }
+//  public func fetchVideoFiles(limit: Int = 0) async -> [VideoAsset] {
+//    await videoContext.fetchVideoFiles(limit: limit)
+//  }
 }
 
 // MARK: PhotoContext
@@ -387,9 +387,9 @@ extension AespaSession: PhotoContext {
     photoContext.custom(setting)
   }
 
-  public func fetchPhotoFiles(limit: Int = 0) async -> [PhotoAsset] {
-    await photoContext.fetchPhotoFiles(limit: limit)
-  }
+//  public func fetchPhotoFiles(limit: Int = 0) async -> [PhotoAsset] {
+//    await photoContext.fetchPhotoFiles(limit: limit)
+//  }
 }
 
 extension AespaSession {
