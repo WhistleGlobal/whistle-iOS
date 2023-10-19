@@ -83,7 +83,7 @@ struct UserContentListView: View {
                     profileImg: content.profileImg ?? "",
                     thumbnailUrl: content.thumbnailUrl ?? "",
                     caption: content.caption ?? "",
-                    musicTitle: content.musicTitle ?? "",
+                    musicTitle: content.musicTitle ?? "원본 오디오",
                     isWhistled:
                     Binding(get: {
                       content.isWhistled == 1 ? true : false
@@ -359,11 +359,11 @@ extension UserContentListView {
                 .font(.system(size: 44))
                 .foregroundColor(.Gray10)
                 .padding(.bottom, 26)
-              Text("차단된 계정의 콘텐츠입니다.")
+              Text("관심없음을 설정한 콘텐츠입니다.")
                 .fontSystem(fontDesignSystem: .subtitle1_KO)
                 .foregroundColor(.LabelColor_Primary_Dark)
                 .padding(.bottom, 12)
-              Text("차단된 계정의 모든 콘텐츠는 \n회원님의 피드에 노출되지 않습니다.")
+              Text("관심없음을 설정한 모든 콘텐츠는 \n회원님의 피드에 노출되지 않습니다.")
                 .fontSystem(fontDesignSystem: .body2_KO)
                 .foregroundColor(.LabelColor_Secondary_Dark)
             }
