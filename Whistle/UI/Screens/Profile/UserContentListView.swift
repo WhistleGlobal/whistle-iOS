@@ -225,40 +225,14 @@ struct UserContentListView: View {
       if showHideContentToast {
         CancelableToastMessage(text: "해당 콘텐츠를 숨겼습니다", paddingBottom: 78, action: {
           Task {
-            if apiViewModel.userPostFeed.count - 1 != currentIndex { // 삭제하려는 컨텐츠가 배열 마지막이 아님
-              guard let contentId = apiViewModel.userPostFeed[currentIndex].contentId else { return }
-              log("contentId: \(contentId)")
-              log("currentIndex: \(currentIndex)")
-              log("playerIndex: \(playerIndex)")
-              apiViewModel.userPostFeed.remove(at: currentIndex)
-              players[currentIndex]?.pause()
-              players.remove(at: currentIndex)
-              if !players.isEmpty {
-                players[currentIndex] =
-                  AVPlayer(url: URL(string: apiViewModel.userPostFeed[currentIndex].videoUrl ?? "")!)
-                await players[currentIndex]?.seek(to: .zero)
-                players[currentIndex]?.play()
-              }
-              apiViewModel.postFeedPlayerChanged()
-              log("contentId: \(contentId)")
-              log("currentIndex: \(currentIndex)")
-              log("playerIndex: \(currentIndex)")
-              await apiViewModel.actionContentHate(contentId: contentId)
-            } else {
-              guard let contentId = apiViewModel.userPostFeed[currentIndex].contentId else { return }
-              log("contentId: \(contentId)")
-              log("currentIndex: \(currentIndex)")
-              log("playerIndex: \(playerIndex)")
-              apiViewModel.userPostFeed.removeLast()
-              players.last??.pause()
-              players.removeLast()
-              currentIndex -= 1
-              apiViewModel.postFeedPlayerChanged()
-              log("contentId: \(contentId)")
-              log("currentIndex: \(currentIndex)")
-              log("playerIndex: \(currentIndex)")
-              await apiViewModel.actionContentHate(contentId: contentId)
-            }
+            guard let contentId = apiViewModel.userPostFeed[currentIndex].contentId else { return }
+            log("contentId: \(contentId)")
+            log("currentIndex: \(currentIndex)")
+            log("playerIndex: \(playerIndex)")
+            apiViewModel.userPostFeed[currentIndex].isHated = 1
+            players[currentIndex]?.pause()
+            apiViewModel.postFeedPlayerChanged()
+            await apiViewModel.actionContentHate(contentId: contentId)
           }
         }, showToast: $showHideContentToast)
       }
