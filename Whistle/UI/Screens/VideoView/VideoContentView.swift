@@ -45,6 +45,7 @@ struct VideoContentView: View {
 
   // MARK: - Bools
 
+  @State var disableUploadButton = false
   @State var isRecording = false
   @State var isFront = false
   @State var isFlashOn = false
@@ -790,7 +791,7 @@ extension VideoContentView {
         .overlay(
           RoundedRectangle(cornerRadius: 6)
             .stroke(Color.LabelColor_Primary_Dark, lineWidth: 1))
-      Text("갤러리")
+      Text("앨범")
         .fontSystem(fontDesignSystem: .body2_KO)
         .foregroundColor(.LabelColor_Primary_Dark)
     }
@@ -885,6 +886,14 @@ extension VideoContentView {
         buttonState = .completed
         stopRecordingTimer()
         isRecording = false
+        viewModel.aespaSession.stopRecording { result in
+          switch result {
+          case .success(let videoURL):
+            setVideo(videoURL)
+          case .failure(let error):
+            print("Error: \(error)")
+          }
+        }
       }
     }
   }
@@ -988,43 +997,47 @@ extension VideoContentView {
           isRecording = false
         }
       case .completed:
-        Circle()
-          .stroke(lineWidth: 4)
-          .foregroundColor(.White)
-          .frame(width: 84, height: 84, alignment: .center)
-          .overlay {
-            Circle()
-              .foregroundColor(.Primary_Default)
-              .frame(width: 72, height: 72, alignment: .center)
-            Image(systemName: "checkmark")
-              .font(.custom("SFCompactText-Regular", size: 44))
-              .foregroundColor(.White)
+        Button {
+          disableUploadButton = true
+          print("button tapped")
+          print(Int(
+            (editorVM.currentVideo?.rangeDuration.lowerBound)! /
+              (editorVM.currentVideo?.originalDuration)! *
+              21))
+          if musicVM.isTrimmed {
+            editorVM.currentVideo?.setVolume(0)
           }
-          .onTapGesture {
-            Task {
-              if musicVM.isTrimmed {
-                editorVM.currentVideo?.setVolume(0)
-              }
-              if let video = editorVM.currentVideo {
-                let exporterVM = ExporterViewModel(video: video)
-                await exporterVM.action(.save, start: (editorVM.currentVideo?.rangeDuration.lowerBound)!)
-                let thumbnail = editorVM
-                  .returnThumbnail(Int(
-                    (editorVM.currentVideo?.rangeDuration.lowerBound)! /
-                      (editorVM.currentVideo?.originalDuration)! *
-                      21))
-                apiViewModel.uploadPost(
-                  video: exporterVM.videoData,
-                  thumbnail: thumbnail.jpegData(compressionQuality: 0.5)!,
-                  caption: "",
-                  musicID: musicVM.musicInfo?.musicID ?? 0,
-                  videoLength: editorVM.currentVideo!.totalDuration,
-                  hashtags: [""])
-              }
-              tabbarModel.tabSelectionNoAnimation = .main
-              tabbarModel.tabSelection = .main
+          Task {
+            if let video = editorVM.currentVideo {
+              let exporterVM = ExporterViewModel(video: video)
+              await exporterVM.action(.save, start: video.rangeDuration.lowerBound)
+              let thumbnail = video.getFirstThumbnail()
+              apiViewModel.uploadPost(
+                video: exporterVM.videoData,
+                thumbnail: thumbnail?.jpegData(compressionQuality: 0.5)! ?? Data(),
+                caption: "",
+                musicID: musicVM.musicInfo?.musicID ?? 0,
+                videoLength: video.totalDuration,
+                hashtags: [""])
             }
           }
+          tabbarModel.tabSelectionNoAnimation = .main
+          tabbarModel.tabSelection = .main
+        } label: {
+          Circle()
+            .stroke(lineWidth: 4)
+            .foregroundColor(.White)
+            .frame(width: 84, height: 84, alignment: .center)
+            .overlay {
+              Circle()
+                .foregroundColor(.Primary_Default)
+                .frame(width: 72, height: 72, alignment: .center)
+              Image(systemName: "checkmark")
+                .font(.custom("SFCompactText-Regular", size: 44))
+                .foregroundColor(.White)
+            }
+        }
+        .disabled(disableUploadButton)
       }
     }
   }
@@ -1036,8 +1049,8 @@ extension VideoContentView {
   private func setVideo(_ url: URL) {
     selectedVideoURL = url
     if let selectedVideoURL {
-      videoPlayer.loadState = .loaded(selectedVideoURL)
       editorVM.setNewVideo(selectedVideoURL)
+      videoPlayer.loadState = .loaded(selectedVideoURL)
     }
 
     if let project, let url = project.videoURL {

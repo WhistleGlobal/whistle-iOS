@@ -20,15 +20,15 @@ extension AVAsset {
     }
   }
 
-  func getImage(_ second: Int, compressionQuality: Double = 0.05) -> UIImage? {
+  func getImage(second: Double, compressionQuality: Double = 0.05) -> UIImage? {
     let imgGenerator = AVAssetImageGenerator(asset: self)
     imgGenerator.appliesPreferredTrackTransform = true
 
     guard
       let cgImage = try? imgGenerator.copyCGImage(
         at: .init(
-          seconds: Double(second),
-          preferredTimescale: 1),
+          seconds: second,
+          preferredTimescale: 1000),
         actualTime: nil)
     else { return nil }
     let uiImage = UIImage(cgImage: cgImage)

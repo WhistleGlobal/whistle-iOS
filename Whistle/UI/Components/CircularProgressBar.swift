@@ -11,18 +11,18 @@ import SwiftUI
 
 struct CircularProgressBar: View {
   var progress: Double
-
+  var width = 1.5
   @State private var animatedProgress = 0.0 // 애니메이션에 사용할 상태 변수
 
   var body: some View {
     GeometryReader { geometry in
       ZStack {
         Circle()
-          .stroke(lineWidth: 1.5)
-          .foregroundColor(.Dim_Thin)
+          .stroke(lineWidth: width)
+          .foregroundColor(.Border_Default_Dark)
         Circle()
           .trim(from: 0.0, to: CGFloat(min(animatedProgress, 1.0))) // 애니메이션된 값 사용
-          .stroke(style: StrokeStyle(lineWidth: 1.5, lineCap: .round, lineJoin: .round))
+          .stroke(style: StrokeStyle(lineWidth: width, lineCap: .round, lineJoin: .round))
           .foregroundColor(.Gray10)
           .rotationEffect(Angle(degrees: 270.0))
       }

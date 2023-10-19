@@ -7,6 +7,7 @@
 
 import _AVKit_SwiftUI
 import AVFoundation
+import Combine
 import Kingfisher
 import SwiftUI
 
@@ -49,11 +50,16 @@ struct MainView: View {
   @State var viewTimer: Timer? = nil
   @State var isSplashOn = true
   @State var processedContentId: Set<Int> = []
+  @State var isUploading = false
+  @State var uploadingThumbnail = Image("noVideo")
+  @State var uploadProgress = 0.0
+  @State var showUploadedToast = false
 
   @Binding var mainOpacity: Double
   @Binding var isRootStacked: Bool
   @State var currentIndex = 0
   @Binding var refreshCount: Int
+  var cancellables: Set<AnyCancellable> = []
 
   var body: some View {
     GeometryReader { proxy in
@@ -209,6 +215,24 @@ struct MainView: View {
           newId = id
         }
         .id(newId)
+        .onReceive(UploadProgressViewModel.shared.isUploadingSubject) { value in
+          switch value {
+          case true:
+            withAnimation {
+              isUploading = value
+            }
+          case false:
+            withAnimation {
+              isUploading = value
+            }
+          }
+        }
+        .onReceive(UploadProgressViewModel.shared.thumbnailSubject) { value in
+          uploadingThumbnail = value
+        }
+        .onReceive(UploadProgressViewModel.shared.progressSubject) { value in
+          uploadProgress = value
+        }
       }
       .rotationEffect(Angle(degrees: 90))
       .frame(width: proxy.size.height)
@@ -280,6 +304,36 @@ struct MainView: View {
           }
         }
       }
+      .overlay(alignment: .topLeading) {
+        if isUploading {
+          uploadingThumbnail
+            .resizable()
+            .frame(width: 64, height: 64)
+            .clipShape(RoundedRectangle(cornerRadius: 8))
+            .overlay {
+              ZStack {
+                RoundedRectangle(cornerRadius: 8)
+                  .fill(.black.opacity(0.48))
+                RoundedRectangle(cornerRadius: 8)
+                  .strokeBorder(Color.Border_Default_Dark)
+                CircularProgressBar(progress: UploadProgressViewModel.shared.progress, width: 2)
+                  .padding(8)
+                Text("\(Int(uploadProgress * 100))%")
+                  .foregroundStyle(Color.white)
+                  .fontSystem(fontDesignSystem: .body2_KO)
+              }
+            }
+            .padding(.top, 70)
+            .padding(.leading, 16)
+            .onDisappear {
+              DispatchQueue.main.asyncAfter(deadline: DispatchTime.now()+0.2) {
+                withAnimation {
+                  showUploadedToast = true
+                }
+              }
+            }
+        }
+      }
     }
     .ignoresSafeArea(.all, edges: .top)
     .navigationBarBackButtonHidden()
@@ -287,7 +341,7 @@ struct MainView: View {
     .alert(isPresented: $showUpdate) {
       Alert(
         title: Text("업데이트 알림"),
-        message: Text("Whistle의 새로운 버전이 있습니다. 최신 버전으로 ta데이트 해주세요."),
+        message: Text("Whistle의 새로운 버전이 있습니다. 최신 버전으로 업데이트 해주세요."),
         dismissButton: .default(Text("업데이트"), action: {
           guard let url = URL(string: "itms-apps://itunes.apple.com/app/6463850354") else { return }
           if UIApplication.shared.canOpenURL(url) {
@@ -403,6 +457,9 @@ struct MainView: View {
       }
     }
     .overlay {
+      if showUploadedToast == true {
+        ToastMessage(text: "영상이 게시되었습니다.", toastPadding: 70, isTopAlignment: true, showToast: $showUploadedToast)
+      }
       if showPasteToast {
         ToastMessage(text: "클립보드에 복사되었어요", toastPadding: 70, isTopAlignment: true, showToast: $showPasteToast)
       }
@@ -456,12 +513,18 @@ struct MainView: View {
         Task {
           if apiViewModel.contentList[currentIndex].isBookmarked ?? false {
             showBookmarkToast.1 = "저장 취소했습니다."
-            showBookmarkToast.0 = await apiViewModel.actionBookmarkCancel(contentId: currentVideoContentId)
+            let tempBool = await apiViewModel.actionBookmarkCancel(contentId: currentVideoContentId)
+            withAnimation{
+              showBookmarkToast.0 = tempBool
+            }
             apiViewModel.contentList[currentIndex].isBookmarked = false
             currentVideoIsBookmarked = false
           } else {
             showBookmarkToast.1 = "저장했습니다."
-            showBookmarkToast.0 = await apiViewModel.actionBookmark(contentId: currentVideoContentId)
+            let tempBool = await apiViewModel.actionBookmark(contentId: currentVideoContentId)
+            withAnimation{
+              showBookmarkToast.0 = tempBool
+            }
             apiViewModel.contentList[currentIndex].isBookmarked = true
             currentVideoIsBookmarked = true
           }
@@ -469,7 +532,9 @@ struct MainView: View {
         }
       }
       Button("관심없음", role: .none) {
-        showHideContentToast = true
+        withAnimation{
+          showHideContentToast = true
+        }
       }
       if currentVideoUserId != apiViewModel.myProfile.userId {
         Button("신고", role: .destructive) {
@@ -634,7 +699,9 @@ extension MainView {
             .padding(.bottom, -4)
           }
           Button {
-            showPasteToast = true
+            withAnimation {
+              showPasteToast = true
+            }
             UIPasteboard.general.setValue(
               "https://readywhistle.com/content_uni?contentId=\(currentVideoContentId)",
               forPasteboardType: UTType.plainText.identifier)

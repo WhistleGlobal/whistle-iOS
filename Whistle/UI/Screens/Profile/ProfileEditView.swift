@@ -74,7 +74,7 @@ struct ProfileEditView: View {
     .padding(.horizontal, 16)
     .navigationBarBackButtonHidden()
     .confirmationDialog("", isPresented: $editProfileImage) {
-      Button("갤러리에서 사진 업로드", role: .none) {
+      Button("앨범에서 사진 업로드", role: .none) {
         PHPhotoLibrary.requestAuthorization(for: .readWrite) { status in
           switch status {
           case .notDetermined, .restricted, .denied:

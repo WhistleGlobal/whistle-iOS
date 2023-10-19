@@ -7,6 +7,7 @@
 
 import Alamofire
 import Foundation
+import SwiftUI
 import SwiftyJSON
 import UIKit
 
@@ -68,18 +69,20 @@ extension APIViewModel: UploadProtocol {
       to: "\(domainURL)/content/upload",
       headers: contentTypeMultipart)
       .uploadProgress { progress in
-        print("Upload Progress: \(progress.fractionCompleted)")
+        UploadProgressViewModel.shared.progress = progress.fractionCompleted
       }
       //    .validate(statusCode: 200 ..< 501)
       .validate(statusCode: 200 ..< 300)
       .response { response in
         switch response.result {
         case .success(let data):
+          UploadProgressViewModel.shared.uploadEnded()
           guard let data else {
             return
           }
           log("Success: \(data)")
         case .failure(let error):
+          UploadProgressViewModel.shared.error = true
           log("\(error)")
         }
       }

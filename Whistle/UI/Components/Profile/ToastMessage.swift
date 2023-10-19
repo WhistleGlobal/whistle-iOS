@@ -41,11 +41,11 @@ struct ToastMessage: View {
       if showToast {
         toastOpacity = 1.0
         // 일정 시간 후에 토스트 메시지를 숨김
-        DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) {
           withAnimation {
             toastOpacity = 0.0
+            showToast = false
           }
-          showToast = false
         }
       }
     }

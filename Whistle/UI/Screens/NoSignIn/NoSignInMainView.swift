@@ -350,6 +350,13 @@ struct NoSignInMainView: View {
         tabbarModel.tabbarOpacity = 0.0
       }
     }
+    .onChange(of: tabbarModel.tabbarOpacity) { newValue in
+      if newValue == 1.0 {
+        players[currentIndex]?.play()
+      } else {
+        players[currentIndex]?.pause()
+      }
+    }
     .navigationDestination(isPresented: $showTermsOfService) {
       TermsOfServiceView()
     }
