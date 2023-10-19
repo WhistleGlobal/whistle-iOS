@@ -353,7 +353,7 @@ extension ProfileView {
             .scaleEffect(whistleFollowerTextScale)
         }
         .hCenter()
-        Rectangle().frame(width: 1, height: .infinity).foregroundColor(.white)
+        Rectangle().frame(width: 1, height: 36).foregroundColor(.white)
         NavigationLink {
           FollowView()
             .environmentObject(apiViewModel)

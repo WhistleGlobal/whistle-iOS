@@ -89,6 +89,7 @@ struct AlertPopup: View {
         }
         if let content {
           Text(content)
+            .fontSystem(fontDesignSystem: .body2_KO)
             .foregroundStyle(Color.LabelColor_Secondary_Dark)
             .lineLimit(nil) // 줄바꿈을 제한하지 않음
             .multilineTextAlignment(.center) // 중앙 정렬
