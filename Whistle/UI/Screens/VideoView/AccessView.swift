@@ -13,11 +13,10 @@ import SwiftUI
 
 struct AccessView: View {
   @EnvironmentObject var tabbarModel: TabbarModel
-  @State var showAlert = false
+  @State var showAlert = (false, VideoUsageAuth.none)
   @State var opacity = 0.1
 
   @Binding var isCameraAuthorized: Bool
-  @Binding var isAlbumAuthorized: Bool
   @Binding var isMicrophoneAuthorized: Bool
 
   var body: some View {
@@ -28,103 +27,47 @@ struct AccessView: View {
           .scaledToFill()
           .blur(radius: 50)
       }
-      VStack {
+      VStack(spacing: 0) {
         Spacer()
-        VStack(spacing: 12) {
-          Text("카메라와 마이크에\n접근할 수 있도록 허용해 주세요")
-            .fontSystem(fontDesignSystem: .subtitle1_KO)
-            .foregroundColor(.LabelColor_Primary_Dark)
-            .multilineTextAlignment(.center)
+        Text("Whistle의 카메라 및 마이크\n액세스를 허용해 주세요")
+          .fontSystem(fontDesignSystem: .title2_KO_SemiBold)
+          .foregroundColor(.LabelColor_Primary_Dark)
+          .multilineTextAlignment(.center)
+          .padding(.bottom, 64)
 
-          Text("당신의 휘슬을 기록해 보세요")
-            .fontSystem(fontDesignSystem: .body2)
-            .foregroundColor(.LabelColor_Secondary_Dark)
+        Group {
+          labelTitleAndText(
+            systemImage: "photo.fill.on.rectangle.fill",
+            title: "회원님이 이 권한을 사용하는 방식",
+            text: "회원님이 Whistle에 15초 이내의 짧은 동영상을 녹화하고 오디오 효과를 미리 볼 수 있습니다.")
+          labelTitleAndText(
+            systemImage: "info.circle",
+            title: "이 권한이 사용되는 방식",
+            text: "회원님이 Whistle에 직접 촬영한 동영상을 공유하고 오디오 효과를 적용할 수 있도록 지원하며 이에 대한 미리보기를 보여줍니다.")
+          labelTitleAndText(
+            systemImage: "gear",
+            title: "이 설정 사용 방법",
+            text: "설정에서 언제든지 권한을 변경할 수 있습니다.")
         }
-        Spacer()
-          .frame(height: 156)
+        .padding(.bottom, 36)
 
+        Spacer()
         VStack(spacing: 16) {
           Button {
-            videoUsageAuth = .photoLibraryAccess
-            showAlert = true
+            requestCameraPermission()
+            requestMicrophonePermission()
+            showAuthAlert()
           } label: {
             glassMorphicView(width: UIScreen.width - 32, height: 56, cornerRadius: 12)
               .overlay {
                 RoundedRectangle(cornerRadius: 12)
                   .stroke(lineWidth: 1)
                   .foregroundStyle(LinearGradient.Border_Glass)
-
-                HStack {
-                  Image(systemName: "photo.fill")
-                    .foregroundColor(.White)
-                    .frame(width: 24, height: 24)
-                  Text("앨범 읽기/쓰기 허용")
-                    .fontSystem(fontDesignSystem: .subtitle2_KO)
-                    .foregroundColor(.LabelColor_Primary_Dark)
-                }
+                Text("계속")
+                  .fontSystem(fontDesignSystem: .subtitle2_KO)
+                  .foregroundColor(.LabelColor_Primary_Dark)
               }
           }
-          .overlay {
-            if isAlbumAuthorized {
-              RoundedRectangle(cornerRadius: 12)
-                .foregroundColor(.black.opacity(0.4))
-            }
-          }
-          .disabled(isAlbumAuthorized)
-          Button {
-            videoUsageAuth = .cameraAccess
-            showAlert = true
-          } label: {
-            glassMorphicView(width: UIScreen.width - 32, height: 56, cornerRadius: 12)
-              .overlay {
-                RoundedRectangle(cornerRadius: 12)
-                  .stroke(lineWidth: 1)
-                  .foregroundStyle(LinearGradient.Border_Glass)
-
-                HStack {
-                  Image(systemName: "camera.fill")
-                    .foregroundColor(.White)
-                    .frame(width: 24, height: 24)
-                  Text("카메라 엑세스 허용")
-                    .fontSystem(fontDesignSystem: .subtitle2_KO)
-                    .foregroundColor(.LabelColor_Primary_Dark)
-                }
-              }
-          }
-          .overlay {
-            if isCameraAuthorized {
-              RoundedRectangle(cornerRadius: 12)
-                .foregroundColor(.black.opacity(0.4))
-            }
-          }
-          .disabled(isCameraAuthorized)
-          Button {
-            videoUsageAuth = .microphoneAccess
-            showAlert = true
-          } label: {
-            glassMorphicView(width: UIScreen.width - 32, height: 56, cornerRadius: 12)
-              .overlay {
-                RoundedRectangle(cornerRadius: 12)
-                  .stroke(lineWidth: 1)
-                  .foregroundStyle(LinearGradient.Border_Glass)
-
-                HStack {
-                  Image(systemName: "mic.fill")
-                    .foregroundColor(.White)
-                    .frame(width: 24, height: 24)
-                  Text("마이크 엑세스 허용")
-                    .fontSystem(fontDesignSystem: .subtitle2_KO)
-                    .foregroundColor(.LabelColor_Primary_Dark)
-                }
-              }
-          }
-          .overlay {
-            if isMicrophoneAuthorized {
-              RoundedRectangle(cornerRadius: 12)
-                .foregroundColor(.black.opacity(0.4))
-            }
-          }
-          .disabled(isMicrophoneAuthorized)
         }
       }
       VStack {
@@ -148,9 +91,9 @@ struct AccessView: View {
         Spacer()
       }
     }
-    .alert(isPresented: $showAlert) {
+    .alert(isPresented: $showAlert.0) {
       Alert(
-        title: Text("'Whistle'에 대해 \(videoUsageAuth.rawValue)이 없습니다. 설정에서 \(videoUsageAuth.rawValue) 권한을 켜시겠습니까?"),
+        title: Text("'Whistle'에 대해 \(showAlert.1.rawValue)이 없습니다. 설정에서 \(showAlert.1.rawValue) 권한을 켜시겠습니까?"),
         primaryButton: .default(Text("설정으로 가기"), action: {
           guard let url = URL(string: UIApplication.openSettingsURLString) else { return }
           if UIApplication.shared.canOpenURL(url) {
@@ -158,12 +101,6 @@ struct AccessView: View {
           }
         }),
         secondaryButton: .cancel())
-    }
-    .opacity(opacity)
-    .onAppear {
-      withAnimation {
-        opacity = 1.0
-      }
     }
   }
 }
@@ -174,7 +111,63 @@ private var videoUsageAuth: VideoUsageAuth = .none
 
 enum VideoUsageAuth: String {
   case photoLibraryAccess = "라이브러리 읽기/쓰기 권한"
-  case cameraAccess = "카메라 사용권한"
+  case cameraAccess = "카메라 사용 권한"
   case microphoneAccess = "마이크 사용 권한"
+  case cameraAndMicrophoneAcess = "카메라/마이크 사용 권한"
   case none = ""
+}
+
+extension AccessView {
+  private func requestCameraPermission() {
+    AVCaptureDevice.requestAccess(for: .video) { granted in
+      DispatchQueue.main.async {
+        isCameraAuthorized = granted
+      }
+    }
+  }
+
+  private func requestMicrophonePermission() {
+    AVCaptureDevice.requestAccess(for: .audio) { granted in
+      DispatchQueue.main.async {
+        isMicrophoneAuthorized = granted
+      }
+    }
+  }
+
+  private func showAuthAlert() {
+    if !isCameraAuthorized {
+      showAlert.1 = .cameraAccess
+      showAlert.0 = true
+    } else if !isMicrophoneAuthorized {
+      showAlert.1 = .microphoneAccess
+      showAlert.0 = true
+    } else { }
+  }
+
+}
+
+extension AccessView {
+  @ViewBuilder
+  func labelTitleAndText(systemImage: String, title: String, text: String) -> some View {
+    HStack(alignment: .top, spacing: 16) {
+      Image(systemName: systemImage)
+        .font(.system(size: 20))
+        .frame(width: 24, height: 24)
+        .foregroundColor(.LabelColor_Primary_Dark)
+
+      VStack(alignment: .leading, spacing: 8) {
+        Text(title)
+          .fontSystem(fontDesignSystem: .subtitle3_KO)
+          .foregroundColor(.LabelColor_Primary_Dark)
+        Text(text)
+          .fontSystem(fontDesignSystem: .caption_KO_Regular)
+          .lineLimit(nil)
+          .multilineTextAlignment(.leading)
+          .fixedSize(horizontal: false, vertical: true)
+          .foregroundColor(.LabelColor_Secondary_Dark)
+      }
+      Spacer()
+    }
+    .padding(.horizontal, 56)
+  }
 }
