@@ -177,7 +177,7 @@ struct TabbarView: View {
                 }
               })
       }
-      .padding(.bottom, 24)
+      .padding(.bottom, 20)
       .ignoresSafeArea()
       .padding(.horizontal, 16)
       .opacity(showGuide ? 0.0 : tabbarModel.tabbarOpacity)

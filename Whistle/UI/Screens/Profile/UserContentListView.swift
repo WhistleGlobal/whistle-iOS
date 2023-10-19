@@ -29,7 +29,7 @@ struct UserContentListView: View {
   @State var showFollowToast = (false, "")
   @State var players: [AVPlayer?] = []
   @State var timer: Timer? = nil
-
+  let processor = BlurImageProcessor(blurRadius: 100.0)
   var body: some View {
     GeometryReader { proxy in
       TabView(selection: $currentIndex) {
@@ -37,7 +37,7 @@ struct UserContentListView: View {
           if !players.isEmpty {
             if let player = players[index] {
               Player(player: player)
-                .frame(width: proxy.size.width)
+                .frame(width: UIScreen.width)
                 .opacity(content.isHated ?? 0 == 1 ? 0.1 : 1)
                 .onChange(of: tabbarModel.tabSelectionNoAnimation) { newValue in
                   if newValue != .profile {
@@ -101,9 +101,55 @@ struct UserContentListView: View {
                     .opacity(showPlayButton ? 1 : 0)
                     .allowsHitTesting(false)
                 }
-                .padding()
+                .overlay {
+                  if (content.isHated ?? 0) == 1 {
+                    KFImage.url(URL(string: content.thumbnailUrl ?? ""))
+                      .placeholder {
+                        Color.black
+                      }
+                      .resizable()
+                      .setProcessor(processor)
+                      .scaledToFill()
+                      .frame(width: UIScreen.width, height: UIScreen.height)
+                      .overlay(alignment: .topLeading) {
+                        Button {
+                          players[currentIndex]?.pause()
+                          players.removeAll()
+                          dismiss()
+                        } label: {
+                          Image(systemName: "chevron.backward")
+                            .font(.system(size: 20))
+                            .foregroundColor(.white)
+                            .padding(.vertical, 16)
+                            .padding(.horizontal, 16)
+                            .padding(.leading, 8)
+                        }
+                        .padding(.top, 54)
+                      }
+                      .overlay {
+                        VStack {
+                          Image(systemName: "eye.slash.fill")
+                            .font(.system(size: 44))
+                            .foregroundColor(.Gray10)
+                            .padding(.bottom, 26)
+                          Text("관심없음을 설정한 콘텐츠입니다.")
+                            .fontSystem(fontDesignSystem: .subtitle1_KO)
+                            .foregroundColor(.LabelColor_Primary_Dark)
+                            .padding(.bottom, 12)
+                          Text("관심없음을 설정한 모든 콘텐츠는 회원님의 피드에 노출되지 않습니다.")
+                            .fixedSize(horizontal: false, vertical: true)
+                            .lineLimit(nil)
+                            .multilineTextAlignment(.center)
+                            .fontSystem(fontDesignSystem: .body2_KO)
+                            .foregroundColor(.LabelColor_Secondary_Dark)
+                            .padding(.horizontal, 80)
+                        }
+                        .ignoresSafeArea()
+                      }
+                  }
+                }
                 .rotationEffect(Angle(degrees: -90))
-                .ignoresSafeArea(.all, edges: .top)
+                .ignoresSafeArea(.all)
                 .tag(index)
             } else {
               Color.black
@@ -132,9 +178,11 @@ struct UserContentListView: View {
         .id(newID)
       }
       .rotationEffect(Angle(degrees: 90))
-      .frame(width: proxy.size.height)
+      .frame(width: UIScreen.height)
       .tabViewStyle(.page(indexDisplayMode: .never))
-      .frame(maxWidth: proxy.size.width)
+      .frame(maxWidth: UIScreen.height)
+      .offset(x: -UIScreen.height / 4 - 16)
+      .ignoresSafeArea(.all)
 
       if players.isEmpty {
         Color.black.ignoresSafeArea().overlay {
@@ -155,7 +203,7 @@ struct UserContentListView: View {
               }
               Spacer()
             }
-            .padding(.top, 54)
+            .padding(.top, 68)
             .padding(.horizontal, 16)
             Spacer()
             Image(systemName: "photo")
@@ -171,7 +219,7 @@ struct UserContentListView: View {
         }
       }
     }
-    .ignoresSafeArea(.all, edges: .top)
+    .ignoresSafeArea(.all)
     .navigationBarBackButtonHidden()
     .background(.black)
     .onAppear {
@@ -292,7 +340,7 @@ extension UserContentListView {
     contentId _: Int?,
     userName: String,
     profileImg: String,
-    thumbnailUrl: String,
+    thumbnailUrl _: String,
     caption: String,
     musicTitle: String,
     isWhistled: Binding<Bool>,
@@ -312,38 +360,13 @@ extension UserContentListView {
             .foregroundColor(.white)
             .padding(.vertical, 16)
             .padding(.trailing, 16)
+            .padding(.leading, 8)
         }
         Spacer()
       }
-      .padding(.top, 38)
+      .padding(.top, 54)
 
-      if isHated == 1 {
-        Spacer()
-        KFImage.url(URL(string: thumbnailUrl))
-          .placeholder {
-            Color.black
-          }
-          .resizable()
-          .scaledToFit()
-          .padding()
-          .blur(radius: 30)
-          .overlay {
-            VStack {
-              Image(systemName: "eye.slash.fill")
-                .font(.system(size: 44))
-                .foregroundColor(.Gray10)
-                .padding(.bottom, 26)
-              Text("관심없음을 설정한 콘텐츠입니다.")
-                .fontSystem(fontDesignSystem: .subtitle1_KO)
-                .foregroundColor(.LabelColor_Primary_Dark)
-                .padding(.bottom, 12)
-              Text("관심없음을 설정한 모든 콘텐츠는 \n회원님의 피드에 노출되지 않습니다.")
-                .fontSystem(fontDesignSystem: .body2_KO)
-                .foregroundColor(.LabelColor_Secondary_Dark)
-            }
-          }
-        Spacer()
-      } else {
+      if isHated != 1 {
         Spacer()
         HStack(spacing: 0) {
           VStack(alignment: .leading, spacing: 12) {
@@ -351,7 +374,7 @@ extension UserContentListView {
             HStack(spacing: 0) {
               Group {
                 profileImageView(url: profileImg, size: 36)
-                  .padding(.trailing, 12)
+                  .padding(.trailing, 16)
                 Text(userName)
                   .foregroundColor(.white)
                   .fontSystem(fontDesignSystem: .subtitle1)
@@ -389,15 +412,20 @@ extension UserContentListView {
                   .frame(width: 58, height: 26)
               }
             }
-            HStack(spacing: 0) {
-              Text(caption)
-                .fontSystem(fontDesignSystem: .body2_KO)
-                .foregroundColor(.white)
+            if !caption.isEmpty {
+              HStack(spacing: 0) {
+                Text(caption)
+                  .fontSystem(fontDesignSystem: .body2_KO)
+                  .foregroundColor(.white)
+              }
             }
             Label(musicTitle, systemImage: "music.note")
               .fontSystem(fontDesignSystem: .body2_KO)
               .foregroundColor(.white)
+              .padding(.top, 4)
           }
+          .padding(.bottom, 4)
+          .padding(.leading, 4)
           Spacer()
           VStack(spacing: 28) {
             Spacer()
@@ -410,13 +438,12 @@ extension UserContentListView {
                   .contentShape(Rectangle())
                   .foregroundColor(.Gray10)
                   .frame(width: 36, height: 36)
-                  .padding(.bottom, 2)
                 Text("\(whistleCount.wrappedValue)")
                   .foregroundColor(.Gray10)
                   .fontSystem(fontDesignSystem: .subtitle3_KO)
               }
             }
-            .frame(width: 36, height: 36)
+            .padding(.bottom, -4)
             Button {
               guard let contentId = apiViewModel.userPostFeed[currentIndex].contentId else {
                 return
@@ -432,8 +459,6 @@ extension UserContentListView {
                 .foregroundColor(.Gray10)
                 .frame(width: 36, height: 36)
             }
-            .fontSystem(fontDesignSystem: .caption_Regular)
-            .frame(width: 36, height: 36)
             Button {
               showDialog = true
             } label: {
@@ -443,13 +468,13 @@ extension UserContentListView {
                 .foregroundColor(.Gray10)
                 .frame(width: 36, height: 36)
             }
-            .frame(width: 36, height: 36)
           }
         }
       }
     }
-    .padding(.bottom, 64)
-    .padding(.horizontal, 12)
+    .padding(.bottom, UIScreen.getHeight(98))
+    .padding(.trailing, UIScreen.getWidth(12))
+    .padding(.leading, UIScreen.getWidth(16))
   }
 }
 

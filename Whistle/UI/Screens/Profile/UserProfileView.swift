@@ -302,7 +302,7 @@ extension UserProfileView {
             .scaleEffect(whistleFollowerTextScale)
         }
         .hCenter()
-        Rectangle().frame(width: 1, height: .infinity).foregroundColor(.white)
+        Rectangle().frame(width: 1, height: 36).foregroundColor(.white)
         NavigationLink {
           UserFollowView(userId: userId)
             .environmentObject(apiViewModel)
@@ -378,7 +378,7 @@ extension UserProfileView {
 
   @ViewBuilder
   func videoThumbnailView(thumbnailUrl: String, viewCount: Int, isHated: Int) -> some View {
-    Color.clear.overlay {
+    Color.black.overlay {
       KFImage.url(URL(string: thumbnailUrl))
         .placeholder { // 플레이스 홀더 설정
           Color.black
@@ -411,7 +411,7 @@ extension UserProfileView {
         .frame(maxWidth: .infinity, alignment: .leading)
       }
     }
-    .frame(height: 204)
+    .frame(width: 204 * 9 / 16,height: 204)
     .cornerRadius(12)
   }
 
