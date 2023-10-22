@@ -9,7 +9,7 @@ import SwiftUI
 
 struct ProfileNotiView: View {
   @Environment(\.dismiss) var dismiss
-  @EnvironmentObject var apiViewModel: APIViewModel
+  @StateObject var apiViewModel = APIViewModel.shared
   @AppStorage("isAllOff") var isAllOff = false
 
   var body: some View {

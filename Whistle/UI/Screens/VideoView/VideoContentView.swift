@@ -20,12 +20,12 @@ struct VideoContentView: View {
 
   @Environment(\.dismiss) var dismiss
   @Environment(\.scenePhase) var scenePhase
-  @EnvironmentObject var apiViewModel: APIViewModel
-  @EnvironmentObject var tabbarModel: TabbarModel
   @ObservedObject private var viewModel = VideoContentViewModel()
   @StateObject var editorVM = EditorViewModel()
   @StateObject var videoPlayer = VideoPlayerManager()
   @StateObject var musicVM = MusicViewModel()
+  @StateObject var apiViewModel = APIViewModel.shared
+  @StateObject private var tabbarModel = TabbarModel.shared
 
   @State var authorizationStatus = PHPhotoLibrary.authorizationStatus(for: .readWrite)
   @State var isAlbumAuthorized = false
@@ -909,6 +909,8 @@ extension VideoContentView {
         selectedSec.1 = false
         buttonState = .recording
         viewModel.aespaSession.startRecording()
+        recordingTimer?.invalidate()
+        recordingTimer = nil
         startRecordingTimer()
         isRecording = true
       } else {
@@ -933,6 +935,8 @@ extension VideoContentView {
             print("Error: \(error)")
           }
         }
+        recordingTimer?.invalidate() // 타이머 중지
+        recordingTimer = nil
       } else {
         recordingDuration += 1
       }

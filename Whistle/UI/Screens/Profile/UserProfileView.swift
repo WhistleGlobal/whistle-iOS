@@ -14,8 +14,7 @@ import UniformTypeIdentifiers
 
 struct UserProfileView: View {
   @Environment(\.dismiss) var dismiss
-  @EnvironmentObject var apiViewModel: APIViewModel
-  @EnvironmentObject var tabbarModel: TabbarModel
+  @StateObject var apiViewModel = APIViewModel.shared
   @State var isFollow = false
   @State var showDialog = false
   @State var showBlockAlert = false
@@ -99,7 +98,6 @@ struct UserProfileView: View {
                 NavigationLink {
                   UserContentListView(currentIndex: index)
                     .environmentObject(apiViewModel)
-                    .environmentObject(tabbarModel)
                     .id(UUID())
                 } label: {
                   videoThumbnailView(
@@ -308,7 +306,6 @@ extension UserProfileView {
         NavigationLink {
           UserFollowView(userId: userId)
             .environmentObject(apiViewModel)
-            .environmentObject(tabbarModel)
             .id(UUID())
         } label: {
           VStack(spacing: 4) {

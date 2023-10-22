@@ -15,7 +15,7 @@ struct UploadView: View {
   let video: EditableVideo
   @Environment(\.dismiss) private var dismiss
   @StateObject var tagsViewModel = TagsViewModel()
-  @StateObject var apiViewModel = APIViewModel()
+  @StateObject var apiViewModel = APIViewModel.shared
   @StateObject var exporterVM: ExporterViewModel
   @ObservedObject var editorVM: EditorViewModel
   @ObservedObject var videoPlayer: VideoPlayerManager

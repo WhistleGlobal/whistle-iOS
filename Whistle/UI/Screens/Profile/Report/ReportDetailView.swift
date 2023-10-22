@@ -9,7 +9,7 @@ import SwiftUI
 
 struct ReportDetailView: View {
   @Environment(\.dismiss) var dismiss
-  @EnvironmentObject var apiViewModel: APIViewModel
+  @StateObject var apiViewModel = APIViewModel.shared
   @Binding var goReport: Bool
   @Binding var selectedContentId: Int
   @State var goComplete = false

@@ -30,8 +30,8 @@ struct ProfileEditIDView: View {
   @State var isAlertActive = false
   @Binding var showToast: Bool
   @State var originalUsername = ""
+  @StateObject private var tabbarModel = TabbarModel.shared
   @EnvironmentObject var apiViewModel: APIViewModel
-  @EnvironmentObject var tabbarModel: TabbarModel
 
   var body: some View {
     VStack(spacing: 0) {

@@ -15,6 +15,10 @@ import UIKit
 // MARK: - APIViewModel
 
 class APIViewModel: ObservableObject {
+
+  static let shared = APIViewModel()
+  private init() { }
+
   let keychain = KeychainSwift()
   let publisher: PassthroughSubject<UUID, Never> = PassthroughSubject()
   @Published var myProfile = Profile()

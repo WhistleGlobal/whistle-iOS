@@ -36,7 +36,7 @@ class UserAuth: ObservableObject {
   @AppStorage("provider") var provider: Provider = .apple
   @AppStorage("deviceToken") var deviceToken: String?
 
-  var apiViewModel = APIViewModel()
+  var apiViewModel = APIViewModel.shared
   var email: String? = ""
   var userName = ""
   var imageURL: String? = ""

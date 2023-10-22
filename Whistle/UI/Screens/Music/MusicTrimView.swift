@@ -17,7 +17,7 @@ struct MusicTrimView: View {
 
   @Environment(\.dismiss) private var dismiss
 
-  @StateObject var apiViewModel = APIViewModel()
+  @StateObject var apiViewModel = APIViewModel.shared
   @ObservedObject var musicVM: MusicViewModel
   @ObservedObject var editorVM: EditorViewModel
   @ObservedObject var videoPlayer: VideoPlayerManager

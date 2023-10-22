@@ -39,10 +39,10 @@ struct TabbarView: View {
   @State private var uploadBottomSheetPosition: BottomSheetPosition = .hidden
   @State private var pickerOptions = PickerOptionsInfo()
   @AppStorage("isAccess") var isAccess = false
-  @EnvironmentObject var apiViewModel: APIViewModel
+  @StateObject private var tabbarModel = TabbarModel.shared
+  @StateObject var apiViewModel = APIViewModel.shared
   @EnvironmentObject var userAuth: UserAuth
   @EnvironmentObject var universalRoutingModel: UniversalRoutingModel
-  @StateObject var tabbarModel: TabbarModel = .init()
   @StateObject var appleSignInViewModel = AppleSignInViewModel()
 
   var domainURL: String {
@@ -59,8 +59,7 @@ struct TabbarView: View {
             mainOpacity: $mainOpacity,
             isRootStacked: $isRootStacked,
             refreshCount: $refreshCount)
-            .environmentObject(apiViewModel)
-            .environmentObject(tabbarModel)
+
             .environmentObject(universalRoutingModel)
             .opacity(mainOpacity)
             .onChange(of: tabbarModel.tabSelectionNoAnimation) { newValue in
@@ -70,8 +69,7 @@ struct TabbarView: View {
         .tint(.black)
       } else {
         NoSignInMainView(mainOpacity: $mainOpacity)
-          .environmentObject(apiViewModel)
-          .environmentObject(tabbarModel)
+
           .environmentObject(userAuth)
           .opacity(mainOpacity)
           .onChange(of: tabbarModel.tabSelectionNoAnimation) { newValue in
@@ -87,14 +85,12 @@ struct TabbarView: View {
         NavigationView {
           if isCameraAuthorized, isMicrophoneAuthorized {
             VideoContentView()
-              .environmentObject(apiViewModel)
-              .environmentObject(tabbarModel)
+
           } else {
             if !isNavigationActive {
               AccessView(
                 isCameraAuthorized: $isCameraAuthorized,
                 isMicrophoneAuthorized: $isMicrophoneAuthorized)
-                .environmentObject(tabbarModel)
             }
           }
         }
@@ -115,13 +111,11 @@ struct TabbarView: View {
               switch UIScreen.main.nativeBounds.height {
               case 1334: // iPhone SE 3rd generation
                 SEProfileView(isFirstProfileLoaded: $isFirstProfileLoaded)
-                  .environmentObject(apiViewModel)
-                  .environmentObject(tabbarModel)
+
                   .environmentObject(userAuth)
               default:
                 ProfileView(isFirstProfileLoaded: $isFirstProfileLoaded)
-                  .environmentObject(apiViewModel)
-                  .environmentObject(tabbarModel)
+
                   .environmentObject(userAuth)
               }
             }
@@ -129,9 +123,7 @@ struct TabbarView: View {
           .tint(.black)
         } else {
           NoSignInProfileView()
-            .environmentObject(tabbarModel)
             .environmentObject(userAuth)
-            .environmentObject(apiViewModel)
         }
       }
       VStack {
@@ -343,7 +335,6 @@ struct TabbarView: View {
 
 #Preview {
   TabbarView()
-    .environmentObject(APIViewModel())
     .environmentObject(UserAuth())
 }
 
@@ -498,13 +489,16 @@ public enum TabSelection: CGFloat {
 // MARK: - TabbarModel
 
 class TabbarModel: ObservableObject {
+
+  static let shared = TabbarModel()
+  private init() { }
+
   @Published var tabSelection: TabSelection = .main
   @Published var tabSelectionNoAnimation: TabSelection = .main
   @Published var prevTabSelection: TabSelection?
   @Published var tabbarOpacity = 1.0
   @Published var tabWidth = UIScreen.width - 32
 }
-
 
 // MARK: - 권한
 extension TabbarView {
