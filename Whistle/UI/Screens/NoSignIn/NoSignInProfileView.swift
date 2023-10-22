@@ -15,9 +15,9 @@ import SwiftUI
 
 struct NoSignInProfileView: View {
   @EnvironmentObject var userAuth: UserAuth
-  @EnvironmentObject var tabbarModel: TabbarModel
   @EnvironmentObject var apiViewModel: APIViewModel
   @StateObject var appleSignInViewModel = AppleSignInViewModel()
+  @StateObject private var tabbarModel = TabbarModel.shared
   @State var bottomSheetPosition: BottomSheetPosition = .hidden
   @State var showTermsOfService = false
   @State var showPrivacyPolicy = false
@@ -58,9 +58,7 @@ struct NoSignInProfileView: View {
       }
     }
     .onChange(of: bottomSheetPosition) { newValue in
-      if newValue == .hidden {
-//        tabbarModel.tabbarOpacity = 1.0
-      } else {
+      if newValue == .hidden {} else {
         tabbarModel.tabbarOpacity = 0.0
       }
     }
@@ -307,7 +305,6 @@ extension NoSignInProfileView {
 #Preview {
   NavigationStack {
     NoSignInProfileView()
-      .environmentObject(TabbarModel())
       .environmentObject(UserAuth())
   }
 }

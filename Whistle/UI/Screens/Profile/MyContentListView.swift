@@ -22,7 +22,7 @@ struct MyContentListView: View {
   @State var showPlayButton = false
   @State var timer: Timer? = nil
   @EnvironmentObject var apiViewModel: APIViewModel
-  @EnvironmentObject var tabbarModel: TabbarModel
+  @StateObject private var tabbarModel = TabbarModel.shared
   @State var players: [AVPlayer?] = []
 
   var body: some View {

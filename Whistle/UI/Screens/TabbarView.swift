@@ -39,10 +39,10 @@ struct TabbarView: View {
   @State private var uploadBottomSheetPosition: BottomSheetPosition = .hidden
   @State private var pickerOptions = PickerOptionsInfo()
   @AppStorage("isAccess") var isAccess = false
+  @StateObject private var tabbarModel = TabbarModel.shared
   @EnvironmentObject var apiViewModel: APIViewModel
   @EnvironmentObject var userAuth: UserAuth
   @EnvironmentObject var universalRoutingModel: UniversalRoutingModel
-  @StateObject var tabbarModel: TabbarModel = .init()
   @StateObject var appleSignInViewModel = AppleSignInViewModel()
 
   var domainURL: String {
@@ -60,7 +60,6 @@ struct TabbarView: View {
             isRootStacked: $isRootStacked,
             refreshCount: $refreshCount)
             .environmentObject(apiViewModel)
-            .environmentObject(tabbarModel)
             .environmentObject(universalRoutingModel)
             .opacity(mainOpacity)
             .onChange(of: tabbarModel.tabSelectionNoAnimation) { newValue in
@@ -71,7 +70,6 @@ struct TabbarView: View {
       } else {
         NoSignInMainView(mainOpacity: $mainOpacity)
           .environmentObject(apiViewModel)
-          .environmentObject(tabbarModel)
           .environmentObject(userAuth)
           .opacity(mainOpacity)
           .onChange(of: tabbarModel.tabSelectionNoAnimation) { newValue in
@@ -88,13 +86,11 @@ struct TabbarView: View {
           if isCameraAuthorized, isMicrophoneAuthorized {
             VideoContentView()
               .environmentObject(apiViewModel)
-              .environmentObject(tabbarModel)
           } else {
             if !isNavigationActive {
               AccessView(
                 isCameraAuthorized: $isCameraAuthorized,
                 isMicrophoneAuthorized: $isMicrophoneAuthorized)
-                .environmentObject(tabbarModel)
             }
           }
         }
@@ -116,12 +112,10 @@ struct TabbarView: View {
               case 1334: // iPhone SE 3rd generation
                 SEProfileView(isFirstProfileLoaded: $isFirstProfileLoaded)
                   .environmentObject(apiViewModel)
-                  .environmentObject(tabbarModel)
                   .environmentObject(userAuth)
               default:
                 ProfileView(isFirstProfileLoaded: $isFirstProfileLoaded)
                   .environmentObject(apiViewModel)
-                  .environmentObject(tabbarModel)
                   .environmentObject(userAuth)
               }
             }
@@ -129,7 +123,6 @@ struct TabbarView: View {
           .tint(.black)
         } else {
           NoSignInProfileView()
-            .environmentObject(tabbarModel)
             .environmentObject(userAuth)
             .environmentObject(apiViewModel)
         }
@@ -498,13 +491,16 @@ public enum TabSelection: CGFloat {
 // MARK: - TabbarModel
 
 class TabbarModel: ObservableObject {
+
+  static let shared = TabbarModel()
+  private init() { }
+
   @Published var tabSelection: TabSelection = .main
   @Published var tabSelectionNoAnimation: TabSelection = .main
   @Published var prevTabSelection: TabSelection?
   @Published var tabbarOpacity = 1.0
   @Published var tabWidth = UIScreen.width - 32
 }
-
 
 // MARK: - 권한
 extension TabbarView {

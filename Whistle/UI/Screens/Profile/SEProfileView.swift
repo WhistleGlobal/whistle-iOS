@@ -26,9 +26,9 @@ struct SEProfileView: View {
   @State var bottomSheetPosition: BottomSheetPosition = .hidden
   @State var offsetY: CGFloat = 0
   @Binding var isFirstProfileLoaded: Bool
+  @StateObject private var tabbarModel = TabbarModel.shared
   @EnvironmentObject var apiViewModel: APIViewModel
   @EnvironmentObject var userAuth: UserAuth
-  @EnvironmentObject var tabbarModel: TabbarModel
 
   var body: some View {
     ZStack {
@@ -108,7 +108,6 @@ struct SEProfileView: View {
                 NavigationLink {
                   MyContentListView(currentIndex: index)
                     .environmentObject(apiViewModel)
-                    .environmentObject(tabbarModel)
                 } label: {
                   videoThumbnailView(
                     thumbnailUrl: content.thumbnailUrl ?? "",
@@ -322,7 +321,6 @@ extension SEProfileView {
       NavigationLink {
         ProfileEditView()
           .environmentObject(apiViewModel)
-          .environmentObject(tabbarModel)
       } label: {
         Text("프로필 편집")
           .fontSystem(fontDesignSystem: .subtitle2_KO)
@@ -348,7 +346,6 @@ extension SEProfileView {
         NavigationLink {
           FollowView()
             .environmentObject(apiViewModel)
-            .environmentObject(tabbarModel)
         } label: {
           VStack(spacing: 4) {
             Text("\(apiViewModel.myFollow.followerCount)")

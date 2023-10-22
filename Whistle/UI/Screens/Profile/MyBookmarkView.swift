@@ -22,7 +22,6 @@ struct MyBookmarkView: View {
   @State var showPlayButton = false
   @State var timer: Timer? = nil
   @EnvironmentObject var apiViewModel: APIViewModel
-  @EnvironmentObject var tabbarModel: TabbarModel
   @State var players: [AVPlayer?] = []
 
   var body: some View {
@@ -67,7 +66,7 @@ struct MyBookmarkView: View {
               if let player = players[index] {
                 Player(player: player)
                   .frame(width: proxy.size.width)
-                  .onChange(of: tabbarModel.tabSelectionNoAnimation) { newValue in
+                  .onChange(of: TabbarModel.shared.tabSelectionNoAnimation) { newValue in
                     if newValue != .profile {
                       player.pause()
                     }

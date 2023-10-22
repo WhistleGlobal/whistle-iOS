@@ -19,7 +19,6 @@ import SwiftUI
 struct NoSignInMainView: View {
   @AppStorage("showGuide") var showGuide = true
   @EnvironmentObject var apiViewModel: APIViewModel
-  @EnvironmentObject var tabbarModel: TabbarModel
   @EnvironmentObject var userAuth: UserAuth
   @State var currentIndex = 0
   @State var playerIndex = 0
@@ -32,6 +31,7 @@ struct NoSignInMainView: View {
   @State var showPrivacyPolicy = false
   @State var bottomSheetPosition: BottomSheetPosition = .hidden
   @StateObject var appleSignInViewModel = AppleSignInViewModel()
+  @StateObject private var tabbarModel = TabbarModel.shared
   @Binding var mainOpacity: Double
   @AppStorage("isAccess") var isAccess = false
   let keychain = KeychainSwift()

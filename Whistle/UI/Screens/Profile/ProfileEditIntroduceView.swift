@@ -14,7 +14,7 @@ struct ProfileEditIntroduceView: View {
   @Environment(\.dismiss) var dismiss
   @Binding var showToast: Bool
   @EnvironmentObject var apiViewModel: APIViewModel
-  @EnvironmentObject var tabbarModel: TabbarModel
+  @StateObject private var tabbarModel = TabbarModel.shared
   @State var introduce = ""
 
   var body: some View {

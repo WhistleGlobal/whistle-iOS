@@ -32,10 +32,10 @@ struct ProfileView: View {
   @State var showPasteToast = false
   @State var bottomSheetPosition: BottomSheetPosition = .hidden
   @State var offsetY: CGFloat = 0
+  @StateObject private var tabbarModel = TabbarModel.shared
   @Binding var isFirstProfileLoaded: Bool
   @EnvironmentObject var apiViewModel: APIViewModel
   @EnvironmentObject var userAuth: UserAuth
-  @EnvironmentObject var tabbarModel: TabbarModel
 
   var body: some View {
     ZStack {
@@ -115,7 +115,6 @@ struct ProfileView: View {
                 NavigationLink {
                   MyContentListView(currentIndex: index)
                     .environmentObject(apiViewModel)
-                    .environmentObject(tabbarModel)
                 } label: {
                   videoThumbnailView(
                     thumbnailUrl: content.thumbnailUrl ?? "",
@@ -147,7 +146,6 @@ struct ProfileView: View {
                 NavigationLink {
                   MyBookmarkView(currentIndex: index)
                     .environmentObject(apiViewModel)
-                    .environmentObject(tabbarModel)
                 } label: {
                   videoThumbnailView(thumbnailUrl: content.thumbnailUrl, viewCount: content.viewCount)
                 }
@@ -329,8 +327,6 @@ extension ProfileView {
       NavigationLink {
         ProfileEditView()
           .environmentObject(apiViewModel)
-          .environmentObject(tabbarModel)
-
       } label: {
         Text("프로필 편집")
           .fontSystem(fontDesignSystem: .subtitle2_KO)
@@ -357,7 +353,6 @@ extension ProfileView {
         NavigationLink {
           FollowView()
             .environmentObject(apiViewModel)
-            .environmentObject(tabbarModel)
         } label: {
           VStack(spacing: 4) {
             Text("\(filteredFollower.count)")
