@@ -890,6 +890,8 @@ extension VideoContentView {
         selectedSec.1 = false
         buttonState = .recording
         viewModel.aespaSession.startRecording()
+        recordingTimer?.invalidate() 
+        recordingTimer = nil
         startRecordingTimer()
         isRecording = true
       } else {
@@ -914,6 +916,8 @@ extension VideoContentView {
             print("Error: \(error)")
           }
         }
+        recordingTimer?.invalidate() // 타이머 중지
+        recordingTimer = nil
       } else {
         recordingDuration += 1
       }
