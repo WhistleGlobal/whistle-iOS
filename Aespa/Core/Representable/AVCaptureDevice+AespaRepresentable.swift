@@ -60,7 +60,9 @@ extension AVCaptureDevice: AespaCaptureDeviceRepresentable {
     }
 
     if isFocusPointOfInterestSupported {
-      if let point { focusPointOfInterest = point }
+      if let point {
+        focusPointOfInterest = point
+      }
     } else {
       throw AespaError.device(reason: .notSupported)
     }

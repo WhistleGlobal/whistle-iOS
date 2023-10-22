@@ -30,10 +30,9 @@ struct NoSignInProfileView: View {
   var body: some View {
     ZStack {
       Color.clear.overlay {
-        Image("DefaultBG")
+        Image("BlurredDefaultBG")
           .resizable()
           .scaledToFill()
-          .blur(radius: 50)
           .scaleEffect(1.4)
       }
       VStack(spacing: 0) {

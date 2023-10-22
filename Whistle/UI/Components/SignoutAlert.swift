@@ -50,7 +50,7 @@ extension SignoutAlert {
       RoundedRectangle(cornerRadius: 32, style: .continuous)
         .fill(Color.black.opacity(0.3))
       CustomBlurView(effect: .systemUltraThinMaterialLight) { view in
-        view.saturationAmout = 2.2
+        view.saturationAmount = 2.2
         view.gaussianBlurRadius = 36
       }
     }

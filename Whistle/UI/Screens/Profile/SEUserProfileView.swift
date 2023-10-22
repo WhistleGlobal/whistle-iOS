@@ -23,27 +23,27 @@ struct SEUserProfileView: View {
   @Binding var players: [AVPlayer?]
   @Binding var currentIndex: Int
   let userId: Int
-
+  let processor = BlurImageProcessor(blurRadius: 10)
   var body: some View {
     ZStack {
       Color.clear.overlay {
         if let url = apiViewModel.userProfile.profileImg, !url.isEmpty {
           KFImage.url(URL(string: url))
             .placeholder { _ in
-              Image("DefaultBG")
+              Image("BlurredDefaultBG")
                 .resizable()
                 .scaledToFill()
-                .blur(radius: 50)
+                .ignoresSafeArea()
             }
             .resizable()
+            .setProcessor(processor)
             .scaledToFill()
             .scaleEffect(2.0)
-            .blur(radius: 50)
         } else {
-          Image("DefaultBG")
+          Image("BlurredDefaultBG")
             .resizable()
             .scaledToFill()
-            .blur(radius: 50)
+            .ignoresSafeArea()
         }
       }
       VStack {

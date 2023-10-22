@@ -25,6 +25,18 @@ final class VideoPlayerManager: ObservableObject {
   private var timeObserver: Any?
   private var currentDurationRange: ClosedRange<Double>?
 
+  func reset() {
+//    currentTime = .zero
+    selectedItem = nil
+    videoPlayer = AVPlayer(playerItem: nil)
+    loadState = .unknown
+    isPlaying = false
+    isSetAudio = false
+    timeObserver = nil
+    currentDurationRange = nil
+    removeTimeObserver()
+  }
+
   deinit {
     removeTimeObserver()
   }

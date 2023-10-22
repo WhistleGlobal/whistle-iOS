@@ -93,6 +93,10 @@ struct VideoContentView: View {
             musicVM.removeMusic()
             buttonState = .idle
           }
+          editorVM.currentVideo = nil
+          editorVM.reset()
+          videoPlayer.reset()
+          selectedVideoURL = nil
         })
         .zIndex(1000)
         .opacity(showAlert ? 1 : 0)
@@ -100,167 +104,20 @@ struct VideoContentView: View {
       if isPresented {
         PickerConfigViewControllerWrapper(isImagePickerClosed: $isImagePickerClosed)
       }
-      if buttonState != .completed {
+      if buttonState != .completed || editorVM.currentVideo == nil {
         viewModel.preview
-          .frame(width: UIScreen.width, height: UIScreen.width * 16 / 9)
-          .allowsHitTesting(false)
       } else {
         if let video = editorVM.currentVideo {
-          EditablePlayerView(player: videoPlayer.videoPlayer)
-            .overlay(alignment: .bottom) {
-              Rectangle()
-                .frame(height: UIScreen.getHeight(2))
-                .foregroundStyle(.white)
-                .overlay(alignment: .leading) {
-                  Rectangle()
-                    .frame(
-                      width: UIScreen
-                        .getWidth(UIScreen.width / video.totalDuration * videoPlayer.currentTime))
-                    .foregroundStyle(Color.Blue_Default)
-                }
-                .onAppear {
-                  DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.1) {
-                    if videoPlayer.isPlaying == false {
-                      videoPlayer.playLoop(video)
-                    }
-                  }
-                }
-                .onChange(of: videoPlayer.isPlaying) { value in
-                  if musicVM.musicInfo != nil {
-                    switch value {
-                    case true:
-                      musicVM
-                        .playAudio(startTime: 0)
-                    case false:
-                      musicVM.stopAudio()
-                    }
-                  }
-                }
-                .onChange(of: musicVM.isTrimmed) { value in
-                  switch value {
-                  case true:
-                    videoPlayer.action(video)
-                    musicVM.playAudio(startTime: 0)
-                  case false:
-                    videoPlayer.action(video)
-                  }
-                }
-            }
-            .onTapGesture {
-              videoPlayer.playLoop(video)
-            }
-            .frame(width: UIScreen.width, height: UIScreen.width * 16 / 9)
-            .padding(.bottom, 68)
+          recordedVideoPreview(video: video)
+        } else {
+          Image("BlurredDefaultBG")
         }
       }
+      // preview 위의 버튼들
       VStack {
-        switch buttonState {
-        case .idle:
-          HStack(spacing: 24) {
-            Button {
-              bottomSheetPosition = .absolute(UIScreen.getHeight(514))
-            } label: {
-              HStack(spacing: 8) {
-                Image(systemName: "clock")
-                  .font(.system(size: 16))
-                  .foregroundColor(.white)
-                  .contentShape(Circle())
-                if selectedSec.1 {
-                  Text("\(selectedSec.0 == .sec3 ? 3 : 10)초")
-                    .fontSystem(fontDesignSystem: .subtitle3_KO)
-                    .foregroundColor(.white)
-                }
-              }
-              .padding(.horizontal, selectedSec.1 ? 20 : 10)
-              .frame(height: UIScreen.getHeight(36))
-              .background {
-                if selectedSec.1 {
-                  Capsule()
-                    .foregroundColor(Color.Primary_Default)
-                } else {
-                  glassMoriphicCircleView()
-                    .overlay {
-                      Circle()
-                        .stroke(lineWidth: 1)
-                        .foregroundStyle(LinearGradient.Border_Glass)
-                    }
-                }
-              }
-            }
-            Button {
-              if !isFront {
-                toggleFlash()
-              }
-            } label: {
-              Image(systemName: isFlashOn ? "bolt" : "bolt.slash.fill")
-                .font(.system(size: 16))
-                .padding(10)
-                .foregroundColor(.white)
-                .contentShape(Circle())
-                .background {
-                  if isFlashOn {
-                    Circle()
-                      .foregroundColor(Color.Primary_Default)
-                  } else {
-                    glassMoriphicCircleView()
-                      .overlay {
-                        Circle()
-                          .stroke(lineWidth: 1)
-                          .foregroundStyle(LinearGradient.Border_Glass)
-                      }
-                  }
-                }
-            }
-            .frame(width: UIScreen.getWidth(36), height: UIScreen.getHeight(36))
-            .allowsHitTesting(!isFront)
-            .overlay {
-              if isFront {
-                Circle().frame(width: 36, height: 36).foregroundColor(.black.opacity(0.4))
-              }
-            }
-          }
-          .frame(height: 52)
-          .hCenter()
-          .overlay(alignment: .leading) {
-            Button {
-              tabbarModel.tabSelectionNoAnimation = tabbarModel.prevTabSelection ?? .main
-              withAnimation {
-                tabbarModel.tabSelection = tabbarModel.prevTabSelection ?? .main
-              }
-            } label: {
-              Image(systemName: "xmark")
-                .font(.system(size: 20))
-                .foregroundColor(.white)
-                .padding(16)
-            }
-          }
-        case .recording:
-          EmptyView()
-        case .completed:
-          HStack(spacing: 24) {
-            Text("새 게시물")
-              .fontSystem(fontDesignSystem: .subtitle1_KO)
-              .foregroundStyle(Color.white)
-          }
-          .frame(height: 52)
-          .hCenter()
-          .overlay(alignment: .leading) {
-            Button {
-              showAlert = true
-              if videoPlayer.isPlaying {
-                if let video = editorVM.currentVideo {
-                  videoPlayer.action(video)
-                  musicVM.stopAudio()
-                }
-              }
-            } label: {
-              Image(systemName: "xmark")
-                .font(.system(size: 20))
-                .foregroundColor(.white)
-                .padding(16)
-            }
-          }
-        }
+        // 상단 버튼
+        toolBar
+        // 음악 추가 버튼
         if buttonState == .completed {
           MusicInfo(musicVM: musicVM, showMusicTrimView: $showMusicTrimView) {
             if musicVM.musicInfo == nil {
@@ -275,81 +132,8 @@ struct VideoContentView: View {
           }
         }
         Spacer()
-        HStack(spacing: 0) {
-          // Album thumbnail + button
-          Button {
-            if isAlbumAuthorized {
-              isImagePickerClosed.send(true)
-            } else {
-              showAlbumAccessView = true
-            }
-          } label: {
-            roundRectangleShape(with: albumCover, size: 56)
-              .vBottom()
-          }
-          .shadow(radius: 5)
-          .contentShape(Rectangle())
-          .onReceive(isImagePickerClosed) { value in
-            isPresented = value
-          }
-          .opacity(buttonState == .idle ? 1 : 0)
-          Spacer()
-          // Shutter + button
-          recordingButton(
-            state: buttonState,
-            timerText: timeStringFromTimeInterval(recordingDuration),
-            progress: min(recordingDuration / Double(timerSec.1 ? Double(timerSec.0) : 14.0), 1.0))
-          Spacer()
-          // Position change + button
-          Button(action: {
-            guard let device = AVCaptureDevice.default(for: .video) else { return }
-
-            if device.hasTorch {
-              do {
-                try device.lockForConfiguration()
-
-                if device.torchMode == .on {
-                  device.torchMode = .off
-                  isFlashOn = false
-                }
-                device.unlockForConfiguration()
-              } catch {
-                print("Flash could not be used")
-              }
-            } else {
-              print("Device does not have a Torch")
-            }
-            viewModel.aespaSession.position(to: isFront ? .back : .front)
-            isFront.toggle()
-          }) {
-            VStack(spacing: 8) {
-              ZStack {
-                Image(systemName: "arrow.triangle.2.circlepath")
-                  .font(.system(size: 24))
-                  .foregroundColor(.white)
-                  .padding(16)
-                  .background {
-                    glassMoriphicCircleView()
-                      .overlay {
-                        Circle()
-                          .stroke(lineWidth: 1)
-                          .foregroundStyle(LinearGradient.Border_Glass)
-                      }
-                  }
-              }
-              Text("화면 전환")
-                .foregroundColor(.white)
-                .fontSystem(fontDesignSystem: .body2_KO)
-            }
-            .vBottom()
-          }
-          .contentShape(Circle())
-          .opacity(buttonState == .idle ? 1 : 0)
-        }
-        .hCenter()
-        .frame(height: UIScreen.getHeight(96))
-        .padding(.horizontal, 42)
-        .padding(.bottom, 24)
+        // 하단 버튼
+        recordButtonSection
       }
       .frame(width: UIScreen.width, height: UIScreen.width * 16 / 9)
       .padding(.bottom, 74)
@@ -397,9 +181,7 @@ struct VideoContentView: View {
         albumCover = Image(uiImage: latestVideoThumbnail)
       }
       viewModel.aespaSession = Aespa.session(with: AespaOption(albumName: "Whistle"))
-      Task {
-        log("직접 가져오기")
-      }
+      viewModel.preview = viewModel.aespaSession.interactivePreview()
     }
     .onChange(of: scenePhase) { newValue in
       if newValue == .background {
@@ -799,20 +581,15 @@ extension VideoContentView {
 
   @ViewBuilder
   func roundRectangleShape(with image: Image, size: CGFloat) -> some View {
-    VStack(spacing: 8) {
-      image
-        .resizable()
-        .scaledToFill()
-        .frame(width: size, height: size, alignment: .center)
-        .clipped()
-        .cornerRadius(6)
-        .overlay(
-          RoundedRectangle(cornerRadius: 6)
-            .stroke(Color.LabelColor_Primary_Dark, lineWidth: 1))
-      Text("앨범")
-        .fontSystem(fontDesignSystem: .body2_KO)
-        .foregroundColor(.LabelColor_Primary_Dark)
-    }
+    image
+      .resizable()
+      .scaledToFill()
+      .frame(width: size, height: size, alignment: .center)
+      .clipped()
+      .cornerRadius(6)
+      .overlay(
+        RoundedRectangle(cornerRadius: 6)
+          .stroke(Color.LabelColor_Primary_Dark, lineWidth: 1))
   }
 
   @ViewBuilder
@@ -821,12 +598,256 @@ extension VideoContentView {
       Capsule()
         .fill(Color.black.opacity(0.3))
       CustomBlurView(effect: .systemUltraThinMaterialLight) { view in
-        view.saturationAmout = 2.2
+        view.saturationAmount = 2.2
         view.gaussianBlurRadius = 32
       }
       .clipShape(Capsule())
     }
     .frame(width: width, height: height)
+  }
+
+  @ViewBuilder
+  var toolBar: some View {
+    switch buttonState {
+    case .idle:
+      HStack(spacing: 24) {
+        Button {
+          bottomSheetPosition = .absolute(UIScreen.getHeight(514))
+        } label: {
+          HStack {
+            Image(systemName: "clock")
+              .font(.system(size: 16))
+              .foregroundColor(.white)
+              .contentShape(Circle())
+            if selectedSec.1 {
+              Text("\(selectedSec.0 == .sec3 ? 3 : 10)초")
+                .fontSystem(fontDesignSystem: .subtitle3_KO)
+                .foregroundColor(.white)
+            }
+          }
+          .frame(height: 36)
+          .padding(.horizontal, 20)
+          .background {
+            if selectedSec.1 {
+              Capsule()
+                .foregroundColor(Color.Primary_Default)
+            } else {
+              glassMoriphicCircleView()
+              Circle()
+                .stroke(lineWidth: 1)
+                .foregroundStyle(LinearGradient.Border_Glass)
+            }
+          }
+        }
+        Button {
+          if !isFront {
+            toggleFlash()
+          }
+        } label: {
+          Image(systemName: isFlashOn ? "bolt" : "bolt.slash.fill")
+            .frame(width: UIScreen.getWidth(36), height: UIScreen.getHeight(36))
+            .font(.system(size: 16))
+            .foregroundColor(.white)
+            .contentShape(Circle())
+            .background {
+              if isFlashOn {
+                Circle()
+                  .foregroundColor(Color.Primary_Default)
+              } else {
+                glassMoriphicCircleView()
+                  .overlay {
+                    Circle()
+                      .stroke(lineWidth: 1)
+                      .foregroundStyle(LinearGradient.Border_Glass)
+                  }
+              }
+            }
+        }
+        .allowsHitTesting(!isFront)
+        .overlay {
+          if isFront {
+            Circle().frame(width: 36, height: 36).foregroundColor(.black.opacity(0.4))
+          }
+        }
+      }
+      .hCenter()
+      .overlay(alignment: .leading) {
+        Button {
+          tabbarModel.tabSelectionNoAnimation = tabbarModel.prevTabSelection ?? .main
+          withAnimation {
+            tabbarModel.tabSelection = tabbarModel.prevTabSelection ?? .main
+          }
+        } label: {
+          Image(systemName: "xmark")
+            .font(.system(size: 20))
+            .foregroundColor(.white)
+            .padding(16)
+        }
+      }
+      .padding(.top, 12)
+    case .recording:
+      EmptyView()
+    case .completed:
+      HStack(spacing: 24) {
+        Text("새 게시물")
+          .fontSystem(fontDesignSystem: .subtitle1_KO)
+          .foregroundStyle(Color.white)
+      }
+      .hCenter()
+      .overlay(alignment: .leading) {
+        Button {
+          showAlert = true
+          if videoPlayer.isPlaying {
+            if let video = editorVM.currentVideo {
+              videoPlayer.action(video)
+              musicVM.stopAudio()
+            }
+          }
+        } label: {
+          Image(systemName: "xmark")
+            .font(.system(size: 20))
+            .foregroundColor(.white)
+            .padding(16)
+        }
+      }
+      .padding(.top, 12)
+    }
+  }
+
+  @ViewBuilder
+  var recordButtonSection: some View {
+    HStack(spacing: 0) {
+      // Album thumbnail + button
+      Button {
+        if isAlbumAuthorized {
+          isImagePickerClosed.send(true)
+        } else {
+          showAlbumAccessView = true
+        }
+      } label: {
+        roundRectangleShape(with: albumCover, size: 56)
+          .vCenter()
+      }
+      .shadow(radius: 5)
+      .contentShape(Rectangle())
+      .onReceive(isImagePickerClosed) { value in
+        isPresented = value
+      }
+      .overlay(alignment: .bottom) {
+        Text("앨범")
+          .fontSystem(fontDesignSystem: .body2_KO)
+          .foregroundColor(.LabelColor_Primary_Dark)
+          .offset(y: 16)
+      }
+      .opacity(buttonState == .idle ? 1 : 0)
+      Spacer()
+      // Shutter + button
+      recordingButton(
+        state: buttonState,
+        timerText: timeStringFromTimeInterval(recordingDuration),
+        progress: min(recordingDuration / Double(timerSec.1 ? Double(timerSec.0) : 14.0), 1.0))
+      Spacer()
+      // Position change + button
+      Button(action: {
+        guard let device = AVCaptureDevice.default(for: .video) else { return }
+
+        if device.hasTorch {
+          do {
+            try device.lockForConfiguration()
+
+            if device.torchMode == .on {
+              device.torchMode = .off
+              isFlashOn = false
+            }
+            device.unlockForConfiguration()
+          } catch {
+            print("Flash could not be used")
+          }
+        } else {
+          print("Device does not have a Torch")
+        }
+        viewModel.aespaSession.position(to: isFront ? .back : .front)
+        isFront.toggle()
+      }) {
+        Image(systemName: "arrow.triangle.2.circlepath")
+          .font(.system(size: 20))
+          .foregroundColor(.white)
+          .padding(16)
+          .background {
+            glassMoriphicCircleView()
+              .overlay {
+                Circle()
+                  .stroke(lineWidth: 1)
+                  .foregroundStyle(LinearGradient.Border_Glass)
+              }
+          }
+          .vCenter()
+      }
+      .overlay(alignment: .bottom) {
+        Text("화면 전환")
+          .foregroundColor(.white)
+          .fontSystem(fontDesignSystem: .body2_KO)
+          .offset(y: 16)
+      }
+      .contentShape(Circle())
+      .opacity(buttonState == .idle ? 1 : 0)
+    }
+    .hCenter()
+    .fixedSize(horizontal: false, vertical: true)
+    .padding(.horizontal, 42)
+    .padding(.bottom, 24 + 16)
+  }
+
+  @ViewBuilder
+  func recordedVideoPreview(video: EditableVideo) -> some View {
+    EditablePlayerView(player: videoPlayer.videoPlayer)
+      .overlay(alignment: .bottom) {
+        Rectangle()
+          .frame(height: UIScreen.getHeight(2))
+          .foregroundStyle(.white)
+          .overlay(alignment: .leading) {
+            Rectangle()
+              .frame(
+                width: UIScreen
+                  .getWidth(UIScreen.width / video.totalDuration * videoPlayer.currentTime))
+              .foregroundStyle(Color.Blue_Default)
+          }
+          .onAppear {
+            DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.1) {
+              if videoPlayer.isPlaying == false {
+                videoPlayer.playLoop(video)
+              }
+            }
+          }
+          .onChange(of: videoPlayer.isPlaying) { value in
+            if musicVM.musicInfo != nil {
+              switch value {
+              case true:
+                musicVM
+                  .playAudio(startTime: 0)
+              case false:
+                musicVM.stopAudio()
+              }
+            }
+          }
+          .onChange(of: musicVM.isTrimmed) { value in
+            switch value {
+            case true:
+              videoPlayer.action(video)
+              musicVM.playAudio(startTime: 0)
+            case false:
+              videoPlayer.action(video)
+            }
+          }
+      }
+      .onAppear {
+        videoPlayer.playLoop(video)
+      }
+      .onTapGesture {
+        videoPlayer.playLoop(video)
+      }
+      .frame(width: UIScreen.width, height: UIScreen.width * 16 / 9)
+      .padding(.bottom, 68)
   }
 }
 
@@ -957,7 +978,7 @@ extension VideoContentView {
           Circle()
             .stroke(lineWidth: 4)
             .foregroundColor(.White)
-            .frame(width: 84, height: 84, alignment: .center)
+            .frame(width: 80, height: 80, alignment: .center)
           Circle()
             .fill(LinearGradient(
               gradient: Gradient(colors: [Color.Primary_Default, Color.Secondary_Default]),
@@ -999,14 +1020,13 @@ extension VideoContentView {
               .frame(width: 36, height: 36, alignment: .center)
           }
         }
-        .padding(.bottom, 40)
+        .offset(y: 20)
         .onAppear {
           withAnimation(.linear(duration: 0.5)) {
             animatedProgress = progress
           }
         }
         .onChange(of: progress) { newValue in
-          print("progress:", newValue)
           withAnimation(.linear(duration: 0.5)) {
             animatedProgress = newValue
           }
@@ -1078,9 +1098,10 @@ extension VideoContentView {
 extension VideoContentView {
   private func setVideo(_ url: URL) {
     selectedVideoURL = url
+
     if let selectedVideoURL {
-      editorVM.setNewVideo(selectedVideoURL)
       videoPlayer.loadState = .loaded(selectedVideoURL)
+      editorVM.setNewVideo(selectedVideoURL)
     }
 
     if let project, let url = project.videoURL {
@@ -1115,7 +1136,6 @@ extension VideoContentView {
 }
 
 extension VideoContentView {
-
   func fetchLatestVideo() -> PHAsset? {
     let fetchOptions = PHFetchOptions()
     fetchOptions.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
@@ -1139,5 +1159,4 @@ extension VideoContentView {
     }
     return thumbnail
   }
-
 }

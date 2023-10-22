@@ -29,6 +29,11 @@ class EditorViewModel: ObservableObject {
     createProject()
   }
 
+  func setNewUploadVideo(_ url: URL) {
+    currentVideo = .init(url: url)
+    createProject()
+  }
+
 //
   //  func returnThumbnail(_ index: Int) -> String {
 //    currentVideo?.generateHQThumbnails()
@@ -148,26 +153,33 @@ extension EditorViewModel {
     updateProject()
   }
 
-  func reset() {
-    guard let selectedTools else { return }
+//  func reset() {
+//    guard let selectedTools else { return }
+//
+//    switch selectedTools {
+  ////    case .cut:
+  ////      currentVideo?.resetRangeDuration()
+  ////    case .speed:
+  ////      currentVideo?.resetRate()
+//    case .audio, .music:
+//      break
+  ////    case .filters:
+  ////      currentVideo?.setFilter(nil)
+  ////    case .corrections:
+  ////      currentVideo?.colorCorrection = ColorCorrection()
+  ////    case .frames:
+  ////      frames.reset()
+  ////      currentVideo?.videoFrames = nil
+//    }
+//    DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+//      self.removeTool()
+//    }
+//  }
 
-    switch selectedTools {
-//    case .cut:
-//      currentVideo?.resetRangeDuration()
-//    case .speed:
-//      currentVideo?.resetRate()
-    case .audio, .music:
-      break
-//    case .filters:
-//      currentVideo?.setFilter(nil)
-//    case .corrections:
-//      currentVideo?.colorCorrection = ColorCorrection()
-//    case .frames:
-//      frames.reset()
-//      currentVideo?.videoFrames = nil
-    }
-    DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-      self.removeTool()
-    }
+  func reset() {
+    currentVideo = nil
+    selectedTools = nil
+    isSelectVideo = true
+    projectEntity = nil
   }
 }

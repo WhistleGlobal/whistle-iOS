@@ -29,27 +29,27 @@ struct SEProfileView: View {
   @StateObject private var tabbarModel = TabbarModel.shared
   @StateObject var apiViewModel = APIViewModel.shared
   @EnvironmentObject var userAuth: UserAuth
-
+  let processor = BlurImageProcessor(blurRadius: 10)
   var body: some View {
     ZStack {
       Color.clear.overlay {
         if let url = apiViewModel.myProfile.profileImage, !url.isEmpty {
           KFImage.url(URL(string: url))
             .placeholder { _ in
-              Image("DefaultBG")
+              Image("BlurredDefaultBG")
                 .resizable()
                 .scaledToFill()
-                .blur(radius: 50)
+                .ignoresSafeArea()
             }
             .resizable()
+            .setProcessor(processor)
             .scaledToFill()
             .scaleEffect(2.0)
-            .blur(radius: 50)
         } else {
-          Image("DefaultBG")
+          Image("BlurredDefaultBG")
             .resizable()
             .scaledToFill()
-            .blur(radius: 50)
+            .ignoresSafeArea()
         }
       }
       VStack(spacing: 0) {

@@ -26,16 +26,14 @@ struct Preview: UIViewControllerRepresentable {
   func makeUIViewController(context _: Context) -> UIViewController {
     let viewController = UIViewController()
     viewController.view.backgroundColor = .clear
-
     return viewController
   }
 
   func updateUIViewController(_ uiViewController: UIViewController, context _: Context) {
     previewLayer.videoGravity = gravity
-    uiViewController.view.layer.addSublayer(previewLayer)
     let viewWidth = uiViewController.view.bounds.width
-//    previewLayer.frame = uiViewController.view.bounds
-    previewLayer.frame = CGRect(x: 0, y: -34, width: viewWidth, height: viewWidth * 16 / 9)
+    previewLayer.frame = CGRect(x: 0, y: 0, width: viewWidth, height: viewWidth * 16 / 9)
+    uiViewController.view.layer.addSublayer(previewLayer)
   }
 
   func dismantleUIViewController(_: UIViewController, coordinator _: ()) {

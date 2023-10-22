@@ -28,29 +28,31 @@ struct UserProfileView: View {
   @Binding var players: [AVPlayer?]
   @Binding var currentIndex: Int
   let userId: Int
+  let processor = BlurImageProcessor(blurRadius: 10)
 
   var body: some View {
     ZStack {
-      Color.clear.overlay {
-        if let url = apiViewModel.userProfile.profileImg, !url.isEmpty {
-          KFImage.url(URL(string: url))
-            .placeholder { _ in
-              Image("DefaultBG")
-                .resizable()
-                .scaledToFill()
-                .blur(radius: 50)
-            }
-            .resizable()
-            .scaledToFill()
-            .scaleEffect(2.0)
-            .blur(radius: 50)
-        } else {
-          Image("DefaultBG")
-            .resizable()
-            .scaledToFill()
-            .blur(radius: 50)
+      Color.clear
+        .overlay {
+          if let url = apiViewModel.userProfile.profileImg, !url.isEmpty {
+            KFImage.url(URL(string: url))
+              .placeholder { _ in
+                Image("BlurredDefaultBG")
+                  .resizable()
+                  .scaledToFill()
+                  .ignoresSafeArea()
+              }
+              .resizable()
+              .setProcessor(processor)
+              .scaledToFill()
+              .scaleEffect(2.0)
+          } else {
+            Image("BlurredDefaultBG")
+              .resizable()
+              .scaledToFill()
+              .ignoresSafeArea()
+          }
         }
-      }
       VStack {
         Spacer().frame(height: topSpacerHeight)
         glassProfile(

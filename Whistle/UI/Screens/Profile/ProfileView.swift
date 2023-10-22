@@ -36,6 +36,7 @@ struct ProfileView: View {
   @Binding var isFirstProfileLoaded: Bool
   @StateObject var apiViewModel = APIViewModel.shared
   @EnvironmentObject var userAuth: UserAuth
+  let processor = BlurImageProcessor(blurRadius: 10)
 
   var body: some View {
     ZStack {
@@ -43,20 +44,20 @@ struct ProfileView: View {
         if let url = apiViewModel.myProfile.profileImage, !url.isEmpty {
           KFImage.url(URL(string: url))
             .placeholder { _ in
-              Image("DefaultBG")
+              Image("BlurredDefaultBG")
                 .resizable()
                 .scaledToFill()
-                .blur(radius: 50)
+                .ignoresSafeArea()
             }
             .resizable()
+            .setProcessor(processor)
             .scaledToFill()
             .scaleEffect(2.0)
-            .blur(radius: 50)
         } else {
-          Image("DefaultBG")
+          Image("BlurredDefaultBG")
             .resizable()
             .scaledToFill()
-            .blur(radius: 50)
+            .ignoresSafeArea()
         }
       }
       VStack(spacing: 0) {
@@ -114,7 +115,6 @@ struct ProfileView: View {
               ForEach(Array(apiViewModel.myPostFeed.enumerated()), id: \.element) { index, content in
                 NavigationLink {
                   MyContentListView(currentIndex: index)
-
                 } label: {
                   videoThumbnailView(
                     thumbnailUrl: content.thumbnailUrl ?? "",
@@ -145,7 +145,6 @@ struct ProfileView: View {
 
                 NavigationLink {
                   MyBookmarkView(currentIndex: index)
-
                 } label: {
                   videoThumbnailView(thumbnailUrl: content.thumbnailUrl, viewCount: content.viewCount)
                 }
@@ -352,7 +351,6 @@ extension ProfileView {
         Rectangle().frame(width: 1, height: 36).foregroundColor(.white)
         NavigationLink {
           FollowView()
-
         } label: {
           VStack(spacing: 4) {
             Text("\(filteredFollower.count)")

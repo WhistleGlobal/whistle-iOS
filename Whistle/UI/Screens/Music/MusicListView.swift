@@ -167,7 +167,7 @@ struct MusicListView: View {
         .fill(Color.black.opacity(0.3))
       CustomBlurView(effect: .systemUltraThinMaterialLight) { view in
         // FIXME: - 피그마와 비슷하도록 값 고치기
-        view.saturationAmout = 2.2
+        view.saturationAmount = 2.2
         view.gaussianBlurRadius = 36
       }
       .clipShape(RoundedRectangle(cornerRadius: cornerRadius, style: .continuous))

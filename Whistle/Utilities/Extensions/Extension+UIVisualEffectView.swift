@@ -30,7 +30,7 @@ extension UIVisualEffectView {
     }
   }
 
-  var saturationAmout: CGFloat {
+  var saturationAmount: CGFloat {
     get {
       saturation?.values?["inputAmount"] as? CGFloat ?? 0
     }
