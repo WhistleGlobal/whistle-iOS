@@ -40,7 +40,7 @@ struct TabbarView: View {
   @State private var pickerOptions = PickerOptionsInfo()
   @AppStorage("isAccess") var isAccess = false
   @StateObject private var tabbarModel = TabbarModel.shared
-  @EnvironmentObject var apiViewModel: APIViewModel
+  @StateObject var apiViewModel = APIViewModel.shared
   @EnvironmentObject var userAuth: UserAuth
   @EnvironmentObject var universalRoutingModel: UniversalRoutingModel
   @StateObject var appleSignInViewModel = AppleSignInViewModel()
@@ -59,7 +59,7 @@ struct TabbarView: View {
             mainOpacity: $mainOpacity,
             isRootStacked: $isRootStacked,
             refreshCount: $refreshCount)
-            .environmentObject(apiViewModel)
+
             .environmentObject(universalRoutingModel)
             .opacity(mainOpacity)
             .onChange(of: tabbarModel.tabSelectionNoAnimation) { newValue in
@@ -69,7 +69,7 @@ struct TabbarView: View {
         .tint(.black)
       } else {
         NoSignInMainView(mainOpacity: $mainOpacity)
-          .environmentObject(apiViewModel)
+
           .environmentObject(userAuth)
           .opacity(mainOpacity)
           .onChange(of: tabbarModel.tabSelectionNoAnimation) { newValue in
@@ -85,7 +85,7 @@ struct TabbarView: View {
         NavigationView {
           if isCameraAuthorized, isMicrophoneAuthorized {
             VideoContentView()
-              .environmentObject(apiViewModel)
+
           } else {
             if !isNavigationActive {
               AccessView(
@@ -111,11 +111,11 @@ struct TabbarView: View {
               switch UIScreen.main.nativeBounds.height {
               case 1334: // iPhone SE 3rd generation
                 SEProfileView(isFirstProfileLoaded: $isFirstProfileLoaded)
-                  .environmentObject(apiViewModel)
+
                   .environmentObject(userAuth)
               default:
                 ProfileView(isFirstProfileLoaded: $isFirstProfileLoaded)
-                  .environmentObject(apiViewModel)
+
                   .environmentObject(userAuth)
               }
             }
@@ -124,7 +124,6 @@ struct TabbarView: View {
         } else {
           NoSignInProfileView()
             .environmentObject(userAuth)
-            .environmentObject(apiViewModel)
         }
       }
       VStack {
@@ -336,7 +335,6 @@ struct TabbarView: View {
 
 #Preview {
   TabbarView()
-    .environmentObject(APIViewModel())
     .environmentObject(UserAuth())
 }
 

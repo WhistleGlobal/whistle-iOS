@@ -31,7 +31,7 @@ struct WhistleApp: App {
   @StateObject var rootVM = RootViewModel(mainContext: PersistenceController.shared.viewContext)
   @StateObject var appleSignInViewModel = AppleSignInViewModel()
   @StateObject var userAuth = UserAuth()
-  @StateObject var apiViewModel = APIViewModel()
+  @StateObject var apiViewModel = APIViewModel.shared
   @StateObject var universalRoutingModel: UniversalRoutingModel = .init()
   @State var testBool = false
   @AppStorage("isAccess") var isAccess = false
@@ -51,7 +51,7 @@ struct WhistleApp: App {
 //        submitText: "완료")
       if isAccess {
         TabbarView()
-          .environmentObject(apiViewModel)
+
           .environmentObject(userAuth)
           .environmentObject(universalRoutingModel)
           .task {
@@ -93,7 +93,7 @@ struct WhistleApp: App {
       } else {
         NavigationStack {
           SignInView()
-            .environmentObject(apiViewModel)
+
             .environmentObject(userAuth)
             .environmentObject(universalRoutingModel)
             .task {

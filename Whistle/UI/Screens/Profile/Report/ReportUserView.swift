@@ -16,7 +16,7 @@ struct ReportUserView: View {
   }
 
   @Environment(\.dismiss) var dismiss
-  @EnvironmentObject var apiViewModel: APIViewModel
+  @StateObject var apiViewModel = APIViewModel.shared
   @State var reportType = 0
   @State var selectedContentId = 0
   @Binding var goReport: Bool
@@ -65,7 +65,7 @@ struct ReportUserView: View {
             userId: userId,
             reportCategory: .post,
             reportReason: 0)
-            .environmentObject(apiViewModel)
+
         } label: {
           reportRow(text: "특정 콘텐츠")
         }
@@ -76,7 +76,7 @@ struct ReportUserView: View {
             selectedContentId: $selectedContentId,
             userId: userId,
             reportCategory: .user)
-            .environmentObject(apiViewModel)
+
         } label: {
           reportRow(text: "이 계정에 관한 문제")
         }
@@ -90,7 +90,6 @@ struct ReportUserView: View {
           selectedContentId: $selectedContentId,
           userId: userId,
           reportCategory: .user)
-          .environmentObject(apiViewModel)
       }
     }
   }

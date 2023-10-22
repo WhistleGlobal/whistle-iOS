@@ -14,7 +14,7 @@ import UniformTypeIdentifiers
 
 struct UserProfileView: View {
   @Environment(\.dismiss) var dismiss
-  @EnvironmentObject var apiViewModel: APIViewModel
+  @StateObject var apiViewModel = APIViewModel.shared
   @State var isFollow = false
   @State var showDialog = false
   @State var showBlockAlert = false

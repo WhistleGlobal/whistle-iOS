@@ -13,7 +13,7 @@ import SwiftUI
 
 struct UserContentListView: View {
   @Environment(\.dismiss) var dismiss
-  @EnvironmentObject var apiViewModel: APIViewModel
+  @StateObject var apiViewModel = APIViewModel.shared
   @State var currentIndex = 0
   @State var currentVideoIsBookmarked = false
   @State var newID = UUID()
@@ -290,7 +290,6 @@ struct UserContentListView: View {
         goReport: $showReport,
         contentId: apiViewModel.userPostFeed[currentIndex].contentId ?? 0,
         userId: apiViewModel.userPostFeed[currentIndex].userId ?? 0)
-        .environmentObject(apiViewModel)
     }
     .confirmationDialog("", isPresented: $showDialog) {
       Button(currentVideoIsBookmarked ? "저장 취소" : "저장하기", role: .none) {

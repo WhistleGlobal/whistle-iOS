@@ -15,7 +15,7 @@ import SwiftUI
 
 struct NoSignInProfileView: View {
   @EnvironmentObject var userAuth: UserAuth
-  @EnvironmentObject var apiViewModel: APIViewModel
+  @StateObject var apiViewModel = APIViewModel.shared
   @StateObject var appleSignInViewModel = AppleSignInViewModel()
   @StateObject private var tabbarModel = TabbarModel.shared
   @State var bottomSheetPosition: BottomSheetPosition = .hidden

@@ -39,7 +39,7 @@ struct PhotoCollectionView: View {
   @State var showAlbumList = false
   @Binding var showProfileImageToast: Bool
   @GestureState private var isInteracting = false
-  @EnvironmentObject var apiViewModel: APIViewModel
+  @StateObject var apiViewModel = APIViewModel.shared
 
   var body: some View {
     VStack(spacing: 0) {

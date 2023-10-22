@@ -21,7 +21,7 @@ struct FollowView: View {
   // MARK: Internal
 
   @Environment(\.dismiss) var dismiss
-  @EnvironmentObject var apiViewModel: APIViewModel
+  @StateObject var apiViewModel = APIViewModel.shared
   @State var newId = UUID()
   @State var tabStatus: profileTabStatus = .follower
   @State var showOtherProfile = false

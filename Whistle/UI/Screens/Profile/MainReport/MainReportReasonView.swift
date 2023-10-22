@@ -11,7 +11,7 @@ import SwiftUI
 
 struct MainReportReasonView: View {
   @Environment(\.dismiss) var dismiss
-  @EnvironmentObject var apiViewModel: APIViewModel
+  @StateObject var apiViewModel = APIViewModel.shared
   @Binding var goReport: Bool
   @State var goComplete = false
   let contentId: Int
@@ -58,7 +58,7 @@ struct MainReportReasonView: View {
               reportReason: reason.numericValue,
               contentId: contentId,
               uesrId: userId)
-              .environmentObject(apiViewModel)
+
           } label: {
             reportRow(text: reason.rawValue)
           }

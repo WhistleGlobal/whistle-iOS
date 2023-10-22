@@ -18,7 +18,7 @@ import SwiftUI
 
 struct NoSignInMainView: View {
   @AppStorage("showGuide") var showGuide = true
-  @EnvironmentObject var apiViewModel: APIViewModel
+  @StateObject var apiViewModel = APIViewModel.shared
   @EnvironmentObject var userAuth: UserAuth
   @State var currentIndex = 0
   @State var playerIndex = 0

@@ -21,7 +21,7 @@ struct MyBookmarkView: View {
   @State var showDeleteToast = false
   @State var showPlayButton = false
   @State var timer: Timer? = nil
-  @EnvironmentObject var apiViewModel: APIViewModel
+  @StateObject var apiViewModel = APIViewModel.shared
   @State var players: [AVPlayer?] = []
 
   var body: some View {

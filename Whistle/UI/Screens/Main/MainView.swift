@@ -24,7 +24,7 @@ class NavigationModel: ObservableObject {
 
 struct MainView: View {
   @Environment(\.scenePhase) var scenePhase
-  @EnvironmentObject var apiViewModel: APIViewModel
+  @StateObject var apiViewModel = APIViewModel.shared
   @EnvironmentObject var universalRoutingModel: UniversalRoutingModel
   @AppStorage("showGuide") var showGuide = true
   @State var viewCount: ViewCount = .init()
@@ -550,7 +550,6 @@ struct MainView: View {
         goReport: $showReport,
         contentId: currentVideoContentId,
         userId: currentVideoUserId)
-        .environmentObject(apiViewModel)
     }
     .navigationDestination(isPresented: $isRootStacked) {
       if universalRoutingModel.isUniversalProfile {
@@ -558,13 +557,13 @@ struct MainView: View {
           switch UIScreen.main.nativeBounds.height {
           case 1334: // iPhone SE 3rd generation
             SEUserProfileView(players: $players, currentIndex: $currentIndex, userId: universalRoutingModel.userId)
-              .environmentObject(apiViewModel)
+
               .onDisappear {
                 universalRoutingModel.isUniversalProfile = false
               }
           default:
             UserProfileView(players: $players, currentIndex: $currentIndex, userId: universalRoutingModel.userId)
-              .environmentObject(apiViewModel)
+
               .onDisappear {
                 universalRoutingModel.isUniversalProfile = false
               }
@@ -575,10 +574,9 @@ struct MainView: View {
           switch UIScreen.main.nativeBounds.height {
           case 1334: // iPhone SE 3rd generation
             SEUserProfileView(players: $players, currentIndex: $currentIndex, userId: currentVideoUserId)
-              .environmentObject(apiViewModel)
+
           default:
             UserProfileView(players: $players, currentIndex: $currentIndex, userId: currentVideoUserId)
-              .environmentObject(apiViewModel)
           }
         }
       }

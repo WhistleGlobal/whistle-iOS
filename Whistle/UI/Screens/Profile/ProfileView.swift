@@ -34,7 +34,7 @@ struct ProfileView: View {
   @State var offsetY: CGFloat = 0
   @StateObject private var tabbarModel = TabbarModel.shared
   @Binding var isFirstProfileLoaded: Bool
-  @EnvironmentObject var apiViewModel: APIViewModel
+  @StateObject var apiViewModel = APIViewModel.shared
   @EnvironmentObject var userAuth: UserAuth
 
   var body: some View {
@@ -114,7 +114,7 @@ struct ProfileView: View {
               ForEach(Array(apiViewModel.myPostFeed.enumerated()), id: \.element) { index, content in
                 NavigationLink {
                   MyContentListView(currentIndex: index)
-                    .environmentObject(apiViewModel)
+
                 } label: {
                   videoThumbnailView(
                     thumbnailUrl: content.thumbnailUrl ?? "",
@@ -145,7 +145,7 @@ struct ProfileView: View {
 
                 NavigationLink {
                   MyBookmarkView(currentIndex: index)
-                    .environmentObject(apiViewModel)
+
                 } label: {
                   videoThumbnailView(thumbnailUrl: content.thumbnailUrl, viewCount: content.viewCount)
                 }
@@ -225,13 +225,13 @@ struct ProfileView: View {
         Divider().background(Color("Gray10"))
         NavigationLink {
           ProfileNotiView()
-            .environmentObject(apiViewModel)
+
         } label: {
           bottomSheetRowWithIcon(systemName: "bell", iconWidth: 22, iconHeight: 20, text: "알림")
         }
         NavigationLink {
           ProfileInfoView()
-            .environmentObject(apiViewModel)
+
         } label: {
           bottomSheetRowWithIcon(systemName: "info.circle", iconWidth: 22, iconHeight: 20, text: "약관 및 정책")
         }
@@ -248,7 +248,7 @@ struct ProfileView: View {
         }
         NavigationLink {
           ProfileReportView()
-            .environmentObject(apiViewModel)
+
         } label: {
           bottomSheetRowWithIcon(
             systemName: "exclamationmark.triangle.fill",
@@ -326,7 +326,7 @@ extension ProfileView {
       Spacer()
       NavigationLink {
         ProfileEditView()
-          .environmentObject(apiViewModel)
+
       } label: {
         Text("프로필 편집")
           .fontSystem(fontDesignSystem: .subtitle2_KO)
@@ -352,7 +352,7 @@ extension ProfileView {
         Rectangle().frame(width: 1, height: 36).foregroundColor(.white)
         NavigationLink {
           FollowView()
-            .environmentObject(apiViewModel)
+
         } label: {
           VStack(spacing: 4) {
             Text("\(filteredFollower.count)")

@@ -13,7 +13,7 @@ struct GlassBottomSheet: View {
   @Binding var isShowing: Bool
   @Binding var showSignoutAlert: Bool
   @Binding var showDeleteAlert: Bool
-  @EnvironmentObject var apiViewModel: APIViewModel
+  @StateObject var apiViewModel = APIViewModel.shared
   @EnvironmentObject var userAuth: UserAuth
   var content: AnyView
 
@@ -57,13 +57,13 @@ struct GlassBottomSheet: View {
 //              Divider().background(Color("Gray10"))
 //              NavigationLink {
 //                ProfileNotiView(isShowingBottomSheet: $isShowing)
-//                  .environmentObject(apiViewModel)
+//
 //              } label: {
 //                bottomSheetRowWithIcon(systemName: "bell", iconWidth: 22, iconHeight: 20, text: "알림")
 //              }
 //              NavigationLink {
 //                ProfileInfoView(isShowingBottomSheet: $isShowing)
-//                  .environmentObject(apiViewModel)
+//
 //              } label: {
 //                bottomSheetRowWithIcon(systemName: "info.circle", iconWidth: 22, iconHeight: 20, text: "약관 및 정책")
 //              }
@@ -74,7 +74,7 @@ struct GlassBottomSheet: View {
 //              }
 //              NavigationLink {
 //                ProfileReportView(isShowingBottomSheet: $isShowing)
-//                  .environmentObject(apiViewModel)
+//
 //              } label: {
 //                bottomSheetRowWithIcon(
 //                  systemName: "exclamationmark.triangle.fill",
