@@ -15,7 +15,7 @@ struct MainReportDetailView: View {
   @State var showDuplication = false
   @State var showFailLoad = false
   @State var inputReportDetail = ""
-  @EnvironmentObject var apiViewModel: APIViewModel
+  @StateObject var apiViewModel = APIViewModel.shared
   let reportReason: Int
   let contentId: Int
   let uesrId: Int

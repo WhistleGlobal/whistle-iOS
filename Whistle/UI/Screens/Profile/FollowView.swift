@@ -21,8 +21,7 @@ struct FollowView: View {
   // MARK: Internal
 
   @Environment(\.dismiss) var dismiss
-  @EnvironmentObject var apiViewModel: APIViewModel
-  @EnvironmentObject var tabbarModel: TabbarModel
+  @StateObject var apiViewModel = APIViewModel.shared
   @State var newId = UUID()
   @State var tabStatus: profileTabStatus = .follower
   @State var showOtherProfile = false
@@ -182,12 +181,10 @@ extension FollowView {
           case 1334: // iPhone SE 3rd generation
             SEUserProfileView(players: .constant([]), currentIndex: .constant(0), userId: follower.followerId)
               .environmentObject(apiViewModel)
-              .environmentObject(tabbarModel)
               .id(UUID())
           default:
             UserProfileView(players: .constant([]), currentIndex: .constant(0), userId: follower.followerId)
               .environmentObject(apiViewModel)
-              .environmentObject(tabbarModel)
               .id(UUID())
           }
         }
@@ -216,12 +213,10 @@ extension FollowView {
           case 1334: // iPhone SE 3rd generation
             SEUserProfileView(players: .constant([]), currentIndex: .constant(0), userId: following.followingId)
               .environmentObject(apiViewModel)
-              .environmentObject(tabbarModel)
               .id(UUID())
           default:
             UserProfileView(players: .constant([]), currentIndex: .constant(0), userId: following.followingId)
               .environmentObject(apiViewModel)
-              .environmentObject(tabbarModel)
               .id(UUID())
           }
         }

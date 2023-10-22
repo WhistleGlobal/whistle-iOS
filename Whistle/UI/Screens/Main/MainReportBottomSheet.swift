@@ -11,7 +11,7 @@ import SwiftUI
 
 struct MainReportBottomSheet: View {
   @Binding var isShowing: Bool
-  @EnvironmentObject var apiViewModel: APIViewModel
+  @StateObject var apiViewModel = APIViewModel.shared
   var content: AnyView
 
   var body: some View {

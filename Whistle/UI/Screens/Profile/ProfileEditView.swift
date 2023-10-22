@@ -23,9 +23,9 @@ struct ProfileEditView: View {
   @State var isAlbumAuthorized = false
   @State var showAlbumAccessView = false
   @State var authorizationStatus = PHPhotoLibrary.authorizationStatus(for: .readWrite)
+  @StateObject private var tabbarModel = TabbarModel.shared
 
-  @EnvironmentObject var apiViewModel: APIViewModel
-  @EnvironmentObject var tabbarModel: TabbarModel
+  @StateObject var apiViewModel = APIViewModel.shared
   @ObservedObject var photoCollection = PhotoCollection(smartAlbum: .smartAlbumUserLibrary)
   var body: some View {
     VStack(spacing: 0) {
@@ -49,8 +49,7 @@ struct ProfileEditView: View {
       Divider()
       profileEditLink(
         destination: ProfileEditIDView(showToast: $showIdToast)
-          .environmentObject(apiViewModel)
-          .environmentObject(tabbarModel),
+        ,
         title: "사용자 ID",
         content: apiViewModel.myProfile.userName)
       Divider().padding(.leading, 96)
@@ -58,8 +57,7 @@ struct ProfileEditView: View {
         destination: ProfileEditIntroduceView(
           showToast: $showIntroductionToast,
           introduce: apiViewModel.myProfile.introduce ?? " ")
-          .environmentObject(apiViewModel)
-          .environmentObject(tabbarModel),
+        ,
         title: "소개",
         content: apiViewModel.myProfile.introduce ?? " ")
       Divider()
@@ -78,7 +76,6 @@ struct ProfileEditView: View {
     }
     .fullScreenCover(isPresented: $showGallery) {
       PhotoCollectionView(photoCollection: photoCollection, showProfileImageToast: $showProfileImageToast)
-        .environmentObject(apiViewModel)
     }
     .fullScreenCover(isPresented: $showAlbumAccessView) {
       AlbumAccessView(isAlbumAuthorized: $isAlbumAuthorized, showAlbumAccessView: $showAlbumAccessView)

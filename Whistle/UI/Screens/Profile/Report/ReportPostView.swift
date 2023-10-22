@@ -12,7 +12,7 @@ import SwiftUI
 
 struct ReportPostView: View {
   @Environment(\.dismiss) var dismiss
-  @EnvironmentObject var apiViewModel: APIViewModel
+  @StateObject var apiViewModel = APIViewModel.shared
   @State var isSelected = false
   @State var selectedIndex = 0
   @Binding var selectedContentId: Int
@@ -66,7 +66,7 @@ struct ReportPostView: View {
               selectedContentId: $selectedContentId,
               userId: userId,
               reportCategory: .post)
-              .environmentObject(apiViewModel)
+
           case .user:
             ReportDetailView(
               goReport: $goReport,
@@ -74,7 +74,6 @@ struct ReportPostView: View {
               reportCategory: .user,
               reportReason: reportReason ?? 0,
               userId: userId)
-              .environmentObject(apiViewModel)
           }
         } label: {
           Text("다음")

@@ -59,7 +59,7 @@ struct MusicListView: View {
     }
   }
 
-  @StateObject var apiViewModel = APIViewModel()
+  @StateObject var apiViewModel = APIViewModel.shared
 
   var body: some View {
     VStack {

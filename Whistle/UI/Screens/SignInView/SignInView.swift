@@ -18,7 +18,7 @@ import SwiftUI
 
 struct SignInView: View {
   @Environment(\.scenePhase) var scenePhase
-  @EnvironmentObject var apiViewModel: APIViewModel
+  @StateObject var apiViewModel = APIViewModel.shared
   @EnvironmentObject var userAuth: UserAuth
   @EnvironmentObject var universalRoutingModel: UniversalRoutingModel
   @StateObject var appleSignInViewModel = AppleSignInViewModel()
@@ -46,7 +46,7 @@ struct SignInView: View {
           Spacer()
           NavigationLink {
             TabbarView()
-              .environmentObject(apiViewModel)
+
               .environmentObject(userAuth)
               .environmentObject(universalRoutingModel)
           } label: {

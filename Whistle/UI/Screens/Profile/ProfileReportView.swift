@@ -10,7 +10,7 @@ import SwiftUI
 
 struct ProfileReportView: View {
   @Environment(\.dismiss) var dismiss
-  @EnvironmentObject var apiViewModel: APIViewModel
+  @StateObject var apiViewModel = APIViewModel.shared
 
   var body: some View {
     VStack(spacing: 0) {
