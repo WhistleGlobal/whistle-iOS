@@ -85,9 +85,9 @@ extension AespaVideoContext: VideoContext {
       fileName: fileName,
       extension: option.asset.fileExtension)
 
-    if option.session.autoVideoOrientationEnabled {
-      commonContext.orientation(to: UIDevice.current.orientation.toVideoOrientation, onComplete)
-    }
+//    if option.session.autoVideoOrientationEnabled {
+//      commonContext.orientation(to: UIDevice.current.orientation.toVideoOrientation, onComplete)
+//    }
 
     recorder.startRecording(in: filePath, onComplete)
     isRecording = true

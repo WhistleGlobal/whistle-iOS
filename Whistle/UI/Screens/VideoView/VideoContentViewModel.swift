@@ -30,7 +30,7 @@ class VideoContentViewModel: ObservableObject {
 
     // Common setting
     aespaSession
-      .focus(mode: .continuousAutoFocus)
+      .focus(mode: .autoFocus)
       .changeMonitoring(enabled: true)
       .orientation(to: .portrait)
       .quality(to: .high)
@@ -40,8 +40,6 @@ class VideoContentViewModel: ObservableObject {
         }
       }
       .unmute()
-
-    aespaSession
       .stabilization(mode: .auto)
   }
 }

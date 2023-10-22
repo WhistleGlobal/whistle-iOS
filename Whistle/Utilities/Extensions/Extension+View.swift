@@ -71,7 +71,7 @@ extension View {
         RoundedRectangle(cornerRadius: 32, style: .continuous)
           .fill(Color.black.opacity(0.3))
         CustomBlurView(effect: .systemUltraThinMaterialLight) { view in
-          view.saturationAmout = 2.2
+          view.saturationAmount = 2.2
           view.gaussianBlurRadius = 36
         }
         .clipShape(RoundedRectangle(cornerRadius: 28, style: .continuous))
@@ -96,7 +96,7 @@ extension View {
         .cornerRadius(cornerRadius, corners: .allCorners)
       CustomBlurView(effect: .systemUltraThinMaterialLight) { view in
         // FIXME: - 피그마와 비슷하도록 값 고치기
-        view.saturationAmout = 2.2
+        view.saturationAmount = 2.2
         view.gaussianBlurRadius = 32
       }
 //      .cornerRadius(cornerRadius, corners: [.topLeft, .topRight])
@@ -114,7 +114,7 @@ extension View {
         .cornerRadius(cornerRadius, corners: .allCorners)
       CustomBlurView(effect: .systemUltraThinMaterialLight) { view in
         // FIXME: - 피그마와 비슷하도록 값 고치기
-        view.saturationAmout = 2.2
+        view.saturationAmount = 2.2
         view.gaussianBlurRadius = 32
       }
       .clipShape(RoundedRectangle(cornerRadius: cornerRadius, style: .continuous))
@@ -142,7 +142,7 @@ extension View {
         .fill(Color.black.opacity(0.3))
       CustomBlurView(effect: .systemUltraThinMaterialLight) { view in
         // FIXME: - 피그마와 비슷하도록 값 고치기
-        view.saturationAmout = 2.2
+        view.saturationAmount = 2.2
         view.gaussianBlurRadius = 36
       }
       .clipShape(RoundedRectangle(cornerRadius: cornerRadius, style: .continuous))
@@ -177,7 +177,7 @@ extension View {
         .fill(Color.black.opacity(0.3))
       CustomBlurView(effect: .systemUltraThinMaterialLight) { view in
         // FIXME: - 피그마와 비슷하도록 값 고치기
-        view.saturationAmout = 2.2
+        view.saturationAmount = 2.2
         view.gaussianBlurRadius = 36
       }
       .clipShape(Circle())

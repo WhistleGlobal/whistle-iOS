@@ -22,7 +22,6 @@ class ExporterViewModel: ObservableObject {
   private var action: ActionEnum = .save
   private let editorHelper = VideoEditor()
   private var timer: Timer?
-  var base64String = ""
   var videoData = Data()
   init(video: EditableVideo) {
     self.video = video
@@ -41,8 +40,6 @@ class ExporterViewModel: ObservableObject {
       let url = try await editorHelper.startRender(video: video, videoQuality: selectedQuality, start: start)
       if let videoData = try? Data(contentsOf: url) {
         self.videoData = videoData
-        base64String = videoData.base64EncodedString()
-        // base64String을 사용하거나 전송하려는 곳에 전달할 수 있습니다.
       }
       renderState = .loaded(url)
     } catch {

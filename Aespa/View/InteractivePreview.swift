@@ -98,24 +98,28 @@ public struct InteractivePreview: View {
     session.currentCameraPosition
   }
 
+  let viewWidth = UIScreen.main.bounds.width
   public var body: some View {
-    GeometryReader { _ in
-      ZStack {
+    GeometryReader { geometry in
+      ZStack(alignment: .top) {
         preview
           .gesture(changePositionGesture)
-//                    .gesture(tapToFocusGesture(geometry)) // Currently disabled
+          .gesture(tapToFocusGesture(geometry)) // Currently disabled
           .gesture(pinchZoomGesture)
 
         // Crosshair
-        Rectangle()
+        Circle()
           .stroke(lineWidth: 1)
-          .foregroundColor(Color.yellow)
-          .frame(width: 100, height: 100)
+          .foregroundColor(Color.white)
+          .frame(width: 60, height: 60)
+          .shadow(radius: 10)
           .position(focusingLocation)
           .opacity(focusFrameOpacity)
           .animation(.spring(), value: focusFrameOpacity)
       }
     }
+    .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.width * 16 / 9)
+    .padding(.bottom, 68)
   }
 }
 
@@ -132,11 +136,13 @@ extension InteractivePreview {
   }
 
   private func tapToFocusGesture(_ geometry: GeometryProxy) -> some Gesture {
-    guard session.isRunning, option.enableFocus else {
-      return DragGesture(minimumDistance: 0).onEnded { _ in }
-    }
+//    guard session.isRunning, option.enableFocus else {
+    ////      return DragGesture(minimumDistance: 0).onEnded { _ in }
+    ////      return TapGesture(count: 1).onEnded { }
+//      return SpatialTapGesture(count: 1, coordinateSpace: .global).onEnded { _ in }
+//    }
 
-    return DragGesture(minimumDistance: 0)
+    DragGesture(minimumDistance: 0)
       .onEnded { value in
         guard
           let currentFocusMode,
@@ -149,11 +155,12 @@ extension InteractivePreview {
         point = CGPoint(
           x: point.x / geometry.size.width,
           y: point.y / geometry.size.height)
-
+        print("value, point, geometry", value.location, point, point, geometry.size.width, geometry.size.height)
         session.focus(mode: .autoFocus, point: point)
         focusingLocation = value.location
+//        CGPoint(x: value.location.x, y: min(value.location.y))
 
-        if option.enableShowingCrosshair {
+        if option.enableShowingCrosshair, point.y <= 1.0 {
           showCrosshair()
         }
       }
@@ -196,10 +203,10 @@ extension InteractivePreview {
 
       withAnimation { focusFrameOpacity = 1 }
 
-      try await Task.sleep(nanoseconds: 2 * second)
-      withAnimation { focusFrameOpacity = 0.35 }
+//      try await Task.sleep(nanoseconds: 2 * second)
+//      withAnimation { focusFrameOpacity = 0.35 }
 
-      try await Task.sleep(nanoseconds: 3 * second)
+      try await Task.sleep(nanoseconds: 1 * second)
       withAnimation { focusFrameOpacity = 0 }
     }
   }

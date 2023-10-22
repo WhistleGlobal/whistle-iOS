@@ -36,6 +36,7 @@ struct ProfileView: View {
   @EnvironmentObject var apiViewModel: APIViewModel
   @EnvironmentObject var userAuth: UserAuth
   @EnvironmentObject var tabbarModel: TabbarModel
+  let processor = BlurImageProcessor(blurRadius: 10)
 
   var body: some View {
     ZStack {
@@ -43,20 +44,20 @@ struct ProfileView: View {
         if let url = apiViewModel.myProfile.profileImage, !url.isEmpty {
           KFImage.url(URL(string: url))
             .placeholder { _ in
-              Image("DefaultBG")
+              Image("BlurredDefaultBG")
                 .resizable()
                 .scaledToFill()
-                .blur(radius: 50)
+                .ignoresSafeArea()
             }
             .resizable()
+            .setProcessor(processor)
             .scaledToFill()
             .scaleEffect(2.0)
-            .blur(radius: 50)
         } else {
-          Image("DefaultBG")
+          Image("BlurredDefaultBG")
             .resizable()
             .scaledToFill()
-            .blur(radius: 50)
+            .ignoresSafeArea()
         }
       }
       VStack(spacing: 0) {
