@@ -30,6 +30,7 @@ struct SEProfileView: View {
   @StateObject var apiViewModel = APIViewModel.shared
   @EnvironmentObject var userAuth: UserAuth
   let processor = BlurImageProcessor(blurRadius: 10)
+  var body: some View {
     ZStack {
       Color.clear.overlay {
         if let url = apiViewModel.myProfile.profileImage, !url.isEmpty {
