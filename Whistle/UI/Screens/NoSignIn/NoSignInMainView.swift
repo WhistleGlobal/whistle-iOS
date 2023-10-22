@@ -351,6 +351,9 @@ struct NoSignInMainView: View {
       }
     }
     .onChange(of: tabbarModel.tabbarOpacity) { newValue in
+      if players.isEmpty {
+        return
+      }
       if newValue == 1.0 {
         players[currentIndex]?.play()
       } else {
