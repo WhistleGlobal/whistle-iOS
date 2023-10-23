@@ -1,5 +1,5 @@
 //
-//  Helpers.swift
+//  VideoFilterHelpers.swift
 //  Whistle
 //
 //  Created by 박상원 on 2023/09/11.
@@ -8,7 +8,7 @@
 import CoreImage
 import Foundation
 
-final class Helpers {
+final class VideoFilterHelpers {
   static func createColorFilter(_ colorCorrection: ColorCorrection?) -> CIFilter? {
     guard let colorCorrection else { return nil }
     let colorCorrectionFilter = CIFilter(name: "CIColorControls")

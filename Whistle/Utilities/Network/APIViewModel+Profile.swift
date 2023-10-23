@@ -1,5 +1,5 @@
 //
-//  APIViewModel+Profile.swift
+//  APIViewModel+MyProfile.swift
 //  Whistle
 //
 //  Created by ChoiYujin on 9/8/23.
@@ -17,7 +17,7 @@ extension APIViewModel: ProfileProtocol {
         method: .get,
         headers: contentTypeJson)
         .validate(statusCode: 200 ... 500)
-        .responseDecodable(of: Profile.self) { response in
+        .responseDecodable(of: MyProfile.self) { response in
           switch response.result {
           case .success(let success):
             self.myProfile = success
@@ -58,17 +58,17 @@ extension APIViewModel: ProfileProtocol {
     }
   }
 
-  func requestUserProfile(userId: Int) async {
+  func requestMemberProfile(userID: Int) async {
     await withCheckedContinuation { continuation in
       AF.request(
-        "\(domainURL)/user/\(userId)/profile",
+        "\(domainURL)/user/\(userID)/profile",
         method: .get,
         headers: contentTypeJson)
         .validate(statusCode: 200 ... 300)
-        .responseDecodable(of: UserProfile.self) { response in
+        .responseDecodable(of: MemberProfile.self) { response in
           switch response.result {
           case .success(let success):
-            self.userProfile = success
+            self.memberProfile = success
             continuation.resume()
           case .failure(let failure):
             log(failure)
@@ -113,10 +113,10 @@ extension APIViewModel: ProfileProtocol {
     }
   }
 
-  func requestUserWhistlesCount(userId: Int) async {
+  func requestMemberWhistlesCount(userID: Int) async {
     await withCheckedContinuation { continuation in
       AF.request(
-        "\(domainURL)/user/\(userId)/whistle/count",
+        "\(domainURL)/user/\(userID)/whistle/count",
         method: .get,
         headers: contentTypeJson)
         .validate(statusCode: 200 ..< 300)
@@ -131,7 +131,7 @@ extension APIViewModel: ProfileProtocol {
                 let jsonObject = try JSONSerialization.jsonObject(with: responseData, options: []) as? [String: Any],
                 let count = jsonObject["whistle_all_count"] as? Int
               {
-                self.userWhistleCount = count
+                self.memberWhistleCount = count
                 continuation.resume()
               }
             } catch {
@@ -156,7 +156,7 @@ extension APIViewModel: ProfileProtocol {
           switch response.result {
           case .success(let data):
             do {
-              self.myFollow = try self.decoder.decode(Follow.self, from: data)
+              self.myFollow = try self.decoder.decode(MyFollow.self, from: data)
               continuation.resume()
             } catch {
               log("Error decoding JSON: \(error)")
@@ -170,10 +170,10 @@ extension APIViewModel: ProfileProtocol {
     }
   }
 
-  func requestUserFollow(userId: Int) async {
+  func requestMemberFollow(userID: Int) async {
     await withCheckedContinuation { continuation in
       AF.request(
-        "\(domainURL)/user/\(userId)/follow-list",
+        "\(domainURL)/user/\(userID)/follow-list",
         method: .get,
         headers: contentTypeXwwwForm)
         .validate(statusCode: 200 ... 300)
@@ -181,7 +181,7 @@ extension APIViewModel: ProfileProtocol {
           switch response.result {
           case .success(let data):
             do {
-              self.userFollow = try self.decoder.decode(UserFollow.self, from: data ?? .init())
+              self.memberFollow = try self.decoder.decode(MemberFollow.self, from: data ?? .init())
               continuation.resume()
             } catch {
               log("Error decoding JSON: \(error)")
@@ -234,10 +234,10 @@ extension APIViewModel: ProfileProtocol {
     }
   }
 
-  func followUser(userId: Int) async {
+  func followUser(userID: Int) async {
     await withCheckedContinuation { continuation in
       AF.request(
-        "\(domainURL)/action/\(userId)/follow",
+        "\(domainURL)/action/\(userID)/follow",
         method: .post,
         headers: contentTypeXwwwForm)
         .validate(statusCode: 200 ... 300)
@@ -253,10 +253,10 @@ extension APIViewModel: ProfileProtocol {
     }
   }
 
-  func unfollowUser(userId: Int) async {
+  func unfollowUser(userID: Int) async {
     await withCheckedContinuation { continuation in
       AF.request(
-        "\(domainURL)/action/\(userId)/follow",
+        "\(domainURL)/action/\(userID)/follow",
         method: .delete,
         headers: contentTypeXwwwForm)
         .validate(statusCode: 200 ... 300)
@@ -322,10 +322,10 @@ extension APIViewModel: ProfileProtocol {
     }
   }
 
-  func actionBlockUser(userId: Int) async {
+  func actionBlockUser(userID: Int) async {
     await withCheckedContinuation { continuation in
       AF.request(
-        "\(domainURL)/action/\(userId)/block",
+        "\(domainURL)/action/\(userID)/block",
         method: .post,
         headers: contentTypeXwwwForm)
         .validate(statusCode: 200 ... 300)
@@ -341,10 +341,10 @@ extension APIViewModel: ProfileProtocol {
     }
   }
 
-  func actionBlockUserCancel(userId: Int) async {
+  func actionBlockUserCancel(userID: Int) async {
     await withCheckedContinuation { continuation in
       AF.request(
-        "\(domainURL)/action/\(userId)/block",
+        "\(domainURL)/action/\(userID)/block",
         method: .delete,
         headers: contentTypeXwwwForm)
         .validate(statusCode: 200 ... 300)

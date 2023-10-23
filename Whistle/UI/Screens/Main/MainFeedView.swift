@@ -54,7 +54,7 @@ struct MainFeedView: View {
   var body: some View {
     GeometryReader { proxy in
       TabView(selection: $currentIndex) {
-        ForEach(Array(apiViewModel.contentList.enumerated()), id: \.element) { index, content in
+        ForEach(Array(apiViewModel.mainFeed.enumerated()), id: \.element) { index, content in
           if !players.isEmpty {
             if let player = players[min(max(0, index), players.count - 1)] {
               ContentPlayer(player: player)
@@ -224,7 +224,7 @@ struct MainFeedView: View {
       .tabViewStyle(.page(indexDisplayMode: .never))
       .frame(maxWidth: proxy.size.width)
       .onChange(of: mainOpacity) { newValue in
-        if apiViewModel.contentList.isEmpty, players.isEmpty {
+        if apiViewModel.mainFeed.isEmpty, players.isEmpty {
           return
         }
         if players.count <= currentIndex {
@@ -235,7 +235,7 @@ struct MainFeedView: View {
         }
         if newValue == 1 {
           if !isRootStacked {
-            if !BlockList.shared.userIds.contains(apiViewModel.contentList[currentIndex].userId ?? 0) {
+            if !BlockList.shared.userIds.contains(apiViewModel.mainFeed[currentIndex].userId ?? 0) {
               player.play()
             }
           }
@@ -346,14 +346,14 @@ struct MainFeedView: View {
       if apiViewModel.myProfile.userName.isEmpty {
         await apiViewModel.requestMyProfile()
       }
-      if apiViewModel.contentList.isEmpty {
+      if apiViewModel.mainFeed.isEmpty {
         if universalRoutingModel.isUniversalContent {
-          apiViewModel.requestUniversalContent(contentId: universalRoutingModel.contentId) {
+          apiViewModel.requestUniversalFeed(contentID: universalRoutingModel.contentId) {
             setupPlayers()
             universalRoutingModel.isUniversalContent = false
           }
         } else {
-          apiViewModel.requestContentList {
+          apiViewModel.requestMainFeed {
             setupPlayers()
           }
         }
@@ -370,7 +370,7 @@ struct MainFeedView: View {
       if universalRoutingModel.isUniversalContent {
         return
       }
-      guard let url = apiViewModel.contentList[newValue].videoUrl else {
+      guard let url = apiViewModel.mainFeed[newValue].videoUrl else {
         return
       }
       players[playerIndex]?.seek(to: .zero)
@@ -378,13 +378,13 @@ struct MainFeedView: View {
       players[playerIndex] = nil
       players[newValue] = AVPlayer(url: URL(string: url)!)
       players[newValue]?.seek(to: .zero)
-      if !BlockList.shared.userIds.contains(apiViewModel.contentList[newValue].userId ?? 0) {
+      if !BlockList.shared.userIds.contains(apiViewModel.mainFeed[newValue].userId ?? 0) {
         players[newValue]?.play()
       }
       playerIndex = newValue
-      currentVideoUserId = apiViewModel.contentList[newValue].userId ?? 0
-      currentVideoContentId = apiViewModel.contentList[newValue].contentId ?? 0
-      currentVideoIsBookmarked = apiViewModel.contentList[newValue].isBookmarked ?? false
+      currentVideoUserId = apiViewModel.mainFeed[newValue].userId ?? 0
+      currentVideoContentId = apiViewModel.mainFeed[newValue].contentId ?? 0
+      currentVideoIsBookmarked = apiViewModel.mainFeed[newValue].isBookmarked ?? false
       apiViewModel.postFeedPlayerChanged()
     }
     .onChange(of: scenePhase) { newValue in
@@ -409,7 +409,7 @@ struct MainFeedView: View {
       }
     }
     .onChange(of: universalRoutingModel.isUniversalContent) { newValue in
-      if newValue, !apiViewModel.contentList.isEmpty {
+      if newValue, !apiViewModel.mainFeed.isEmpty {
         tabbarModel.tabSelectionNoAnimation = .main
         tabbarModel.tabSelection = .main
         currentIndex = 0
@@ -417,14 +417,14 @@ struct MainFeedView: View {
         currentVideoUserId = 0
         currentVideoContentId = 0
         players.removeAll()
-        apiViewModel.contentList.removeAll()
+        apiViewModel.mainFeed.removeAll()
         if universalRoutingModel.isUniversalContent {
-          apiViewModel.requestUniversalContent(contentId: universalRoutingModel.contentId) {
+          apiViewModel.requestUniversalFeed(contentID: universalRoutingModel.contentId) {
             setupPlayers()
             universalRoutingModel.isUniversalContent = false
           }
         } else {
-          apiViewModel.requestContentList {
+          apiViewModel.requestMainFeed {
             setupPlayers()
             universalRoutingModel.isUniversalContent = false
           }
@@ -447,9 +447,9 @@ struct MainFeedView: View {
       if showHideContentToast {
         CancelableToastMessage(text: "해당 콘텐츠를 숨겼습니다", paddingBottom: 78, action: {
           Task {
-            await apiViewModel.actionContentHate(contentId: currentVideoContentId)
-            apiViewModel.contentList.remove(at: currentIndex)
-            guard let url = apiViewModel.contentList[currentIndex].videoUrl else {
+            await apiViewModel.actionContentHate(contentID: currentVideoContentId)
+            apiViewModel.mainFeed.remove(at: currentIndex)
+            guard let url = apiViewModel.mainFeed[currentIndex].videoUrl else {
               return
             }
             players[currentIndex] = AVPlayer(url: URL(string: url)!)
@@ -486,21 +486,21 @@ struct MainFeedView: View {
         role: .none)
       {
         Task {
-          if apiViewModel.contentList[currentIndex].isBookmarked ?? false {
+          if apiViewModel.mainFeed[currentIndex].isBookmarked ?? false {
             showBookmarkToast.1 = "저장 취소했습니다."
-            let tempBool = await apiViewModel.actionBookmarkCancel(contentId: currentVideoContentId)
+            let tempBool = await apiViewModel.actionBookmarkCancel(contentID: currentVideoContentId)
             withAnimation {
               showBookmarkToast.0 = tempBool
             }
-            apiViewModel.contentList[currentIndex].isBookmarked = false
+            apiViewModel.mainFeed[currentIndex].isBookmarked = false
             currentVideoIsBookmarked = false
           } else {
             showBookmarkToast.1 = "저장했습니다."
-            let tempBool = await apiViewModel.actionBookmark(contentId: currentVideoContentId)
+            let tempBool = await apiViewModel.actionBookmark(contentID: currentVideoContentId)
             withAnimation {
               showBookmarkToast.0 = tempBool
             }
-            apiViewModel.contentList[currentIndex].isBookmarked = true
+            apiViewModel.mainFeed[currentIndex].isBookmarked = true
             currentVideoIsBookmarked = true
           }
           apiViewModel.postFeedPlayerChanged()
@@ -516,7 +516,7 @@ struct MainFeedView: View {
           showReport = true
         }
       }
-      Button("닫기", role: .cancel) {}
+      Button("닫기", role: .cancel) { }
     }
     .fullScreenCover(isPresented: $showReport) {
       MainFeedReportReasonSelectionView(
@@ -576,7 +576,7 @@ extension MainFeedView {
         VStack(alignment: .leading, spacing: 12) {
           Spacer()
           HStack(spacing: 0) {
-            if apiViewModel.contentList[currentIndex].userName != apiViewModel.myProfile.userName {
+            if apiViewModel.mainFeed[currentIndex].userName != apiViewModel.myProfile.userName {
               Button {
                 isRootStacked = true
               } label: {
@@ -603,14 +603,14 @@ extension MainFeedView {
               Button {
                 Task {
                   if isFollowed.wrappedValue {
-                    await apiViewModel.unfollowUser(userId: currentVideoUserId)
+                    await apiViewModel.unfollowUser(userID: currentVideoUserId)
                     showFollowToast = (true, "\(userName)님을 팔로우 취소함")
                   } else {
-                    await apiViewModel.followUser(userId: currentVideoUserId)
+                    await apiViewModel.followUser(userID: currentVideoUserId)
                     showFollowToast = (true, "\(userName)님을 팔로우 중")
                   }
                   isFollowed.wrappedValue.toggle()
-                  apiViewModel.contentList = apiViewModel.contentList.map { item in
+                  apiViewModel.mainFeed = apiViewModel.mainFeed.map { item in
                     let mutableItem = item
                     if mutableItem.userId == currentVideoUserId {
                       mutableItem.isFollowed = isFollowed.wrappedValue
@@ -702,22 +702,22 @@ extension MainFeedView {
   func whistleToggle() {
     HapticManager.instance.impact(style: .medium)
     timer?.invalidate()
-    if apiViewModel.contentList[currentIndex].isWhistled {
+    if apiViewModel.mainFeed[currentIndex].isWhistled {
       timer = Timer.scheduledTimer(withTimeInterval: 2, repeats: false) { _ in
         Task {
-          await apiViewModel.actionWhistleCancel(contentId: currentVideoContentId)
+          await apiViewModel.actionWhistleCancel(contentID: currentVideoContentId)
         }
       }
-      apiViewModel.contentList[currentIndex].whistleCount? -= 1
+      apiViewModel.mainFeed[currentIndex].whistleCount? -= 1
     } else {
       timer = Timer.scheduledTimer(withTimeInterval: 2, repeats: false) { _ in
         Task {
-          await apiViewModel.actionWhistle(contentId: currentVideoContentId)
+          await apiViewModel.actionWhistle(contentID: currentVideoContentId)
         }
       }
-      apiViewModel.contentList[currentIndex].whistleCount? += 1
+      apiViewModel.mainFeed[currentIndex].whistleCount? += 1
     }
-    apiViewModel.contentList[currentIndex].isWhistled.toggle()
+    apiViewModel.mainFeed[currentIndex].isWhistled.toggle()
     apiViewModel.postFeedPlayerChanged()
   }
 }
@@ -747,23 +747,23 @@ extension Date {
 extension MainFeedView {
   func setupPlayers() {
     Task {
-      if !apiViewModel.contentList.isEmpty {
+      if !apiViewModel.mainFeed.isEmpty {
         players.removeAll()
-        for _ in 0 ..< apiViewModel.contentList.count {
+        for _ in 0 ..< apiViewModel.mainFeed.count {
           players.append(nil)
         }
         players[currentIndex] =
-          AVPlayer(url: URL(string: apiViewModel.contentList[currentIndex].videoUrl ?? "")!)
+          AVPlayer(url: URL(string: apiViewModel.mainFeed[currentIndex].videoUrl ?? "")!)
         playerIndex = currentIndex
         guard let player = players[currentIndex] else {
           return
         }
-        currentVideoUserId = apiViewModel.contentList[currentIndex].userId ?? 0
-        currentVideoContentId = apiViewModel.contentList[currentIndex].contentId ?? 0
-        isCurrentVideoWhistled = apiViewModel.contentList[currentIndex].isWhistled
-        currentVideoIsBookmarked = apiViewModel.contentList[currentIndex].isBookmarked ?? false
+        currentVideoUserId = apiViewModel.mainFeed[currentIndex].userId ?? 0
+        currentVideoContentId = apiViewModel.mainFeed[currentIndex].contentId ?? 0
+        isCurrentVideoWhistled = apiViewModel.mainFeed[currentIndex].isWhistled
+        currentVideoIsBookmarked = apiViewModel.mainFeed[currentIndex].isBookmarked ?? false
         await player.seek(to: .zero)
-        if !BlockList.shared.userIds.contains(apiViewModel.contentList[currentIndex].userId ?? 0) {
+        if !BlockList.shared.userIds.contains(apiViewModel.mainFeed[currentIndex].userId ?? 0) {
           player.play()
         }
         withAnimation {

@@ -12,7 +12,7 @@ import SwiftyJSON
 import UIKit
 
 extension APIViewModel: UploadProtocol {
-  func uploadPhoto(image: UIImage, completion: @escaping (String) -> Void) async {
+  func uploadProfilePhoto(image: UIImage, completion: @escaping (String) -> Void) async {
     guard let image = image.jpegData(compressionQuality: 0.5) else {
       return
     }
@@ -39,7 +39,7 @@ extension APIViewModel: UploadProtocol {
     }
   }
 
-  func uploadPost(
+  func uploadContent(
     video: Data,
     thumbnail: Data,
     caption: String,

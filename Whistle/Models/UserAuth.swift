@@ -76,8 +76,7 @@ class UserAuth: ObservableObject {
           guard let deviceToken = self.deviceToken else {
             return
           }
-          self.apiViewModel.uploadDeviceToken(deviceToken: deviceToken) {
-          }
+          self.apiViewModel.uploadDeviceToken(deviceToken: deviceToken) { }
           self.isAccess = true
           completion()
         case .failure(let error):
@@ -108,7 +107,7 @@ class UserAuth: ObservableObject {
         self.isAccess = false
         return
       }
-      if let statusCode = response.response?.statusCode, statusCode == 401 {}
+      if let statusCode = response.response?.statusCode, statusCode == 401 { }
       guard let data = response.data else {
         return
       }

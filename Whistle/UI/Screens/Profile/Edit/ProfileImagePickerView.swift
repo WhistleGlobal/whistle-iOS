@@ -70,7 +70,7 @@ struct ProfileImagePickerView: View {
             guard let image = renderer.uiImage else {
               return
             }
-              await apiViewModel.uploadPhoto(image: image) { _ in }
+            await apiViewModel.uploadProfilePhoto(image: image) { _ in }
             await apiViewModel.requestMyProfile()
             showProfileImageToast = true
             dismiss()

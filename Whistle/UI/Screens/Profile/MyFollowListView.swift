@@ -123,8 +123,8 @@ extension MyFollowListView {
         Button("") {
           Task {
             if isFollowed.wrappedValue {
-              await apiViewModel.unfollowUser(userId: userId)
-              apiViewModel.contentList = apiViewModel.contentList.map { content in
+              await apiViewModel.unfollowUser(userID: userId)
+              apiViewModel.mainFeed = apiViewModel.mainFeed.map { content in
                 let updatedContent = content
                 if content.userId == userId {
                   updatedContent.isFollowed.toggle()
@@ -132,8 +132,8 @@ extension MyFollowListView {
                 return updatedContent
               }
             } else {
-              await apiViewModel.followUser(userId: userId)
-              apiViewModel.contentList = apiViewModel.contentList.map { content in
+              await apiViewModel.followUser(userID: userId)
+              apiViewModel.mainFeed = apiViewModel.mainFeed.map { content in
                 let updatedContent = content
                 if content.userId == userId {
                   updatedContent.isFollowed.toggle()

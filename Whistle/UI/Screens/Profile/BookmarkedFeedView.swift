@@ -204,7 +204,7 @@ struct BookmarkedFeedView: View {
                 players[currentIndex]?.play()
               }
               apiViewModel.postFeedPlayerChanged()
-              _ = await apiViewModel.actionBookmarkCancel(contentId: contentId)
+              _ = await apiViewModel.actionBookmarkCancel(contentID: contentId)
             } else {
               let contentId = apiViewModel.bookmark[currentIndex].contentId
               apiViewModel.bookmark.removeLast()
@@ -212,7 +212,7 @@ struct BookmarkedFeedView: View {
               players.removeLast()
               currentIndex -= 1
               apiViewModel.postFeedPlayerChanged()
-              _ = await apiViewModel.actionBookmarkCancel(contentId: contentId)
+              _ = await apiViewModel.actionBookmarkCancel(contentID: contentId)
             }
           }
         }, showToast: $showDeleteToast)
@@ -222,7 +222,7 @@ struct BookmarkedFeedView: View {
       Button("저장 해제", role: .destructive) {
         showDeleteToast = true
       }
-      Button("닫기", role: .cancel) {}
+      Button("닫기", role: .cancel) { }
     }
   }
 }
@@ -288,10 +288,10 @@ extension BookmarkedFeedView {
           Button {
             Task {
               if isWhistled.wrappedValue {
-                await apiViewModel.actionWhistleCancel(contentId: contentId)
+                await apiViewModel.actionWhistleCancel(contentID: contentId)
                 whistleCount.wrappedValue -= 1
               } else {
-                await apiViewModel.actionWhistle(contentId: contentId)
+                await apiViewModel.actionWhistle(contentID: contentId)
                 whistleCount.wrappedValue += 1
               }
               isWhistled.wrappedValue.toggle()
@@ -351,7 +351,7 @@ extension BookmarkedFeedView {
       let contentId = apiViewModel.bookmark[currentIndex].contentId
       timer = Timer.scheduledTimer(withTimeInterval: 2, repeats: false) { _ in
         Task {
-          await apiViewModel.actionWhistleCancel(contentId: contentId)
+          await apiViewModel.actionWhistleCancel(contentID: contentId)
         }
       }
       apiViewModel.bookmark[currentIndex].whistleCount -= 1
@@ -359,7 +359,7 @@ extension BookmarkedFeedView {
       let contentId = apiViewModel.bookmark[currentIndex].contentId
       timer = Timer.scheduledTimer(withTimeInterval: 2, repeats: false) { _ in
         Task {
-          await apiViewModel.actionWhistle(contentId: contentId)
+          await apiViewModel.actionWhistle(contentID: contentId)
         }
       }
       apiViewModel.bookmark[currentIndex].whistleCount += 1

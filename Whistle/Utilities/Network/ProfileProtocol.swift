@@ -10,16 +10,17 @@ import Alamofire
 protocol ProfileProtocol {
   func requestMyProfile() async
   func updateMyProfile() async -> ProfileEditIDView.InputValidationStatus
-  func requestUserProfile(userId: Int) async
+  func requestMemberProfile(userID: Int) async
   func requestMyWhistlesCount() async
-  func requestUserWhistlesCount(userId: Int) async
+  func requestMemberWhistlesCount(userID: Int) async
   func requestMyFollow() async
-  func requestUserFollow(userId: Int) async
+  func requestMemberFollow(userID: Int) async
   func isAvailableUsername() async -> Bool
   func deleteProfileImage() async
-  func followUser(userId: Int) async
-  func unfollowUser(userId: Int) async
+  // FIXME: - 차단: blockAction, 팔로우: followAction
+  func followUser(userID: Int) async
+  func unfollowUser(userID: Int) async
   func rebokeAppleToken() async
-  func actionBlockUser(userId: Int) async
-  func actionBlockUserCancel(userId: Int) async
+  func actionBlockUser(userID: Int) async
+  func actionBlockUserCancel(userID: Int) async
 }

@@ -8,7 +8,7 @@
 import AVFoundation
 import Foundation
 
-class NoSignInMainContent: Hashable, ObservableObject {
+class GuestContent: Hashable, ObservableObject {
   // MARK: Lifecycle
 
   init(
@@ -55,7 +55,7 @@ class NoSignInMainContent: Hashable, ObservableObject {
   var whistleCount: Int?
 
   // Equatable conformance for completeness (optional but recommended)
-  static func == (lhs: NoSignInMainContent, rhs: NoSignInMainContent) -> Bool {
+  static func == (lhs: GuestContent, rhs: GuestContent) -> Bool {
     lhs.id == rhs.id
   }
 

@@ -50,7 +50,7 @@ struct GuestProfileView: View {
     .onChange(of: isAccess) { newValue in
       if newValue {
         apiViewModel.myProfile = .init()
-        apiViewModel.contentList = []
+        apiViewModel.mainFeed = []
         tabbarModel.tabSelection = .main
         tabbarModel.tabSelectionNoAnimation = .main
         tabbarModel.tabbarOpacity = 1.0

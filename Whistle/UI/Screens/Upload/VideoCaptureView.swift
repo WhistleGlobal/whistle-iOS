@@ -1064,7 +1064,7 @@ extension VideoCaptureView {
               }
               let exporterVM = VideoExporterViewModel(video: video)
               await exporterVM.action(.save, start: video.rangeDuration.lowerBound)
-              apiViewModel.uploadPost(
+              apiViewModel.uploadContent(
                 video: exporterVM.videoData,
                 thumbnail: thumbnail?.jpegData(compressionQuality: 0.5)! ?? Data(),
                 caption: "",
@@ -1125,7 +1125,7 @@ extension VideoCaptureView {
     case .limited:
       isAlbumAuthorized = true
     default:
-        break
+      break
     }
   }
 }

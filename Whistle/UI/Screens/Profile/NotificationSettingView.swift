@@ -50,17 +50,17 @@ struct NotificationSettingView: View {
     .onChange(of: isAllOff) { newValue in
       if newValue {
         Task {
-          await apiViewModel.updateSettingWhistle(newSetting: false)
-          await apiViewModel.updateSettingFollow(newSetting: false)
-          await apiViewModel.updateSettingInfo(newSetting: false)
-          await apiViewModel.updateSettingAd(newSetting: false)
+          await apiViewModel.updateWhistleNoti(newSetting: false)
+          await apiViewModel.updateFollowNoti(newSetting: false)
+          await apiViewModel.updateServerNoti(newSetting: false)
+          await apiViewModel.updateAdNoti(newSetting: false)
           await apiViewModel.requestNotiSetting()
         }
       }
     }
     .onChange(of: apiViewModel.notiSetting.whistleEnabled) { newValue in
       Task {
-        await apiViewModel.updateSettingWhistle(newSetting: newValue)
+        await apiViewModel.updateWhistleNoti(newSetting: newValue)
         if newValue {
           isAllOff = false
         }
@@ -68,7 +68,7 @@ struct NotificationSettingView: View {
     }
     .onChange(of: apiViewModel.notiSetting.followEnabled) { newValue in
       Task {
-        await apiViewModel.updateSettingFollow(newSetting: newValue)
+        await apiViewModel.updateFollowNoti(newSetting: newValue)
         if newValue {
           isAllOff = false
         }
@@ -76,7 +76,7 @@ struct NotificationSettingView: View {
     }
     .onChange(of: apiViewModel.notiSetting.infoEnabled) { newValue in
       Task {
-        await apiViewModel.updateSettingInfo(newSetting: newValue)
+        await apiViewModel.updateServerNoti(newSetting: newValue)
         if newValue {
           isAllOff = false
         }
@@ -84,7 +84,7 @@ struct NotificationSettingView: View {
     }
     .onChange(of: apiViewModel.notiSetting.adEnabled) { newValue in
       Task {
-        await apiViewModel.updateSettingAd(newSetting: newValue)
+        await apiViewModel.updateAdNoti(newSetting: newValue)
         if newValue {
           isAllOff = false
         }

@@ -7,9 +7,9 @@
 
 import Foundation
 
-// MARK: - Follow
+// MARK: - MyFollow
 
-class Follow: Decodable {
+class MyFollow: Decodable {
   // MARK: Lifecycle
 
   init(
@@ -47,9 +47,9 @@ class Follow: Decodable {
   }
 }
 
-// MARK: - UserFollow
+// MARK: - MemberFollow
 
-class UserFollow: Decodable {
+class MemberFollow: Decodable {
   // MARK: Lifecycle
 
   init(

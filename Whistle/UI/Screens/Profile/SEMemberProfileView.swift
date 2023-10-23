@@ -27,7 +27,7 @@ struct SEMemberProfileView: View {
   var body: some View {
     ZStack {
       Color.clear.overlay {
-        if let url = apiViewModel.userProfile.profileImg, !url.isEmpty {
+        if let url = apiViewModel.memberProfile.profileImg, !url.isEmpty {
           KFImage.url(URL(string: url))
             .placeholder { _ in
               Image("BlurredDefaultBG")
@@ -56,7 +56,7 @@ struct SEMemberProfileView: View {
           .padding(.bottom, 8)
           .padding(.horizontal, profileHorizontalPadding)
           .zIndex(1)
-        if apiViewModel.userPostFeed.isEmpty {
+        if apiViewModel.memberFeed.isEmpty {
           Spacer()
           Image(systemName: "photo.fill")
             .resizable()
@@ -76,7 +76,7 @@ struct SEMemberProfileView: View {
               GridItem(.flexible()),
               GridItem(.flexible()),
             ], spacing: 20) {
-              ForEach(Array(apiViewModel.userPostFeed.enumerated()), id: \.element) { index, content in
+              ForEach(Array(apiViewModel.memberFeed.enumerated()), id: \.element) { index, content in
                 NavigationLink {
                   MemberFeedView(currentIndex: index)
                     .environmentObject(apiViewModel)
@@ -115,20 +115,20 @@ struct SEMemberProfileView: View {
       Button("신고", role: .destructive) {
         goReport = true
       }
-      Button("취소", role: .cancel) {}
+      Button("취소", role: .cancel) { }
     }
     .fullScreenCover(isPresented: $goReport) {
       ProfileReportTypeSelectionView(goReport: $goReport, userId: userId)
         .environmentObject(apiViewModel)
     }
     .task {
-      await apiViewModel.requestUserProfile(userId: userId)
-      await apiViewModel.requestUserFollow(userId: userId)
-      await apiViewModel.requestUserWhistlesCount(userId: userId)
-      isFollow = apiViewModel.userProfile.isFollowed == 1 ? true : false
+      await apiViewModel.requestMemberProfile(userID: userId)
+      await apiViewModel.requestMemberFollow(userID: userId)
+      await apiViewModel.requestMemberWhistlesCount(userID: userId)
+      isFollow = apiViewModel.memberProfile.isFollowed == 1 ? true : false
     }
     .task {
-      await apiViewModel.requestUserPostFeed(userId: userId)
+      await apiViewModel.requestMemberPostFeed(userID: userId)
     }
     .overlay {
       if showPasteToast {
@@ -148,15 +148,15 @@ extension SEMemberProfileView {
   func profileInfo() -> some View {
     VStack(spacing: 0) {
       Spacer().frame(height: 48)
-      profileImageView(url: apiViewModel.userProfile.profileImg, size: profileImageSize)
+      profileImageView(url: apiViewModel.memberProfile.profileImg, size: profileImageSize)
         .padding(.bottom, 12)
-      Text(apiViewModel.userProfile.userName)
+      Text(apiViewModel.memberProfile.userName)
         .font(.system(size: 18, weight: .semibold).width(.expanded))
         .foregroundColor(Color.LabelColor_Primary_Dark)
         .frame(height: 28)
       Spacer().frame(minHeight: 10)
       Color.clear.overlay {
-        Text(apiViewModel.userProfile.introduce ?? " ")
+        Text(apiViewModel.memberProfile.introduce ?? " ")
           .foregroundColor(Color.LabelColor_Secondary_Dark)
           .font(.system(size: 14, weight: .regular))
           .fontSystem(fontDesignSystem: .body2_KO)
@@ -174,10 +174,10 @@ extension SEMemberProfileView {
         Task {
           if isFollow {
             isFollow.toggle()
-            await apiViewModel.unfollowUser(userId: userId)
+            await apiViewModel.unfollowUser(userID: userId)
           } else {
             isFollow.toggle()
-            await apiViewModel.followUser(userId: userId)
+            await apiViewModel.followUser(userID: userId)
           }
         }
       }
@@ -187,7 +187,7 @@ extension SEMemberProfileView {
       .disabled(userId == apiViewModel.myProfile.userId)
       HStack(spacing: 48) {
         VStack(spacing: 4) {
-          Text("\(apiViewModel.userWhistleCount)")
+          Text("\(apiViewModel.memberWhistleCount)")
             .foregroundColor(Color.LabelColor_Primary_Dark)
             .font(.system(size: 16, weight: .semibold).width(.expanded))
             .scaleEffect(whistleFollowerTextScale)
@@ -203,7 +203,7 @@ extension SEMemberProfileView {
             .id(UUID())
         } label: {
           VStack(spacing: 4) {
-            Text("\(apiViewModel.userFollow.followerCount)")
+            Text("\(apiViewModel.memberFollow.followerCount)")
               .foregroundColor(Color.LabelColor_Primary_Dark)
               .font(.system(size: 16, weight: .semibold).width(.expanded))
               .scaleEffect(whistleFollowerTextScale)
@@ -466,7 +466,7 @@ extension SEMemberProfileView {
   }
 
   var videoOffset: CGFloat {
-    return offsetY < -202 ? 202 : -offsetY
+    offsetY < -202 ? 202 : -offsetY
   }
 
   var profileHeightLast: CGFloat {

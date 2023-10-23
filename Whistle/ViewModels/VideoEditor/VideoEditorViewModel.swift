@@ -34,16 +34,6 @@ class VideoEditorViewModel: ObservableObject {
     createProject()
   }
 
-//
-  //  func returnThumbnail(_ index: Int) -> String {
-//    currentVideo?.generateHQThumbnails()
-//    if let image = currentVideo?.thumbHQImages[index].image, let imageData = image.pngData() {
-//      // Data를 Base64로 인코딩
-//      return imageData.base64EncodedString(options: [])
-//    }
-//    return ""
-  //  }
-
   func returnThumbnail(_ index: Int) -> UIImage {
     if let image = currentVideo?.thumbHQImages[index].image {
       return image

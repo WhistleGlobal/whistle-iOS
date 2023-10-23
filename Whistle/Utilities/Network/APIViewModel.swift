@@ -21,18 +21,18 @@ class APIViewModel: ObservableObject {
 
   let keychain = KeychainSwift()
   let publisher: PassthroughSubject<UUID, Never> = PassthroughSubject()
-  @Published var myProfile = Profile()
-  @Published var userProfile = UserProfile()
+  @Published var myProfile = MyProfile()
+  @Published var memberProfile = MemberProfile()
   @Published var myWhistleCount = 0
-  @Published var userWhistleCount = 0
-  @Published var myFollow = Follow()
-  @Published var userFollow = UserFollow()
-  @Published var myPostFeed: [PostFeed] = []
-  @Published var userPostFeed: [UserPostFeed] = []
+  @Published var memberWhistleCount = 0
+  @Published var myFollow = MyFollow()
+  @Published var memberFollow = MemberFollow()
+  @Published var myFeed: [MyContent] = []
+  @Published var memberFeed: [MemberContent] = []
   @Published var bookmark: [Bookmark] = []
   @Published var notiSetting: NotiSetting = .init()
-  @Published var contentList: [MainContent] = []
-  @Published var noSignInContentList: [NoSignInMainContent] = []
+  @Published var mainFeed: [MainContent] = []
+  @Published var guestFeed: [GuestContent] = []
   @Published var reportedContent: [ReportedContent] = []
   @Published var userCreatedDate = ""
   @Published var versionCheck = VersionCheck()
@@ -41,17 +41,17 @@ class APIViewModel: ObservableObject {
 
   func reset() {
     myProfile = .init()
-    userProfile = .init()
+    memberProfile = .init()
     myWhistleCount = 0
-    userWhistleCount = 0
-    myFollow = Follow()
-    userFollow = UserFollow()
-    myPostFeed = []
-    userPostFeed = []
+    memberWhistleCount = 0
+    myFollow = MyFollow()
+    memberFollow = MemberFollow()
+    myFeed = []
+    memberFeed = []
     bookmark = []
     notiSetting = .init()
-    contentList = []
-    noSignInContentList = []
+    mainFeed = []
+    guestFeed = []
     reportedContent = []
     userCreatedDate = ""
   }

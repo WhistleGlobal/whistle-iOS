@@ -27,7 +27,7 @@ struct MyFeedView: View {
 
   var body: some View {
     GeometryReader { proxy in
-      if apiViewModel.myPostFeed.isEmpty {
+      if apiViewModel.myFeed.isEmpty {
         Color.black.ignoresSafeArea().overlay {
           VStack(spacing: 16) {
             HStack(spacing: 0) {
@@ -62,7 +62,7 @@ struct MyFeedView: View {
         }
       } else {
         TabView(selection: $currentIndex) {
-          ForEach(Array(apiViewModel.myPostFeed.enumerated()), id: \.element) { index, content in
+          ForEach(Array(apiViewModel.myFeed.enumerated()), id: \.element) { index, content in
             if !players.isEmpty {
               if let player = players[index] {
                 ContentPlayer(player: player)
@@ -168,10 +168,10 @@ struct MyFeedView: View {
     .navigationBarBackButtonHidden()
     .background(.black)
     .onAppear {
-      for _ in 0 ..< apiViewModel.myPostFeed.count {
+      for _ in 0 ..< apiViewModel.myFeed.count {
         players.append(nil)
       }
-      players[currentIndex] = AVPlayer(url: URL(string: apiViewModel.myPostFeed[currentIndex].videoUrl ?? "")!)
+      players[currentIndex] = AVPlayer(url: URL(string: apiViewModel.myFeed[currentIndex].videoUrl ?? "")!)
       playerIndex = currentIndex
       guard let player = players[currentIndex] else {
         return
@@ -180,10 +180,10 @@ struct MyFeedView: View {
       player.play()
     }
     .onChange(of: currentIndex) { newValue in
-      if apiViewModel.myPostFeed.isEmpty {
+      if apiViewModel.myFeed.isEmpty {
         return
       }
-      guard let url = apiViewModel.myPostFeed[newValue].videoUrl else {
+      guard let url = apiViewModel.myFeed[newValue].videoUrl else {
         return
       }
       players[newValue] = AVPlayer(url: URL(string: url)!)
@@ -204,26 +204,26 @@ struct MyFeedView: View {
       if showDeleteToast {
         CancelableToastMessage(text: "삭제되었습니다", paddingBottom: 78, action: {
           Task {
-            if apiViewModel.myPostFeed.count - 1 != currentIndex { // 삭제하려는 컨텐츠가 배열 마지막이 아님
-              guard let contentId = apiViewModel.myPostFeed[currentIndex].contentId else { return }
-              apiViewModel.myPostFeed.remove(at: currentIndex)
+            if apiViewModel.myFeed.count - 1 != currentIndex { // 삭제하려는 컨텐츠가 배열 마지막이 아님
+              guard let contentId = apiViewModel.myFeed[currentIndex].contentId else { return }
+              apiViewModel.myFeed.remove(at: currentIndex)
               players[currentIndex]?.pause()
               players.remove(at: currentIndex)
               if !players.isEmpty {
-                players[currentIndex] = AVPlayer(url: URL(string: apiViewModel.myPostFeed[currentIndex].videoUrl ?? "")!)
+                players[currentIndex] = AVPlayer(url: URL(string: apiViewModel.myFeed[currentIndex].videoUrl ?? "")!)
                 await players[currentIndex]?.seek(to: .zero)
                 players[currentIndex]?.play()
               }
               apiViewModel.postFeedPlayerChanged()
-              await apiViewModel.deleteContent(contentId: contentId)
+              await apiViewModel.deleteContent(contentID: contentId)
             } else {
-              guard let contentId = apiViewModel.myPostFeed[currentIndex].contentId else { return }
-              apiViewModel.myPostFeed.removeLast()
+              guard let contentId = apiViewModel.myFeed[currentIndex].contentId else { return }
+              apiViewModel.myFeed.removeLast()
               players.last??.pause()
               players.removeLast()
               currentIndex -= 1
               apiViewModel.postFeedPlayerChanged()
-              await apiViewModel.deleteContent(contentId: contentId)
+              await apiViewModel.deleteContent(contentID: contentId)
             }
           }
         }, showToast: $showDeleteToast)
@@ -233,7 +233,7 @@ struct MyFeedView: View {
       Button("삭제하기", role: .destructive) {
         showDeleteToast = true
       }
-      Button("닫기", role: .cancel) {}
+      Button("닫기", role: .cancel) { }
     }
   }
 }
@@ -299,11 +299,11 @@ extension MyFeedView {
             Task {
               if isWhistled.wrappedValue {
                 guard let contentId else { return }
-                await apiViewModel.actionWhistleCancel(contentId: contentId)
+                await apiViewModel.actionWhistleCancel(contentID: contentId)
                 whistleCount.wrappedValue -= 1
               } else {
                 guard let contentId else { return }
-                await apiViewModel.actionWhistle(contentId: contentId)
+                await apiViewModel.actionWhistle(contentID: contentId)
                 whistleCount.wrappedValue += 1
               }
               isWhistled.wrappedValue.toggle()
@@ -325,7 +325,7 @@ extension MyFeedView {
           Button {
             showPasteToast = true
             UIPasteboard.general.setValue(
-              "https://readywhistle.com/content_uni?contentId=\(apiViewModel.myPostFeed[currentIndex].contentId ?? 0)",
+              "https://readywhistle.com/content_uni?contentId=\(apiViewModel.myFeed[currentIndex].contentId ?? 0)",
               forPasteboardType: UTType.plainText.identifier)
           } label: {
             Image(systemName: "square.and.arrow.up")
@@ -358,22 +358,22 @@ extension MyFeedView {
   func whistleToggle() {
     HapticManager.instance.impact(style: .medium)
     timer?.invalidate()
-    if apiViewModel.myPostFeed[currentIndex].isWhistled == 1 {
+    if apiViewModel.myFeed[currentIndex].isWhistled == 1 {
       timer = Timer.scheduledTimer(withTimeInterval: 2, repeats: false) { _ in
         Task {
-          await apiViewModel.actionWhistleCancel(contentId: apiViewModel.myPostFeed[currentIndex].contentId ?? 0)
+          await apiViewModel.actionWhistleCancel(contentID: apiViewModel.myFeed[currentIndex].contentId ?? 0)
         }
       }
-      apiViewModel.myPostFeed[currentIndex].contentWhistleCount? -= 1
+      apiViewModel.myFeed[currentIndex].contentWhistleCount? -= 1
     } else {
       timer = Timer.scheduledTimer(withTimeInterval: 2, repeats: false) { _ in
         Task {
-          await apiViewModel.actionWhistle(contentId: apiViewModel.myPostFeed[currentIndex].contentId ?? 0)
+          await apiViewModel.actionWhistle(contentID: apiViewModel.myFeed[currentIndex].contentId ?? 0)
         }
       }
-      apiViewModel.myPostFeed[currentIndex].contentWhistleCount! += 1
+      apiViewModel.myFeed[currentIndex].contentWhistleCount! += 1
     }
-    apiViewModel.myPostFeed[currentIndex].isWhistled = apiViewModel.myPostFeed[currentIndex].isWhistled == 1 ? 0 : 1
+    apiViewModel.myFeed[currentIndex].isWhistled = apiViewModel.myFeed[currentIndex].isWhistled == 1 ? 0 : 1
     apiViewModel.postFeedPlayerChanged()
   }
 }

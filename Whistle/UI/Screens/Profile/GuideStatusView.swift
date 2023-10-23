@@ -52,7 +52,7 @@ struct GuideStatusView: View {
     .navigationTitle("가이드 상태")
     .task {
       if apiViewModel.reportedContent.isEmpty {
-//        await apiViewModel.requestReportedConent()
+//        await apiViewModel.requestReportedFeed()
       }
     }
     .toolbar {

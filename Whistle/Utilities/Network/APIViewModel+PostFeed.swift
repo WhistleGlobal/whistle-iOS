@@ -1,5 +1,5 @@
 //
-//  APIViewModel+PostFeed.swift
+//  APIViewModel+MyContent.swift
 //  Whistle
 //
 //  Created by ChoiYujin on 9/8/23.
@@ -29,8 +29,8 @@ extension APIViewModel: PostFeedProtocol {
                 return
               }
               let decoder = JSONDecoder()
-              self.myPostFeed = try decoder.decode([PostFeed].self, from: data)
-              self.myPostFeed = self.myPostFeed.filter { $0.contentId != nil }
+              self.myFeed = try decoder.decode([MyContent].self, from: data)
+              self.myFeed = self.myFeed.filter { $0.contentId != nil }
               continuation.resume()
             } catch {
               log("Error parsing JSON: \(error)")
@@ -45,10 +45,10 @@ extension APIViewModel: PostFeedProtocol {
   }
 
   // FIXME: - 데이터가 없을 시 처리할 로직 생각할 것
-  func requestUserPostFeed(userId: Int) async {
+  func requestMemberPostFeed(userID: Int) async {
     await withCheckedContinuation { continuation in
       AF.request(
-        "\(domainURL)/user/\(userId)/post/feed",
+        "\(domainURL)/user/\(userID)/post/feed",
         method: .get,
         headers: contentTypeJson)
         .validate(statusCode: 200 ... 300)
@@ -59,7 +59,7 @@ extension APIViewModel: PostFeedProtocol {
               guard let data else {
                 return
               }
-              self.userPostFeed = try self.decoder.decode([UserPostFeed].self, from: data)
+              self.memberFeed = try self.decoder.decode([MemberContent].self, from: data)
               continuation.resume()
             } catch {
               log("Error parsing JSON: \(error)")
@@ -67,7 +67,7 @@ extension APIViewModel: PostFeedProtocol {
             }
           case .failure(let error):
             log("Error: \(error)")
-            self.userPostFeed = []
+            self.memberFeed = []
             continuation.resume()
           }
         }
@@ -104,7 +104,7 @@ extension APIViewModel: PostFeedProtocol {
     }
   }
 
-  func requestContentList(completion: @escaping () -> Void) {
+  func requestMainFeed(completion: @escaping () -> Void) {
     AF.request(
       "\(domainURL)/content/content-list",
       method: .get,
@@ -135,12 +135,12 @@ extension APIViewModel: PostFeedProtocol {
               tempContent.isWhistled = (jsonObject["is_whistled"] as? Int) == 0 ? false : true
               tempContent.isFollowed = (jsonObject["is_followed"] as? Int) == 0 ? false : true
               tempContent.isBookmarked = (jsonObject["is_bookmarked"] as? Int) == 0 ? false : true
-              if self.contentList.count < 2 {
+              if self.mainFeed.count < 2 {
                 tempContent.player = AVPlayer(url: URL(string: tempContent.videoUrl ?? "")!)
               }
               tempArray.append(tempContent)
             }
-            self.contentList = tempArray
+            self.mainFeed = tempArray
             completion()
           } catch {
             log("Error parsing JSON: \(error)")
@@ -152,7 +152,7 @@ extension APIViewModel: PostFeedProtocol {
   }
 
   // /user/post/suspend-list
-  func requestReportedConent() async {
+  func requestReportedFeed() async {
     await withCheckedContinuation { continuation in
       AF.request(
         "\(domainURL)/user/post/suspend-list",
@@ -180,10 +180,10 @@ extension APIViewModel: PostFeedProtocol {
     }
   }
 
-  func actionBookmark(contentId: Int) async -> Bool {
+  func actionBookmark(contentID: Int) async -> Bool {
     await withCheckedContinuation { continuation in
       AF.request(
-        "\(domainURL)/action/\(contentId)/bookmark",
+        "\(domainURL)/action/\(contentID)/bookmark",
         method: .post,
         headers: contentTypeXwwwForm)
         .validate(statusCode: 200 ... 300)
@@ -199,10 +199,10 @@ extension APIViewModel: PostFeedProtocol {
     }
   }
 
-  func actionBookmarkCancel(contentId: Int) async -> Bool {
+  func actionBookmarkCancel(contentID: Int) async -> Bool {
     await withCheckedContinuation { continuation in
       AF.request(
-        "\(domainURL)/action/\(contentId)/bookmark",
+        "\(domainURL)/action/\(contentID)/bookmark",
         method: .delete,
         headers: contentTypeXwwwForm)
         .validate(statusCode: 200 ... 300)
@@ -218,10 +218,10 @@ extension APIViewModel: PostFeedProtocol {
     }
   }
 
-  func actionWhistle(contentId: Int) async {
+  func actionWhistle(contentID: Int) async {
     await withCheckedContinuation { continuation in
       AF.request(
-        "\(domainURL)/action/\(contentId)/whistle",
+        "\(domainURL)/action/\(contentID)/whistle",
         method: .post,
         headers: contentTypeXwwwForm)
         .validate(statusCode: 200 ... 300)
@@ -237,10 +237,10 @@ extension APIViewModel: PostFeedProtocol {
     }
   }
 
-  func actionWhistleCancel(contentId: Int) async {
+  func actionWhistleCancel(contentID: Int) async {
     await withCheckedContinuation { continuation in
       AF.request(
-        "\(domainURL)/action/\(contentId)/whistle",
+        "\(domainURL)/action/\(contentID)/whistle",
         method: .delete,
         headers: contentTypeXwwwForm)
         .validate(statusCode: 200 ... 300)
@@ -256,10 +256,10 @@ extension APIViewModel: PostFeedProtocol {
     }
   }
 
-  func actionContentHate(contentId: Int) async {
+  func actionContentHate(contentID: Int) async {
     await withCheckedContinuation { continuation in
       AF.request(
-        "\(domainURL)/action/\(contentId)/hate",
+        "\(domainURL)/action/\(contentID)/hate",
         method: .post,
         headers: contentTypeXwwwForm)
         .validate(statusCode: 200 ... 300)
@@ -275,10 +275,10 @@ extension APIViewModel: PostFeedProtocol {
     }
   }
 
-  func deleteContent(contentId: Int) async {
+  func deleteContent(contentID: Int) async {
     await withCheckedContinuation { continuation in
       AF.request(
-        "\(domainURL)/content/\(contentId)",
+        "\(domainURL)/content/\(contentID)",
         method: .delete,
         headers: contentTypeJson)
         .validate(statusCode: 200 ... 300)
@@ -295,15 +295,15 @@ extension APIViewModel: PostFeedProtocol {
   }
 
   // FIXME: - 중복신고 반환 처리하도록 추후 수정
-  func reportContent(userId: Int, contentId: Int, reportReason: Int, reportDescription: String) async -> Int {
+  func reportContent(userID: Int, contentID: Int, reportReason: Int, reportDescription: String) async -> Int {
     let params: [String: Any] = [
-      "user_id": "\(userId)",
+      "user_id": "\(userID)",
       "report_reason": "\(reportReason)",
       "report_description": "\(reportDescription)",
     ]
     return await withCheckedContinuation { continuation in
       AF.request(
-        "\(domainURL)/report/content/\(contentId)",
+        "\(domainURL)/report/content/\(contentID)",
         method: .post,
         parameters: params,
         encoding: JSONEncoding.default,
@@ -321,15 +321,15 @@ extension APIViewModel: PostFeedProtocol {
     }
   }
 
-  func reportUser(usedId: Int, contentId: Int, reportReason: Int, reportDescription: String) async -> Int {
+  func reportUser(usedID: Int, contentID: Int, reportReason: Int, reportDescription: String) async -> Int {
     let params: [String: Any] = [
-      "content_id": "\(contentId)",
+      "content_id": "\(contentID)",
       "report_reason": "\(reportReason)",
       "report_description": "\(reportDescription)",
     ]
     return await withCheckedContinuation { continuation in
       AF.request(
-        "\(domainURL)/report/user/\(usedId)",
+        "\(domainURL)/report/user/\(usedID)",
         method: .post,
         parameters: params,
         encoding: JSONEncoding.default,
@@ -379,7 +379,7 @@ extension APIViewModel: PostFeedProtocol {
     }
   }
 
-  func requestNoSignInContent(completion: @escaping () -> Void) {
+  func requestGuestFeed(completion: @escaping () -> Void) {
     AF.request(
       "\(domainURL)/content/all-content-list",
       method: .get,
@@ -393,9 +393,9 @@ extension APIViewModel: PostFeedProtocol {
               return
             }
             let jsonArray = try JSONSerialization.jsonObject(with: data, options: []) as? [[String: Any]]
-            self.noSignInContentList.removeAll()
+            self.guestFeed.removeAll()
             for jsonObject in jsonArray ?? [] {
-              let tempContent: NoSignInMainContent = .init()
+              let tempContent: GuestContent = .init()
               tempContent.contentId = jsonObject["content_id"] as? Int
               tempContent.userId = jsonObject["user_id"] as? Int
               tempContent.userName = jsonObject["user_name"] as? String
@@ -407,9 +407,9 @@ extension APIViewModel: PostFeedProtocol {
               tempContent.musicTitle = jsonObject["music_title"] as? String
               tempContent.hashtags = jsonObject["content_hashtags"] as? String
               tempContent.whistleCount = jsonObject["content_whistle_count"] as? Int
-              self.noSignInContentList.append(tempContent)
+              self.guestFeed.append(tempContent)
             }
-            self.noSignInContentList.removeSubrange(3...)
+            self.guestFeed.removeSubrange(3...)
             completion()
           } catch {
             log(error)
@@ -420,9 +420,9 @@ extension APIViewModel: PostFeedProtocol {
       }
   }
 
-  func requestUniversalContent(contentId: Int, completion: @escaping () -> Void) {
+  func requestUniversalFeed(contentID: Int, completion: @escaping () -> Void) {
     AF.request(
-      "\(domainURL)/content/\(contentId)",
+      "\(domainURL)/content/\(contentID)",
       method: .get,
       headers: contentTypeJson)
       .validate(statusCode: 200 ... 300)
@@ -434,7 +434,7 @@ extension APIViewModel: PostFeedProtocol {
               return
             }
             let jsonData = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any]
-            self.contentList.removeAll()
+            self.mainFeed.removeAll()
             guard let singleContentJson = jsonData?["finalSingleContentRows"] as? [String: Any] else { return }
             let singleContent: MainContent = .init()
             singleContent.contentId = singleContentJson["content_id"] as? Int
@@ -451,7 +451,7 @@ extension APIViewModel: PostFeedProtocol {
             singleContent.isWhistled = (singleContentJson["is_whistled"] as? Int) == 0 ? false : true
             singleContent.isFollowed = (singleContentJson["is_followed"] as? Int) == 0 ? false : true
             singleContent.isBookmarked = (singleContentJson["is_bookmarked"] as? Int) == 0 ? false : true
-            self.contentList.append(singleContent)
+            self.mainFeed.append(singleContent)
 
             guard let allContentsJson = jsonData?["finalAllContentRows"] as? [[String: Any]] else { return }
             for jsonObject in allContentsJson {
@@ -470,10 +470,10 @@ extension APIViewModel: PostFeedProtocol {
               tempContent.isWhistled = (jsonObject["is_whistled"] as? Int) == 0 ? false : true
               tempContent.isFollowed = (jsonObject["is_followed"] as? Int) == 0 ? false : true
               tempContent.isBookmarked = (jsonObject["is_bookmarked"] as? Int) == 0 ? false : true
-              if self.contentList.count < 2 {
+              if self.mainFeed.count < 2 {
                 tempContent.player = AVPlayer(url: URL(string: tempContent.videoUrl ?? "")!)
               }
-              self.contentList.append(tempContent)
+              self.mainFeed.append(tempContent)
             }
 
             completion()

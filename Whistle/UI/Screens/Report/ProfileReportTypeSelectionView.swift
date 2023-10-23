@@ -84,7 +84,7 @@ struct ProfileReportTypeSelectionView: View {
         Spacer()
       }
       .navigationBarBackButtonHidden()
-      .navigationDestination(isPresented: .constant(apiViewModel.userPostFeed.isEmpty)) {
+      .navigationDestination(isPresented: .constant(apiViewModel.memberFeed.isEmpty)) {
         ProfileReportReasonSelectionView(
           goReport: $goReport,
           selectedContentId: $selectedContentId,

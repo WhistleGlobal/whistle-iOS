@@ -59,8 +59,8 @@ struct MainFeedReportCommentView: View {
         } reportAction: {
           Task {
             let reportSuccess = await apiViewModel.reportContent(
-              userId: uesrId,
-              contentId: contentId,
+              userID: uesrId,
+              contentID: contentId,
               reportReason: reportReason,
               reportDescription: inputReportDetail)
             if reportSuccess == 200 {

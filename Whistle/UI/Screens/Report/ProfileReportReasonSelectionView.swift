@@ -49,7 +49,7 @@ struct ProfileReportReasonSelectionView: View {
       } else {
         ForEach(UserReportReason.allCases, id: \.self) { reason in
           NavigationLink {
-            if apiViewModel.userPostFeed.isEmpty {
+            if apiViewModel.memberFeed.isEmpty {
               ProfileReportCommentView(
                 goReport: $goReport,
                 selectedContentId: .constant(0),

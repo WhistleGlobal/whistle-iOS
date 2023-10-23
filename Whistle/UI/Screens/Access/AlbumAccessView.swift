@@ -109,7 +109,7 @@ extension AlbumAccessView {
           case .limited:
             print("limited")
           default:
-              break
+            break
           }
         }
       }
@@ -121,7 +121,7 @@ extension AlbumAccessView {
     case .limited:
       print("limited")
     default:
-        break
+      break
     }
   }
 }

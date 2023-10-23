@@ -9,5 +9,4 @@ import Foundation
 
 protocol MusicServiceProtocol {
   func buffer(url: URL, samplesCount: Int) async throws -> [MusicNote]
-  //  func downloadMusicAsync(from url: URL) async throws -> URL
 }

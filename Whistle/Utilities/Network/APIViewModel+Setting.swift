@@ -45,7 +45,7 @@ extension APIViewModel: SettingProtocol {
 
   // FIXME: - 코드 리팩토링이 필요함 (URL 뻬고 모든 코드가 중복)
 
-  func updateSettingWhistle(newSetting: Bool) async {
+  func updateWhistleNoti(newSetting: Bool) async {
     let params = ["newSetting": newSetting ? 1 : 0]
     return await withCheckedContinuation { continuation in
       AF.request(
@@ -69,7 +69,7 @@ extension APIViewModel: SettingProtocol {
     }
   }
 
-  func updateSettingFollow(newSetting: Bool) async {
+  func updateFollowNoti(newSetting: Bool) async {
     let params = ["newSetting": newSetting ? 1 : 0]
     return await withCheckedContinuation { continuation in
       AF.request(
@@ -91,7 +91,7 @@ extension APIViewModel: SettingProtocol {
     }
   }
 
-  func updateSettingInfo(newSetting: Bool) async {
+  func updateServerNoti(newSetting: Bool) async {
     let params = ["newSetting": newSetting ? 1 : 0]
     return await withCheckedContinuation { continuation in
       AF.request(
@@ -115,7 +115,7 @@ extension APIViewModel: SettingProtocol {
     }
   }
 
-  func updateSettingAd(newSetting: Bool) async {
+  func updateAdNoti(newSetting: Bool) async {
     let params = ["newSetting": newSetting ? 1 : 0]
     return await withCheckedContinuation { continuation in
       AF.request(

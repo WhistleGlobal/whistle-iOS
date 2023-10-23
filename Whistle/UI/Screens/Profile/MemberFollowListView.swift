@@ -45,7 +45,7 @@ struct MemberFollowListView: View {
       }
       .frame(height: 48)
       if tabStatus == .follower {
-        if apiViewModel.userFollow.followerCount == 0 {
+        if apiViewModel.memberFollow.followerCount == 0 {
           Spacer()
           followEmptyView()
         } else {
@@ -56,7 +56,7 @@ struct MemberFollowListView: View {
             .id(newId)
         }
       } else {
-        if apiViewModel.userFollow.followingCount == 0 {
+        if apiViewModel.memberFollow.followingCount == 0 {
           Spacer()
           followEmptyView()
         } else {
@@ -82,14 +82,14 @@ struct MemberFollowListView: View {
         }
       }
       ToolbarItem(placement: .principal) {
-        Text("\(apiViewModel.userProfile.userName)")
+        Text("\(apiViewModel.memberProfile.userName)")
           .fontSystem(fontDesignSystem: .subtitle2_KO)
       }
     }
     .task {
-      await apiViewModel.requestUserFollow(userId: userId)
-      userFollower = apiViewModel.userFollow.followerList
-      userFollowing = apiViewModel.userFollow.followingList
+      await apiViewModel.requestMemberFollow(userID: userId)
+      userFollower = apiViewModel.memberFollow.followerList
+      userFollowing = apiViewModel.memberFollow.followingList
     }
   }
 }
@@ -121,8 +121,8 @@ extension MemberFollowListView {
         Button("") {
           Task {
             if isFollowed.wrappedValue {
-              await apiViewModel.unfollowUser(userId: userId)
-              apiViewModel.contentList = apiViewModel.contentList.map { content in
+              await apiViewModel.unfollowUser(userID: userId)
+              apiViewModel.mainFeed = apiViewModel.mainFeed.map { content in
                 let updatedContent = content
                 if content.userId == userId {
                   updatedContent.isFollowed.toggle()
@@ -130,8 +130,8 @@ extension MemberFollowListView {
                 return updatedContent
               }
             } else {
-              await apiViewModel.followUser(userId: userId)
-              apiViewModel.contentList = apiViewModel.contentList.map { content in
+              await apiViewModel.followUser(userID: userId)
+              apiViewModel.mainFeed = apiViewModel.mainFeed.map { content in
                 let updatedContent = content
                 if content.userId == userId {
                   updatedContent.isFollowed.toggle()

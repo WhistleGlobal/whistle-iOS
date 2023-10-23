@@ -362,7 +362,7 @@ extension RootTabView {
               if isRootStacked {
                 NavigationUtil.popToRootView()
               } else {
-                apiViewModel.requestContentList {
+                apiViewModel.requestMainFeed {
                   HapticManager.instance.impact(style: .medium)
                   refreshCount += 1
                 }
@@ -485,19 +485,6 @@ public enum TabSelection: CGFloat {
   case profile = 1.0
 }
 
-// MARK: - TabbarModel
-
-class TabbarModel: ObservableObject {
-
-  static let shared = TabbarModel()
-  private init() { }
-
-  @Published var tabSelection: TabSelection = .main
-  @Published var tabSelectionNoAnimation: TabSelection = .main
-  @Published var prevTabSelection: TabSelection?
-  @Published var tabbarOpacity = 1.0
-  @Published var tabWidth = UIScreen.width - 32
-}
 
 // MARK: - 권한
 extension RootTabView {
@@ -508,7 +495,7 @@ extension RootTabView {
     case .authorized:
       isCameraAuthorized = true
     default:
-        break
+      break
     }
   }
 
@@ -518,7 +505,7 @@ extension RootTabView {
     case .authorized:
       isMicrophoneAuthorized = true
     default:
-        break
+      break
     }
   }
 

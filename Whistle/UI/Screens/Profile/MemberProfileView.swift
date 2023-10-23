@@ -34,7 +34,7 @@ struct MemberProfileView: View {
     ZStack {
       Color.clear
         .overlay {
-          if let url = apiViewModel.userProfile.profileImg, !url.isEmpty {
+          if let url = apiViewModel.memberProfile.profileImg, !url.isEmpty {
             KFImage.url(URL(string: url))
               .placeholder { _ in
                 Image("BlurredDefaultBG")
@@ -63,8 +63,8 @@ struct MemberProfileView: View {
           .padding(.horizontal, profileHorizontalPadding)
           .zIndex(1)
           .padding(.bottom, 12)
-        if apiViewModel.userPostFeed.isEmpty {
-          if !(apiViewModel.userProfile.isBlocked == 1) {
+        if apiViewModel.memberFeed.isEmpty {
+          if !(apiViewModel.memberProfile.isBlocked == 1) {
             Spacer()
             Image(systemName: "photo.fill")
               .resizable()
@@ -94,7 +94,7 @@ struct MemberProfileView: View {
               GridItem(.flexible()),
               GridItem(.flexible()),
             ], spacing: 20) {
-              ForEach(Array(apiViewModel.userPostFeed.enumerated()), id: \.element) { index, content in
+              ForEach(Array(apiViewModel.memberFeed.enumerated()), id: \.element) { index, content in
                 NavigationLink {
                   MemberFeedView(currentIndex: index)
                     .environmentObject(apiViewModel)
@@ -126,8 +126,8 @@ struct MemberProfileView: View {
     .navigationBarBackButtonHidden()
     .confirmationDialog("", isPresented: $showDialog) {
       if apiViewModel.myProfile.userId != userId {
-        Button(apiViewModel.userProfile.isBlocked == 1 ? "차단 해제" : "차단", role: .destructive) {
-          if apiViewModel.userProfile.isBlocked == 1 {
+        Button(apiViewModel.memberProfile.isBlocked == 1 ? "차단 해제" : "차단", role: .destructive) {
+          if apiViewModel.memberProfile.isBlocked == 1 {
             showUnblockAlert = true
           } else {
             showBlockAlert = true
@@ -143,54 +143,54 @@ struct MemberProfileView: View {
           forPasteboardType: UTType.plainText.identifier)
         showPasteToast = true
       }
-      Button("취소", role: .cancel) {}
+      Button("취소", role: .cancel) { }
     }
     .fullScreenCover(isPresented: $goReport) {
       ProfileReportTypeSelectionView(goReport: $goReport, userId: userId)
         .environmentObject(apiViewModel)
     }
     .task {
-      await apiViewModel.requestUserProfile(userId: userId)
-      isFollow = apiViewModel.userProfile.isFollowed == 1 ? true : false
+      await apiViewModel.requestMemberProfile(userID: userId)
+      isFollow = apiViewModel.memberProfile.isFollowed == 1 ? true : false
       isProfileLoaded = true
-      await apiViewModel.requestUserFollow(userId: userId)
-      await apiViewModel.requestUserWhistlesCount(userId: userId)
+      await apiViewModel.requestMemberFollow(userID: userId)
+      await apiViewModel.requestMemberWhistlesCount(userID: userId)
     }
     .task {
-      await apiViewModel.requestUserPostFeed(userId: userId)
+      await apiViewModel.requestMemberPostFeed(userID: userId)
     }
     .overlay {
       if showPasteToast {
         ToastMessage(text: "클립보드에 복사되었어요", toastPadding: 78, showToast: $showPasteToast)
       }
       if showBlockAlert {
-        ToastMessage(text: "\(apiViewModel.userProfile.userName)님이 차단되었습니다.", toastPadding: 72, showToast: $showBlockToast)
+        ToastMessage(text: "\(apiViewModel.memberProfile.userName)님이 차단되었습니다.", toastPadding: 72, showToast: $showBlockToast)
       }
       if showUnblockToast {
-        ToastMessage(text: "\(apiViewModel.userProfile.userName)님이 차단 해제되었습니다.", toastPadding: 72, showToast: $showUnblockToast)
+        ToastMessage(text: "\(apiViewModel.memberProfile.userName)님이 차단 해제되었습니다.", toastPadding: 72, showToast: $showUnblockToast)
       }
     }
     .overlay {
       if showUnblockAlert {
         AlertPopup(
           alertStyle: .linear,
-          title: "\(apiViewModel.userProfile.userName) 님을 해제하시겠어요?",
+          title: "\(apiViewModel.memberProfile.userName) 님을 해제하시겠어요?",
           content: "이제 상대방이 회원님의 게시물을 보거나 팔로우할 수 있습니다. 상대방에게 회원님이 차단을 해제했다는 정보를 알리지 않습니다.",
           cancelText: "취소", destructiveText: "차단해제",cancelAction: {
             showUnblockAlert = false
           }, destructiveAction: {
             showUnblockAlert = false
             Task {
-              await apiViewModel.actionBlockUserCancel(userId: userId)
+              await apiViewModel.actionBlockUserCancel(userID: userId)
               BlockList.shared.userIds.append(userId)
               BlockList.shared.userIds = BlockList.shared.userIds.filter { $0 != userId }
               Task {
-                await apiViewModel.requestUserProfile(userId: userId)
-                await apiViewModel.requestUserPostFeed(userId: userId)
+                await apiViewModel.requestMemberProfile(userID: userId)
+                await apiViewModel.requestMemberPostFeed(userID: userId)
               }
               Task {
-                await apiViewModel.requestUserFollow(userId: userId)
-                await apiViewModel.requestUserWhistlesCount(userId: userId)
+                await apiViewModel.requestMemberFollow(userID: userId)
+                await apiViewModel.requestMemberWhistlesCount(userID: userId)
               }
             }
           })
@@ -198,22 +198,22 @@ struct MemberProfileView: View {
       if showBlockAlert {
         AlertPopup(
           alertStyle: .linear,
-          title: "\(apiViewModel.userProfile.userName) 님을 차단하시겠어요?",
+          title: "\(apiViewModel.memberProfile.userName) 님을 차단하시겠어요?",
           content: "차단된 사람은 회원님의 프로필 또는 콘텐츠를 찾을 수 없게 되며, 상대방에게 차단되었다는 알림이 전송되지 않습니다.",
           cancelText: "취소", destructiveText:"차단",cancelAction: {
             showBlockAlert = false
           }, destructiveAction: {
             showBlockAlert = false
             Task {
-              await apiViewModel.actionBlockUser(userId: userId)
+              await apiViewModel.actionBlockUser(userID: userId)
               BlockList.shared.userIds.append(userId)
               Task {
-                await apiViewModel.requestUserProfile(userId: userId)
-                await apiViewModel.requestUserPostFeed(userId: userId)
+                await apiViewModel.requestMemberProfile(userID: userId)
+                await apiViewModel.requestMemberPostFeed(userID: userId)
               }
               Task {
-                await apiViewModel.requestUserFollow(userId: userId)
-                await apiViewModel.requestUserWhistlesCount(userId: userId)
+                await apiViewModel.requestMemberFollow(userID: userId)
+                await apiViewModel.requestMemberWhistlesCount(userID: userId)
               }
             }
           })
@@ -232,14 +232,14 @@ extension MemberProfileView {
   func profileInfo() -> some View {
     VStack(spacing: 0) {
       Spacer().frame(height: 64)
-      profileImageView(url: apiViewModel.userProfile.profileImg, size: profileImageSize)
+      profileImageView(url: apiViewModel.memberProfile.profileImg, size: profileImageSize)
         .padding(.bottom, 16)
-      Text(apiViewModel.userProfile.userName)
+      Text(apiViewModel.memberProfile.userName)
         .foregroundColor(Color.LabelColor_Primary_Dark)
         .fontSystem(fontDesignSystem: .title2_Expanded)
       Spacer().frame(maxHeight: 20)
       Color.clear.overlay {
-        Text(apiViewModel.userProfile.introduce ?? " ")
+        Text(apiViewModel.memberProfile.introduce ?? " ")
           .foregroundColor(Color.LabelColor_Secondary_Dark)
           .fontSystem(fontDesignSystem: .body2_KO)
           .lineLimit(nil)
@@ -249,7 +249,7 @@ extension MemberProfileView {
           .padding(.bottom, 16)
       }
       .frame(height: introduceHeight)
-      if apiViewModel.userProfile.isBlocked == 1 {
+      if apiViewModel.memberProfile.isBlocked == 1 {
         Button {
           showUnblockAlert = true
         } label: {
@@ -265,10 +265,10 @@ extension MemberProfileView {
               Task {
                 if isFollow {
                   isFollow.toggle()
-                  await apiViewModel.unfollowUser(userId: userId)
+                  await apiViewModel.unfollowUser(userID: userId)
                 } else {
                   isFollow.toggle()
-                  await apiViewModel.followUser(userId: userId)
+                  await apiViewModel.followUser(userID: userId)
                 }
               }
             }
@@ -282,13 +282,13 @@ extension MemberProfileView {
       }
       HStack(spacing: 0) {
         VStack(spacing: 4) {
-          if apiViewModel.userProfile.isBlocked == 1 {
+          if apiViewModel.memberProfile.isBlocked == 1 {
             Text("0")
               .foregroundColor(Color.LabelColor_Primary_Dark)
               .fontSystem(fontDesignSystem: .title2_Expanded)
               .scaleEffect(whistleFollowerTextScale)
           } else {
-            Text("\(apiViewModel.userWhistleCount)")
+            Text("\(apiViewModel.memberWhistleCount)")
               .foregroundColor(Color.LabelColor_Primary_Dark)
               .fontSystem(fontDesignSystem: .title2_Expanded)
               .scaleEffect(whistleFollowerTextScale)
@@ -299,20 +299,20 @@ extension MemberProfileView {
             .scaleEffect(whistleFollowerTextScale)
         }
         .hCenter()
-        Rectangle().frame(width: 1, height: 36).foregroundColor(.white)
+        Rectangle().frame(width: 1).foregroundColor(.white).scaleEffect(0.5)
         NavigationLink {
           MemberFollowListView(userId: userId)
             .environmentObject(apiViewModel)
             .id(UUID())
         } label: {
           VStack(spacing: 4) {
-            if apiViewModel.userProfile.isBlocked == 1 {
+            if apiViewModel.memberProfile.isBlocked == 1 {
               Text("0")
                 .foregroundColor(Color.LabelColor_Primary_Dark)
                 .fontSystem(fontDesignSystem: .title2_Expanded)
                 .scaleEffect(whistleFollowerTextScale)
             } else {
-              Text("\(apiViewModel.userFollow.followerCount)")
+              Text("\(apiViewModel.memberFollow.followerCount)")
                 .foregroundColor(Color.LabelColor_Primary_Dark)
                 .fontSystem(fontDesignSystem: .title2_Expanded)
                 .scaleEffect(whistleFollowerTextScale)
@@ -324,7 +324,7 @@ extension MemberProfileView {
           }
           .hCenter()
         }
-        .disabled(apiViewModel.userProfile.isBlocked == 1)
+        .disabled(apiViewModel.memberProfile.isBlocked == 1)
         .id(UUID())
       }
       .frame(height: whistleFollowerTabHeight)
@@ -582,6 +582,6 @@ extension MemberProfileView {
   }
 
   var videoOffset: CGFloat {
-    return offsetY < -305 ? 305 : -offsetY
+    offsetY < -305 ? 305 : -offsetY
   }
 }

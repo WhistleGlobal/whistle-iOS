@@ -146,7 +146,6 @@ extension MusicViewModel {
   }
 
   func stopAudio() {
-    print("Audio Stopped")
     player?.pause()
     timer?.invalidate()
     DispatchQueue.main.async {

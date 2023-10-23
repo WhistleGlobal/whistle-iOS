@@ -61,8 +61,8 @@ struct ProfileReportCommentView: View {
           if reportCategory == .post {
             Task {
               let reportSuccess = await apiViewModel.reportContent(
-                userId: userId,
-                contentId: selectedContentId,
+                userID: userId,
+                contentID: selectedContentId,
                 reportReason: reportReason,
                 reportDescription: inputReportDetail)
               if reportSuccess == 200 {
@@ -78,8 +78,8 @@ struct ProfileReportCommentView: View {
           } else {
             Task {
               let statusCode = await apiViewModel.reportUser(
-                usedId: userId,
-                contentId: apiViewModel.userPostFeed.isEmpty ? 0 : selectedContentId,
+                usedID: userId,
+                contentID: apiViewModel.memberFeed.isEmpty ? 0 : selectedContentId,
                 reportReason: reportReason,
                 reportDescription: inputReportDetail)
               if statusCode == 200 {

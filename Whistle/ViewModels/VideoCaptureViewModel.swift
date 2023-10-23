@@ -17,9 +17,6 @@ class VideoCaptureViewModel: ObservableObject {
   var aespaSession: AespaSession
 
   @Published var preview: InteractivePreview?
-
-  private var subscription = Set<AnyCancellable>()
-
   @Published var videoFiles: [VideoAssetModel] = []
   @Published var photoFiles: [PhotoAssetModel] = []
 

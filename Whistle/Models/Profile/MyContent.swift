@@ -1,5 +1,5 @@
 //
-//  UserPostFeed.swift
+//  MyContent.swift
 //  Whistle
 //
 //  Created by ChoiYujin on 9/6/23.
@@ -7,7 +7,7 @@
 
 import Foundation
 
-class UserPostFeed: ObservableObject, Codable, Hashable {
+class MyContent: ObservableObject, Codable, Hashable {
   enum CodingKeys: String, CodingKey {
     case contentId = "content_id"
     case userId = "user_id"
@@ -22,9 +22,6 @@ class UserPostFeed: ObservableObject, Codable, Hashable {
     case contentWhistleCount = "content_whistle_count"
     case contentViewCount = "content_view_count"
     case isWhistled = "is_whistled"
-    case isFollowed = "is_followed"
-    case isBookmarked = "is_bookmarked"
-    case isHated = "is_hated"
   }
 
   var contentId: Int?
@@ -40,11 +37,8 @@ class UserPostFeed: ObservableObject, Codable, Hashable {
   var contentWhistleCount: Int?
   var contentViewCount: Int?
   var isWhistled: Int?
-  var isFollowed: Int?
-  var isBookmarked: Int?
-  var isHated: Int?
 
-  static func == (lhs: UserPostFeed, rhs: UserPostFeed) -> Bool {
+  static func == (lhs: MyContent, rhs: MyContent) -> Bool {
     lhs.videoUrl == rhs.videoUrl
   }
 

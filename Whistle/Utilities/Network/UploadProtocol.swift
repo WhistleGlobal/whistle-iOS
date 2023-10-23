@@ -9,8 +9,8 @@ import Foundation
 import UIKit
 
 protocol UploadProtocol {
-  func uploadPhoto(image: UIImage, completion: @escaping (String) -> Void) async
-  func uploadPost(
+  func uploadProfilePhoto(image: UIImage, completion: @escaping (String) -> Void) async
+  func uploadContent(
     video: Data,
     thumbnail: Data,
     caption: String,

@@ -101,7 +101,7 @@ struct ProfileEditView: View {
           await apiViewModel.requestMyProfile()
         }
       }
-      Button("취소", role: .cancel) {}
+      Button("취소", role: .cancel) { }
     }
     .toolbar {
       ToolbarItem(placement: .cancellationAction) {
@@ -172,7 +172,7 @@ extension ProfileEditView {
     case .limited:
       isAlbumAuthorized = true
     default:
-        break
+      break
     }
   }
 }

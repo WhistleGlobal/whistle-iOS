@@ -95,7 +95,7 @@ struct SEMyProfileView: View {
         .frame(height: tabHeight)
         .padding(.bottom, tabPadding)
         .zIndex(2)
-        switch (tabSelection, apiViewModel.myPostFeed.isEmpty, apiViewModel.bookmark.isEmpty) {
+        switch (tabSelection, apiViewModel.myFeed.isEmpty, apiViewModel.bookmark.isEmpty) {
         // 내 비디오 탭 & 올린 컨텐츠 있음
         case (.myVideo, false, _):
           ScrollView {
@@ -104,7 +104,7 @@ struct SEMyProfileView: View {
               GridItem(.flexible()),
               GridItem(.flexible()),
             ], spacing: 20) {
-              ForEach(Array(apiViewModel.myPostFeed.enumerated()), id: \.element) { index, content in
+              ForEach(Array(apiViewModel.myFeed.enumerated()), id: \.element) { index, content in
                 NavigationLink {
                   MyFeedView(currentIndex: index)
 
@@ -684,6 +684,6 @@ extension SEMyProfileView {
   }
 
   var videoOffset: CGFloat {
-    return offsetY < -202 ? 202 : -offsetY
+    offsetY < -202 ? 202 : -offsetY
   }
 }

@@ -30,12 +30,12 @@ struct ProfileReportContentSelectionView: View {
           GridItem(.flexible()),
           GridItem(.flexible()),
         ], spacing: 20) {
-          ForEach(Array(apiViewModel.userPostFeed.enumerated()), id: \.element) { index, content in
+          ForEach(Array(apiViewModel.memberFeed.enumerated()), id: \.element) { index, content in
             if let url = content.thumbnailUrl {
               videoThumbnail(url: url, index: index)
                 .onTapGesture {
                   selectedIndex = index
-                  selectedContentId = apiViewModel.userPostFeed[index].contentId ?? 0
+                  selectedContentId = apiViewModel.memberFeed[index].contentId ?? 0
                 }
             }
           }
@@ -84,7 +84,7 @@ struct ProfileReportContentSelectionView: View {
       }
     }
     .task {
-      await apiViewModel.requestUserPostFeed(userId: userId)
+      await apiViewModel.requestMemberPostFeed(userID: userId)
     }
   }
 }

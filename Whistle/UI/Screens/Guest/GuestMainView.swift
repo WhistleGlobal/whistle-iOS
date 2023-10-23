@@ -42,7 +42,7 @@ struct GuestMainView: View {
   var body: some View {
     GeometryReader { proxy in
       TabView(selection: $currentIndex) {
-        ForEach(Array(apiViewModel.noSignInContentList.enumerated()), id: \.element) { index, content in
+        ForEach(Array(apiViewModel.guestFeed.enumerated()), id: \.element) { index, content in
           if !players.isEmpty {
             if let player = players[index] {
               ContentPlayer(player: player)
@@ -100,7 +100,7 @@ struct GuestMainView: View {
       .tabViewStyle(.page(indexDisplayMode: .never))
       .frame(maxWidth: proxy.size.width)
       .onChange(of: mainOpacity) { newValue in
-        if apiViewModel.noSignInContentList.isEmpty, players.isEmpty {
+        if apiViewModel.guestFeed.isEmpty, players.isEmpty {
           return
         }
         if players.count <= currentIndex {
@@ -290,21 +290,21 @@ struct GuestMainView: View {
       tabbarModel.tabbarOpacity = 1.0
     }
     .task {
-      apiViewModel.requestNoSignInContent {
+      apiViewModel.requestGuestFeed {
         Task {
-          if !apiViewModel.noSignInContentList.isEmpty {
+          if !apiViewModel.guestFeed.isEmpty {
             players.removeAll()
-            for _ in 0 ..< apiViewModel.noSignInContentList.count {
+            for _ in 0 ..< apiViewModel.guestFeed.count {
               players.append(nil)
             }
             players[currentIndex] =
-              AVPlayer(url: URL(string: apiViewModel.noSignInContentList[currentIndex].videoUrl ?? "")!)
+              AVPlayer(url: URL(string: apiViewModel.guestFeed[currentIndex].videoUrl ?? "")!)
             playerIndex = currentIndex
             guard let player = players[currentIndex] else {
               return
             }
-            currentVideoUserId = apiViewModel.noSignInContentList[currentIndex].userId ?? 0
-            currentVideoContentId = apiViewModel.noSignInContentList[currentIndex].contentId ?? 0
+            currentVideoUserId = apiViewModel.guestFeed[currentIndex].userId ?? 0
+            currentVideoContentId = apiViewModel.guestFeed[currentIndex].contentId ?? 0
             await player.seek(to: .zero)
             player.play()
           }
@@ -312,7 +312,7 @@ struct GuestMainView: View {
       }
     }
     .onChange(of: currentIndex) { newValue in
-      guard let url = apiViewModel.noSignInContentList[newValue].videoUrl else {
+      guard let url = apiViewModel.guestFeed[newValue].videoUrl else {
         return
       }
       players[playerIndex]?.seek(to: .zero)
@@ -322,8 +322,8 @@ struct GuestMainView: View {
       players[newValue]?.seek(to: .zero)
       players[newValue]?.play()
       playerIndex = newValue
-      currentVideoUserId = apiViewModel.noSignInContentList[newValue].userId ?? 0
-      currentVideoContentId = apiViewModel.noSignInContentList[newValue].contentId ?? 0
+      currentVideoUserId = apiViewModel.guestFeed[newValue].userId ?? 0
+      currentVideoContentId = apiViewModel.guestFeed[newValue].contentId ?? 0
       apiViewModel.postFeedPlayerChanged()
       if (newValue + 1) % 3 == 0, newValue + 1 != 1 {
         bottomSheetPosition = .absolute(UIScreen.height - 68)
@@ -332,7 +332,7 @@ struct GuestMainView: View {
     .onChange(of: isAccess) { newValue in
       if newValue {
         apiViewModel.myProfile = .init()
-        apiViewModel.contentList = []
+        apiViewModel.mainFeed = []
         tabbarModel.tabSelection = .main
         tabbarModel.tabSelectionNoAnimation = .main
         tabbarModel.tabbarOpacity = 1.0
@@ -362,7 +362,7 @@ struct GuestMainView: View {
       PrivacyPolicyView()
     }
     .onChange(of: mainOpacity) { newValue in
-      if apiViewModel.noSignInContentList.isEmpty, players.isEmpty {
+      if apiViewModel.guestFeed.isEmpty, players.isEmpty {
         return
       }
       if players.isEmpty {

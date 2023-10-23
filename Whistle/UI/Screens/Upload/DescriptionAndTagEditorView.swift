@@ -69,7 +69,7 @@ struct DescriptionAndTagEditorView: View {
           UploadProgressViewModel.shared.thumbnail = Image(uiImage: thumbnail)
           await exporterVM.action(.save, start: (editorVM.currentVideo?.rangeDuration.lowerBound)!)
           let video = exporterVM.videoData
-          apiViewModel.uploadPost(
+          apiViewModel.uploadContent(
             video: video,
             thumbnail: thumbnail.jpegData(compressionQuality: 0.5)!,
             caption: content,

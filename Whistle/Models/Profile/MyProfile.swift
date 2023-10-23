@@ -1,5 +1,5 @@
 //
-//  Profile.swift
+//  MyProfile.swift
 //  Whistle
 //
 //  Created by ChoiYujin on 9/6/23.
@@ -7,9 +7,9 @@
 
 import Foundation
 
-// MARK: - Profile
+// MARK: - MyProfile
 
-class Profile: ObservableObject, Decodable {
+class MyProfile: ObservableObject, Decodable {
   enum CodingKeys: String, CodingKey {
     case userId = "user_id"
     case userName = "user_name"
