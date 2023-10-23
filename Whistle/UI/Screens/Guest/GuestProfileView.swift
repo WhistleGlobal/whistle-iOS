@@ -76,7 +76,7 @@ struct GuestProfileView: View {
             bottomSheetPosition = .hidden
           } label: {
             Image(systemName: "xmark")
-              .foregroundColor(.White)
+              .foregroundColor(.white)
               .frame(width: 18, height: 18)
               .padding(.horizontal, 16)
           }

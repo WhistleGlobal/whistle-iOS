@@ -27,7 +27,6 @@ struct VideoCaptureView: View {
   @StateObject private var tabbarModel = TabbarModel.shared
   @ObservedObject private var viewModel = VideoCaptureViewModel()
 
-
   // MARK: - Datas
 
   @State var authorizationStatus = PHPhotoLibrary.authorizationStatus(for: .readWrite)
@@ -251,7 +250,7 @@ extension VideoCaptureView {
         Spacer()
         Text("타이머")
           .fontSystem(fontDesignSystem: .subtitle1_KO)
-          .foregroundColor(.White)
+          .foregroundColor(.white)
         Spacer()
         Button {
           timerSec.1 = false
@@ -259,7 +258,7 @@ extension VideoCaptureView {
         } label: {
           Text("취소")
             .fontSystem(fontDesignSystem: .subtitle2_KO)
-            .foregroundColor(.White)
+            .foregroundColor(.white)
         }
       }
       .frame(height: 24)
@@ -308,7 +307,7 @@ extension VideoCaptureView {
             } label: {
               Text("3s")
                 .fontSystem(fontDesignSystem: .subtitle3_KO)
-                .foregroundColor(selectedSec.0 == .sec3 ? .White : Color.LabelColor_DisablePlaceholder)
+                .foregroundColor(selectedSec.0 == .sec3 ? .white : Color.LabelColor_DisablePlaceholder)
                 .frame(width: 58, height: 30)
             }
             .frame(width: 58, height: 30)
@@ -319,7 +318,7 @@ extension VideoCaptureView {
             } label: {
               Text("10s")
                 .fontSystem(fontDesignSystem: .subtitle3_KO)
-                .foregroundColor(selectedSec.0 == .sec10 ? .White : Color.LabelColor_DisablePlaceholder)
+                .foregroundColor(selectedSec.0 == .sec10 ? .white : Color.LabelColor_DisablePlaceholder)
                 .frame(width: 58, height: 30)
             }
             .frame(width: 58, height: 30)
@@ -520,7 +519,7 @@ extension VideoCaptureView {
             .offset(y: -53)
             HStack {
               Text("\(Int((defaultWidth + dragOffset - 6) / (barSpacing + 6)))s")
-                .foregroundColor(Color.White)
+                .foregroundColor(Color.white)
                 .fontSystem(fontDesignSystem: .caption_KO_Semibold)
                 .frame(width: dragOffset + defaultWidth, alignment: .trailing)
             }
@@ -976,7 +975,7 @@ extension VideoCaptureView {
         ZStack {
           Circle()
             .stroke(lineWidth: 4)
-            .foregroundColor(.White)
+            .foregroundColor(.white)
             .frame(width: 80, height: 80, alignment: .center)
           Circle()
             .fill(LinearGradient(
@@ -1014,7 +1013,7 @@ extension VideoCaptureView {
               .rotationEffect(Angle(degrees: -90))
               .animation(.linear(duration: 1.0))
             Rectangle()
-              .foregroundColor(.White)
+              .foregroundColor(.white)
               .cornerRadius(8)
               .frame(width: 36, height: 36, alignment: .center)
           }
@@ -1075,7 +1074,7 @@ extension VideoCaptureView {
         } label: {
           Circle()
             .stroke(lineWidth: 4)
-            .foregroundColor(.White)
+            .foregroundColor(.white)
             .frame(width: 84, height: 84, alignment: .center)
             .overlay {
               Circle()
@@ -1083,7 +1082,7 @@ extension VideoCaptureView {
                 .frame(width: 72, height: 72, alignment: .center)
               Image(systemName: "checkmark")
                 .font(.custom("SFCompactText-Regular", size: 44))
-                .foregroundColor(.White)
+                .foregroundColor(.white)
             }
         }
         .disabled(disableUploadButton)

@@ -167,12 +167,12 @@ final class MenuDropDownPresentationController: UIPresentationController {
 
   private func calculateBottomOffsetHeight() -> CGFloat {
     if isFullScreen {
-      return 0
+      0
     } else {
       if traitCollection.horizontalSizeClass == .compact {
-        return 0
+        0
       } else {
-        return abs(presentingViewController.view.bounds.height - (containerView?.bounds.height ?? 0)) / 2
+        abs(presentingViewController.view.bounds.height - (containerView?.bounds.height ?? 0)) / 2
       }
     }
   }

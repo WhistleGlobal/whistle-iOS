@@ -26,9 +26,9 @@ enum CorrectionType: String, CaseIterable {
 
   var key: String {
     switch self {
-    case .brightness: return kCIInputBrightnessKey
-    case .contrast: return kCIInputContrastKey
-    case .saturation: return kCIInputSaturationKey
+    case .brightness: kCIInputBrightnessKey
+    case .contrast: kCIInputContrastKey
+    case .saturation: kCIInputSaturationKey
     }
   }
 }

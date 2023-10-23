@@ -33,7 +33,6 @@ struct ProfileEditIDView: View {
   @State var originalUsername = ""
   @Binding var showToast: Bool
 
-
   var body: some View {
     VStack(spacing: 0) {
       Divider().frame(width: UIScreen.width)
@@ -178,37 +177,37 @@ extension ProfileEditIDView {
   func validationText() -> String {
     switch inputValidationStatus {
     case .valid:
-      return "사용할 수 있는 ID 입니다."
+      "사용할 수 있는 ID 입니다."
     case .empty:
-      return "사용자 ID를 입력해주세요."
+      "사용자 ID를 입력해주세요."
     case .tooShort:
-      return "사용자 ID는 2자 이상 입력해주세요."
+      "사용자 ID는 2자 이상 입력해주세요."
     case .invalidCharacters:
-      return "영문, 숫자, 밑줄 또는 마침표만 허용됩니다."
+      "영문, 숫자, 밑줄 또는 마침표만 허용됩니다."
     case .invalidID:
-      return "이미 사용 중인 ID 입니다."
+      "이미 사용 중인 ID 입니다."
     case .none:
-      return ""
+      ""
     case .updateFailed:
-      return "사용자 이름은 14일에 한번만 업데이트할 수 있습니다."
+      "사용자 이름은 14일에 한번만 업데이트할 수 있습니다."
     }
   }
 
   func validationColor() -> Color {
     switch inputValidationStatus {
     case .valid, .none:
-      return .Success
+      .Success
     case .empty, .tooShort, .invalidCharacters, .invalidID, .updateFailed:
-      return .Danger
+      .Danger
     }
   }
 
   func validationSystemImagename() -> String {
     switch inputValidationStatus {
     case .valid, .none:
-      return "checkmark.circle"
+      "checkmark.circle"
     case .empty, .tooShort, .invalidCharacters, .invalidID, .updateFailed:
-      return "exclamationmark.triangle.fill"
+      "exclamationmark.triangle.fill"
     }
   }
 }

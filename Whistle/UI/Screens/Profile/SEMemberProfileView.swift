@@ -230,7 +230,7 @@ extension SEMemberProfileView {
             dismiss()
           } label: {
             Image(systemName: "chevron.left")
-              .foregroundColor(Color.White)
+              .foregroundColor(.white)
               .fontWeight(.semibold)
               .frame(width: 40, height: 40)
               .background(
@@ -243,7 +243,7 @@ extension SEMemberProfileView {
             showDialog = true
           } label: {
             Image(systemName: "ellipsis")
-              .foregroundColor(Color.White)
+              .foregroundColor(.white)
               .fontWeight(.semibold)
               .frame(width: 40, height: 40)
               .background(
@@ -307,160 +307,160 @@ extension SEMemberProfileView {
   var profileHorizontalPadding: CGFloat {
     switch -offsetY {
     case ..<0:
-      return 16
+      16
     case 0 ..< 28:
-      return 16 + (16 * (offsetY / 28))
+      16 + (16 * (offsetY / 28))
     default:
-      return 0
+      0
     }
   }
 
   var profileCornerRadius: CGFloat {
     switch -offsetY {
     case ..<0:
-      return 32
+      32
     case 0 ..< 28:
-      return 32 + (32 * (offsetY / 28))
+      32 + (32 * (offsetY / 28))
     default:
-      return 0
+      0
     }
   }
 
   var topSpacerHeight: CGFloat {
     switch -offsetY {
     case ..<0:
-      return 28
+      28
     case 0 ..< 28:
-      return 28 + offsetY
+      28 + offsetY
     default:
-      return 0
+      0
     }
   }
 
   var profileImageSize: CGFloat {
     switch -offsetY {
     case ..<0:
-      return 56
+      56
     case 0 ..< 68:
-      return 56 + (56 * (offsetY / 68))
+      56 + (56 * (offsetY / 68))
     default:
-      return 0
+      0
     }
   }
 
   var whistleFollowerTabHeight: CGFloat {
     switch -offsetY {
     case ..<68:
-      return 42
+      42
     case 68 ..< 126:
-      return 42 + (42 * ((offsetY + 68) / 58))
+      42 + (42 * ((offsetY + 68) / 58))
     default:
-      return 0
+      0
     }
   }
 
   var whistleFollowerTextScale: CGFloat {
     switch -offsetY {
     case ..<122:
-      return 1
+      1
     case 68 ..< 126:
-      return 1 - abs((offsetY + 68) / 58)
+      1 - abs((offsetY + 68) / 58)
     default:
-      return 0
+      0
     }
   }
 
   var profileEditButtonHeight: CGFloat {
     switch -offsetY {
     case ..<126:
-      return 36
+      36
     case 126 ..< 146:
-      return 28 + (28 * ((offsetY + 126) / 20))
+      28 + (28 * ((offsetY + 126) / 20))
     default:
-      return 0
+      0
     }
   }
 
   var profileEditButtonWidth: CGFloat {
     switch -offsetY {
     case ..<126:
-      return 114
+      114
     case 126 ..< 146:
-      return 79 + (79 * ((offsetY + 126) / 20))
+      79 + (79 * ((offsetY + 126) / 20))
     default:
-      return 0
+      0
     }
   }
 
   var profileEditButtonScale: CGFloat {
     switch -offsetY {
     case ..<126:
-      return 1
+      1
     case 126 ..< 146:
-      return 1 - abs((offsetY + 126) / 20)
+      1 - abs((offsetY + 126) / 20)
     default:
-      return 0
+      0
     }
   }
 
   var introduceHeight: CGFloat {
     switch -offsetY {
     case ..<146:
-      return 20
+      20
     case 146 ..< 202:
-      return 20 + (20 * ((offsetY + 146) / 56))
+      20 + (20 * ((offsetY + 146) / 56))
     default:
-      return 0
+      0
     }
   }
 
   var introduceScale: CGFloat {
     switch -offsetY {
     case ..<146:
-      return 1
+      1
     case 146 ..< 202:
-      return 1 - abs((offsetY + 146) / 56)
+      1 - abs((offsetY + 146) / 56)
     default:
-      return 0
+      0
     }
   }
 
   var tabOffset: CGFloat {
     switch -offsetY {
     case ..<146:
-      return 0
+      0
     case 146 ..< 202:
-      return 32 * ((offsetY + 146) / 56)
+      32 * ((offsetY + 146) / 56)
     case 202...:
-      return -32
+      -32
     default:
-      return 0
+      0
     }
   }
 
   var tabPadding: CGFloat {
     switch -offsetY {
     case ..<146:
-      return 16
+      16
     case 146 ..< 202:
-      return 8 + (8 * ((offsetY + 146) / 56))
+      8 + (8 * ((offsetY + 146) / 56))
     case 202...:
-      return 0
+      0
     default:
-      return 0
+      0
     }
   }
 
   var tabHeight: CGFloat {
     switch -offsetY {
     case ..<146:
-      return 48
+      48
     case 146 ..< 202:
-      return 48 + (48 * ((offsetY + 146) / 56))
+      48 + (48 * ((offsetY + 146) / 56))
     case 202...:
-      return 0
+      0
     default:
-      return 0
+      0
     }
   }
 
@@ -471,13 +471,13 @@ extension SEMemberProfileView {
   var profileHeightLast: CGFloat {
     switch -offsetY {
     case ..<146:
-      return 0
+      0
     case 146 ..< 202:
-      return (offsetY + 146) / 56 * 32
+      (offsetY + 146) / 56 * 32
     case 202...:
-      return -32
+      -32
     default:
-      return 0
+      0
     }
   }
 }

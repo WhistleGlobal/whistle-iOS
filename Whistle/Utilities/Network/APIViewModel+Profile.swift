@@ -235,7 +235,6 @@ extension APIViewModel: ProfileProtocol {
     }
   }
 
-
   func followAction(userID: Int, method: Alamofire.HTTPMethod) async {
     await withCheckedContinuation { continuation in
       AF.request(

@@ -104,9 +104,9 @@ extension Album {
 extension Album {
   var count: Int {
     if hasCamera {
-      return assets.count - 1
+      assets.count - 1
     } else {
-      return assets.count
+      assets.count
     }
   }
 

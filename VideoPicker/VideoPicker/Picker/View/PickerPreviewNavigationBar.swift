@@ -13,7 +13,7 @@ import UIKit
 final class PickerPreviewNavigationBar: UIView {
   private(set) lazy var backButton: UIButton = {
     let view = UIButton(type: .custom)
-    view.imageEdgeInsets = UIEdgeInsets(top: 0, left: -15, bottom: 0, right: 0)
+    view.configuration!.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: -15.0, bottom: 0, trailing: 0)
     return view
   }()
 

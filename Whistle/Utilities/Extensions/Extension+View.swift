@@ -474,7 +474,7 @@ extension View {
         Image(systemName: toPlay ? "play.fill" : "pause.fill")
           .font(.system(size: 20))
           .contentShape(Circle())
-          .foregroundColor(.White)
+          .foregroundColor(.white)
       }
   }
 }

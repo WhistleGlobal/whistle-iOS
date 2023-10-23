@@ -160,7 +160,7 @@ struct VideoEditorView: View {
               editorVM.selectedTools = nil
             }
         }
-        .foregroundStyle(Color.White)
+        .foregroundStyle(.white)
         .padding(.horizontal, 16)
         .padding(.vertical, 6)
         Rectangle()
@@ -308,7 +308,7 @@ struct MusicInfo: View {
               showMusicTrimView = true
             }
           Divider()
-            .overlay { Color.White }
+            .overlay { Color.white }
           Button {
             onDelete()
           } label: {
@@ -318,7 +318,7 @@ struct MusicInfo: View {
               .padding(.trailing, 16)
           }
         }
-        .foregroundStyle(Color.White)
+        .foregroundStyle(.white)
         .fixedSize()
         .padding(.vertical, 6)
         .padding(.leading, 16)
@@ -335,7 +335,7 @@ struct MusicInfo: View {
           .fontSystem(fontDesignSystem: .body1)
           .contentShape(Rectangle())
       }
-      .foregroundStyle(Color.White)
+      .foregroundStyle(.white)
       .fixedSize()
       .padding(.horizontal, 16)
       .padding(.vertical, 6)

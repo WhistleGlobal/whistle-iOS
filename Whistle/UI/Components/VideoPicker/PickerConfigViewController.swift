@@ -32,7 +32,10 @@ final class PickerConfigViewController: UIViewController {
   @objc
   public func openPickerTapped() {
     options.enableDebugLog = true
-    let controller = ImagePickerController(options: options, delegate: self, imagePickerClosedSubject: isImagePickerClosed)
+    let controller = ImagePickerController(
+      options: options,
+      delegate: self,
+      imagePickerClosedSubject: isImagePickerClosed)
     controller.trackDelegate = self
     if #available(iOS 13.0, *) {
       // 모달 방식 설정

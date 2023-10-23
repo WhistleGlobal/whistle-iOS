@@ -102,7 +102,7 @@ extension APIViewModel: SettingProtocol {
         .response { response in
           switch response.result {
           case .success(let data):
-            guard let data else {
+            guard data != nil else {
               return
             }
             continuation.resume()
@@ -126,7 +126,7 @@ extension APIViewModel: SettingProtocol {
         .response { response in
           switch response.result {
           case .success(let data):
-            guard let data else {
+            guard data != nil else {
               return
             }
             continuation.resume()

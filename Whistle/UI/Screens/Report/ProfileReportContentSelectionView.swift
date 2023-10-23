@@ -105,7 +105,7 @@ extension ProfileReportContentSelectionView {
           Image(systemName: index == selectedIndex ? "checkmark.circle.fill" : "circle")
             .resizable()
             .scaledToFit()
-            .foregroundColor(index == selectedIndex ? .Primary_Default : .White)
+            .foregroundColor(index == selectedIndex ? .Primary_Default : .white)
             .frame(width: 22, height: 22)
             .padding(6)
         }

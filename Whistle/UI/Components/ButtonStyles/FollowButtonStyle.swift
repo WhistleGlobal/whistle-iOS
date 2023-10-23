@@ -30,23 +30,23 @@ struct FollowButtonStyle: ButtonStyle {
       switch (isFollowed, isEnabled, configuration.isPressed) {
       // Follow/Pressed
       case (false, true, true):
-        return .Blue_Pressed
+        .Blue_Pressed
       // Follow/Not pressed
       case (false, true, false):
-        return .Blue_Default
+        .Blue_Default
       // Follow/Disable
       case (false, false, _):
-        return .Blue_Disabled
+        .Blue_Disabled
 
       // Following/Pressed
       case (true, true, true):
-        return .Blue_Pressed
+        .Blue_Pressed
       // Following/Not pressed
       case (true, true, false):
-        return .Blue_Disabled
+        .Blue_Disabled
       // Following/Disable
       case (true, false, _):
-        return .Blue_Disabled
+        .Blue_Disabled
       }
     }
   }

@@ -32,18 +32,18 @@ extension CacheModule {
   var title: String {
     switch self {
     case .picker:
-      return "Picker"
+      "Picker"
     case .editor:
-      return "Editor"
+      "Editor"
     }
   }
 
   var subTitle: String {
     switch self {
     case .picker(let subModule):
-      return subModule.rawValue
+      subModule.rawValue
     case .editor(let subModule):
-      return subModule.rawValue
+      subModule.rawValue
     }
   }
 

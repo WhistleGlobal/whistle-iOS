@@ -18,7 +18,7 @@ struct VideoSpeedSlider: View {
     VStack {
       Text(String(format: "%.1fx", value))
         .fontSystem(fontDesignSystem: .subtitle2)
-        .foregroundStyle(Color.White)
+        .foregroundStyle(.white)
       UniSlider(
         value: $value,
         in: rateRange,

@@ -58,11 +58,11 @@ extension CorrectionsToolView {
   func getValue(_ type: CorrectionType) -> Binding<Double> {
     switch type {
     case .brightness:
-      return $correction.brightness
+      $correction.brightness
     case .contrast:
-      return $correction.contrast
+      $correction.contrast
     case .saturation:
-      return $correction.saturation
+      $correction.saturation
     }
   }
 }

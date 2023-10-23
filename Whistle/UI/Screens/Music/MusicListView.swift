@@ -55,9 +55,9 @@ struct MusicListView: View {
 
   var filteredMusicList: [Music] {
     if searchQueryString.isEmpty {
-      return musicList
+      musicList
     } else {
-      return musicList.filter { $0.musicTitle.localizedStandardContains(searchQueryString) }
+      musicList.filter { $0.musicTitle.localizedStandardContains(searchQueryString) }
     }
   }
 
@@ -139,7 +139,7 @@ struct MusicListView: View {
           }
           .listStyle(.plain)
           .navigationTitle("")
-          .foregroundStyle(Color.White)
+          .foregroundStyle(.white)
         } else {
           List {
             Text("검색 결과가 없습니다.")

@@ -193,15 +193,15 @@ final class PhotoPreviewController: AnyImageViewController, PickerOptionsConfigu
   override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
     switch UIApplication.shared.statusBarOrientation {
     case .unknown:
-      return .portrait
+      .portrait
     case .portrait:
-      return .portrait
+      .portrait
     case .portraitUpsideDown:
-      return .portraitUpsideDown
+      .portraitUpsideDown
     case .landscapeLeft:
-      return .landscapeLeft
+      .landscapeLeft
     case .landscapeRight:
-      return .landscapeRight
+      .landscapeRight
     }
   }
 
@@ -391,7 +391,12 @@ extension PhotoPreviewController {
 
     navigationBar.selectButton.setNum(data.asset.selectedNum, isSelected: data.asset.isSelected, animated: true)
     indexView.didChangeSelectedAsset()
-    trackObserver?.track(event: .pickerSelect, userInfo: [.isOn: data.asset.isSelected, .page: AnyImagePage.pickerPreview])
+    trackObserver?.track(
+      event: .pickerSelect,
+      userInfo: [
+        .isOn: data.asset.isSelected,
+        .page: AnyImagePage.pickerPreview,
+      ])
 
     if sourceType == .selectedAssets {
       toolBar.setDoneEnable(!manager.selectedAssets.isEmpty)

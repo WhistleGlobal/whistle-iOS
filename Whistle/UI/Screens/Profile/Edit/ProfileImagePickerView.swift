@@ -290,22 +290,22 @@ enum Crop: Equatable {
   func name() -> String {
     switch self {
     case .circle:
-      return "Circle"
+      "Circle"
     case .square:
-      return "Square"
+      "Square"
     case .custom(let cGSize):
-      return "Custom \(Int(cGSize.width))x\(Int(cGSize.height))"
+      "Custom \(Int(cGSize.width))x\(Int(cGSize.height))"
     }
   }
 
   func size() -> CGSize {
     switch self {
     case .circle:
-      return .init(width: UIScreen.width, height: UIScreen.width)
+      .init(width: UIScreen.width, height: UIScreen.width)
     case .square:
-      return .init(width: UIScreen.width, height: UIScreen.width)
+      .init(width: UIScreen.width, height: UIScreen.width)
     case .custom(let cGSzie):
-      return cGSzie
+      cGSzie
     }
   }
 }

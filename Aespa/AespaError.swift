@@ -19,15 +19,15 @@ public enum AespaError: LocalizedError {
   public var errorDescription: String? {
     switch self {
     case .session(reason: let reason):
-      return reason.rawValue
+      reason.rawValue
     case .device(reason: let reason):
-      return reason.rawValue
+      reason.rawValue
     case .permission(reason: let reason):
-      return reason.rawValue
+      reason.rawValue
     case .album(reason: let reason):
-      return reason.rawValue
+      reason.rawValue
     case .file(reason: let reason):
-      return reason.rawValue
+      reason.rawValue
     }
   }
 }

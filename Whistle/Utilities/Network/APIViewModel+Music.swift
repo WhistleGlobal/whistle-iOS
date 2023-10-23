@@ -24,7 +24,6 @@ extension APIViewModel: MusicProtocol {
               guard let data else {
                 return
               }
-              let json = try JSON(data: data)
               let decoder = JSONDecoder()
               let musicList = try decoder.decode([Music].self, from: data)
 

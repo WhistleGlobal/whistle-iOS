@@ -48,9 +48,7 @@ struct VideoEditorToolsSection: View {
 
 extension VideoEditorToolsSection {
   @ViewBuilder
-  private func bottomSheet(_ tool: ToolEnum, _ video: EditableVideo) -> some View {
-    let isAppliedTool = video.isAppliedTool(for: tool)
-
+  private func bottomSheet(_ tool: ToolEnum, _: EditableVideo) -> some View {
     VStack(spacing: 16) {
       sheetHeader(tool)
       switch tool {

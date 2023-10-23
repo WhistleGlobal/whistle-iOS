@@ -190,7 +190,7 @@ class PhotoCollection: NSObject, ObservableObject {
       fetchOptions.predicate = NSPredicate(format: "mediaType == %d", PHAssetMediaType.image.rawValue)
 
       if
-        let assetCollection, let fetchResult = (PHAsset.fetchAssets(
+        let fetchResult = (PHAsset.fetchAssets(
           with: fetchOptions) as AnyObject?) as? PHFetchResult<PHAsset>
       {
         newFetchResult = fetchResult

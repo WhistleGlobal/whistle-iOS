@@ -35,11 +35,11 @@ extension AVAudioSession.RecordPermission {
   fileprivate var _status: Permission.Status {
     switch self {
     case .denied:
-      return .denied
+      .denied
     case .granted:
-      return .authorized
+      .authorized
     default:
-      return .notDetermined
+      .notDetermined
     }
   }
 }

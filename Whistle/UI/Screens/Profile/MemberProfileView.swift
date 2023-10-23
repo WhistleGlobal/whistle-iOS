@@ -210,7 +210,7 @@ struct MemberProfileView: View {
           alertStyle: .linear,
           title: "\(apiViewModel.memberProfile.userName) 님을 차단하시겠어요?",
           content: "차단된 사람은 회원님의 프로필 또는 콘텐츠를 찾을 수 없게 되며, 상대방에게 차단되었다는 알림이 전송되지 않습니다.",
-          cancelText: "취소", destructiveText:"차단",cancelAction: {
+          cancelText: "취소", destructiveText:"차단", cancelAction: {
             showBlockAlert = false
           }, destructiveAction: {
             showBlockAlert = false
@@ -352,7 +352,7 @@ extension MemberProfileView {
             dismiss()
           } label: {
             Image(systemName: "chevron.left")
-              .foregroundColor(Color.White)
+              .foregroundColor(.white)
               .fontWeight(.semibold)
               .frame(width: 48, height: 48)
               .background(
@@ -365,7 +365,7 @@ extension MemberProfileView {
             showDialog = true
           } label: {
             Image(systemName: "ellipsis")
-              .foregroundColor(Color.White)
+              .foregroundColor(.white)
               .fontWeight(.semibold)
               .frame(width: 48, height: 48)
               .background(
@@ -447,147 +447,147 @@ extension MemberProfileView {
   var profileHorizontalPadding: CGFloat {
     switch -offsetY {
     case ..<0:
-      return 16
+      16
     case 0 ..< 64:
-      return 16 + (16 * (offsetY / 64))
+      16 + (16 * (offsetY / 64))
     default:
-      return 0
+      0
     }
   }
 
   var profileCornerRadius: CGFloat {
     switch -offsetY {
     case ..<0:
-      return 32
+      32
     case 0 ..< 64:
-      return 32 + (32 * (offsetY / 64))
+      32 + (32 * (offsetY / 64))
     default:
-      return 0
+      0
     }
   }
 
   var topSpacerHeight: CGFloat {
     switch -offsetY {
     case ..<0:
-      return 64
+      64
     case 0 ..< 64:
-      return 64 + offsetY
+      64 + offsetY
     default:
-      return 0
+      0
     }
   }
 
   var profileImageSize: CGFloat {
     switch -offsetY {
     case ..<0:
-      return 100
+      100
     case 0 ..< 122:
-      return 100 + (100 * (offsetY / 122))
+      100 + (100 * (offsetY / 122))
     default:
-      return 0
+      0
     }
   }
 
   var whistleFollowerTabHeight: CGFloat {
     switch -offsetY {
     case ..<122:
-      return 54
+      54
     case 122 ..< 200:
-      return 54 + (54 * ((offsetY + 122) / 78))
+      54 + (54 * ((offsetY + 122) / 78))
     default:
-      return 0
+      0
     }
   }
 
   var whistleFollowerTextScale: CGFloat {
     switch -offsetY {
     case ..<122:
-      return 1
+      1
     case 122 ..< 200:
-      return 1 - abs((offsetY + 122) / 78)
+      1 - abs((offsetY + 122) / 78)
     default:
-      return 0
+      0
     }
   }
 
   var profileEditButtonHeight: CGFloat {
     switch -offsetY {
     case ..<200:
-      return 36
+      36
     case 200 ..< 252:
-      return 36 + (36 * ((offsetY + 200) / 52))
+      36 + (36 * ((offsetY + 200) / 52))
     default:
-      return 0
+      0
     }
   }
 
   var profileEditButtonWidth: CGFloat {
     switch -offsetY {
     case ..<200:
-      return 114
+      114
     case 200 ..< 252:
-      return 114 + (114 * ((offsetY + 200) / 52))
+      114 + (114 * ((offsetY + 200) / 52))
     default:
-      return 0
+      0
     }
   }
 
   var profileEditButtonScale: CGFloat {
     switch -offsetY {
     case ..<200:
-      return 1
+      1
     case 200 ..< 252:
-      return 1 - abs((offsetY + 200) / 52)
+      1 - abs((offsetY + 200) / 52)
     default:
-      return 0
+      0
     }
   }
 
   var introduceHeight: CGFloat {
     switch -offsetY {
     case ..<252:
-      return 20
+      20
     case 252 ..< 305:
-      return 20 + (20 * ((offsetY + 252) / 53))
+      20 + (20 * ((offsetY + 252) / 53))
     default:
-      return 0
+      0
     }
   }
 
   var introduceScale: CGFloat {
     switch -offsetY {
     case ..<252:
-      return 1
+      1
     case 252 ..< 305:
-      return 1 - abs((offsetY + 252) / 53)
+      1 - abs((offsetY + 252) / 53)
     default:
-      return 0
+      0
     }
   }
 
   var tabOffset: CGFloat {
     switch -offsetY {
     case ..<252:
-      return 0
+      0
     case 252 ..< 305:
-      return offsetY + 252
+      offsetY + 252
     case 305...:
-      return -60
+      -60
     default:
-      return 0
+      0
     }
   }
 
   var profileHeightLast: CGFloat {
     switch -offsetY {
     case ..<252:
-      return 0
+      0
     case 252 ..< 305:
-      return (offsetY + 252) / 53 * 36
+      (offsetY + 252) / 53 * 36
     case 305...:
-      return -36
+      -36
     default:
-      return 0
+      0
     }
   }
 

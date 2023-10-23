@@ -14,48 +14,48 @@ enum VideoQuality: Int, CaseIterable {
   var exportPresetName: String {
     switch self {
     case .low:
-      return AVAssetExportPresetMediumQuality
+      AVAssetExportPresetMediumQuality
     case .high, .medium:
-      return AVAssetExportPresetHighestQuality
+      AVAssetExportPresetHighestQuality
     }
   }
 
   var title: String {
     switch self {
-    case .low: return "qHD - 480"
-    case .medium: return "HD - 720p"
-    case .high: return "Full HD - 1080p"
+    case .low: "qHD - 480"
+    case .medium: "HD - 720p"
+    case .high: "Full HD - 1080p"
     }
   }
 
   var subtitle: String {
     switch self {
-    case .low: return "Fast loading and small size, low quality"
-    case .medium: return "Optimal size to quality ratio"
-    case .high: return "Ideal for publishing on social networks"
+    case .low: "Fast loading and small size, low quality"
+    case .medium: "Optimal size to quality ratio"
+    case .high: "Ideal for publishing on social networks"
     }
   }
 
   var size: CGSize {
     switch self {
-    case .low: return .init(width: 854, height: 480)
-    case .medium: return .init(width: 1280, height: 720)
-    case .high: return .init(width: 1920, height: 1080)
+    case .low: .init(width: 854, height: 480)
+    case .medium: .init(width: 1280, height: 720)
+    case .high: .init(width: 1920, height: 1080)
     }
   }
 
   var frameRate: Double {
     switch self {
-    case .low, .medium: return 30
-    case .high: return 60
+    case .low, .medium: 30
+    case .high: 60
     }
   }
 
   var bitrate: Double {
     switch self {
-    case .low: return 2.5
-    case .medium: return 5
-    case .high: return 8
+    case .low: 2.5
+    case .medium: 5
+    case .high: 8
     }
   }
 

@@ -30,7 +30,7 @@ struct AlbumAccessView: View {
           } label: {
             Image(systemName: "xmark")
               .font(.system(size: 20))
-              .foregroundColor(.White)
+              .foregroundColor(.white)
           }
           Spacer()
         }

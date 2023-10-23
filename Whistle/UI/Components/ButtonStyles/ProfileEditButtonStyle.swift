@@ -23,13 +23,13 @@ struct ProfileEditButtonStyle: ButtonStyle {
       switch (isEnabled, configuration.isPressed) {
       // Pressed
       case (true, true):
-        return .Gray_Pressed
+        .Gray_Pressed
       // Not pressed
       case (true, false):
-        return .Gray_Default
+        .Gray_Default
       // Disable
       case (false, _):
-        return .Gray_Disabled
+        .Gray_Disabled
       }
     }
 

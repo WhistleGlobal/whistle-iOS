@@ -52,9 +52,6 @@ struct DualSlider: View {
       // 1초당 화면에서 차지하는 width pixel
       let stepWidthInPixel = CGFloat(sliderSize.width) / CGFloat(sliderBoundDifference)
 
-      // 최대 15초
-      let maxDuration = stepWidthInPixel * 15
-
       // Calculate Left Thumb initial position
       // 왼쪽 한계에 닿았다면 0, 아니라면
       let leftThumbLocation: CGFloat = currentValue?.wrappedValue.lowerBound == sliderBounds.lowerBound

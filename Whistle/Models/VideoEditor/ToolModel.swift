@@ -16,8 +16,8 @@ enum ToolEnum: Int, CaseIterable {
     switch self {
 //    case .cut: return "Cut"
 //    case .speed: return "속도"
-    case .music: return "음악"
-    case .audio: return "볼륨"
+    case .music: "음악"
+    case .audio: "볼륨"
 //    case .filters: return "Filters"
 //    case .corrections: return "Corrections"
 //    case .frames: return "Frames"
@@ -28,8 +28,8 @@ enum ToolEnum: Int, CaseIterable {
     switch self {
 //    case .cut: return "scissors"
 //    case .speed: return "timer"
-    case .music: return "music.note"
-    case .audio: return "waveform"
+    case .music: "music.note"
+    case .audio: "waveform"
 //    case .filters: return "camera.filters"
 //    case .corrections: return "circle.righthalf.filled"
 //    case .frames: return "person.crop.artframe"

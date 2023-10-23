@@ -57,9 +57,9 @@ extension Asset {
   var isReady: Bool {
     switch mediaType {
     case .photo, .photoLive:
-      return _image != nil
+      _image != nil
     case .video:
-      return videoDidDownload
+      videoDidDownload
     }
   }
 
@@ -90,15 +90,15 @@ extension Asset {
     static func == (lhs: Self, rhs: Self) -> Bool {
       switch (lhs, rhs) {
       case (.unchecked, unchecked):
-        return true
+        true
       case (.normal, normal):
-        return true
+        true
       case (.selected, selected):
-        return true
+        true
       case (.disable, disable):
-        return true
+        true
       default:
-        return false
+        false
       }
     }
   }
@@ -114,9 +114,9 @@ extension Asset {
   var isDisable: Bool {
     switch state {
     case .disable:
-      return true
+      true
     default:
-      return false
+      false
     }
   }
 }

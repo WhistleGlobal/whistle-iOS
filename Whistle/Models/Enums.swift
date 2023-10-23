@@ -21,14 +21,14 @@ enum UserReportReason: String, CaseIterable {
 
   var numericValue: Int {
     switch self {
-    case .none: return 100
-    case .cyberbullying: return 101
-    case .identityTheft: return 102
-    case .violentThreat: return 103
-    case .abuse: return 104
-    case .hateSpeech: return 105
-    case .spamAndFraud: return 106
-    case .privacyViolation: return 107
+    case .none: 100
+    case .cyberbullying: 101
+    case .identityTheft: 102
+    case .violentThreat: 103
+    case .abuse: 104
+    case .hateSpeech: 105
+    case .spamAndFraud: 106
+    case .privacyViolation: 107
     }
   }
 }
@@ -46,13 +46,13 @@ enum ContentReportReason: String, CaseIterable {
 
   var numericValue: Int {
     switch self {
-    case .none: return 200
-    case .hatredOrAbuse: return 201
-    case .harmfulBehavior: return 202
-    case .spamOrConfusion: return 203
-    case .violentOrHatefulContent: return 204
-    case .sexualContent: return 205
-    case .copyrightInfringement: return 206
+    case .none: 200
+    case .hatredOrAbuse: 201
+    case .harmfulBehavior: 202
+    case .spamOrConfusion: 203
+    case .violentOrHatefulContent: 204
+    case .sexualContent: 205
+    case .copyrightInfringement: 206
     }
   }
 }

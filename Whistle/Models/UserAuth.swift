@@ -55,10 +55,10 @@ class UserAuth: ObservableObject {
     switch provider {
     case .apple:
 //      return URL(string: "\(domainUrl)/user/profile?provider=Apple")
-      return URL(string: "\(domainURL)/user/profile")
+      URL(string: "\(domainURL)/user/profile")
     case .google:
 //      return URL(string: "\(domainUrl)/user/profile?provider=Google")
-      return URL(string: "\(domainURL)/user/profile")
+      URL(string: "\(domainURL)/user/profile")
     }
   }
 

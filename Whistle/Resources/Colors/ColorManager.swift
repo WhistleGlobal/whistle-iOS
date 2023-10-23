@@ -51,7 +51,6 @@ extension Color {
 
   // MARK: - etc
 
-  static let White: Color = .init("White")
   static let Gray10 = Color("Gray10")
   static let Gray10_Dark = Color("Gray10_Dark")
   static let Gray20_Light = Color("Gray20_Light")
@@ -102,7 +101,7 @@ extension Color {
   // MARK: - Background_Default
 
   static var Background_Default: Color {
-    Color.lightAndDarkColor(light: "White", dark: "Gray80")
+    Color.lightAndDarkColor(light: "white", dark: "Gray80")
   }
 
   static var Background_Default_Dark: Color {
@@ -112,7 +111,7 @@ extension Color {
   // MARK: - Background_Elevated
 
   static var Elevated: Color {
-    Color.lightAndDarkColor(light: "White", dark: "Gray70")
+    Color.lightAndDarkColor(light: "white", dark: "Gray70")
   }
 
   static var Elevated_Dark: Color {
@@ -144,7 +143,7 @@ extension Color {
 
 extension LinearGradient {
   static var Border_Glass = LinearGradient(
-    gradient: Gradient(colors: [Color("White").opacity(0.48), Color("White").opacity(0.16)]),
+    gradient: Gradient(colors: [Color.white.opacity(0.48), Color.white.opacity(0.16)]),
     startPoint: .top, endPoint: .bottom)
 
   static var primaryGradient = LinearGradient(
@@ -156,9 +155,13 @@ extension LinearGradient {
 extension Color {
   static func lightAndDarkColor(light: String, dark: String) -> Color {
     if UITraitCollection.current.userInterfaceStyle == .dark {
-      return Color(dark)
+      Color(dark)
     } else {
-      return Color(light)
+      if light == "white" {
+        Color.white
+      } else {
+        Color(light)
+      }
     }
   }
 }

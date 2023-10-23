@@ -140,7 +140,7 @@ struct RootTabView: View {
                     .padding(4)
                     .overlay {
                       Image(systemName: "arrow.up.left.and.arrow.down.right")
-                        .foregroundColor(.White)
+                        .foregroundColor(.white)
                         .frame(width: 20, height: 20)
                     }
                 }
@@ -183,7 +183,7 @@ struct RootTabView: View {
             uploadBottomSheetPosition = .hidden
           } label: {
             Image(systemName: "xmark")
-              .foregroundColor(.White)
+              .foregroundColor(.white)
               .frame(width: 18, height: 18)
               .padding(.horizontal, 16)
           }
@@ -471,7 +471,6 @@ public enum TabSelection: CGFloat {
   case upload = 0.0
   case profile = 1.0
 }
-
 
 // MARK: - 권한
 extension RootTabView {

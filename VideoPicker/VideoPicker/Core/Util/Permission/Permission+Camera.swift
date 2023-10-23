@@ -35,11 +35,11 @@ extension AVAuthorizationStatus {
   fileprivate var _status: Permission.Status {
     switch self {
     case .authorized:
-      return .authorized
+      .authorized
     case .notDetermined:
-      return .notDetermined
+      .notDetermined
     default:
-      return .denied
+      .denied
     }
   }
 }

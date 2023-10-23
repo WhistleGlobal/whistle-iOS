@@ -116,7 +116,6 @@ final class AssetPickerViewController: AnyImageViewController {
       right: defaultAssetSpacing * 2)
     // 컬렉션뷰 배경 색상
     view.backgroundColor = UIColor.black.withAlphaComponent(0.3)
-    manager.options.theme[color: .background]
     if #available(iOS 14.0, *) {
     } else {
       view.registerCell(AssetCell.self)
@@ -284,7 +283,7 @@ extension AssetPickerViewController {
       loadDefaultAlbumIfNeeded()
 //      showLimitedView()
     }, denied: { [weak self] _ in
-      guard let self else { return }
+      guard self != nil else { return }
 //      permissionView.isHidden = false
     })
   }
@@ -476,7 +475,7 @@ extension AssetPickerViewController {
   @objc
   private func didSyncAsset(_ sender: Notification) {
     DispatchQueue.main.async {
-      guard let _ = sender.object as? String else { return }
+      guard sender.object is String else { return }
       guard self.manager.options.selectLimit == 1, self.manager.options.selectionTapAction.hideToolBar else { return }
       guard let asset = self.manager.selectedAssets.first else { return }
       guard let cell = self.collectionView.cellForItem(at: IndexPath(row: asset.idx, section: 0)) as? AssetCell
@@ -496,7 +495,9 @@ extension AssetPickerViewController {
     controller.album = album
     controller.albums = albums
     controller.delegate = self
-    let presentationController = MenuDropDownPresentationController(presentedViewController: controller, presenting: self)
+    let presentationController = MenuDropDownPresentationController(
+      presentedViewController: controller,
+      presenting: self)
     let isFullScreen = ScreenHelper.mainBounds.height == (navigationController?.view ?? view).frame.height
     presentationController.isFullScreen = isFullScreen
     controller.transitioningDelegate = presentationController
@@ -526,7 +527,10 @@ extension AssetPickerViewController {
   private func originalImageButtonTapped(_ sender: UIButton) {
     sender.isSelected.toggle()
     manager.useOriginalImage = sender.isSelected
-    trackObserver?.track(event: .pickerOriginalImage, userInfo: [.isOn: sender.isSelected, .page: AnyImagePage.pickerAsset])
+    trackObserver?
+      .track(
+        event: .pickerOriginalImage,
+        userInfo: [.isOn: sender.isSelected, .page: AnyImagePage.pickerAsset])
   }
 
   @objc

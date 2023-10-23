@@ -39,11 +39,11 @@ struct MyFeedTabItemButtonStyle: ButtonStyle {
       .overlay(alignment: .bottom) {
         Capsule()
           .frame(width: (UIScreen.width - 32) / 2, height: 5)
-          .foregroundColor(.White)
+          .foregroundColor(.white)
           .opacity(tab == selectedTab.rawValue ? 1 : 0)
           .offset(y: 2.5)
       }
-      .foregroundColor(tab == selectedTab.rawValue ? Color.White : Color.Gray30_Dark)
+      .foregroundColor(tab == selectedTab.rawValue ? .white : Color.Gray30_Dark)
       .background(.clear)
   }
 }
