@@ -1,96 +1,10 @@
-# whistle-ios
+# 야구 직관 그 이상의 즐거움, Whistle
 
-## 커밋메시지 작성 방법
-<aside>
-👉 로컬에서 수정한 코드를 깃허브에 올리려면 commit을 하게 되는데요, 어떤 부분이 수정되었는지 설명하기 위해 커밋메시지를 작성합니다.
+![banner](https://github.com/WhistleGlobal/whistle-iOS/assets/75407186/526fc230-03d4-4aff-b143-09ce80797e86)
 
-</aside>
-
-- 해당 작업을 진행하지 않은 사람도 커밋메시지에 `요약된 내용만 보고도 무슨 내용인지 추측하게 쉽게끔` 작성하는 것이 중요해요!
-- 아래와 같은 형식으로 작성하면 됩니다.
-    
-    ```swift
-    type: title
-    
-    body
-    
-    ```
-    
-- title과 body 사이 한칸 띄워주셔야 합니닷
-- `type`: **어떤 의도**로 커밋했는지를 명시합니다
-    - type의 종류
-        - `feat`
-            
-            → 새로운 기능을 추가했을 경우
-            
-            → 이슈에 적힌 작업을 진행했을 때 선택하면 됩니닷
-            
-            → 아마 가장 사용할 일이 많을거에요
-            
-        - `refactor`
-            
-            → 새로운 기능이나 버그 수정 없이 코드의 모양만 바꿨을 때
-            
-            → 변수명 수정이나, 함수 리팩토링 등등 코드 동작의 수정이 없을 때 선택하세요
-            
-        - `fix`
-            
-            → 버그 또는 오탈자를 고친 경우! 
-            
-            → “내가 의도하지 않은 동작이면 모두 다 버그이다”
-            
-        - `style`
-            
-            → formatter 수정과 같은 사소한 수정일 때!
-            
-            → EX)
-            
-            ```swift
-            // BEFORE
-            Image("Tomato").resizable().scaledToFit()
-            
-            // AFTER
-            Image("Tomato")
-            	.resizable()
-            	.scaledToFit()
-            ```
-            
-        - `chore`
-            
-            → 코드 수정은 아니고, 프로젝트 관련 환경 설정할 때!
-            
-            → 에셋 변경, 폴더 구조 변경이나, 패키지 매니저 설정할 경우
-            
-        - `docs`
-            
-            → README 등 문서 관련 수정일 때!
-            
-        - `remove`
-            
-            → 사용하지 않는 파일이나 폴더를 삭제할 때!
-            
-        - `rename`
-            
-            → 파일이나 폴더명을 수정하는 경우!
-            
-- `title`: 수정한 내용을 모두 포함하는 한 줄로 작성합니다.
-- `body`: **어떻게** 했는지가 아닌, **무엇을 왜 했는지**를 작성합니다.
-    - 꼼꼼하게 쓸수록 좋아용
-- EX)
-    
-    ```swift
-    [Feat] #이슈번호 - user 모델 연동
-    
-    - user 모델과 서버 통신 연동 성공
-    ```
-
-## 브랜치 생성 방법
-    
-  ```swift
-    type/#이슈번호
-    
-    ex) 
-    feat/#02
-    fix/#05
-    add/#08
-  ```
+<p align = "center">
+    <image width = 24%, src = "https://github.com/WhistleGlobal/whistle-iOS/assets/75407186/c9a57dd3-faaa-4683-bcd9-8d337214a6ef">
+    <image width = 24%, src = "https://github.com/WhistleGlobal/whistle-iOS/assets/75407186/fb0d79ea-40ae-4454-a5b4-24b1b3f1b593">
+    <image width = 24%, src = "https://github.com/WhistleGlobal/whistle-iOS/assets/75407186/38f60b90-6b56-46b7-8736-cb28a04f2517">
+    <image width = 24%, src = "https://github.com/WhistleGlobal/whistle-iOS/assets/75407186/140ce31c-639f-4767-8cc4-10fbfeb3b274">
+</p>
