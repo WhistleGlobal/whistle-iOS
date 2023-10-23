@@ -29,7 +29,7 @@ struct AudioSheetView: View {
   var body: some View {
     VStack(alignment: .leading, spacing: 12) {
       subtitleText(text: "원본 사운드")
-      CustomSlider(
+      UniSlider(
         value: videoValue,
         in: 0 ... 1,
         onChanged: {

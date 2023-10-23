@@ -8,7 +8,7 @@
 import AVKit
 import SwiftUI
 
-struct EditablePlayerView: UIViewControllerRepresentable {
+struct EditablePlayer: UIViewControllerRepresentable {
   var player: AVPlayer
   let scale = 16 / 9
   typealias UIViewControllerType = AVPlayerViewController

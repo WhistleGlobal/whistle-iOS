@@ -21,7 +21,7 @@ struct ToolsSectionView: View {
 //      ScrollView(.horizontal, showsIndicators: false) {
       HStack(spacing: 20) {
         ForEach(ToolEnum.allCases, id: \.self) { tool in
-          ToolButtonView(
+          EditorToolButton(
             label: tool.title,
             image: tool.image,
             isChange: editorVM.currentVideo?.isAppliedTool(for: tool) ?? false)

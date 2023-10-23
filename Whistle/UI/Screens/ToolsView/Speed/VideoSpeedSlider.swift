@@ -19,7 +19,7 @@ struct VideoSpeedSlider: View {
       Text(String(format: "%.1fx", value))
         .fontSystem(fontDesignSystem: .subtitle2)
         .foregroundStyle(Color.White)
-      CustomSlider(
+      UniSlider(
         value: $value,
         in: rateRange,
         step: 0.1,

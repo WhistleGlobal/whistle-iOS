@@ -7,9 +7,9 @@
 
 import SwiftUI
 
-// MARK: - CustomSlider
+// MARK: - UniSlider
 
-struct CustomSlider<Value, Track, Thumb>: View
+struct UniSlider<Value, Track, Thumb>: View
   where Value: BinaryFloatingPoint, Value.Stride: BinaryFloatingPoint, Track: View, Thumb: View
 {
   // the value of the slider, inside `bounds`
@@ -165,7 +165,7 @@ struct CustomSlider<Value, Track, Thumb>: View
 
 struct CustomSlider_Previews: PreviewProvider {
   static var previews: some View {
-    CustomSlider(
+    UniSlider(
       value: .constant(10),
       in: 10 ... 255,
       step: 90,

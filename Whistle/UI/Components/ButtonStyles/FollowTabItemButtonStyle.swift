@@ -9,7 +9,7 @@ import SwiftUI
 
 // MARK: - FollowTabbarStyle
 
-struct FollowTabbarStyle: ButtonStyle {
+struct FollowTabItemButtonStyle: ButtonStyle {
   // MARK: Lifecycle
 
   init(followNum: Int, tab: String, selectedTab: Binding<profileTabStatus>) {

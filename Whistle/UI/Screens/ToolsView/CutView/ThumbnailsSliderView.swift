@@ -26,7 +26,7 @@ struct ThumbnailsSliderView: View {
       ZStack {
         thumbnailsImagesSection(proxy)
         if let video {
-          RangedSliderView(
+          DualSlider(
             editor: editorVM,
             player: videoPlayer,
             value: $rangeDuration,

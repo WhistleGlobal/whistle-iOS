@@ -8,7 +8,7 @@
 import Foundation
 import SwiftUI
 
-struct CustomBlurView: UIViewRepresentable {
+struct CustomBlurEffect: UIViewRepresentable {
   var effect: UIBlurEffect.Style
   var onChange: (UIVisualEffectView) -> Void
 

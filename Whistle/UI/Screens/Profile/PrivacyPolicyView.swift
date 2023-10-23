@@ -16,7 +16,7 @@ struct PrivacyPolicyView: View {
   @Environment(\.dismiss) var dismiss
 
   var body: some View {
-    NotionWebView(urlToLoad: "https://collabint.notion.site/05eda14c7579447094f88e2eb94a618f?pvs=4")
+    Notion(urlToLoad: "https://collabint.notion.site/05eda14c7579447094f88e2eb94a618f?pvs=4")
       .navigationTitle("개인정보 처리 방침")
       .navigationBarBackButtonHidden()
       .toolbar {

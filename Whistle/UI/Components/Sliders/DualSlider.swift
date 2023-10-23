@@ -1,5 +1,5 @@
 //
-//  RangeSliderView.swift
+//  DualSlider.swift
 //  Whistle
 //
 //  Created by 박상원 on 2023/09/11.
@@ -7,9 +7,9 @@
 
 import SwiftUI
 
-// MARK: - RangedSliderView
+// MARK: - DualSlider
 
-struct RangedSliderView: View {
+struct DualSlider: View {
   @ObservedObject var editorVM: EditorViewModel
   @ObservedObject var videoPlayer: VideoPlayerManager
   @State var originalValue: ClosedRange<Double> = 0 ... 15
@@ -223,17 +223,3 @@ struct RangedSliderView: View {
     originalValue = currentValue?.wrappedValue ?? originalValue
   }
 }
-
-//// MARK: - RangeSliderView_Previews
-//
-// struct RangeSliderView_Previews: PreviewProvider {
-//  static var previews: some View {
-//    RangedSliderView(
-//      value: .constant(16 ... 60),
-//      currentTime: .constant(1), bounds: 1 ... 100,
-//      onEndChange: {}
-//    )
-//    .frame(height: 60)
-//    .padding()
-//  }
-// }

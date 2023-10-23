@@ -81,7 +81,7 @@ struct ProfileView: View {
                 .opacity(0.01)
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
             }
-            .buttonStyle(ProfileTabItem(
+            .buttonStyle(MyFeedTabItemButtonStyle(
               systemName: "square.grid.2x2.fill",
               tab: profileTabCase.myVideo.rawValue,
               selectedTab: $tabSelection))
@@ -92,7 +92,7 @@ struct ProfileView: View {
                 .opacity(0.01)
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
             }
-            .buttonStyle(ProfileTabItem(
+            .buttonStyle(MyFeedTabItemButtonStyle(
               systemName: "bookmark.fill",
               tab: profileTabCase.bookmark.rawValue,
               selectedTab: $tabSelection))

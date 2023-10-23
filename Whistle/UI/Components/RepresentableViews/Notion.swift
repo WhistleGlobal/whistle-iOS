@@ -10,7 +10,7 @@ import SwiftUI
 import UIKit
 import WebKit
 
-struct NotionWebView: UIViewRepresentable {
+struct Notion: UIViewRepresentable {
   var urlToLoad: String
   func makeUIView(context _: Context) -> WKWebView {
     guard let url = URL(string: urlToLoad) else {
@@ -21,5 +21,5 @@ struct NotionWebView: UIViewRepresentable {
     return webview
   }
 
-  func updateUIView(_: WKWebView, context _: UIViewRepresentableContext<NotionWebView>) { }
+  func updateUIView(_: WKWebView, context _: UIViewRepresentableContext<Notion>) { }
 }

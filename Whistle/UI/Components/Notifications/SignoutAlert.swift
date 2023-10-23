@@ -1,32 +1,33 @@
 //
-//  DeleteAccountAlert.swift
+//  SignoutAlert.swift
 //  Whistle
 //
-//  Created by ChoiYujin on 9/18/23.
+//  Created by ChoiYujin on 9/14/23.
 //
 
 import SwiftUI
 
-// MARK: - DeleteAccountAlert
+// MARK: - SignoutAlert
 
-struct DeleteAccountAlert: View {
+struct SignoutAlert: View {
   let cancelAction: () -> Void
-  let deleteAction: () -> Void
+  let signOutAction: () -> Void
 
   var body: some View {
     VStack(spacing: 0) {
       Spacer()
       ZStack {
         VStack(spacing: 0) {
-          deleteAlertView()
+          signoutAlertView()
         }
-        RoundedRectangle(cornerRadius: 14)
-          .stroke(lineWidth: 1)
-          .foregroundStyle(LinearGradient.Border_Glass)
-          .frame(maxWidth: .infinity, maxHeight: .infinity)
-
+        .overlay {
+          RoundedRectangle(cornerRadius: 14)
+            .stroke(lineWidth: 1)
+            .foregroundStyle(
+              LinearGradient.Border_Glass)
+        }
         VStack(spacing: 0) {
-          Spacer().frame(height: 138)
+          Spacer().frame(height: 114)
           Rectangle()
             .frame(width: 270, height: 1)
             .foregroundStyle(LinearGradient.Border_Glass)
@@ -35,8 +36,6 @@ struct DeleteAccountAlert: View {
             .foregroundStyle(LinearGradient.Border_Glass)
         }
       }
-      .frame(width: 270, height: 182)
-
       Spacer()
     }
     .frame(maxWidth: .infinity)
@@ -44,14 +43,13 @@ struct DeleteAccountAlert: View {
   }
 }
 
-extension DeleteAccountAlert {
+extension SignoutAlert {
   @ViewBuilder
-  func glassMorphicCard(width: CGFloat, height: CGFloat) -> some View {
+  func glassMorphicAlert(width: CGFloat, height: CGFloat) -> some View {
     ZStack {
       RoundedRectangle(cornerRadius: 32, style: .continuous)
         .fill(Color.black.opacity(0.3))
-      CustomBlurView(effect: .systemUltraThinMaterialLight) { view in
-        // FIXME: - 피그마와 비슷하도록 값 고치기
+      CustomBlurEffect(effect: .systemUltraThinMaterialLight) { view in
         view.saturationAmount = 2.2
         view.gaussianBlurRadius = 36
       }
@@ -61,34 +59,29 @@ extension DeleteAccountAlert {
 
   @ViewBuilder
   func glassAlertTop() -> some View {
-    glassMorphicCard(width: 270, height: 138)
+    glassMorphicAlert(width: 270, height: 114)
       .cornerRadius(14, corners: [.topLeft, .topRight])
   }
 
   @ViewBuilder
   func glassAlertBottomRight() -> some View {
-    glassMorphicCard(width: 135, height: 45)
+    glassMorphicAlert(width: 135, height: 45)
       .cornerRadius(14, corners: [.bottomRight])
   }
 
   @ViewBuilder
   func glassAlertBottomLeft() -> some View {
-    glassMorphicCard(width: 135, height: 45)
+    glassMorphicAlert(width: 135, height: 45)
       .cornerRadius(14, corners: [.bottomLeft])
   }
 
   @ViewBuilder
-  func deleteAlertView() -> some View {
-    VStack(spacing: 16) {
-      Text("정말 삭제하시겠어요?")
-        .fontSystem(fontDesignSystem: .subtitle2_KO)
-        .foregroundColor(.LabelColor_Primary_Dark)
-      Text("삭제하시면 회원님의 모든 정보와 활동\n기록이 삭제됩니다. 삭제된 정보는\n복구할 수 없으니 신중하게 결정해주세요.")
-        .fontSystem(fontDesignSystem: .body2_KO)
-        .foregroundColor(.LabelColor_Secondary_Dark)
+  func signoutAlertView() -> some View {
+    VStack {
+      Text("정말 로그아웃하시겠어요?")
     }
-    .frame(width: 270, height: 138)
-    .multilineTextAlignment(.center)
+    .foregroundColor(.LabelColor_Primary_Dark)
+    .frame(width: 270, height: 114)
     .background(
       glassAlertTop())
     HStack(spacing: 0) {
@@ -103,19 +96,15 @@ extension DeleteAccountAlert {
           .foregroundColor(.Info)
       }
       Button {
-        deleteAction()
+        signOutAction()
       } label: {
         glassAlertBottomRight()
       }
       .overlay {
-        Text("변경")
+        Text("로그아웃")
           .fontSystem(fontDesignSystem: .subtitle2_KO)
           .foregroundColor(.Danger)
       }
     }
   }
 }
-
-// #Preview {
-//  DeleteAccountAlert(cancelAction: { }, deleteAction: { })
-// }

@@ -30,7 +30,7 @@ struct UserFollowView: View {
           tabStatus = .follower
         }
         .buttonStyle(
-          FollowTabbarStyle(
+          FollowTabItemButtonStyle(
             followNum: filteredFollower.count,
             tab: profileTabStatus.follower.rawValue,
             selectedTab: $tabStatus))
@@ -38,7 +38,7 @@ struct UserFollowView: View {
           tabStatus = .following
         }
         .buttonStyle(
-          FollowTabbarStyle(
+          FollowTabItemButtonStyle(
             followNum: filteredFollowing.count,
             tab: profileTabStatus.following.rawValue,
             selectedTab: $tabStatus))

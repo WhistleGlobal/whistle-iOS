@@ -66,8 +66,6 @@ class ExporterViewModel: ObservableObject {
           if action == .save {
             renderState = .saved
 //            saveVideoInLib(url)
-          } else {
-            showShareSheet(data: url)
           }
           resetTimer()
         default:
@@ -81,13 +79,6 @@ class ExporterViewModel: ObservableObject {
     timer?.invalidate()
     timer = nil
     progressTimer = .zero
-  }
-
-  private func showShareSheet(data: Any) {
-    DispatchQueue.main.async {
-      self.renderState = .unknown
-    }
-    UIActivityViewController(activityItems: [data], applicationActivities: nil).presentInKeyWindow()
   }
 
   private func saveVideoInLib(_ url: URL) {

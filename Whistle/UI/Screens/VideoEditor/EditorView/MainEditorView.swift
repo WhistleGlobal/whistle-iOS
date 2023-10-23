@@ -101,10 +101,6 @@ struct MainEditorView: View {
           setVideo()
         }
       }
-
-      if showVideoQualitySheet, let video = editorVM.currentVideo {
-        VideoExporterBottomSheetView(isPresented: $showVideoQualitySheet, video: video)
-      }
     }
     .background(Color.Background_Default_Dark)
     .ignoresSafeArea()

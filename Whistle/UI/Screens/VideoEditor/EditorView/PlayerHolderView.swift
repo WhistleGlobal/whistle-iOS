@@ -47,7 +47,7 @@ extension PlayerHolderView {
     Group {
       if let video = editorVM.currentVideo {
         ZStack {
-          EditablePlayerView(player: videoPlayer.videoPlayer)
+          EditablePlayer(player: videoPlayer.videoPlayer)
             .frame(width: UIScreen.getWidth(videoWidth), height: UIScreen.getHeight(videoWidth * videoScale))
             .cornerRadius(12)
             .hCenter()
@@ -117,35 +117,6 @@ extension PlayerHolderView {
       }
       .foregroundColor(.white)
       .padding(16)
-    }
-  }
-}
-
-// MARK: - PlayerControl
-
-struct PlayerControl: View {
-  @ObservedObject var editorVM: EditorViewModel
-  @ObservedObject var videoPlayer: VideoPlayerManager
-  var body: some View {
-    VStack(spacing: 6) {
-      timeLineControlSection
-    }
-  }
-
-  @ViewBuilder
-  private var timeLineControlSection: some View {
-    if let video = editorVM.currentVideo {
-      TimeLineView(
-        currentTime: $videoPlayer.currentTime,
-        isSelectedTrack: $editorVM.isSelectVideo,
-        viewState: editorVM.selectedTools?.timeState ?? .empty,
-        video: video)
-      {
-        videoPlayer.scrubState = .scrubEnded(videoPlayer.currentTime)
-      } onSetAudio: { audio in
-        editorVM.setAudio(audio)
-        videoPlayer.setAudio(audio.url)
-      }
     }
   }
 }

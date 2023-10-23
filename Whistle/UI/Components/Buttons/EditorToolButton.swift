@@ -7,17 +7,13 @@
 
 import SwiftUI
 
-// MARK: - ToolButtonView
+// MARK: - EditorToolButton
 
-struct ToolButtonView: View {
+struct EditorToolButton: View {
   let label: String
   let image: String
   let isChange: Bool
   let action: () -> Void
-
-  //  private var bgColor: Color {
-  ////    Color(isChange ? .systemGray5 : .systemGray6)
-  //  }
 
   var body: some View {
     Button {
@@ -50,8 +46,8 @@ struct ToolButtonView: View {
 struct ToolButtonView_Previews: PreviewProvider {
   static var previews: some View {
     VStack {
-      ToolButtonView(label: "Cut", image: "scissors", isChange: false) { }
-      ToolButtonView(label: "Cut", image: "scissors", isChange: true) { }
+      EditorToolButton(label: "Cut", image: "scissors", isChange: false) { }
+      EditorToolButton(label: "Cut", image: "scissors", isChange: true) { }
     }
     .frame(width: 100)
   }

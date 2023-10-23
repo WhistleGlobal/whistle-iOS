@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct ProfileTabItem: ButtonStyle {
+struct MyFeedTabItemButtonStyle: ButtonStyle {
   // MARK: Lifecycle
 
   init(systemName: String, tab: String, selectedTab: Binding<profileTabCase>) {

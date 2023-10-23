@@ -597,7 +597,7 @@ extension VideoContentView {
     ZStack {
       Capsule()
         .fill(Color.black.opacity(0.3))
-      CustomBlurView(effect: .systemUltraThinMaterialLight) { view in
+      CustomBlurEffect(effect: .systemUltraThinMaterialLight) { view in
         view.saturationAmount = 2.2
         view.gaussianBlurRadius = 32
       }
@@ -800,7 +800,7 @@ extension VideoContentView {
 
   @ViewBuilder
   func recordedVideoPreview(video: EditableVideo) -> some View {
-    EditablePlayerView(player: videoPlayer.videoPlayer)
+    EditablePlayer(player: videoPlayer.videoPlayer)
       .overlay(alignment: .bottom) {
         Rectangle()
           .frame(height: UIScreen.getHeight(2))

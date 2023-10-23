@@ -47,7 +47,7 @@ struct MusicTrimView: View {
         .ignoresSafeArea()
       ZStack(alignment: .center) {
         VStack {
-          EditablePlayerView(player: videoPlayer.videoPlayer)
+          EditablePlayer(player: videoPlayer.videoPlayer)
             .frame(height: UIScreen.getHeight(700))
             .overlay {
               VStack {

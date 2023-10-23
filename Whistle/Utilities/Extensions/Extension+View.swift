@@ -70,7 +70,7 @@ extension View {
       ZStack(alignment: .bottomTrailing) { // alignment 변경
         RoundedRectangle(cornerRadius: 32, style: .continuous)
           .fill(Color.black.opacity(0.3))
-        CustomBlurView(effect: .systemUltraThinMaterialLight) { view in
+        CustomBlurEffect(effect: .systemUltraThinMaterialLight) { view in
           view.saturationAmount = 2.2
           view.gaussianBlurRadius = 36
         }
@@ -94,7 +94,7 @@ extension View {
       Rectangle()
         .fill(Color.black.opacity(0.3))
         .cornerRadius(cornerRadius, corners: .allCorners)
-      CustomBlurView(effect: .systemUltraThinMaterialLight) { view in
+      CustomBlurEffect(effect: .systemUltraThinMaterialLight) { view in
         // FIXME: - 피그마와 비슷하도록 값 고치기
         view.saturationAmount = 2.2
         view.gaussianBlurRadius = 32
@@ -112,7 +112,7 @@ extension View {
 //        .fill(Color.Gray30_Light.opacity(0.24))
         .fill(Color.black.opacity(0.3))
         .cornerRadius(cornerRadius, corners: .allCorners)
-      CustomBlurView(effect: .systemUltraThinMaterialLight) { view in
+      CustomBlurEffect(effect: .systemUltraThinMaterialLight) { view in
         // FIXME: - 피그마와 비슷하도록 값 고치기
         view.saturationAmount = 2.2
         view.gaussianBlurRadius = 32
@@ -140,7 +140,7 @@ extension View {
     ZStack {
       RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
         .fill(Color.black.opacity(0.3))
-      CustomBlurView(effect: .systemUltraThinMaterialLight) { view in
+      CustomBlurEffect(effect: .systemUltraThinMaterialLight) { view in
         // FIXME: - 피그마와 비슷하도록 값 고치기
         view.saturationAmount = 2.2
         view.gaussianBlurRadius = 36
@@ -175,7 +175,7 @@ extension View {
     ZStack {
       Circle()
         .fill(Color.black.opacity(0.3))
-      CustomBlurView(effect: .systemUltraThinMaterialLight) { view in
+      CustomBlurEffect(effect: .systemUltraThinMaterialLight) { view in
         // FIXME: - 피그마와 비슷하도록 값 고치기
         view.saturationAmount = 2.2
         view.gaussianBlurRadius = 36
