@@ -31,7 +31,7 @@ struct ProfileEditIDView: View {
   @Binding var showToast: Bool
   @State var originalUsername = ""
   @StateObject private var tabbarModel = TabbarModel.shared
-  @EnvironmentObject var apiViewModel: APIViewModel
+  @StateObject var apiViewModel = APIViewModel.shared
 
   var body: some View {
     VStack(spacing: 0) {
