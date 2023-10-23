@@ -22,13 +22,13 @@ struct MusicTrimView: View {
   @ObservedObject var editorVM: VideoEditorViewModel
   @ObservedObject var videoPlayer: VideoPlayerManager
 
-  @Binding var showMusicTrimView: Bool
   @State private var audioURL: URL?
-  @State private var startTime: TimeInterval = 0
-  @State private var endTime: TimeInterval = 0
-  @State private var isPlaying = false
   @State private var trimmedAudioURL: URL?
   @State private var player: AVPlayer?
+  @State private var isPlaying = false
+  @State private var startTime: TimeInterval = 0
+  @State private var endTime: TimeInterval = 0
+
   @State var offset: CGFloat = 0
   @State var isAnimated = false
   @State var isScrolling = false
@@ -38,6 +38,7 @@ struct MusicTrimView: View {
   @State var accumulatedOffset: Double = 0
   @State var musicDuration: Double = 80
   @State var indicatorOffset: Double = 0
+  @Binding var showMusicTrimView: Bool
 
   // MARK: Internal
 

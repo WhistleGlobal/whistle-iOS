@@ -10,9 +10,10 @@ import SwiftUI
 // MARK: - CircularProgressBar
 
 struct CircularProgressBar: View {
+  @State private var animatedProgress = 0.0 // 애니메이션에 사용할 상태 변수
+
   var progress: Double
   var width = 1.5
-  @State private var animatedProgress = 0.0 // 애니메이션에 사용할 상태 변수
 
   var body: some View {
     GeometryReader { geometry in

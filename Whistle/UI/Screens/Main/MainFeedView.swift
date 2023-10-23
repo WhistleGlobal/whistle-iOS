@@ -262,13 +262,12 @@ struct MainFeedView: View {
                 .foregroundColor(Color.LabelColor_Primary_Dark)
                 .frame(width: UIScreen.width - 32, height: 56)
                 .background {
-                  glassMorphicView(width: UIScreen.width - 32, height: 56, cornerRadius: 12)
+                  glassMorphicView(cornerRadius: 12)
                     .overlay {
                       RoundedRectangle(cornerRadius: 12)
                         .stroke(lineWidth: 1)
                         .foregroundStyle(
                           LinearGradient.Border_Glass)
-                        .frame(maxWidth: .infinity, maxHeight: .infinity)
                     }
                 }
             }

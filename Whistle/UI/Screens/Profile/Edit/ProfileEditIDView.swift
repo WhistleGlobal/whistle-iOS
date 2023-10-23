@@ -64,9 +64,15 @@ struct ProfileEditIDView: View {
     .padding(.horizontal, 16)
     .navigationBarBackButtonHidden()
     .overlay {
-      ProfileAlert(cancelAction: {
+      AlertPopup(
+        alertStyle: .linear,
+        title: "정말 사용자 ID를\n 변경하시겠습니까?",
+        content: "14일마다 한 번씩 사용자 ID를\n 변경할 수 있습니다.",
+        cancelText: "취소",
+        destructiveText: "변경")
+      {
         isAlertActive = false
-      }, updateAction: {
+      } destructiveAction: {
         Task {
           let updateStatus = await apiViewModel.updateMyProfile()
           if updateStatus == .valid {
@@ -78,7 +84,7 @@ struct ProfileEditIDView: View {
             originalUsername = apiViewModel.myProfile.userName
           }
         }
-      })
+      }
       .opacity(isAlertActive ? 1 : 0)
     }
     .toolbar {

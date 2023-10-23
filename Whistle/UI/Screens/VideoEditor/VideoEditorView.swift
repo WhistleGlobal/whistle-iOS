@@ -16,19 +16,21 @@ import SwiftUI
 struct VideoEditorView: View {
   @Environment(\.scenePhase) private var scenePhase
   @Environment(\.dismiss) private var dismiss
-  var project: ProjectEntity?
-  var selectedVideoURL: URL?
-  @State var isInitial = true
-  @State var showVideoQualitySheet = false
-  @State var showMusicTrimView = false
-  @State var bottomSheetTitle = ""
-  @State var bottomSheetPosition: BottomSheetPosition = .hidden
-  @State var sheetPositions: [BottomSheetPosition] = [.hidden, .dynamic]
-  @State var goUpload = false
-  @State var showAlert = false
   @StateObject var musicVM = MusicViewModel()
   @StateObject var editorVM = VideoEditorViewModel()
   @StateObject var videoPlayer = VideoPlayerManager()
+
+  @State var isInitial = true
+  @State var goUpload = false
+  @State var showAlert = false
+  @State var showMusicTrimView = false
+  @State var showVideoQualitySheet = false
+  @State var bottomSheetTitle = ""
+  @State var bottomSheetPosition: BottomSheetPosition = .hidden
+  @State var sheetPositions: [BottomSheetPosition] = [.hidden, .dynamic]
+
+  var project: ProjectEntity?
+  var selectedVideoURL: URL?
 
   var body: some View {
     ZStack {
@@ -59,8 +61,7 @@ struct VideoEditorView: View {
         if let video = editorVM.currentVideo {
           NavigationLink(
             destination: DescriptionAndTagEditorView(
-              video: video,
-              editorVM: editorVM,
+              video: video, editorVM: editorVM,
               videoPlayer: videoPlayer,
               musicVM: musicVM,
               isInitial: $isInitial),
@@ -218,7 +219,7 @@ struct VideoEditorView: View {
     .enableSwipeToDismiss()
     .enableTapToDismiss()
     .customBackground(
-      glassMorphicView(width: UIScreen.width, height: .infinity, cornerRadius: 24)
+      glassMorphicView(cornerRadius: 24)
         .overlay(RoundedRectangle(cornerRadius: 24).strokeBorder(LinearGradient.Border_Glass)))
     .showDragIndicator(true)
     .dragIndicatorColor(Color.Border_Default_Dark)

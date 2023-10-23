@@ -87,29 +87,26 @@ extension View {
     }
   }
 
-  @ViewBuilder
-  func glassMorphicView(width: CGFloat, height: CGFloat, cornerRadius: CGFloat) -> some View {
-    ZStack {
-//      RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
-      Rectangle()
-        .fill(Color.black.opacity(0.3))
-        .cornerRadius(cornerRadius, corners: .allCorners)
-      CustomBlurEffect(effect: .systemUltraThinMaterialLight) { view in
-        // FIXME: - 피그마와 비슷하도록 값 고치기
-        view.saturationAmount = 2.2
-        view.gaussianBlurRadius = 32
-      }
-//      .cornerRadius(cornerRadius, corners: [.topLeft, .topRight])
-      .clipShape(RoundedRectangle(cornerRadius: cornerRadius, style: .continuous))
-    }
-    .frame(width: width, height: height)
-  }
+//  @ViewBuilder
+//  func glassMorphicView(width: CGFloat, height: CGFloat, cornerRadius: CGFloat) -> some View {
+//    ZStack {
+//      Rectangle()
+//        .fill(Color.black.opacity(0.3))
+//        .cornerRadius(cornerRadius, corners: .allCorners)
+//      CustomBlurEffect(effect: .systemUltraThinMaterialLight) { view in
+//        // FIXME: - 피그마와 비슷하도록 값 고치기
+//        view.saturationAmount = 2.2
+//        view.gaussianBlurRadius = 32
+//      }
+//      .clipShape(RoundedRectangle(cornerRadius: cornerRadius, style: .continuous))
+//    }
+//    .frame(width: width, height: height)
+//  }
 
   @ViewBuilder
   func glassMorphicView(cornerRadius: CGFloat) -> some View {
     ZStack {
       Rectangle()
-//        .fill(Color.Gray30_Light.opacity(0.24))
         .fill(Color.black.opacity(0.3))
         .cornerRadius(cornerRadius, corners: .allCorners)
       CustomBlurEffect(effect: .systemUltraThinMaterialLight) { view in
@@ -122,14 +119,13 @@ extension View {
   }
 
   @ViewBuilder
-  func glassProfile(width: CGFloat, height: CGFloat, cornerRadius: CGFloat, overlayed: some View) -> some View {
-    glassMorphicView(width: width, height: height, cornerRadius: cornerRadius)
+  func glassProfile(cornerRadius: CGFloat, overlayed: some View) -> some View {
+    glassMorphicView(cornerRadius: cornerRadius)
       .overlay {
         RoundedRectangle(cornerRadius: cornerRadius)
           .stroke(lineWidth: 1)
           .foregroundStyle(
             LinearGradient.Border_Glass)
-          .frame(width: width, height: height)
         overlayed
       }
   }

@@ -12,7 +12,6 @@ import SwiftUI
 // MARK: - DescriptionAndTagEditorView
 
 struct DescriptionAndTagEditorView: View {
-  let video: EditableVideo
   @Environment(\.dismiss) private var dismiss
   @StateObject var tagsViewModel = TagsViewModel()
   @StateObject var apiViewModel = APIViewModel.shared
@@ -21,12 +20,15 @@ struct DescriptionAndTagEditorView: View {
   @ObservedObject var videoPlayer: VideoPlayerManager
   @ObservedObject var musicVM: MusicViewModel
   @FocusState private var isFocused: Bool
+
   @State var content = ""
   @State var sheetPosition: BottomSheetPosition = .hidden
   @State var showTagCountMax = false
   @State var showTagTextCountMax = false
   @State private var inputText = "\u{200B}"
   @Binding var isInitial: Bool
+
+  let video: EditableVideo
   let videoScale: CGFloat = 16 / 9
   let videoWidth: CGFloat = 203
   let textLimit = 40

@@ -56,10 +56,11 @@ struct MemberProfileView: View {
       VStack {
         Spacer().frame(height: topSpacerHeight)
         glassProfile(
-          width: .infinity,
-          height: 418 + (240 * progress) + profileHeightLast,
+          //          width: .infinity,
+//          height: 418 + (240 * progress) + profileHeightLast,
           cornerRadius: profileCornerRadius,
           overlayed: profileInfo())
+          .frame(height: 418 + (240 * progress) + profileHeightLast)
           .padding(.horizontal, profileHorizontalPadding)
           .zIndex(1)
           .padding(.bottom, 12)

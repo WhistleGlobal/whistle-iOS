@@ -24,11 +24,11 @@ enum DownloadStatus {
 // MARK: - MusicListView
 
 struct MusicListView: View {
+  @StateObject var apiViewModel = APIViewModel.shared
   @ObservedObject var musicVM: MusicViewModel
   @ObservedObject var editorVM: VideoEditorViewModel
   @ObservedObject var videoPlayer: VideoPlayerManager
-  @Binding var bottomSheetPosition: BottomSheetPosition
-  @Binding var showMusicTrimView: Bool
+
   @State var searchQueryString = ""
   @State var isSearching = false
   @State var musicList: [Music] = []
@@ -50,7 +50,9 @@ struct MusicListView: View {
     }
   }
 
-  let tapSearchBar: (() -> Void)?
+  @Binding var bottomSheetPosition: BottomSheetPosition
+  @Binding var showMusicTrimView: Bool
+
   var filteredMusicList: [Music] {
     if searchQueryString.isEmpty {
       return musicList
@@ -59,7 +61,7 @@ struct MusicListView: View {
     }
   }
 
-  @StateObject var apiViewModel = APIViewModel.shared
+  let tapSearchBar: (() -> Void)?
 
   var body: some View {
     VStack {

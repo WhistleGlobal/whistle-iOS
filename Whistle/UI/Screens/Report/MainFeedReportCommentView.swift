@@ -54,9 +54,9 @@ struct MainFeedReportCommentView: View {
     }
     .overlay {
       if showAlert {
-        ReportAlert {
+        AlertPopup(alertStyle: .linear, title: "정말 신고하시겠습니까?", cancelText: "취소", destructiveText: "신고") {
           showAlert = false
-        } reportAction: {
+        } destructiveAction: {
           Task {
             let reportSuccess = await apiViewModel.reportContent(
               userID: uesrId,

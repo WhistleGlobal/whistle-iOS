@@ -20,19 +20,17 @@ struct VideoCaptureView: View {
 
   @Environment(\.dismiss) var dismiss
   @Environment(\.scenePhase) var scenePhase
-  @ObservedObject private var viewModel = VideoCaptureViewModel()
   @StateObject var editorVM = VideoEditorViewModel()
   @StateObject var videoPlayer = VideoPlayerManager()
   @StateObject var musicVM = MusicViewModel()
   @StateObject var apiViewModel = APIViewModel.shared
   @StateObject private var tabbarModel = TabbarModel.shared
+  @ObservedObject private var viewModel = VideoCaptureViewModel()
 
-  @State var authorizationStatus = PHPhotoLibrary.authorizationStatus(for: .readWrite)
-  @State var isAlbumAuthorized = false
-  @State var showAlbumAccessView = false
 
   // MARK: - Datas
 
+  @State var authorizationStatus = PHPhotoLibrary.authorizationStatus(for: .readWrite)
   @State var isImagePickerClosed = PassthroughSubject<Bool, Never>()
   @State private var buttonState: CameraButtonState = .idle
   @State var captureMode: AssetType = .video
@@ -50,6 +48,8 @@ struct VideoCaptureView: View {
 
   // MARK: - Bools
 
+  @State var isAlbumAuthorized = false
+  @State var showAlbumAccessView = false
   @State var disableUploadButton = false
   @State var isRecording = false
   @State var isFront = false
@@ -230,13 +230,12 @@ struct VideoCaptureView: View {
     .enableAppleScrollBehavior(false)
     .dragIndicatorColor(Color.Border_Default_Dark)
     .customBackground(
-      glassMorphicView(width: UIScreen.width, height: .infinity, cornerRadius: 24)
+      glassMorphicView(cornerRadius: 24)
         .overlay {
           RoundedRectangle(cornerRadius: 24)
             .stroke(lineWidth: 1)
             .foregroundStyle(
               LinearGradient.Border_Glass)
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
         })
   }
 }

@@ -64,10 +64,9 @@ struct MyProfileView: View {
         VStack(spacing: 0) {
           Spacer().frame(height: topSpacerHeight)
           glassProfile(
-            width: .infinity,
-            height: 418 + (240 * progress),
             cornerRadius: profileCornerRadius,
             overlayed: profileInfo())
+            .frame(height: 418 + (240 * progress))
             .padding(.bottom, 12)
         }
         .padding(.horizontal, profileHorizontalPadding)
@@ -117,7 +116,7 @@ struct MyProfileView: View {
                   MyFeedView(currentIndex: index)
                 } label: {
                   videoThumbnailView(
-                    thumbnailUrl: content.thumbnailUrl ?? "",
+                    thumbnailURL: content.thumbnailUrl ?? "",
                     viewCount: content.contentViewCount ?? 0)
                 }
               }
@@ -142,11 +141,10 @@ struct MyProfileView: View {
               GridItem(.flexible()),
             ], spacing: 20) {
               ForEach(Array(apiViewModel.bookmark.enumerated()), id: \.element) { index, content in
-
                 NavigationLink {
                   BookmarkedFeedView(currentIndex: index)
                 } label: {
-                  videoThumbnailView(thumbnailUrl: content.thumbnailUrl, viewCount: content.viewCount)
+                  videoThumbnailView(thumbnailURL: content.thumbnailUrl, viewCount: content.viewCount)
                 }
               }
             }
@@ -175,9 +173,9 @@ struct MyProfileView: View {
     }
     .overlay {
       if showSignoutAlert {
-        SignoutAlert {
+        AlertPopup(alertStyle: .linear, title: "정말 로그아웃하시겠어요?", cancelText: "취소", destructiveText: "로그아웃") {
           showSignoutAlert = false
-        } signOutAction: {
+        } destructiveAction: {
           apiViewModel.reset()
           GIDSignIn.sharedInstance.signOut()
           userAuth.appleSignout()
@@ -185,9 +183,15 @@ struct MyProfileView: View {
         }
       }
       if showDeleteAlert {
-        DeleteAccountAlert {
+        AlertPopup(
+          alertStyle: .linear,
+          title: "정말 삭제하시겠어요?",
+          content: "삭제하시면 회원님의 모든 정보와 활동 기록이 삭제됩니다. 삭제된 정보는 복구할 수 없으니 신중하게 결정해주세요.",
+          cancelText: "취소",
+          destructiveText: "삭제")
+        {
           showDeleteAlert = false
-        } deleteAction: {
+        } destructiveAction: {
           Task {
             apiViewModel.myProfile.userName.removeAll()
             await apiViewModel.rebokeAppleToken()
@@ -284,7 +288,7 @@ struct MyProfileView: View {
     .enableAppleScrollBehavior(false)
     .dragIndicatorColor(Color.Border_Default_Dark)
     .customBackground(
-      glassMorphicView(width: UIScreen.width, height: .infinity, cornerRadius: 24)
+      glassMorphicView(cornerRadius: 24)
         .overlay {
           RoundedRectangle(cornerRadius: 24)
             .stroke(lineWidth: 1)
@@ -401,9 +405,9 @@ extension MyProfileView {
   }
 
   @ViewBuilder
-  func videoThumbnailView(thumbnailUrl: String, viewCount: Int) -> some View {
+  func videoThumbnailView(thumbnailURL: String, viewCount: Int) -> some View {
     Color.black.overlay {
-      KFImage.url(URL(string: thumbnailUrl))
+      KFImage.url(URL(string: thumbnailURL))
         .placeholder {
           Color.black
         }

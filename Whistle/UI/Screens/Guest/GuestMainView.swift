@@ -125,14 +125,14 @@ struct GuestMainView: View {
               Text("닫기")
                 .fontSystem(fontDesignSystem: .subtitle2_KO)
                 .foregroundColor(Color.LabelColor_Primary_Dark)
+                .frame(width: UIScreen.width - 32, height: 56)
                 .background {
-                  glassMorphicView(width: UIScreen.width - 32, height: 56, cornerRadius: 12)
+                  glassMorphicView(cornerRadius: 12)
                     .overlay {
                       RoundedRectangle(cornerRadius: 12)
                         .stroke(lineWidth: 1)
                         .foregroundStyle(
                           LinearGradient.Border_Glass)
-                        .frame(maxWidth: .infinity, maxHeight: .infinity)
                     }
                 }
             }
@@ -278,13 +278,12 @@ struct GuestMainView: View {
     .enableAppleScrollBehavior(false)
     .dragIndicatorColor(Color.Border_Default_Dark)
     .customBackground(
-      glassMorphicView(width: UIScreen.width, height: .infinity, cornerRadius: 24)
+      glassMorphicView(cornerRadius: 24)
         .overlay {
           RoundedRectangle(cornerRadius: 24)
             .stroke(lineWidth: 1)
             .foregroundStyle(
               LinearGradient.Border_Glass)
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
         })
     .onDismiss {
       tabbarModel.tabbarOpacity = 1.0

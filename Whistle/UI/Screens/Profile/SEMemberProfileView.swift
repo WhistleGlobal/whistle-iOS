@@ -49,10 +49,9 @@ struct SEMemberProfileView: View {
       VStack {
         Spacer().frame(height: topSpacerHeight)
         glassProfile(
-          width: .infinity,
-          height: 278 + (146 * progress) + profileHeightLast,
           cornerRadius: profileCornerRadius,
           overlayed: profileInfo())
+          .frame(height: 278 + (146 * progress) + profileHeightLast)
           .padding(.bottom, 8)
           .padding(.horizontal, profileHorizontalPadding)
           .zIndex(1)

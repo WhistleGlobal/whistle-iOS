@@ -12,13 +12,15 @@ import SwiftUI
 // MARK: - TagsContent
 
 struct TagsContent<Overlay>: View where Overlay: View {
-  private let zwsp = "\u{200B}"
   @ObservedObject var viewModel = TagsViewModel()
   @FocusState private var isFocused: Bool
+
   @Binding var inputText: String
   @Binding var sheetPosition: BottomSheetPosition
   @Binding var showTagCountMax: Bool
   @Binding var showTagTextCountMax: Bool
+
+  private let zwsp = "\u{200B}"
   let overlayContent: () -> Overlay
 
   var body: some View {

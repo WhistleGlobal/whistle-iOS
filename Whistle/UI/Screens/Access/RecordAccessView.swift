@@ -69,14 +69,15 @@ struct RecordAccessView: View {
           requestMicrophonePermission()
           showAuthAlert()
         } label: {
-          glassMorphicView(width: UIScreen.width - 32, height: 56, cornerRadius: 12)
-            .overlay {
+          Text("계속")
+            .fontSystem(fontDesignSystem: .subtitle2_KO)
+            .foregroundColor(.LabelColor_Primary_Dark)
+            .frame(width: UIScreen.width - 32, height: 56)
+            .background {
+              glassMorphicView(cornerRadius: 12)
               RoundedRectangle(cornerRadius: 12)
                 .stroke(lineWidth: 1)
                 .foregroundStyle(LinearGradient.Border_Glass)
-              Text("계속")
-                .fontSystem(fontDesignSystem: .subtitle2_KO)
-                .foregroundColor(.LabelColor_Primary_Dark)
             }
         }
       }

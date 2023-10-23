@@ -83,7 +83,7 @@ struct AlertPopup: View {
           Text(title)
             .fontSystem(fontDesignSystem: .subtitle2_KO)
             .foregroundStyle(Color.LabelColor_Primary_Dark)
-            .padding(.bottom, UIScreen.getHeight(8))
+            .padding(.bottom, content != nil ? UIScreen.getHeight(8) : UIScreen.getHeight(20))
             .padding(.horizontal, UIScreen.getWidth(16))
             .multilineTextAlignment(.center)
         }

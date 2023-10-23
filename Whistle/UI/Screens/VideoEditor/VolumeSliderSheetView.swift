@@ -10,13 +10,13 @@ import SwiftUI
 // MARK: - VolumeSliderSheetView
 
 struct VolumeSliderSheetView: View {
-  @State private var videoVolume: Float = 1.0
-  @State private var audioVolume: Float = 1.0
   @ObservedObject var videoPlayer: VideoPlayerManager
   @ObservedObject var editorVM: VideoEditorViewModel
   @ObservedObject var musicVM: MusicViewModel
 
-  let tapDismiss: (() -> Void)?
+  @State private var videoVolume: Float = 1.0
+  @State private var audioVolume: Float = 1.0
+
   var videoValue: Binding<Float> {
 //    editorVM.isSelectVideo ? $videoVolume : $audioVolume
     $videoVolume
@@ -25,6 +25,8 @@ struct VolumeSliderSheetView: View {
   var audioValue: Binding<Float> {
     $audioVolume
   }
+
+  let tapDismiss: (() -> Void)?
 
   var body: some View {
     VStack(alignment: .leading, spacing: 12) {

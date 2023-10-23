@@ -38,10 +38,10 @@ struct GuestProfileView: View {
       VStack(spacing: 0) {
         Spacer().frame(height: 64)
         glassProfile(
-          width: UIScreen.width - 32,
-          height: 340,
           cornerRadius: 32,
           overlayed: overlayedView())
+          .frame(height: 340)
+          .padding(.horizontal, 16)
           .padding(.bottom, 12)
         Spacer()
       }
@@ -187,13 +187,12 @@ struct GuestProfileView: View {
     .enableAppleScrollBehavior(false)
     .dragIndicatorColor(Color.Border_Default_Dark)
     .customBackground(
-      glassMorphicView(width: UIScreen.width, height: .infinity, cornerRadius: 24)
+      glassMorphicView(cornerRadius: 24)
         .overlay {
           RoundedRectangle(cornerRadius: 24)
             .stroke(lineWidth: 1)
             .foregroundStyle(
               LinearGradient.Border_Glass)
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
         })
     .onDismiss {
       tabbarModel.tabbarOpacity = 1.0
