@@ -174,10 +174,10 @@ extension SEMemberProfileView {
         Task {
           if isFollow {
             isFollow.toggle()
-            await apiViewModel.unfollowUser(userID: userId)
+            await apiViewModel.followAction(userID: userId, method: .delete)
           } else {
             isFollow.toggle()
-            await apiViewModel.followUser(userID: userId)
+            await apiViewModel.followAction(userID: userId, method: .post)
           }
         }
       }

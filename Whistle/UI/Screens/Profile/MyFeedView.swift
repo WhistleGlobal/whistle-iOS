@@ -300,11 +300,11 @@ extension MyFeedView {
             Task {
               if isWhistled.wrappedValue {
                 guard let contentId else { return }
-                await apiViewModel.actionWhistleCancel(contentID: contentId)
+                await apiViewModel.whistleAction(contentID: contentId, method: .delete)
                 whistleCount.wrappedValue -= 1
               } else {
                 guard let contentId else { return }
-                await apiViewModel.actionWhistle(contentID: contentId)
+                await apiViewModel.whistleAction(contentID: contentId, method: .post)
                 whistleCount.wrappedValue += 1
               }
               isWhistled.wrappedValue.toggle()
@@ -362,14 +362,14 @@ extension MyFeedView {
     if apiViewModel.myFeed[currentIndex].isWhistled == 1 {
       timer = Timer.scheduledTimer(withTimeInterval: 2, repeats: false) { _ in
         Task {
-          await apiViewModel.actionWhistleCancel(contentID: apiViewModel.myFeed[currentIndex].contentId ?? 0)
+          await apiViewModel.whistleAction(contentID: apiViewModel.myFeed[currentIndex].contentId ?? 0, method: .delete)
         }
       }
       apiViewModel.myFeed[currentIndex].contentWhistleCount? -= 1
     } else {
       timer = Timer.scheduledTimer(withTimeInterval: 2, repeats: false) { _ in
         Task {
-          await apiViewModel.actionWhistle(contentID: apiViewModel.myFeed[currentIndex].contentId ?? 0)
+          await apiViewModel.whistleAction(contentID: apiViewModel.myFeed[currentIndex].contentId ?? 0, method: .post)
         }
       }
       apiViewModel.myFeed[currentIndex].contentWhistleCount! += 1

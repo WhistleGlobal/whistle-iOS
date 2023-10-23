@@ -17,10 +17,7 @@ protocol ProfileProtocol {
   func requestMemberFollow(userID: Int) async
   func isAvailableUsername() async -> Bool
   func deleteProfileImage() async
-  // FIXME: - 차단: blockAction, 팔로우: followAction
-  func followUser(userID: Int) async
-  func unfollowUser(userID: Int) async
+  func followAction(userID: Int, method: HTTPMethod) async
   func rebokeAppleToken() async
-  func actionBlockUser(userID: Int) async
-  func actionBlockUserCancel(userID: Int) async
+  func blockAction(userID: Int, method: HTTPMethod) async
 }

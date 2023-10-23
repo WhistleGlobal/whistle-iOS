@@ -294,12 +294,12 @@ struct MemberFeedView: View {
           guard let currentVideocontentId = apiViewModel.memberFeed[currentIndex].contentId else { return }
           if apiViewModel.memberFeed[currentIndex].isBookmarked == 1 {
             showBookmarkToast.1 = "저장 취소 했습니다."
-            showBookmarkToast.0 = await apiViewModel.actionBookmarkCancel(contentID: currentVideocontentId)
+            showBookmarkToast.0 = await apiViewModel.bookmarkAction(contentID: currentVideocontentId, method: .delete)
             apiViewModel.memberFeed[currentIndex].isBookmarked = 0
             currentVideoIsBookmarked = false
           } else {
             showBookmarkToast.1 = "저장했습니다."
-            showBookmarkToast.0 = await apiViewModel.actionBookmark(contentID: currentVideocontentId)
+            showBookmarkToast.0 = await apiViewModel.bookmarkAction(contentID: currentVideocontentId, method: .post)
             apiViewModel.memberFeed[currentIndex].isBookmarked = 1
             currentVideoIsBookmarked = true
           }
@@ -376,11 +376,11 @@ extension MemberFeedView {
               Button {
                 Task {
                   if apiViewModel.memberProfile.isFollowed == 1 {
-                    await apiViewModel.unfollowUser(userID: apiViewModel.memberProfile.userId)
+                    await apiViewModel.followAction(userID: apiViewModel.memberProfile.userId, method: .delete)
                     apiViewModel.memberProfile.isFollowed = 0
                     showFollowToast = (true, "\(userName)님을 팔로우 취소함")
                   } else {
-                    await apiViewModel.followUser(userID: apiViewModel.memberProfile.userId)
+                    await apiViewModel.followAction(userID: apiViewModel.memberProfile.userId, method: .post)
                     showFollowToast = (true, "\(userName)님을 팔로우 중")
                     apiViewModel.memberProfile.isFollowed = 1
                   }
@@ -483,14 +483,14 @@ extension MemberFeedView {
     if apiViewModel.memberFeed[currentIndex].isWhistled! == 1 {
       timer = Timer.scheduledTimer(withTimeInterval: 2, repeats: false) { _ in
         Task {
-          await apiViewModel.actionWhistleCancel(contentID: contentId)
+          await apiViewModel.whistleAction(contentID: contentId, method: .delete)
         }
       }
       apiViewModel.memberFeed[currentIndex].contentWhistleCount! -= 1
     } else {
       timer = Timer.scheduledTimer(withTimeInterval: 2, repeats: false) { _ in
         Task {
-          await apiViewModel.actionWhistle(contentID: contentId)
+          await apiViewModel.whistleAction(contentID: contentId, method: .post)
         }
       }
       apiViewModel.memberFeed[currentIndex].contentWhistleCount! += 1

@@ -178,11 +178,11 @@ extension APIViewModel: PostFeedProtocol {
     }
   }
 
-  func actionBookmark(contentID: Int) async -> Bool {
+  func bookmarkAction(contentID: Int, method: HTTPMethod) async -> Bool {
     await withCheckedContinuation { continuation in
       AF.request(
         "\(domainURL)/action/\(contentID)/bookmark",
-        method: .post,
+        method: method,
         headers: contentTypeXwwwForm)
         .validate(statusCode: 200 ... 300)
         .response { response in
@@ -197,49 +197,11 @@ extension APIViewModel: PostFeedProtocol {
     }
   }
 
-  func actionBookmarkCancel(contentID: Int) async -> Bool {
-    await withCheckedContinuation { continuation in
-      AF.request(
-        "\(domainURL)/action/\(contentID)/bookmark",
-        method: .delete,
-        headers: contentTypeXwwwForm)
-        .validate(statusCode: 200 ... 300)
-        .response { response in
-          switch response.result {
-          case .success:
-            continuation.resume(returning: true)
-          case .failure(let error):
-            log(error)
-            continuation.resume(returning: false)
-          }
-        }
-    }
-  }
-
-  func actionWhistle(contentID: Int) async {
+  func whistleAction(contentID: Int, method: HTTPMethod) async {
     await withCheckedContinuation { continuation in
       AF.request(
         "\(domainURL)/action/\(contentID)/whistle",
-        method: .post,
-        headers: contentTypeXwwwForm)
-        .validate(statusCode: 200 ... 300)
-        .response { response in
-          switch response.result {
-          case .success:
-            continuation.resume()
-          case .failure(let error):
-            log(error)
-            continuation.resume()
-          }
-        }
-    }
-  }
-
-  func actionWhistleCancel(contentID: Int) async {
-    await withCheckedContinuation { continuation in
-      AF.request(
-        "\(domainURL)/action/\(contentID)/whistle",
-        method: .delete,
+        method: method,
         headers: contentTypeXwwwForm)
         .validate(statusCode: 200 ... 300)
         .response { response in

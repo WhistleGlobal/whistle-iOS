@@ -5,6 +5,7 @@
 //  Created by ChoiYujin on 9/8/23.
 //
 
+import Alamofire
 import Foundation
 import UIKit
 
@@ -16,11 +17,8 @@ protocol PostFeedProtocol {
   func requestReportedFeed() async
   // TODO: - MainView 정리 시 함께 정리
   func postFeedPlayerChanged()
-  // FIXME: - 하나로 통합
-  func actionBookmark(contentID: Int) async -> Bool
-  func actionBookmarkCancel(contentID: Int) async -> Bool
-  func actionWhistle(contentID: Int) async
-  func actionWhistleCancel(contentID: Int) async
+  func bookmarkAction(contentID: Int, method: HTTPMethod) async -> Bool
+  func whistleAction(contentID: Int, method: HTTPMethod) async
   func actionContentHate(contentID: Int) async
   func deleteContent(contentID: Int) async
   func reportContent(userID: Int, contentID: Int, reportReason: Int, reportDescription: String) async -> Int

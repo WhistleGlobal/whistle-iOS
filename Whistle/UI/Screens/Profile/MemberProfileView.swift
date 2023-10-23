@@ -190,7 +190,7 @@ struct MemberProfileView: View {
           }, destructiveAction: {
             showUnblockAlert = false
             Task {
-              await apiViewModel.actionBlockUserCancel(userID: userId)
+              await apiViewModel.blockAction(userID: userId, method: .delete)
               BlockList.shared.userIds.append(userId)
               BlockList.shared.userIds = BlockList.shared.userIds.filter { $0 != userId }
               Task {
@@ -214,7 +214,7 @@ struct MemberProfileView: View {
           }, destructiveAction: {
             showBlockAlert = false
             Task {
-              await apiViewModel.actionBlockUser(userID: userId)
+              await apiViewModel.blockAction(userID: userId, method: .post)
               BlockList.shared.userIds.append(userId)
               Task {
                 await apiViewModel.requestMemberProfile(userID: userId)
@@ -274,10 +274,10 @@ extension MemberProfileView {
               Task {
                 if isFollow {
                   isFollow.toggle()
-                  await apiViewModel.unfollowUser(userID: userId)
+                  await apiViewModel.followAction(userID: userId, method: .delete)
                 } else {
                   isFollow.toggle()
-                  await apiViewModel.followUser(userID: userId)
+                  await apiViewModel.followAction(userID: userId, method: .post)
                 }
               }
             }
