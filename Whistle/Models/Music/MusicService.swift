@@ -32,7 +32,7 @@ class MusicService {
 
 extension MusicService: MusicServiceProtocol {
   func buffer(url: URL, samplesCount: Int) async throws -> [MusicNote] {
-    var cur_url = url
+    let cur_url = url
 //    if url.absoluteString.hasPrefix("https://") {
 //      print("url: \(url)")
 //      let data = try await downloadMusicAsync(from: url)

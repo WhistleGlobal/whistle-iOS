@@ -370,7 +370,7 @@ struct GuestMainView: View {
       if players.isEmpty {
         return
       }
-      guard let player = players[currentIndex] else {
+      guard players[currentIndex] != nil else {
         return
       }
       if newValue == 1 {

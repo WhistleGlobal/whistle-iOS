@@ -64,7 +64,7 @@ struct ProfileEditIntroduceView: View {
           }
         } label: {
           Text("완료")
-            .foregroundColor(true ? .Info : .Disable_Placeholder)
+            .foregroundColor(.Info)
             .fontSystem(fontDesignSystem: .subtitle2_KO)
         }
         .disabled(false)

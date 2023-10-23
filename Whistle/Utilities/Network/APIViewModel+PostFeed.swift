@@ -89,7 +89,6 @@ extension APIViewModel: PostFeedProtocol {
               guard let data else {
                 return
               }
-              let json = try JSON(data: data)
               let decoder = JSONDecoder()
               self.bookmark = try decoder.decode([Bookmark].self, from: data)
               continuation.resume()
@@ -164,7 +163,6 @@ extension APIViewModel: PostFeedProtocol {
           case .success(let data):
             do {
               guard let data else { return }
-              let json = try JSON(data: data)
               let decoder = JSONDecoder()
               self.reportedContent = try decoder.decode([ReportedContent].self, from: data)
               continuation.resume()
@@ -189,7 +187,7 @@ extension APIViewModel: PostFeedProtocol {
         .validate(statusCode: 200 ... 300)
         .response { response in
           switch response.result {
-          case .success(let data):
+          case .success:
             continuation.resume(returning: true)
           case .failure(let error):
             log(error)
@@ -208,7 +206,7 @@ extension APIViewModel: PostFeedProtocol {
         .validate(statusCode: 200 ... 300)
         .response { response in
           switch response.result {
-          case .success(let data):
+          case .success:
             continuation.resume(returning: true)
           case .failure(let error):
             log(error)
@@ -227,7 +225,7 @@ extension APIViewModel: PostFeedProtocol {
         .validate(statusCode: 200 ... 300)
         .response { response in
           switch response.result {
-          case .success(let data):
+          case .success:
             continuation.resume()
           case .failure(let error):
             log(error)
@@ -246,7 +244,7 @@ extension APIViewModel: PostFeedProtocol {
         .validate(statusCode: 200 ... 300)
         .response { response in
           switch response.result {
-          case .success(let data):
+          case .success:
             continuation.resume()
           case .failure(let error):
             log(error)
@@ -265,7 +263,7 @@ extension APIViewModel: PostFeedProtocol {
         .validate(statusCode: 200 ... 300)
         .response { response in
           switch response.result {
-          case .success(let data):
+          case .success:
             continuation.resume()
           case .failure(let error):
             log(error)
@@ -284,7 +282,7 @@ extension APIViewModel: PostFeedProtocol {
         .validate(statusCode: 200 ... 300)
         .response { response in
           switch response.result {
-          case .success(let data):
+          case .success:
             continuation.resume()
           case .failure(let error):
             log(error)
@@ -311,7 +309,7 @@ extension APIViewModel: PostFeedProtocol {
         .validate(statusCode: 200 ... 300)
         .response { response in
           switch response.result {
-          case .success(let data):
+          case .success:
             continuation.resume(returning: 200)
           case .failure(let error):
             log(error)
@@ -337,7 +335,7 @@ extension APIViewModel: PostFeedProtocol {
         .validate(statusCode: 200 ... 300)
         .response { response in
           switch response.result {
-          case .success(let data):
+          case .success:
             continuation.resume(returning: 200)
           case .failure(let error):
             log(error)
@@ -349,7 +347,7 @@ extension APIViewModel: PostFeedProtocol {
 
   func addViewCount(_ viewCount: ViewCount, notInclude: Set<Int>, completion: @escaping ([ViewCountModel]) -> Void) {
     do {
-      var tempViewCount = viewCount
+      let tempViewCount = viewCount
       tempViewCount.views = tempViewCount.views.filter { !notInclude.contains($0.contentId) }
       tempViewCount.views = viewCount.views.filter { Int($0.viewTime) ?? 0 >= 3 }
       tempViewCount.views = tempViewCount.views.filter { !$0.viewTime.isEmpty }
@@ -367,7 +365,7 @@ extension APIViewModel: PostFeedProtocol {
           .validate(statusCode: 200 ..< 300)
           .response { response in
             switch response.result {
-            case .success(let data):
+            case .success:
               completion(tempViewCount.views)
             case .failure(let error):
               log(error)

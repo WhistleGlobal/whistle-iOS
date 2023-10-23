@@ -290,7 +290,7 @@ struct MemberFeedView: View {
     .confirmationDialog("", isPresented: $showDialog) {
       Button(currentVideoIsBookmarked ? "저장 취소" : "저장하기", role: .none) {
         Task {
-          guard let contentId = apiViewModel.memberFeed[currentIndex].contentId else { return }
+          guard apiViewModel.memberFeed[currentIndex].contentId != nil else { return }
           guard let currentVideocontentId = apiViewModel.memberFeed[currentIndex].contentId else { return }
           if apiViewModel.memberFeed[currentIndex].isBookmarked == 1 {
             showBookmarkToast.1 = "저장 취소 했습니다."

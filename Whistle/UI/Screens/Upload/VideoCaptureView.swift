@@ -966,7 +966,6 @@ extension VideoCaptureView {
   }
 }
 
-
 // MARK: - Extension for Recording Button ViewBuilder
 
 extension VideoCaptureView {

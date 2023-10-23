@@ -318,7 +318,7 @@ struct MainFeedView: View {
             .padding(.top, 70)
             .padding(.leading, 16)
             .onDisappear {
-              DispatchQueue.main.asyncAfter(deadline: DispatchTime.now()+0.2) {
+              DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.2) {
                 withAnimation {
                   showUploadedToast = true
                 }

@@ -62,7 +62,7 @@ class VideoExporterViewModel: ObservableObject {
           timer = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) { _ in
             self.progressTimer += 1
           }
-        case .loaded(let url):
+        case .loaded:
           if action == .save {
             renderState = .saved
 //            saveVideoInLib(url)

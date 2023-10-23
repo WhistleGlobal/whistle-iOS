@@ -167,10 +167,16 @@ struct MemberProfileView: View {
         ToastMessage(text: "클립보드에 복사되었어요", toastPadding: 78, showToast: $showPasteToast)
       }
       if showBlockAlert {
-        ToastMessage(text: "\(apiViewModel.memberProfile.userName)님이 차단되었습니다.", toastPadding: 72, showToast: $showBlockToast)
+        ToastMessage(
+          text: "\(apiViewModel.memberProfile.userName)님이 차단되었습니다.",
+          toastPadding: 72,
+          showToast: $showBlockToast)
       }
       if showUnblockToast {
-        ToastMessage(text: "\(apiViewModel.memberProfile.userName)님이 차단 해제되었습니다.", toastPadding: 72, showToast: $showUnblockToast)
+        ToastMessage(
+          text: "\(apiViewModel.memberProfile.userName)님이 차단 해제되었습니다.",
+          toastPadding: 72,
+          showToast: $showUnblockToast)
       }
     }
     .overlay {

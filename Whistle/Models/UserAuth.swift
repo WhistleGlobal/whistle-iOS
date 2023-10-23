@@ -75,7 +75,7 @@ class UserAuth: ObservableObject {
       .validate(statusCode: 200 ... 300)
       .response { response in
         switch response.result {
-        case .success(let data):
+        case .success:
           guard let deviceToken = self.deviceToken else {
             return
           }

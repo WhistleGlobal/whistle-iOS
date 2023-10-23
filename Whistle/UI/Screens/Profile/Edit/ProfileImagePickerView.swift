@@ -42,7 +42,6 @@ struct ProfileImagePickerView: View {
     GridItem(.flexible(minimum: 40), spacing: 0),
   ]
 
-
   var body: some View {
     VStack(spacing: 0) {
       HStack(spacing: 0) {
@@ -61,7 +60,7 @@ struct ProfileImagePickerView: View {
           .foregroundColor(.LabelColor_Primary)
         Spacer()
         Button {
-          guard let selectedImage else {
+          guard selectedImage != nil else {
             dismiss()
             return
           }

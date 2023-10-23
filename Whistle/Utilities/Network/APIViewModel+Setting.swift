@@ -27,7 +27,6 @@ extension APIViewModel: SettingProtocol {
               guard let data else {
                 return
               }
-              let json = try JSON(data: data)
               let decoder = JSONDecoder()
               self.notiSetting = try decoder.decode(NotiSetting.self, from: data)
               continuation.resume()
@@ -57,7 +56,7 @@ extension APIViewModel: SettingProtocol {
         .response { response in
           switch response.result {
           case .success(let data):
-            guard let data else {
+            guard data != nil else {
               return
             }
             continuation.resume()
@@ -79,7 +78,7 @@ extension APIViewModel: SettingProtocol {
         headers: contentTypeXwwwForm).validate(statusCode: 200 ... 300).response { response in
         switch response.result {
         case .success(let data):
-          guard let data else {
+          guard data != nil else {
             return
           }
           continuation.resume()
@@ -156,7 +155,7 @@ extension APIViewModel: SettingProtocol {
       .response { response in
         switch response.result {
         case .success(let data):
-          guard let data else {
+          guard data != nil else {
             return
           }
           completion()
