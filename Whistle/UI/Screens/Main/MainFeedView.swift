@@ -14,12 +14,22 @@ import SwiftUI
 // MARK: - MainFeedView
 
 struct MainFeedView: View {
-  @Environment(\.scenePhase) var scenePhase
-  @StateObject var apiViewModel = APIViewModel.shared
-  @EnvironmentObject var universalRoutingModel: UniversalRoutingModel
   @AppStorage("showGuide") var showGuide = true
+  @Environment(\.scenePhase) var scenePhase
+  @EnvironmentObject var universalRoutingModel: UniversalRoutingModel
+  @StateObject var apiViewModel = APIViewModel.shared
+  @StateObject private var tabbarModel = TabbarModel.shared
+
   @State var viewCount: ViewCount = .init()
+
   @State var playerIndex = 0
+  @State var isCurrentVideoWhistled = false
+  @State var currentVideoUserId = 0
+  @State var currentVideoContentId = 0
+  @State var currentVideoIsBookmarked = false
+  @State var currentIndex = 0
+  @State var players: [AVPlayer?] = []
+
   @State var showDialog = false
   @State var showPasteToast = false
   @State var showBookmarkToast = (false, "저장하기")
@@ -29,25 +39,22 @@ struct MainFeedView: View {
   @State var showUserProfile = false
   @State var showUpdate = false
   @State var showPlayButton = false
-  @State var currentVideoUserId = 0
-  @State var currentVideoContentId = 0
-  @State var currentVideoIsBookmarked = false
+  @State var showUploadedToast = false
+
   @State var isShowingBottomSheet = false
-  @State var players: [AVPlayer?] = []
+  @State var isSplashOn = true
+  @State var isUploading = false
   @State var newId = UUID()
-  @State var isCurrentVideoWhistled = false
+
   @State var timer: Timer? = nil
   @State var viewTimer: Timer? = nil
-  @State var isSplashOn = true
+
   @State var processedContentId: Set<Int> = []
-  @State var isUploading = false
   @State var uploadingThumbnail = Image("noVideo")
   @State var uploadProgress = 0.0
-  @State var showUploadedToast = false
-  @StateObject private var tabbarModel = TabbarModel.shared
+
   @Binding var mainOpacity: Double
   @Binding var isRootStacked: Bool
-  @State var currentIndex = 0
   @Binding var refreshCount: Int
   var cancellables: Set<AnyCancellable> = []
 

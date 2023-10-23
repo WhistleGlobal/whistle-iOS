@@ -19,8 +19,8 @@ struct MemberFollowListView: View {
   @State var tabStatus: profileTabStatus = .follower
   @State var showOtherProfile = false
   @State var showUserProfile = false
-  @State var userFollowing: [UserFollowingData] = []
-  @State var userFollower: [FollowerData] = []
+  @State var memberFollowing: [MemberFollowingData] = []
+  @State var memberFollower: [FollowerData] = []
   let userId: Int
 
   var body: some View {
@@ -49,7 +49,7 @@ struct MemberFollowListView: View {
           Spacer()
           followEmptyView()
         } else {
-          userFollowerList()
+          memberFollowerList()
             .onReceive(apiViewModel.publisher) { id in
               newId = id
             }
@@ -60,7 +60,7 @@ struct MemberFollowListView: View {
           Spacer()
           followEmptyView()
         } else {
-          userFollowingList()
+          memberFollowingList()
             .onReceive(apiViewModel.publisher) { id in
               newId = id
             }
@@ -88,8 +88,8 @@ struct MemberFollowListView: View {
     }
     .task {
       await apiViewModel.requestMemberFollow(userID: userId)
-      userFollower = apiViewModel.memberFollow.followerList
-      userFollowing = apiViewModel.memberFollow.followingList
+      memberFollower = apiViewModel.memberFollow.followerList
+      memberFollowing = apiViewModel.memberFollow.followingList
     }
   }
 }
@@ -167,7 +167,7 @@ extension MemberFollowListView {
   }
 
   @ViewBuilder
-  func userFollowerList() -> some View {
+  func memberFollowerList() -> some View {
     ForEach(filteredFollower, id: \.userName) { follower in
       NavigationLink {
         if UIDevice.current.userInterfaceIdiom == .phone {
@@ -199,7 +199,7 @@ extension MemberFollowListView {
   }
 
   @ViewBuilder
-  func userFollowingList() -> some View {
+  func memberFollowingList() -> some View {
     ForEach(filteredFollowing, id: \.userName) { following in
       NavigationLink {
         if UIDevice.current.userInterfaceIdiom == .phone {
@@ -233,10 +233,10 @@ extension MemberFollowListView {
 
 extension MemberFollowListView {
   var filteredFollower: [FollowerData] {
-    userFollower.filter { !BlockList.shared.userIds.contains($0.followerId) }
+    memberFollower.filter { !BlockList.shared.userIds.contains($0.followerId) }
   }
 
-  var filteredFollowing: [UserFollowingData] {
-    userFollowing.filter { !BlockList.shared.userIds.contains($0.followingId) }
+  var filteredFollowing: [MemberFollowingData] {
+    memberFollowing.filter { !BlockList.shared.userIds.contains($0.followingId) }
   }
 }

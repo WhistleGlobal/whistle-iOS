@@ -14,10 +14,13 @@ import SwiftUI
 struct MemberFeedView: View {
   @Environment(\.dismiss) var dismiss
   @StateObject var apiViewModel = APIViewModel.shared
+  @StateObject private var tabbarModel = TabbarModel.shared
   @State var currentIndex = 0
   @State var currentVideoIsBookmarked = false
   @State var newID = UUID()
   @State var playerIndex = 0
+  @State var players: [AVPlayer?] = []
+
   @State var showDialog = false
   @State var showPasteToast = false
   @State var showDeleteToast = false
@@ -26,9 +29,9 @@ struct MemberFeedView: View {
   @State var showHideContentToast = false
   @State var showReport = false
   @State var showFollowToast = (false, "")
-  @State var players: [AVPlayer?] = []
+
   @State var timer: Timer? = nil
-  @StateObject private var tabbarModel = TabbarModel.shared
+
   let processor = BlurImageProcessor(blurRadius: 100.0)
   var body: some View {
     GeometryReader { proxy in

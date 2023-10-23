@@ -12,10 +12,11 @@ import SwiftUI
 // MARK: - AlbumAccessView
 
 struct AlbumAccessView: View {
-  let authorizationStatus = PHPhotoLibrary.authorizationStatus(for: .readWrite)
   @State var showAlert = false
   @Binding var isAlbumAuthorized: Bool
   @Binding var showAlbumAccessView: Bool
+
+  let authorizationStatus = PHPhotoLibrary.authorizationStatus(for: .readWrite)
 
   var body: some View {
     ZStack {

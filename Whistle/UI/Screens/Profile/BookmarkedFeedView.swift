@@ -13,6 +13,7 @@ import SwiftUI
 
 struct BookmarkedFeedView: View {
   @Environment(\.dismiss) var dismiss
+  @StateObject var apiViewModel = APIViewModel.shared
   @State var currentIndex = 0
   @State var newID = UUID()
   @State var playerIndex = 0
@@ -21,7 +22,6 @@ struct BookmarkedFeedView: View {
   @State var showDeleteToast = false
   @State var showPlayButton = false
   @State var timer: Timer? = nil
-  @StateObject var apiViewModel = APIViewModel.shared
   @State var players: [AVPlayer?] = []
 
   var body: some View {

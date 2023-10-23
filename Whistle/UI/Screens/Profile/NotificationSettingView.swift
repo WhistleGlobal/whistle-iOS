@@ -8,9 +8,9 @@
 import SwiftUI
 
 struct NotificationSettingView: View {
+  @AppStorage("isAllOff") var isAllOff = false
   @Environment(\.dismiss) var dismiss
   @StateObject var apiViewModel = APIViewModel.shared
-  @AppStorage("isAllOff") var isAllOff = false
 
   var body: some View {
     List {

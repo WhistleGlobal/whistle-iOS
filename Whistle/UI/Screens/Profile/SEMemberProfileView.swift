@@ -16,8 +16,8 @@ struct SEMemberProfileView: View {
   @Environment(\.dismiss) var dismiss
   @StateObject var apiViewModel = APIViewModel.shared
   @State var isFollow = false
-  @State var showDialog = false
   @State var goReport = false
+  @State var showDialog = false
   @State var showPasteToast = false
   @State var offsetY: CGFloat = 0
   @Binding var players: [AVPlayer?]

@@ -14,6 +14,7 @@ import SwiftUI
 // MARK: - GuestProfileView
 
 struct GuestProfileView: View {
+  @AppStorage("isAccess") var isAccess = false
   @EnvironmentObject var userAuth: UserAuth
   @StateObject var apiViewModel = APIViewModel.shared
   @StateObject var appleSignInViewModel = AppleSignInViewModel()
@@ -21,11 +22,11 @@ struct GuestProfileView: View {
   @State var bottomSheetPosition: BottomSheetPosition = .hidden
   @State var showTermsOfService = false
   @State var showPrivacyPolicy = false
-  @AppStorage("isAccess") var isAccess = false
-  let keychain = KeychainSwift()
   var domainURL: String {
     AppKeys.domainURL as! String
   }
+
+  let keychain = KeychainSwift()
 
   var body: some View {
     ZStack {

@@ -18,21 +18,20 @@ import SwiftUI
 
 struct SignInView: View {
   @Environment(\.scenePhase) var scenePhase
-  @StateObject var apiViewModel = APIViewModel.shared
   @EnvironmentObject var userAuth: UserAuth
   @EnvironmentObject var universalRoutingModel: UniversalRoutingModel
+  @StateObject var apiViewModel = APIViewModel.shared
   @StateObject var appleSignInViewModel = AppleSignInViewModel()
   @State var showTermsOfService = false
   @State var showPrivacyPolicy = false
   @State var showUpdate = false
   @State var loginOpacity = 0.0
-  let keychain = KeychainSwift()
-
   var domainURL: String {
     AppKeys.domainURL as! String
   }
 
   private var customViewModel = GoogleSignInButtonViewModel(scheme: .light, style: .standard, state: .normal)
+  let keychain = KeychainSwift()
 
   var body: some View {
     ZStack {

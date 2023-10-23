@@ -15,16 +15,19 @@ import UniformTypeIdentifiers
 struct MemberProfileView: View {
   @Environment(\.dismiss) var dismiss
   @StateObject var apiViewModel = APIViewModel.shared
+
   @State var isFollow = false
+  @State var isProfileLoaded = false
+  @State var goReport = false
+
   @State var showDialog = false
   @State var showBlockAlert = false
   @State var showUnblockAlert = false
   @State var showBlockToast = false
   @State var showUnblockToast = false
-  @State var goReport = false
   @State var showPasteToast = false
   @State var offsetY: CGFloat = 0
-  @State var isProfileLoaded = false
+
   @Binding var players: [AVPlayer?]
   @Binding var currentIndex: Int
   let userId: Int

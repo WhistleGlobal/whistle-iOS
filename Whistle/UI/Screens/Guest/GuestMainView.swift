@@ -18,26 +18,31 @@ import SwiftUI
 
 struct GuestMainView: View {
   @AppStorage("showGuide") var showGuide = true
-  @StateObject var apiViewModel = APIViewModel.shared
+  @AppStorage("isAccess") var isAccess = false
   @EnvironmentObject var userAuth: UserAuth
+  @StateObject var apiViewModel = APIViewModel.shared
+  @StateObject var appleSignInViewModel = AppleSignInViewModel()
+  @StateObject private var tabbarModel = TabbarModel.shared
+
   @State var currentIndex = 0
   @State var playerIndex = 0
   @State var currentVideoUserId = 0
   @State var currentVideoContentId = 0
-  @State var isShowingBottomSheet = false
   @State var players: [AVPlayer?] = []
+
+  @State var isShowingBottomSheet = false
   @State var newId = UUID()
+
   @State var showTermsOfService = false
   @State var showPrivacyPolicy = false
   @State var bottomSheetPosition: BottomSheetPosition = .hidden
-  @StateObject var appleSignInViewModel = AppleSignInViewModel()
-  @StateObject private var tabbarModel = TabbarModel.shared
+
   @Binding var mainOpacity: Double
-  @AppStorage("isAccess") var isAccess = false
-  let keychain = KeychainSwift()
   var domainURL: String {
     AppKeys.domainURL as! String
   }
+
+  let keychain = KeychainSwift()
 
   var body: some View {
     GeometryReader { proxy in

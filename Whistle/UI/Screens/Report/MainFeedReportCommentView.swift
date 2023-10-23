@@ -9,13 +9,13 @@ import SwiftUI
 
 struct MainFeedReportCommentView: View {
   @Environment(\.dismiss) var dismiss
-  @Binding var goReport: Bool
+  @StateObject var apiViewModel = APIViewModel.shared
   @State var goComplete = false
   @State var showAlert = false
   @State var showDuplication = false
   @State var showFailLoad = false
   @State var inputReportDetail = ""
-  @StateObject var apiViewModel = APIViewModel.shared
+  @Binding var goReport: Bool
   let reportReason: Int
   let contentId: Int
   let uesrId: Int

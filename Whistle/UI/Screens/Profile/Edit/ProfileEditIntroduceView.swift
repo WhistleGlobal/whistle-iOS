@@ -12,10 +12,10 @@ import SwiftUI
 
 struct ProfileEditIntroduceView: View {
   @Environment(\.dismiss) var dismiss
-  @Binding var showToast: Bool
   @StateObject var apiViewModel = APIViewModel.shared
   @StateObject private var tabbarModel = TabbarModel.shared
   @State var introduce = ""
+  @Binding var showToast: Bool
 
   var body: some View {
     VStack(spacing: 0) {
