@@ -16,8 +16,8 @@ struct SEMemberProfileView: View {
   @Environment(\.dismiss) var dismiss
   @StateObject var apiViewModel = APIViewModel.shared
   @State var isFollow = false
-  @State var showDialog = false
   @State var goReport = false
+  @State var showDialog = false
   @State var showPasteToast = false
   @State var offsetY: CGFloat = 0
   @Binding var players: [AVPlayer?]
@@ -173,10 +173,10 @@ extension SEMemberProfileView {
         Task {
           if isFollow {
             isFollow.toggle()
-            await apiViewModel.unfollowUser(userID: userId)
+            await apiViewModel.followAction(userID: userId, method: .delete)
           } else {
             isFollow.toggle()
-            await apiViewModel.followUser(userID: userId)
+            await apiViewModel.followAction(userID: userId, method: .post)
           }
         }
       }

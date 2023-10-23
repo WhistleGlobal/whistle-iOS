@@ -10,6 +10,7 @@ import Foundation
 import SwiftyJSON
 
 extension APIViewModel: ProfileProtocol {
+
   func requestMyProfile() async {
     await withCheckedContinuation { continuation in
       AF.request(
@@ -22,7 +23,7 @@ extension APIViewModel: ProfileProtocol {
           case .success(let success):
             self.myProfile = success
             continuation.resume()
-          case .failure(let failure):
+          case .failure:
             continuation.resume()
           }
         }
@@ -234,30 +235,12 @@ extension APIViewModel: ProfileProtocol {
     }
   }
 
-  func followUser(userID: Int) async {
-    await withCheckedContinuation { continuation in
-      AF.request(
-        "\(domainURL)/action/\(userID)/follow",
-        method: .post,
-        headers: contentTypeXwwwForm)
-        .validate(statusCode: 200 ... 300)
-        .responseData { response in
-          switch response.result {
-          case .success:
-            continuation.resume()
-          case .failure(let error):
-            log("Request failed with error: \(error)")
-            continuation.resume()
-          }
-        }
-    }
-  }
 
-  func unfollowUser(userID: Int) async {
+  func followAction(userID: Int, method: Alamofire.HTTPMethod) async {
     await withCheckedContinuation { continuation in
       AF.request(
         "\(domainURL)/action/\(userID)/follow",
-        method: .delete,
+        method: method,
         headers: contentTypeXwwwForm)
         .validate(statusCode: 200 ... 300)
         .responseData { response in
@@ -312,7 +295,7 @@ extension APIViewModel: ProfileProtocol {
         .validate(statusCode: 200 ... 300)
         .response { response in
           switch response.result {
-          case .success(let data):
+          case .success:
             continuation.resume()
           case .failure(let error):
             log(error)
@@ -322,30 +305,11 @@ extension APIViewModel: ProfileProtocol {
     }
   }
 
-  func actionBlockUser(userID: Int) async {
+  func blockAction(userID: Int, method: Alamofire.HTTPMethod) async {
     await withCheckedContinuation { continuation in
       AF.request(
         "\(domainURL)/action/\(userID)/block",
-        method: .post,
-        headers: contentTypeXwwwForm)
-        .validate(statusCode: 200 ... 300)
-        .responseData { response in
-          switch response.result {
-          case .success:
-            continuation.resume()
-          case .failure(let error):
-            log("Request failed with error: \(error)")
-            continuation.resume()
-          }
-        }
-    }
-  }
-
-  func actionBlockUserCancel(userID: Int) async {
-    await withCheckedContinuation { continuation in
-      AF.request(
-        "\(domainURL)/action/\(userID)/block",
-        method: .delete,
+        method: method,
         headers: contentTypeXwwwForm)
         .validate(statusCode: 200 ... 300)
         .responseData { response in

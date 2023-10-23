@@ -14,12 +14,22 @@ import SwiftUI
 // MARK: - MainFeedView
 
 struct MainFeedView: View {
-  @Environment(\.scenePhase) var scenePhase
-  @StateObject var apiViewModel = APIViewModel.shared
-  @EnvironmentObject var universalRoutingModel: UniversalRoutingModel
   @AppStorage("showGuide") var showGuide = true
+  @Environment(\.scenePhase) var scenePhase
+  @EnvironmentObject var universalRoutingModel: UniversalRoutingModel
+  @StateObject var apiViewModel = APIViewModel.shared
+  @StateObject private var tabbarModel = TabbarModel.shared
+
   @State var viewCount: ViewCount = .init()
+
   @State var playerIndex = 0
+  @State var isCurrentVideoWhistled = false
+  @State var currentVideoUserId = 0
+  @State var currentVideoContentId = 0
+  @State var currentVideoIsBookmarked = false
+  @State var currentIndex = 0
+  @State var players: [AVPlayer?] = []
+
   @State var showDialog = false
   @State var showPasteToast = false
   @State var showBookmarkToast = (false, "저장하기")
@@ -29,25 +39,22 @@ struct MainFeedView: View {
   @State var showUserProfile = false
   @State var showUpdate = false
   @State var showPlayButton = false
-  @State var currentVideoUserId = 0
-  @State var currentVideoContentId = 0
-  @State var currentVideoIsBookmarked = false
+  @State var showUploadedToast = false
+
   @State var isShowingBottomSheet = false
-  @State var players: [AVPlayer?] = []
+  @State var isSplashOn = true
+  @State var isUploading = false
   @State var newId = UUID()
-  @State var isCurrentVideoWhistled = false
+
   @State var timer: Timer? = nil
   @State var viewTimer: Timer? = nil
-  @State var isSplashOn = true
+
   @State var processedContentId: Set<Int> = []
-  @State var isUploading = false
   @State var uploadingThumbnail = Image("noVideo")
   @State var uploadProgress = 0.0
-  @State var showUploadedToast = false
-  @StateObject private var tabbarModel = TabbarModel.shared
+
   @Binding var mainOpacity: Double
   @Binding var isRootStacked: Bool
-  @State var currentIndex = 0
   @Binding var refreshCount: Int
   var cancellables: Set<AnyCancellable> = []
 
@@ -310,7 +317,7 @@ struct MainFeedView: View {
             .padding(.top, 70)
             .padding(.leading, 16)
             .onDisappear {
-              DispatchQueue.main.asyncAfter(deadline: DispatchTime.now()+0.2) {
+              DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.2) {
                 withAnimation {
                   showUploadedToast = true
                 }
@@ -487,7 +494,7 @@ struct MainFeedView: View {
         Task {
           if apiViewModel.mainFeed[currentIndex].isBookmarked ?? false {
             showBookmarkToast.1 = "저장 취소했습니다."
-            let tempBool = await apiViewModel.actionBookmarkCancel(contentID: currentVideoContentId)
+            let tempBool = await apiViewModel.bookmarkAction(contentID: currentVideoContentId, method: .delete)
             withAnimation {
               showBookmarkToast.0 = tempBool
             }
@@ -495,7 +502,7 @@ struct MainFeedView: View {
             currentVideoIsBookmarked = false
           } else {
             showBookmarkToast.1 = "저장했습니다."
-            let tempBool = await apiViewModel.actionBookmark(contentID: currentVideoContentId)
+            let tempBool = await apiViewModel.bookmarkAction(contentID: currentVideoContentId, method: .post)
             withAnimation {
               showBookmarkToast.0 = tempBool
             }
@@ -602,10 +609,10 @@ extension MainFeedView {
               Button {
                 Task {
                   if isFollowed.wrappedValue {
-                    await apiViewModel.unfollowUser(userID: currentVideoUserId)
+                    await apiViewModel.followAction(userID: currentVideoUserId, method: .delete)
                     showFollowToast = (true, "\(userName)님을 팔로우 취소함")
                   } else {
-                    await apiViewModel.followUser(userID: currentVideoUserId)
+                    await apiViewModel.followAction(userID: currentVideoUserId, method: .post)
                     showFollowToast = (true, "\(userName)님을 팔로우 중")
                   }
                   isFollowed.wrappedValue.toggle()
@@ -704,14 +711,14 @@ extension MainFeedView {
     if apiViewModel.mainFeed[currentIndex].isWhistled {
       timer = Timer.scheduledTimer(withTimeInterval: 2, repeats: false) { _ in
         Task {
-          await apiViewModel.actionWhistleCancel(contentID: currentVideoContentId)
+          await apiViewModel.whistleAction(contentID: currentVideoContentId, method: .delete)
         }
       }
       apiViewModel.mainFeed[currentIndex].whistleCount? -= 1
     } else {
       timer = Timer.scheduledTimer(withTimeInterval: 2, repeats: false) { _ in
         Task {
-          await apiViewModel.actionWhistle(contentID: currentVideoContentId)
+          await apiViewModel.whistleAction(contentID: currentVideoContentId, method: .post)
         }
       }
       apiViewModel.mainFeed[currentIndex].whistleCount? += 1

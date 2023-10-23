@@ -15,20 +15,23 @@ import SwiftUI
 // MARK: - SEMyProfileView
 
 struct SEMyProfileView: View {
-  // MARK: Internal
+
+  @StateObject var userAuth = UserAuth.shared
+  @StateObject private var tabbarModel = TabbarModel.shared
+  @StateObject var apiViewModel = APIViewModel.shared
 
   @State var isShowingBottomSheet = false
   @State var tabbarDirection: CGFloat = -1.0
   @State var tabSelection: profileTabCase = .myVideo
+
   @State var showSignoutAlert = false
   @State var showDeleteAlert = false
   @State var showPasteToast = false
+
   @State var bottomSheetPosition: BottomSheetPosition = .hidden
   @State var offsetY: CGFloat = 0
   @Binding var isFirstProfileLoaded: Bool
-  @StateObject private var tabbarModel = TabbarModel.shared
-  @StateObject var apiViewModel = APIViewModel.shared
-  @EnvironmentObject var userAuth: UserAuth
+
   let processor = BlurImageProcessor(blurRadius: 10)
   var body: some View {
     ZStack {

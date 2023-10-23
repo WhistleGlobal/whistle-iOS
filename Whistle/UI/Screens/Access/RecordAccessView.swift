@@ -12,10 +12,9 @@ import SwiftUI
 // MARK: - RecordAccessView
 
 struct RecordAccessView: View {
+  @StateObject private var tabbarModel = TabbarModel.shared
   @State var showAlert = (false, VideoUsageAuth.none)
   @State var opacity = 0.1
-  @StateObject private var tabbarModel = TabbarModel.shared
-
   @Binding var isCameraAuthorized: Bool
   @Binding var isMicrophoneAuthorized: Bool
 

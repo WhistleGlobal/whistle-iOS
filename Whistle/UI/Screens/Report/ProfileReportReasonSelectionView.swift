@@ -12,9 +12,9 @@ import SwiftUI
 struct ProfileReportReasonSelectionView: View {
   @Environment(\.dismiss) var dismiss
   @StateObject var apiViewModel = APIViewModel.shared
+  @State var goComplete = false
   @Binding var goReport: Bool
   @Binding var selectedContentId: Int
-  @State var goComplete = false
   let userId: Int
   let reportCategory: ProfileReportTypeSelectionView.ReportCategory
 

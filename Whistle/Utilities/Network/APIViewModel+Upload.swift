@@ -76,7 +76,7 @@ extension APIViewModel: UploadProtocol {
         switch response.result {
         case .success(let data):
           UploadProgressViewModel.shared.uploadEnded()
-          guard let data else {
+          guard data != nil else {
             return
           }
         case .failure(let error):

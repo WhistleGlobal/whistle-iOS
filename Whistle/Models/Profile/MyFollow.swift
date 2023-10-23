@@ -53,7 +53,7 @@ class MemberFollow: Decodable {
   // MARK: Lifecycle
 
   init(
-    followingList: [UserFollowingData] = [],
+    followingList: [MemberFollowingData] = [],
     followingCount: Int = 0,
     followerList: [FollowerData] = [],
     followerCount: Int = 0)
@@ -73,7 +73,7 @@ class MemberFollow: Decodable {
     case followerCount = "follower_count"
   }
 
-  var followingList: [UserFollowingData]
+  var followingList: [MemberFollowingData]
   var followingCount: Int
   var followerList: [FollowerData]
   var followerCount: Int
@@ -136,9 +136,9 @@ class FollowerData: Decodable {
   }
 }
 
-// MARK: - UserFollowingData
+// MARK: - MemberFollowingData
 
-class UserFollowingData: Decodable {
+class MemberFollowingData: Decodable {
   init(followingId: Int, userName: String, profileImg: String?, isFollowed: Bool) {
     self.followingId = followingId
     self.userName = userName

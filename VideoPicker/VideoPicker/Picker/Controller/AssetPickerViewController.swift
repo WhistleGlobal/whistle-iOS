@@ -454,7 +454,10 @@ extension AssetPickerViewController {
       selector: #selector(containerSizeDidChange(_:)),
       name: .containerSizeDidChange,
       object: nil)
-    NotificationCenter.default.addObserver(self, selector: #selector(didSyncAsset(_:)), name: .didSyncAsset, object: nil)
+    NotificationCenter.default.addObserver(
+      self,
+      selector: #selector(didSyncAsset(_:)),
+      name: .didSyncAsset, object: nil)
   }
 
   @objc

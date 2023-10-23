@@ -26,12 +26,13 @@ struct ProfileEditIDView: View {
   // MARK: Internal
 
   @Environment(\.dismiss) var dismiss
-  @State var inputValidationStatus: InputValidationStatus = .none
-  @State var isAlertActive = false
-  @Binding var showToast: Bool
-  @State var originalUsername = ""
   @StateObject private var tabbarModel = TabbarModel.shared
   @StateObject var apiViewModel = APIViewModel.shared
+  @State var inputValidationStatus: InputValidationStatus = .none
+  @State var isAlertActive = false
+  @State var originalUsername = ""
+  @Binding var showToast: Bool
+
 
   var body: some View {
     VStack(spacing: 0) {

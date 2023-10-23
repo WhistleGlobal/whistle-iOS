@@ -11,14 +11,29 @@ import SwiftUI
 // MARK: - ProfileImagePickerView
 
 struct ProfileImagePickerView: View {
-  @ObservedObject var photoCollection: PhotoCollection
 
   @Environment(\.displayScale) private var displayScale
-  private static let itemSize = CGSize(width: UIScreen.width / 4, height: UIScreen.width / 4)
+  @Environment(\.dismiss) var dismiss
+  @StateObject var apiViewModel = APIViewModel.shared
+  @ObservedObject var photoCollection: PhotoCollection
 
+  @State var selectedImage: UIImage?
+  @State private var scale: CGFloat = 1
+  @State private var lastScale: CGFloat = 0
+  @State private var offset: CGSize = .zero
+  @State private var lastStoredOffset: CGSize = .zero
+  @State private var albumName = "최근 항목"
+  @State var showAlbumList = false
+  @GestureState private var isInteracting = false
+
+  @Binding var showProfileImageToast: Bool
+
+  var crop: Crop = .circle
   private var imageSize: CGSize {
     CGSize(width: 800, height: 800)
   }
+
+  private static let itemSize = CGSize(width: UIScreen.width / 4, height: UIScreen.width / 4)
 
   let columns = [
     GridItem(.flexible(minimum: 40), spacing: 0),
@@ -26,20 +41,6 @@ struct ProfileImagePickerView: View {
     GridItem(.flexible(minimum: 40), spacing: 0),
     GridItem(.flexible(minimum: 40), spacing: 0),
   ]
-  @Environment(\.dismiss) var dismiss
-  @State var selectedImage: UIImage?
-
-  var crop: Crop = .circle
-
-  @State private var scale: CGFloat = 1
-  @State private var lastScale: CGFloat = 0
-  @State private var offset: CGSize = .zero
-  @State private var lastStoredOffset: CGSize = .zero
-  @State private var albumName = "최근 항목"
-  @State var showAlbumList = false
-  @Binding var showProfileImageToast: Bool
-  @GestureState private var isInteracting = false
-  @StateObject var apiViewModel = APIViewModel.shared
 
   var body: some View {
     VStack(spacing: 0) {
@@ -59,7 +60,7 @@ struct ProfileImagePickerView: View {
           .foregroundColor(.LabelColor_Primary)
         Spacer()
         Button {
-          guard let selectedImage else {
+          guard selectedImage != nil else {
             dismiss()
             return
           }

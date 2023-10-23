@@ -15,16 +15,19 @@ import UniformTypeIdentifiers
 struct MemberProfileView: View {
   @Environment(\.dismiss) var dismiss
   @StateObject var apiViewModel = APIViewModel.shared
+
   @State var isFollow = false
+  @State var isProfileLoaded = false
+  @State var goReport = false
+
   @State var showDialog = false
   @State var showBlockAlert = false
   @State var showUnblockAlert = false
   @State var showBlockToast = false
   @State var showUnblockToast = false
-  @State var goReport = false
   @State var showPasteToast = false
   @State var offsetY: CGFloat = 0
-  @State var isProfileLoaded = false
+
   @Binding var players: [AVPlayer?]
   @Binding var currentIndex: Int
   let userId: Int
@@ -165,10 +168,16 @@ struct MemberProfileView: View {
         ToastMessage(text: "클립보드에 복사되었어요", toastPadding: 78, showToast: $showPasteToast)
       }
       if showBlockAlert {
-        ToastMessage(text: "\(apiViewModel.memberProfile.userName)님이 차단되었습니다.", toastPadding: 72, showToast: $showBlockToast)
+        ToastMessage(
+          text: "\(apiViewModel.memberProfile.userName)님이 차단되었습니다.",
+          toastPadding: 72,
+          showToast: $showBlockToast)
       }
       if showUnblockToast {
-        ToastMessage(text: "\(apiViewModel.memberProfile.userName)님이 차단 해제되었습니다.", toastPadding: 72, showToast: $showUnblockToast)
+        ToastMessage(
+          text: "\(apiViewModel.memberProfile.userName)님이 차단 해제되었습니다.",
+          toastPadding: 72,
+          showToast: $showUnblockToast)
       }
     }
     .overlay {
@@ -182,7 +191,7 @@ struct MemberProfileView: View {
           }, destructiveAction: {
             showUnblockAlert = false
             Task {
-              await apiViewModel.actionBlockUserCancel(userID: userId)
+              await apiViewModel.blockAction(userID: userId, method: .delete)
               BlockList.shared.userIds.append(userId)
               BlockList.shared.userIds = BlockList.shared.userIds.filter { $0 != userId }
               Task {
@@ -206,7 +215,7 @@ struct MemberProfileView: View {
           }, destructiveAction: {
             showBlockAlert = false
             Task {
-              await apiViewModel.actionBlockUser(userID: userId)
+              await apiViewModel.blockAction(userID: userId, method: .post)
               BlockList.shared.userIds.append(userId)
               Task {
                 await apiViewModel.requestMemberProfile(userID: userId)
@@ -266,10 +275,10 @@ extension MemberProfileView {
               Task {
                 if isFollow {
                   isFollow.toggle()
-                  await apiViewModel.unfollowUser(userID: userId)
+                  await apiViewModel.followAction(userID: userId, method: .delete)
                 } else {
                   isFollow.toggle()
-                  await apiViewModel.followUser(userID: userId)
+                  await apiViewModel.followAction(userID: userId, method: .post)
                 }
               }
             }

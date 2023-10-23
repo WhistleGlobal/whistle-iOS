@@ -18,26 +18,28 @@ import SwiftUI
 
 struct GuestMainView: View {
   @AppStorage("showGuide") var showGuide = true
+  @AppStorage("isAccess") var isAccess = false
+  @StateObject var userAuth = UserAuth.shared
   @StateObject var apiViewModel = APIViewModel.shared
-  @EnvironmentObject var userAuth: UserAuth
+  @StateObject var appleSignInViewModel = AppleSignInViewModel()
+  @StateObject private var tabbarModel = TabbarModel.shared
+
   @State var currentIndex = 0
   @State var playerIndex = 0
   @State var currentVideoUserId = 0
   @State var currentVideoContentId = 0
-  @State var isShowingBottomSheet = false
   @State var players: [AVPlayer?] = []
+
+  @State var isShowingBottomSheet = false
   @State var newId = UUID()
+
   @State var showTermsOfService = false
   @State var showPrivacyPolicy = false
   @State var bottomSheetPosition: BottomSheetPosition = .hidden
-  @StateObject var appleSignInViewModel = AppleSignInViewModel()
-  @StateObject private var tabbarModel = TabbarModel.shared
+
   @Binding var mainOpacity: Double
-  @AppStorage("isAccess") var isAccess = false
+
   let keychain = KeychainSwift()
-  var domainURL: String {
-    AppKeys.domainURL as! String
-  }
 
   var body: some View {
     GeometryReader { proxy in
@@ -367,7 +369,7 @@ struct GuestMainView: View {
       if players.isEmpty {
         return
       }
-      guard let player = players[currentIndex] else {
+      guard players[currentIndex] != nil else {
         return
       }
       if newValue == 1 {
@@ -475,63 +477,5 @@ extension GuestMainView {
     }
     .padding(.bottom, 64)
     .padding(.horizontal, 20)
-  }
-}
-
-extension GuestMainView {
-  // 구글 로그인 버튼 클릭 처리
-  func handleSignInButton() {
-    // rootViewController 찾기
-    guard
-      let rootViewController = (UIApplication.shared.connectedScenes.first as? UIWindowScene)?.windows.first?
-        .rootViewController
-    else {
-      return
-    }
-    GIDSignIn.sharedInstance.signIn(
-      withPresenting: rootViewController)
-    { signInResult, error in
-
-      guard let result = signInResult else {
-        return
-      }
-      result.user.refreshTokensIfNeeded { user, error in
-        guard error == nil else { return }
-        guard let user else { return }
-
-        let idToken = user.idToken
-        keychain.set("", forKey: "refresh_token")
-        if let idTokenString = idToken?.tokenString {
-          print("저장될 ID 토큰: \(idTokenString)")
-          keychain.set(idTokenString, forKey: "id_token")
-        }
-        userAuth.provider = .google
-        tokenSignIn(idToken: keychain.get("id_token") ?? "")
-      }
-    }
-
-    func tokenSignIn(idToken: String) {
-      guard let authData = try? JSONEncoder().encode(["idToken": idToken]) else {
-        return
-      }
-
-      guard let url = URL(string: "\(domainURL)/auth/google") else {
-        return
-      }
-      log("\(idToken)")
-      var request = URLRequest(url: url)
-      request.httpMethod = "POST"
-      request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-
-      let task = URLSession.shared.uploadTask(with: request, from: authData) { _, _, error in
-        if let error {
-          print("서버 통신 에러: \(error)")
-        }
-        DispatchQueue.main.async {
-          userAuth.loadData { }
-        }
-      }
-      task.resume()
-    }
   }
 }

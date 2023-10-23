@@ -16,8 +16,8 @@ struct ProfileReportContentSelectionView: View {
   @State var isSelected = false
   @State var selectedIndex = 0
   @Binding var selectedContentId: Int
-  @State var dummySet: [Color] = [Color.blue, Color.red, Color.green, Color.Blue_Pressed]
   @Binding var goReport: Bool
+
   let userId: Int
   let reportCategory: ProfileReportTypeSelectionView.ReportCategory
   let reportReason: Int?

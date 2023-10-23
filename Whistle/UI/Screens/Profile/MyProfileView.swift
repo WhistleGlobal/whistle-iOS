@@ -22,7 +22,10 @@ public enum profileTabCase: String {
 // MARK: - MyProfileView
 
 struct MyProfileView: View {
-  // MARK: Internal
+
+  @StateObject var userAuth = UserAuth.shared
+  @StateObject var apiViewModel = APIViewModel.shared
+  @StateObject private var tabbarModel = TabbarModel.shared
 
   @State var isShowingBottomSheet = false
   @State var tabbarDirection: CGFloat = -1.0
@@ -32,10 +35,8 @@ struct MyProfileView: View {
   @State var showPasteToast = false
   @State var bottomSheetPosition: BottomSheetPosition = .hidden
   @State var offsetY: CGFloat = 0
-  @StateObject private var tabbarModel = TabbarModel.shared
+
   @Binding var isFirstProfileLoaded: Bool
-  @StateObject var apiViewModel = APIViewModel.shared
-  @EnvironmentObject var userAuth: UserAuth
   let processor = BlurImageProcessor(blurRadius: 10)
 
   var body: some View {

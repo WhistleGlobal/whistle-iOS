@@ -10,13 +10,13 @@ import SwiftUI
 struct ProfileReportCommentView: View {
   @Environment(\.dismiss) var dismiss
   @StateObject var apiViewModel = APIViewModel.shared
-  @Binding var goReport: Bool
-  @Binding var selectedContentId: Int
   @State var goComplete = false
   @State var showAlert = false
   @State var inputReportDetail = ""
   @State var showDuplication = false
   @State var showFailLoad = false
+  @Binding var goReport: Bool
+  @Binding var selectedContentId: Int
   let reportCategory: ProfileReportTypeSelectionView.ReportCategory
   let reportReason: Int
   let userId: Int

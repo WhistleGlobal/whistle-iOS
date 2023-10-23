@@ -13,20 +13,21 @@ import SwiftUI
 
 struct ProfileEditView: View {
   @Environment(\.dismiss) var dismiss
-  @State var editProfileImage = false
+  @StateObject private var tabbarModel = TabbarModel.shared
+  @StateObject var apiViewModel = APIViewModel.shared
+  @ObservedObject var photoCollection = PhotoCollection(smartAlbum: .smartAlbumUserLibrary)
+
   @State var showIdToast = false
   @State var showIntroductionToast = false
   @State var showProfileImageToast = false
   @State var showGallery = false
   @State var showAuthAlert = false
-
-  @State var isAlbumAuthorized = false
   @State var showAlbumAccessView = false
-  @State var authorizationStatus = PHPhotoLibrary.authorizationStatus(for: .readWrite)
-  @StateObject private var tabbarModel = TabbarModel.shared
 
-  @StateObject var apiViewModel = APIViewModel.shared
-  @ObservedObject var photoCollection = PhotoCollection(smartAlbum: .smartAlbumUserLibrary)
+  @State var editProfileImage = false
+  @State var isAlbumAuthorized = false
+  @State var authorizationStatus = PHPhotoLibrary.authorizationStatus(for: .readWrite)
+
   var body: some View {
     VStack(spacing: 0) {
       Divider()
@@ -55,8 +56,7 @@ struct ProfileEditView: View {
       Divider().padding(.leading, 96)
       profileEditLink(
         destination: ProfileEditIntroduceView(
-          showToast: $showIntroductionToast,
-          introduce: apiViewModel.myProfile.introduce ?? " ")
+          introduce: apiViewModel.myProfile.introduce ?? " ", showToast: $showIntroductionToast)
         ,
         title: "소개",
         content: apiViewModel.myProfile.introduce ?? " ")

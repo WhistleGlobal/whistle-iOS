@@ -14,10 +14,13 @@ import SwiftUI
 struct MemberFeedView: View {
   @Environment(\.dismiss) var dismiss
   @StateObject var apiViewModel = APIViewModel.shared
+  @StateObject private var tabbarModel = TabbarModel.shared
   @State var currentIndex = 0
   @State var currentVideoIsBookmarked = false
   @State var newID = UUID()
   @State var playerIndex = 0
+  @State var players: [AVPlayer?] = []
+
   @State var showDialog = false
   @State var showPasteToast = false
   @State var showDeleteToast = false
@@ -26,9 +29,9 @@ struct MemberFeedView: View {
   @State var showHideContentToast = false
   @State var showReport = false
   @State var showFollowToast = (false, "")
-  @State var players: [AVPlayer?] = []
+
   @State var timer: Timer? = nil
-  @StateObject private var tabbarModel = TabbarModel.shared
+
   let processor = BlurImageProcessor(blurRadius: 100.0)
   var body: some View {
     GeometryReader { proxy in
@@ -287,16 +290,16 @@ struct MemberFeedView: View {
     .confirmationDialog("", isPresented: $showDialog) {
       Button(currentVideoIsBookmarked ? "저장 취소" : "저장하기", role: .none) {
         Task {
-          guard let contentId = apiViewModel.memberFeed[currentIndex].contentId else { return }
+          guard apiViewModel.memberFeed[currentIndex].contentId != nil else { return }
           guard let currentVideocontentId = apiViewModel.memberFeed[currentIndex].contentId else { return }
           if apiViewModel.memberFeed[currentIndex].isBookmarked == 1 {
             showBookmarkToast.1 = "저장 취소 했습니다."
-            showBookmarkToast.0 = await apiViewModel.actionBookmarkCancel(contentID: currentVideocontentId)
+            showBookmarkToast.0 = await apiViewModel.bookmarkAction(contentID: currentVideocontentId, method: .delete)
             apiViewModel.memberFeed[currentIndex].isBookmarked = 0
             currentVideoIsBookmarked = false
           } else {
             showBookmarkToast.1 = "저장했습니다."
-            showBookmarkToast.0 = await apiViewModel.actionBookmark(contentID: currentVideocontentId)
+            showBookmarkToast.0 = await apiViewModel.bookmarkAction(contentID: currentVideocontentId, method: .post)
             apiViewModel.memberFeed[currentIndex].isBookmarked = 1
             currentVideoIsBookmarked = true
           }
@@ -373,11 +376,11 @@ extension MemberFeedView {
               Button {
                 Task {
                   if apiViewModel.memberProfile.isFollowed == 1 {
-                    await apiViewModel.unfollowUser(userID: apiViewModel.memberProfile.userId)
+                    await apiViewModel.followAction(userID: apiViewModel.memberProfile.userId, method: .delete)
                     apiViewModel.memberProfile.isFollowed = 0
                     showFollowToast = (true, "\(userName)님을 팔로우 취소함")
                   } else {
-                    await apiViewModel.followUser(userID: apiViewModel.memberProfile.userId)
+                    await apiViewModel.followAction(userID: apiViewModel.memberProfile.userId, method: .post)
                     showFollowToast = (true, "\(userName)님을 팔로우 중")
                     apiViewModel.memberProfile.isFollowed = 1
                   }
@@ -480,14 +483,14 @@ extension MemberFeedView {
     if apiViewModel.memberFeed[currentIndex].isWhistled! == 1 {
       timer = Timer.scheduledTimer(withTimeInterval: 2, repeats: false) { _ in
         Task {
-          await apiViewModel.actionWhistleCancel(contentID: contentId)
+          await apiViewModel.whistleAction(contentID: contentId, method: .delete)
         }
       }
       apiViewModel.memberFeed[currentIndex].contentWhistleCount! -= 1
     } else {
       timer = Timer.scheduledTimer(withTimeInterval: 2, repeats: false) { _ in
         Task {
-          await apiViewModel.actionWhistle(contentID: contentId)
+          await apiViewModel.whistleAction(contentID: contentId, method: .post)
         }
       }
       apiViewModel.memberFeed[currentIndex].contentWhistleCount! += 1

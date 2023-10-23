@@ -26,25 +26,24 @@ struct WhistleApp: App {
   }
 
   // MARK: Internal
-
+  @AppStorage("isAccess") var isAccess = false
   @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
   @StateObject var appleSignInViewModel = AppleSignInViewModel()
-  @StateObject var userAuth = UserAuth()
+  @StateObject var userAuth = UserAuth.shared
   @StateObject var apiViewModel = APIViewModel.shared
   @StateObject var universalRoutingModel: UniversalRoutingModel = .init()
   @State var testBool = false
-  @AppStorage("isAccess") var isAccess = false
-  let keychain = KeychainSwift()
+  @State private var pickerOptions = PickerOptionsInfo()
   var domainURL: String {
     AppKeys.domainURL as! String
   }
 
-  @State private var pickerOptions = PickerOptionsInfo()
+  let keychain = KeychainSwift()
+
   var body: some Scene {
     WindowGroup {
       if isAccess {
         RootTabView()
-          .environmentObject(userAuth)
           .environmentObject(universalRoutingModel)
           .task {
             if isAccess {
@@ -77,7 +76,6 @@ struct WhistleApp: App {
       } else {
         NavigationStack {
           SignInView()
-            .environmentObject(userAuth)
             .environmentObject(universalRoutingModel)
             .task {
               let updateAvailable = await apiViewModel.checkUpdateAvailable()

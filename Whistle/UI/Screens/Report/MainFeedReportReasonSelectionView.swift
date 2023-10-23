@@ -12,8 +12,8 @@ import SwiftUI
 struct MainFeedReportReasonSelectionView: View {
   @Environment(\.dismiss) var dismiss
   @StateObject var apiViewModel = APIViewModel.shared
-  @Binding var goReport: Bool
   @State var goComplete = false
+  @Binding var goReport: Bool
   let contentId: Int
   let userId: Int
 
