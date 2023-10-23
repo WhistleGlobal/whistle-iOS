@@ -10,7 +10,7 @@ import SwiftUI
 // MARK: - DualSlider
 
 struct DualSlider: View {
-  @ObservedObject var editorVM: EditorViewModel
+  @ObservedObject var editorVM: VideoEditorViewModel
   @ObservedObject var videoPlayer: VideoPlayerManager
   @State var originalValue: ClosedRange<Double> = 0 ... 15
   let currentValue: Binding<ClosedRange<Double>>?
@@ -21,7 +21,7 @@ struct DualSlider: View {
   let strokeWidth: CGFloat = 4
 
   init(
-    editor: EditorViewModel,
+    editor: VideoEditorViewModel,
     player: VideoPlayerManager,
     value: Binding<ClosedRange<Double>>?,
     currentTime: Binding<Double>,

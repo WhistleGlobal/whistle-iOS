@@ -75,7 +75,7 @@ struct ProfileEditView: View {
       }
     }
     .fullScreenCover(isPresented: $showGallery) {
-      PhotoCollectionView(photoCollection: photoCollection, showProfileImageToast: $showProfileImageToast)
+      ProfileImagePickerView(photoCollection: photoCollection, showProfileImageToast: $showProfileImageToast)
     }
     .fullScreenCover(isPresented: $showAlbumAccessView) {
       AlbumAccessView(isAlbumAuthorized: $isAlbumAuthorized, showAlbumAccessView: $showAlbumAccessView)

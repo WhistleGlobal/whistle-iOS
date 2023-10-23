@@ -19,7 +19,7 @@ struct MusicTrimView: View {
 
   @StateObject var apiViewModel = APIViewModel.shared
   @ObservedObject var musicVM: MusicViewModel
-  @ObservedObject var editorVM: EditorViewModel
+  @ObservedObject var editorVM: VideoEditorViewModel
   @ObservedObject var videoPlayer: VideoPlayerManager
 
   @Binding var showMusicTrimView: Bool

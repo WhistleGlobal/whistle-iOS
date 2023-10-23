@@ -28,7 +28,6 @@ struct WhistleApp: App {
   // MARK: Internal
 
   @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
-  @StateObject var rootVM = RootViewModel(mainContext: PersistenceController.shared.viewContext)
   @StateObject var appleSignInViewModel = AppleSignInViewModel()
   @StateObject var userAuth = UserAuth()
   @StateObject var apiViewModel = APIViewModel.shared
@@ -43,15 +42,8 @@ struct WhistleApp: App {
   @State private var pickerOptions = PickerOptionsInfo()
   var body: some Scene {
     WindowGroup {
-//      AlertPopup(
-//        title: "A Short Title Is Best",
-//        content: "A message should be short, complete sentence",
-//        cancelText: "취소",
-//        destructiveText: "제거",
-//        submitText: "완료")
       if isAccess {
-        TabbarView()
-
+        RootTabView()
           .environmentObject(userAuth)
           .environmentObject(universalRoutingModel)
           .task {

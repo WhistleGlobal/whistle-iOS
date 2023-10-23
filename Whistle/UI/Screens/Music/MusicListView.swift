@@ -25,7 +25,7 @@ enum DownloadStatus {
 
 struct MusicListView: View {
   @ObservedObject var musicVM: MusicViewModel
-  @ObservedObject var editorVM: EditorViewModel
+  @ObservedObject var editorVM: VideoEditorViewModel
   @ObservedObject var videoPlayer: VideoPlayerManager
   @Binding var bottomSheetPosition: BottomSheetPosition
   @Binding var showMusicTrimView: Bool
