@@ -262,7 +262,6 @@ extension MusicListView {
         .response { response in
           switch response.result {
           case .success:
-            print("successed!")
             downloadStatus[music] = .complete
           case .failure(let error):
             print("ERROR: \(error)")

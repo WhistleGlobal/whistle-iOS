@@ -513,12 +513,10 @@ extension GuestMainView {
 
     func tokenSignIn(idToken: String) {
       guard let authData = try? JSONEncoder().encode(["idToken": idToken]) else {
-        print("JSON 인코딩 실패")
         return
       }
 
       guard let url = URL(string: "\(domainURL)/auth/google") else {
-        print("URL is nil")
         return
       }
       log("\(idToken)")

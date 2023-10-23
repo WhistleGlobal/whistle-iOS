@@ -103,22 +103,16 @@ extension AlbumAccessView {
       PHPhotoLibrary.requestAuthorization { status in
         DispatchQueue.main.async {
           switch status {
-          case .restricted:
-            print("restricted")
-          case .denied:
-            print("denied")
           case .authorized:
             isAlbumAuthorized = true
             showAlbumAccessView = false
           case .limited:
             print("limited")
-          @unknown default:
-            print("unknown default")
+          default:
+              break
           }
         }
       }
-    case .restricted:
-      print("restricted")
     case .denied:
       showAlert = true
     case .authorized:
@@ -126,8 +120,8 @@ extension AlbumAccessView {
       showAlbumAccessView = false
     case .limited:
       print("limited")
-    @unknown default:
-      print("unknown default")
+    default:
+        break
     }
   }
 }

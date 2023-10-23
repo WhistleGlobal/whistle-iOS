@@ -215,7 +215,6 @@ extension SignInView {
     // 서버로 ID 토큰을 전송하여 인증
     func tokenSignIn(idToken: String) {
       guard let authData = try? JSONEncoder().encode(["idToken": idToken]) else {
-        print("JSON 인코딩 실패")
         return
       }
 
