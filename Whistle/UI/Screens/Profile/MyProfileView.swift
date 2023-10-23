@@ -23,7 +23,7 @@ public enum profileTabCase: String {
 
 struct MyProfileView: View {
 
-  @EnvironmentObject var userAuth: UserAuth
+  @StateObject var userAuth = UserAuth.shared
   @StateObject var apiViewModel = APIViewModel.shared
   @StateObject private var tabbarModel = TabbarModel.shared
 
@@ -179,6 +179,8 @@ struct MyProfileView: View {
         SignoutAlert {
           showSignoutAlert = false
         } signOutAction: {
+          tabbarModel.tabSelectionNoAnimation = .main
+          tabbarModel.tabSelection = .main
           apiViewModel.reset()
           GIDSignIn.sharedInstance.signOut()
           userAuth.appleSignout()

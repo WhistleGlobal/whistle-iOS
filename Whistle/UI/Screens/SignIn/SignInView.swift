@@ -18,20 +18,16 @@ import SwiftUI
 
 struct SignInView: View {
   @Environment(\.scenePhase) var scenePhase
-  @EnvironmentObject var userAuth: UserAuth
   @EnvironmentObject var universalRoutingModel: UniversalRoutingModel
   @StateObject var apiViewModel = APIViewModel.shared
   @StateObject var appleSignInViewModel = AppleSignInViewModel()
+  @StateObject var userAuth = UserAuth.shared
   @State var showTermsOfService = false
   @State var showPrivacyPolicy = false
   @State var showUpdate = false
   @State var loginOpacity = 0.0
-  var domainURL: String {
-    AppKeys.domainURL as! String
-  }
 
   private var customViewModel = GoogleSignInButtonViewModel(scheme: .light, style: .standard, state: .normal)
-  let keychain = KeychainSwift()
 
   var body: some View {
     ZStack {
@@ -45,8 +41,6 @@ struct SignInView: View {
           Spacer()
           NavigationLink {
             RootTabView()
-
-              .environmentObject(userAuth)
               .environmentObject(universalRoutingModel)
           } label: {
             Text("건너뛰기")
@@ -164,78 +158,6 @@ struct SignInView: View {
     }
     .navigationDestination(isPresented: $showPrivacyPolicy) {
       PrivacyPolicyView()
-    }
-  }
-}
-
-extension SignInView {
-  // 구글 로그인 버튼 클릭 처리
-  func handleSignInButton() {
-    // rootViewController 찾기
-    guard
-      let rootViewController = (UIApplication.shared.connectedScenes.first as? UIWindowScene)?.windows.first?
-        .rootViewController
-    else {
-      return // rootViewController를 얻을 수 없을 경우 반환
-    }
-
-    // 구글 로그인 실행
-    GIDSignIn.sharedInstance.signIn(
-      withPresenting: rootViewController)
-    { signInResult, error in
-
-      guard let result = signInResult else {
-        return // 로그인 실패시 반환
-      }
-
-      // 토큰 갱신
-      result.user.refreshTokensIfNeeded { user, error in
-        guard error == nil else { return }
-        guard let user else { return }
-
-        let idToken = user.idToken // ID 토큰
-
-        // let refreshToken = user.refreshToken // 리프레시 토큰
-        // print("저장될 구글 리프레시 토큰: \(refreshToken.tokenString)")
-
-//                    userAuth.refresh_token = nil // 리프레시 토큰 저장
-        keychain.set("", forKey: "refresh_token")
-
-        if let idTokenString = idToken?.tokenString {
-          print("저장될 ID 토큰: \(idTokenString)")
-          keychain.set(idTokenString, forKey: "id_token")
-        }
-
-        userAuth.provider = .google
-        tokenSignIn(idToken: keychain.get("id_token") ?? "") // 서버로 토큰 전송
-      }
-    }
-
-    // 서버로 ID 토큰을 전송하여 인증
-    func tokenSignIn(idToken: String) {
-      guard let authData = try? JSONEncoder().encode(["idToken": idToken]) else {
-        return
-      }
-
-      guard let url = URL(string: "\(domainURL)/auth/google") else {
-        print("URL is nil")
-        return
-      }
-      log("\(idToken)")
-      var request = URLRequest(url: url)
-      request.httpMethod = "POST"
-      request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-
-      // 서버 통신
-      let task = URLSession.shared.uploadTask(with: request, from: authData) { _, _, error in
-        if let error {
-          print("서버 통신 에러: \(error)")
-        }
-        DispatchQueue.main.async {
-          userAuth.loadData { }
-        }
-      }
-      task.resume()
     }
   }
 }

@@ -16,7 +16,7 @@ import SwiftUI
 
 struct SEMyProfileView: View {
 
-  @EnvironmentObject var userAuth: UserAuth
+  @StateObject var userAuth = UserAuth.shared
   @StateObject private var tabbarModel = TabbarModel.shared
   @StateObject var apiViewModel = APIViewModel.shared
 

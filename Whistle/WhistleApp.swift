@@ -29,7 +29,7 @@ struct WhistleApp: App {
   @AppStorage("isAccess") var isAccess = false
   @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
   @StateObject var appleSignInViewModel = AppleSignInViewModel()
-  @StateObject var userAuth = UserAuth()
+  @StateObject var userAuth = UserAuth.shared
   @StateObject var apiViewModel = APIViewModel.shared
   @StateObject var universalRoutingModel: UniversalRoutingModel = .init()
   @State var testBool = false
@@ -44,7 +44,6 @@ struct WhistleApp: App {
     WindowGroup {
       if isAccess {
         RootTabView()
-          .environmentObject(userAuth)
           .environmentObject(universalRoutingModel)
           .task {
             if isAccess {
@@ -77,7 +76,6 @@ struct WhistleApp: App {
       } else {
         NavigationStack {
           SignInView()
-            .environmentObject(userAuth)
             .environmentObject(universalRoutingModel)
             .task {
               let updateAvailable = await apiViewModel.checkUpdateAvailable()

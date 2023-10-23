@@ -41,13 +41,9 @@ struct RootTabView: View {
   @AppStorage("isAccess") var isAccess = false
   @StateObject private var tabbarModel = TabbarModel.shared
   @StateObject var apiViewModel = APIViewModel.shared
-  @EnvironmentObject var userAuth: UserAuth
+  @StateObject var userAuth = UserAuth.shared
   @EnvironmentObject var universalRoutingModel: UniversalRoutingModel
   @StateObject var appleSignInViewModel = AppleSignInViewModel()
-
-  var domainURL: String {
-    AppKeys.domainURL as! String
-  }
 
   let keychain = KeychainSwift()
 
@@ -69,8 +65,6 @@ struct RootTabView: View {
         .tint(.black)
       } else {
         GuestMainView(mainOpacity: $mainOpacity)
-
-          .environmentObject(userAuth)
           .opacity(mainOpacity)
           .onChange(of: tabbarModel.tabSelectionNoAnimation) { newValue in
             mainOpacity = newValue == .main ? 1 : 0
@@ -111,19 +105,14 @@ struct RootTabView: View {
               switch UIScreen.main.nativeBounds.height {
               case 1334: // iPhone SE 3rd generation
                 SEMyProfileView(isFirstProfileLoaded: $isFirstProfileLoaded)
-
-                  .environmentObject(userAuth)
               default:
                 MyProfileView(isFirstProfileLoaded: $isFirstProfileLoaded)
-
-                  .environmentObject(userAuth)
               }
             }
           }
           .tint(.black)
         } else {
           GuestProfileView()
-            .environmentObject(userAuth)
         }
       }
       VStack {
@@ -334,7 +323,6 @@ struct RootTabView: View {
 
 #Preview {
   RootTabView()
-    .environmentObject(UserAuth())
 }
 
 extension RootTabView {
@@ -532,62 +520,6 @@ extension RootTabView {
       isNavigationActive = true
     } else {
       isNavigationActive = false
-    }
-  }
-}
-
-extension RootTabView {
-  func handleSignInButton() {
-    // rootViewController 찾기
-    guard
-      let rootViewController = (UIApplication.shared.connectedScenes.first as? UIWindowScene)?.windows.first?
-        .rootViewController
-    else {
-      return
-    }
-    GIDSignIn.sharedInstance.signIn(
-      withPresenting: rootViewController)
-    { signInResult, error in
-
-      guard let result = signInResult else {
-        return
-      }
-      result.user.refreshTokensIfNeeded { user, error in
-        guard error == nil else { return }
-        guard let user else { return }
-
-        let idToken = user.idToken
-        keychain.set("", forKey: "refresh_token")
-        if let idTokenString = idToken?.tokenString {
-          print("저장될 ID 토큰: \(idTokenString)")
-          keychain.set(idTokenString, forKey: "id_token")
-        }
-        userAuth.provider = .google
-        tokenSignIn(idToken: keychain.get("id_token") ?? "")
-      }
-    }
-
-    func tokenSignIn(idToken: String) {
-      guard let authData = try? JSONEncoder().encode(["idToken": idToken]) else {
-        return
-      }
-      guard let url = URL(string: "\(domainURL)/auth/google") else {
-        return
-      }
-      log("\(idToken)")
-      var request = URLRequest(url: url)
-      request.httpMethod = "POST"
-      request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-
-      let task = URLSession.shared.uploadTask(with: request, from: authData) { _, _, error in
-        if let error {
-          print("서버 통신 에러: \(error)")
-        }
-        DispatchQueue.main.async {
-          userAuth.loadData { }
-        }
-      }
-      task.resume()
     }
   }
 }
