@@ -290,12 +290,7 @@ struct GuestMainView: View {
       tabbarModel.tabbarOpacity = 1.0
     }
     .task {
-      log("Task executed")
-      log("apiViewModel.noSignInContentList : \(apiViewModel.noSignInContentList)")
-
-      log("isEmpty")
       apiViewModel.requestNoSignInContent {
-        log("request executed")
         Task {
           if !apiViewModel.noSignInContentList.isEmpty {
             players.removeAll()

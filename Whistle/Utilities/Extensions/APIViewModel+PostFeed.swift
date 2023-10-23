@@ -34,7 +34,6 @@ extension APIViewModel: PostFeedProtocol {
               continuation.resume()
             } catch {
               log("Error parsing JSON: \(error)")
-              log("피드를 불러올 수 없습니다.")
               continuation.resume()
             }
           case .failure(let error):
@@ -61,15 +60,9 @@ extension APIViewModel: PostFeedProtocol {
                 return
               }
               self.userPostFeed = try self.decoder.decode([UserPostFeed].self, from: data)
-              for test in self.userPostFeed {
-                log("\(test.isFollowed)")
-                log("\(test.isBookmarked)")
-                log("\(test.isHated)")
-              }
               continuation.resume()
             } catch {
               log("Error parsing JSON: \(error)")
-              log("피드를 불러올 수 없습니다.")
               continuation.resume()
             }
           case .failure(let error):
@@ -97,13 +90,10 @@ extension APIViewModel: PostFeedProtocol {
                 return
               }
               let json = try JSON(data: data)
-              log("\(json)")
               let decoder = JSONDecoder()
               self.bookmark = try decoder.decode([Bookmark].self, from: data)
               continuation.resume()
             } catch {
-              log("Error parsing JSON: \(error)")
-              log("저장된 컨텐츠를 불러올 수 없습니다.")
               continuation.resume()
             }
           case .failure(let error):
@@ -154,7 +144,6 @@ extension APIViewModel: PostFeedProtocol {
             completion()
           } catch {
             log("Error parsing JSON: \(error)")
-            log("피드를 불러올 수 없습니다.")
           }
         case .failure(let error):
           log("Error: \(error)")
@@ -176,7 +165,6 @@ extension APIViewModel: PostFeedProtocol {
             do {
               guard let data else { return }
               let json = try JSON(data: data)
-              log("\(json)")
               let decoder = JSONDecoder()
               self.reportedContent = try decoder.decode([ReportedContent].self, from: data)
               continuation.resume()
@@ -202,7 +190,6 @@ extension APIViewModel: PostFeedProtocol {
         .response { response in
           switch response.result {
           case .success(let data):
-            log(data)
             continuation.resume(returning: true)
           case .failure(let error):
             log(error)
@@ -222,7 +209,6 @@ extension APIViewModel: PostFeedProtocol {
         .response { response in
           switch response.result {
           case .success(let data):
-            log(data)
             continuation.resume(returning: true)
           case .failure(let error):
             log(error)
@@ -242,7 +228,6 @@ extension APIViewModel: PostFeedProtocol {
         .response { response in
           switch response.result {
           case .success(let data):
-            log(data)
             continuation.resume()
           case .failure(let error):
             log(error)
@@ -262,7 +247,6 @@ extension APIViewModel: PostFeedProtocol {
         .response { response in
           switch response.result {
           case .success(let data):
-            log(data)
             continuation.resume()
           case .failure(let error):
             log(error)
@@ -282,7 +266,6 @@ extension APIViewModel: PostFeedProtocol {
         .response { response in
           switch response.result {
           case .success(let data):
-            log(data)
             continuation.resume()
           case .failure(let error):
             log(error)
@@ -302,7 +285,6 @@ extension APIViewModel: PostFeedProtocol {
         .response { response in
           switch response.result {
           case .success(let data):
-            log(data)
             continuation.resume()
           case .failure(let error):
             log(error)
@@ -330,7 +312,6 @@ extension APIViewModel: PostFeedProtocol {
         .response { response in
           switch response.result {
           case .success(let data):
-            log(data)
             continuation.resume(returning: 200)
           case .failure(let error):
             log(error)
@@ -357,7 +338,6 @@ extension APIViewModel: PostFeedProtocol {
         .response { response in
           switch response.result {
           case .success(let data):
-            log(data)
             continuation.resume(returning: 200)
           case .failure(let error):
             log(error)
@@ -378,7 +358,6 @@ extension APIViewModel: PostFeedProtocol {
       }
       let data = try JSONEncoder().encode(tempViewCount)
       if let dictionary = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {
-        log(dictionary)
         AF.request(
           "\(domainURL)/content/record-view",
           method: .post,
@@ -389,7 +368,6 @@ extension APIViewModel: PostFeedProtocol {
           .response { response in
             switch response.result {
             case .success(let data):
-              log(data)
               completion(tempViewCount.views)
             case .failure(let error):
               log(error)
@@ -443,7 +421,6 @@ extension APIViewModel: PostFeedProtocol {
   }
 
   func requestUniversalContent(contentId: Int, completion: @escaping () -> Void) {
-    log("")
     AF.request(
       "\(domainURL)/content/\(contentId)",
       method: .get,
@@ -453,14 +430,12 @@ extension APIViewModel: PostFeedProtocol {
         switch response.result {
         case .success(let data):
           do {
-            log("data : \(data)")
             guard let data else {
               return
             }
             let jsonData = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any]
             self.contentList.removeAll()
             guard let singleContentJson = jsonData?["finalSingleContentRows"] as? [String: Any] else { return }
-            log("singleContentJson : \(singleContentJson)")
             let singleContent: MainContent = .init()
             singleContent.contentId = singleContentJson["content_id"] as? Int
             singleContent.userId = singleContentJson["user_id"] as? Int

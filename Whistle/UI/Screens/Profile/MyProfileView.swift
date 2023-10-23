@@ -687,7 +687,6 @@ extension MyProfileView {
   }
 
   var videoOffset: CGFloat {
-    log("\(offsetY < -305 ? 305 : -offsetY)")
     return offsetY < -305 ? 305 : -offsetY
   }
 }

@@ -49,7 +49,6 @@ struct WhistleApp: App {
           .task {
             if isAccess {
               let updateAvailable = await apiViewModel.checkUpdateAvailable()
-              log(updateAvailable)
               if updateAvailable {
                 await apiViewModel.requestVersionCheck()
               }
@@ -57,12 +56,9 @@ struct WhistleApp: App {
             }
           }
           .onOpenURL { url in
-            log(url)
             var urlString = url.absoluteString
             urlString = urlString.replacingOccurrences(of: "\(domainURL)", with: "")
-            log(urlString)
             if urlString.contains("/profile_uni?") {
-              log("/profile_uni? .contains")
               urlString = urlString.replacingOccurrences(of: "/profile_uni?id=", with: "")
               guard let userId = Int(urlString) else {
                 return
@@ -70,14 +66,10 @@ struct WhistleApp: App {
               universalRoutingModel.userId = userId
               universalRoutingModel.isUniversalProfile = true
             } else if urlString.contains("/content_uni?") {
-              log("/content_uni? .contains")
               urlString = urlString.replacingOccurrences(of: "/content_uni?contentId=", with: "")
-              log("urlString: \(urlString)")
               guard let contentId = Int(urlString) else {
-                log("guard urlString: \(urlString)")
                 return
               }
-              log("contentId: \(contentId)")
               universalRoutingModel.contentId = contentId
               universalRoutingModel.isUniversalContent = true
             }
@@ -85,12 +77,10 @@ struct WhistleApp: App {
       } else {
         NavigationStack {
           SignInView()
-
             .environmentObject(userAuth)
             .environmentObject(universalRoutingModel)
             .task {
               let updateAvailable = await apiViewModel.checkUpdateAvailable()
-              log(updateAvailable)
               if updateAvailable {
                 await apiViewModel.requestVersionCheck()
               }

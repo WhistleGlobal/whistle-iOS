@@ -28,7 +28,6 @@ extension APIViewModel: UploadProtocol {
           switch response.result {
           case .success(let data):
             if let imageURL = String(data: data!, encoding: .utf8) {
-              log("URL: \(imageURL)")
               completion(imageURL)
               continuation.resume()
             }
@@ -80,7 +79,6 @@ extension APIViewModel: UploadProtocol {
           guard let data else {
             return
           }
-          log("Success: \(data)")
         case .failure(let error):
           UploadProgressViewModel.shared.error = true
           log("\(error)")

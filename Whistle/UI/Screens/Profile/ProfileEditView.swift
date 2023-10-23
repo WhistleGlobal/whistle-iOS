@@ -101,9 +101,7 @@ struct ProfileEditView: View {
           await apiViewModel.requestMyProfile()
         }
       }
-      Button("취소", role: .cancel) {
-        log("Cancel")
-      }
+      Button("취소", role: .cancel) {}
     }
     .toolbar {
       ToolbarItem(placement: .cancellationAction) {
@@ -121,7 +119,6 @@ struct ProfileEditView: View {
       }
       ToolbarItem(placement: .confirmationAction) {
         Button {
-          log("Update Profile")
           tabbarModel.tabbarOpacity = 1.0
           dismiss()
         } label: {
@@ -170,18 +167,12 @@ extension ProfileEditView {
 extension ProfileEditView {
   func getAlbumAuth() {
     switch authorizationStatus {
-    case .notDetermined:
-      log("notDetermined")
-    case .restricted:
-      log("restricted")
-    case .denied:
-      log("restricted")
     case .authorized:
       isAlbumAuthorized = true
     case .limited:
       isAlbumAuthorized = true
-    @unknown default:
-      log("unknown default")
+    default:
+        break
     }
   }
 }

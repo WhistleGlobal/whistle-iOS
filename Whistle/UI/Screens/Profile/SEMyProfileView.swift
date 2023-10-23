@@ -684,7 +684,6 @@ extension SEMyProfileView {
   }
 
   var videoOffset: CGFloat {
-    log("\(offsetY < -202 ? 202 : -offsetY)")
     return offsetY < -202 ? 202 : -offsetY
   }
 }

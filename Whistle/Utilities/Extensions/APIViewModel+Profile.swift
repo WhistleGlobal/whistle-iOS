@@ -21,10 +21,8 @@ extension APIViewModel: ProfileProtocol {
           switch response.result {
           case .success(let success):
             self.myProfile = success
-            log("success")
             continuation.resume()
           case .failure(let failure):
-            log(failure)
             continuation.resume()
           }
         }
@@ -100,14 +98,11 @@ extension APIViewModel: ProfileProtocol {
                 let count = firstObject["whistle_all_count"] as? Int
               {
                 self.myWhistleCount = count
-                log("/whistle/count response \(count)")
                 continuation.resume()
               } else {
-                log("Invalid JSON format or missing 'whistle_all_count' key")
                 continuation.resume()
               }
             } catch {
-              log("Error parsing JSON: \(error)")
               continuation.resume()
             }
           case .failure(let error):
@@ -137,10 +132,7 @@ extension APIViewModel: ProfileProtocol {
                 let count = jsonObject["whistle_all_count"] as? Int
               {
                 self.userWhistleCount = count
-                log("/whistle/count response \(count)")
                 continuation.resume()
-              } else {
-                log("Invalid JSON format or missing 'whistle_all_count' key")
               }
             } catch {
               log("Error parsing JSON: \(error)")
@@ -190,10 +182,6 @@ extension APIViewModel: ProfileProtocol {
           case .success(let data):
             do {
               self.userFollow = try self.decoder.decode(UserFollow.self, from: data ?? .init())
-              log(self.userFollow.followerCount)
-              log(self.userFollow.followerCount)
-              log(self.userFollow.followerList)
-              log(self.userFollow.followingList)
               continuation.resume()
             } catch {
               log("Error decoding JSON: \(error)")
@@ -219,10 +207,8 @@ extension APIViewModel: ProfileProtocol {
         .response { response in
           switch response.result {
           case .success:
-            log("Success")
             continuation.resume(returning: true)
           case .failure:
-            log("Failure")
             continuation.resume(returning: false)
           }
         }
@@ -239,7 +225,6 @@ extension APIViewModel: ProfileProtocol {
         .responseData { response in
           switch response.result {
           case .success:
-            log("success")
             continuation.resume()
           case .failure(let error):
             log("Request failed with error: \(error)")
@@ -259,7 +244,6 @@ extension APIViewModel: ProfileProtocol {
         .responseData { response in
           switch response.result {
           case .success:
-            log("success")
             continuation.resume()
           case .failure(let error):
             log("Request failed with error: \(error)")
@@ -279,7 +263,6 @@ extension APIViewModel: ProfileProtocol {
         .responseData { response in
           switch response.result {
           case .success:
-            log("success")
             continuation.resume()
           case .failure(let error):
             log("Request failed with error: \(error)")
@@ -300,8 +283,6 @@ extension APIViewModel: ProfileProtocol {
         case .success(let data):
           let json = JSON(data)
           let dateString = json["created_at"]
-          log(dateString.type)
-          log(dateString.string)
           let inputDateString = dateString.string
           let inputDateFormatter = DateFormatter()
           inputDateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
@@ -309,12 +290,8 @@ extension APIViewModel: ProfileProtocol {
             let outputDateFormatter = DateFormatter()
             outputDateFormatter.dateFormat = "yyyy.MM.dd"
             let formattedDateString = outputDateFormatter.string(from: date)
-            log(formattedDateString)
             self.userCreatedDate = formattedDateString
-          } else {
-            log("Failed to parse the date string")
           }
-          log("success")
         case .failure(let error):
           log(error)
         }
@@ -336,7 +313,6 @@ extension APIViewModel: ProfileProtocol {
         .response { response in
           switch response.result {
           case .success(let data):
-            log(data)
             continuation.resume()
           case .failure(let error):
             log(error)
@@ -356,7 +332,6 @@ extension APIViewModel: ProfileProtocol {
         .responseData { response in
           switch response.result {
           case .success:
-            log("success")
             continuation.resume()
           case .failure(let error):
             log("Request failed with error: \(error)")
@@ -376,7 +351,6 @@ extension APIViewModel: ProfileProtocol {
         .responseData { response in
           switch response.result {
           case .success:
-            log("success")
             continuation.resume()
           case .failure(let error):
             log("Request failed with error: \(error)")

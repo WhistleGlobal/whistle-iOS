@@ -61,11 +61,9 @@ class UserAuth: ObservableObject {
 
   func loadData(completion: @escaping () -> Void?) {
     guard let idTokenKey = keychain.get("id_token") else {
-      log("id_Token nil")
       return
     }
     guard let url else {
-      log("url nil")
       return
     }
     log("idToken \(idTokenKey)")
@@ -76,11 +74,9 @@ class UserAuth: ObservableObject {
         switch response.result {
         case .success(let data):
           guard let deviceToken = self.deviceToken else {
-            log("device token nil")
             return
           }
           self.apiViewModel.uploadDeviceToken(deviceToken: deviceToken) {
-            log("success upload device token")
           }
           self.isAccess = true
           completion()
@@ -98,7 +94,6 @@ class UserAuth: ObservableObject {
 
   func refresh() {
     guard let refreshTokenKey = keychain.get("refresh_token") else {
-      log("refreshTokenKey nil")
       return
     }
     guard let url = URL(string: "\(domainURL)/auth/apple/refresh") else {
@@ -113,11 +108,8 @@ class UserAuth: ObservableObject {
         self.isAccess = false
         return
       }
-      if let statusCode = response.response?.statusCode, statusCode == 401 {
-        log("refresh_token expired or invalid")
-      }
+      if let statusCode = response.response?.statusCode, statusCode == 401 {}
       guard let data = response.data else {
-        log("data nil")
         return
       }
       do {

@@ -183,9 +183,6 @@ struct MyFeedView: View {
       if apiViewModel.myPostFeed.isEmpty {
         return
       }
-      log(playerIndex)
-      log(newValue)
-      log(currentIndex)
       guard let url = apiViewModel.myPostFeed[newValue].videoUrl else {
         return
       }
@@ -209,9 +206,6 @@ struct MyFeedView: View {
           Task {
             if apiViewModel.myPostFeed.count - 1 != currentIndex { // 삭제하려는 컨텐츠가 배열 마지막이 아님
               guard let contentId = apiViewModel.myPostFeed[currentIndex].contentId else { return }
-              log("contentId: \(contentId)")
-              log("currentIndex: \(currentIndex)")
-              log("playerIndex: \(playerIndex)")
               apiViewModel.myPostFeed.remove(at: currentIndex)
               players[currentIndex]?.pause()
               players.remove(at: currentIndex)
@@ -221,23 +215,14 @@ struct MyFeedView: View {
                 players[currentIndex]?.play()
               }
               apiViewModel.postFeedPlayerChanged()
-              log("contentId: \(contentId)")
-              log("currentIndex: \(currentIndex)")
-              log("playerIndex: \(currentIndex)")
               await apiViewModel.deleteContent(contentId: contentId)
             } else {
               guard let contentId = apiViewModel.myPostFeed[currentIndex].contentId else { return }
-              log("contentId: \(contentId)")
-              log("currentIndex: \(currentIndex)")
-              log("playerIndex: \(playerIndex)")
               apiViewModel.myPostFeed.removeLast()
               players.last??.pause()
               players.removeLast()
               currentIndex -= 1
               apiViewModel.postFeedPlayerChanged()
-              log("contentId: \(contentId)")
-              log("currentIndex: \(currentIndex)")
-              log("playerIndex: \(currentIndex)")
               await apiViewModel.deleteContent(contentId: contentId)
             }
           }
@@ -248,9 +233,7 @@ struct MyFeedView: View {
       Button("삭제하기", role: .destructive) {
         showDeleteToast = true
       }
-      Button("닫기", role: .cancel) {
-        log("Cancel")
-      }
+      Button("닫기", role: .cancel) {}
     }
   }
 }

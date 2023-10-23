@@ -75,7 +75,6 @@ struct MemberFollowListView: View {
     .toolbar {
       ToolbarItem(placement: .cancellationAction) {
         Button {
-          log("dismiss")
           dismiss()
         } label: {
           Image(systemName: "chevron.backward")
@@ -121,9 +120,6 @@ extension MemberFollowListView {
       if userName != apiViewModel.myProfile.userName {
         Button("") {
           Task {
-            log("Button pressed")
-            log(userId)
-            log(isFollowed.wrappedValue)
             if isFollowed.wrappedValue {
               await apiViewModel.unfollowUser(userId: userId)
               apiViewModel.contentList = apiViewModel.contentList.map { content in

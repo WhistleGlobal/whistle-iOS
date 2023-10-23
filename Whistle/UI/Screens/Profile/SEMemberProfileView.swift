@@ -115,9 +115,7 @@ struct SEMemberProfileView: View {
       Button("신고", role: .destructive) {
         goReport = true
       }
-      Button("취소", role: .cancel) {
-        log("Cancel")
-      }
+      Button("취소", role: .cancel) {}
     }
     .fullScreenCover(isPresented: $goReport) {
       ProfileReportTypeSelectionView(goReport: $goReport, userId: userId)
@@ -130,7 +128,6 @@ struct SEMemberProfileView: View {
       isFollow = apiViewModel.userProfile.isFollowed == 1 ? true : false
     }
     .task {
-      log(userId)
       await apiViewModel.requestUserPostFeed(userId: userId)
     }
     .overlay {
@@ -469,7 +466,6 @@ extension SEMemberProfileView {
   }
 
   var videoOffset: CGFloat {
-    log("\(offsetY < -202 ? 202 : -offsetY)")
     return offsetY < -202 ? 202 : -offsetY
   }
 

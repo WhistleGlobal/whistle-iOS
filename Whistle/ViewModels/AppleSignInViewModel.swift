@@ -24,14 +24,12 @@ class AppleSignInViewModel: ObservableObject {
 
   // 밑으로는 사용 되는 함수들
   func configureRequest(_ request: ASAuthorizationAppleIDRequest) {
-    log("")
     request.requestedScopes = [.email]
   }
 
   func handleResult(_ result: Result<ASAuthorization, Error>) {
     switch result {
     case .success(let authorization):
-      log("auth success")
       guard
         let credential = authorization.credential as? ASAuthorizationAppleIDCredential,
         let authCodeData = credential.authorizationCode,
@@ -45,12 +43,10 @@ class AppleSignInViewModel: ObservableObject {
 
   // 백엔드 서버에 인증 코드를 전송하는 함수
   func sendAuthCodeToBackend(authCode: String) {
-    log("sendAuthCodeToBackend authCode: \(authCode)")
     let url = "\(domainURL)/auth/apple"
     let parameters: [String: Any] = [
       "authCode": authCode,
     ]
-    log(url)
     // Alamofire 사용하여 POST 요청
     AF.request(
       url,

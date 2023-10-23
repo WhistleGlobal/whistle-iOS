@@ -70,7 +70,6 @@ struct ProfileReportCommentView: View {
                 goComplete = true
               } else if reportSuccess == 400 {
                 showDuplication = true
-                log(showDuplication)
               } else {
                 showFailLoad = true
               }
@@ -83,14 +82,11 @@ struct ProfileReportCommentView: View {
                 contentId: apiViewModel.userPostFeed.isEmpty ? 0 : selectedContentId,
                 reportReason: reportReason,
                 reportDescription: inputReportDetail)
-              log(statusCode)
-              log(type(of: statusCode))
               if statusCode == 200 {
                 goReport = true
                 goComplete = true
               } else if statusCode == 400 {
                 showDuplication = true
-                log(showDuplication)
               } else {
                 showFailLoad = true
               }

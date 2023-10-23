@@ -165,19 +165,14 @@ struct MainFeedView: View {
                   } else {
                     viewCount.views.append(.init(contentId: content.contentId ?? 0, viewDate: dateString))
                   }
-                  log("viewCount.views: \(viewCount.views)")
                 }
                 .onDisappear {
                   if let index = viewCount.views.firstIndex(where: { $0.contentId == content.contentId }) {
                     let viewDate = viewCount.views[index].viewDate.toDate()
                     var nowDate = Date.now
                     nowDate.addTimeInterval(3600 * 9)
-                    log("Date.now: \(nowDate)")
-                    log("viewDate: \(viewDate)")
                     let viewTime = nowDate.timeIntervalSince(viewDate ?? Date.now)
-                    log("viewTime: \(viewTime)")
                     viewCount.views[index].viewTime = "\(Int(viewTime))"
-                    log("viewCount.views[index].viewTime : \(viewCount.views[index].viewTime)")
                   }
                 }
             } else {
@@ -341,7 +336,6 @@ struct MainFeedView: View {
     }
     .task {
       let updateAvailable = await apiViewModel.checkUpdateAvailable()
-      log(updateAvailable)
       if updateAvailable {
         await apiViewModel.requestVersionCheck()
         showUpdate = apiViewModel.versionCheck.forceUpdate
@@ -354,7 +348,6 @@ struct MainFeedView: View {
       }
       if apiViewModel.contentList.isEmpty {
         if universalRoutingModel.isUniversalContent {
-          log("universalRoutingModel.isUniversalContent \(universalRoutingModel.isUniversalContent)")
           apiViewModel.requestUniversalContent(contentId: universalRoutingModel.contentId) {
             setupPlayers()
             universalRoutingModel.isUniversalContent = false
@@ -370,15 +363,7 @@ struct MainFeedView: View {
       players[playerIndex]?.seek(to: .zero)
       players[playerIndex]?.pause()
       players[playerIndex] = nil
-      log("REF currentIndex: \(currentIndex)")
-      log("REF playerIndex: \(playerIndex)")
-      log("REF apiViewModel: \(apiViewModel.contentList)")
-      log("REF players: \(players)")
       setupPlayers()
-      log("REF after Setup currentIndex: \(currentIndex)")
-      log("REF after Setup playerIndex: \(playerIndex)")
-      log("REF after Setup apiViewModel: \(apiViewModel.contentList)")
-      log("REF after Setup players: \(players)")
       apiViewModel.postFeedPlayerChanged()
     }
     .onChange(of: currentIndex) { newValue in
@@ -413,7 +398,7 @@ struct MainFeedView: View {
           processedContentId = processedContentId.union(tempSet)
         }
       default:
-        log("default")
+        break
       }
     }
     .onChange(of: universalRoutingModel.isUniversalProfile) { newValue in
@@ -528,13 +513,10 @@ struct MainFeedView: View {
       }
       if currentVideoUserId != apiViewModel.myProfile.userId {
         Button("신고", role: .destructive) {
-          log(currentVideoContentId)
           showReport = true
         }
       }
-      Button("닫기", role: .cancel) {
-        log("Cancel")
-      }
+      Button("닫기", role: .cancel) {}
     }
     .fullScreenCover(isPresented: $showReport) {
       MainFeedReportReasonSelectionView(
@@ -770,7 +752,6 @@ extension MainFeedView {
         for _ in 0 ..< apiViewModel.contentList.count {
           players.append(nil)
         }
-        log(players)
         players[currentIndex] =
           AVPlayer(url: URL(string: apiViewModel.contentList[currentIndex].videoUrl ?? "")!)
         playerIndex = currentIndex

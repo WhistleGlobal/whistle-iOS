@@ -174,9 +174,6 @@ struct BookmarkedFeedView: View {
       if apiViewModel.bookmark.isEmpty {
         return
       }
-      log(playerIndex)
-      log(newValue)
-      log(currentIndex)
       let url = apiViewModel.bookmark[newValue].videoUrl
       players[newValue] = AVPlayer(url: URL(string: url)!)
       if playerIndex < players.count {
@@ -198,9 +195,6 @@ struct BookmarkedFeedView: View {
           Task {
             if apiViewModel.bookmark.count - 1 != currentIndex { // 삭제하려는 컨텐츠가 배열 마지막이 아님
               let contentId = apiViewModel.bookmark[currentIndex].contentId
-              log("contentId: \(contentId)")
-              log("currentIndex: \(currentIndex)")
-              log("playerIndex: \(playerIndex)")
               apiViewModel.bookmark.remove(at: currentIndex)
               players[currentIndex]?.pause()
               players.remove(at: currentIndex)
@@ -210,23 +204,14 @@ struct BookmarkedFeedView: View {
                 players[currentIndex]?.play()
               }
               apiViewModel.postFeedPlayerChanged()
-              log("contentId: \(contentId)")
-              log("currentIndex: \(currentIndex)")
-              log("playerIndex: \(currentIndex)")
               _ = await apiViewModel.actionBookmarkCancel(contentId: contentId)
             } else {
               let contentId = apiViewModel.bookmark[currentIndex].contentId
-              log("contentId: \(contentId)")
-              log("currentIndex: \(currentIndex)")
-              log("playerIndex: \(playerIndex)")
               apiViewModel.bookmark.removeLast()
               players.last??.pause()
               players.removeLast()
               currentIndex -= 1
               apiViewModel.postFeedPlayerChanged()
-              log("contentId: \(contentId)")
-              log("currentIndex: \(currentIndex)")
-              log("playerIndex: \(currentIndex)")
               _ = await apiViewModel.actionBookmarkCancel(contentId: contentId)
             }
           }
@@ -237,9 +222,7 @@ struct BookmarkedFeedView: View {
       Button("저장 해제", role: .destructive) {
         showDeleteToast = true
       }
-      Button("닫기", role: .cancel) {
-        log("Cancel")
-      }
+      Button("닫기", role: .cancel) {}
     }
   }
 }

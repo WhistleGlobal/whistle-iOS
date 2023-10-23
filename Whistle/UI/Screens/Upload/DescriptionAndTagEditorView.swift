@@ -168,7 +168,6 @@ struct DescriptionAndTagEditorView: View {
             .foregroundStyle(Color.Info)
             .contentShape(Rectangle())
             .onTapGesture {
-//              log("inputText: ->\(inputText)<-")
               if !inputText.isEmpty, inputText != "\u{200B}" {
                 tagsViewModel.dataObject.insert(
                   TagsDataModel(titleKey: inputText),

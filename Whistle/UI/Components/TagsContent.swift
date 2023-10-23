@@ -67,9 +67,6 @@ struct TagsContent<Overlay>: View where Overlay: View {
               .overlay(alignment: .leading) {
                 if tagsData.id == viewModel.getEditableAndTextfieldLastID(), viewModel.getEditableCount() < 5 {
                   tagTextField()
-                    .onAppear {
-                      log("onAppear")
-                    }
                     .onDisappear {
                       if sheetPosition != .hidden {
                         showTagCountMax = true

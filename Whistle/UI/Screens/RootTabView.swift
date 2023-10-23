@@ -162,7 +162,6 @@ struct RootTabView: View {
             DragGesture(minimumDistance: 0, coordinateSpace: .local)
               .onEnded { value in
                 if value.translation.width > 50 {
-                  log("right swipe")
                   withAnimation {
                     tabbarModel.tabWidth = 56
                   }
@@ -506,32 +505,20 @@ extension RootTabView {
   private func getCameraPermission() {
     let authorizationStatus = AVCaptureDevice.authorizationStatus(for: .video)
     switch authorizationStatus {
-    case .notDetermined:
-      log("notDetermined")
-    case .restricted:
-      log("restricted")
-    case .denied:
-      log("restricted")
     case .authorized:
       isCameraAuthorized = true
-    @unknown default:
-      log("unknown default")
+    default:
+        break
     }
   }
 
   private func getMicrophonePermission() {
     let authorizationStatus = AVCaptureDevice.authorizationStatus(for: .audio)
     switch authorizationStatus {
-    case .notDetermined:
-      log("notDetermined")
-    case .restricted:
-      log("restricted")
-    case .denied:
-      log("restricted")
     case .authorized:
       isMicrophoneAuthorized = true
-    @unknown default:
-      log("unknown default")
+    default:
+        break
     }
   }
 
@@ -595,12 +582,9 @@ extension RootTabView {
 
     func tokenSignIn(idToken: String) {
       guard let authData = try? JSONEncoder().encode(["idToken": idToken]) else {
-        print("JSON 인코딩 실패")
         return
       }
-
       guard let url = URL(string: "\(domainURL)/auth/google") else {
-        print("URL is nil")
         return
       }
       log("\(idToken)")

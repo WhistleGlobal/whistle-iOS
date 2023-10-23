@@ -223,7 +223,6 @@ struct MemberFeedView: View {
     .navigationBarBackButtonHidden()
     .background(.black)
     .onAppear {
-      log("currentIndex : \(currentIndex)")
       for _ in 0 ..< apiViewModel.userPostFeed.count {
         players.append(nil)
       }
@@ -240,9 +239,6 @@ struct MemberFeedView: View {
       if apiViewModel.userPostFeed.isEmpty {
         return
       }
-      log(playerIndex)
-      log(newValue)
-      log(currentIndex)
       guard let url = apiViewModel.userPostFeed[newValue].videoUrl else {
         return
       }
@@ -274,9 +270,6 @@ struct MemberFeedView: View {
         CancelableToastMessage(text: "해당 콘텐츠를 숨겼습니다", paddingBottom: 78, action: {
           Task {
             guard let contentId = apiViewModel.userPostFeed[currentIndex].contentId else { return }
-            log("contentId: \(contentId)")
-            log("currentIndex: \(currentIndex)")
-            log("playerIndex: \(playerIndex)")
             apiViewModel.userPostFeed[currentIndex].isHated = 1
             players[currentIndex]?.pause()
             apiViewModel.postFeedPlayerChanged()
@@ -316,9 +309,7 @@ struct MemberFeedView: View {
       Button("신고", role: .destructive) {
         showReport = true
       }
-      Button("닫기", role: .cancel) {
-        log("Cancel")
-      }
+      Button("닫기", role: .cancel) {}
     }
     .onDisappear {
       if players.count <= currentIndex {

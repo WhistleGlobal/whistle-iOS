@@ -68,10 +68,9 @@ struct ProfileImagePickerView: View {
             renderer.scale = 0.5
             renderer.proposedSize = .init(crop.size())
             guard let image = renderer.uiImage else {
-              log("Fail to render image")
               return
             }
-            await apiViewModel.uploadPhoto(image: image) { url in log(url) }
+              await apiViewModel.uploadPhoto(image: image) { _ in }
             await apiViewModel.requestMyProfile()
             showProfileImageToast = true
             dismiss()

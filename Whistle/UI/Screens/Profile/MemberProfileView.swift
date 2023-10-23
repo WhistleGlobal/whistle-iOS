@@ -143,9 +143,7 @@ struct MemberProfileView: View {
           forPasteboardType: UTType.plainText.identifier)
         showPasteToast = true
       }
-      Button("취소", role: .cancel) {
-        log("Cancel")
-      }
+      Button("취소", role: .cancel) {}
     }
     .fullScreenCover(isPresented: $goReport) {
       ProfileReportTypeSelectionView(goReport: $goReport, userId: userId)
@@ -159,7 +157,6 @@ struct MemberProfileView: View {
       await apiViewModel.requestUserWhistlesCount(userId: userId)
     }
     .task {
-      log(userId)
       await apiViewModel.requestUserPostFeed(userId: userId)
     }
     .overlay {
@@ -585,7 +582,6 @@ extension MemberProfileView {
   }
 
   var videoOffset: CGFloat {
-    log("\(offsetY < -305 ? 305 : -offsetY)")
     return offsetY < -305 ? 305 : -offsetY
   }
 }

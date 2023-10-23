@@ -506,7 +506,7 @@ extension VideoCaptureView {
                           timerSec.0 = 15
                         }
                       default:
-                        log("")
+                        break
                       }
                     })
             }
@@ -1120,18 +1120,12 @@ extension VideoCaptureView {
 extension VideoCaptureView {
   func getAlbumAuth() {
     switch authorizationStatus {
-    case .notDetermined:
-      log("notDetermined")
-    case .restricted:
-      log("restricted")
-    case .denied:
-      log("restricted")
     case .authorized:
       isAlbumAuthorized = true
     case .limited:
       isAlbumAuthorized = true
-    @unknown default:
-      log("unknown default")
+    default:
+        break
     }
   }
 }

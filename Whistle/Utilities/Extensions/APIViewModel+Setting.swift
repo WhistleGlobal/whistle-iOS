@@ -28,13 +28,11 @@ extension APIViewModel: SettingProtocol {
                 return
               }
               let json = try JSON(data: data)
-              log("\(json)")
               let decoder = JSONDecoder()
               self.notiSetting = try decoder.decode(NotiSetting.self, from: data)
               continuation.resume()
             } catch {
               log("Error parsing JSON: \(error)")
-              log("NotiSetting을 불러올 수 없습니다.")
               continuation.resume()
             }
           case .failure(let error):
@@ -62,7 +60,6 @@ extension APIViewModel: SettingProtocol {
             guard let data else {
               return
             }
-            log("Success: \(data)")
             continuation.resume()
           case .failure(let error):
             log("\(error)")
@@ -85,7 +82,6 @@ extension APIViewModel: SettingProtocol {
           guard let data else {
             return
           }
-          log("Success: \(data)")
           continuation.resume()
         case .failure(let error):
           log("\(error)")
@@ -110,7 +106,6 @@ extension APIViewModel: SettingProtocol {
             guard let data else {
               return
             }
-            log("Success: \(data)")
             continuation.resume()
           case .failure(let error):
             log("\(error)")
@@ -135,7 +130,6 @@ extension APIViewModel: SettingProtocol {
             guard let data else {
               return
             }
-            log("Success: \(data)")
             continuation.resume()
           case .failure(let error):
             log("\(error)")
@@ -165,7 +159,6 @@ extension APIViewModel: SettingProtocol {
           guard let data else {
             return
           }
-          log("Success: \(data)")
           completion()
         case .failure(let error):
           log("\(error)")
@@ -194,14 +187,9 @@ extension APIViewModel: SettingProtocol {
               self.versionCheck.forceUpdate = json?["forceUpdate"] as? Bool ?? false
               self.versionCheck
                 .latestAppVersion = json?["latestAppVersion"] as? String ?? "\(Bundle.main.appVersion ?? "Unknown")"
-              log(self.versionCheck.needUpdate)
-              log(self.versionCheck.reason)
-              log(self.versionCheck.forceUpdate)
-              log(self.versionCheck.latestAppVersion)
             } catch {
               log(error)
             }
-            log(data)
             continuation.resume()
           case .failure(let error):
             log(error)
@@ -222,16 +210,13 @@ extension APIViewModel: SettingProtocol {
       results.count > 0,
       let appStoreVersion = results[0]["version"] as? String
     else {
-      log("guard")
       return false
     }
     let currentVersionArray = currentVersion.split(separator: ".").map { $0 }
     let appStoreVersionArray = appStoreVersion.split(separator: ".").map { $0 }
     if currentVersionArray[0] < appStoreVersionArray[0] {
-      log("return true")
       return true
     } else {
-      log("else return \(currentVersionArray[1] < appStoreVersionArray[1] ? true : false)")
       return currentVersionArray[1] < appStoreVersionArray[1] ? true : false
     }
   }

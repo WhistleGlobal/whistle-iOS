@@ -25,14 +25,12 @@ extension APIViewModel: MusicProtocol {
                 return
               }
               let json = try JSON(data: data)
-              log("\(json)")
               let decoder = JSONDecoder()
               let musicList = try decoder.decode([Music].self, from: data)
 
               continuation.resume(returning: musicList)
             } catch {
               log("Error parsing JSON: \(error)")
-              log("music list를 불러올 수 없습니다.")
               continuation.resume(returning: [])
             }
           case .failure(let error):
