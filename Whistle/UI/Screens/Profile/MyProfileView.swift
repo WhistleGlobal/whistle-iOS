@@ -316,7 +316,7 @@ extension MyProfileView {
         .padding(.bottom, 4)
       Spacer()
       Color.clear.overlay {
-        Text(apiViewModel.myProfile.introduce ?? " ")
+        Text(apiViewModel.myProfile.introduce ?? "")
           .foregroundColor(Color.LabelColor_Secondary_Dark)
           .fontSystem(fontDesignSystem: .body2_KO)
           .lineLimit(nil)

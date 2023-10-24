@@ -313,7 +313,7 @@ extension SEMyProfileView {
         .frame(height: 28)
       Spacer().frame(minHeight: 10)
       Color.clear.overlay {
-        Text(apiViewModel.myProfile.introduce ?? " ")
+        Text(apiViewModel.myProfile.introduce ?? "")
           .foregroundColor(Color.LabelColor_Secondary_Dark)
           .font(.system(size: 14, weight: .regular))
           .fontSystem(fontDesignSystem: .body2_KO)

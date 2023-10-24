@@ -249,7 +249,7 @@ extension MemberProfileView {
         .fontSystem(fontDesignSystem: .title2_Expanded)
       Spacer().frame(maxHeight: 20)
       Color.clear.overlay {
-        Text(apiViewModel.memberProfile.introduce ?? " ")
+        Text(apiViewModel.memberProfile.introduce ?? "")
           .foregroundColor(Color.LabelColor_Secondary_Dark)
           .fontSystem(fontDesignSystem: .body2_KO)
           .lineLimit(nil)

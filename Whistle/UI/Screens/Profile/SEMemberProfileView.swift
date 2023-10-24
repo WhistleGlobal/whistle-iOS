@@ -155,7 +155,7 @@ extension SEMemberProfileView {
         .frame(height: 28)
       Spacer().frame(minHeight: 10)
       Color.clear.overlay {
-        Text(apiViewModel.memberProfile.introduce ?? " ")
+        Text(apiViewModel.memberProfile.introduce ?? "")
           .foregroundColor(Color.LabelColor_Secondary_Dark)
           .font(.system(size: 14, weight: .regular))
           .fontSystem(fontDesignSystem: .body2_KO)
