@@ -113,7 +113,8 @@ struct ProfileEditIDView: View {
             .foregroundColor(inputValidationStatus == .valid ? .Info : .Disable_Placeholder)
             .fontSystem(fontDesignSystem: .subtitle2_KO)
         }
-        .disabled(inputValidationStatus != .valid && isAlertActive)
+        .disabled(inputValidationStatus != .valid)
+        .disabled(isAlertActive)
         .opacity(isAlertActive ? 0 : 1)
       }
     }

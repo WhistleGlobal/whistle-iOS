@@ -12,7 +12,7 @@ import KeychainSwift
 import SwiftUI
 
 class AppleSignInViewModel: ObservableObject {
-  @StateObject var userAuth = UserAuth.shared
+  @Published var userAuth = UserAuth.shared
   @Published var gotoTab = false
   @AppStorage("isAccess") var isAccess = false
   @AppStorage("provider") var provider: Provider = .apple
