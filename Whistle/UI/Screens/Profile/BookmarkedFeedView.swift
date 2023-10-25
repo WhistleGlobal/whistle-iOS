@@ -14,12 +14,12 @@ import SwiftUI
 struct BookmarkedFeedView: View {
   @Environment(\.dismiss) var dismiss
   @StateObject var apiViewModel = APIViewModel.shared
+  @StateObject private var toastViewModel = ToastViewModel.shared
+
   @State var currentIndex = 0
   @State var newID = UUID()
   @State var playerIndex = 0
   @State var showDialog = false
-  @State var showPasteToast = false
-  @State var showDeleteToast = false
   @State var showPlayButton = false
   @State var timer: Timer? = nil
   @State var players: [AVPlayer?] = []
@@ -187,11 +187,38 @@ struct BookmarkedFeedView: View {
       apiViewModel.postFeedPlayerChanged()
     }
     .overlay {
-      if showPasteToast {
-        ToastMessage(text: "클립보드에 복사되었어요", toastPadding: 78, showToast: $showPasteToast)
-      }
-      if showDeleteToast {
-        CancelableToastMessage(text: "저장 해제되었습니다.", paddingBottom: 78, action: {
+      ToastMessageView()
+//      if showDeleteToast {
+//        CancelableToastMessage(text: "저장 해제되었습니다.", paddingBottom: 78, action: {
+//          Task {
+//            if apiViewModel.bookmark.count - 1 != currentIndex { // 삭제하려는 컨텐츠가 배열 마지막이 아님
+//              let contentId = apiViewModel.bookmark[currentIndex].contentId
+//              apiViewModel.bookmark.remove(at: currentIndex)
+//              players[currentIndex]?.pause()
+//              players.remove(at: currentIndex)
+//              if !players.isEmpty {
+//                players[currentIndex] = AVPlayer(url: URL(string: apiViewModel.bookmark[currentIndex].videoUrl)!)
+//                await players[currentIndex]?.seek(to: .zero)
+//                players[currentIndex]?.play()
+//              }
+//              apiViewModel.postFeedPlayerChanged()
+//              _ = await apiViewModel.bookmarkAction(contentID: contentId, method: .delete)
+//            } else {
+//              let contentId = apiViewModel.bookmark[currentIndex].contentId
+//              apiViewModel.bookmark.removeLast()
+//              players.last??.pause()
+//              players.removeLast()
+//              currentIndex -= 1
+//              apiViewModel.postFeedPlayerChanged()
+//              _ = await apiViewModel.bookmarkAction(contentID: contentId, method: .delete)
+//            }
+//          }
+//        }, showToast: $showDeleteToast)
+//      }
+    }
+    .confirmationDialog("", isPresented: $showDialog) {
+      Button("저장 해제", role: .destructive) {
+        toastViewModel.cancelToastInit(isTop: false, message: "저장 해제되었습니다.", padding: 78) {
           Task {
             if apiViewModel.bookmark.count - 1 != currentIndex { // 삭제하려는 컨텐츠가 배열 마지막이 아님
               let contentId = apiViewModel.bookmark[currentIndex].contentId
@@ -215,12 +242,7 @@ struct BookmarkedFeedView: View {
               _ = await apiViewModel.bookmarkAction(contentID: contentId, method: .delete)
             }
           }
-        }, showToast: $showDeleteToast)
-      }
-    }
-    .confirmationDialog("", isPresented: $showDialog) {
-      Button("저장 해제", role: .destructive) {
-        showDeleteToast = true
+        }
       }
       Button("닫기", role: .cancel) { }
     }
@@ -311,7 +333,7 @@ extension BookmarkedFeedView {
             .padding(.bottom, -4)
           }
           Button {
-            showPasteToast = true
+            toastViewModel.toastInit(message: "클립보드에 복사되었어요")
             UIPasteboard.general.setValue(
               "https://readywhistle.com/content_uni?contentId=\(apiViewModel.bookmark[currentIndex].contentId)",
               forPasteboardType: UTType.plainText.identifier)

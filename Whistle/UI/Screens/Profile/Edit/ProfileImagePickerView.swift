@@ -15,6 +15,7 @@ struct ProfileImagePickerView: View {
   @Environment(\.displayScale) private var displayScale
   @Environment(\.dismiss) var dismiss
   @StateObject var apiViewModel = APIViewModel.shared
+  @StateObject private var toastViewModel = ToastViewModel.shared
   @ObservedObject var photoCollection: PhotoCollection
 
   @State var selectedImage: UIImage?
@@ -25,8 +26,6 @@ struct ProfileImagePickerView: View {
   @State private var albumName = "최근 항목"
   @State var showAlbumList = false
   @GestureState private var isInteracting = false
-
-  @Binding var showProfileImageToast: Bool
 
   var crop: Crop = .circle
   private var imageSize: CGSize {
@@ -52,8 +51,8 @@ struct ProfileImagePickerView: View {
             .font(.system(size: 20))
             .contentShape(Rectangle())
             .foregroundColor(.LabelColor_Primary)
+            .frame(width: 24, height: 24)
         }
-        .frame(width: 24, height: 24)
         Spacer()
         Text("앨범")
           .fontSystem(fontDesignSystem: .subtitle1_KO)
@@ -73,7 +72,7 @@ struct ProfileImagePickerView: View {
             }
             await apiViewModel.uploadProfilePhoto(image: image) { _ in }
             await apiViewModel.requestMyProfile()
-            showProfileImageToast = true
+            toastViewModel.toastInit(isTop: false, message: "프로필 사진이 수정되었습니다.", padding: 32)
             dismiss()
           }
         } label: {
@@ -100,19 +99,17 @@ struct ProfileImagePickerView: View {
           photoCollection.fetchAlbumList()
           showAlbumList = true
         } label: {
-          Text(albumName)
-            .fontSystem(fontDesignSystem: .subtitle2_KO)
-            .foregroundColor(.LabelColor_Primary)
-            .frame(height: 54)
-          Image(systemName: "chevron.down")
-            .foregroundColor(.LabelColor_Primary)
-            .frame(height: 54)
+          HStack {
+            Text(albumName)
+              .fontSystem(fontDesignSystem: .subtitle2_KO)
+              .foregroundColor(.LabelColor_Primary)
+            Image(systemName: "chevron.down")
+              .foregroundColor(.LabelColor_Primary)
+          }
+          .frame(height: 54)
         }
-        .frame(height: 54)
         Spacer()
       }
-      .frame(height: 54)
-      .frame(maxWidth: .infinity)
       .padding(.horizontal, 16)
       ScrollView {
         LazyVGrid(columns: columns, spacing: 0) {

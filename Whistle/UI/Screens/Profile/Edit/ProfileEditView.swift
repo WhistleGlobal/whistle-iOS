@@ -15,11 +15,10 @@ struct ProfileEditView: View {
   @Environment(\.dismiss) var dismiss
   @StateObject private var tabbarModel = TabbarModel.shared
   @StateObject var apiViewModel = APIViewModel.shared
+  @StateObject private var toastViewModel = ToastViewModel.shared
+
   @ObservedObject var photoCollection = PhotoCollection(smartAlbum: .smartAlbumUserLibrary)
 
-  @State var showIdToast = false
-  @State var showIntroductionToast = false
-  @State var showProfileImageToast = false
   @State var showGallery = false
   @State var showAuthAlert = false
   @State var showAlbumAccessView = false
@@ -49,33 +48,23 @@ struct ProfileEditView: View {
       .padding(.bottom, 40)
       Divider()
       profileEditLink(
-        destination: ProfileEditIDView(showToast: $showIdToast)
-        ,
+        destination: ProfileEditIDView(),
         title: "사용자 ID",
         content: apiViewModel.myProfile.userName)
       Divider().padding(.leading, 96)
       profileEditLink(
         destination: ProfileEditIntroduceView(
-          introduce: apiViewModel.myProfile.introduce ?? "", showToast: $showIntroductionToast)
-        ,
+          introduce: apiViewModel.myProfile.introduce ?? ""),
         title: "소개",
         content: apiViewModel.myProfile.introduce ?? "")
       Divider()
       Spacer()
     }
     .overlay {
-      if showIdToast {
-        ToastMessage(text: "사용자 ID가 수정되었습니다.", toastPadding: 32, showToast: $showIdToast)
-      }
-      if showIntroductionToast {
-        ToastMessage(text: "소개가 수정되었습니다.", toastPadding: 32, showToast: $showIntroductionToast)
-      }
-      if showProfileImageToast {
-        ToastMessage(text: "프로필 사진이 수정되었습니다.", toastPadding: 32, showToast: $showProfileImageToast)
-      }
+      ToastMessageView()
     }
     .fullScreenCover(isPresented: $showGallery) {
-      ProfileImagePickerView(photoCollection: photoCollection, showProfileImageToast: $showProfileImageToast)
+      ProfileImagePickerView(photoCollection: photoCollection)
     }
     .fullScreenCover(isPresented: $showAlbumAccessView) {
       AlbumAccessView(isAlbumAuthorized: $isAlbumAuthorized, showAlbumAccessView: $showAlbumAccessView)

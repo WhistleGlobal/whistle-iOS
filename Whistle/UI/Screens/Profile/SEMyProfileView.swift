@@ -15,10 +15,10 @@ import SwiftUI
 // MARK: - SEMyProfileView
 
 struct SEMyProfileView: View {
-
   @StateObject var userAuth = UserAuth.shared
   @StateObject private var tabbarModel = TabbarModel.shared
   @StateObject var apiViewModel = APIViewModel.shared
+  @StateObject private var toastViewModel = ToastViewModel.shared
 
   @State var isShowingBottomSheet = false
   @State var tabbarDirection: CGFloat = -1.0
@@ -26,7 +26,6 @@ struct SEMyProfileView: View {
 
   @State var showSignoutAlert = false
   @State var showDeleteAlert = false
-  @State var showPasteToast = false
 
   @State var bottomSheetPosition: BottomSheetPosition = .hidden
   @State var offsetY: CGFloat = 0
@@ -137,10 +136,8 @@ struct SEMyProfileView: View {
               GridItem(.flexible()),
             ], spacing: 20) {
               ForEach(Array(apiViewModel.bookmark.enumerated()), id: \.element) { index, content in
-
                 NavigationLink {
                   BookmarkedFeedView(currentIndex: index)
-
                 } label: {
                   videoThumbnailView(thumbnailUrl: content.thumbnailUrl, viewCount: content.viewCount)
                 }
@@ -201,9 +198,7 @@ struct SEMyProfileView: View {
       }
     }
     .overlay {
-      if showPasteToast {
-        ToastMessage(text: "클립보드에 복사되었어요", toastPadding: 78, showToast: $showPasteToast)
-      }
+      ToastMessageView()
     }
     .onChange(of: bottomSheetPosition) { newValue in
       if newValue == .hidden {
@@ -243,7 +238,7 @@ struct SEMyProfileView: View {
           UIPasteboard.general.setValue(
             "https://readywhistle.com/profile_uni?id=\(apiViewModel.myProfile.userId)",
             forPasteboardType: UTType.plainText.identifier)
-          showPasteToast = true
+          toastViewModel.toastInit(message: "클립보드에 복사되었어요")
         } label: {
           bottomSheetRowWithIcon(systemName: "square.and.arrow.up", iconWidth: 22, iconHeight: 20, text: "프로필 공유")
         }

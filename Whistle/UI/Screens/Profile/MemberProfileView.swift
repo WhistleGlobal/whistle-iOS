@@ -15,6 +15,7 @@ import UniformTypeIdentifiers
 struct MemberProfileView: View {
   @Environment(\.dismiss) var dismiss
   @StateObject var apiViewModel = APIViewModel.shared
+  @StateObject private var toastViewModel = ToastViewModel.shared
 
   @State var isFollow = false
   @State var isProfileLoaded = false
@@ -59,8 +60,6 @@ struct MemberProfileView: View {
       VStack {
         Spacer().frame(height: topSpacerHeight)
         glassProfile(
-          //          width: .infinity,
-//          height: 418 + (240 * progress) + profileHeightLast,
           cornerRadius: profileCornerRadius,
           overlayed: profileInfo())
           .frame(height: 418 + (240 * progress) + profileHeightLast)
@@ -145,7 +144,7 @@ struct MemberProfileView: View {
         UIPasteboard.general.setValue(
           "https://readywhistle.com/profile_uni?id=\(userId)",
           forPasteboardType: UTType.plainText.identifier)
-        showPasteToast = true
+        toastViewModel.toastInit(message: "클립보드에 복사되었어요")
       }
       Button("취소", role: .cancel) { }
     }
@@ -164,21 +163,7 @@ struct MemberProfileView: View {
       await apiViewModel.requestMemberPostFeed(userID: userId)
     }
     .overlay {
-      if showPasteToast {
-        ToastMessage(text: "클립보드에 복사되었어요", toastPadding: 78, showToast: $showPasteToast)
-      }
-      if showBlockAlert {
-        ToastMessage(
-          text: "\(apiViewModel.memberProfile.userName)님이 차단되었습니다.",
-          toastPadding: 72,
-          showToast: $showBlockToast)
-      }
-      if showUnblockToast {
-        ToastMessage(
-          text: "\(apiViewModel.memberProfile.userName)님이 차단 해제되었습니다.",
-          toastPadding: 72,
-          showToast: $showUnblockToast)
-      }
+      ToastMessageView()
     }
     .overlay {
       if showUnblockAlert {
@@ -190,6 +175,7 @@ struct MemberProfileView: View {
             showUnblockAlert = false
           }, destructiveAction: {
             showUnblockAlert = false
+            toastViewModel.toastInit(isTop: false, message: "\(apiViewModel.memberProfile.userName)님이 차단 해제되었습니다.", padding: 72)
             Task {
               await apiViewModel.blockAction(userID: userId, method: .delete)
               BlockList.shared.userIds.append(userId)
@@ -210,10 +196,11 @@ struct MemberProfileView: View {
           alertStyle: .linear,
           title: "\(apiViewModel.memberProfile.userName) 님을 차단하시겠어요?",
           content: "차단된 사람은 회원님의 프로필 또는 콘텐츠를 찾을 수 없게 되며, 상대방에게 차단되었다는 알림이 전송되지 않습니다.",
-          cancelText: "취소", destructiveText:"차단", cancelAction: {
+          cancelText: "취소", destructiveText: "차단", cancelAction: {
             showBlockAlert = false
           }, destructiveAction: {
             showBlockAlert = false
+            toastViewModel.toastInit(isTop: false, message: "\(apiViewModel.memberProfile.userName)님이 차단되었습니다.", padding: 72)
             Task {
               await apiViewModel.blockAction(userID: userId, method: .post)
               BlockList.shared.userIds.append(userId)

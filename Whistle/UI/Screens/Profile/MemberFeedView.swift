@@ -15,6 +15,8 @@ struct MemberFeedView: View {
   @Environment(\.dismiss) var dismiss
   @StateObject var apiViewModel = APIViewModel.shared
   @StateObject private var tabbarModel = TabbarModel.shared
+  @StateObject private var toastViewModel = ToastViewModel.shared
+
   @State var currentIndex = 0
   @State var currentVideoIsBookmarked = false
   @State var newID = UUID()
@@ -22,13 +24,9 @@ struct MemberFeedView: View {
   @State var players: [AVPlayer?] = []
 
   @State var showDialog = false
-  @State var showPasteToast = false
-  @State var showDeleteToast = false
-  @State var showBookmarkToast = (false, "저장하기")
   @State var showPlayButton = false
   @State var showHideContentToast = false
   @State var showReport = false
-  @State var showFollowToast = (false, "")
 
   @State var timer: Timer? = nil
 
@@ -260,26 +258,18 @@ struct MemberFeedView: View {
       apiViewModel.postFeedPlayerChanged()
     }
     .overlay {
-      if showPasteToast {
-        ToastMessage(text: "클립보드에 복사되었어요", toastPadding: 70, isTopAlignment: true, showToast: $showPasteToast)
-      }
-      if showBookmarkToast.0 {
-        ToastMessage(text: showBookmarkToast.1, toastPadding: 70, isTopAlignment: true, showToast: $showBookmarkToast.0)
-      }
-      if showFollowToast.0 {
-        ToastMessage(text: showFollowToast.1, toastPadding: 70, isTopAlignment: true, showToast: $showFollowToast.0)
-      }
-      if showHideContentToast {
-        CancelableToastMessage(text: "해당 콘텐츠를 숨겼습니다", paddingBottom: 78, action: {
-          Task {
-            guard let contentId = apiViewModel.memberFeed[currentIndex].contentId else { return }
-            apiViewModel.memberFeed[currentIndex].isHated = 1
-            players[currentIndex]?.pause()
-            apiViewModel.postFeedPlayerChanged()
-            await apiViewModel.actionContentHate(contentID: contentId)
-          }
-        }, showToast: $showHideContentToast)
-      }
+      ToastMessageView()
+//      if showHideContentToast {
+//        CancelableToastMessage(text: "해당 콘텐츠를 숨겼습니다", paddingBottom: 78, action: {
+//          Task {
+//            guard let contentId = apiViewModel.memberFeed[currentIndex].contentId else { return }
+//            apiViewModel.memberFeed[currentIndex].isHated = 1
+//            players[currentIndex]?.pause()
+//            apiViewModel.postFeedPlayerChanged()
+//            await apiViewModel.actionContentHate(contentID: contentId)
+//          }
+//        }, showToast: $showHideContentToast)
+//      }
     }
     .fullScreenCover(isPresented: $showReport) {
       MainFeedReportReasonSelectionView(
@@ -293,13 +283,15 @@ struct MemberFeedView: View {
           guard apiViewModel.memberFeed[currentIndex].contentId != nil else { return }
           guard let currentVideocontentId = apiViewModel.memberFeed[currentIndex].contentId else { return }
           if apiViewModel.memberFeed[currentIndex].isBookmarked == 1 {
-            showBookmarkToast.1 = "저장 취소 했습니다."
-            showBookmarkToast.0 = await apiViewModel.bookmarkAction(contentID: currentVideocontentId, method: .delete)
+            if await apiViewModel.bookmarkAction(contentID: currentVideocontentId, method: .delete) {
+              toastViewModel.toastInit(message: "저장 취소 했습니다.")
+            }
             apiViewModel.memberFeed[currentIndex].isBookmarked = 0
             currentVideoIsBookmarked = false
           } else {
-            showBookmarkToast.1 = "저장했습니다."
-            showBookmarkToast.0 = await apiViewModel.bookmarkAction(contentID: currentVideocontentId, method: .post)
+            if await apiViewModel.bookmarkAction(contentID: currentVideocontentId, method: .post) {
+              toastViewModel.toastInit(message: "저장했습니다.")
+            }
             apiViewModel.memberFeed[currentIndex].isBookmarked = 1
             currentVideoIsBookmarked = true
           }
@@ -308,6 +300,15 @@ struct MemberFeedView: View {
       }
       Button("관심없음", role: .none) {
         showHideContentToast = true
+        toastViewModel.cancelToastInit(message: "해당 콘텐츠를 숨겼습니다") {
+          Task {
+            guard let contentId = apiViewModel.memberFeed[currentIndex].contentId else { return }
+            apiViewModel.memberFeed[currentIndex].isHated = 1
+            players[currentIndex]?.pause()
+            apiViewModel.postFeedPlayerChanged()
+            await apiViewModel.actionContentHate(contentID: contentId)
+          }
+        }
       }
       Button("신고", role: .destructive) {
         showReport = true
@@ -378,10 +379,10 @@ extension MemberFeedView {
                   if apiViewModel.memberProfile.isFollowed == 1 {
                     await apiViewModel.followAction(userID: apiViewModel.memberProfile.userId, method: .delete)
                     apiViewModel.memberProfile.isFollowed = 0
-                    showFollowToast = (true, "\(userName)님을 팔로우 취소함")
+                    toastViewModel.toastInit(message: "\(userName)님을 팔로우 취소함")
                   } else {
                     await apiViewModel.followAction(userID: apiViewModel.memberProfile.userId, method: .post)
-                    showFollowToast = (true, "\(userName)님을 팔로우 중")
+                    toastViewModel.toastInit(message: "\(userName)님을 팔로우 중")
                     apiViewModel.memberProfile.isFollowed = 1
                   }
                   apiViewModel.memberFeed = apiViewModel.memberFeed.map { item in
@@ -441,7 +442,7 @@ extension MemberFeedView {
               guard let contentId = apiViewModel.memberFeed[currentIndex].contentId else {
                 return
               }
-              showPasteToast = true
+              toastViewModel.toastInit(message: "클립보드에 복사되었어요")
               UIPasteboard.general.setValue(
                 "https://readywhistle.com/content_uni?contentId=\(contentId)",
                 forPasteboardType: UTType.plainText.identifier)

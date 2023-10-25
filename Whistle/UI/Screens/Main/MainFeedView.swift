@@ -19,6 +19,7 @@ struct MainFeedView: View {
   @EnvironmentObject var universalRoutingModel: UniversalRoutingModel
   @StateObject var apiViewModel = APIViewModel.shared
   @StateObject private var tabbarModel = TabbarModel.shared
+  @StateObject private var toastViewModel = ToastViewModel.shared
 
   @State var viewCount: ViewCount = .init()
 
@@ -31,15 +32,10 @@ struct MainFeedView: View {
   @State var players: [AVPlayer?] = []
 
   @State var showDialog = false
-  @State var showPasteToast = false
-  @State var showBookmarkToast = (false, "저장하기")
-  @State var showHideContentToast = false
   @State var showReport = false
-  @State var showFollowToast = (false, "")
   @State var showUserProfile = false
   @State var showUpdate = false
   @State var showPlayButton = false
-  @State var showUploadedToast = false
 
   @State var isShowingBottomSheet = false
   @State var isSplashOn = true
@@ -318,9 +314,7 @@ struct MainFeedView: View {
             .padding(.leading, 16)
             .onDisappear {
               DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.2) {
-                withAnimation {
-                  showUploadedToast = true
-                }
+                toastViewModel.toastInit(message: "영상이 게시되었습니다.")
               }
             }
         }
@@ -438,33 +432,7 @@ struct MainFeedView: View {
       }
     }
     .overlay {
-      if showUploadedToast == true {
-        ToastMessage(text: "영상이 게시되었습니다.", toastPadding: 70, isTopAlignment: true, showToast: $showUploadedToast)
-      }
-      if showPasteToast {
-        ToastMessage(text: "클립보드에 복사되었어요", toastPadding: 70, isTopAlignment: true, showToast: $showPasteToast)
-      }
-      if showBookmarkToast.0 {
-        ToastMessage(text: showBookmarkToast.1, toastPadding: 70, isTopAlignment: true, showToast: $showBookmarkToast.0)
-      }
-      if showFollowToast.0 {
-        ToastMessage(text: showFollowToast.1, toastPadding: 70, isTopAlignment: true, showToast: $showFollowToast.0)
-      }
-      if showHideContentToast {
-        CancelableToastMessage(text: "해당 콘텐츠를 숨겼습니다", paddingBottom: 78, action: {
-          Task {
-            await apiViewModel.actionContentHate(contentID: currentVideoContentId)
-            apiViewModel.mainFeed.remove(at: currentIndex)
-            guard let url = apiViewModel.mainFeed[currentIndex].videoUrl else {
-              return
-            }
-            players[currentIndex] = AVPlayer(url: URL(string: url)!)
-            await players[currentIndex]?.seek(to: .zero)
-            players[currentIndex]?.play()
-            apiViewModel.postFeedPlayerChanged()
-          }
-        }, showToast: $showHideContentToast)
-      }
+      ToastMessageView()
     }
     .onAppear {
       DispatchQueue.main.asyncAfter(deadline: .now() + 1.4) {
@@ -493,19 +461,13 @@ struct MainFeedView: View {
       {
         Task {
           if apiViewModel.mainFeed[currentIndex].isBookmarked ?? false {
-            showBookmarkToast.1 = "저장 취소했습니다."
             let tempBool = await apiViewModel.bookmarkAction(contentID: currentVideoContentId, method: .delete)
-            withAnimation {
-              showBookmarkToast.0 = tempBool
-            }
+            toastViewModel.toastInit(message: "저장 취소했습니다.")
             apiViewModel.mainFeed[currentIndex].isBookmarked = false
             currentVideoIsBookmarked = false
           } else {
-            showBookmarkToast.1 = "저장했습니다."
             let tempBool = await apiViewModel.bookmarkAction(contentID: currentVideoContentId, method: .post)
-            withAnimation {
-              showBookmarkToast.0 = tempBool
-            }
+            toastViewModel.toastInit(message: "저장했습니다.")
             apiViewModel.mainFeed[currentIndex].isBookmarked = true
             currentVideoIsBookmarked = true
           }
@@ -513,8 +475,18 @@ struct MainFeedView: View {
         }
       }
       Button("관심없음", role: .none) {
-        withAnimation {
-          showHideContentToast = true
+        toastViewModel.cancelToastInit(isTop: false, message: "해당 콘텐츠를 숨겼습니다", padding: 78) {
+          Task {
+            await apiViewModel.actionContentHate(contentID: currentVideoContentId)
+            apiViewModel.mainFeed.remove(at: currentIndex)
+            guard let url = apiViewModel.mainFeed[currentIndex].videoUrl else {
+              return
+            }
+            players[currentIndex] = AVPlayer(url: URL(string: url)!)
+            await players[currentIndex]?.seek(to: .zero)
+            players[currentIndex]?.play()
+            apiViewModel.postFeedPlayerChanged()
+          }
         }
       }
       if currentVideoUserId != apiViewModel.myProfile.userId {
@@ -610,10 +582,10 @@ extension MainFeedView {
                 Task {
                   if isFollowed.wrappedValue {
                     await apiViewModel.followAction(userID: currentVideoUserId, method: .delete)
-                    showFollowToast = (true, "\(userName)님을 팔로우 취소함")
+                    toastViewModel.toastInit(message: "\(userName)님을 팔로우 취소함")
                   } else {
                     await apiViewModel.followAction(userID: currentVideoUserId, method: .post)
-                    showFollowToast = (true, "\(userName)님을 팔로우 중")
+                    toastViewModel.toastInit(message: "\(userName)님을 팔로우 중")
                   }
                   isFollowed.wrappedValue.toggle()
                   apiViewModel.mainFeed = apiViewModel.mainFeed.map { item in
@@ -671,9 +643,7 @@ extension MainFeedView {
             .padding(.bottom, -4)
           }
           Button {
-            withAnimation {
-              showPasteToast = true
-            }
+            toastViewModel.toastInit(message: "클립보드에 복사되었어요")
             UIPasteboard.general.setValue(
               "https://readywhistle.com/content_uni?contentId=\(currentVideoContentId)",
               forPasteboardType: UTType.plainText.identifier)

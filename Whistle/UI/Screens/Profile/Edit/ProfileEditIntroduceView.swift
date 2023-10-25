@@ -14,8 +14,9 @@ struct ProfileEditIntroduceView: View {
   @Environment(\.dismiss) var dismiss
   @StateObject var apiViewModel = APIViewModel.shared
   @StateObject private var tabbarModel = TabbarModel.shared
+  @StateObject private var toastViewModel = ToastViewModel.shared
+
   @State var introduce = ""
-  @Binding var showToast: Bool
 
   var body: some View {
     VStack(spacing: 0) {
@@ -60,7 +61,7 @@ struct ProfileEditIntroduceView: View {
             apiViewModel.myProfile.introduce = introduce
             _ = await apiViewModel.updateMyProfile()
             dismiss()
-            showToast = true
+            toastViewModel.toastInit(isTop: false, message: "소개가 수정되었습니다.", padding: 32)
           }
         } label: {
           Text("완료")

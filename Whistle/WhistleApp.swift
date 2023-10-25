@@ -32,6 +32,7 @@ struct WhistleApp: App {
   @StateObject var userAuth = UserAuth.shared
   @StateObject var apiViewModel = APIViewModel.shared
   @StateObject var universalRoutingModel: UniversalRoutingModel = .init()
+  @StateObject var toastInfo = ToastViewModel.shared
   @State var testBool = false
   @State private var pickerOptions = PickerOptionsInfo()
   var domainURL: String {

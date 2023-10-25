@@ -202,12 +202,7 @@ struct DescriptionAndTagEditorView: View {
         }
       }
       .overlay {
-        if showTagCountMax {
-          ToastMessage(text: "해시태그는 최대 5개까지만 가능합니다", toastPadding: 32, showToast: $showTagCountMax)
-        }
-        if showTagTextCountMax {
-          ToastMessage(text: "해시태그는 최대 16글자까지 가능합니다", toastPadding: 32, showToast: $showTagTextCountMax)
-        }
+        ToastMessageView()
       }
     })
     .enableTapToDismiss()

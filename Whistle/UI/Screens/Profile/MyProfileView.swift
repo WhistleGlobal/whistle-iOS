@@ -22,17 +22,16 @@ public enum profileTabCase: String {
 // MARK: - MyProfileView
 
 struct MyProfileView: View {
-
   @StateObject var userAuth = UserAuth.shared
   @StateObject var apiViewModel = APIViewModel.shared
   @StateObject private var tabbarModel = TabbarModel.shared
+  @StateObject private var toastViewModel = ToastViewModel.shared
 
   @State var isShowingBottomSheet = false
   @State var tabbarDirection: CGFloat = -1.0
   @State var tabSelection: profileTabCase = .myVideo
   @State var showSignoutAlert = false
   @State var showDeleteAlert = false
-  @State var showPasteToast = false
   @State var bottomSheetPosition: BottomSheetPosition = .hidden
   @State var offsetY: CGFloat = 0
 
@@ -204,9 +203,7 @@ struct MyProfileView: View {
       }
     }
     .overlay {
-      if showPasteToast {
-        ToastMessage(text: "클립보드에 복사되었어요", toastPadding: 78, showToast: $showPasteToast)
-      }
+      ToastMessageView()
     }
     .onChange(of: bottomSheetPosition) { newValue in
       if newValue == .hidden {
@@ -246,7 +243,7 @@ struct MyProfileView: View {
           UIPasteboard.general.setValue(
             "https://readywhistle.com/profile_uni?id=\(apiViewModel.myProfile.userId)",
             forPasteboardType: UTType.plainText.identifier)
-          showPasteToast = true
+          toastViewModel.toastInit(message: "클립보드에 복사되었어요")
         } label: {
           bottomSheetRowWithIcon(systemName: "square.and.arrow.up", iconWidth: 22, iconHeight: 20, text: "프로필 공유")
         }
@@ -353,7 +350,7 @@ extension MyProfileView {
             .scaleEffect(whistleFollowerTextScale)
         }
         .hCenter()
-        Rectangle().frame(width: 1, height: 36).foregroundColor(.white)
+        Rectangle().frame(width: 1).foregroundColor(.white).scaleEffect(0.5)
         NavigationLink {
           MyFollowListView()
         } label: {

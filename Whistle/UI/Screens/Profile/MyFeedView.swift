@@ -15,13 +15,12 @@ struct MyFeedView: View {
   @Environment(\.dismiss) var dismiss
   @StateObject var apiViewModel = APIViewModel.shared
   @StateObject private var tabbarModel = TabbarModel.shared
+  @StateObject private var toastViewModel = ToastViewModel.shared
 
   @State var currentIndex = 0
   @State var newID = UUID()
   @State var playerIndex = 0
   @State var showDialog = false
-  @State var showPasteToast = false
-  @State var showDeleteToast = false
   @State var showPlayButton = false
   @State var timer: Timer? = nil
   @State var players: [AVPlayer?] = []
@@ -199,11 +198,11 @@ struct MyFeedView: View {
       apiViewModel.postFeedPlayerChanged()
     }
     .overlay {
-      if showPasteToast {
-        ToastMessage(text: "클립보드에 복사되었어요", toastPadding: 70, isTopAlignment: true, showToast: $showPasteToast)
-      }
-      if showDeleteToast {
-        CancelableToastMessage(text: "삭제되었습니다", paddingBottom: 78, action: {
+      ToastMessageView()
+    }
+    .confirmationDialog("", isPresented: $showDialog) {
+      Button("삭제하기", role: .destructive) {
+        toastViewModel.cancelToastInit(message: "삭제되었습니다") {
           Task {
             if apiViewModel.myFeed.count - 1 != currentIndex { // 삭제하려는 컨텐츠가 배열 마지막이 아님
               guard let contentId = apiViewModel.myFeed[currentIndex].contentId else { return }
@@ -227,12 +226,7 @@ struct MyFeedView: View {
               await apiViewModel.deleteContent(contentID: contentId)
             }
           }
-        }, showToast: $showDeleteToast)
-      }
-    }
-    .confirmationDialog("", isPresented: $showDialog) {
-      Button("삭제하기", role: .destructive) {
-        showDeleteToast = true
+        }
       }
       Button("닫기", role: .cancel) { }
     }
@@ -324,7 +318,7 @@ extension MyFeedView {
             .padding(.bottom, -4)
           }
           Button {
-            showPasteToast = true
+            toastViewModel.toastInit(message: "클립보드에 복사되었어요")
             UIPasteboard.general.setValue(
               "https://readywhistle.com/content_uni?contentId=\(apiViewModel.myFeed[currentIndex].contentId ?? 0)",
               forPasteboardType: UTType.plainText.identifier)

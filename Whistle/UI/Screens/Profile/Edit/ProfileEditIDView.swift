@@ -28,10 +28,11 @@ struct ProfileEditIDView: View {
   @Environment(\.dismiss) var dismiss
   @StateObject private var tabbarModel = TabbarModel.shared
   @StateObject var apiViewModel = APIViewModel.shared
+  @StateObject private var toastViewModel = ToastViewModel.shared
+
   @State var inputValidationStatus: InputValidationStatus = .none
   @State var isAlertActive = false
   @State var originalUsername = ""
-  @Binding var showToast: Bool
 
   var body: some View {
     VStack(spacing: 0) {
@@ -76,7 +77,7 @@ struct ProfileEditIDView: View {
         Task {
           let updateStatus = await apiViewModel.updateMyProfile()
           if updateStatus == .valid {
-            showToast = true
+            toastViewModel.toastInit(isTop: false, message: "사용자 ID가 수정되었습니다.", padding: 32)
             dismiss()
           } else {
             inputValidationStatus = updateStatus

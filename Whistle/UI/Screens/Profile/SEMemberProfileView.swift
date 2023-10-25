@@ -15,15 +15,20 @@ import UniformTypeIdentifiers
 struct SEMemberProfileView: View {
   @Environment(\.dismiss) var dismiss
   @StateObject var apiViewModel = APIViewModel.shared
+  @StateObject private var toastViewModel = ToastViewModel.shared
+
   @State var isFollow = false
   @State var goReport = false
   @State var showDialog = false
   @State var showPasteToast = false
   @State var offsetY: CGFloat = 0
+
   @Binding var players: [AVPlayer?]
   @Binding var currentIndex: Int
+
   let userId: Int
   let processor = BlurImageProcessor(blurRadius: 10)
+
   var body: some View {
     ZStack {
       Color.clear.overlay {
@@ -109,7 +114,7 @@ struct SEMemberProfileView: View {
         UIPasteboard.general.setValue(
           "https://readywhistle.com/profile_uni?id=\(userId)",
           forPasteboardType: UTType.plainText.identifier)
-        showPasteToast = true
+        toastViewModel.toastInit(message: "클립보드에 복사되었어요")
       }
       Button("신고", role: .destructive) {
         goReport = true
@@ -130,9 +135,7 @@ struct SEMemberProfileView: View {
       await apiViewModel.requestMemberPostFeed(userID: userId)
     }
     .overlay {
-      if showPasteToast {
-        ToastMessage(text: "클립보드에 복사되었어요", toastPadding: 78, showToast: $showPasteToast)
-      }
+      ToastMessageView()
     }
     .onAppear {
       if !players.isEmpty {
