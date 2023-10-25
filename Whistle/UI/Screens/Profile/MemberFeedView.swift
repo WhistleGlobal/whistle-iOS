@@ -41,7 +41,7 @@ struct MemberFeedView: View {
             if let player = players[index] {
               ContentPlayer(player: player)
                 .frame(width: UIScreen.width)
-                .opacity(content.isHated ?? 0 == 1 ? 0.1 : 1)
+                .opacity(content.isHated ? 0.1 : 1)
                 .onChange(of: tabbarModel.tabSelectionNoAnimation) { newValue in
                   if newValue != .profile {
                     player.pause()
@@ -89,11 +89,11 @@ struct MemberFeedView: View {
                     musicTitle: content.musicTitle ?? "원본 오디오",
                     isWhistled:
                     Binding(get: {
-                      content.isWhistled == 1 ? true : false
+                      content.isWhistled
                     }, set: { newValue in
-                      content.isWhistled = newValue ? 1 : 0
+                      content.isWhistled = newValue
                     }),
-                    isHated: content.isHated ?? 0,
+                    isHated: content.isHated,
                     whistleCount:
                     Binding(get: {
                       content.contentWhistleCount ?? 0
@@ -105,7 +105,7 @@ struct MemberFeedView: View {
                     .allowsHitTesting(false)
                 }
                 .overlay {
-                  if (content.isHated ?? 0) == 1 {
+                  if content.isHated {
                     KFImage.url(URL(string: content.thumbnailUrl ?? ""))
                       .placeholder {
                         Color.black
@@ -231,9 +231,9 @@ struct MemberFeedView: View {
       }
       players[currentIndex] = AVPlayer(url: URL(string: apiViewModel.memberFeed[currentIndex].videoUrl ?? "")!)
       playerIndex = currentIndex
-      currentVideoIsBookmarked = apiViewModel.memberFeed[currentIndex].isBookmarked == 1
+      currentVideoIsBookmarked = apiViewModel.memberFeed[currentIndex].isBookmarked
       players[currentIndex]?.seek(to: .zero)
-      if !(apiViewModel.memberFeed[currentIndex].isHated == 1) {
+      if !apiViewModel.memberFeed[currentIndex].isHated {
         players[currentIndex]?.play()
       }
       apiViewModel.postFeedPlayerChanged()
@@ -251,9 +251,9 @@ struct MemberFeedView: View {
         players[playerIndex]?.pause()
         players[playerIndex] = nil
       }
-      currentVideoIsBookmarked = apiViewModel.memberFeed[newValue].isBookmarked == 1
+      currentVideoIsBookmarked = apiViewModel.memberFeed[newValue].isBookmarked
       players[newValue]?.seek(to: .zero)
-      if !(apiViewModel.memberFeed[currentIndex].isHated == 1) {
+      if !apiViewModel.memberFeed[currentIndex].isHated {
         players[currentIndex]?.play()
       }
       playerIndex = newValue
@@ -273,7 +273,7 @@ struct MemberFeedView: View {
         CancelableToastMessage(text: "해당 콘텐츠를 숨겼습니다", paddingBottom: 78, action: {
           Task {
             guard let contentId = apiViewModel.memberFeed[currentIndex].contentId else { return }
-            apiViewModel.memberFeed[currentIndex].isHated = 1
+            apiViewModel.memberFeed[currentIndex].isHated = true
             players[currentIndex]?.pause()
             apiViewModel.postFeedPlayerChanged()
             await apiViewModel.actionContentHate(contentID: contentId)
@@ -292,15 +292,15 @@ struct MemberFeedView: View {
         Task {
           guard apiViewModel.memberFeed[currentIndex].contentId != nil else { return }
           guard let currentVideocontentId = apiViewModel.memberFeed[currentIndex].contentId else { return }
-          if apiViewModel.memberFeed[currentIndex].isBookmarked == 1 {
+          if apiViewModel.memberFeed[currentIndex].isBookmarked {
             showBookmarkToast.1 = "저장 취소 했습니다."
             showBookmarkToast.0 = await apiViewModel.bookmarkAction(contentID: currentVideocontentId, method: .delete)
-            apiViewModel.memberFeed[currentIndex].isBookmarked = 0
+            apiViewModel.memberFeed[currentIndex].isBookmarked = false
             currentVideoIsBookmarked = false
           } else {
             showBookmarkToast.1 = "저장했습니다."
             showBookmarkToast.0 = await apiViewModel.bookmarkAction(contentID: currentVideocontentId, method: .post)
-            apiViewModel.memberFeed[currentIndex].isBookmarked = 1
+            apiViewModel.memberFeed[currentIndex].isBookmarked = true
             currentVideoIsBookmarked = true
           }
           apiViewModel.postFeedPlayerChanged()
@@ -337,7 +337,7 @@ extension MemberFeedView {
     caption: String,
     musicTitle: String,
     isWhistled: Binding<Bool>,
-    isHated: Int,
+    isHated: Bool,
     whistleCount: Binding<Int>)
     -> some View
   {
@@ -359,7 +359,7 @@ extension MemberFeedView {
       }
       .padding(.top, 54)
 
-      if isHated != 1 {
+      if !isHated {
         Spacer()
         HStack(spacing: 0) {
           VStack(alignment: .leading, spacing: 12) {
@@ -375,14 +375,14 @@ extension MemberFeedView {
               }
               Button {
                 Task {
-                  if apiViewModel.memberProfile.isFollowed == 1 {
+                  if apiViewModel.memberProfile.isFollowed {
                     await apiViewModel.followAction(userID: apiViewModel.memberProfile.userId, method: .delete)
-                    apiViewModel.memberProfile.isFollowed = 0
+                    apiViewModel.memberProfile.isFollowed = false
                     showFollowToast = (true, "\(userName)님을 팔로우 취소함")
                   } else {
                     await apiViewModel.followAction(userID: apiViewModel.memberProfile.userId, method: .post)
                     showFollowToast = (true, "\(userName)님을 팔로우 중")
-                    apiViewModel.memberProfile.isFollowed = 1
+                    apiViewModel.memberProfile.isFollowed = true
                   }
                   apiViewModel.memberFeed = apiViewModel.memberFeed.map { item in
                     let mutableItem = item
@@ -394,7 +394,7 @@ extension MemberFeedView {
                   apiViewModel.postFeedPlayerChanged()
                 }
               } label: {
-                Text(apiViewModel.memberProfile.isFollowed == 1 ? "팔로잉" : "팔로워")
+                Text(apiViewModel.memberProfile.isFollowed ? "팔로잉" : "팔로워")
                   .fontSystem(fontDesignSystem: .caption_SemiBold)
                   .foregroundColor(.Gray10)
                   .background {
@@ -480,7 +480,7 @@ extension MemberFeedView {
     guard let contentId = apiViewModel.memberFeed[currentIndex].contentId else {
       return
     }
-    if apiViewModel.memberFeed[currentIndex].isWhistled! == 1 {
+    if apiViewModel.memberFeed[currentIndex].isWhistled {
       timer = Timer.scheduledTimer(withTimeInterval: 2, repeats: false) { _ in
         Task {
           await apiViewModel.whistleAction(contentID: contentId, method: .delete)
@@ -495,10 +495,10 @@ extension MemberFeedView {
       }
       apiViewModel.memberFeed[currentIndex].contentWhistleCount! += 1
     }
-    if apiViewModel.memberFeed[currentIndex].isWhistled! == 0 {
-      apiViewModel.memberFeed[currentIndex].isWhistled = 1
+    if !apiViewModel.memberFeed[currentIndex].isWhistled {
+      apiViewModel.memberFeed[currentIndex].isWhistled = true
     } else {
-      apiViewModel.memberFeed[currentIndex].isWhistled = 0
+      apiViewModel.memberFeed[currentIndex].isWhistled = false
     }
     apiViewModel.postFeedPlayerChanged()
   }

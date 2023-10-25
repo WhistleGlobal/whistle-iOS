@@ -124,7 +124,7 @@ struct SEMemberProfileView: View {
       await apiViewModel.requestMemberProfile(userID: userId)
       await apiViewModel.requestMemberFollow(userID: userId)
       await apiViewModel.requestMemberWhistlesCount(userID: userId)
-      isFollow = apiViewModel.memberProfile.isFollowed == 1 ? true : false
+      isFollow = apiViewModel.memberProfile.isFollowed
     }
     .task {
       await apiViewModel.requestMemberPostFeed(userID: userId)

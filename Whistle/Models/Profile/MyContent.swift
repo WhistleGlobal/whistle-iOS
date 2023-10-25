@@ -36,7 +36,24 @@ class MyContent: ObservableObject, Codable, Hashable {
   var hashtags: [String]?
   var contentWhistleCount: Int?
   var contentViewCount: Int?
-  var isWhistled: Int?
+  var isWhistled = false
+
+  required init(from decoder: Decoder) throws {
+    let container = try decoder.container(keyedBy: CodingKeys.self)
+    contentId = try container.decode(Int.self, forKey: .contentId)
+    userId = try container.decode(Int.self, forKey: .userId)
+    userName = try container.decode(String.self, forKey: .userName)
+    profileImg = try container.decode(String?.self, forKey: .profileImg)
+    caption = try container.decode(String?.self, forKey: .caption)
+    videoUrl = try container.decode(String?.self, forKey: .videoUrl)
+    thumbnailUrl = try container.decode(String?.self, forKey: .thumbnailUrl)
+    musicArtist = try container.decode(String?.self, forKey: .musicArtist)
+    musicTitle = try container.decode(String?.self, forKey: .musicTitle)
+    hashtags = try container.decode([String]?.self, forKey: .hashtags)
+    contentWhistleCount = try container.decode(Int?.self, forKey: .contentWhistleCount)
+    contentViewCount = try container.decode(Int?.self, forKey: .contentViewCount)
+    isWhistled = try container.decode(Int.self, forKey: .isWhistled) == 1 ? true : false
+  }
 
   static func == (lhs: MyContent, rhs: MyContent) -> Bool {
     lhs.videoUrl == rhs.videoUrl

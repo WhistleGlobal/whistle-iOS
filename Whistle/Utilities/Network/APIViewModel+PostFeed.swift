@@ -93,6 +93,7 @@ extension APIViewModel: PostFeedProtocol {
               self.bookmark = try decoder.decode([Bookmark].self, from: data)
               continuation.resume()
             } catch {
+              log("Error: \(error)")
               continuation.resume()
             }
           case .failure(let error):
@@ -109,43 +110,14 @@ extension APIViewModel: PostFeedProtocol {
       method: .get,
       headers: contentTypeJson)
       .validate(statusCode: 200 ... 300)
-      .response { response in
+      .responseDecodable(of: [MainContent].self) { response in
         switch response.result {
-        case .success(let data):
-          do {
-            guard let data else {
-              return
-            }
-            let jsonArray = try JSONSerialization.jsonObject(with: data, options: []) as? [[String: Any]]
-            var tempArray: [MainContent] = []
-            for jsonObject in jsonArray ?? [] {
-              let tempContent: MainContent = .init()
-              tempContent.contentId = jsonObject["content_id"] as? Int
-              tempContent.userId = jsonObject["user_id"] as? Int
-              tempContent.userName = jsonObject["user_name"] as? String
-              tempContent.profileImg = jsonObject["profile_img"] as? String
-              tempContent.caption = jsonObject["caption"] as? String
-              tempContent.videoUrl = jsonObject["video_url"] as? String
-              tempContent.thumbnailUrl = jsonObject["thumbnail_url"] as? String
-              tempContent.musicArtist = jsonObject["music_artist"] as? String
-              tempContent.musicTitle = jsonObject["music_title"] as? String
-              tempContent.hashtags = jsonObject["hashtags"] as? [String]
-              tempContent.whistleCount = jsonObject["content_whistle_count"] as? Int
-              tempContent.isWhistled = (jsonObject["is_whistled"] as? Int) == 0 ? false : true
-              tempContent.isFollowed = (jsonObject["is_followed"] as? Int) == 0 ? false : true
-              tempContent.isBookmarked = (jsonObject["is_bookmarked"] as? Int) == 0 ? false : true
-              if self.mainFeed.count < 2 {
-                tempContent.player = AVPlayer(url: URL(string: tempContent.videoUrl ?? "")!)
-              }
-              tempArray.append(tempContent)
-            }
-            self.mainFeed = tempArray
-            completion()
-          } catch {
-            log("Error parsing JSON: \(error)")
-          }
-        case .failure(let error):
-          log("Error: \(error)")
+        case .success(let success):
+          self.mainFeed = success
+          completion()
+        case .failure:
+          log("decodeFail")
+          break
         }
       }
   }
@@ -345,37 +317,14 @@ extension APIViewModel: PostFeedProtocol {
       method: .get,
       headers: contentTypeJson)
       .validate(statusCode: 200 ..< 300)
-      .response { response in
+      .responseDecodable(of: [GuestContent].self) { response in
         switch response.result {
-        case .success(let data):
-          do {
-            guard let data else {
-              return
-            }
-            let jsonArray = try JSONSerialization.jsonObject(with: data, options: []) as? [[String: Any]]
-            self.guestFeed.removeAll()
-            for jsonObject in jsonArray ?? [] {
-              let tempContent: GuestContent = .init()
-              tempContent.contentId = jsonObject["content_id"] as? Int
-              tempContent.userId = jsonObject["user_id"] as? Int
-              tempContent.userName = jsonObject["user_name"] as? String
-              tempContent.profileImg = jsonObject["profile_img"] as? String
-              tempContent.caption = jsonObject["caption"] as? String
-              tempContent.videoUrl = jsonObject["video_url"] as? String
-              tempContent.thumbnailUrl = jsonObject["thumbnail_url"] as? String
-              tempContent.musicArtist = jsonObject["music_artist"] as? String
-              tempContent.musicTitle = jsonObject["music_title"] as? String
-              tempContent.hashtags = jsonObject["content_hashtags"] as? String
-              tempContent.whistleCount = jsonObject["content_whistle_count"] as? Int
-              self.guestFeed.append(tempContent)
-            }
-            self.guestFeed.removeSubrange(3...)
-            completion()
-          } catch {
-            log(error)
-          }
-        case .failure(let error):
-          log(error)
+        case .success(let success):
+          self.guestFeed = success
+          completion()
+        case .failure:
+          log("decodeFail")
+          break
         }
       }
   }
@@ -407,7 +356,7 @@ extension APIViewModel: PostFeedProtocol {
             singleContent.musicArtist = singleContentJson["music_artist"] as? String
             singleContent.musicTitle = singleContentJson["music_title"] as? String
             singleContent.hashtags = singleContentJson["hashtags"] as? [String]
-            singleContent.whistleCount = singleContentJson["content_whistle_count"] as? Int
+            singleContent.whistleCount = singleContentJson["content_whistle_count"] as? Int ?? 0
             singleContent.isWhistled = (singleContentJson["is_whistled"] as? Int) == 0 ? false : true
             singleContent.isFollowed = (singleContentJson["is_followed"] as? Int) == 0 ? false : true
             singleContent.isBookmarked = (singleContentJson["is_bookmarked"] as? Int) == 0 ? false : true
@@ -426,13 +375,10 @@ extension APIViewModel: PostFeedProtocol {
               tempContent.musicArtist = jsonObject["music_artist"] as? String
               tempContent.musicTitle = jsonObject["music_title"] as? String
               tempContent.hashtags = jsonObject["hashtags"] as? [String]
-              tempContent.whistleCount = jsonObject["content_whistle_count"] as? Int
+              tempContent.whistleCount = jsonObject["content_whistle_count"] as? Int ?? 0
               tempContent.isWhistled = (jsonObject["is_whistled"] as? Int) == 0 ? false : true
               tempContent.isFollowed = (jsonObject["is_followed"] as? Int) == 0 ? false : true
               tempContent.isBookmarked = (jsonObject["is_bookmarked"] as? Int) == 0 ? false : true
-              if self.mainFeed.count < 2 {
-                tempContent.player = AVPlayer(url: URL(string: tempContent.videoUrl ?? "")!)
-              }
               self.mainFeed.append(tempContent)
             }
 

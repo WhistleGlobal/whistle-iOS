@@ -714,14 +714,14 @@ extension MainFeedView {
           await apiViewModel.whistleAction(contentID: currentVideoContentId, method: .delete)
         }
       }
-      apiViewModel.mainFeed[currentIndex].whistleCount? -= 1
+      apiViewModel.mainFeed[currentIndex].whistleCount -= 1
     } else {
       timer = Timer.scheduledTimer(withTimeInterval: 2, repeats: false) { _ in
         Task {
           await apiViewModel.whistleAction(contentID: currentVideoContentId, method: .post)
         }
       }
-      apiViewModel.mainFeed[currentIndex].whistleCount? += 1
+      apiViewModel.mainFeed[currentIndex].whistleCount += 1
     }
     apiViewModel.mainFeed[currentIndex].isWhistled.toggle()
     apiViewModel.postFeedPlayerChanged()
@@ -767,7 +767,7 @@ extension MainFeedView {
         currentVideoUserId = apiViewModel.mainFeed[currentIndex].userId ?? 0
         currentVideoContentId = apiViewModel.mainFeed[currentIndex].contentId ?? 0
         isCurrentVideoWhistled = apiViewModel.mainFeed[currentIndex].isWhistled
-        currentVideoIsBookmarked = apiViewModel.mainFeed[currentIndex].isBookmarked ?? false
+        currentVideoIsBookmarked = apiViewModel.mainFeed[currentIndex].isBookmarked
         await player.seek(to: .zero)
         if !BlockList.shared.userIds.contains(apiViewModel.mainFeed[currentIndex].userId ?? 0) {
           player.play()

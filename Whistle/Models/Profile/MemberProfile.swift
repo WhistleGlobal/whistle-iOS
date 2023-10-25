@@ -23,6 +23,20 @@ class MemberProfile: ObservableObject, Codable {
   var profileImg: String?
   var introduce: String?
   var status: UserStatus = .active
-  var isFollowed = 0
-  var isBlocked = 0
+  var isFollowed = false
+  var isBlocked = false
+
+  init() { }
+
+  required init(from decoder: Decoder) throws {
+    let container = try decoder.container(keyedBy: CodingKeys.self)
+    userId = try container.decode(Int.self, forKey: .userId)
+    userName = try container.decode(String.self, forKey: .userName)
+    profileImg = try container.decode(String?.self, forKey: .profileImg)
+    introduce = try container.decode(String?.self, forKey: .introduce)
+    status = try container.decode(UserStatus.self, forKey: .status)
+    status = try container.decode(UserStatus.self, forKey: .status)
+    isFollowed = try container.decode(Int.self, forKey: .isFollowed) == 1 ? true : false
+    isBlocked = try container.decode(Int.self, forKey: .isBlocked) == 1 ? true : false
+  }
 }
