@@ -356,7 +356,7 @@ extension APIViewModel: PostFeedProtocol {
             singleContent.musicArtist = singleContentJson["music_artist"] as? String
             singleContent.musicTitle = singleContentJson["music_title"] as? String
             singleContent.hashtags = singleContentJson["hashtags"] as? [String]
-            singleContent.whistleCount = singleContentJson["content_whistle_count"] as? Int ?? 0
+              singleContent.whistleCount = singleContentJson["content_whistle_count"] as? Int ?? 0
             singleContent.isWhistled = (singleContentJson["is_whistled"] as? Int) == 0 ? false : true
             singleContent.isFollowed = (singleContentJson["is_followed"] as? Int) == 0 ? false : true
             singleContent.isBookmarked = (singleContentJson["is_bookmarked"] as? Int) == 0 ? false : true
@@ -375,13 +375,12 @@ extension APIViewModel: PostFeedProtocol {
               tempContent.musicArtist = jsonObject["music_artist"] as? String
               tempContent.musicTitle = jsonObject["music_title"] as? String
               tempContent.hashtags = jsonObject["hashtags"] as? [String]
-              tempContent.whistleCount = jsonObject["content_whistle_count"] as? Int ?? 0
+                tempContent.whistleCount = jsonObject["content_whistle_count"] as? Int ?? 0
               tempContent.isWhistled = (jsonObject["is_whistled"] as? Int) == 0 ? false : true
               tempContent.isFollowed = (jsonObject["is_followed"] as? Int) == 0 ? false : true
               tempContent.isBookmarked = (jsonObject["is_bookmarked"] as? Int) == 0 ? false : true
               self.mainFeed.append(tempContent)
             }
-
             completion()
           } catch {
             log("Error parsing JSON: \(error)")
