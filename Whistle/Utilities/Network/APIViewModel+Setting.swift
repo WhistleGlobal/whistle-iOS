@@ -31,11 +31,11 @@ extension APIViewModel: SettingProtocol {
               self.notiSetting = try decoder.decode(NotiSetting.self, from: data)
               continuation.resume()
             } catch {
-              log("Error parsing JSON: \(error)")
+              WhistleLogger.logger.error("Error parsing JSON: \(error)")
               continuation.resume()
             }
           case .failure(let error):
-            log("Error: \(error)")
+            WhistleLogger.logger.error("Failure: \(error)")
             continuation.resume()
           }
         }
@@ -61,7 +61,7 @@ extension APIViewModel: SettingProtocol {
             }
             continuation.resume()
           case .failure(let error):
-            log("\(error)")
+            WhistleLogger.logger.error("Failure: \(error)")
             continuation.resume()
           }
         }
@@ -83,7 +83,7 @@ extension APIViewModel: SettingProtocol {
           }
           continuation.resume()
         case .failure(let error):
-          log("\(error)")
+          WhistleLogger.logger.error("Failure: \(error)")
           continuation.resume()
         }
       }
@@ -107,7 +107,7 @@ extension APIViewModel: SettingProtocol {
             }
             continuation.resume()
           case .failure(let error):
-            log("\(error)")
+            WhistleLogger.logger.error("Failure: \(error)")
             continuation.resume()
           }
         }
@@ -131,7 +131,7 @@ extension APIViewModel: SettingProtocol {
             }
             continuation.resume()
           case .failure(let error):
-            log("\(error)")
+            WhistleLogger.logger.error("Failure: \(error)")
             continuation.resume()
           }
         }
@@ -160,7 +160,7 @@ extension APIViewModel: SettingProtocol {
           }
           completion()
         case .failure(let error):
-          log("\(error)")
+          WhistleLogger.logger.error("Failure: \(error)")
         }
       }
   }
@@ -187,11 +187,11 @@ extension APIViewModel: SettingProtocol {
               self.versionCheck
                 .latestAppVersion = json?["latestAppVersion"] as? String ?? "\(Bundle.main.appVersion ?? "Unknown")"
             } catch {
-              log(error)
+              WhistleLogger.logger.error("Failure: \(error)")
             }
             continuation.resume()
           case .failure(let error):
-            log(error)
+            WhistleLogger.logger.error("Failure: \(error)")
             continuation.resume()
           }
         }

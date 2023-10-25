@@ -7,7 +7,7 @@
 
 import Foundation
 
-class Logger {
+class AespaLogger {
   static var enableLogging = true
 
   static func log(message: String) {

@@ -59,11 +59,11 @@ extension AespaCoreCamera: AVCapturePhotoCaptureDelegate {
     didFinishProcessingPhoto photo: AVCapturePhoto,
     error: Error?)
   {
-    Logger.log(message: "Photo captured")
+    AespaLogger.log(message: "Photo captured")
 
     if let error {
       fileIOResultSubject.send(.failure(error))
-      Logger.log(error: error)
+      AespaLogger.log(error: error)
     } else {
       fileIOResultSubject.send(.success(photo))
     }

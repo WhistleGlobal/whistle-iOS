@@ -69,7 +69,7 @@ extension AespaCoreRecorder: AVCaptureFileOutputRecordingDelegate {
     didStartRecordingTo _: URL,
     from _: [AVCaptureConnection])
   {
-    Logger.log(message: "Recording started")
+    AespaLogger.log(message: "Recording started")
   }
 
   func fileOutput(
@@ -78,10 +78,10 @@ extension AespaCoreRecorder: AVCaptureFileOutputRecordingDelegate {
     from _: [AVCaptureConnection],
     error: Error?)
   {
-    Logger.log(message: "Recording stopped")
+    AespaLogger.log(message: "Recording stopped")
 
     if let error {
-      Logger.log(error: error)
+      AespaLogger.log(error: error)
       fileIOResultSubject.send(.failure(error))
     } else {
       fileIOResultSubject.send(.success(outputFileURL))

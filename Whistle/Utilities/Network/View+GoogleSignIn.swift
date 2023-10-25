@@ -60,7 +60,7 @@ extension View {
       print("URL is nil")
       return
     }
-    log("\(idToken)")
+    WhistleLogger.logger.debug("idToken: \(idToken)")
     var request = URLRequest(url: url)
     request.httpMethod = "POST"
     request.setValue("application/json", forHTTPHeaderField: "Content-Type")
@@ -68,7 +68,7 @@ extension View {
     // 서버 통신
     let task = URLSession.shared.uploadTask(with: request, from: authData) { _, _, error in
       if let error {
-        print("서버 통신 에러: \(error)")
+        WhistleLogger.logger.error("서버 통신 에러: \(error)")
       }
       DispatchQueue.main.async {
         UserAuth.shared.loadData { }

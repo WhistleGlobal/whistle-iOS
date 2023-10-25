@@ -32,7 +32,7 @@ extension APIViewModel: UploadProtocol {
               continuation.resume()
             }
           case .failure(let error):
-            log("업로드 실패:, \(error)")
+            WhistleLogger.logger.error("Failure Upload: \(error)")
             continuation.resume()
           }
         }
@@ -81,7 +81,7 @@ extension APIViewModel: UploadProtocol {
           }
         case .failure(let error):
           UploadProgressViewModel.shared.error = true
-          log("\(error)")
+          WhistleLogger.logger.error("Failure Upload: \(error)")
         }
       }
   }

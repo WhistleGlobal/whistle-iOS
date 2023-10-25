@@ -33,11 +33,11 @@ extension APIViewModel: PostFeedProtocol {
               self.myFeed = self.myFeed.filter { $0.contentId != nil }
               continuation.resume()
             } catch {
-              log("Error parsing JSON: \(error)")
+              WhistleLogger.logger.error("Error parsing JSON: \(error)")
               continuation.resume()
             }
           case .failure(let error):
-            log("Error: \(error)")
+            WhistleLogger.logger.error("Failure: \(error)")
             continuation.resume()
           }
         }
@@ -62,11 +62,11 @@ extension APIViewModel: PostFeedProtocol {
               self.memberFeed = try self.decoder.decode([MemberContent].self, from: data)
               continuation.resume()
             } catch {
-              log("Error parsing JSON: \(error)")
+              WhistleLogger.logger.error("Error parsing JSON: \(error)")
               continuation.resume()
             }
           case .failure(let error):
-            log("Error: \(error)")
+            WhistleLogger.logger.error("Failure: \(error)")
             self.memberFeed = []
             continuation.resume()
           }
@@ -93,11 +93,11 @@ extension APIViewModel: PostFeedProtocol {
               self.bookmark = try decoder.decode([Bookmark].self, from: data)
               continuation.resume()
             } catch {
-              log("Error: \(error)")
+              WhistleLogger.logger.error("Failure: \(error)")
               continuation.resume()
             }
           case .failure(let error):
-            log("Error: \(error)")
+            WhistleLogger.logger.error("Failure: \(error)")
             continuation.resume()
           }
         }
@@ -116,7 +116,7 @@ extension APIViewModel: PostFeedProtocol {
           self.mainFeed = success
           completion()
         case .failure:
-          log("decodeFail")
+          WhistleLogger.logger.error("Failure")
           break
         }
       }
@@ -139,11 +139,11 @@ extension APIViewModel: PostFeedProtocol {
               self.reportedContent = try decoder.decode([ReportedContent].self, from: data)
               continuation.resume()
             } catch {
-              log("Error parsing JSON: \(error)")
+              WhistleLogger.logger.error("Error parsing JSON: \(error)")
               continuation.resume()
             }
           case .failure(let error):
-            log("Error: \(error)")
+            WhistleLogger.logger.error("Failure: \(error)")
             continuation.resume()
           }
         }
@@ -162,7 +162,7 @@ extension APIViewModel: PostFeedProtocol {
           case .success:
             continuation.resume(returning: true)
           case .failure(let error):
-            log(error)
+            WhistleLogger.logger.error("Failure: \(error)")
             continuation.resume(returning: false)
           }
         }
@@ -181,7 +181,7 @@ extension APIViewModel: PostFeedProtocol {
           case .success:
             continuation.resume()
           case .failure(let error):
-            log(error)
+            WhistleLogger.logger.error("Failure: \(error)")
             continuation.resume()
           }
         }
@@ -200,7 +200,7 @@ extension APIViewModel: PostFeedProtocol {
           case .success:
             continuation.resume()
           case .failure(let error):
-            log(error)
+            WhistleLogger.logger.error("Failure: \(error)")
             continuation.resume()
           }
         }
@@ -219,7 +219,7 @@ extension APIViewModel: PostFeedProtocol {
           case .success:
             continuation.resume()
           case .failure(let error):
-            log(error)
+            WhistleLogger.logger.error("Failure: \(error)")
             continuation.resume()
           }
         }
@@ -246,7 +246,7 @@ extension APIViewModel: PostFeedProtocol {
           case .success:
             continuation.resume(returning: 200)
           case .failure(let error):
-            log(error)
+            WhistleLogger.logger.error("Failure: \(error)")
             continuation.resume(returning: error.responseCode ?? 500)
           }
         }
@@ -272,7 +272,7 @@ extension APIViewModel: PostFeedProtocol {
           case .success:
             continuation.resume(returning: 200)
           case .failure(let error):
-            log(error)
+            WhistleLogger.logger.error("Failure: \(error)")
             continuation.resume(returning: error.responseCode ?? 500)
           }
         }
@@ -302,12 +302,12 @@ extension APIViewModel: PostFeedProtocol {
             case .success:
               completion(tempViewCount.views)
             case .failure(let error):
-              log(error)
+              WhistleLogger.logger.error("Failure: \(error)")
             }
           }
       }
     } catch {
-      log(error)
+      WhistleLogger.logger.error("Failure: \(error)")
     }
   }
 
@@ -323,7 +323,7 @@ extension APIViewModel: PostFeedProtocol {
           self.guestFeed = success
           completion()
         case .failure:
-          log("decodeFail")
+          WhistleLogger.logger.error("Error parsing JSON")
           break
         }
       }
@@ -356,7 +356,7 @@ extension APIViewModel: PostFeedProtocol {
             singleContent.musicArtist = singleContentJson["music_artist"] as? String
             singleContent.musicTitle = singleContentJson["music_title"] as? String
             singleContent.hashtags = singleContentJson["hashtags"] as? [String]
-              singleContent.whistleCount = singleContentJson["content_whistle_count"] as? Int ?? 0
+            singleContent.whistleCount = singleContentJson["content_whistle_count"] as? Int ?? 0
             singleContent.isWhistled = (singleContentJson["is_whistled"] as? Int) == 0 ? false : true
             singleContent.isFollowed = (singleContentJson["is_followed"] as? Int) == 0 ? false : true
             singleContent.isBookmarked = (singleContentJson["is_bookmarked"] as? Int) == 0 ? false : true
@@ -375,7 +375,7 @@ extension APIViewModel: PostFeedProtocol {
               tempContent.musicArtist = jsonObject["music_artist"] as? String
               tempContent.musicTitle = jsonObject["music_title"] as? String
               tempContent.hashtags = jsonObject["hashtags"] as? [String]
-                tempContent.whistleCount = jsonObject["content_whistle_count"] as? Int ?? 0
+              tempContent.whistleCount = jsonObject["content_whistle_count"] as? Int ?? 0
               tempContent.isWhistled = (jsonObject["is_whistled"] as? Int) == 0 ? false : true
               tempContent.isFollowed = (jsonObject["is_followed"] as? Int) == 0 ? false : true
               tempContent.isBookmarked = (jsonObject["is_bookmarked"] as? Int) == 0 ? false : true
@@ -383,11 +383,10 @@ extension APIViewModel: PostFeedProtocol {
             }
             completion()
           } catch {
-            log("Error parsing JSON: \(error)")
-            log("피드를 불러올 수 없습니다.")
+            WhistleLogger.logger.error("Error parsing JSON: \(error)")
           }
         case .failure(let error):
-          log("Error: \(error)")
+          WhistleLogger.logger.error("Failure: \(error)")
         }
       }
   }

@@ -37,7 +37,7 @@ class AppleSignInViewModel: ObservableObject {
       else { return }
       sendAuthCodeToBackend(authCode: authCodeString)
     case .failure(let error):
-      log("[auth fail] Error : \(error)")
+      WhistleLogger.logger.error("[auth fail] Error : \(error)")
     }
   }
 
@@ -63,8 +63,8 @@ class AppleSignInViewModel: ObservableObject {
             let id_token = jsonObject["id_token"] as? String,
             let refresh_token = jsonObject["refresh_token"] as? String
           {
-            log(id_token)
-            log(refresh_token)
+            WhistleLogger.logger.debug("id_token: \(id_token)")
+            WhistleLogger.logger.debug("refresh_token: \(refresh_token)")
             DispatchQueue.main.async {
               self.keychain.set("\(id_token)", forKey: "id_token")
               self.keychain.set("\(refresh_token)", forKey: "refresh_token")
@@ -75,7 +75,7 @@ class AppleSignInViewModel: ObservableObject {
             }
           }
         case .failure(let error):
-          log("Error sending authCode to backend: \(error.localizedDescription)")
+          WhistleLogger.logger.error("Error sending authCode to backend: \(error.localizedDescription)")
         }
       }
   }

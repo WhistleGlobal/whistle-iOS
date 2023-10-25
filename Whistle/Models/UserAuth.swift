@@ -69,7 +69,7 @@ class UserAuth: ObservableObject {
     guard let url else {
       return
     }
-    log("idToken \(idTokenKey)")
+    WhistleLogger.logger.debug("idToken \(idTokenKey)")
     let headers: HTTPHeaders = ["Authorization": "Bearer \(idTokenKey)"]
     AF.request(url, method: .get, headers: headers)
       .validate(statusCode: 200 ... 300)
@@ -85,10 +85,10 @@ class UserAuth: ObservableObject {
         case .failure(let error):
           switch self.provider {
           case .apple:
-            log(error)
+            WhistleLogger.logger.error("Error: \(error)")
             self.refresh()
           case .google:
-            log(error)
+            WhistleLogger.logger.error("Error: \(error)")
           }
         }
       }
@@ -106,7 +106,7 @@ class UserAuth: ObservableObject {
     let parameters: Parameters = ["refresh_token": refreshTokenKey]
     AF.request(url, method: .post, parameters: parameters, headers: headers).response { response in
       if let error = response.error {
-        log("\(error.localizedDescription)")
+        WhistleLogger.logger.error("Error: \(error)")
         self.isAccess = false
         return
       }
@@ -123,7 +123,7 @@ class UserAuth: ObservableObject {
           self.loadData { }
         }
       } catch {
-        log(error)
+        WhistleLogger.logger.error("Error: \(error)")
       }
     }
   }

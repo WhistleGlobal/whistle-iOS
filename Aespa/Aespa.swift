@@ -25,7 +25,7 @@ open class Aespa {
     let newCore = AespaSession(option: option)
 
     // Check logging option
-    Logger.enableLogging = option.log.loggingEnabled
+    AespaLogger.enableLogging = option.log.loggingEnabled
 
     // Configure session now
     Task {

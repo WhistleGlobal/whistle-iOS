@@ -62,7 +62,7 @@ class APIViewModel: ObservableObject {
 extension APIViewModel {
   var idToken: String {
     guard let idTokenKey = keychain.get("id_token") else {
-      log("id_Token nil")
+      WhistleLogger.logger.debug("id_token nil")
       return ""
     }
     return idTokenKey
