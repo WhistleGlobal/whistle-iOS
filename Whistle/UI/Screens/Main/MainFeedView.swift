@@ -120,7 +120,7 @@ struct MainFeedView: View {
                       }),
                       whistleCount:
                       Binding(get: {
-                        content.whistleCount ?? 0
+                        content.whistleCount
                       }, set: { newValue in
                         content.whistleCount = newValue
                       }))
@@ -280,6 +280,7 @@ struct MainFeedView: View {
             }
             .padding(.bottom, 32)
           }
+          .frame(width: UIScreen.width, height: UIScreen.height)
           .ignoresSafeArea()
           .ignoresSafeArea(.all, edges: .top)
           .background {
