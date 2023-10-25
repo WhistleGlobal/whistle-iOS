@@ -201,8 +201,7 @@ extension APIViewModel: SettingProtocol {
   func checkUpdateAvailable() async -> Bool {
     guard
       let currentVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String,
-      let bundleID = Bundle.main.infoDictionary?["CFBundleIdentifier"] as? String,
-      let url = URL(string: "http://itunes.apple.com/lookup?bundleId=" + bundleID),
+      let url = URL(string: "http://itunes.apple.com/lookup?id=6463850354&country=kr"),
       let data = try? Data(contentsOf: url),
       let jsonData = try? JSONSerialization.jsonObject(with: data, options: .fragmentsAllowed) as? [String: Any],
       let results = jsonData["results"] as? [[String: Any]],
