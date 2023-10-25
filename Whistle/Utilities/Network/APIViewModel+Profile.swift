@@ -52,7 +52,7 @@ extension APIViewModel: ProfileProtocol {
               continuation.resume(returning: .valid)
             }
           case .failure(let error):
-            log("Error: \(error)")
+            WhistleLogger.logger.error("Failure: \(error)")
             continuation.resume(returning: .invalidID)
           }
         }
@@ -71,8 +71,8 @@ extension APIViewModel: ProfileProtocol {
           case .success(let success):
             self.memberProfile = success
             continuation.resume()
-          case .failure(let failure):
-            log(failure)
+          case .failure(let error):
+            WhistleLogger.logger.error("Failure: \(error)")
             continuation.resume()
           }
         }
@@ -107,7 +107,7 @@ extension APIViewModel: ProfileProtocol {
               continuation.resume()
             }
           case .failure(let error):
-            log("Error: \(error)")
+            WhistleLogger.logger.error("Failure: \(error)")
             continuation.resume()
           }
         }
@@ -136,11 +136,11 @@ extension APIViewModel: ProfileProtocol {
                 continuation.resume()
               }
             } catch {
-              log("Error parsing JSON: \(error)")
+              WhistleLogger.logger.error("Error parsing JSON: \(error)")
               continuation.resume()
             }
           case .failure(let error):
-            log("Error: \(error)")
+            WhistleLogger.logger.error("Failure: \(error)")
           }
         }
     }
@@ -160,11 +160,11 @@ extension APIViewModel: ProfileProtocol {
               self.myFollow = try self.decoder.decode(MyFollow.self, from: data)
               continuation.resume()
             } catch {
-              log("Error decoding JSON: \(error)")
+              WhistleLogger.logger.error("Error parsing JSON: \(error)")
               continuation.resume()
             }
           case .failure(let error):
-            log("Request failed with error: \(error)")
+            WhistleLogger.logger.error("Failure: \(error)")
             continuation.resume()
           }
         }
@@ -185,11 +185,11 @@ extension APIViewModel: ProfileProtocol {
               self.memberFollow = try self.decoder.decode(MemberFollow.self, from: data ?? .init())
               continuation.resume()
             } catch {
-              log("Error decoding JSON: \(error)")
+              WhistleLogger.logger.error("Error parsing JSON: \(error)")
               continuation.resume()
             }
           case .failure(let error):
-            log("Request failed with error: \(error)")
+            WhistleLogger.logger.error("Failure: \(error)")
             continuation.resume()
           }
         }
@@ -228,7 +228,7 @@ extension APIViewModel: ProfileProtocol {
           case .success:
             continuation.resume()
           case .failure(let error):
-            log("Request failed with error: \(error)")
+            WhistleLogger.logger.error("Failure: \(error)")
             continuation.resume()
           }
         }
@@ -247,7 +247,7 @@ extension APIViewModel: ProfileProtocol {
           case .success:
             continuation.resume()
           case .failure(let error):
-            log("Request failed with error: \(error)")
+            WhistleLogger.logger.error("Failure: \(error)")
             continuation.resume()
           }
         }
@@ -275,7 +275,7 @@ extension APIViewModel: ProfileProtocol {
             self.userCreatedDate = formattedDateString
           }
         case .failure(let error):
-          log(error)
+          WhistleLogger.logger.error("Failure: \(error)")
         }
       }
   }
@@ -284,7 +284,7 @@ extension APIViewModel: ProfileProtocol {
     let params = [
       "refresh_token": "\(keychain.get("refresh_token") ?? "")",
     ]
-    log("\(keychain.get("refresh_token") ?? "")")
+
     return await withCheckedContinuation { continuation in
       AF.request(
         "\(domainURL)/apple/logout",
@@ -297,7 +297,7 @@ extension APIViewModel: ProfileProtocol {
           case .success:
             continuation.resume()
           case .failure(let error):
-            log(error)
+            WhistleLogger.logger.error("Failure: \(error)")
             continuation.resume()
           }
         }
@@ -316,7 +316,7 @@ extension APIViewModel: ProfileProtocol {
           case .success:
             continuation.resume()
           case .failure(let error):
-            log("Request failed with error: \(error)")
+            WhistleLogger.logger.error("Failure: \(error)")
             continuation.resume()
           }
         }

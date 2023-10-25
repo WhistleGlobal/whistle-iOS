@@ -8,8 +8,21 @@
 import AVFoundation
 import Foundation
 
-class GuestContent: Hashable, ObservableObject {
+class GuestContent: Hashable, ObservableObject, Codable {
   // MARK: Lifecycle
+  enum CodingKeys: String, CodingKey {
+    case contentId = "content_id"
+    case userId = "user_id"
+    case userName = "user_name"
+    case profileImg = "profile_img"
+    case caption
+    case videoUrl = "video_url"
+    case thumbnailUrl = "thumbnail_url"
+    case musicArtist = "music_artist"
+    case musicTitle = "music_title"
+    case hashtags = "content_hashtags"
+    case whistleCount = "content_whistle_count"
+  }
 
   init(
     id: UUID = UUID(),
@@ -22,7 +35,7 @@ class GuestContent: Hashable, ObservableObject {
     thumbnailUrl: String? = nil,
     musicArtist: String? = nil,
     musicTitle: String? = nil,
-    hashtags: String? = nil,
+    hashtags: [String]? = nil,
     whistleCount: Int? = nil)
   {
     self.id = id
@@ -51,8 +64,23 @@ class GuestContent: Hashable, ObservableObject {
   var thumbnailUrl: String?
   var musicArtist: String?
   var musicTitle: String?
-  var hashtags: String?
+  var hashtags: [String]?
   var whistleCount: Int?
+
+  required init(from decoder: Decoder) throws {
+    let container = try decoder.container(keyedBy: CodingKeys.self)
+    contentId = try container.decode(Int.self, forKey: .contentId)
+    userId = try container.decode(Int.self, forKey: .userId)
+    userName = try container.decode(String.self, forKey: .userName)
+    profileImg = try container.decode(String?.self, forKey: .profileImg)
+    caption = try container.decode(String?.self, forKey: .caption)
+    videoUrl = try container.decode(String.self, forKey: .videoUrl)
+    thumbnailUrl = try container.decode(String.self, forKey: .thumbnailUrl)
+    musicArtist = try container.decode(String?.self, forKey: .musicArtist)
+    musicTitle = try container.decode(String?.self, forKey: .musicTitle)
+    hashtags = try container.decode([String]?.self, forKey: .hashtags)
+    whistleCount = try container.decode(Int?.self, forKey: .whistleCount)
+  }
 
   // Equatable conformance for completeness (optional but recommended)
   static func == (lhs: GuestContent, rhs: GuestContent) -> Bool {

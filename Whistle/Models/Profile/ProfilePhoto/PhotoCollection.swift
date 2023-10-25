@@ -47,10 +47,10 @@ class PhotoCollection: NSObject, ObservableObject {
 
   init?(albumWithIdentifier identifier: String) {
     guard let assetCollection = PhotoCollection.getAlbum(identifier: identifier) else {
-      logger.error("Photo album not found for identifier: \(identifier)")
+      WhistleLogger.logger.error("Photo album not found for identifier: \(identifier)")
       return nil
     }
-    logger.log("Loaded photo album with identifier: \(identifier)")
+    WhistleLogger.logger.log("Loaded photo album with identifier: \(identifier)")
     self.assetCollection = assetCollection
     super.init()
     Task {
@@ -72,34 +72,34 @@ class PhotoCollection: NSObject, ObservableObject {
 
     if let smartAlbumType {
       if let assetCollection = PhotoCollection.getSmartAlbum(subtype: smartAlbumType) {
-        logger.log("Loaded smart album of type: \(smartAlbumType.rawValue)")
+        WhistleLogger.logger.log("Loaded smart album of type: \(smartAlbumType.rawValue)")
         self.assetCollection = assetCollection
         await refreshPhotoAssets()
         return
       } else {
-        logger.error("Unable to load smart album of type: : \(smartAlbumType.rawValue)")
+        WhistleLogger.logger.error("Unable to load smart album of type: : \(smartAlbumType.rawValue)")
         throw PhotoCollectionError.unableToLoadSmartAlbum(smartAlbumType)
       }
     }
 
     guard let name = albumName, !name.isEmpty else {
-      logger.error("Unable to load an album without a name.")
+      WhistleLogger.logger.error("Unable to load an album without a name.")
       throw PhotoCollectionError.missingAlbumName
     }
 
     if let assetCollection = PhotoCollection.getAlbum(named: name) {
-      logger.log("Loaded photo album named: \(name)")
+      WhistleLogger.logger.log("Loaded photo album named: \(name)")
       self.assetCollection = assetCollection
       await refreshPhotoAssets()
       return
     }
 
     guard createAlbumIfNotFound else {
-      logger.error("Unable to find photo album named: \(name)")
+      WhistleLogger.logger.error("Unable to find photo album named: \(name)")
       throw PhotoCollectionError.unableToFindAlbum(name)
     }
 
-    logger.log("Creating photo album named: \(name)")
+    WhistleLogger.logger.log("Creating photo album named: \(name)")
 
     if let assetCollection = try? await PhotoCollection.createAlbum(named: name) {
       self.assetCollection = assetCollection
@@ -131,7 +131,7 @@ class PhotoCollection: NSObject, ObservableObject {
       await refreshPhotoAssets()
 
     } catch {
-      logger.error("Error adding image to photo library: \(error.localizedDescription)")
+      WhistleLogger.logger.error("Error adding image to photo library: \(error.localizedDescription)")
       throw PhotoCollectionError.addImageError(error)
     }
   }
@@ -151,7 +151,7 @@ class PhotoCollection: NSObject, ObservableObject {
       await refreshPhotoAssets()
 
     } catch {
-      logger.error("Error removing all photos from the album: \(error.localizedDescription)")
+      WhistleLogger.logger.error("Error removing all photos from the album: \(error.localizedDescription)")
       throw PhotoCollectionError.removeAllError(error)
     }
   }
@@ -176,7 +176,7 @@ class PhotoCollection: NSObject, ObservableObject {
       await refreshPhotoAssets()
 
     } catch {
-      logger.error("Error removing all photos from the album: \(error.localizedDescription)")
+      WhistleLogger.logger.error("Error removing all photos from the album: \(error.localizedDescription)")
       throw PhotoCollectionError.removeAllError(error)
     }
   }
@@ -200,7 +200,7 @@ class PhotoCollection: NSObject, ObservableObject {
     if let newFetchResult {
       await MainActor.run {
         photoAssets = PhotoAssetCollection(newFetchResult)
-        logger.debug("PhotoCollection photoAssets refreshed: \(self.photoAssets.count)")
+        WhistleLogger.logger.debug("PhotoCollection photoAssets refreshed: \(self.photoAssets.count)")
       }
     }
   }
@@ -215,7 +215,7 @@ class PhotoCollection: NSObject, ObservableObject {
       options: albumOptions).firstObject
 
     guard let album = albumCollection else {
-      print("앨범을 찾을 수 없습니다.")
+      WhistleLogger.logger.debug("엘범을 찾을 수 없습니다.")
       return
     }
 
@@ -228,7 +228,7 @@ class PhotoCollection: NSObject, ObservableObject {
 
     await MainActor.run {
       photoAssets = PhotoAssetCollection(fetchResult)
-      logger.debug("앨범 '\(albumName)'의 이미지를 가져왔습니다. 이미지 수: \(self.photoAssets.count)")
+      WhistleLogger.logger.debug("앨범 '\(albumName)'의 이미지를 가져왔습니다. 이미지 수: \(self.photoAssets.count)")
     }
   }
 
@@ -250,7 +250,7 @@ class PhotoCollection: NSObject, ObservableObject {
     }
 
     guard let album = albumCollection else {
-      print("Smart album not found.")
+      WhistleLogger.logger.debug("Smart album not found")
       return
     }
 
@@ -263,7 +263,7 @@ class PhotoCollection: NSObject, ObservableObject {
 
     await MainActor.run {
       photoAssets = PhotoAssetCollection(fetchResult)
-      logger.debug("Images fetched from smart album '\(albumName)'. Count: \(self.photoAssets.count)")
+      WhistleLogger.logger.debug("Images fetched from smart album '\(albumName)'. Count: \(self.photoAssets.count)")
     }
   }
 
@@ -294,10 +294,10 @@ class PhotoCollection: NSObject, ObservableObject {
         collectionPlaceholder = createAlbumRequest.placeholderForCreatedAssetCollection
       }
     } catch {
-      logger.error("Error creating album in photo library: \(error.localizedDescription)")
+      WhistleLogger.logger.error("Error creating album in photo library: \(error.localizedDescription)")
       throw PhotoCollectionError.createAlbumError(error)
     }
-    logger.log("Created photo album named: \(name)")
+    WhistleLogger.logger.log("Created photo album named: \(name)")
     guard let collectionIdentifier = collectionPlaceholder?.localIdentifier else {
       throw PhotoCollectionError.missingLocalIdentifier
     }
@@ -436,5 +436,3 @@ extension PhotoCollection: PHPhotoLibraryChangeObserver {
     }
   }
 }
-
-private let logger = Logger(subsystem: "com.apple.swiftplaygroundscontent.capturingphotos", category: "PhotoCollection")

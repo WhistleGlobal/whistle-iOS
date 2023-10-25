@@ -144,7 +144,7 @@ struct ProfileImagePickerView: View {
             selectedImage = photo?.photo
           }
         } catch {
-          log(error)
+          WhistleLogger.logger.error("Error: \(error)")
         }
       }
     }

@@ -63,9 +63,24 @@ class ReportedContent: Hashable, Decodable {
   var whistleCount = 0
   var musicArtist: String?
   var musicTitle: String?
-  var hashtags: String?
+  var hashtags: [String]?
   var viewCounts = 0
-  var isWhistled = 0
+  var isWhistled = false
+
+  required init(from decoder: Decoder) throws {
+    let container = try decoder.container(keyedBy: CodingKeys.self)
+    userId = try container.decode(Int.self, forKey: .userId)
+    userName = try container.decode(String.self, forKey: .userName)
+    profileImg = try container.decode(String?.self, forKey: .profileImg)
+    caption = try container.decode(String.self, forKey: .caption)
+    videoUrl = try container.decode(String.self, forKey: .videoUrl)
+    thumbnailUrl = try container.decode(String.self, forKey: .thumbnailUrl)
+    musicArtist = try container.decode(String?.self, forKey: .musicArtist)
+    musicTitle = try container.decode(String?.self, forKey: .musicTitle)
+    hashtags = try container.decode([String].self, forKey: .hashtags)
+    viewCounts = try container.decode(Int.self, forKey: .viewCounts)
+    isWhistled = try container.decode(Int.self, forKey: .isWhistled) == 1
+  }
 
   static func == (lhs: ReportedContent, rhs: ReportedContent) -> Bool {
     lhs.videoUrl == rhs.videoUrl

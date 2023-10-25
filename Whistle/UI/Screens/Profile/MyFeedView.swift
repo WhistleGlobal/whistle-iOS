@@ -113,9 +113,9 @@ struct MyFeedView: View {
                         musicTitle: content.musicTitle ?? "원본 오디오",
                         isWhistled:
                         Binding(get: {
-                          content.isWhistled == 1 ? true : false
+                          content.isWhistled
                         }, set: { newValue in
-                          content.isWhistled = newValue ? 1 : 0
+                          content.isWhistled = newValue
                         }),
                         whistleCount:
                         Binding(get: {
@@ -353,7 +353,7 @@ extension MyFeedView {
   func whistleToggle() {
     HapticManager.instance.impact(style: .medium)
     timer?.invalidate()
-    if apiViewModel.myFeed[currentIndex].isWhistled == 1 {
+    if apiViewModel.myFeed[currentIndex].isWhistled {
       timer = Timer.scheduledTimer(withTimeInterval: 2, repeats: false) { _ in
         Task {
           await apiViewModel.whistleAction(contentID: apiViewModel.myFeed[currentIndex].contentId ?? 0, method: .delete)
@@ -368,7 +368,7 @@ extension MyFeedView {
       }
       apiViewModel.myFeed[currentIndex].contentWhistleCount! += 1
     }
-    apiViewModel.myFeed[currentIndex].isWhistled = apiViewModel.myFeed[currentIndex].isWhistled == 1 ? 0 : 1
+    apiViewModel.myFeed[currentIndex].isWhistled.toggle()
     apiViewModel.postFeedPlayerChanged()
   }
 }

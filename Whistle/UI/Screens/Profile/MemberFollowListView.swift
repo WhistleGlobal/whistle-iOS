@@ -168,66 +168,72 @@ extension MemberFollowListView {
 
   @ViewBuilder
   func memberFollowerList() -> some View {
-    ForEach(filteredFollower, id: \.userName) { follower in
-      NavigationLink {
-        if UIDevice.current.userInterfaceIdiom == .phone {
-          switch UIScreen.main.nativeBounds.height {
-          case 1334: // iPhone SE 3rd generation
-            SEMemberProfileView(players: .constant([]), currentIndex: .constant(0), userId: follower.followerId)
-              .environmentObject(apiViewModel)
-              .id(UUID())
-          default:
-            MemberProfileView(players: .constant([]), currentIndex: .constant(0), userId: follower.followerId)
-              .environmentObject(apiViewModel)
-              .id(UUID())
+    ScrollView {
+      ForEach(filteredFollower, id: \.userName) { follower in
+        NavigationLink {
+          if UIDevice.current.userInterfaceIdiom == .phone {
+            switch UIScreen.main.nativeBounds.height {
+            case 1334: // iPhone SE 3rd generation
+              SEMemberProfileView(players: .constant([]), currentIndex: .constant(0), userId: follower.followerId)
+                .environmentObject(apiViewModel)
+                .id(UUID())
+            default:
+              MemberProfileView(players: .constant([]), currentIndex: .constant(0), userId: follower.followerId)
+                .environmentObject(apiViewModel)
+                .id(UUID())
+            }
           }
+        } label: {
+          personRow(
+            isFollowed: Binding(get: {
+              follower.isFollowed
+            }, set: { newValue in
+              follower.isFollowed = newValue
+            }),
+            userName: follower.userName,
+            description: follower.userName,
+            profileImage: follower.profileImg ?? "",
+            userId: follower.followerId)
         }
-      } label: {
-        personRow(
-          isFollowed: Binding(get: {
-            follower.isFollowed
-          }, set: { newValue in
-            follower.isFollowed = newValue
-          }),
-          userName: follower.userName,
-          description: follower.userName,
-          profileImage: follower.profileImg ?? "",
-          userId: follower.followerId)
+        .id(UUID())
       }
-      .id(UUID())
     }
+    .scrollIndicators(.hidden)
   }
 
   @ViewBuilder
   func memberFollowingList() -> some View {
-    ForEach(filteredFollowing, id: \.userName) { following in
-      NavigationLink {
-        if UIDevice.current.userInterfaceIdiom == .phone {
-          switch UIScreen.main.nativeBounds.height {
-          case 1334: // iPhone SE 3rd generation
-            SEMemberProfileView(players: .constant([]), currentIndex: .constant(0), userId: following.followingId)
-              .environmentObject(apiViewModel)
-              .id(UUID())
-          default:
-            MemberProfileView(players: .constant([]), currentIndex: .constant(0), userId: following.followingId)
-              .environmentObject(apiViewModel)
-              .id(UUID())
+    ScrollView {
+      ForEach(filteredFollowing, id: \.userName) { following in
+        NavigationLink {
+          if UIDevice.current.userInterfaceIdiom == .phone {
+            switch UIScreen.main.nativeBounds.height {
+            case 1334: // iPhone SE 3rd generation
+              SEMemberProfileView(players: .constant([]), currentIndex: .constant(0), userId: following.followingId)
+                .environmentObject(apiViewModel)
+                .id(UUID())
+            default:
+              MemberProfileView(players: .constant([]), currentIndex: .constant(0), userId: following.followingId)
+                .environmentObject(apiViewModel)
+                .id(UUID())
+            }
           }
+        } label: {
+          personRow(
+            isFollowed: Binding(get: {
+              following.isFollowed
+            }, set: { newValue in
+              following.isFollowed = newValue
+            }),
+            userName: following.userName,
+            description: following.userName,
+            profileImage: following.profileImg ?? "",
+            userId: following.followingId)
         }
-      } label: {
-        personRow(
-          isFollowed: Binding(get: {
-            following.isFollowed
-          }, set: { newValue in
-            following.isFollowed = newValue
-          }),
-          userName: following.userName,
-          description: following.userName,
-          profileImage: following.profileImg ?? "",
-          userId: following.followingId)
+        .id(UUID())
       }
-      .id(UUID())
     }
+    .scrollIndicators(.hidden)
   }
 }
 

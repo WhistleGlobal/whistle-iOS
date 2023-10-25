@@ -36,14 +36,14 @@ struct VideoAssetAdditionProcessor: AespaAssetProcessing {
         let placeholder = assetChangeRequest.placeholderForCreatedAsset,
         let albumChangeRequest = PHAssetCollectionChangeRequest(for: album.underlyingAssetCollection)
       else {
-        Logger.log(error: AespaError.album(reason: .unabledToAccess))
+        AespaLogger.log(error: AespaError.album(reason: .unabledToAccess))
         return
       }
 
       let enumeration = NSArray(object: placeholder)
       albumChangeRequest.addAssets(enumeration)
 
-      Logger.log(message: "File is added to album")
+      AespaLogger.log(message: "File is added to album")
     }
   }
 }

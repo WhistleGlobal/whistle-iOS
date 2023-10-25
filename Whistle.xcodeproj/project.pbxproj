@@ -107,7 +107,7 @@
 		1BA24B3B2ADBFF8600DB0992 /* VideoFileGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BA24AFD2ADBFF8600DB0992 /* VideoFileGenerator.swift */; };
 		1BA24B3C2ADBFF8600DB0992 /* FilePathProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BA24AFE2ADBFF8600DB0992 /* FilePathProvider.swift */; };
 		1BA24B3D2ADBFF8600DB0992 /* PhotoFileGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BA24AFF2ADBFF8600DB0992 /* PhotoFileGenerator.swift */; };
-		1BA24B3E2ADBFF8600DB0992 /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BA24B012ADBFF8600DB0992 /* Logger.swift */; };
+		1BA24B3E2ADBFF8600DB0992 /* AespaLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BA24B012ADBFF8600DB0992 /* AespaLogger.swift */; };
 		1BA24B3F2ADBFF8600DB0992 /* AuthorizationChecker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BA24B032ADBFF8600DB0992 /* AuthorizationChecker.swift */; };
 		1BA24B402ADBFF8600DB0992 /* AlbumImporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BA24B052ADBFF8600DB0992 /* AlbumImporter.swift */; };
 		1BA24B412ADBFF8600DB0992 /* AespaOption.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BA24B062ADBFF8600DB0992 /* AespaOption.swift */; };
@@ -302,6 +302,9 @@
 		787C0A5A2AC19C730021BC02 /* Roboto-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 787C0A592AC19C730021BC02 /* Roboto-Medium.ttf */; };
 		787C8AE02AB3293C00723085 /* ProfileReportCommentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 787C8ADF2AB3293C00723085 /* ProfileReportCommentView.swift */; };
 		787C8B1A2AB340E500723085 /* ReportCompleteView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 787C8B192AB340E500723085 /* ReportCompleteView.swift */; };
+		787FA24E2AE8E3B700B9BBDE /* WhistleLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 787FA24D2AE8E3B700B9BBDE /* WhistleLogger.swift */; };
+		787FA2502AE8E43900B9BBDE /* WhistleLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 787FA24F2AE8E43900B9BBDE /* WhistleLogger.swift */; };
+		787FA2522AE8E46F00B9BBDE /* WhistleLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 787FA2512AE8E46F00B9BBDE /* WhistleLogger.swift */; };
 		788010872ABC7EF800116FD5 /* MemberFollowListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 788010862ABC7EF800116FD5 /* MemberFollowListView.swift */; };
 		7880108A2ABC82FC00116FD5 /* MainFeedReportReasonSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 788010892ABC82FC00116FD5 /* MainFeedReportReasonSelectionView.swift */; };
 		7880108C2ABC837A00116FD5 /* MainFeedReportCommentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7880108B2ABC837A00116FD5 /* MainFeedReportCommentView.swift */; };
@@ -494,7 +497,7 @@
 		1BA24AFD2ADBFF8600DB0992 /* VideoFileGenerator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoFileGenerator.swift; sourceTree = "<group>"; };
 		1BA24AFE2ADBFF8600DB0992 /* FilePathProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FilePathProvider.swift; sourceTree = "<group>"; };
 		1BA24AFF2ADBFF8600DB0992 /* PhotoFileGenerator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhotoFileGenerator.swift; sourceTree = "<group>"; };
-		1BA24B012ADBFF8600DB0992 /* Logger.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Logger.swift; sourceTree = "<group>"; };
+		1BA24B012ADBFF8600DB0992 /* AespaLogger.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AespaLogger.swift; sourceTree = "<group>"; };
 		1BA24B032ADBFF8600DB0992 /* AuthorizationChecker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuthorizationChecker.swift; sourceTree = "<group>"; };
 		1BA24B052ADBFF8600DB0992 /* AlbumImporter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlbumImporter.swift; sourceTree = "<group>"; };
 		1BA24B062ADBFF8600DB0992 /* AespaOption.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AespaOption.swift; sourceTree = "<group>"; };
@@ -684,6 +687,9 @@
 		787C0A592AC19C730021BC02 /* Roboto-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Roboto-Medium.ttf"; sourceTree = "<group>"; };
 		787C8ADF2AB3293C00723085 /* ProfileReportCommentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileReportCommentView.swift; sourceTree = "<group>"; };
 		787C8B192AB340E500723085 /* ReportCompleteView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportCompleteView.swift; sourceTree = "<group>"; };
+		787FA24D2AE8E3B700B9BBDE /* WhistleLogger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WhistleLogger.swift; sourceTree = "<group>"; };
+		787FA24F2AE8E43900B9BBDE /* WhistleLogger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WhistleLogger.swift; sourceTree = "<group>"; };
+		787FA2512AE8E46F00B9BBDE /* WhistleLogger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WhistleLogger.swift; sourceTree = "<group>"; };
 		788010862ABC7EF800116FD5 /* MemberFollowListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemberFollowListView.swift; sourceTree = "<group>"; };
 		788010892ABC82FC00116FD5 /* MainFeedReportReasonSelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainFeedReportReasonSelectionView.swift; sourceTree = "<group>"; };
 		7880108B2ABC837A00116FD5 /* MainFeedReportCommentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainFeedReportCommentView.swift; sourceTree = "<group>"; };
@@ -1052,6 +1058,7 @@
 				1B3895772AB9CC2C00B4C8DD /* Helpers */,
 				1B3955512A9507CC00BCB4DF /* Extensions */,
 				7861E6892ACD092B00612E2F /* NavigationUtil.swift */,
+				787FA24D2AE8E3B700B9BBDE /* WhistleLogger.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -1397,6 +1404,7 @@
 				1BA24B002ADBFF8600DB0992 /* Log */,
 				1BA24B022ADBFF8600DB0992 /* Authorization */,
 				1BA24B042ADBFF8600DB0992 /* Album */,
+				787FA24F2AE8E43900B9BBDE /* WhistleLogger.swift */,
 			);
 			path = Util;
 			sourceTree = "<group>";
@@ -1424,7 +1432,7 @@
 		1BA24B002ADBFF8600DB0992 /* Log */ = {
 			isa = PBXGroup;
 			children = (
-				1BA24B012ADBFF8600DB0992 /* Logger.swift */,
+				1BA24B012ADBFF8600DB0992 /* AespaLogger.swift */,
 			);
 			path = Log;
 			sourceTree = "<group>";
@@ -1717,6 +1725,7 @@
 				1BD4E63A2ABA2F8600ADB783 /* DataTrack */,
 				1BD4E63D2ABA2F8600ADB783 /* PickerManager+Album.swift */,
 				1BD4E63E2ABA2F8600ADB783 /* PickerManager+Video.swift */,
+				787FA2512AE8E46F00B9BBDE /* WhistleLogger.swift */,
 			);
 			path = Util;
 			sourceTree = "<group>";
@@ -2348,6 +2357,7 @@
 				1B3895542AB9CB8C00B4C8DD /* VideoExporterViewModel.swift in Sources */,
 				78DDADFA2AA1A37F00960552 /* AppKeys.swift in Sources */,
 				78E19B122AACE73D001DD3C8 /* ReportedContent.swift in Sources */,
+				787FA24E2AE8E3B700B9BBDE /* WhistleLogger.swift in Sources */,
 				1BEB20162AE12866008A7253 /* UploadProgressViewModel.swift in Sources */,
 				7819532E2ABA261A0053B975 /* MyFeedView.swift in Sources */,
 				7860FC232AB04A2F007C5C79 /* OffsetKey.swift in Sources */,
@@ -2409,7 +2419,8 @@
 				1BA24B462ADBFF8600DB0992 /* FocusTuner.swift in Sources */,
 				1BA24B2A2ADBFF8600DB0992 /* AespaVideoContext.swift in Sources */,
 				1BA24B1C2ADBFF8600DB0992 /* AssetCachingProxy.swift in Sources */,
-				1BA24B3E2ADBFF8600DB0992 /* Logger.swift in Sources */,
+				787FA2502AE8E43900B9BBDE /* WhistleLogger.swift in Sources */,
+				1BA24B3E2ADBFF8600DB0992 /* AespaLogger.swift in Sources */,
 				1BA24B1E2ADBFF8600DB0992 /* PhotoAsset.swift in Sources */,
 				1BA24B252ADBFF8600DB0992 /* PhotoAssetAdditionProcessor.swift in Sources */,
 				1BA24B322ADBFF8600DB0992 /* AespaCoreSession+AespaRepresentable.swift in Sources */,
@@ -2445,6 +2456,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				787FA2522AE8E46F00B9BBDE /* WhistleLogger.swift in Sources */,
 				1BD4E75B2ABA2F8600ADB783 /* LivePhotoTipView.swift in Sources */,
 				1BD4E7D62ABBF2B500ADB783 /* Picker+UIScreen.swift in Sources */,
 				1BD4E7272ABA2F8600ADB783 /* ExportTool+PhotoData.swift in Sources */,

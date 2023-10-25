@@ -29,11 +29,11 @@ extension APIViewModel: MusicProtocol {
 
               continuation.resume(returning: musicList)
             } catch {
-              log("Error parsing JSON: \(error)")
+              WhistleLogger.logger.error("Error parsing JSON: \(error)")
               continuation.resume(returning: [])
             }
           case .failure(let error):
-            log("Error: \(error)")
+            WhistleLogger.logger.error("Failure: \(error)")
             continuation.resume(returning: [])
           }
         }

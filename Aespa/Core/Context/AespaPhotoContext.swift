@@ -60,7 +60,7 @@ extension AespaPhotoContext: PhotoContext {
   public var photoFilePublisher: AnyPublisher<Result<PhotoFile, Error>, Never> {
     photoFileBufferSubject.handleEvents(receiveOutput: { status in
       if case .failure(let error) = status {
-        Logger.log(error: error)
+        AespaLogger.log(error: error)
       }
     })
     .compactMap { $0 }
@@ -79,7 +79,7 @@ extension AespaPhotoContext: PhotoContext {
         let photoFile = try await self.capturePhotoWithError()
         completionHandler(.success(photoFile))
       } catch {
-        Logger.log(error: error)
+        AespaLogger.log(error: error)
         completionHandler(.failure(error))
       }
     }

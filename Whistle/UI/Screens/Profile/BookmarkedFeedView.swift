@@ -111,9 +111,9 @@ struct BookmarkedFeedView: View {
                       musicTitle: content.musicTitle ?? "원본 오디오",
                       isWhistled:
                       Binding(get: {
-                        content.isWhistled == 1 ? true : false
+                        content.isWhistled
                       }, set: { newValue in
-                        content.isWhistled = newValue ? 1 : 0
+                        content.isWhistled = newValue
                       }),
                       whistleCount:
                       Binding(get: {
@@ -369,7 +369,7 @@ extension BookmarkedFeedView {
   func whistleToggle() {
     HapticManager.instance.impact(style: .medium)
     timer?.invalidate()
-    if apiViewModel.bookmark[currentIndex].isWhistled == 1 {
+    if apiViewModel.bookmark[currentIndex].isWhistled {
       let contentId = apiViewModel.bookmark[currentIndex].contentId
       timer = Timer.scheduledTimer(withTimeInterval: 2, repeats: false) { _ in
         Task {
@@ -386,7 +386,7 @@ extension BookmarkedFeedView {
       }
       apiViewModel.bookmark[currentIndex].whistleCount += 1
     }
-    apiViewModel.bookmark[currentIndex].isWhistled = apiViewModel.bookmark[currentIndex].isWhistled == 1 ? 0 : 1
+    apiViewModel.bookmark[currentIndex].isWhistled.toggle()
     apiViewModel.postFeedPlayerChanged()
   }
 }

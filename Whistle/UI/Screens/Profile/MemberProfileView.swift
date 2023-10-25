@@ -67,7 +67,7 @@ struct MemberProfileView: View {
           .zIndex(1)
           .padding(.bottom, 12)
         if apiViewModel.memberFeed.isEmpty {
-          if !(apiViewModel.memberProfile.isBlocked == 1) {
+          if !apiViewModel.memberProfile.isBlocked {
             Spacer()
             Image(systemName: "photo.fill")
               .resizable()
@@ -106,7 +106,7 @@ struct MemberProfileView: View {
                   videoThumbnailView(
                     thumbnailUrl: content.thumbnailUrl ?? "",
                     viewCount: content.contentViewCount ?? 0,
-                    isHated: content.isHated ?? 0)
+                    isHated: content.isHated)
                 }
                 .id(UUID())
               }
@@ -129,8 +129,8 @@ struct MemberProfileView: View {
     .navigationBarBackButtonHidden()
     .confirmationDialog("", isPresented: $showDialog) {
       if apiViewModel.myProfile.userId != userId {
-        Button(apiViewModel.memberProfile.isBlocked == 1 ? "차단 해제" : "차단", role: .destructive) {
-          if apiViewModel.memberProfile.isBlocked == 1 {
+        Button(apiViewModel.memberProfile.isBlocked ? "차단 해제" : "차단", role: .destructive) {
+          if apiViewModel.memberProfile.isBlocked {
             showUnblockAlert = true
           } else {
             showBlockAlert = true
@@ -154,7 +154,7 @@ struct MemberProfileView: View {
     }
     .task {
       await apiViewModel.requestMemberProfile(userID: userId)
-      isFollow = apiViewModel.memberProfile.isFollowed == 1 ? true : false
+      isFollow = apiViewModel.memberProfile.isFollowed
       isProfileLoaded = true
       await apiViewModel.requestMemberFollow(userID: userId)
       await apiViewModel.requestMemberWhistlesCount(userID: userId)
@@ -246,7 +246,7 @@ extension MemberProfileView {
           .padding(.bottom, 16)
       }
       .frame(height: introduceHeight)
-      if apiViewModel.memberProfile.isBlocked == 1 {
+      if apiViewModel.memberProfile.isBlocked {
         Button {
           showUnblockAlert = true
         } label: {
@@ -279,7 +279,7 @@ extension MemberProfileView {
       }
       HStack(spacing: 0) {
         VStack(spacing: 4) {
-          if apiViewModel.memberProfile.isBlocked == 1 {
+          if apiViewModel.memberProfile.isBlocked {
             Text("0")
               .foregroundColor(Color.LabelColor_Primary_Dark)
               .fontSystem(fontDesignSystem: .title2_Expanded)
@@ -303,7 +303,7 @@ extension MemberProfileView {
             .id(UUID())
         } label: {
           VStack(spacing: 4) {
-            if apiViewModel.memberProfile.isBlocked == 1 {
+            if apiViewModel.memberProfile.isBlocked {
               Text("0")
                 .foregroundColor(Color.LabelColor_Primary_Dark)
                 .fontSystem(fontDesignSystem: .title2_Expanded)
@@ -321,7 +321,7 @@ extension MemberProfileView {
           }
           .hCenter()
         }
-        .disabled(apiViewModel.memberProfile.isBlocked == 1)
+        .disabled(apiViewModel.memberProfile.isBlocked)
         .id(UUID())
       }
       .frame(height: whistleFollowerTabHeight)
@@ -369,8 +369,11 @@ extension MemberProfileView {
     }
   }
 
+  // var isFollowed = false
+  // var isBlocked = false
+
   @ViewBuilder
-  func videoThumbnailView(thumbnailUrl: String, viewCount: Int, isHated: Int) -> some View {
+  func videoThumbnailView(thumbnailUrl: String, viewCount: Int, isHated: Bool) -> some View {
     Color.black.overlay {
       KFImage.url(URL(string: thumbnailUrl))
         .placeholder { // 플레이스 홀더 설정
@@ -378,10 +381,10 @@ extension MemberProfileView {
         }
         .resizable()
         .scaledToFit()
-        .blur(radius: isHated == 1 ? 30 : 0, opaque: false)
-        .scaleEffect(isHated == 1 ? 1.3 : 1)
+        .blur(radius: isHated ? 30 : 0, opaque: false)
+        .scaleEffect(isHated ? 1.3 : 1)
         .overlay {
-          if isHated == 1 {
+          if isHated {
             Image(systemName: "eye.slash.fill")
               .font(.system(size: 30))
               .foregroundColor(.Gray10)

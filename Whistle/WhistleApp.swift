@@ -106,7 +106,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     UNUserNotificationCenter.current()
       .requestAuthorization(options: [.alert, .sound, .badge]) {
         [weak self] granted, _ in
-        log("Permission granted: \(granted)")
+        WhistleLogger.logger.debug("Permission granted: \(granted)")
       }
     // APNS 등록
     application.registerForRemoteNotifications()
@@ -114,35 +114,35 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
   }
 
   func application(_: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: Error) {
-    log("Failed to register for notifications: \(error.localizedDescription)")
+    WhistleLogger.logger.debug("Failed to register for notifications: \(error.localizedDescription)")
   }
 
   // 성공시
   func application(_: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
     let tokenParts = deviceToken.map { data in String(format: "%02.2hhx", data) }
     let token = tokenParts.joined()
-    log("Device Token: \(token)")
+    WhistleLogger.logger.debug("Device Token: \(token)")
     self.deviceToken = token
-    log("Device Token in appstorage: \(self.deviceToken)")
+    WhistleLogger.logger.debug("Device Token in appstorage: \(self.deviceToken)")
   }
-}
-
-public func log<T>(
-  _ object: T?,
-  filename: String = #file,
-  line: Int = #line,
-  funcName: String = #function)
-{
-  #if DEBUG
-  if let obj = object {
-    print("\(filename.components(separatedBy: "/").last ?? "")(\(line)) : \(funcName) : \(obj)")
-  } else {
-    print("\(filename.components(separatedBy: "/").last ?? "")(\(line)) : \(funcName) : nil")
-  }
-  #endif
 }
 
 // MARK: - UniversalRoutingModel
+
+// public func log<T>(
+//  _ object: T?,
+//  filename: String = #file,
+//  line: Int = #line,
+//  funcName: String = #function)
+// {
+//  #if DEBUG
+//  if let obj = object {
+//    print("\(filename.components(separatedBy: "/").last ?? "")(\(line)) : \(funcName) : \(obj)")
+//  } else {
+//    print("\(filename.components(separatedBy: "/").last ?? "")(\(line)) : \(funcName) : nil")
+//  }
+//  #endif
+// }
 
 class UniversalRoutingModel: ObservableObject {
   @Published var isUniversalProfile = false
