@@ -17,6 +17,7 @@ struct ProfileEditIDView: View {
     case valid
     case empty
     case tooShort
+    case tooLong
     case invalidCharacters
     case invalidID
     case updateFailed
@@ -29,9 +30,10 @@ struct ProfileEditIDView: View {
   @StateObject private var tabbarModel = TabbarModel.shared
   @StateObject var apiViewModel = APIViewModel.shared
   @StateObject private var toastViewModel = ToastViewModel.shared
+  @StateObject var alertViewModel = AlertViewModel.shared
+  @FocusState private var isFocused: Bool
 
   @State var inputValidationStatus: InputValidationStatus = .none
-  @State var isAlertActive = false
   @State var originalUsername = ""
 
   var body: some View {
@@ -49,6 +51,13 @@ struct ProfileEditIDView: View {
             }
           }
         }
+        .onSubmit {
+          isFocused = false
+        }
+        .focused($isFocused)
+        .onAppear {
+          isFocused = true
+        }
       Divider().frame(width: UIScreen.width)
       if inputValidationStatus != .none {
         validationLabel()
@@ -64,30 +73,6 @@ struct ProfileEditIDView: View {
     }
     .padding(.horizontal, 16)
     .navigationBarBackButtonHidden()
-    .overlay {
-      AlertPopup(
-        alertStyle: .linear,
-        title: "정말 사용자 ID를\n 변경하시겠습니까?",
-        content: "14일마다 한 번씩 사용자 ID를\n 변경할 수 있습니다.",
-        cancelText: "취소",
-        destructiveText: "변경")
-      {
-        isAlertActive = false
-      } destructiveAction: {
-        Task {
-          let updateStatus = await apiViewModel.updateMyProfile()
-          if updateStatus == .valid {
-            toastViewModel.toastInit(message: "사용자 ID가 수정되었습니다.", padding: 32)
-            dismiss()
-          } else {
-            inputValidationStatus = updateStatus
-            isAlertActive = false
-            originalUsername = apiViewModel.myProfile.userName
-          }
-        }
-      }
-      .opacity(isAlertActive ? 1 : 0)
-    }
     .toolbar {
       ToolbarItem(placement: .cancellationAction) {
         Button {
@@ -106,8 +91,23 @@ struct ProfileEditIDView: View {
       }
       ToolbarItem(placement: .confirmationAction) {
         Button {
-          Task {
-            isAlertActive = true
+          isFocused = false
+          alertViewModel.linearAlert(
+            title: "정말 사용자 ID를\n 변경하시겠습니까?",
+            content: "14일마다 한 번씩 사용자 ID를\n 변경할 수 있습니다.",
+            cancelText: "취소",
+            destructiveText: "변경")
+          {
+            Task {
+              let updateStatus = await apiViewModel.updateMyProfile()
+              if updateStatus == .valid {
+                toastViewModel.toastInit(message: "사용자 ID가 수정되었습니다.", padding: 32)
+                dismiss()
+              } else {
+                inputValidationStatus = updateStatus
+                originalUsername = apiViewModel.myProfile.userName
+              }
+            }
           }
         } label: {
           Text("완료")
@@ -115,8 +115,6 @@ struct ProfileEditIDView: View {
             .fontSystem(fontDesignSystem: .subtitle2_KO)
         }
         .disabled(inputValidationStatus != .valid)
-        .disabled(isAlertActive)
-        .opacity(isAlertActive ? 0 : 1)
       }
     }
     .onAppear {
@@ -152,6 +150,9 @@ extension ProfileEditIDView {
     }
     if input.count < 4 {
       return InputValidationStatus.tooShort
+    }
+    if input.count > 16 {
+      return InputValidationStatus.tooLong
     }
 
     let allowedCharacterSet = CharacterSet(charactersIn: "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789._")
@@ -192,6 +193,8 @@ extension ProfileEditIDView {
       ""
     case .updateFailed:
       "사용자 이름은 14일에 한번만 업데이트할 수 있습니다."
+    case .tooLong:
+      "사용자 ID는 16자 이하 입력해주세요."
     }
   }
 
@@ -199,7 +202,7 @@ extension ProfileEditIDView {
     switch inputValidationStatus {
     case .valid, .none:
       .Success
-    case .empty, .tooShort, .invalidCharacters, .invalidID, .updateFailed:
+    case .empty, .tooShort, .invalidCharacters, .invalidID, .updateFailed, .tooLong:
       .Danger
     }
   }
@@ -208,7 +211,7 @@ extension ProfileEditIDView {
     switch inputValidationStatus {
     case .valid, .none:
       "checkmark.circle"
-    case .empty, .tooShort, .invalidCharacters, .invalidID, .updateFailed:
+    case .empty, .tooShort, .invalidCharacters, .invalidID, .updateFailed, .tooLong:
       "exclamationmark.triangle.fill"
     }
   }

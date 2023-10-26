@@ -74,6 +74,8 @@ struct ProfileReportReasonSelectionView: View {
     }
     .padding(.horizontal, 16)
     .navigationBarBackButtonHidden()
+    .navigationTitle("신고")
+    .navigationBarTitleDisplayMode(.inline)
     .navigationDestination(isPresented: $goComplete) {
       ReportCompleteView(goReport: $goReport)
     }
@@ -85,10 +87,6 @@ struct ProfileReportReasonSelectionView: View {
           Image(systemName: "chevron.backward")
             .foregroundColor(.LabelColor_Primary)
         }
-      }
-      ToolbarItem(placement: .principal) {
-        Text("신고")
-          .fontSystem(fontDesignSystem: .subtitle2_KO)
       }
     }
   }

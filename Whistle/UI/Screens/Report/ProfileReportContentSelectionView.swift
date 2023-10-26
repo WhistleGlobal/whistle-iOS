@@ -41,9 +41,12 @@ struct ProfileReportContentSelectionView: View {
           }
         }
       }
+      .padding(.top, 12)
     }
     .padding(.horizontal, 16)
     .navigationBarBackButtonHidden()
+    .navigationTitle("콘텐츠 선택")
+    .navigationBarTitleDisplayMode(.inline)
     .toolbar {
       ToolbarItem(placement: .cancellationAction) {
         Button {
@@ -52,10 +55,6 @@ struct ProfileReportContentSelectionView: View {
           Image(systemName: "chevron.backward")
             .foregroundColor(.LabelColor_Primary)
         }
-      }
-      ToolbarItem(placement: .principal) {
-        Text("콘텐츠 선택")
-          .fontSystem(fontDesignSystem: .subtitle2_KO)
       }
       ToolbarItem(placement: .confirmationAction) {
         NavigationLink {

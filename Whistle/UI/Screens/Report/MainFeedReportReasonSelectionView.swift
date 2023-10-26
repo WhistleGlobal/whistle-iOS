@@ -12,6 +12,7 @@ import SwiftUI
 struct MainFeedReportReasonSelectionView: View {
   @Environment(\.dismiss) var dismiss
   @StateObject var apiViewModel = APIViewModel.shared
+
   @State var goComplete = false
   @Binding var goReport: Bool
   let contentId: Int
@@ -20,24 +21,6 @@ struct MainFeedReportReasonSelectionView: View {
   var body: some View {
     NavigationStack {
       VStack(spacing: 0) {
-        HStack {
-          Button {
-            dismiss()
-          } label: {
-            Image(systemName: "xmark")
-              .resizable()
-              .scaledToFit()
-              .frame(width: 14, height: 20)
-              .foregroundColor(.LabelColor_Primary)
-          }
-          Spacer()
-          Text("신고")
-            .fontSystem(fontDesignSystem: .subtitle1_KO)
-            .foregroundColor(.LabelColor_Primary)
-          Spacer()
-        }
-        .padding(.horizontal, 16)
-        .padding(.vertical, 14)
         Divider().frame(width: UIScreen.width)
         Text("이 콘텐츠를 신고하는 이유는 무엇인가요?")
           .fontSystem(fontDesignSystem: .subtitle2_KO)
@@ -67,8 +50,20 @@ struct MainFeedReportReasonSelectionView: View {
       }
       .padding(.horizontal, 16)
       .navigationBarBackButtonHidden()
+      .navigationTitle("신고")
+      .navigationBarTitleDisplayMode(.inline)
       .navigationDestination(isPresented: $goComplete) {
         ReportCompleteView(goReport: $goReport)
+      }
+      .toolbar {
+        ToolbarItem(placement: .cancellationAction) {
+          Button {
+            dismiss()
+          } label: {
+            Image(systemName: "xmark")
+              .foregroundColor(.LabelColor_Primary)
+          }
+        }
       }
     }
     .tint(.black)

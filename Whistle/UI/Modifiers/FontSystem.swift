@@ -34,6 +34,7 @@ struct FontSystem: ViewModifier {
     case body1_KO
     case body2_KO
     case caption_KO_Regular
+    case caption2_KO_Regular
     case caption_KO_Semibold
   }
 
@@ -169,6 +170,11 @@ struct FontSystem: ViewModifier {
     case .caption_KO_Regular:
       content
         .font(.custom("AppleSDGothicNeo-Regular", size: 12))
+        .lineSpacing(6)
+        .padding(.vertical, 3)
+    case .caption2_KO_Regular:
+      content
+        .font(.custom("AppleSDGothicNeo-Regular", size: 10))
         .lineSpacing(6)
         .padding(.vertical, 3)
     case .caption_KO_Semibold:

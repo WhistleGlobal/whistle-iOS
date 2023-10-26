@@ -42,92 +42,64 @@ enum AlertStyle {
 ///   - submitAction: 완료 버튼이 수행할 액션을 정의합니다.
 ///
 struct AlertPopup: View {
-  var alertStyle: AlertStyle
-  let title: String?
-  let content: String?
-  let cancelText: String?
-  let destructiveText: String?
-  let submitText: String?
-
-  let cancelAction: (() -> Void)?
-  let destructiveAction: (() -> Void)?
-  let submitAction: (() -> Void)?
-
-  init(
-    alertStyle: AlertStyle = .stack,
-    title: String? = nil,
-    content: String? = nil,
-    cancelText: String? = nil,
-    destructiveText: String? = nil,
-    submitText: String? = nil,
-    cancelAction: (() -> Void)? = nil,
-    destructiveAction: (() -> Void)? = nil,
-    submitAction: (() -> Void)? = nil)
-  {
-    self.alertStyle = alertStyle
-    self.title = title
-    self.content = content
-    self.cancelText = cancelText
-    self.destructiveText = destructiveText
-    self.submitText = submitText
-    self.cancelAction = cancelAction
-    self.destructiveAction = destructiveAction
-    self.submitAction = submitAction
-  }
+  @ObservedObject var alertViewModel = AlertViewModel.shared
 
   var body: some View {
-    ZStack {
-      Color.black.opacity(0.64)
-      VStack(spacing: 0) {
-        if let title {
-          Text(title)
-            .fontSystem(fontDesignSystem: .subtitle2_KO)
-            .foregroundStyle(Color.LabelColor_Primary_Dark)
-            .padding(.bottom, content != nil ? UIScreen.getHeight(8) : UIScreen.getHeight(20))
-            .padding(.horizontal, UIScreen.getWidth(16))
-            .multilineTextAlignment(.center)
-        }
-        if let content {
-          Text(content)
-            .fontSystem(fontDesignSystem: .body2_KO)
-            .foregroundStyle(Color.LabelColor_Secondary_Dark)
-            .lineLimit(nil) // 줄바꿈을 제한하지 않음
-            .multilineTextAlignment(.center) // 중앙 정렬
-            .fixedSize(horizontal: false, vertical: true) // 너비를 넘어갈 경우 자동 줄바꿈
-            .padding(.horizontal, UIScreen.getWidth(16))
-            .padding(.bottom, UIScreen.getHeight(22))
-        }
-        Divider().overlay(Color.Border_Default)
-        alerButton()
-      }
-      .padding(.top, UIScreen.getHeight(24)) // 텍스트와 경계 사이의 여백 추가
-      .frame(width: UIScreen.getWidth(270))
-      .background {
-        RoundedRectangle(cornerRadius: 14)
-          .fill(.clear)
-          .background {
-            glassMorphicView(cornerRadius: 14)
+    if alertViewModel.showAlert {
+      ZStack {
+        Color.black.opacity(0.64)
+        VStack(spacing: 0) {
+          if let title = alertViewModel.title {
+            Text(title)
+              .fontSystem(fontDesignSystem: .subtitle2_KO)
+              .foregroundStyle(Color.LabelColor_Primary_Dark)
+              .padding(.bottom, alertViewModel.content != nil ? UIScreen.getHeight(8) : UIScreen.getHeight(20))
+              .padding(.horizontal, UIScreen.getWidth(16))
+              .multilineTextAlignment(.center)
           }
+          if let content = alertViewModel.content {
+            Text(content)
+              .fontSystem(fontDesignSystem: .body2_KO)
+              .foregroundStyle(Color.LabelColor_Secondary_Dark)
+              .lineLimit(nil) // 줄바꿈을 제한하지 않음
+              .multilineTextAlignment(.center) // 중앙 정렬
+              .fixedSize(horizontal: false, vertical: true) // 너비를 넘어갈 경우 자동 줄바꿈
+              .padding(.horizontal, UIScreen.getWidth(16))
+              .padding(.bottom, UIScreen.getHeight(22))
+          }
+          Divider().overlay(Color.Border_Default)
+          alerButton()
+        }
+        .padding(.top, UIScreen.getHeight(24)) // 텍스트와 경계 사이의 여백 추가
+        .frame(width: UIScreen.getWidth(270))
+        .background {
+          RoundedRectangle(cornerRadius: 14)
+            .fill(.clear)
+            .background {
+              glassMorphicView(cornerRadius: 14)
+            }
+        }
+        .overlay {
+          RoundedRectangle(cornerRadius: 14)
+            .stroke(LinearGradient.Border_Glass)
+        }
       }
-      .overlay {
-        RoundedRectangle(cornerRadius: 14)
-          .stroke(LinearGradient.Border_Glass)
-      }
+      .ignoresSafeArea()
     }
-    .ignoresSafeArea()
   }
 }
 
 extension AlertPopup {
   @ViewBuilder
   func alerButton() -> some View {
-    switch alertStyle {
+    switch alertViewModel.alertStyle {
     case .stack:
       VStack(spacing: 0) {
         Button {
-          destructiveAction?()
+          alertViewModel.destructiveAction?()
+          alertViewModel.dismissAlert()
         } label: {
-          if let destructiveText {
+          if let destructiveText = alertViewModel.destructiveText {
             Text(destructiveText)
               .foregroundStyle(Color.Danger)
               .fontSystem(fontDesignSystem: .subtitle2_KO)
@@ -138,9 +110,10 @@ extension AlertPopup {
         }
         Divider().overlay(Color.Border_Default)
         Button {
-          cancelAction?()
+          alertViewModel.cancelAction?()
+          alertViewModel.dismissAlert()
         } label: {
-          if let cancelText {
+          if let cancelText = alertViewModel.cancelText {
             Text(cancelText)
               .foregroundStyle(Color.Info)
               .fontSystem(fontDesignSystem: .body1_KO)
@@ -154,9 +127,10 @@ extension AlertPopup {
     case .linear:
       HStack(spacing: 0) {
         Button {
-          cancelAction?()
+          alertViewModel.cancelAction?()
+          alertViewModel.dismissAlert()
         } label: {
-          if let cancelText {
+          if let cancelText = alertViewModel.cancelText {
             Text(cancelText)
               .foregroundStyle(Color.Info)
               .fontSystem(fontDesignSystem: .body1_KO)
@@ -167,9 +141,10 @@ extension AlertPopup {
         Divider()
           .overlay(Color.Border_Default)
         Button {
-          destructiveAction?()
+          alertViewModel.destructiveAction?()
+          alertViewModel.dismissAlert()
         } label: {
-          if let destructiveText {
+          if let destructiveText = alertViewModel.destructiveText {
             Text(destructiveText)
               .foregroundStyle(Color.Danger)
               .fontSystem(fontDesignSystem: .subtitle2_KO)
@@ -181,9 +156,10 @@ extension AlertPopup {
       .fixedSize(horizontal: false, vertical: true)
     case .submit:
       Button {
-        submitAction?()
+        alertViewModel.submitAction?()
+        alertViewModel.dismissAlert()
       } label: {
-        if let submitText {
+        if let submitText = alertViewModel.submitText {
           Text(submitText)
             .foregroundStyle(Color.Info)
             .fontSystem(fontDesignSystem: .subtitle2_KO)

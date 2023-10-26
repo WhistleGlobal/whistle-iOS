@@ -62,6 +62,7 @@
 		1B3955532A9507E300BCB4DF /* Extension+UIScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B3955522A9507E300BCB4DF /* Extension+UIScreen.swift */; };
 		1B39555B2A95095500BCB4DF /* ColorManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B39555A2A95095500BCB4DF /* ColorManager.swift */; };
 		1B39555D2A95098100BCB4DF /* VideoModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B39555C2A95098100BCB4DF /* VideoModel.swift */; };
+		1B547D592AEA864300EDE344 /* AlertViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B547D582AEA864300EDE344 /* AlertViewModel.swift */; };
 		1B57077D2AE6DD49009A7025 /* EditorVideoResource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B57077C2AE6DD49009A7025 /* EditorVideoResource.swift */; };
 		1B5FB4B72AC6777A0049E4EE /* ImagePickerController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BD4E6442ABA2F8600ADB783 /* ImagePickerController.swift */; };
 		1B6C04302AC2B93400DF4045 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 1B6C042F2AC2B93400DF4045 /* SnapKit */; };
@@ -454,6 +455,7 @@
 		1B3955522A9507E300BCB4DF /* Extension+UIScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Extension+UIScreen.swift"; sourceTree = "<group>"; };
 		1B39555A2A95095500BCB4DF /* ColorManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorManager.swift; sourceTree = "<group>"; };
 		1B39555C2A95098100BCB4DF /* VideoModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoModel.swift; sourceTree = "<group>"; };
+		1B547D582AEA864300EDE344 /* AlertViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertViewModel.swift; sourceTree = "<group>"; };
 		1B57077C2AE6DD49009A7025 /* EditorVideoResource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorVideoResource.swift; sourceTree = "<group>"; };
 		1B7D801C2AC881490030CAC3 /* CustomNavigationBarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomNavigationBarViewController.swift; sourceTree = "<group>"; };
 		1B8132DC2AE6285E00000C32 /* NavigationModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationModel.swift; sourceTree = "<group>"; };
@@ -1066,6 +1068,7 @@
 		1B3955502A9507A700BCB4DF /* ViewModels */ = {
 			isa = PBXGroup;
 			children = (
+				1B547D582AEA864300EDE344 /* AlertViewModel.swift */,
 				1B3895582AB9CB9700B4C8DD /* VideoEditor */,
 				1BAC07F42AD559CE0087D8CD /* TagsViewModel.swift */,
 				788E68622AD6B6710056C18B /* VideoCaptureViewModel.swift */,
@@ -2371,6 +2374,7 @@
 				78BECCE32AAAE566003FA7B5 /* APIViewModel+Setting.swift in Sources */,
 				782F1B252AA1C566006831C8 /* MyFeedTabItemButtonStyle.swift in Sources */,
 				1B0A29AC2AA64AF3009077A1 /* MusicNote.swift in Sources */,
+				1B547D592AEA864300EDE344 /* AlertViewModel.swift in Sources */,
 				1B3895862AB9CC4300B4C8DD /* CoreDataManager.swift in Sources */,
 				1B38954C2AB9CB7500B4C8DD /* FramesToolView.swift in Sources */,
 				1B2CFECB2AD412D000F34AA3 /* DescriptionAndTagEditorView.swift in Sources */,

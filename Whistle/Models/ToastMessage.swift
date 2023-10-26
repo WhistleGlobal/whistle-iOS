@@ -13,7 +13,6 @@ class ToastViewModel: ObservableObject {
   private init() { }
 
   @Published var showToast = false
-//  @Published var isTop = false
   @Published var message = ""
   @Published var padding: CGFloat = 58
   @Published var toastOpacity = 0.0

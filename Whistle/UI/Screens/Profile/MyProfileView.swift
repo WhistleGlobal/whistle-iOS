@@ -26,12 +26,11 @@ struct MyProfileView: View {
   @StateObject var apiViewModel = APIViewModel.shared
   @StateObject private var tabbarModel = TabbarModel.shared
   @StateObject private var toastViewModel = ToastViewModel.shared
+  @StateObject var alertViewModel = AlertViewModel.shared
 
   @State var isShowingBottomSheet = false
   @State var tabbarDirection: CGFloat = -1.0
   @State var tabSelection: profileTabCase = .myVideo
-  @State var showSignoutAlert = false
-  @State var showDeleteAlert = false
   @State var bottomSheetPosition: BottomSheetPosition = .hidden
   @State var offsetY: CGFloat = 0
 
@@ -171,37 +170,6 @@ struct MyProfileView: View {
       }
       .ignoresSafeArea()
     }
-    .overlay {
-      if showSignoutAlert {
-        AlertPopup(alertStyle: .linear, title: "정말 로그아웃하시겠어요?", cancelText: "취소", destructiveText: "로그아웃") {
-          showSignoutAlert = false
-        } destructiveAction: {
-          apiViewModel.reset()
-          GIDSignIn.sharedInstance.signOut()
-          userAuth.appleSignout()
-          isFirstProfileLoaded = false
-        }
-      }
-      if showDeleteAlert {
-        AlertPopup(
-          alertStyle: .linear,
-          title: "정말 삭제하시겠어요?",
-          content: "삭제하시면 회원님의 모든 정보와 활동 기록이 삭제됩니다. 삭제된 정보는 복구할 수 없으니 신중하게 결정해주세요.",
-          cancelText: "취소",
-          destructiveText: "삭제")
-        {
-          showDeleteAlert = false
-        } destructiveAction: {
-          Task {
-            apiViewModel.myProfile.userName.removeAll()
-            await apiViewModel.rebokeAppleToken()
-            GIDSignIn.sharedInstance.signOut()
-            userAuth.appleSignout()
-            isFirstProfileLoaded = true
-          }
-        }
-      }
-    }
     .onChange(of: bottomSheetPosition) { newValue in
       if newValue == .hidden {
         tabbarModel.tabbarOpacity = 1.0
@@ -260,7 +228,12 @@ struct MyProfileView: View {
             withAnimation {
               bottomSheetPosition = .hidden
             }
-            showSignoutAlert = true
+            alertViewModel.linearAlert(title: "정말 로그아웃하시겠어요?", cancelText: "취소", destructiveText: "로그아웃") {
+              apiViewModel.reset()
+              GIDSignIn.sharedInstance.signOut()
+              userAuth.appleSignout()
+              isFirstProfileLoaded = false
+            }
           } label: {
             bottomSheetRow(text: "로그아웃", color: Color.Info)
           }
@@ -268,7 +241,20 @@ struct MyProfileView: View {
             withAnimation {
               bottomSheetPosition = .hidden
             }
-            showDeleteAlert = true
+            alertViewModel.linearAlert(
+              title: "정말 삭제하시겠어요?",
+              content: "삭제하시면 회원님의 모든 정보와 활동 기록이 삭제됩니다. 삭제된 정보는 복구할 수 없으니 신중하게 결정해주세요.",
+              cancelText: "취소",
+              destructiveText: "삭제")
+            {
+              Task {
+                apiViewModel.myProfile.userName.removeAll()
+                await apiViewModel.rebokeAppleToken()
+                GIDSignIn.sharedInstance.signOut()
+                userAuth.appleSignout()
+                isFirstProfileLoaded = true
+              }
+            }
           } label: {
             bottomSheetRow(text: "계정삭제", color: Color.Danger)
           }

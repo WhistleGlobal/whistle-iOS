@@ -10,10 +10,10 @@ import SwiftUI
 struct MainFeedReportCommentView: View {
   @Environment(\.dismiss) var dismiss
   @StateObject var apiViewModel = APIViewModel.shared
+  @StateObject var alertViewModel = AlertViewModel.shared
+  @FocusState private var isFocused: Bool
+
   @State var goComplete = false
-  @State var showAlert = false
-  @State var showDuplication = false
-  @State var showFailLoad = false
   @State var inputReportDetail = ""
   @Binding var goReport: Bool
   let reportReason: Int
@@ -39,59 +39,41 @@ struct MainFeedReportCommentView: View {
         .frame(height: 160, alignment: .top)
         .frame(maxWidth: .infinity)
         .cornerRadius(8)
+        .contentShape(Rectangle())
         .tint(.Info)
+        .focused($isFocused)
         .overlay {
           RoundedRectangle(cornerRadius: 8)
             .stroke(lineWidth: 1)
             .foregroundColor(.Disable_Placeholder)
         }
+        .onSubmit {
+          isFocused = false
+        }
+        .onTapGesture {
+          isFocused = true
+        }
       Spacer()
+    }
+    .onTapGesture {
+      isFocused = false
     }
     .padding(.horizontal, 16)
     .navigationBarBackButtonHidden()
+    .navigationTitle("신고")
+    .navigationBarTitleDisplayMode(.inline)
     .navigationDestination(isPresented: $goComplete) {
       ReportCompleteView(goReport: $goReport)
     }
+    .onAppear {
+      alertViewModel.onFullScreenCover = true
+    }
+    .onDisappear {
+      alertViewModel.onFullScreenCover = false
+    }
     .overlay {
-      if showAlert {
-        AlertPopup(alertStyle: .linear, title: "정말 신고하시겠습니까?", cancelText: "취소", destructiveText: "신고") {
-          showAlert = false
-        } destructiveAction: {
-          Task {
-            let reportSuccess = await apiViewModel.reportContent(
-              userID: uesrId,
-              contentID: contentId,
-              reportReason: reportReason,
-              reportDescription: inputReportDetail)
-            if reportSuccess == 200 {
-              goComplete = true
-            } else if reportSuccess == 400 {
-              showDuplication = true
-            } else {
-              showFailLoad = true
-            }
-            showAlert = false
-          }
-        }
-      }
-      if showDuplication {
-        AlertPopup(
-          alertStyle: .submit,
-          title: "중복 접수되었습니다.",
-          content: "같은 아이디로 접수된 신고 사유가 있습니다.",
-          submitText: "확인",
-          submitAction: {
-            showDuplication = false
-          })
-      }
-      if showFailLoad {
-        AlertPopup(
-          alertStyle: .submit,
-          title: "신고 처리 중 문제가 생겼습니다. 잠시후 다시 시도해주세요.",
-          submitText: "확인",
-          submitAction: {
-            showFailLoad = false
-          })
+      if alertViewModel.onFullScreenCover {
+        AlertPopup()
       }
     }
     .toolbar {
@@ -103,20 +85,39 @@ struct MainFeedReportCommentView: View {
             .foregroundColor(.LabelColor_Primary)
         }
       }
-      ToolbarItem(placement: .principal) {
-        Text("신고")
-          .fontSystem(fontDesignSystem: .subtitle2_KO)
-      }
       ToolbarItem(placement: .confirmationAction) {
         Button {
-          showAlert = true
-        } label: {
-          if !showAlert, !showDuplication, !showFailLoad {
-            Text("제출")
-              .foregroundColor(.Info)
-              .fontSystem(fontDesignSystem: .subtitle2_KO)
+          isFocused = false
+          alertViewModel.linearAlert(title: "정말 신고하시겠습니까?", cancelText: "취소", destructiveText: "신고") {
+            Task {
+              let reportSuccess = await apiViewModel.reportContent(
+                userID: uesrId,
+                contentID: contentId,
+                reportReason: reportReason,
+                reportDescription: inputReportDetail)
+              if reportSuccess == 200 {
+                goComplete = true
+              } else if reportSuccess == 400 {
+                alertViewModel.submitAlert(
+                  title: "중복 접수되었습니다.",
+                  content: "같은 아이디로 접수된 신고 사유가 있습니다.",
+                  submitText: "확인")
+              } else {
+                alertViewModel.submitAlert(
+                  title: "신고 처리 중 문제가 생겼습니다. 잠시후 다시 시도해주세요.",
+                  content: "같은 아이디로 접수된 신고 사유가 있습니다.",
+                  submitText: "확인")
+              }
+            }
           }
+        } label: {
+          Text("제출")
+            .foregroundColor(.Info)
+            .fontSystem(fontDesignSystem: .subtitle2_KO)
+            .opacity(alertViewModel.showAlert ? 0.3 : 1)
+            .grayscale(alertViewModel.showAlert ? 0.5 : 0)
         }
+        .disabled(alertViewModel.showAlert)
       }
     }
   }

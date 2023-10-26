@@ -19,10 +19,10 @@ struct VideoEditorView: View {
   @StateObject var musicVM = MusicViewModel()
   @StateObject var editorVM = VideoEditorViewModel()
   @StateObject var videoPlayer = VideoPlayerManager()
+  @StateObject var alertViewModel = AlertViewModel.shared
 
   @State var isInitial = true
   @State var goUpload = false
-  @State var showAlert = false
   @State var showMusicTrimView = false
   @State var showVideoQualitySheet = false
   @State var bottomSheetTitle = ""
@@ -34,20 +34,16 @@ struct VideoEditorView: View {
 
   var body: some View {
     ZStack {
-      AlertPopup(
-        alertStyle: .stack,
-        title: "처음부터 시작하시겠어요?",
-        content: "지금 돌아가면 해당 작업물이 삭제됩니다.",
-        cancelText: "계속 수정",
-        destructiveText: "처음부터 시작",
-        cancelAction: { withAnimation(.easeInOut) { showAlert = false } },
-        destructiveAction: { dismiss() })
-        .zIndex(1000)
-        .opacity(showAlert ? 1 : 0)
+      Color.Background_Default_Dark.ignoresSafeArea()
       VStack(spacing: 0) {
         CustomNavigationBarViewController(title: "새 게시물") {
-          withAnimation(.easeInOut) {
-            showAlert = true
+          alertViewModel.stackAlert(
+            title: "처음부터 시작하시겠어요?",
+            content: "지금 돌아가면 해당 작업물이 삭제됩니다.",
+            cancelText: "계속 수정",
+            destructiveText: "처음부터 시작")
+          {
+            dismiss()
           }
         } nextButtonAction: {
           if let video = editorVM.currentVideo {

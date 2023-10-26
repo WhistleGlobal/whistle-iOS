@@ -41,6 +41,7 @@ struct RootTabView: View {
   @AppStorage("isAccess") var isAccess = false
   @StateObject private var tabbarModel = TabbarModel.shared
   @StateObject var apiViewModel = APIViewModel.shared
+  @StateObject var alertViewModel = AlertViewModel.shared
   @StateObject var userAuth = UserAuth.shared
   @EnvironmentObject var universalRoutingModel: UniversalRoutingModel
   @StateObject var appleSignInViewModel = AppleSignInViewModel()
@@ -50,6 +51,9 @@ struct RootTabView: View {
   var body: some View {
     ZStack {
       ToastMessageView().zIndex(1000)
+      if !alertViewModel.onFullScreenCover {
+        AlertPopup().zIndex(1000)
+      }
       if isAccess {
         NavigationStack {
           MainFeedView(
@@ -139,7 +143,7 @@ struct RootTabView: View {
                     }
                     .padding(4)
                     .overlay {
-                      Image(systemName: "arrow.up.left.and.arrow.down.right")
+                      Image(systemName: "arrow.left.and.right")
                         .foregroundColor(.white)
                         .frame(width: 20, height: 20)
                     }
@@ -327,85 +331,64 @@ struct RootTabView: View {
 extension RootTabView {
   @ViewBuilder
   func tabItems() -> some View {
-    RoundedRectangle(cornerRadius: 100)
-      .foregroundColor(Color.Dim_Default)
-      .frame(width: (UIScreen.width - 32) / 3 - 6)
-      .offset(x: tabbarModel.tabSelection.rawValue * ((UIScreen.width - 32) / 3))
-      .padding(3)
-      .overlay {
-        Capsule()
-          .stroke(lineWidth: 1)
-          .foregroundStyle(LinearGradient.Border_Glass)
-          .padding(3)
-          .offset(x: tabbarModel.tabSelection.rawValue * ((UIScreen.width - 32) / 3))
-      }
-      .foregroundColor(.clear)
-      .frame(height: 56)
-      .frame(maxWidth: .infinity)
-      .overlay {
-        Button {
-          if tabbarModel.tabSelectionNoAnimation == .main {
-            if isAccess {
-              if isRootStacked {
-                NavigationUtil.popToRootView()
-              } else {
-                apiViewModel.requestMainFeed {
-                  HapticManager.instance.impact(style: .medium)
-                  refreshCount += 1
-                }
+    HStack(spacing: 0) {
+      Button {
+        if tabbarModel.tabSelectionNoAnimation == .main {
+          if isAccess {
+            if isRootStacked {
+              NavigationUtil.popToRootView()
+            } else {
+              apiViewModel.requestMainFeed {
+                HapticManager.instance.impact(style: .medium)
+                refreshCount += 1
               }
             }
-          } else {
-            switchTab(to: .main)
           }
-        } label: {
-          Color.clear.overlay {
-            Image(systemName: "house.fill")
-              .resizable()
-              .scaledToFit()
-              .frame(width: 24, height: 24)
-          }
-          .frame(width: (UIScreen.width - 32) / 3, height: 56)
+        } else {
+          switchTab(to: .main)
         }
-        .foregroundColor(.white)
-        .padding(3)
-        .offset(x: -1 * ((UIScreen.width - 32) / 3))
-        Button {
-          if isAccess {
-            switchTab(to: .upload)
-          } else {
-            uploadBottomSheetPosition = .relative(1)
-          }
-        } label: {
-          Color.clear.overlay {
-            Image(systemName: "plus")
-              .resizable()
-              .scaledToFit()
-              .frame(width: 20, height: 20)
-              .foregroundColor(.white)
-          }
-          .frame(width: (UIScreen.width - 32) / 3, height: 56)
+      } label: {
+        VStack {
+          Image(systemName: tabbarModel.tabSelection == .main ? "play.square.fill" : "play.square")
+            .font(.system(size: 20))
+          Text("플레이")
+            .fontSystem(fontDesignSystem: .caption2_KO_Regular)
         }
-        .foregroundColor(.white)
-        .padding(3)
-        Button {
-          profileTabClicked()
-        } label: {
-          Color.clear.overlay {
-            Image(systemName: "person.fill")
-              .resizable()
-              .scaledToFit()
-              .frame(width: 20, height: 20)
-              .foregroundColor(.white)
-          }
-          .frame(width: (UIScreen.width - 32) / 3, height: 56)
-        }
-        .foregroundColor(.white)
-        .padding(3)
-        .offset(x: (UIScreen.width - 32) / 3)
       }
-      .frame(height: 56)
-      .frame(maxWidth: .infinity)
+      .hCenter()
+      Button {
+        if isAccess {
+          switchTab(to: .upload)
+        } else {
+          uploadBottomSheetPosition = .relative(1)
+        }
+      } label: {
+        Capsule()
+          .fill(Color.Dim_Thin)
+          .overlay {
+            Capsule().strokeBorder(LinearGradient.Border_Glass)
+            Image(systemName: "plus")
+              .font(.system(size: 20))
+          }
+      }
+      .frame(width: UIScreen.getWidth(80), height: UIScreen.getHeight(40))
+      .padding(.horizontal, 8)
+      Button {
+        profileTabClicked()
+      } label: {
+        VStack {
+          Image(systemName: tabbarModel.tabSelection == .profile ? "person.fill" : "person")
+            .font(.system(size: 20))
+          Text("프로필")
+            .fontSystem(fontDesignSystem: .caption2_KO_Regular)
+        }
+      }
+      .hCenter()
+    }
+    .foregroundColor(.white)
+    .padding(.horizontal, 16)
+    .frame(height: UIScreen.getHeight(56))
+    .frame(maxWidth: .infinity)
   }
 }
 
@@ -458,9 +441,7 @@ extension RootTabView {
       tabbarModel.prevTabSelection = tabbarModel.tabSelectionNoAnimation
     }
     tabbarModel.tabSelectionNoAnimation = tabSelection
-    withAnimation {
-      tabbarModel.tabSelection = tabSelection
-    }
+    tabbarModel.tabSelection = tabSelection
   }
 }
 

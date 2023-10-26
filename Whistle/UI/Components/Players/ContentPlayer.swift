@@ -17,12 +17,25 @@ struct ContentPlayer: UIViewControllerRepresentable {
 
   func makeUIViewController(context _: Context) -> AVPlayerViewController {
     let view = AVPlayerViewController()
+    let audioSession = AVAudioSession.sharedInstance()
+    do {
+      try audioSession.setCategory(
+        .playback,
+        mode: .default,
+        options: [
+          .defaultToSpeaker,
+          .allowAirPlay,
+          .allowBluetooth,
+        ])
+      try audioSession.setActive(true)
+    } catch { }
     view.player = player
     if #available(iOS 16.0, *) {
       view.allowsVideoFrameAnalysis = false
     }
     view.showsPlaybackControls = false
     view.videoGravity = .resizeAspect
+
     NotificationCenter.default.addObserver(
       forName: .AVPlayerItemDidPlayToEndTime,
       object: player.currentItem,

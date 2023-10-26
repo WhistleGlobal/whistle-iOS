@@ -295,7 +295,7 @@ extension MusicListView {
         do {
           let session = AVAudioSession.sharedInstance()
           try session.setCategory(.playback)
-          try session.overrideOutputAudioPort(AVAudioSession.PortOverride.none)
+          try session.overrideOutputAudioPort(.none)
         } catch {
           print("Audio session setup failed: \(error.localizedDescription)")
         }

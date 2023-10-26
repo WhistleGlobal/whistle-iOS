@@ -24,6 +24,7 @@ struct VideoCaptureView: View {
   @StateObject var videoPlayer = VideoPlayerManager()
   @StateObject var musicVM = MusicViewModel()
   @StateObject var apiViewModel = APIViewModel.shared
+  @StateObject var alertViewModel = AlertViewModel.shared
   @StateObject private var tabbarModel = TabbarModel.shared
   @ObservedObject private var viewModel = VideoCaptureViewModel()
 
@@ -59,8 +60,6 @@ struct VideoCaptureView: View {
   @State var showPreparingView = false
   @State var isPresented = false
   @State var timerSec = (15, false)
-  /// 작업물 삭제 alert용
-  @State var showAlert = false
   /// 음악 편집기 띄우기용
   @State var showMusicTrimView = false
 
@@ -79,28 +78,6 @@ struct VideoCaptureView: View {
   var body: some View {
     ZStack {
       Color.black.ignoresSafeArea()
-      AlertPopup(
-        alertStyle: .linear,
-        title: "영상을 삭제하시겠어요?",
-        content: "지금 돌아가면 변경 사항이 모두 삭제됩니다.",
-        cancelText: "계속 수정",
-        destructiveText: "삭제",
-        cancelAction: { withAnimation(.easeInOut) { showAlert = false } },
-        destructiveAction: {
-          recordingDuration = 0
-          withAnimation(.easeInOut) {
-            showAlert = false
-            musicVM.removeMusic()
-            buttonState = .idle
-          }
-          editorVM.currentVideo = nil
-          editorVM.reset()
-          videoPlayer.reset()
-          selectedVideoURL = nil
-        })
-        .zIndex(1000)
-        .opacity(showAlert ? 1 : 0)
-
       if isPresented {
         PickerConfigViewControllerWrapper(isImagePickerClosed: $isImagePickerClosed)
       }
@@ -685,7 +662,22 @@ extension VideoCaptureView {
       .hCenter()
       .overlay(alignment: .leading) {
         Button {
-          showAlert = true
+          alertViewModel.linearAlert(
+            title: "영상을 삭제하시겠어요?",
+            content: "지금 돌아가면 변경 사항이 모두 삭제됩니다.",
+            cancelText: "계속 수정",
+            destructiveText: "삭제")
+          {
+            recordingDuration = 0
+            withAnimation(.easeInOut) {
+              musicVM.removeMusic()
+              buttonState = .idle
+            }
+            editorVM.currentVideo = nil
+            editorVM.reset()
+            videoPlayer.reset()
+            selectedVideoURL = nil
+          }
           if videoPlayer.isPlaying {
             if let video = editorVM.currentVideo {
               videoPlayer.action(video)
