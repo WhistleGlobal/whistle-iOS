@@ -144,7 +144,7 @@ struct MemberProfileView: View {
         UIPasteboard.general.setValue(
           "https://readywhistle.com/profile_uni?id=\(userId)",
           forPasteboardType: UTType.plainText.identifier)
-        toastViewModel.toastInit(message: "클립보드에 복사되었어요")
+        toastViewModel.toastInit(isTop: false, message: "클립보드에 복사되었어요", padding: 78)
       }
       Button("취소", role: .cancel) { }
     }
@@ -161,9 +161,6 @@ struct MemberProfileView: View {
     }
     .task {
       await apiViewModel.requestMemberPostFeed(userID: userId)
-    }
-    .overlay {
-      ToastMessageView()
     }
     .overlay {
       if showUnblockAlert {

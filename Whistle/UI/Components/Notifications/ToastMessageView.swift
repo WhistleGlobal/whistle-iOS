@@ -25,8 +25,10 @@ struct ToastMessageView: View {
         if toastViewModel.isCancellable {
           Spacer()
           Button("실행 취소") {
-//            toastInfo.toastOpacity = 0.0
             toastViewModel.cancelCancellableAction()
+            withAnimation {
+              toastViewModel.toastOpacity = 0.0
+            }
             toastViewModel.showToast = false
           }
           .fontSystem(fontDesignSystem: .body2_KO)
@@ -50,9 +52,9 @@ struct ToastMessageView: View {
     }
     .padding(.horizontal, 16)
     .padding(toastViewModel.isTop ? .top : .bottom, toastViewModel.isTop ? 0 : toastViewModel.padding)
-    .onChange(of: toastViewModel.showToast) { _ in
+    .onChange(of: toastViewModel.showToast) { newValue in
       // showToast가 true로 설정되면 토스트 메시지를 표시하도록 설정
-      if toastViewModel.showToast {
+      if newValue {
         withAnimation {
           toastViewModel.toastOpacity = 1.0
         }

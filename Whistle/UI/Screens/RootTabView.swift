@@ -49,6 +49,7 @@ struct RootTabView: View {
 
   var body: some View {
     ZStack {
+      ToastMessageView().zIndex(1000)
       if isAccess {
         NavigationStack {
           MainFeedView(

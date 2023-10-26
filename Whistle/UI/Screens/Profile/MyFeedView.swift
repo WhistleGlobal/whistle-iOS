@@ -197,9 +197,6 @@ struct MyFeedView: View {
       playerIndex = newValue
       apiViewModel.postFeedPlayerChanged()
     }
-    .overlay {
-      ToastMessageView()
-    }
     .confirmationDialog("", isPresented: $showDialog) {
       Button("삭제하기", role: .destructive) {
         toastViewModel.cancelToastInit(message: "삭제되었습니다") {

@@ -60,9 +60,6 @@ struct ProfileEditView: View {
       Divider()
       Spacer()
     }
-    .overlay {
-      ToastMessageView()
-    }
     .fullScreenCover(isPresented: $showGallery) {
       ProfileImagePickerView(photoCollection: photoCollection)
     }

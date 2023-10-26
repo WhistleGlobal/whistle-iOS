@@ -201,9 +201,6 @@ struct DescriptionAndTagEditorView: View {
           Text("")
         }
       }
-      .overlay {
-        ToastMessageView()
-      }
     })
     .enableTapToDismiss()
     .enableSwipeToDismiss()

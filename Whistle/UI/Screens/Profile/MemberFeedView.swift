@@ -257,20 +257,6 @@ struct MemberFeedView: View {
       playerIndex = newValue
       apiViewModel.postFeedPlayerChanged()
     }
-    .overlay {
-      ToastMessageView()
-//      if showHideContentToast {
-//        CancelableToastMessage(text: "해당 콘텐츠를 숨겼습니다", paddingBottom: 78, action: {
-//          Task {
-//            guard let contentId = apiViewModel.memberFeed[currentIndex].contentId else { return }
-//            apiViewModel.memberFeed[currentIndex].isHated = true
-//            players[currentIndex]?.pause()
-//            apiViewModel.postFeedPlayerChanged()
-//            await apiViewModel.actionContentHate(contentID: contentId)
-//          }
-//        }, showToast: $showHideContentToast)
-//      }
-    }
     .fullScreenCover(isPresented: $showReport) {
       MainFeedReportReasonSelectionView(
         goReport: $showReport,

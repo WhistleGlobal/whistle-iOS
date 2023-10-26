@@ -432,9 +432,6 @@ struct MainFeedView: View {
         }
       }
     }
-    .overlay {
-      ToastMessageView()
-    }
     .onAppear {
       DispatchQueue.main.asyncAfter(deadline: .now() + 1.4) {
         withAnimation {
