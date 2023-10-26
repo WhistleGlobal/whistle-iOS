@@ -8,5 +8,9 @@
 import Foundation
 
 struct AppKeys {
+  #if DEBUG
+  static let domainURL = Bundle.main.object(forInfoDictionaryKey: "DevUrl")
+  #else
   static let domainURL = Bundle.main.object(forInfoDictionaryKey: "DomainUrl")
+  #endif
 }
