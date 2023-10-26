@@ -41,6 +41,7 @@ struct VideoCaptureView: View {
   @State private var animatedProgress = 0.0
   @State var count: CGFloat = 0
   @State var dragOffset: CGFloat = 0
+  @State var accumulatedOffset: CGFloat = 0
   @State var sheetPositions: [BottomSheetPosition] = [.hidden, .absolute(514)]
   @State var bottomSheetPosition: BottomSheetPosition = .hidden
   @State var albumCover = Image("noVideo")
@@ -57,7 +58,7 @@ struct VideoCaptureView: View {
   @State var showGallery = false
   @State var showPreparingView = false
   @State var isPresented = false
-  @State var timerSec = (8, false)
+  @State var timerSec = (15, false)
   /// 작업물 삭제 alert용
   @State var showAlert = false
   /// 음악 편집기 띄우기용
@@ -70,7 +71,7 @@ struct VideoCaptureView: View {
   }
 
   var defaultWidth: CGFloat {
-    CGFloat(6 + (6 + barSpacing) * 8)
+    CGFloat(6 + (6 + barSpacing) * 15)
   }
 
   // MARK: - Body
@@ -144,7 +145,7 @@ struct VideoCaptureView: View {
           .frame(width: 84)
           .rotationEffect(Angle(degrees: -90))
           .rotation3DEffect(.degrees(180), axis: (x: 0.0, y: 1.0, z: 0.0))
-        Text("\(Int(count))")
+        Text("\(Int(count + 0.9))")
           .fontSystem(fontDesignSystem: .largeTitle_Expanded)
           .foregroundColor(.white)
       }
@@ -396,111 +397,103 @@ extension VideoCaptureView {
                 .gesture(
                   DragGesture()
                     .onChanged { value in
-                      if
-                        CGFloat(defaultWidth + value.translation.width) >
-                        CGFloat(UIScreen.width - 32)
-                      {
-                        dragOffset = CGFloat((6 + barSpacing) * 7)
-                      } else if defaultWidth + value.translation.width < 6 {
-                        dragOffset = -CGFloat((6 + barSpacing) * 8)
-                      } else {
-                        dragOffset = value.translation.width
-                      }
+                      dragOffset = max(-CGFloat((6 + barSpacing) * 14), min(0, accumulatedOffset + value.translation.width))
                     }
                     .onEnded { _ in
+                      accumulatedOffset = dragOffset
                       let dragValue = Int(dragOffset + defaultWidth)
                       let multiplier = 6 + barSpacing
                       switch dragValue {
                       case .min ..< 6 + Int(barSpacing):
                         withAnimation {
-                          dragOffset = -8.0 * CGFloat(multiplier)
-                          timerSec.0 = 0
+                          dragOffset = -14.0 * CGFloat(multiplier)
+                          timerSec.0 = 1
                         }
                       case 6 - Int(barSpacing) ..< Int(multiplier) + Int(barSpacing):
                         withAnimation {
-                          dragOffset = -7.0 * CGFloat(multiplier)
+                          dragOffset = -14.0 * CGFloat(multiplier)
                           timerSec.0 = 1
                         }
                       case Int(multiplier) - Int(barSpacing) ..< Int(2 * multiplier) + Int(barSpacing):
                         withAnimation {
-                          dragOffset = -6.0 * CGFloat(multiplier)
+                          dragOffset = -13.0 * CGFloat(multiplier)
                           timerSec.0 = 2
                         }
                       case Int(2 * multiplier) - Int(barSpacing) ..< Int(3 * multiplier) +
                         Int(barSpacing):
                         withAnimation {
-                          dragOffset = -5.0 * CGFloat(multiplier)
+                          dragOffset = -12.0 * CGFloat(multiplier)
                           timerSec.0 = 3
                         }
                       case Int(3 * multiplier) - Int(barSpacing) ..< Int(4 * multiplier) +
                         Int(barSpacing):
                         withAnimation {
-                          dragOffset = -4.0 * CGFloat(multiplier)
+                          dragOffset = -11.0 * CGFloat(multiplier)
                           timerSec.0 = 4
                         }
                       case Int(4 * multiplier) - Int(barSpacing) ..< Int(5 * multiplier) +
                         Int(barSpacing):
                         withAnimation {
-                          dragOffset = -3.0 * CGFloat(multiplier)
+                          dragOffset = -10.0 * CGFloat(multiplier)
                           timerSec.0 = 5
                         }
                       case Int(5 * multiplier) - Int(barSpacing) ..< Int(6 * multiplier) +
                         Int(barSpacing):
                         withAnimation {
-                          dragOffset = -2.0 * CGFloat(multiplier)
+                          dragOffset = -9.0 * CGFloat(multiplier)
                           timerSec.0 = 6
                         }
                       case Int(6 * multiplier) - Int(barSpacing) ..< Int(7 * multiplier) +
                         Int(barSpacing):
                         withAnimation {
-                          dragOffset = -CGFloat(multiplier)
+                          dragOffset = -8.0 * CGFloat(multiplier)
                           timerSec.0 = 7
                         }
                       case Int(7 * multiplier) - Int(barSpacing) ..< Int(8 * multiplier) +
                         Int(barSpacing):
                         withAnimation {
-                          dragOffset = 0.0
+                          dragOffset = -7.0 * CGFloat(multiplier)
                           timerSec.0 = 8
                         }
                       case Int(8 * multiplier) - Int(barSpacing) ..< Int(9 * multiplier) +
                         Int(barSpacing):
                         withAnimation {
-                          dragOffset = CGFloat(multiplier)
+                          dragOffset = -6.0 * CGFloat(multiplier)
                           timerSec.0 = 9
                         }
                       case Int(9 * multiplier) - Int(barSpacing) ..< Int(10 * multiplier) +
                         Int(barSpacing):
                         withAnimation {
-                          dragOffset = 2.0 * CGFloat(multiplier)
+                          dragOffset = -5.0 * CGFloat(multiplier)
                           timerSec.0 = 10
                         }
                       case Int(10 * multiplier) - Int(barSpacing) ..< Int(11 * multiplier) +
                         Int(barSpacing):
                         withAnimation {
-                          dragOffset = 3.0 * CGFloat(multiplier)
+                          dragOffset = -4.0 * CGFloat(multiplier)
                           timerSec.0 = 11
                         }
                       case Int(11 * multiplier) - Int(barSpacing) ..< Int(12 * multiplier) +
                         Int(barSpacing):
                         withAnimation {
-                          dragOffset = 4.0 * CGFloat(multiplier)
+                          dragOffset = -3.0 * CGFloat(multiplier)
                           timerSec.0 = 12
                         }
                       case Int(12 * multiplier) - Int(barSpacing) ..< Int(13 * multiplier) +
                         Int(barSpacing):
                         withAnimation {
-                          dragOffset = 5.0 * CGFloat(multiplier)
+                          dragOffset = -2.0 * CGFloat(multiplier)
                           timerSec.0 = 13
                         }
                       case Int(13 * multiplier) - Int(barSpacing) ..< Int(14 * multiplier) +
                         Int(barSpacing):
                         withAnimation {
-                          dragOffset = 6.0 * CGFloat(multiplier)
+                          dragOffset = -1.0 * CGFloat(multiplier)
                           timerSec.0 = 14
                         }
                       case Int(14 * multiplier) - Int(barSpacing) ... Int.max:
                         withAnimation {
-                          dragOffset = 7.0 * CGFloat(multiplier)
+                          dragOffset = 0
                           timerSec.0 = 15
                         }
                       default:
@@ -562,7 +555,7 @@ extension VideoCaptureView {
       .padding(.bottom, 8)
       Button("타이머 해제") {
         withAnimation {
-          timerSec.0 = 8
+          timerSec.0 = 15
           timerSec.1 = false
           selectedSec.0 = .sec3
           selectedSec.1 = false
@@ -741,7 +734,7 @@ extension VideoCaptureView {
       recordingButton(
         state: buttonState,
         timerText: timeStringFromTimeInterval(recordingDuration),
-        progress: min(recordingDuration / Double(timerSec.1 ? Double(timerSec.0) : 14.0), 1.0))
+        progress: min(recordingDuration / Double(timerSec.1 ? Double(timerSec.0) : 15.0), 1.0))
       Spacer()
       // Position change + button
       Button(action: {
@@ -906,8 +899,8 @@ extension VideoCaptureView {
   private func startPreparingTimer() {
     count = CGFloat(selectedSec.0 == .sec3 ? 3 : 10)
     showPreparingView = true
-    recordingTimer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { _ in
-      if count == 0 {
+    recordingTimer = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) { _ in
+      if count <= 0 {
         showPreparingView = false
         selectedSec.0 = .sec3
         selectedSec.1 = false
@@ -918,16 +911,16 @@ extension VideoCaptureView {
         startRecordingTimer()
         isRecording = true
       } else {
-        withAnimation(.linear(duration: 1.0)) {
-          count -= 1
+        withAnimation(.linear(duration: 0.1)) {
+          count -= 0.1
         }
       }
     }
   }
 
   private func startRecordingTimer() {
-    recordingTimer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { _ in
-      if recordingDuration >= Double(timerSec.1 ? Double(timerSec.0) : 14.0) {
+    recordingTimer = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) { _ in
+      if recordingDuration >= Double(timerSec.1 ? Double(timerSec.0) : 15.0) {
         buttonState = .completed
         stopRecordingTimer()
         isRecording = false
@@ -942,7 +935,7 @@ extension VideoCaptureView {
         recordingTimer?.invalidate() // 타이머 중지
         recordingTimer = nil
       } else {
-        recordingDuration += 1
+        recordingDuration += 0.1
       }
     }
   }
@@ -950,7 +943,7 @@ extension VideoCaptureView {
   private func stopRecordingTimer() {
     recordingTimer?.invalidate()
     recordingTimer = nil
-    timerSec.0 = 8
+    timerSec.0 = 15
     timerSec.1 = false
   }
 
@@ -1018,12 +1011,12 @@ extension VideoCaptureView {
         }
         .offset(y: 20)
         .onAppear {
-          withAnimation(.linear(duration: 0.5)) {
+          withAnimation(.linear(duration: 0.05)) {
             animatedProgress = progress
           }
         }
         .onChange(of: progress) { newValue in
-          withAnimation(.linear(duration: 0.5)) {
+          withAnimation(.linear(duration: 0.05)) {
             animatedProgress = newValue
           }
         }
