@@ -21,6 +21,8 @@ struct SEMemberProfileView: View {
   @State var goReport = false
   @State var showDialog = false
   @State var showPasteToast = false
+  @State var showBlockAlert = false
+  @State var showUnblockAlert = false
   @State var offsetY: CGFloat = 0
 
   @Binding var players: [AVPlayer?]
@@ -110,14 +112,23 @@ struct SEMemberProfileView: View {
     }
     .navigationBarBackButtonHidden()
     .confirmationDialog("", isPresented: $showDialog) {
+      if apiViewModel.myProfile.userId != userId {
+        Button(apiViewModel.memberProfile.isBlocked ? "차단 해제" : "차단", role: .destructive) {
+          if apiViewModel.memberProfile.isBlocked {
+            showUnblockAlert = true
+          } else {
+            showBlockAlert = true
+          }
+        }
+        Button("신고", role: .destructive) {
+          goReport = true
+        }
+      }
       Button("프로필 URL 복사", role: .none) {
         UIPasteboard.general.setValue(
           "https://readywhistle.com/profile_uni?id=\(userId)",
           forPasteboardType: UTType.plainText.identifier)
         toastViewModel.toastInit(message: "클립보드에 복사되었어요")
-      }
-      Button("신고", role: .destructive) {
-        goReport = true
       }
       Button("취소", role: .cancel) { }
     }
@@ -137,6 +148,58 @@ struct SEMemberProfileView: View {
     .overlay {
       ToastMessageView()
     }
+    .overlay {
+      if showUnblockAlert {
+        AlertPopup(
+          alertStyle: .linear,
+          title: "\(apiViewModel.memberProfile.userName) 님을 해제하시겠어요?",
+          content: "이제 상대방이 회원님의 게시물을 보거나 팔로우할 수 있습니다. 상대방에게 회원님이 차단을 해제했다는 정보를 알리지 않습니다.",
+          cancelText: "취소", destructiveText: "차단해제",cancelAction: {
+            showUnblockAlert = false
+          }, destructiveAction: {
+            showUnblockAlert = false
+            toastViewModel.toastInit(isTop: false, message: "\(apiViewModel.memberProfile.userName)님이 차단 해제되었습니다.", padding: 72)
+            Task {
+              await apiViewModel.blockAction(userID: userId, method: .delete)
+              BlockList.shared.userIds.append(userId)
+              BlockList.shared.userIds = BlockList.shared.userIds.filter { $0 != userId }
+              Task {
+                await apiViewModel.requestMemberProfile(userID: userId)
+                await apiViewModel.requestMemberPostFeed(userID: userId)
+              }
+              Task {
+                await apiViewModel.requestMemberFollow(userID: userId)
+                await apiViewModel.requestMemberWhistlesCount(userID: userId)
+              }
+            }
+          })
+      }
+      if showBlockAlert {
+        AlertPopup(
+          alertStyle: .linear,
+          title: "\(apiViewModel.memberProfile.userName) 님을 차단하시겠어요?",
+          content: "차단된 사람은 회원님의 프로필 또는 콘텐츠를 찾을 수 없게 되며, 상대방에게 차단되었다는 알림이 전송되지 않습니다.",
+          cancelText: "취소", destructiveText: "차단", cancelAction: {
+            showBlockAlert = false
+          }, destructiveAction: {
+            showBlockAlert = false
+            toastViewModel.toastInit(isTop: false, message: "\(apiViewModel.memberProfile.userName)님이 차단되었습니다.", padding: 72)
+            Task {
+              await apiViewModel.blockAction(userID: userId, method: .post)
+              BlockList.shared.userIds.append(userId)
+              Task {
+                await apiViewModel.requestMemberProfile(userID: userId)
+                await apiViewModel.requestMemberPostFeed(userID: userId)
+              }
+              Task {
+                await apiViewModel.requestMemberFollow(userID: userId)
+                await apiViewModel.requestMemberWhistlesCount(userID: userId)
+              }
+            }
+          })
+      }
+    }
+
     .onAppear {
       if !players.isEmpty {
         players[currentIndex]?.pause()
@@ -171,22 +234,30 @@ extension SEMemberProfileView {
       .padding(.bottom, 8)
       .padding(.horizontal, 48)
       Spacer()
-      Capsule()
-      Button("") {
-        Task {
-          if isFollow {
-            isFollow.toggle()
-            await apiViewModel.followAction(userID: userId, method: .delete)
-          } else {
-            isFollow.toggle()
-            await apiViewModel.followAction(userID: userId, method: .post)
+      if apiViewModel.memberProfile.isBlocked {
+        Button {
+          showUnblockAlert = true
+        } label: {
+          unblockButton
+        }
+        .padding(.bottom, 24)
+      } else {
+        Button("") {
+          Task {
+            if isFollow {
+              isFollow.toggle()
+              await apiViewModel.followAction(userID: userId, method: .delete)
+            } else {
+              isFollow.toggle()
+              await apiViewModel.followAction(userID: userId, method: .post)
+            }
           }
         }
+        .buttonStyle(FollowButtonStyle(isFollowed: $isFollow))
+        .scaleEffect(profileEditButtonScale)
+        .padding(.bottom, 16)
+        .disabled(userId == apiViewModel.myProfile.userId)
       }
-      .buttonStyle(FollowButtonStyle(isFollowed: $isFollow))
-      .scaleEffect(profileEditButtonScale)
-      .padding(.bottom, 16)
-      .disabled(userId == apiViewModel.myProfile.userId)
       HStack(spacing: 48) {
         VStack(spacing: 4) {
           Text("\(apiViewModel.memberWhistleCount)")
@@ -293,6 +364,19 @@ extension SEMemberProfileView {
     }
     .frame(height: UIScreen.getHeight(204))
     .cornerRadius(12)
+  }
+
+  @ViewBuilder
+  var unblockButton: some View {
+    Text("차단해제")
+      .fontSystem(fontDesignSystem: .subtitle3_KO)
+      .foregroundColor(.LabelColor_Primary_Dark)
+      .padding(.horizontal, 20)
+      .padding(.vertical, 6)
+      .background {
+        Capsule()
+          .foregroundColor(.Primary_Default)
+      }
   }
 }
 

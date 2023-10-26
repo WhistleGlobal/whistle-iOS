@@ -91,6 +91,7 @@ extension APIViewModel: PostFeedProtocol {
               }
               let decoder = JSONDecoder()
               self.bookmark = try decoder.decode([Bookmark].self, from: data)
+                WhistleLogger.logger.debug("Bookmark: \(self.bookmark)")
               continuation.resume()
             } catch {
               WhistleLogger.logger.error("Failure: \(error)")
