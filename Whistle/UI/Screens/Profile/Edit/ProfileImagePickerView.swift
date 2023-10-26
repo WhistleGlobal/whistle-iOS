@@ -72,7 +72,8 @@ struct ProfileImagePickerView: View {
             }
             await apiViewModel.uploadProfilePhoto(image: image) { _ in }
             await apiViewModel.requestMyProfile()
-            toastViewModel.toastInit(isTop: false, message: "프로필 사진이 수정되었습니다.", padding: 32)
+//            toastViewModel.toastInit(message: "프로필 사진이 수정되었습니다.", padding: 32)
+            toastViewModel.toastInit(message: "프로필 사진이 수정되었습니다.", padding: 32)
             dismiss()
           }
         } label: {

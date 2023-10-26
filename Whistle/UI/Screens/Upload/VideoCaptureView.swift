@@ -672,9 +672,7 @@ extension VideoCaptureView {
       .overlay(alignment: .leading) {
         Button {
           tabbarModel.tabSelectionNoAnimation = tabbarModel.prevTabSelection ?? .main
-          withAnimation {
-            tabbarModel.tabSelection = tabbarModel.prevTabSelection ?? .main
-          }
+          tabbarModel.tabSelection = tabbarModel.prevTabSelection ?? .main
         } label: {
           Image(systemName: "xmark")
             .font(.system(size: 20))

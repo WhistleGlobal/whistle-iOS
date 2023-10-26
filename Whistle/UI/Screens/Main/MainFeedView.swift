@@ -473,7 +473,7 @@ struct MainFeedView: View {
         }
       }
       Button("관심없음", role: .none) {
-        toastViewModel.cancelToastInit(isTop: false, message: "해당 콘텐츠를 숨겼습니다", padding: 78) {
+        toastViewModel.cancelToastInit(message: "해당 콘텐츠를 숨겼습니다") {
           Task {
             await apiViewModel.actionContentHate(contentID: currentVideoContentId)
             apiViewModel.mainFeed.remove(at: currentIndex)

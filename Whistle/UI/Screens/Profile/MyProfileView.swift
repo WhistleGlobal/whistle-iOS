@@ -240,7 +240,7 @@ struct MyProfileView: View {
           UIPasteboard.general.setValue(
             "https://readywhistle.com/profile_uni?id=\(apiViewModel.myProfile.userId)",
             forPasteboardType: UTType.plainText.identifier)
-          toastViewModel.toastInit(isTop: false, message: "클립보드에 복사되었어요", padding: 78)
+          toastViewModel.toastInit(message: "클립보드에 복사되었어요")
         } label: {
           bottomSheetRowWithIcon(systemName: "square.and.arrow.up", iconWidth: 22, iconHeight: 20, text: "프로필 공유")
         }

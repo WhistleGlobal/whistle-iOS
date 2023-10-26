@@ -14,9 +14,7 @@ struct ToastMessageView: View {
 
   var body: some View {
     VStack {
-      if !toastViewModel.isTop {
-        Spacer()
-      }
+      Spacer()
       HStack {
         Text(toastViewModel.message)
           .fontSystem(fontDesignSystem: .body1_KO)
@@ -46,12 +44,9 @@ struct ToastMessageView: View {
           .foregroundColor(.Border_Default_Dark)
       }
       .opacity(toastViewModel.toastOpacity)
-      if toastViewModel.isTop {
-        Spacer()
-      }
     }
     .padding(.horizontal, 16)
-    .padding(toastViewModel.isTop ? .top : .bottom, toastViewModel.isTop ? 0 : toastViewModel.padding)
+    .padding(.bottom, toastViewModel.padding)
     .onChange(of: toastViewModel.showToast) { newValue in
       // showToast가 true로 설정되면 토스트 메시지를 표시하도록 설정
       if newValue {

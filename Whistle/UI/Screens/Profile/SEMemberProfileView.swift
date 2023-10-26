@@ -158,7 +158,7 @@ struct SEMemberProfileView: View {
             showUnblockAlert = false
           }, destructiveAction: {
             showUnblockAlert = false
-            toastViewModel.toastInit(isTop: false, message: "\(apiViewModel.memberProfile.userName)님이 차단 해제되었습니다.", padding: 72)
+            toastViewModel.toastInit(message: "\(apiViewModel.memberProfile.userName)님이 차단 해제되었습니다.")
             Task {
               await apiViewModel.blockAction(userID: userId, method: .delete)
               BlockList.shared.userIds.append(userId)
@@ -183,7 +183,7 @@ struct SEMemberProfileView: View {
             showBlockAlert = false
           }, destructiveAction: {
             showBlockAlert = false
-            toastViewModel.toastInit(isTop: false, message: "\(apiViewModel.memberProfile.userName)님이 차단되었습니다.", padding: 72)
+            toastViewModel.toastInit(message: "\(apiViewModel.memberProfile.userName)님이 차단되었습니다.")
             Task {
               await apiViewModel.blockAction(userID: userId, method: .post)
               BlockList.shared.userIds.append(userId)

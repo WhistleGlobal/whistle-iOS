@@ -77,7 +77,7 @@ struct ProfileEditIDView: View {
         Task {
           let updateStatus = await apiViewModel.updateMyProfile()
           if updateStatus == .valid {
-            toastViewModel.toastInit(isTop: false, message: "사용자 ID가 수정되었습니다.", padding: 32)
+            toastViewModel.toastInit(message: "사용자 ID가 수정되었습니다.", padding: 32)
             dismiss()
           } else {
             inputValidationStatus = updateStatus

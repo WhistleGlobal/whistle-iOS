@@ -13,9 +13,9 @@ class ToastViewModel: ObservableObject {
   private init() { }
 
   @Published var showToast = false
-  @Published var isTop = false
+//  @Published var isTop = false
   @Published var message = ""
-  @Published var padding: CGFloat = 70
+  @Published var padding: CGFloat = 58
   @Published var toastOpacity = 0.0
   @Published var isCancelled = false
 
@@ -24,12 +24,10 @@ class ToastViewModel: ObservableObject {
 
   func toastInit(
     showToast: Bool = true,
-    isTop: Bool = true,
     message: String,
-    padding: CGFloat = 70)
+    padding: CGFloat = 58)
   {
     self.showToast = showToast
-    self.isTop = isTop
     self.message = message
     self.padding = padding
     isCancellable = false
@@ -38,14 +36,12 @@ class ToastViewModel: ObservableObject {
 
   func cancelToastInit(
     showToast: Bool = true,
-    isTop: Bool = true,
     message: String,
     isCancelled _: Bool = false,
-    padding: CGFloat = 70,
+    padding: CGFloat = 58,
     cancelAction: @escaping () -> Void)
   {
     self.showToast = showToast
-    self.isTop = isTop
     isCancellable = true
     isCancelled = false
     self.message = message

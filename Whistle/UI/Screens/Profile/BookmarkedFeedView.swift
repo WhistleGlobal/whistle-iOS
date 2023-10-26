@@ -188,7 +188,7 @@ struct BookmarkedFeedView: View {
     }
     .confirmationDialog("", isPresented: $showDialog) {
       Button("저장 해제", role: .destructive) {
-        toastViewModel.cancelToastInit(isTop: false, message: "저장 해제되었습니다.", padding: 78) {
+        toastViewModel.cancelToastInit(message: "저장 해제되었습니다.") {
           Task {
             if apiViewModel.bookmark.count - 1 != currentIndex { // 삭제하려는 컨텐츠가 배열 마지막이 아님
               let contentId = apiViewModel.bookmark[currentIndex].contentId

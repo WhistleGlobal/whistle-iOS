@@ -80,7 +80,6 @@ struct RootTabView: View {
         NavigationView {
           if isCameraAuthorized, isMicrophoneAuthorized {
             VideoCaptureView()
-
           } else {
             if !isNavigationActive {
               RecordAccessView(

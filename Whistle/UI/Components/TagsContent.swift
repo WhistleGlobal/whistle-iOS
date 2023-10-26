@@ -72,7 +72,7 @@ struct TagsContent<Overlay>: View where Overlay: View {
                   tagTextField()
                     .onDisappear {
                       if sheetPosition != .hidden {
-                        toastViewModel.toastInit(isTop: false, message: "해시태그는 최대 5개까지만 가능합니다", padding: 32)
+                        toastViewModel.toastInit(message: "해시태그는 최대 5개까지만 가능합니다", padding: 32)
                       }
                     }
                 }
@@ -196,7 +196,7 @@ extension TagsContent {
   // Function to keep text length in limits
   func limitText(_ upper: Int) {
     if inputText.filter({ $0 != " " }).count > upper {
-      toastViewModel.toastInit(isTop: false, message: "해시태그는 최대 16글자까지 가능합니다", padding: 32)
+      toastViewModel.toastInit(message: "해시태그는 최대 16글자까지 가능합니다", padding: 32)
       inputText = String(inputText.prefix(upper))
     }
   }
