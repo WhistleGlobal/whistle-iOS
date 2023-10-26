@@ -381,7 +381,7 @@ extension MemberFeedView {
                   apiViewModel.postFeedPlayerChanged()
                 }
               } label: {
-                Text(apiViewModel.memberProfile.isFollowed ? "팔로잉" : "팔로워")
+                Text(apiViewModel.memberProfile.isFollowed ? "팔로잉" : "팔로우")
                   .fontSystem(fontDesignSystem: .caption_SemiBold)
                   .foregroundColor(.Gray10)
                   .background {
