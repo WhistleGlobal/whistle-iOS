@@ -63,7 +63,7 @@ extension PhotoPreviewCell {
           guard imageView.image == nil, asset.identifier == id else { return }
           setImage(response.image)
         case .failure(let error):
-          _print(error)
+          WhistleLogger.logger.debug("Error: \(error)")
         }
       })
     }
@@ -71,10 +71,11 @@ extension PhotoPreviewCell {
     let options = _PhotoFetchOptions(sizeMode: .preview(manager.options.largePhotoMaxWidth)) { progress, _, _, _ in
       DispatchQueue.main.async { [weak self] in
         guard let self, asset.identifier == id else { return }
-        _print("Download photo from iCloud: \(progress)")
+        WhistleLogger.logger.debug("Download photo from iCloud: \(progress)")
         setDownloadingProgress(progress)
       }
     }
+
     manager.requestPhoto(for: asset.phAsset, options: options) { [weak self] result in
       guard let self else { return }
       switch result {
@@ -83,7 +84,7 @@ extension PhotoPreviewCell {
         setImage(response.image)
         setDownloadingProgress(1.0)
       case .failure(let error):
-        _print(error)
+        WhistleLogger.logger.debug("Error: \(error)")
       }
     }
   }

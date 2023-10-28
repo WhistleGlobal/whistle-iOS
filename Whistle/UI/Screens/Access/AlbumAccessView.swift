@@ -109,7 +109,7 @@ extension AlbumAccessView {
             isAlbumAuthorized = true
             showAlbumAccessView = false
           case .limited:
-            print("limited")
+            WhistleLogger.logger.debug("limited")
           default:
             break
           }
@@ -121,7 +121,7 @@ extension AlbumAccessView {
       isAlbumAuthorized = true
       showAlbumAccessView = false
     case .limited:
-      print("limited")
+      WhistleLogger.logger.debug("limited")
     default:
       break
     }

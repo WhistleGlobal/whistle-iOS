@@ -460,7 +460,7 @@ struct MainFeedView: View {
         Task {
           if apiViewModel.mainFeed[currentIndex].isBookmarked ?? false {
             let tempBool = await apiViewModel.bookmarkAction(contentID: currentVideoContentId, method: .delete)
-            toastViewModel.toastInit(message: "저장 취소했습니다.")
+            toastViewModel.toastInit(message: "저장을 취소했습니다.")
             apiViewModel.mainFeed[currentIndex].isBookmarked = false
             currentVideoIsBookmarked = false
           } else {
@@ -580,10 +580,10 @@ extension MainFeedView {
                 Task {
                   if isFollowed.wrappedValue {
                     await apiViewModel.followAction(userID: currentVideoUserId, method: .delete)
-                    toastViewModel.toastInit(message: "\(userName)님을 팔로우 취소함")
+                    toastViewModel.toastInit(message: "\(userName)님을 팔로우 취소했습니다")
                   } else {
                     await apiViewModel.followAction(userID: currentVideoUserId, method: .post)
-                    toastViewModel.toastInit(message: "\(userName)님을 팔로우 중")
+                    toastViewModel.toastInit(message: "\(userName)님을 팔로우 중입니다")
                   }
                   isFollowed.wrappedValue.toggle()
                   apiViewModel.mainFeed = apiViewModel.mainFeed.map { item in

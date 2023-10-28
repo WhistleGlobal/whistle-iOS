@@ -46,7 +46,7 @@ class MusicViewModel: ObservableObject {
       try session?.overrideOutputAudioPort(.none)
 
     } catch {
-      print(error.localizedDescription)
+      WhistleLogger.logger.debug("Error: \(error.localizedDescription)")
     }
   }
 }
@@ -176,7 +176,7 @@ extension MusicViewModel {
         try FileManager.default.removeItem(at: url)
       }
     } catch {
-      print(error)
+      WhistleLogger.logger.debug("Error: \(error)")
     }
   }
 

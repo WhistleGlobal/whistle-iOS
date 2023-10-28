@@ -2714,14 +2714,14 @@
 				CODE_SIGN_ENTITLEMENTS = Whistle/WhistleDebug.entitlements;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 15;
+				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Whistle/Preview Content\"";
 				DEVELOPMENT_TEAM = "";
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = 45V6H9W5KT;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Whistle/Info.plist;
-				INFOPLIST_KEY_LSApplicationCategoryType = "";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.social-networking";
 				INFOPLIST_KEY_NSAppleMusicUsageDescription = "Seek through media library for content selection";
 				INFOPLIST_KEY_NSCameraUsageDescription = "Whistle에서 회원님의 기기 카메라를 사용하여 동영상을 녹화 또는 콘텐츠에 동영상을 촬영하여 등록하는 기능 사용을 위해 카메라에 대한 액세스 권한을 사용합니다.";
 				INFOPLIST_KEY_NSMicrophoneUsageDescription = "Whistle에서 회원님의 기기 마이크를 사용하여 원본 오디오를 포함한 동영상을 녹화하고 등록하는 기능 사용을 위해 마이크에 대한 액세스 권한을 사용합니다.";
@@ -2738,7 +2738,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0.0;
+				MARKETING_VERSION = 1.1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.newcompany.Whistle;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -2761,14 +2761,14 @@
 				CODE_SIGN_ENTITLEMENTS = Whistle/Whistle.entitlements;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 15;
+				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Whistle/Preview Content\"";
 				DEVELOPMENT_TEAM = "";
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = 45V6H9W5KT;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Whistle/Info.plist;
-				INFOPLIST_KEY_LSApplicationCategoryType = "";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.social-networking";
 				INFOPLIST_KEY_NSAppleMusicUsageDescription = "Seek through media library for content selection";
 				INFOPLIST_KEY_NSCameraUsageDescription = "Whistle에서 회원님의 기기 카메라를 사용하여 동영상을 녹화 또는 콘텐츠에 동영상을 촬영하여 등록하는 기능 사용을 위해 카메라에 대한 액세스 권한을 사용합니다.";
 				INFOPLIST_KEY_NSMicrophoneUsageDescription = "Whistle에서 회원님의 기기 마이크를 사용하여 원본 오디오를 포함한 동영상을 녹화하고 등록하는 기능 사용을 위해 마이크에 대한 액세스 권한을 사용합니다.";
@@ -2785,7 +2785,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0.0;
+				MARKETING_VERSION = 1.1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.newcompany.Whistle;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";

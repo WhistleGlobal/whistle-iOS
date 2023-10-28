@@ -33,192 +33,195 @@ struct VideoEditorView: View {
   var selectedVideoURL: URL?
 
   var body: some View {
-    ZStack {
-      Color.Background_Default_Dark.ignoresSafeArea()
-      VStack(spacing: 0) {
-        CustomNavigationBarViewController(title: "새 게시물") {
-          alertViewModel.stackAlert(
-            title: "처음부터 시작하시겠어요?",
-            content: "지금 돌아가면 해당 작업물이 삭제됩니다.",
-            cancelText: "계속 수정",
-            destructiveText: "처음부터 시작")
-          {
-            dismiss()
+    GeometryReader { _ in
+      ZStack {
+        Color.Background_Default_Dark.ignoresSafeArea()
+        VStack(spacing: 0) {
+          CustomNavigationBarViewController(title: "새 게시물") {
+            alertViewModel.stackAlert(
+              title: "처음부터 시작하시겠어요?",
+              content: "지금 돌아가면 해당 작업물이 삭제됩니다.",
+              cancelText: "계속 수정",
+              destructiveText: "처음부터 시작")
+            {
+              dismiss()
+            }
+          } nextButtonAction: {
+            if let video = editorVM.currentVideo {
+              if videoPlayer.isPlaying {
+                videoPlayer.action(video)
+              }
+            }
+            goUpload = true
           }
-        } nextButtonAction: {
+          .frame(height: UIScreen.getHeight(44))
+          if let video = editorVM.currentVideo {
+            NavigationLink(
+              destination: DescriptionAndTagEditorView(
+                video: video, editorVM: editorVM,
+                videoPlayer: videoPlayer,
+                musicVM: musicVM,
+                isInitial: $isInitial),
+              isActive: $goUpload)
+            {
+              EmptyView()
+            }
+          }
+          ZStack(alignment: .top) {
+            PlayerHolderView(editorVM: editorVM, videoPlayer: videoPlayer, musicVM: musicVM)
+            if musicVM.isTrimmed {
+              MusicInfo(musicVM: musicVM, showMusicTrimView: $showMusicTrimView) {
+                showMusicTrimView = true
+              } onDelete: {
+                musicVM.removeMusic()
+                editorVM.removeAudio()
+              }
+            }
+          }
+          .padding(.top, 4)
+
+          ThumbnailsSliderView(
+            currentTime: $videoPlayer.currentTime,
+            video: $editorVM.currentVideo,
+            isInitial: $isInitial,
+            editorVM: editorVM,
+            videoPlayer: videoPlayer)
+          {
+            videoPlayer.scrubState = .scrubEnded(videoPlayer.currentTime)
+            editorVM.setTools()
+          }
+          helpText
+
+          VideoEditorToolsSection(videoPlayer: videoPlayer, editorVM: editorVM)
+        }
+        .onAppear {
+          if isInitial {
+            setVideo()
+          }
+        }
+      }
+      .background(Color.Background_Default_Dark)
+      .ignoresSafeArea()
+      .navigationBarHidden(true)
+      .navigationBarBackButtonHidden(true)
+      .fullScreenCover(isPresented: $showMusicTrimView) {
+        MusicTrimView(
+          musicVM: musicVM,
+          editorVM: editorVM,
+          videoPlayer: videoPlayer,
+          showMusicTrimView: $showMusicTrimView)
+      }
+      .onChange(of: scenePhase) { phase in
+        saveProject(phase)
+      }
+      .onChange(of: editorVM.selectedTools) { newValue in
+        switch newValue {
+        //      case .speed:
+        //        bottomSheetPosition = .dynamic
+        //        bottomSheetTitle = "영상 속도"
+        case .music:
           if let video = editorVM.currentVideo {
             if videoPlayer.isPlaying {
               videoPlayer.action(video)
             }
+            videoPlayer.scrubState = .scrubEnded(video.rangeDuration.lowerBound)
           }
-          goUpload = true
-        }
-        .frame(height: UIScreen.getHeight(44))
-        if let video = editorVM.currentVideo {
-          NavigationLink(
-            destination: DescriptionAndTagEditorView(
-              video: video, editorVM: editorVM,
-              videoPlayer: videoPlayer,
-              musicVM: musicVM,
-              isInitial: $isInitial),
-            isActive: $goUpload)
-          {
-            EmptyView()
-          }
-        }
-        ZStack(alignment: .top) {
-          PlayerHolderView(editorVM: editorVM, videoPlayer: videoPlayer, musicVM: musicVM)
-          if musicVM.isTrimmed {
-            MusicInfo(musicVM: musicVM, showMusicTrimView: $showMusicTrimView) {
-              showMusicTrimView = true
-            } onDelete: {
-              musicVM.removeMusic()
-              editorVM.removeAudio()
-            }
-          }
-        }
-        .padding(.top, 4)
-
-        ThumbnailsSliderView(
-          currentTime: $videoPlayer.currentTime,
-          video: $editorVM.currentVideo,
-          isInitial: $isInitial,
-          editorVM: editorVM,
-          videoPlayer: videoPlayer)
-        {
-          videoPlayer.scrubState = .scrubEnded(videoPlayer.currentTime)
-          editorVM.setTools()
-        }
-        helpText
-
-        VideoEditorToolsSection(videoPlayer: videoPlayer, editorVM: editorVM)
-      }
-      .onAppear {
-        if isInitial {
-          setVideo()
-        }
-      }
-    }
-    .background(Color.Background_Default_Dark)
-    .ignoresSafeArea()
-    .navigationBarHidden(true)
-    .navigationBarBackButtonHidden(true)
-    .fullScreenCover(isPresented: $showMusicTrimView) {
-      MusicTrimView(
-        musicVM: musicVM,
-        editorVM: editorVM,
-        videoPlayer: videoPlayer,
-        showMusicTrimView: $showMusicTrimView)
-    }
-    .onChange(of: scenePhase) { phase in
-      saveProject(phase)
-    }
-    .onChange(of: editorVM.selectedTools) { newValue in
-      switch newValue {
-      //      case .speed:
-      //        bottomSheetPosition = .dynamic
-      //        bottomSheetTitle = "영상 속도"
-      case .music:
-        if let video = editorVM.currentVideo {
-          if videoPlayer.isPlaying {
-            videoPlayer.action(video)
-          }
-          videoPlayer.scrubState = .scrubEnded(video.rangeDuration.lowerBound)
-        }
-        bottomSheetPosition = .relative(1)
-        sheetPositions = [.absolute(UIScreen.getHeight(400)), .hidden, .relative(1)]
-        bottomSheetTitle = "음악 검색"
-      case .audio:
-        bottomSheetPosition = .dynamic
-        sheetPositions = [.hidden, .dynamic]
-        bottomSheetTitle = "볼륨 조절"
-      //      case .filters: print("filters")
-      //      case .corrections: print("corrections")
-      //      case .frames: print("frames")
-      case nil: print("nil")
-      }
-    }
-    .bottomSheet(
-      bottomSheetPosition: $bottomSheetPosition,
-      switchablePositions: sheetPositions)
-    {
-      VStack(spacing: 0) {
-        ZStack {
-          Text(bottomSheetTitle)
-            .fontSystem(fontDesignSystem: .subtitle1_KO)
-            .hCenter()
-          Text("취소")
-            .fontSystem(fontDesignSystem: .subtitle2_KO)
-            .contentShape(Rectangle())
-            .hTrailing()
-            .onTapGesture {
-              bottomSheetPosition = .hidden
-              editorVM.selectedTools = nil
-            }
-        }
-        .foregroundStyle(.white)
-        .padding(.horizontal, 16)
-        .padding(.vertical, 6)
-        Rectangle()
-          .fill(Color.Border_Default_Dark)
-          .frame(height: 1)
-      }
-    } mainContent: {
-      switch editorVM.selectedTools {
-      //      case .speed:
-      //        if let toolState = editorVM.selectedTools, let video = editorVM.currentVideo {
-      //          let isAppliedTool = video.isAppliedTool(for: toolState)
-      //          VStack {
-      //            VideoSpeedSlider(value: Double(video.rate), isChangeState: isAppliedTool) { rate in
-      //              videoPlayer.pause()
-      //              editorVM.updateRate(rate: rate)
-      //              print("range: \(editorVM.currentVideo?.rangeDuration)")
-      //            }
-      //            Text("속도 설정")
-      //              .fontSystem(fontDesignSystem: .subtitle2_KO)
-      //              .foregroundColor(.white)
-      //              .padding(.horizontal, UIScreen.getWidth(150))
-      //              .padding(.vertical, UIScreen.getHeight(12))
-      //              .background(RoundedRectangle(cornerRadius: 100).fill(Color.Blue_Default))
-      //              .onTapGesture {
-      //                bottomSheetPosition = .hidden
-      //                editorVM.selectedTools = nil
-      //              }
-      //              .padding(.top, UIScreen.getHeight(36))
-      //          }
-      //        }
-      case .music:
-        MusicListView(
-          musicVM: musicVM,
-          editorVM: editorVM,
-          videoPlayer: videoPlayer,
-          bottomSheetPosition: $bottomSheetPosition,
-          showMusicTrimView: $showMusicTrimView)
-        {
           bottomSheetPosition = .relative(1)
+          sheetPositions = [.absolute(UIScreen.getHeight(400)), .hidden, .relative(1)]
+          bottomSheetTitle = "음악 검색"
+        case .audio:
+          bottomSheetPosition = .dynamic
+          sheetPositions = [.hidden, .dynamic]
+          bottomSheetTitle = "볼륨 조절"
+        //      case .filters: print("filters")
+        //      case .corrections: print("corrections")
+        //      case .frames: print("frames")
+        case nil: print("nil")
         }
-      case .audio:
-        VolumeSliderSheetView(videoPlayer: videoPlayer, editorVM: editorVM, musicVM: musicVM) {
-          bottomSheetPosition = .hidden
-          editorVM.selectedTools = nil
-        }
-      //        case .filters: print("filters")
-      //        case .corrections: print("corrections")
-      //        case .frames: print("frames")
-      //        case nil: print("nil")
-      default: Text("")
       }
+      .bottomSheet(
+        bottomSheetPosition: $bottomSheetPosition,
+        switchablePositions: sheetPositions)
+      {
+        VStack(spacing: 0) {
+          ZStack {
+            Text(bottomSheetTitle)
+              .fontSystem(fontDesignSystem: .subtitle1_KO)
+              .hCenter()
+            Text("취소")
+              .fontSystem(fontDesignSystem: .subtitle2_KO)
+              .contentShape(Rectangle())
+              .hTrailing()
+              .onTapGesture {
+                bottomSheetPosition = .hidden
+                editorVM.selectedTools = nil
+              }
+          }
+          .foregroundStyle(.white)
+          .padding(.horizontal, 16)
+          .padding(.vertical, 6)
+          Rectangle()
+            .fill(Color.Border_Default_Dark)
+            .frame(height: 1)
+        }
+      } mainContent: {
+        switch editorVM.selectedTools {
+        //      case .speed:
+        //        if let toolState = editorVM.selectedTools, let video = editorVM.currentVideo {
+        //          let isAppliedTool = video.isAppliedTool(for: toolState)
+        //          VStack {
+        //            VideoSpeedSlider(value: Double(video.rate), isChangeState: isAppliedTool) { rate in
+        //              videoPlayer.pause()
+        //              editorVM.updateRate(rate: rate)
+        //              print("range: \(editorVM.currentVideo?.rangeDuration)")
+        //            }
+        //            Text("속도 설정")
+        //              .fontSystem(fontDesignSystem: .subtitle2_KO)
+        //              .foregroundColor(.white)
+        //              .padding(.horizontal, UIScreen.getWidth(150))
+        //              .padding(.vertical, UIScreen.getHeight(12))
+        //              .background(RoundedRectangle(cornerRadius: 100).fill(Color.Blue_Default))
+        //              .onTapGesture {
+        //                bottomSheetPosition = .hidden
+        //                editorVM.selectedTools = nil
+        //              }
+        //              .padding(.top, UIScreen.getHeight(36))
+        //          }
+        //        }
+        case .music:
+          MusicListView(
+            musicVM: musicVM,
+            editorVM: editorVM,
+            videoPlayer: videoPlayer,
+            bottomSheetPosition: $bottomSheetPosition,
+            showMusicTrimView: $showMusicTrimView)
+          {
+            bottomSheetPosition = .relative(1)
+          }
+        case .audio:
+          VolumeSliderSheetView(videoPlayer: videoPlayer, editorVM: editorVM, musicVM: musicVM) {
+            bottomSheetPosition = .hidden
+            editorVM.selectedTools = nil
+          }
+        //        case .filters: print("filters")
+        //        case .corrections: print("corrections")
+        //        case .frames: print("frames")
+        //        case nil: print("nil")
+        default: Text("")
+        }
+      }
+      .onDismiss {
+        editorVM.selectedTools = nil
+      }
+      .enableSwipeToDismiss()
+      .enableTapToDismiss()
+      .customBackground(
+        glassMorphicView(cornerRadius: 24)
+          .overlay(RoundedRectangle(cornerRadius: 24).strokeBorder(LinearGradient.Border_Glass)))
+      .showDragIndicator(true)
+      .dragIndicatorColor(Color.Border_Default_Dark)
     }
-    .onDismiss {
-      editorVM.selectedTools = nil
-    }
-    .enableSwipeToDismiss()
-    .enableTapToDismiss()
-    .customBackground(
-      glassMorphicView(cornerRadius: 24)
-        .overlay(RoundedRectangle(cornerRadius: 24).strokeBorder(LinearGradient.Border_Glass)))
-    .showDragIndicator(true)
-    .dragIndicatorColor(Color.Border_Default_Dark)
+    .ignoresSafeArea(.keyboard)
   }
 }
 

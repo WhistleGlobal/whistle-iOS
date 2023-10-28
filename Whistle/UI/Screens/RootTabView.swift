@@ -128,26 +128,26 @@ struct RootTabView: View {
             } else {
               HStack(spacing: 0) {
                 Spacer().frame(minWidth: 0)
-                Button {
-                  withAnimation {
-                    tabbarModel.tabWidth = UIScreen.width - 32
+                Circle()
+                  .foregroundColor(.Dim_Default)
+                  .frame(width: 48, height: 48)
+                  .overlay {
+                    Circle()
+                      .stroke(lineWidth: 1)
+                      .foregroundStyle(LinearGradient.Border_Glass)
                   }
-                } label: {
-                  Circle()
-                    .foregroundColor(.Dim_Default)
-                    .frame(width: 48, height: 48)
-                    .overlay {
-                      Circle()
-                        .stroke(lineWidth: 1)
-                        .foregroundStyle(LinearGradient.Border_Glass)
-                    }
-                    .padding(4)
-                    .overlay {
-                      Image(systemName: "arrow.left.and.right")
-                        .foregroundColor(.white)
-                        .frame(width: 20, height: 20)
-                    }
-                }
+                  .padding(4)
+                  .overlay {
+                    Image(systemName: "arrow.left.and.right")
+                      .foregroundColor(.white)
+                      .frame(width: 20, height: 20)
+                  }
+                  .gesture(
+                    DragGesture(minimumDistance: 0, coordinateSpace: .local).onEnded { _ in
+                      withAnimation {
+                        tabbarModel.tabWidth = UIScreen.width - 32
+                      }
+                    })
               }
             }
           }
@@ -354,8 +354,9 @@ extension RootTabView {
           Text("플레이")
             .fontSystem(fontDesignSystem: .caption2_KO_Regular)
         }
+        .hCenter()
+        .padding(.leading, 4)
       }
-      .hCenter()
       Button {
         if isAccess {
           switchTab(to: .upload)
@@ -382,11 +383,12 @@ extension RootTabView {
           Text("프로필")
             .fontSystem(fontDesignSystem: .caption2_KO_Regular)
         }
+        .hCenter()
+        .padding(.trailing, 4)
       }
-      .hCenter()
     }
     .foregroundColor(.white)
-    .padding(.horizontal, 16)
+//    .padding(.horizontal, 16)
     .frame(height: UIScreen.getHeight(56))
     .frame(maxWidth: .infinity)
   }
@@ -454,8 +456,8 @@ public enum TabSelection: CGFloat {
 }
 
 // MARK: - 권한
-extension RootTabView {
 
+extension RootTabView {
   private func getCameraPermission() {
     let authorizationStatus = AVCaptureDevice.authorizationStatus(for: .video)
     switch authorizationStatus {

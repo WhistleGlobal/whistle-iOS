@@ -76,144 +76,150 @@ struct VideoCaptureView: View {
   // MARK: - Body
 
   var body: some View {
-    ZStack {
-      Color.black.ignoresSafeArea()
-      if isPresented {
-        PickerConfigViewControllerWrapper(isImagePickerClosed: $isImagePickerClosed)
-      }
-      if buttonState != .completed || editorVM.currentVideo == nil {
-        viewModel.preview
-      } else {
-        if let video = editorVM.currentVideo {
-          recordedVideoPreview(video: video)
-        } else {
-          Image("BlurredDefaultBG")
+    GeometryReader { _ in
+      ZStack {
+        Color.black.ignoresSafeArea()
+        if bottomSheetPosition == .absolute(UIScreen.getHeight(514)) {
+          Color.black.opacity(0.64).ignoresSafeArea().zIndex(1000)
         }
-      }
-      // preview 위의 버튼들
-      VStack {
-        // 상단 버튼
-        toolBar
-        // 음악 추가 버튼
-        if buttonState == .completed {
-          MusicInfo(musicVM: musicVM, showMusicTrimView: $showMusicTrimView) {
-            if musicVM.musicInfo == nil {
-              sheetPositions = [.absolute(UIScreen.getHeight(400)), .hidden, .relative(1)]
-              bottomSheetPosition = .absolute(UIScreen.getHeight(400))
-            }
-          } onDelete: {
-            withAnimation(.easeInOut) {
-              musicVM.removeMusic()
-              editorVM.removeAudio()
-            }
+        if isPresented {
+          PickerConfigViewControllerWrapper(isImagePickerClosed: $isImagePickerClosed)
+        }
+        if buttonState != .completed || editorVM.currentVideo == nil {
+          viewModel.preview
+        } else {
+          if let video = editorVM.currentVideo {
+            recordedVideoPreview(video: video)
+          } else {
+            Image("BlurredDefaultBG")
           }
         }
-        Spacer()
-        // 하단 버튼
-        recordButtonSection
-      }
-      .frame(width: UIScreen.width, height: UIScreen.width * 16 / 9)
-      .padding(.bottom, 74)
-      .opacity(showPreparingView ? 0 : 1)
-      if showPreparingView {
-        Circle()
-          .trim(from: 0, to: min(count / CGFloat(selectedSec.0 == .sec3 ? 3.0 : 10.0), 1.0))
-          .stroke(Color.white, style: StrokeStyle(lineWidth: 4, lineCap: .square))
-          .frame(width: 84)
-          .rotationEffect(Angle(degrees: -90))
-          .rotation3DEffect(.degrees(180), axis: (x: 0.0, y: 1.0, z: 0.0))
-        Text("\(Int(count + 0.9))")
-          .fontSystem(fontDesignSystem: .largeTitle_Expanded)
-          .foregroundColor(.white)
-      }
-    }
-    .onDisappear {
-      do {
-        try Aespa.terminate()
-        viewModel.preview = nil
-      } catch { }
-    }
-    .fullScreenCover(isPresented: $showMusicTrimView) {
-      MusicTrimView(
-        musicVM: musicVM,
-        editorVM: editorVM,
-        videoPlayer: videoPlayer,
-        showMusicTrimView: $showMusicTrimView)
-    }
-    .fullScreenCover(isPresented: $showAlbumAccessView, onDismiss: {
-      if isAlbumAuthorized {
-        guard let latestVideoAsset = fetchLatestVideo() else { return }
-        guard let latestVideoThumbnail = generateThumbnail(for: latestVideoAsset) else { return }
-        albumCover = Image(uiImage: latestVideoThumbnail)
-      }
-    }) {
-      AlbumAccessView(isAlbumAuthorized: $isAlbumAuthorized, showAlbumAccessView: $showAlbumAccessView)
-    }
-    .navigationBarBackButtonHidden()
-    .onAppear {
-      getAlbumAuth()
-      if isAlbumAuthorized {
-        guard let latestVideoAsset = fetchLatestVideo() else { return }
-        guard let latestVideoThumbnail = generateThumbnail(for: latestVideoAsset) else { return }
-        albumCover = Image(uiImage: latestVideoThumbnail)
-      }
-      viewModel.aespaSession = Aespa.session(with: AespaOption(albumName: "Whistle"))
-      viewModel.preview = viewModel.aespaSession.interactivePreview()
-    }
-    .onChange(of: scenePhase) { newValue in
-      if newValue == .background {
-        guard let device = AVCaptureDevice.default(for: .video) else { return }
-        if device.hasTorch {
-          do {
-            try device.lockForConfiguration()
-
-            if device.torchMode == .on {
-              device.torchMode = .off
-              isFlashOn = false
+        // preview 위의 버튼들
+        VStack {
+          // 상단 버튼
+          toolBar
+          // 음악 추가 버튼
+          if buttonState == .completed {
+            MusicInfo(musicVM: musicVM, showMusicTrimView: $showMusicTrimView) {
+              if musicVM.musicInfo == nil {
+                sheetPositions = [.absolute(UIScreen.getHeight(400)), .hidden, .relative(1)]
+                bottomSheetPosition = .absolute(UIScreen.getHeight(400))
+              }
+            } onDelete: {
+              withAnimation(.easeInOut) {
+                musicVM.removeMusic()
+                editorVM.removeAudio()
+              }
             }
-            device.unlockForConfiguration()
-          } catch {
-            print("Flash could not be used")
           }
-        } else {
-          print("Device does not have a Torch")
+          Spacer()
+          // 하단 버튼
+          recordButtonSection
+        }
+        .frame(width: UIScreen.width, height: UIScreen.width * 16 / 9)
+        .padding(.bottom, 74)
+        .opacity(showPreparingView ? 0 : 1)
+        if showPreparingView {
+          Circle()
+            .trim(from: 0, to: min(count / CGFloat(selectedSec.0 == .sec3 ? 3.0 : 10.0), 1.0))
+            .stroke(Color.white, style: StrokeStyle(lineWidth: 4, lineCap: .square))
+            .frame(width: 84)
+            .rotationEffect(Angle(degrees: -90))
+            .rotation3DEffect(.degrees(180), axis: (x: 0.0, y: 1.0, z: 0.0))
+          Text("\(Int(count + 0.9))")
+            .fontSystem(fontDesignSystem: .largeTitle_Expanded)
+            .foregroundColor(.white)
         }
       }
-    }
-    .bottomSheet(
-      bottomSheetPosition: $bottomSheetPosition,
-      switchablePositions: sheetPositions)
-    {
-      switch buttonState {
-      case .idle:
-        timerSetView()
-      case .recording:
-        EmptyView()
-      case .completed:
-        MusicListView(
+      .onDisappear {
+        do {
+          try Aespa.terminate()
+          viewModel.preview = nil
+        } catch { }
+      }
+      .fullScreenCover(isPresented: $showMusicTrimView) {
+        MusicTrimView(
           musicVM: musicVM,
           editorVM: editorVM,
           videoPlayer: videoPlayer,
-          bottomSheetPosition: $bottomSheetPosition,
           showMusicTrimView: $showMusicTrimView)
-        {
-          bottomSheetPosition = .relative(1)
+      }
+      .fullScreenCover(isPresented: $showAlbumAccessView, onDismiss: {
+        if isAlbumAuthorized {
+          guard let latestVideoAsset = fetchLatestVideo() else { return }
+          guard let latestVideoThumbnail = generateThumbnail(for: latestVideoAsset) else { return }
+          albumCover = Image(uiImage: latestVideoThumbnail)
+        }
+      }) {
+        AlbumAccessView(isAlbumAuthorized: $isAlbumAuthorized, showAlbumAccessView: $showAlbumAccessView)
+      }
+      .navigationBarBackButtonHidden()
+      .onAppear {
+        getAlbumAuth()
+        if isAlbumAuthorized {
+          guard let latestVideoAsset = fetchLatestVideo() else { return }
+          guard let latestVideoThumbnail = generateThumbnail(for: latestVideoAsset) else { return }
+          albumCover = Image(uiImage: latestVideoThumbnail)
+        }
+        viewModel.aespaSession = Aespa.session(with: AespaOption(albumName: "Whistle"))
+        viewModel.preview = viewModel.aespaSession.interactivePreview()
+      }
+      .onChange(of: scenePhase) { newValue in
+        if newValue == .background {
+          guard let device = AVCaptureDevice.default(for: .video) else { return }
+          if device.hasTorch {
+            do {
+              try device.lockForConfiguration()
+
+              if device.torchMode == .on {
+                device.torchMode = .off
+                isFlashOn = false
+              }
+              device.unlockForConfiguration()
+            } catch {
+              WhistleLogger.logger.debug("Flash could not be used")
+            }
+          } else {
+            WhistleLogger.logger.debug("Device does not have a Torch")
+          }
         }
       }
+      .bottomSheet(
+        bottomSheetPosition: $bottomSheetPosition,
+        switchablePositions: sheetPositions)
+      {
+        switch buttonState {
+        case .idle:
+          timerSetView()
+        case .recording:
+          EmptyView()
+        case .completed:
+          MusicListView(
+            musicVM: musicVM,
+            editorVM: editorVM,
+            videoPlayer: videoPlayer,
+            bottomSheetPosition: $bottomSheetPosition,
+            showMusicTrimView: $showMusicTrimView)
+          {
+            bottomSheetPosition = .relative(1)
+          }
+        }
+      }
+      .enableSwipeToDismiss(true)
+      .enableTapToDismiss(true)
+      .enableContentDrag(true)
+      .enableAppleScrollBehavior(false)
+      .dragIndicatorColor(Color.Border_Default_Dark)
+      .customBackground(
+        glassMorphicView(cornerRadius: 24)
+          .overlay {
+            RoundedRectangle(cornerRadius: 24)
+              .stroke(lineWidth: 1)
+              .foregroundStyle(
+                LinearGradient.Border_Glass)
+          })
+      .ignoresSafeArea(.keyboard)
     }
-    .enableSwipeToDismiss(true)
-    .enableTapToDismiss(true)
-    .enableContentDrag(true)
-    .enableAppleScrollBehavior(false)
-    .dragIndicatorColor(Color.Border_Default_Dark)
-    .customBackground(
-      glassMorphicView(cornerRadius: 24)
-        .overlay {
-          RoundedRectangle(cornerRadius: 24)
-            .stroke(lineWidth: 1)
-            .foregroundStyle(
-              LinearGradient.Border_Glass)
-        })
   }
 }
 
@@ -346,8 +352,8 @@ extension VideoCaptureView {
               RoundedRectangle(cornerRadius: 8)
                 .foregroundStyle(
                   LinearGradient(colors: [
-                    Color.Primary_Darken,
-                    Color.Secondary_Darken,
+                    Color.Primary_Default,
+                    Color.Secondary_Default,
                   ], startPoint: .leading, endPoint: .trailing))
                 .frame(width: CGFloat(defaultWidth + dragOffset), height: 84, alignment: .leading)
                 .overlay {
@@ -374,6 +380,7 @@ extension VideoCaptureView {
                 .gesture(
                   DragGesture()
                     .onChanged { value in
+                      WhistleLogger.logger.debug("length \((defaultWidth + dragOffset - 6) / (barSpacing + 6))")
                       dragOffset = max(-CGFloat((6 + barSpacing) * 14), min(0, accumulatedOffset + value.translation.width))
                     }
                     .onEnded { _ in
@@ -476,6 +483,8 @@ extension VideoCaptureView {
                       default:
                         break
                       }
+                      WhistleLogger.logger.debug("length: \((defaultWidth + dragOffset - 6) / (barSpacing + 6))")
+
                     })
             }
             .frame(width: UIScreen.width - 32, alignment: .leading)
@@ -742,10 +751,10 @@ extension VideoCaptureView {
             }
             device.unlockForConfiguration()
           } catch {
-            print("Flash could not be used")
+            WhistleLogger.logger.debug("Flash could not be used")
           }
         } else {
-          print("Device does not have a Torch")
+          WhistleLogger.logger.debug("Device does not have a Torch")
         }
         viewModel.aespaSession.position(to: isFront ? .back : .front)
         isFront.toggle()
@@ -881,10 +890,10 @@ extension VideoCaptureView {
         }
         device.unlockForConfiguration()
       } catch {
-        print("Flash could not be used")
+        WhistleLogger.logger.debug("Flash could not be used")
       }
     } else {
-      print("Device does not have a Torch")
+      WhistleLogger.logger.debug("Device does not have a Torch")
     }
   }
 
@@ -921,7 +930,7 @@ extension VideoCaptureView {
           case .success(let videoURL):
             setVideo(videoURL)
           case .failure(let error):
-            print("Error: \(error)")
+            WhistleLogger.logger.debug("Error: \(error)")
           }
         }
         recordingTimer?.invalidate() // 타이머 중지
@@ -1019,7 +1028,7 @@ extension VideoCaptureView {
             case .success(let videoURL):
               setVideo(videoURL)
             case .failure(let error):
-              print("Error: \(error)")
+              WhistleLogger.logger.debug("Error: \(error)")
             }
           }
           stopRecordingTimer()

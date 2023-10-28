@@ -20,8 +20,7 @@ struct PickerConfigViewControllerWrapper: UIViewControllerRepresentable {
 
     viewController.isImagePickerClosed = isImagePickerClosed
     viewController.isImagePickerClosed?
-      .sink { isClosed in
-        print("combine", isClosed)
+      .sink { _ in
       }
       .store(in: &viewController.cancellables)
 

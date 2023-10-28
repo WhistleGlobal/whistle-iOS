@@ -103,7 +103,7 @@ struct MusicListView: View {
                   .truncationMode(.tail)
                   .lineLimit(1)
                   .frame(width: UIScreen.getWidth(210), alignment: .leading)
-                Rectangle().fill(.white).opacity(0.0001)
+                Rectangle().fill(.white).opacity(0.01)
               }
               .hLeading()
               .highPriorityGesture(TapGesture().onEnded {
@@ -163,7 +163,7 @@ struct MusicListView: View {
   }
 
   @ViewBuilder
-  func glassMoriphicView(width: CGFloat, height: CGFloat, cornerRadius: CGFloat) -> some View {
+  func glassMoriphicView(width _: CGFloat, height _: CGFloat, cornerRadius: CGFloat) -> some View {
     ZStack {
       RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
         .fill(Color.black.opacity(0.3))
@@ -174,7 +174,6 @@ struct MusicListView: View {
       }
       .clipShape(RoundedRectangle(cornerRadius: cornerRadius, style: .continuous))
     }
-    .frame(width: width, height: height)
   }
 
   @ViewBuilder
@@ -266,7 +265,7 @@ extension MusicListView {
           case .success:
             downloadStatus[music] = .complete
           case .failure(let error):
-            print("ERROR: \(error)")
+            WhistleLogger.logger.debug("Error: \(error)")
             downloadStatus[music] = .beforeDownload
           }
         }
@@ -357,9 +356,9 @@ struct SearchBar: View {
   var body: some View {
     ZStack {
       HStack(spacing: 0) {
-        TextField("", text: $searchText, prompt: Text("Search").foregroundColor(Color.LabelColor_Secondary_Dark))
+        TextField("", text: $searchText, prompt: Text("Search").foregroundColor(Color.Disable_Placeholder_Dark))
           .padding(.horizontal, 34)
-          .frame(height: UIScreen.getHeight(36))
+          .frame(height: UIScreen.getHeight(28))
           .foregroundStyle(Color.LabelColor_Primary_Dark)
           .fontSystem(fontDesignSystem: .body1_KO)
           .background(Color.Dim_Default)

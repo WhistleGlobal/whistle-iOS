@@ -9,26 +9,20 @@ import AVFoundation
 
 extension AVAudioSession {
   func playAndRecord() {
-    print("Configuring playAndRecord session")
     do {
       try setCategory(.playAndRecord, mode: .default)
       try overrideOutputAudioPort(AVAudioSession.PortOverride.none)
-      print("AVAudio Session out options: ", currentRoute)
-      print("Successfully configured audio session.")
     } catch {
-      print("Error while configuring audio session: \(error)")
+      WhistleLogger.logger.debug("Error while configuring audio session: \(error)")
     }
   }
 
   func configureRecordAudioSessionCategory() {
-    print("Configuring record session")
     do {
       try setCategory(.record, mode: .default)
       try overrideOutputAudioPort(AVAudioSession.PortOverride.none)
-      print("AVAudio Session out options: ", currentRoute)
-      print("Successfully configured audio session.")
     } catch {
-      print("Error while configuring audio session: \(error)")
+      WhistleLogger.logger.debug("Error while configuring audio session: \(error)")
     }
   }
 

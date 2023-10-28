@@ -24,7 +24,7 @@ extension Cacheable {
     do {
       try FileManager.default.removeItem(at: url)
     } catch {
-      _print(error.localizedDescription)
+      WhistleLogger.logger.debug("Error: \(error.localizedDescription)")
     }
   }
 
@@ -38,7 +38,7 @@ extension Cacheable {
       do {
         try data.write(to: url)
       } catch {
-        _print(error.localizedDescription)
+        WhistleLogger.logger.debug("Error: \(error.localizedDescription)")
       }
     }
   }
@@ -52,7 +52,7 @@ extension Cacheable {
       let data = try Data(contentsOf: url)
       return data
     } catch {
-      _print(error.localizedDescription)
+      WhistleLogger.logger.debug("Error: \(error.localizedDescription)")
     }
     return nil
   }

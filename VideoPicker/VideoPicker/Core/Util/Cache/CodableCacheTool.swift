@@ -33,7 +33,7 @@ extension CodableCacheTool {
       let data = try JSONEncoder().encode(model)
       storeDataToDisk(data, forKey: key)
     } catch {
-      _print(error.localizedDescription)
+      WhistleLogger.logger.debug("Error: \(error.localizedDescription)")
     }
   }
 
@@ -51,7 +51,7 @@ extension CodableCacheTool {
       }
       return model
     } catch {
-      _print(error.localizedDescription)
+      WhistleLogger.logger.debug("Error: \(error.localizedDescription)")
     }
     return nil
   }

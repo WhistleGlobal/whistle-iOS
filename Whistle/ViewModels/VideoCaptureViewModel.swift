@@ -33,7 +33,7 @@ class VideoCaptureViewModel: ObservableObject {
       .quality(to: .high)
       .custom(WideColorCameraTuner()) { result in
         if case .failure(let error) = result {
-          print("Error: ", error)
+          WhistleLogger.logger.debug("Error: \(error)")
         }
       }
       .unmute()

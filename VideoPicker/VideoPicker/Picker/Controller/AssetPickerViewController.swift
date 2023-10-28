@@ -101,6 +101,34 @@ final class AssetPickerViewController: AnyImageViewController {
     return view
   }()
 
+  private lazy var emptyAlbumView: UIView = {
+    let uiView = UIView()
+    let imageConfig = UIImage.SymbolConfiguration(pointSize: 48)
+    let image = UIImageView()
+    image.translatesAutoresizingMaskIntoConstraints = false
+    image.image = UIImage(systemName: "photo.fill", withConfiguration: imageConfig)
+    image.tintColor = .white
+
+    let label = UILabel()
+    label.translatesAutoresizingMaskIntoConstraints = false
+    label.text = "사용할 수 있는 동영상이 없습니다."
+    label.textColor = .white
+    label.font = UIFont(name: "AppleSDGothicNeo-Regular", size: 14)
+
+    uiView.addSubview(image)
+    uiView.addSubview(label)
+
+    image.snp.makeConstraints { maker in
+      maker.centerX.equalToSuperview()
+    }
+
+    label.snp.makeConstraints { maker in
+      maker.centerX.equalToSuperview()
+      maker.top.equalTo(image.snp.bottom).offset(26)
+    }
+    return uiView
+  }()
+
   private(set) lazy var collectionView: UICollectionView = {
     let layout = UICollectionViewFlowLayout()
     layout.minimumLineSpacing = defaultAssetSpacing
@@ -187,6 +215,13 @@ final class AssetPickerViewController: AnyImageViewController {
     }
     checkPermission()
     update(options: manager.options)
+    if album?.assets.isEmpty ?? true {
+      setupEmptyAlbumView()
+    }
+  }
+
+  override func viewWillAppear(_: Bool) {
+    super.viewWillAppear(false)
   }
 
   override func viewDidLayoutSubviews() {
@@ -205,7 +240,6 @@ final class AssetPickerViewController: AnyImageViewController {
     navigationController?.navigationBar.layer.masksToBounds = true
     navigationItem.titleView = titleView
     navigationItem.titleView?.tintColor = .white
-    //    navigationItem.titleView?.tintColor = .white
 
     let cancel = UIBarButtonItem(
       title: manager.options.theme[string: .cancel],
@@ -214,6 +248,14 @@ final class AssetPickerViewController: AnyImageViewController {
       action: #selector(cancelButtonTapped(_:)))
     navigationItem.rightBarButtonItem = cancel
     navigationItem.rightBarButtonItem?.tintColor = .white
+  }
+
+  private func setupEmptyAlbumView() {
+    view.addSubview(emptyAlbumView)
+    emptyAlbumView.snp.makeConstraints { maker in
+      maker.centerX.equalToSuperview()
+      maker.centerY.equalToSuperview().offset(-50)
+    }
   }
 
   private func setupView() {

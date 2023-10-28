@@ -310,7 +310,6 @@ extension MyProfileView {
       Spacer()
       NavigationLink {
         ProfileEditView()
-
       } label: {
         Text("프로필 편집")
           .fontSystem(fontDesignSystem: .subtitle2_KO)

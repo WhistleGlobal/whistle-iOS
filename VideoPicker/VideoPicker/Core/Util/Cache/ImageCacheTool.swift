@@ -87,7 +87,7 @@ extension ImageCacheTool {
       case .success(let res):
         image = res.image
       case .failure(let error):
-        _print(error)
+        WhistleLogger.logger.debug("Error: \(error.localizedDescription)")
       }
       semaphore.signal()
     }

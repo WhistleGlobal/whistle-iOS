@@ -33,11 +33,6 @@ class MusicService {
 extension MusicService: MusicServiceProtocol {
   func buffer(url: URL, samplesCount: Int) async throws -> [MusicNote] {
     let cur_url = url
-//    if url.absoluteString.hasPrefix("https://") {
-//      print("url: \(url)")
-//      let data = try await downloadMusicAsync(from: url)
-//      cur_url = data
-//    }
 
     let file = try AVAudioFile(forReading: cur_url)
     guard
@@ -74,28 +69,4 @@ extension MusicService: MusicServiceProtocol {
 
     return result
   }
-
-  //  // 파일 임시 디렉토리 다운로드 함수
-  //  func downloadMusicAsync(from url: URL) async throws -> URL {
-//    let session = URLSession.shared
-//    let (data, _) = try await session.data(from: url)
-//
-//    let directory = FileManager.default.temporaryDirectory
-//    let fileName = "downloadedAudio.mp3" // 임시저장 파일 이름 지정
-//    let destinationURL = directory.appendingPathComponent(fileName)
-//
-//    // 기존 파일이 있다면 삭제
-//    if FileManager.default.fileExists(atPath: destinationURL.path) {
-//      try FileManager.default.removeItem(at: destinationURL)
-//    }
-//
-//    // 다운로드한 데이터를 파일로 저장
-//    do {
-//      try data.write(to: destinationURL)
-//      print("downloaded!")
-//      return destinationURL
-//    } catch {
-//      throw FileDownloadError.fileCopyFailed
-//    }
-  //  }
 }

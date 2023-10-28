@@ -22,7 +22,7 @@ final class PickerConfigViewController: UIViewController {
     super.viewDidLoad()
   }
 
-  override func viewWillAppear(_: Bool) {
+  override func viewDidAppear(_: Bool) {
     openPickerTapped()
     view.backgroundColor = UIColor.clear
   }
@@ -64,7 +64,7 @@ extension PickerConfigViewController: ImagePickerControllerDelegate {
           }
         }
       case .failure(let error):
-        print("Error: \(error)")
+        WhistleLogger.logger.debug("Error: \(error)")
       }
     }
   }
@@ -73,17 +73,19 @@ extension PickerConfigViewController: ImagePickerControllerDelegate {
 // MARK: ImageKitDataTrackDelegate
 
 extension PickerConfigViewController: ImageKitDataTrackDelegate {
-  func dataTrack(page: AnyImagePage, state: AnyImagePageState) {
+  func dataTrack(page _: AnyImagePage, state: AnyImagePageState) {
     switch state {
     case .enter:
-      print("[Data Track] ENTER Page: \(page.rawValue)")
+      break
+//      print("[Data Track] ENTER Page: \(page.rawValue)")
     case .leave:
-      print("[Data Track] LEAVE Page: \(page.rawValue)")
+      break
+//      print("[Data Track] LEAVE Page: \(page.rawValue)")
     }
   }
 
-  func dataTrack(event: AnyImageEvent, userInfo: [AnyImageEventUserInfoKey: Any]) {
-    print("[Data Track] EVENT: \(event.rawValue), userInfo: \(userInfo)")
+  func dataTrack(event _: AnyImageEvent, userInfo _: [AnyImageEventUserInfoKey: Any]) {
+//    print("[Data Track] EVENT: \(event.rawValue), userInfo: \(userInfo)")
   }
 }
 

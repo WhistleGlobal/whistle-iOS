@@ -34,6 +34,51 @@ final class AlbumPickerViewController: AnyImageViewController {
     return view
   }()
 
+  private lazy var emptyAlbumView: UIView = {
+    let view = UIView()
+    let imageView = UIImageView()
+    let imageConfig = UIImage.SymbolConfiguration(pointSize: 48)
+    imageView.image = UIImage(systemName: "photo.fill", withConfiguration: imageConfig)
+    imageView.tintColor = .white
+
+    let label = UILabel()
+    label.text = "사용할 수 있는 앨범이 없습니다."
+    label.font = UIFont(name: "AppleSDGothicNeo-Regular", size: 14)
+    label.textColor = .white
+
+    view.addSubview(imageView)
+    view.addSubview(label)
+
+    // 이미지와 레이블을 위아래로 배치하기 위한 제약 조건 설정
+    imageView.snp.makeConstraints { make in
+      make.centerX.equalToSuperview()
+    }
+
+    label.snp.makeConstraints { make in
+      make.centerX.equalToSuperview()
+      make.top.equalTo(imageView.snp.bottom).offset(26)
+    }
+
+    return view
+  }()
+
+  private func setupEmptyAlbumView() {
+    // emptyAlbumView를 슈퍼뷰의 중앙에 위치하도록 제약 조건 설정
+    view.addSubview(emptyAlbumView)
+
+    emptyAlbumView.snp.makeConstraints { make in
+      make.centerX.equalToSuperview()
+      make.centerY.equalToSuperview().offset(-50)
+    }
+
+//    emptyAlbumView.isHidden = true
+  }
+
+  private func updateEmptyAlbumLabel() {
+    // 앨범이 비어있는지 여부에 따라 emptyAlbumView의 표시 여부를 업데이트
+    emptyAlbumView.isHidden = !albums.isEmpty
+  }
+
   let manager: PickerManager
 
   init(manager: PickerManager) {
@@ -55,7 +100,11 @@ final class AlbumPickerViewController: AnyImageViewController {
     addNotifications()
     updatePreferredContentSize(with: traitCollection)
     setupView()
+    if albums.isEmpty {
+      setupEmptyAlbumView()
+    }
     update(options: manager.options)
+    edgesForExtendedLayout = .all
   }
 
   override func viewWillDisappear(_ animated: Bool) {
@@ -132,6 +181,7 @@ extension AlbumPickerViewController {
     if let album, let index = albums.firstIndex(of: album) {
       let indexPath = IndexPath(row: index, section: 0)
       tableView.scrollToRow(at: indexPath, at: .middle, animated: false)
+      tableView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: rowHeight * 1.5, right: 0)
     }
   }
 
@@ -168,24 +218,16 @@ extension AlbumPickerViewController: UITableViewDataSource {
   }
 
   func tableView(_: UITableView, numberOfRowsInSection _: Int) -> Int {
-    albums.count + 2
+    albums.count
   }
 
   func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-    if indexPath.row < albums.count {
-      let cell = tableView.dequeueReusableCell(AlbumCell.self, for: indexPath)
-      let album = albums[indexPath.row]
-      cell.setContent(album, manager: manager)
-      cell.accessoryType = self.album == album ? .checkmark : .none
-      return cell
-    } else {
-      // 빈 row를 위한 셀을 생성하거나 사용할 셀을 만듭니다.
-      // 예를 들어, 기본 UITableViewCell을 사용하거나 커스텀 셀을 따로 만들 수 있습니다.
-      let cell = UITableViewCell(style: .default, reuseIdentifier: nil)
-      cell.textLabel?.text = "" // 빈 텍스트로 설정하거나 원하는 내용을 추가합니다.
-      cell.backgroundColor = .clear
-      return cell
-    }
+    let cell = tableView.dequeueReusableCell(AlbumCell.self, for: indexPath)
+    let album = albums[indexPath.row]
+    cell.setContent(album, manager: manager)
+    // 선택된 앨범을 앨범 목록에서 체크마크로 보여줍니다.
+//    cell.accessoryType = self.album == album ? .checkmark : .none
+    return cell
   }
 }
 

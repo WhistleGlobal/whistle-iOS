@@ -170,12 +170,3 @@ extension AlertPopup {
     }
   }
 }
-
-// #Preview {
-//  AlertPopup(
-//    title: "A Short Title Is Best",
-//    content: "A message should be short,\ncomplete sentence",
-//    cancelText: "취소",
-//    destructiveText: "삭제",
-//    submitText: "완료")
-// }

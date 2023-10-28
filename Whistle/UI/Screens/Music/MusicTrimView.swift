@@ -191,8 +191,10 @@ extension MusicTrimView {
         musicVM.startTime = (offset / 16.0) * (musicVM.trimDuration / 10)
         Task {
           stopPlaying()
-          showMusicTrimView = false
           trimAudio()
+          if !videoPlayer.isPlaying {
+            showMusicTrimView = false
+          }
         }
         musicVM.isTrimmed = true
       } label: {

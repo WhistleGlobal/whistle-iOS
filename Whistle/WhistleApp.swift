@@ -129,21 +129,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
 
 // MARK: - UniversalRoutingModel
 
-// public func log<T>(
-//  _ object: T?,
-//  filename: String = #file,
-//  line: Int = #line,
-//  funcName: String = #function)
-// {
-//  #if DEBUG
-//  if let obj = object {
-//    print("\(filename.components(separatedBy: "/").last ?? "")(\(line)) : \(funcName) : \(obj)")
-//  } else {
-//    print("\(filename.components(separatedBy: "/").last ?? "")(\(line)) : \(funcName) : nil")
-//  }
-//  #endif
-// }
-
 class UniversalRoutingModel: ObservableObject {
   @Published var isUniversalProfile = false
   @Published var isUniversalContent = false

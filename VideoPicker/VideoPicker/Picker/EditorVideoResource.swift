@@ -52,7 +52,7 @@ extension PHAsset: EditorVideoResource {
       version: .current,
       deliveryMode: .highQualityFormat,
       fetchProgressHandler: { progress, _, _, _ in
-        _print("Download video from iCloud: \(progress)")
+        WhistleLogger.logger.debug("Download video from iCloud: \(progress)")
       })
 
     ExportTool.requestVideoURL(for: self, options: options) { result, _ in

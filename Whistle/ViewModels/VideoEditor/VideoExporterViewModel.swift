@@ -107,7 +107,7 @@ class VideoExporterViewModel: ObservableObject {
       case .loading: return 1
       case .loaded: return 2
       case .failed(let error):
-        print("Fail Error", error)
+        WhistleLogger.logger.debug("Error: \(error)")
         return 3
       case .saved: return 4
       }

@@ -365,10 +365,10 @@ extension MemberFeedView {
                   if apiViewModel.memberProfile.isFollowed {
                     await apiViewModel.followAction(userID: apiViewModel.memberProfile.userId, method: .delete)
                     apiViewModel.memberProfile.isFollowed = false
-                    toastViewModel.toastInit(message: "\(userName)님을 팔로우 취소함")
+                    toastViewModel.toastInit(message: "\(userName)님을 팔로우 취소했습니다")
                   } else {
                     await apiViewModel.followAction(userID: apiViewModel.memberProfile.userId, method: .post)
-                    toastViewModel.toastInit(message: "\(userName)님을 팔로우 중")
+                    toastViewModel.toastInit(message: "\(userName)님을 팔로우 중입니다")
                     apiViewModel.memberProfile.isFollowed = true
                   }
                   apiViewModel.memberFeed = apiViewModel.memberFeed.map { item in

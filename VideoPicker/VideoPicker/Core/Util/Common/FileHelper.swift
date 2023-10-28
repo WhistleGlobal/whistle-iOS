@@ -34,7 +34,7 @@ struct FileHelper {
           withIntermediateDirectories: true,
           attributes: nil)
       } catch {
-        _print(error.localizedDescription)
+        WhistleLogger.logger.debug("Error: \(error.localizedDescription)")
       }
     }
   }
@@ -53,7 +53,7 @@ extension FileHelper {
       try photoData.write(to: url)
       return url
     } catch {
-      _print(error.localizedDescription)
+      WhistleLogger.logger.debug("Error: \(error.localizedDescription)")
     }
     return nil
   }
@@ -68,7 +68,7 @@ extension FileHelper {
     do {
       return try Data(contentsOf: url)
     } catch {
-      _print(error.localizedDescription)
+      WhistleLogger.logger.debug("Error: \(error.localizedDescription)")
     }
     return nil
   }

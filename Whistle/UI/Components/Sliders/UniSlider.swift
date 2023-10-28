@@ -171,8 +171,7 @@ struct CustomSlider_Previews: PreviewProvider {
       step: 90,
       minimumValueLabel: Text("Min"),
       maximumValueLabel: Text("Max"),
-      onEditingChanged: { started in
-        print("started custom slider: \(started)")
+      onEditingChanged: { _ in
       },
       track: {
         Capsule()
