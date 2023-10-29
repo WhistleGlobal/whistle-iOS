@@ -89,6 +89,8 @@ struct ProfileEditView: View {
       }
       Button("취소", role: .cancel) { }
     }
+    .navigationTitle("프로필 편집")
+    .navigationBarTitleDisplayMode(.inline)
     .toolbar {
       ToolbarItem(placement: .cancellationAction) {
         Button {
@@ -98,10 +100,6 @@ struct ProfileEditView: View {
           Image(systemName: "chevron.backward")
             .foregroundColor(.LabelColor_Primary)
         }
-      }
-      ToolbarItem(placement: .principal) {
-        Text("프로필 편집")
-          .fontSystem(fontDesignSystem: .subtitle2_KO)
       }
       ToolbarItem(placement: .confirmationAction) {
         Button {
@@ -131,7 +129,7 @@ extension ProfileEditView {
       HStack(spacing: 0) {
         Text(title)
           .multilineTextAlignment(.leading)
-          .fontSystem(fontDesignSystem: .subtitle1_KO)
+          .fontSystem(fontDesignSystem: .subtitle2_KO)
           .foregroundColor(.LabelColor_Primary)
           .frame(width: 96, height: 56, alignment: .leading)
         Text(content.isEmpty ? "소개" : content)
@@ -140,10 +138,8 @@ extension ProfileEditView {
           .frame(maxWidth: .infinity, alignment: .leading)
 
         Image(systemName: "chevron.right")
-          .resizable()
-          .scaledToFit()
-          .frame(width: 12, height: 16)
-          .foregroundColor(.secondary)
+          .font(.system(size: 16))
+          .foregroundColor(Color.Disable_Placeholder_Dark)
       }
       .frame(height: 56)
     }

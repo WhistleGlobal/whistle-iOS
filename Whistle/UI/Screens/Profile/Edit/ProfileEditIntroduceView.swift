@@ -39,6 +39,8 @@ struct ProfileEditIntroduceView: View {
     }
     .padding(.horizontal, 16)
     .navigationBarBackButtonHidden()
+    .navigationTitle("소개")
+    .navigationBarTitleDisplayMode(.inline)
     .toolbar {
       ToolbarItem(placement: .cancellationAction) {
         Button {
@@ -50,10 +52,6 @@ struct ProfileEditIntroduceView: View {
           Image(systemName: "chevron.backward")
             .foregroundColor(.LabelColor_Primary)
         }
-      }
-      ToolbarItem(placement: .principal) {
-        Text("소개")
-          .fontSystem(fontDesignSystem: .subtitle2_KO)
       }
       ToolbarItem(placement: .confirmationAction) {
         Button {

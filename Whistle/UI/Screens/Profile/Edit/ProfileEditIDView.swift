@@ -73,6 +73,8 @@ struct ProfileEditIDView: View {
     }
     .padding(.horizontal, 16)
     .navigationBarBackButtonHidden()
+    .navigationTitle("사용자 ID")
+    .navigationBarTitleDisplayMode(.inline)
     .toolbar {
       ToolbarItem(placement: .cancellationAction) {
         Button {
@@ -84,10 +86,6 @@ struct ProfileEditIDView: View {
           Image(systemName: "chevron.backward")
             .foregroundColor(.LabelColor_Primary)
         }
-      }
-      ToolbarItem(placement: .principal) {
-        Text("사용자 ID")
-          .fontSystem(fontDesignSystem: .subtitle2_KO)
       }
       ToolbarItem(placement: .confirmationAction) {
         Button {
@@ -137,7 +135,7 @@ extension ProfileEditIDView {
           text = ""
         }) {
           Image(systemName: "multiply.circle.fill")
-            .foregroundColor(.Dim_Default)
+            .foregroundColor(UITraitCollection.current.userInterfaceStyle == .dark ? Color.secondary : Color.Dim_Default)
             .opacity(text.isEmpty ? 0 : 1)
         }
       }
