@@ -53,7 +53,7 @@ struct BookmarkedFeedView: View {
               .scaledToFit()
               .frame(width: 60)
               .foregroundColor(.LabelColor_Primary_Dark)
-            Text("콘텐츠가 없습니다")
+            Text("저장한 콘텐츠가 없습니다")
               .fontSystem(fontDesignSystem: .body1_KO)
               .foregroundColor(.LabelColor_Primary_Dark)
             Spacer()
@@ -187,30 +187,29 @@ struct BookmarkedFeedView: View {
       apiViewModel.postFeedPlayerChanged()
     }
     .confirmationDialog("", isPresented: $showDialog) {
-      Button("저장 해제", role: .destructive) {
-        toastViewModel.cancelToastInit(message: "저장 해제되었습니다.") {
-          Task {
-            if apiViewModel.bookmark.count - 1 != currentIndex { // 삭제하려는 컨텐츠가 배열 마지막이 아님
-              let contentId = apiViewModel.bookmark[currentIndex].contentId
-              apiViewModel.bookmark.remove(at: currentIndex)
-              players[currentIndex]?.pause()
-              players.remove(at: currentIndex)
-              if !players.isEmpty {
-                players[currentIndex] = AVPlayer(url: URL(string: apiViewModel.bookmark[currentIndex].videoUrl)!)
-                await players[currentIndex]?.seek(to: .zero)
-                players[currentIndex]?.play()
-              }
-              apiViewModel.postFeedPlayerChanged()
-              _ = await apiViewModel.bookmarkAction(contentID: contentId, method: .delete)
-            } else {
-              let contentId = apiViewModel.bookmark[currentIndex].contentId
-              apiViewModel.bookmark.removeLast()
-              players.last??.pause()
-              players.removeLast()
-              currentIndex -= 1
-              apiViewModel.postFeedPlayerChanged()
-              _ = await apiViewModel.bookmarkAction(contentID: contentId, method: .delete)
+      Button("저장 취소", role: .destructive) {
+        toastViewModel.toastInit(message: "저장을 취소했습니다.")
+        Task {
+          if apiViewModel.bookmark.count - 1 != currentIndex { // 삭제하려는 컨텐츠가 배열 마지막이 아님
+            let contentId = apiViewModel.bookmark[currentIndex].contentId
+            apiViewModel.bookmark.remove(at: currentIndex)
+            players[currentIndex]?.pause()
+            players.remove(at: currentIndex)
+            if !players.isEmpty {
+              players[currentIndex] = AVPlayer(url: URL(string: apiViewModel.bookmark[currentIndex].videoUrl)!)
+              await players[currentIndex]?.seek(to: .zero)
+              players[currentIndex]?.play()
             }
+            apiViewModel.postFeedPlayerChanged()
+            _ = await apiViewModel.bookmarkAction(contentID: contentId, method: .delete)
+          } else {
+            let contentId = apiViewModel.bookmark[currentIndex].contentId
+            apiViewModel.bookmark.removeLast()
+            players.last??.pause()
+            players.removeLast()
+            currentIndex -= 1
+            apiViewModel.postFeedPlayerChanged()
+            _ = await apiViewModel.bookmarkAction(contentID: contentId, method: .delete)
           }
         }
       }
@@ -275,9 +274,10 @@ extension BookmarkedFeedView {
         .padding(.bottom, 4)
         .padding(.leading, 4)
         Spacer()
-        VStack(spacing: 28) {
+        VStack(spacing: 26) {
           Spacer()
           Button {
+            HapticManager.instance.impact(style: .medium)
             Task {
               if isWhistled.wrappedValue {
                 await apiViewModel.whistleAction(contentID: contentId, method: .delete)
@@ -290,46 +290,49 @@ extension BookmarkedFeedView {
               apiViewModel.postFeedPlayerChanged()
             }
           } label: {
-            VStack(spacing: 0) {
+            VStack(spacing: 2) {
               Image(systemName: isWhistled.wrappedValue ? "heart.fill" : "heart")
-                .font(.system(size: 30))
-                .contentShape(Rectangle())
-                .foregroundColor(.Gray10)
+                .font(.system(size: 26))
                 .frame(width: 36, height: 36)
               Text("\(whistleCount.wrappedValue)")
-                .foregroundColor(.Gray10)
-                .fontSystem(fontDesignSystem: .caption_Regular)
+                .fontSystem(fontDesignSystem: .caption_KO_Semibold)
             }
-            .padding(.bottom, -4)
+            .frame(height: UIScreen.getHeight(56))
           }
           Button {
-            toastViewModel.toastInit(message: "클립보드에 복사되었어요")
+            toastViewModel.toastInit(message: "클립보드에 복사되었습니다")
             UIPasteboard.general.setValue(
               "https://readywhistle.com/content_uni?contentId=\(apiViewModel.bookmark[currentIndex].contentId)",
               forPasteboardType: UTType.plainText.identifier)
           } label: {
-            Image(systemName: "square.and.arrow.up")
-              .font(.system(size: 30))
-              .contentShape(Rectangle())
-              .foregroundColor(.Gray10)
-              .frame(width: 36, height: 36)
+            VStack(spacing: 2) {
+              Image(systemName: "square.and.arrow.up")
+                .font(.system(size: 26))
+                .frame(width: 36, height: 36)
+              Text("공유")
+                .fontSystem(fontDesignSystem: .caption_KO_Semibold)
+            }
+            .frame(height: UIScreen.getHeight(56))
           }
           Button {
             showDialog = true
           } label: {
-            Image(systemName: "ellipsis")
-              .font(.system(size: 30))
-              .contentShape(Rectangle())
-              .foregroundColor(.Gray10)
-              .frame(width: 36, height: 36)
+            VStack(spacing: 2) {
+              Image(systemName: "ellipsis")
+                .font(.system(size: 26))
+                .frame(width: 36, height: 36)
+              Text("더보기")
+                .fontSystem(fontDesignSystem: .caption_KO_Semibold)
+            }
+            .frame(height: UIScreen.getHeight(56))
           }
         }
+        .foregroundColor(.Gray10)
       }
     }
     .ignoresSafeArea(.all, edges: .bottom)
-    .padding(.bottom, UIScreen.getHeight(48))
-    .padding(.trailing, UIScreen.getWidth(12))
-    .padding(.leading, UIScreen.getWidth(16))
+    .padding(.bottom, UIScreen.getHeight(52))
+    .padding(.horizontal, UIScreen.getWidth(12))
   }
 }
 

@@ -39,6 +39,9 @@ struct MyProfileView: View {
 
   var body: some View {
     ZStack {
+      if bottomSheetPosition == .absolute(420) {
+        DimmedBackground().zIndex(1000)
+      }
       Color.clear.overlay {
         if let url = apiViewModel.myProfile.profileImage, !url.isEmpty {
           KFImage.url(URL(string: url))
@@ -191,15 +194,13 @@ struct MyProfileView: View {
         Divider().background(Color("Gray10"))
         NavigationLink {
           NotificationSettingView()
-
         } label: {
-          bottomSheetRowWithIcon(systemName: "bell", iconWidth: 22, iconHeight: 20, text: "알림")
+          bottomSheetRowWithIcon(systemName: "bell", text: "알림")
         }
         NavigationLink {
           LegalInfoView()
-
         } label: {
-          bottomSheetRowWithIcon(systemName: "info.circle", iconWidth: 22, iconHeight: 20, text: "약관 및 정책")
+          bottomSheetRowWithIcon(systemName: "info.circle", text: "약관 및 정책")
         }
         Button {
           withAnimation {
@@ -208,19 +209,14 @@ struct MyProfileView: View {
           UIPasteboard.general.setValue(
             "https://readywhistle.com/profile_uni?id=\(apiViewModel.myProfile.userId)",
             forPasteboardType: UTType.plainText.identifier)
-          toastViewModel.toastInit(message: "클립보드에 복사되었어요")
+          toastViewModel.toastInit(message: "클립보드에 복사되었습니다")
         } label: {
-          bottomSheetRowWithIcon(systemName: "square.and.arrow.up", iconWidth: 22, iconHeight: 20, text: "프로필 공유")
+          bottomSheetRowWithIcon(systemName: "link", text: "프로필 URL 복사")
         }
         NavigationLink {
           GuideStatusView()
-
         } label: {
-          bottomSheetRowWithIcon(
-            systemName: "exclamationmark.triangle.fill",
-            iconWidth: 22,
-            iconHeight: 20,
-            text: "가이드 상태")
+          bottomSheetRowWithIcon(systemName: "exclamationmark.triangle.fill", text: "가이드 상태")
         }
         Group {
           Divider().background(Color("Gray10"))
@@ -451,29 +447,20 @@ extension MyProfileView {
   @ViewBuilder
   func bottomSheetRowWithIcon(
     systemName: String,
-    iconWidth: CGFloat,
-    iconHeight: CGFloat,
     text: String)
     -> some View
   {
     HStack(spacing: 12) {
       Image(systemName: systemName)
-        .resizable()
-        .scaledToFit()
-        .frame(width: iconWidth, height: iconHeight)
-        .foregroundColor(.white)
-
+        .font(.system(size: 18))
+        .foregroundColor(Color.LabelColor_Primary_Dark)
       Text(text)
-        .foregroundColor(.white)
-        .fontSystem(fontDesignSystem: .body1_KO)
+        .foregroundColor(Color.LabelColor_Primary_Dark)
+        .fontSystem(fontDesignSystem: .subtitle2_KO)
       Spacer()
       Image(systemName: "chevron.forward")
-        .resizable()
-        .scaledToFit()
-        .padding(.vertical, 2.5)
-        .padding(.horizontal, 6)
-        .frame(width: 24, height: 24)
-        .foregroundColor(.white)
+        .font(.system(size: 16))
+        .foregroundColor(Color.Disable_Placeholder_Light)
     }
     .frame(height: 56)
     .padding(.horizontal, 16)
@@ -484,15 +471,11 @@ extension MyProfileView {
     HStack {
       Text(text)
         .foregroundColor(color)
-        .fontSystem(fontDesignSystem: .body1_KO)
+        .fontSystem(fontDesignSystem: .subtitle2_KO)
       Spacer()
       Image(systemName: "chevron.forward")
-        .resizable()
-        .scaledToFit()
-        .padding(.vertical, 2.5)
-        .padding(.horizontal, 6)
-        .frame(width: 24, height: 24)
-        .foregroundColor(.white)
+        .font(.system(size: 16))
+        .foregroundColor(Color.Disable_Placeholder_Light)
     }
     .frame(height: 56)
     .padding(.horizontal, 16)

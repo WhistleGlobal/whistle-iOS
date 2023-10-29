@@ -133,6 +133,9 @@
 		1BAC07F52AD559CE0087D8CD /* TagsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BAC07F42AD559CE0087D8CD /* TagsViewModel.swift */; };
 		1BAC07F72AD559E60087D8CD /* TagsDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BAC07F62AD559E60087D8CD /* TagsDataModel.swift */; };
 		1BB7A06A2A9514B4002DD86F /* .swiftlint.yml in Resources */ = {isa = PBXBuildFile; fileRef = 1BB7A0692A9514B4002DD86F /* .swiftlint.yml */; };
+		1BCB902F2AEEB0740088B2F2 /* Extension+String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BCB902E2AEEB0740088B2F2 /* Extension+String.swift */; };
+		1BCB90312AEEB0890088B2F2 /* Extension+Date.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BCB90302AEEB0890088B2F2 /* Extension+Date.swift */; };
+		1BCB90332AEEBCE60088B2F2 /* DimmedBackground.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BCB90322AEEBCE60088B2F2 /* DimmedBackground.swift */; };
 		1BD4E56B2ABA275200ADB783 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 1BD4E56A2ABA275200ADB783 /* SnapKit */; };
 		1BD4E5B62ABA2F5600ADB783 /* VideoPicker.h in Headers */ = {isa = PBXBuildFile; fileRef = 1BD4E5B52ABA2F5600ADB783 /* VideoPicker.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		1BD4E5B92ABA2F5600ADB783 /* VideoPicker.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1BD4E5B32ABA2F5600ADB783 /* VideoPicker.framework */; platformFilter = ios; };
@@ -522,6 +525,9 @@
 		1BAC07F42AD559CE0087D8CD /* TagsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagsViewModel.swift; sourceTree = "<group>"; };
 		1BAC07F62AD559E60087D8CD /* TagsDataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagsDataModel.swift; sourceTree = "<group>"; };
 		1BB7A0692A9514B4002DD86F /* .swiftlint.yml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = .swiftlint.yml; sourceTree = "<group>"; };
+		1BCB902E2AEEB0740088B2F2 /* Extension+String.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Extension+String.swift"; sourceTree = "<group>"; };
+		1BCB90302AEEB0890088B2F2 /* Extension+Date.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Extension+Date.swift"; sourceTree = "<group>"; };
+		1BCB90322AEEBCE60088B2F2 /* DimmedBackground.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DimmedBackground.swift; sourceTree = "<group>"; };
 		1BD4E5B32ABA2F5600ADB783 /* VideoPicker.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = VideoPicker.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		1BD4E5B52ABA2F5600ADB783 /* VideoPicker.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VideoPicker.h; sourceTree = "<group>"; };
 		1BD4E5EF2ABA2F8600ADB783 /* Core+Notification.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Core+Notification.swift"; sourceTree = "<group>"; };
@@ -1098,6 +1104,8 @@
 				78D148E62A9E137100DDCE48 /* Extension+UIVisualEffectView.swift */,
 				782DD47B2AA32448006183D3 /* Extension+UINavigationController.swift */,
 				1B0A29A52AA64A67009077A1 /* Extension+Array.swift */,
+				1BCB902E2AEEB0740088B2F2 /* Extension+String.swift */,
+				1BCB90302AEEB0890088B2F2 /* Extension+Date.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -1126,6 +1134,7 @@
 				1B3895182AB9CB6000B4C8DD /* Sliders */,
 				1B33AA602AE610A3003F8099 /* ButtonStyles */,
 				1B8132D82AE618DE00000C32 /* RepresentableViews */,
+				1BCB90322AEEBCE60088B2F2 /* DimmedBackground.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -2232,9 +2241,11 @@
 				787AF5712AA887E600C190E6 /* MyContent.swift in Sources */,
 				787AF5602AA85CBC00C190E6 /* MyProfile.swift in Sources */,
 				787C8B1A2AB340E500723085 /* ReportCompleteView.swift in Sources */,
+				1BCB902F2AEEB0740088B2F2 /* Extension+String.swift in Sources */,
 				1B3895752AB9CBFC00B4C8DD /* Extension+AVAssets.swift in Sources */,
 				788F43F02AA5CD9F00718D38 /* MainFeedView.swift in Sources */,
 				782DD4752AA30C22006183D3 /* FollowButtonStyle.swift in Sources */,
+				1BCB90312AEEB0890088B2F2 /* Extension+Date.swift in Sources */,
 				78BECCD92AAAE1E6003FA7B5 /* PostFeedProtocol.swift in Sources */,
 				1B38954A2AB9CB7500B4C8DD /* CropperRatio.swift in Sources */,
 				785258572ACC6D680024E466 /* GuestProfileView.swift in Sources */,
@@ -2349,6 +2360,7 @@
 				1B3895882AB9CC4300B4C8DD /* CoreDataContainer.xcdatamodeld in Sources */,
 				78F980812A9F32C800AD542A /* RootTabView.swift in Sources */,
 				1BE8E9FF2AAE2DFB00EB0A55 /* MusicServiceProtocol.swift in Sources */,
+				1BCB90332AEEBCE60088B2F2 /* DimmedBackground.swift in Sources */,
 				78730CE72ACE8660008B9981 /* PhotoCollection.swift in Sources */,
 				1B3895612AB9CBD300B4C8DD /* FilteredImage.swift in Sources */,
 				785E82722AAC8FDD00EF3576 /* MainContent.swift in Sources */,

@@ -277,18 +277,14 @@ struct MainFeedView: View {
             .padding(.bottom, 32)
           }
           .frame(width: UIScreen.width, height: UIScreen.height)
-          .ignoresSafeArea()
-          .ignoresSafeArea(.all, edges: .top)
           .background {
             Color.clear.overlay {
               Image("gestureGuide")
                 .resizable()
+                .scaleEffect(1.01)
                 .scaledToFill()
-                .ignoresSafeArea()
-                .ignoresSafeArea(.all, edges: .top)
             }
             .ignoresSafeArea()
-            .ignoresSafeArea(.all, edges: .top)
           }
         }
       }
@@ -314,7 +310,7 @@ struct MainFeedView: View {
             .padding(.top, 70)
             .padding(.leading, 16)
             .onDisappear {
-              DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.2) {
+              DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.1) {
                 toastViewModel.toastInit(message: "영상이 게시되었습니다.")
               }
             }
@@ -453,25 +449,6 @@ struct MainFeedView: View {
       }
     }
     .confirmationDialog("", isPresented: $showDialog) {
-      Button(
-        currentVideoIsBookmarked ? "저장 취소" : "저장하기",
-        role: .none)
-      {
-        Task {
-          if apiViewModel.mainFeed[currentIndex].isBookmarked ?? false {
-            let tempBool = await apiViewModel.bookmarkAction(contentID: currentVideoContentId, method: .delete)
-            toastViewModel.toastInit(message: "저장을 취소했습니다.")
-            apiViewModel.mainFeed[currentIndex].isBookmarked = false
-            currentVideoIsBookmarked = false
-          } else {
-            let tempBool = await apiViewModel.bookmarkAction(contentID: currentVideoContentId, method: .post)
-            toastViewModel.toastInit(message: "저장했습니다.")
-            apiViewModel.mainFeed[currentIndex].isBookmarked = true
-            currentVideoIsBookmarked = true
-          }
-          apiViewModel.postFeedPlayerChanged()
-        }
-      }
       Button("관심없음", role: .none) {
         toastViewModel.cancelToastInit(message: "해당 콘텐츠를 숨겼습니다") {
           Task {
@@ -599,12 +576,11 @@ extension MainFeedView {
                 Text(isFollowed.wrappedValue ? "팔로잉" : "팔로우")
                   .fontSystem(fontDesignSystem: .caption_KO_Semibold)
                   .foregroundColor(.Gray10)
+                  .frame(width: 58, height: 26)
                   .background {
                     Capsule()
-                      .stroke(Color.Gray10, lineWidth: 1)
-                      .frame(width: 58, height: 26)
+                      .stroke(Color.Gray30, lineWidth: 1)
                   }
-                  .frame(width: 58, height: 26)
               }
             }
           }
@@ -612,7 +588,7 @@ extension MainFeedView {
             HStack(spacing: 0) {
               Text(caption)
                 .fontSystem(fontDesignSystem: .body2_KO)
-                .foregroundColor(.white)
+                .foregroundColor(Color.LabelColor_Primary_Dark)
             }
           }
           Label(musicTitle, systemImage: "music.note")
@@ -623,50 +599,79 @@ extension MainFeedView {
         .padding(.bottom, 4)
         .padding(.leading, 4)
         Spacer()
-        VStack(spacing: 28) {
+        // MARK: - Action Buttons
+        VStack(spacing: 26) {
           Spacer()
           Button {
             whistleToggle()
           } label: {
-            VStack(spacing: 0) {
+            VStack(spacing: 2) {
               Image(systemName: isWhistled.wrappedValue ? "heart.fill" : "heart")
-                .font(.system(size: 30))
-                .contentShape(Rectangle())
-                .foregroundColor(.Gray10)
+                .font(.system(size: 26))
                 .frame(width: 36, height: 36)
               Text("\(whistleCount.wrappedValue)")
-                .foregroundColor(.Gray10)
-                .fontSystem(fontDesignSystem: .subtitle3_KO)
+                .fontSystem(fontDesignSystem: .caption_KO_Semibold)
             }
-            .padding(.bottom, -4)
+            .frame(height: UIScreen.getHeight(56))
           }
           Button {
-            toastViewModel.toastInit(message: "클립보드에 복사되었어요")
+            Task {
+              if apiViewModel.mainFeed[currentIndex].isBookmarked {
+                let _ = await apiViewModel.bookmarkAction(contentID: currentVideoContentId, method: .delete)
+                toastViewModel.toastInit(message: "저장을 취소했습니다")
+                apiViewModel.mainFeed[currentIndex].isBookmarked = false
+                currentVideoIsBookmarked = false
+              } else {
+                let _ = await apiViewModel.bookmarkAction(contentID: currentVideoContentId, method: .post)
+                toastViewModel.toastInit(message: "저장했습니다")
+                apiViewModel.mainFeed[currentIndex].isBookmarked = true
+                currentVideoIsBookmarked = true
+              }
+              apiViewModel.postFeedPlayerChanged()
+            }
+          } label: {
+            VStack(spacing: 2) {
+              Image(systemName: currentVideoIsBookmarked ? "bookmark.fill" : "bookmark")
+                .font(.system(size: 26))
+                .frame(width: 36, height: 36)
+              Text("저장")
+                .fontSystem(fontDesignSystem: .caption_KO_Semibold)
+            }
+            .frame(height: UIScreen.getHeight(56))
+          }
+          Button {
+            toastViewModel.toastInit(message: "클립보드에 복사되었습니다")
             UIPasteboard.general.setValue(
               "https://readywhistle.com/content_uni?contentId=\(currentVideoContentId)",
               forPasteboardType: UTType.plainText.identifier)
           } label: {
-            Image(systemName: "square.and.arrow.up")
-              .font(.system(size: 30))
-              .contentShape(Rectangle())
-              .foregroundColor(.Gray10)
-              .frame(width: 36, height: 36)
+            VStack(spacing: 2) {
+              Image(systemName: "square.and.arrow.up")
+                .font(.system(size: 26))
+                .frame(width: 36, height: 36)
+              Text("공유")
+                .fontSystem(fontDesignSystem: .caption_KO_Semibold)
+            }
+            .frame(height: UIScreen.getHeight(56))
           }
           Button {
             showDialog = true
           } label: {
-            Image(systemName: "ellipsis")
-              .font(.system(size: 30))
-              .contentShape(Rectangle())
-              .foregroundColor(.Gray10)
-              .frame(width: 36, height: 36)
+            VStack(spacing: 2) {
+              Image(systemName: "ellipsis")
+                .font(.system(size: 26))
+                .frame(width: 36, height: 36)
+              Text("더보기")
+                .fontSystem(fontDesignSystem: .caption_KO_Semibold)
+            }
+            .frame(height: UIScreen.getHeight(56))
           }
         }
+        .foregroundColor(.Gray10)
       }
     }
-    .padding(.bottom, UIScreen.getHeight(48))
-    .padding(.trailing, UIScreen.getWidth(12))
-    .padding(.leading, UIScreen.getWidth(16))
+    .padding(.bottom, UIScreen.getHeight(52))
+    .padding(.horizontal, UIScreen.getWidth(16))
   }
 }
 
@@ -693,28 +698,6 @@ extension MainFeedView {
     }
     apiViewModel.mainFeed[currentIndex].isWhistled.toggle()
     apiViewModel.postFeedPlayerChanged()
-  }
-}
-
-extension String {
-  func toDate() -> Date? { // "yyyy-MM-dd HH:mm:ss"
-    let dateFormatter = DateFormatter()
-    dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
-    dateFormatter.timeZone = TimeZone(identifier: "UTC")
-    if let date = dateFormatter.date(from: self) {
-      return date
-    } else {
-      return nil
-    }
-  }
-}
-
-extension Date {
-  func toString() -> String {
-    let dateFormatter = DateFormatter()
-    dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
-    dateFormatter.timeZone = TimeZone(identifier: "UTC")
-    return dateFormatter.string(from: self)
   }
 }
 

@@ -47,7 +47,7 @@ struct AlertPopup: View {
   var body: some View {
     if alertViewModel.showAlert {
       ZStack {
-        Color.black.opacity(0.64)
+        DimmedBackground()
         VStack(spacing: 0) {
           if let title = alertViewModel.title {
             Text(title)

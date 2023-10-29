@@ -80,7 +80,7 @@ struct VideoCaptureView: View {
       ZStack {
         Color.black.ignoresSafeArea()
         if bottomSheetPosition == .absolute(UIScreen.getHeight(514)) {
-          Color.black.opacity(0.64).ignoresSafeArea().zIndex(1000)
+          DimmedBackground().zIndex(1000)
         }
         if isPresented {
           PickerConfigViewControllerWrapper(isImagePickerClosed: $isImagePickerClosed)

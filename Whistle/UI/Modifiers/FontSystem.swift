@@ -176,10 +176,11 @@ struct FontSystem: ViewModifier {
       content
         .font(.custom("AppleSDGothicNeo-Regular", size: 10))
         .lineSpacing(6)
-        .padding(.vertical, 3)
+        .padding(.vertical, 1)
     case .caption_KO_Semibold:
       content
         .font(.custom("AppleSDGothicNeo-SemiBold", size: 12))
+        .fontWeight(.semibold)
         .lineSpacing(6)
         .padding(.vertical, 3)
     }

@@ -67,23 +67,23 @@ struct GuestProfileView: View {
     }
     .bottomSheet(
       bottomSheetPosition: $bottomSheetPosition,
-      switchablePositions: [.hidden, .absolute(UIScreen.height - 68)])
+      switchablePositions: [.hidden, .dynamic])
     {
       VStack(spacing: 0) {
         HStack {
+          Spacer()
           Button {
             tabbarModel.tabbarOpacity = 1.0
             bottomSheetPosition = .hidden
           } label: {
-            Image(systemName: "xmark")
+            Text("취소")
+              .fontSystem(fontDesignSystem: .subtitle2_KO)
               .foregroundColor(.white)
-              .frame(width: 18, height: 18)
               .padding(.horizontal, 16)
           }
-          Spacer()
         }
         .frame(height: 52)
-        .padding(.bottom, 56)
+        .padding(.bottom, 36)
         Group {
           Text("Whistle")
             .font(.system(size: 24, weight: .semibold)) +
@@ -177,7 +177,7 @@ struct GuestProfileView: View {
         .foregroundColor(.LabelColor_Primary_Dark)
         .padding(.bottom, 64)
       }
-      .frame(height: UIScreen.height - 68)
+      .frame(height: UIScreen.height * 0.7)
     }
     .enableSwipeToDismiss(true)
     .enableTapToDismiss(true)
@@ -220,16 +220,16 @@ extension GuestProfileView {
         .foregroundColor(.LabelColor_Secondary_Dark)
         .padding(.bottom, 24)
       Button {
-        bottomSheetPosition = .absolute(UIScreen.height - 68)
+        bottomSheetPosition = .dynamic
       } label: {
         Text("가입하기")
           .fontSystem(fontDesignSystem: .subtitle2_KO)
           .foregroundColor(.LabelColor_Primary_Dark)
-          .frame(maxWidth: .infinity)
+          .hCenter()
+          .frame(height: 48)
           .background {
             Capsule()
               .foregroundColor(.Blue_Default)
-              .frame(width: .infinity, height: 48)
               .padding(.horizontal, 32)
           }
       }

@@ -115,9 +115,9 @@ struct MusicListView: View {
                   audioPlayer?.stop()
                   DispatchQueue.main.async {
                     musicVM.musicInfo = music
-                    musicVM.url = fileDirectories[music]
+                    musicVM.originalAudioURL = fileDirectories[music]
                     Task {
-                      if let url = musicVM.url, let duration = editorVM.currentVideo?.totalDuration {
+                      if let url = musicVM.originalAudioURL, let duration = editorVM.currentVideo?.totalDuration {
                         musicVM.sample_count = Int(audioDuration(url) / (duration / 10))
                         musicVM.trimDuration = duration
                       }
@@ -296,7 +296,7 @@ extension MusicListView {
           try session.setCategory(.playback)
           try session.overrideOutputAudioPort(.none)
         } catch {
-          print("Audio session setup failed: \(error.localizedDescription)")
+          WhistleLogger.logger.debug("Audio session setup failed: \(error.localizedDescription)")
         }
 
         do {
@@ -321,7 +321,7 @@ extension MusicListView {
             }
           }
         } catch {
-          print("AVAudioPlayer initialization failed: \(error.localizedDescription)")
+          WhistleLogger.logger.debug("AVAudioPlayer initialization failed: \(error.localizedDescription)")
         }
       }
     }
@@ -377,7 +377,7 @@ struct SearchBar: View {
           }
         if isSearching {
           Text("취소")
-            .foregroundStyle(Color.Info)
+            .foregroundStyle(Color.LabelColor_Primary_Dark)
             .fontSystem(fontDesignSystem: .body1_KO)
             .padding(.horizontal, 16)
             .contentShape(Rectangle())

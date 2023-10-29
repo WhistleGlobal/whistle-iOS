@@ -119,6 +119,7 @@ struct RootTabView: View {
           GuestProfileView()
         }
       }
+      // MARK: - Tabbar
       VStack {
         Spacer()
         glassMorphicTab(width: tabbarModel.tabWidth)
@@ -161,7 +162,7 @@ struct RootTabView: View {
                 }
               })
       }
-      .padding(.bottom, 20)
+      .padding(.bottom, 24)
       .ignoresSafeArea()
       .padding(.horizontal, 16)
       .opacity(showGuide ? 0.0 : tabbarModel.tabbarOpacity)
@@ -350,7 +351,7 @@ extension RootTabView {
       } label: {
         VStack {
           Image(systemName: tabbarModel.tabSelection == .main ? "play.square.fill" : "play.square")
-            .font(.system(size: 20))
+            .font(.system(size: 19))
           Text("플레이")
             .fontSystem(fontDesignSystem: .caption2_KO_Regular)
         }
@@ -379,7 +380,7 @@ extension RootTabView {
       } label: {
         VStack {
           Image(systemName: tabbarModel.tabSelection == .profile ? "person.fill" : "person")
-            .font(.system(size: 20))
+            .font(.system(size: 19))
           Text("프로필")
             .fontSystem(fontDesignSystem: .caption2_KO_Regular)
         }

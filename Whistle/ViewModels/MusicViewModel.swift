@@ -17,7 +17,8 @@ import SwiftUI
 @MainActor
 class MusicViewModel: ObservableObject {
   private var timer: Timer?
-  @Published var url: URL?
+  @Published var originalAudioURL: URL?
+  @Published var trimmedAudioURL: URL?
   @Published var isPlaying = false
   @Published public var soundSamples = [MusicNote]()
   /// 오디오를 샘플링하기 위한 count
@@ -90,8 +91,8 @@ extension MusicViewModel {
   }
 
   func visualizeAudio() async {
-    if let url {
-      let results = try? await dataManager.buffer(url: url, samplesCount: sample_count)
+    if let originalAudioURL {
+      let results = try? await dataManager.buffer(url: originalAudioURL, samplesCount: sample_count)
       DispatchQueue.main.async {
         self.soundSamples = results ?? []
       }
@@ -102,7 +103,7 @@ extension MusicViewModel {
     if isPlaying {
       pauseAudio()
     } else {
-      player = AVPlayer(url: url!)
+      player = AVPlayer(url: originalAudioURL!)
       player?.volume = musicVolume
       let start = CMTime(seconds: startTime, preferredTimescale: 1000)
       player?.seek(to: start) // 시작 시간으로 이동
@@ -119,7 +120,7 @@ extension MusicViewModel {
     if isPlaying {
       pauseAudio()
     } else {
-      player = AVPlayer(url: url!)
+      player = AVPlayer(url: originalAudioURL!)
       player?.volume = musicVolume
 //      let start = CMTime(seconds: startTime, preferredTimescale: 1000)
 //      player?.seek(to: start) // 시작 시간으로 이동
@@ -172,8 +173,8 @@ extension MusicViewModel {
 
   func removeAudio() {
     do {
-      if let url {
-        try FileManager.default.removeItem(at: url)
+      if let originalAudioURL {
+        try FileManager.default.removeItem(at: originalAudioURL)
       }
     } catch {
       WhistleLogger.logger.debug("Error: \(error)")
@@ -181,7 +182,7 @@ extension MusicViewModel {
   }
 
   func removeMusic() {
-    url = nil
+    originalAudioURL = nil
     player = nil
     session = nil
     musicInfo = nil

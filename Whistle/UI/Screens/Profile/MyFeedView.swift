@@ -285,9 +285,11 @@ extension MyFeedView {
         .padding(.bottom, 4)
         .padding(.leading, 4)
         Spacer()
-        VStack(spacing: 28) {
+        // MARK: - Action Buttons
+        VStack(spacing: 26) {
           Spacer()
           Button {
+            HapticManager.instance.impact(style: .medium)
             Task {
               if isWhistled.wrappedValue {
                 guard let contentId else { return }
@@ -302,45 +304,49 @@ extension MyFeedView {
               apiViewModel.postFeedPlayerChanged()
             }
           } label: {
-            VStack(spacing: 0) {
+            VStack(spacing: 2) {
               Image(systemName: isWhistled.wrappedValue ? "heart.fill" : "heart")
-                .font(.system(size: 30))
-                .contentShape(Rectangle())
-                .foregroundColor(.Gray10)
+                .font(.system(size: 26))
                 .frame(width: 36, height: 36)
               Text("\(whistleCount.wrappedValue)")
-                .foregroundColor(.Gray10)
-                .fontSystem(fontDesignSystem: .subtitle3_KO)
+                .fontSystem(fontDesignSystem: .caption_KO_Semibold)
             }
-            .padding(.bottom, -4)
+            .frame(height: UIScreen.getHeight(56))
           }
+          // 저장버튼 들어갈 자리
           Button {
-            toastViewModel.toastInit(message: "클립보드에 복사되었어요")
+            toastViewModel.toastInit(message: "클립보드에 복사되었습니다")
             UIPasteboard.general.setValue(
               "https://readywhistle.com/content_uni?contentId=\(apiViewModel.myFeed[currentIndex].contentId ?? 0)",
               forPasteboardType: UTType.plainText.identifier)
           } label: {
-            Image(systemName: "square.and.arrow.up")
-              .font(.system(size: 30))
-              .contentShape(Rectangle())
-              .foregroundColor(.Gray10)
-              .frame(width: 36, height: 36)
+            VStack(spacing: 2) {
+              Image(systemName: "square.and.arrow.up")
+                .font(.system(size: 26))
+                .frame(width: 36, height: 36)
+              Text("공유")
+                .fontSystem(fontDesignSystem: .caption_KO_Semibold)
+            }
+            .frame(height: UIScreen.getHeight(56))
           }
           Button {
             showDialog = true
           } label: {
-            Image(systemName: "ellipsis")
-              .font(.system(size: 30))
-              .contentShape(Rectangle())
-              .foregroundColor(.Gray10)
-              .frame(width: 36, height: 36)
+            VStack(spacing: 2) {
+              Image(systemName: "ellipsis")
+                .font(.system(size: 26))
+                .frame(width: 36, height: 36)
+              Text("더보기")
+                .fontSystem(fontDesignSystem: .caption_KO_Semibold)
+            }
+            .frame(height: UIScreen.getHeight(56))
           }
         }
+        .foregroundColor(.Gray10)
       }
     }
-    .padding(.bottom, UIScreen.getHeight(48))
-    .padding(.trailing, UIScreen.getWidth(12))
-    .padding(.leading, UIScreen.getWidth(16))
+    .padding(.bottom, UIScreen.getHeight(52))
+    .padding(.horizontal, UIScreen.getWidth(16))
   }
 }
 

@@ -178,7 +178,7 @@ struct MemberProfileView: View {
         UIPasteboard.general.setValue(
           "https://readywhistle.com/profile_uni?id=\(userId)",
           forPasteboardType: UTType.plainText.identifier)
-        toastViewModel.toastInit(message: "클립보드에 복사되었어요")
+        toastViewModel.toastInit(message: "클립보드에 복사되었습니다")
       }
       Button("취소", role: .cancel) { }
     }

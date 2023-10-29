@@ -282,7 +282,7 @@ extension MusicTrimView {
 //    } else {
     offset = 0
 //    }
-    if let url = musicVM.url {
+    if let url = musicVM.originalAudioURL {
       musicDuration = audioDuration(url)
     }
     startPlaying()
@@ -321,7 +321,7 @@ extension MusicTrimView {
 
 extension MusicTrimView {
   func loadAudioFile() {
-    if let audioFileURL = musicVM.url {
+    if let audioFileURL = musicVM.originalAudioURL {
       audioURL = audioFileURL
       endTime = audioDuration(audioFileURL)
     }
@@ -366,7 +366,7 @@ extension MusicTrimView {
     exportSession?.exportAsynchronously(completionHandler: {
       DispatchQueue.main.async {
         trimmedAudioURL = outputPath
-        musicVM.url = trimmedAudioURL
+        musicVM.originalAudioURL = trimmedAudioURL
         editorVM.setAudio(Audio(url: trimmedAudioURL!, duration: musicVM.trimDuration))
       }
     })

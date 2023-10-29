@@ -69,7 +69,7 @@ struct GuestMainView: View {
                       userName: content.userName ?? "",
                       profileImg: content.profileImg ?? "",
                       caption: content.caption ?? "",
-                      musicTitle: content.musicTitle ?? "",
+                      musicTitle: content.musicTitle ?? "원본 오디오",
                       whistleCount: content.whistleCount ?? 0)
                   }
                 }
@@ -138,21 +138,16 @@ struct GuestMainView: View {
                     }
                 }
             }
-            .frame(width: UIScreen.width - 32, height: 56)
             .padding(.bottom, 32)
           }
-          .ignoresSafeArea()
-          .ignoresSafeArea(.all, edges: .top)
           .background {
             Color.clear.overlay {
               Image("gestureGuide")
                 .resizable()
+                .scaleEffect(1.01)
                 .scaledToFill()
-                .ignoresSafeArea()
-                .ignoresSafeArea(.all, edges: .top)
             }
             .ignoresSafeArea()
-            .ignoresSafeArea(.all, edges: .top)
           }
         }
       }
@@ -162,22 +157,23 @@ struct GuestMainView: View {
     .background(.black)
     .bottomSheet(
       bottomSheetPosition: $bottomSheetPosition,
-      switchablePositions: [.hidden, .absolute(UIScreen.height - 68)])
+      switchablePositions: [.hidden, .dynamic])
     {
       VStack(spacing: 0) {
         HStack {
+          Spacer()
           Button {
+            tabbarModel.tabbarOpacity = 1.0
             bottomSheetPosition = .hidden
           } label: {
-            Image(systemName: "xmark")
+            Text("취소")
+              .fontSystem(fontDesignSystem: .subtitle2_KO)
               .foregroundColor(.white)
-              .frame(width: 18, height: 18)
               .padding(.horizontal, 16)
           }
-          Spacer()
         }
         .frame(height: 52)
-        .padding(.bottom, 56)
+        .padding(.bottom, 36)
         Group {
           Text("Whistle")
             .font(.system(size: 24, weight: .semibold)) +
@@ -272,7 +268,7 @@ struct GuestMainView: View {
         .foregroundColor(.LabelColor_Primary_Dark)
         .padding(.bottom, 64)
       }
-      .frame(height: UIScreen.height - 68)
+      .frame(height: UIScreen.height * 0.7)
     }
     .enableSwipeToDismiss(true)
     .enableTapToDismiss(true)
@@ -327,7 +323,7 @@ struct GuestMainView: View {
       currentVideoContentId = apiViewModel.guestFeed[newValue].contentId ?? 0
       apiViewModel.postFeedPlayerChanged()
       if (newValue + 1) % 3 == 0, newValue + 1 != 1 {
-        bottomSheetPosition = .absolute(UIScreen.height - 68)
+        bottomSheetPosition = .dynamic
       }
     }
     .onChange(of: isAccess) { newValue in
@@ -399,7 +395,7 @@ extension GuestMainView {
           Spacer()
           HStack(spacing: 0) {
             Button {
-              bottomSheetPosition = .absolute(UIScreen.height - 68)
+              bottomSheetPosition = .dynamic
             } label: {
               Group {
                 profileImageView(url: profileImg, size: 36)
@@ -411,71 +407,75 @@ extension GuestMainView {
               }
             }
             Button {
-              bottomSheetPosition = .absolute(UIScreen.height - 68)
+              bottomSheetPosition = .dynamic
             } label: {
-              Text("follow")
-                .fontSystem(fontDesignSystem: .caption_SemiBold)
+              Text("팔로우")
+                .fontSystem(fontDesignSystem: .caption_KO_Semibold)
                 .foregroundColor(.Gray10)
+                .frame(width: 58, height: 26)
                 .background {
                   Capsule()
-                    .stroke(Color.Border_Default, lineWidth: 1)
-                    .frame(width: 60, height: 26)
+                    .stroke(Color.Gray30, lineWidth: 1)
                 }
-                .frame(width: 60, height: 26)
             }
           }
-          HStack(spacing: 0) {
-            Text(caption)
-              .fontSystem(fontDesignSystem: .body2_KO)
-              .foregroundColor(.white)
+          if !caption.isEmpty {
+            HStack(spacing: 0) {
+              Text(caption)
+                .fontSystem(fontDesignSystem: .body2_KO)
+                .foregroundColor(.white)
+            }
           }
           Label(musicTitle, systemImage: "music.note")
             .fontSystem(fontDesignSystem: .body2_KO)
             .foregroundColor(.white)
+            .padding(.top, 4)
         }
         Spacer()
-        VStack(spacing: 0) {
+        VStack(spacing: 26) {
           Spacer()
           Button {
-            bottomSheetPosition = .absolute(UIScreen.height - 68)
+            bottomSheetPosition = .dynamic
           } label: {
-            VStack(spacing: 0) {
+            VStack(spacing: 2) {
               Image(systemName: "heart")
-                .resizable()
-                .scaledToFit()
-                .frame(width: 28, height: 26)
-                .foregroundColor(.Gray10)
-                .padding(.bottom, 2)
+                .font(.system(size: 26))
+                .frame(width: 36, height: 36)
               Text("\(whistleCount)")
-                .foregroundColor(.Gray10)
-                .fontSystem(fontDesignSystem: .caption_Regular)
-                .padding(.bottom, 24)
+                .fontSystem(fontDesignSystem: .caption_KO_Semibold)
             }
+            .frame(height: UIScreen.getHeight(56))
           }
           Button {
-            bottomSheetPosition = .absolute(UIScreen.height - 68)
+            bottomSheetPosition = .dynamic
           } label: {
-            Image(systemName: "square.and.arrow.up")
-              .resizable()
-              .scaledToFit()
-              .frame(width: 25, height: 32)
-              .foregroundColor(.Gray10)
-              .padding(.bottom, 24)
+            VStack(spacing: 2) {
+              Image(systemName: "square.and.arrow.up")
+                .font(.system(size: 26))
+                .frame(width: 36, height: 36)
+              Text("공유")
+                .fontSystem(fontDesignSystem: .caption_KO_Semibold)
+            }
+            .frame(height: UIScreen.getHeight(56))
           }
           .fontSystem(fontDesignSystem: .caption_Regular)
           Button {
-            bottomSheetPosition = .absolute(UIScreen.height - 68)
+            bottomSheetPosition = .dynamic
           } label: {
-            Image(systemName: "ellipsis")
-              .resizable()
-              .scaledToFit()
-              .frame(width: 30, height: 25)
-              .foregroundColor(.Gray10)
+            VStack(spacing: 2) {
+              Image(systemName: "ellipsis")
+                .font(.system(size: 26))
+                .frame(width: 36, height: 36)
+              Text("더보기")
+                .fontSystem(fontDesignSystem: .caption_KO_Semibold)
+            }
+            .frame(height: UIScreen.getHeight(56))
           }
         }
+        .foregroundColor(.Gray10)
       }
     }
-    .padding(.bottom, 64)
-    .padding(.horizontal, 20)
+    .padding(.bottom, UIScreen.getHeight(52))
+    .padding(.horizontal, UIScreen.getWidth(16))
   }
 }
