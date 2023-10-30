@@ -293,8 +293,6 @@
 		7874CB902AA0B5350081DE54 /* NotificationSettingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7874CB8F2AA0B5350081DE54 /* NotificationSettingView.swift */; };
 		7874CB922AA0B53A0081DE54 /* LegalInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7874CB912AA0B53A0081DE54 /* LegalInfoView.swift */; };
 		7874CB942AA0B5430081DE54 /* GuideStatusView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7874CB932AA0B5430081DE54 /* GuideStatusView.swift */; };
-		787711EF2AEE19830044DB21 /* Extension+String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 787711EE2AEE19830044DB21 /* Extension+String.swift */; };
-		787711F12AEE19AA0044DB21 /* Extension+Date.swift in Sources */ = {isa = PBXBuildFile; fileRef = 787711F02AEE19AA0044DB21 /* Extension+Date.swift */; };
 		787AF5602AA85CBC00C190E6 /* MyProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 787AF55F2AA85CBC00C190E6 /* MyProfile.swift */; };
 		787AF5622AA85D0300C190E6 /* APIViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 787AF5612AA85D0300C190E6 /* APIViewModel.swift */; };
 		787AF5652AA85D2C00C190E6 /* SwiftyJSON in Frameworks */ = {isa = PBXBuildFile; productRef = 787AF5642AA85D2C00C190E6 /* SwiftyJSON */; };
@@ -689,8 +687,6 @@
 		7874CB8F2AA0B5350081DE54 /* NotificationSettingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationSettingView.swift; sourceTree = "<group>"; };
 		7874CB912AA0B53A0081DE54 /* LegalInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LegalInfoView.swift; sourceTree = "<group>"; };
 		7874CB932AA0B5430081DE54 /* GuideStatusView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GuideStatusView.swift; sourceTree = "<group>"; };
-		787711EE2AEE19830044DB21 /* Extension+String.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Extension+String.swift"; sourceTree = "<group>"; };
-		787711F02AEE19AA0044DB21 /* Extension+Date.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Extension+Date.swift"; sourceTree = "<group>"; };
 		787AF55F2AA85CBC00C190E6 /* MyProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyProfile.swift; sourceTree = "<group>"; };
 		787AF5612AA85D0300C190E6 /* APIViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIViewModel.swift; sourceTree = "<group>"; };
 		787AF5662AA87D2E00C190E6 /* MemberProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemberProfile.swift; sourceTree = "<group>"; };
@@ -2362,7 +2358,6 @@
 				1BAC07F32AD559A70087D8CD /* TagsContent.swift in Sources */,
 				78D85E542AB2DF1000B3AD6E /* ProfileReportContentSelectionView.swift in Sources */,
 				78BECCE12AAAE539003FA7B5 /* APIViewModel+PostFeed.swift in Sources */,
-				787711F12AEE19AA0044DB21 /* Extension+Date.swift in Sources */,
 				1B3895742AB9CBFC00B4C8DD /* Extension+TimeInterval.swift in Sources */,
 				7874CB922AA0B53A0081DE54 /* LegalInfoView.swift in Sources */,
 				788E68652AD6B6710056C18B /* VideoFile.swift in Sources */,
