@@ -27,6 +27,7 @@ struct MyProfileView: View {
   @StateObject private var tabbarModel = TabbarModel.shared
   @StateObject private var toastViewModel = ToastViewModel.shared
   @StateObject var alertViewModel = AlertViewModel.shared
+  @StateObject private var feedPlayersViewModel = MainFeedPlayersViewModel.shared
 
   @State var isShowingBottomSheet = false
   @State var tabbarDirection: CGFloat = -1.0
@@ -226,8 +227,13 @@ struct MyProfileView: View {
             }
             alertViewModel.linearAlert(title: "정말 로그아웃하시겠어요?", cancelText: "취소", destructiveText: "로그아웃") {
               apiViewModel.reset()
+              apiViewModel.publisherSend()
+              NavigationUtil.popToRootView()
+              feedPlayersViewModel.resetPlayer()
               GIDSignIn.sharedInstance.signOut()
               userAuth.appleSignout()
+              tabbarModel.tabSelectionNoAnimation = .main
+              tabbarModel.tabSelection = .main
               isFirstProfileLoaded = false
             }
           } label: {
