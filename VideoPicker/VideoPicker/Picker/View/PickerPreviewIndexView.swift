@@ -33,9 +33,9 @@ final class PickerPreviewIndexView: UIView {
   private var selectedAssets: [Asset] {
     switch sourceType {
     case .album:
-      return manager.selectedAssets
+      manager.selectedAssets
     case .selectedAssets:
-      return manager.lastSelectedAssets
+      manager.lastSelectedAssets
     }
   }
 

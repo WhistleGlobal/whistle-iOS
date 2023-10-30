@@ -28,9 +28,9 @@ extension UIColor {
     if #available(iOS 13.0, *) {
       return UIColor { traitCollection -> UIColor in
         if let darkColor, traitCollection.userInterfaceStyle == .dark {
-          return darkColor
+          darkColor
         } else {
-          return lightColor
+          lightColor
         }
       }
     } else {
@@ -43,11 +43,11 @@ extension UIColor {
   static func create(style: UserInterfaceStyle, light lightColor: UIColor, dark darkColor: UIColor) -> UIColor {
     switch style {
     case .light:
-      return lightColor
+      lightColor
     case .dark:
-      return darkColor
+      darkColor
     case .auto:
-      return UIColor.create(light: lightColor, dark: darkColor)
+      UIColor.create(light: lightColor, dark: darkColor)
     }
   }
 }

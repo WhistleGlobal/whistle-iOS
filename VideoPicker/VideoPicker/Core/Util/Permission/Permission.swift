@@ -20,11 +20,11 @@ enum Permission: Equatable {
   var status: Status {
     switch self {
     case .photos:
-      return _checkPhotos()
+      _checkPhotos()
     case .camera:
-      return _checkCamera()
+      _checkCamera()
     case .microphone:
-      return _checkMicrophone()
+      _checkMicrophone()
     }
   }
 
@@ -44,22 +44,22 @@ extension Permission {
   var localizedTitleKey: StringConfigKey {
     switch self {
     case .photos:
-      return .photos
+      .photos
     case .camera:
-      return .camera
+      .camera
     case .microphone:
-      return .microphone
+      .microphone
     }
   }
 
   var localizedAlertMessageKey: StringConfigKey {
     switch self {
     case .photos:
-      return .noPhotosPermissionTips
+      .noPhotosPermissionTips
     case .camera:
-      return .noCameraPermissionTips
+      .noCameraPermissionTips
     case .microphone:
-      return .noMicrophonePermissionTips
+      .noMicrophonePermissionTips
     }
   }
 }

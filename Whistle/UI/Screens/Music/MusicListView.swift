@@ -24,11 +24,11 @@ enum DownloadStatus {
 // MARK: - MusicListView
 
 struct MusicListView: View {
+  @StateObject var apiViewModel = APIViewModel.shared
   @ObservedObject var musicVM: MusicViewModel
-  @ObservedObject var editorVM: EditorViewModel
+  @ObservedObject var editorVM: VideoEditorViewModel
   @ObservedObject var videoPlayer: VideoPlayerManager
-  @Binding var bottomSheetPosition: BottomSheetPosition
-  @Binding var showMusicTrimView: Bool
+
   @State var searchQueryString = ""
   @State var isSearching = false
   @State var musicList: [Music] = []
@@ -50,16 +50,18 @@ struct MusicListView: View {
     }
   }
 
-  let tapSearchBar: (() -> Void)?
+  @Binding var bottomSheetPosition: BottomSheetPosition
+  @Binding var showMusicTrimView: Bool
+
   var filteredMusicList: [Music] {
     if searchQueryString.isEmpty {
-      return musicList
+      musicList
     } else {
-      return musicList.filter { $0.musicTitle.localizedStandardContains(searchQueryString) }
+      musicList.filter { $0.musicTitle.localizedStandardContains(searchQueryString) }
     }
   }
 
-  @StateObject var apiViewModel = APIViewModel.shared
+  let tapSearchBar: (() -> Void)?
 
   var body: some View {
     VStack {
@@ -101,7 +103,7 @@ struct MusicListView: View {
                   .truncationMode(.tail)
                   .lineLimit(1)
                   .frame(width: UIScreen.getWidth(210), alignment: .leading)
-                Rectangle().fill(.white).opacity(0.0001)
+                Rectangle().fill(.white).opacity(0.01)
               }
               .hLeading()
               .highPriorityGesture(TapGesture().onEnded {
@@ -113,9 +115,9 @@ struct MusicListView: View {
                   audioPlayer?.stop()
                   DispatchQueue.main.async {
                     musicVM.musicInfo = music
-                    musicVM.url = fileDirectories[music]
+                    musicVM.originalAudioURL = fileDirectories[music]
                     Task {
-                      if let url = musicVM.url, let duration = editorVM.currentVideo?.totalDuration {
+                      if let url = musicVM.originalAudioURL, let duration = editorVM.currentVideo?.totalDuration {
                         musicVM.sample_count = Int(audioDuration(url) / (duration / 10))
                         musicVM.trimDuration = duration
                       }
@@ -137,7 +139,7 @@ struct MusicListView: View {
           }
           .listStyle(.plain)
           .navigationTitle("")
-          .foregroundStyle(Color.White)
+          .foregroundStyle(.white)
         } else {
           List {
             Text("검색 결과가 없습니다.")
@@ -161,18 +163,17 @@ struct MusicListView: View {
   }
 
   @ViewBuilder
-  func glassMoriphicView(width: CGFloat, height: CGFloat, cornerRadius: CGFloat) -> some View {
+  func glassMoriphicView(width _: CGFloat, height _: CGFloat, cornerRadius: CGFloat) -> some View {
     ZStack {
       RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
         .fill(Color.black.opacity(0.3))
-      CustomBlurView(effect: .systemUltraThinMaterialLight) { view in
+      CustomBlurEffect(effect: .systemUltraThinMaterialLight) { view in
         // FIXME: - 피그마와 비슷하도록 값 고치기
         view.saturationAmount = 2.2
         view.gaussianBlurRadius = 36
       }
       .clipShape(RoundedRectangle(cornerRadius: cornerRadius, style: .continuous))
     }
-    .frame(width: width, height: height)
   }
 
   @ViewBuilder
@@ -262,10 +263,9 @@ extension MusicListView {
         .response { response in
           switch response.result {
           case .success:
-            print("successed!")
             downloadStatus[music] = .complete
           case .failure(let error):
-            print("ERROR: \(error)")
+            WhistleLogger.logger.debug("Error: \(error)")
             downloadStatus[music] = .beforeDownload
           }
         }
@@ -294,9 +294,9 @@ extension MusicListView {
         do {
           let session = AVAudioSession.sharedInstance()
           try session.setCategory(.playback)
-          try session.overrideOutputAudioPort(AVAudioSession.PortOverride.none)
+          try session.overrideOutputAudioPort(.none)
         } catch {
-          print("Audio session setup failed: \(error.localizedDescription)")
+          WhistleLogger.logger.debug("Audio session setup failed: \(error.localizedDescription)")
         }
 
         do {
@@ -321,7 +321,7 @@ extension MusicListView {
             }
           }
         } catch {
-          print("AVAudioPlayer initialization failed: \(error.localizedDescription)")
+          WhistleLogger.logger.debug("AVAudioPlayer initialization failed: \(error.localizedDescription)")
         }
       }
     }
@@ -356,9 +356,9 @@ struct SearchBar: View {
   var body: some View {
     ZStack {
       HStack(spacing: 0) {
-        TextField("", text: $searchText, prompt: Text("Search").foregroundColor(Color.LabelColor_Secondary_Dark))
+        TextField("", text: $searchText, prompt: Text("Search").foregroundColor(Color.Disable_Placeholder_Dark))
           .padding(.horizontal, 34)
-          .frame(height: UIScreen.getHeight(36))
+          .frame(height: UIScreen.getHeight(28))
           .foregroundStyle(Color.LabelColor_Primary_Dark)
           .fontSystem(fontDesignSystem: .body1_KO)
           .background(Color.Dim_Default)
@@ -377,7 +377,7 @@ struct SearchBar: View {
           }
         if isSearching {
           Text("취소")
-            .foregroundStyle(Color.Info)
+            .foregroundStyle(Color.LabelColor_Primary_Dark)
             .fontSystem(fontDesignSystem: .body1_KO)
             .padding(.horizontal, 16)
             .contentShape(Rectangle())

@@ -51,15 +51,6 @@ extension AVAsset {
   }
 
   func adjustVideoSize(to viewSize: CGSize) async -> CGSize? {
-//    guard let assetSize = await naturalSize() else { return nil }
-//    let videoRatio = assetSize.width / assetSize.height
-//    let isPortrait = assetSize.height > assetSize.width
-    let videoSize = viewSize
-//    if isPortrait {
-//      videoSize = CGSize(width: videoSize.height * videoRatio, height: videoSize.height)
-//    } else {
-//      videoSize = CGSize(width: videoSize.width, height: videoSize.width / videoRatio)
-//    }
-    return videoSize
+    viewSize
   }
 }

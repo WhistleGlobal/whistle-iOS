@@ -70,7 +70,7 @@ extension View {
       ZStack(alignment: .bottomTrailing) { // alignment 변경
         RoundedRectangle(cornerRadius: 32, style: .continuous)
           .fill(Color.black.opacity(0.3))
-        CustomBlurView(effect: .systemUltraThinMaterialLight) { view in
+        CustomBlurEffect(effect: .systemUltraThinMaterialLight) { view in
           view.saturationAmount = 2.2
           view.gaussianBlurRadius = 36
         }
@@ -88,32 +88,12 @@ extension View {
   }
 
   @ViewBuilder
-  func glassMorphicView(width: CGFloat, height: CGFloat, cornerRadius: CGFloat) -> some View {
-    ZStack {
-//      RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
-      Rectangle()
-        .fill(Color.black.opacity(0.3))
-        .cornerRadius(cornerRadius, corners: .allCorners)
-      CustomBlurView(effect: .systemUltraThinMaterialLight) { view in
-        // FIXME: - 피그마와 비슷하도록 값 고치기
-        view.saturationAmount = 2.2
-        view.gaussianBlurRadius = 32
-      }
-//      .cornerRadius(cornerRadius, corners: [.topLeft, .topRight])
-      .clipShape(RoundedRectangle(cornerRadius: cornerRadius, style: .continuous))
-    }
-    .frame(width: width, height: height)
-  }
-
-  @ViewBuilder
   func glassMorphicView(cornerRadius: CGFloat) -> some View {
     ZStack {
       Rectangle()
-//        .fill(Color.Gray30_Light.opacity(0.24))
         .fill(Color.black.opacity(0.3))
         .cornerRadius(cornerRadius, corners: .allCorners)
-      CustomBlurView(effect: .systemUltraThinMaterialLight) { view in
-        // FIXME: - 피그마와 비슷하도록 값 고치기
+      CustomBlurEffect(effect: .systemUltraThinMaterialLight) { view in
         view.saturationAmount = 2.2
         view.gaussianBlurRadius = 32
       }
@@ -122,45 +102,8 @@ extension View {
   }
 
   @ViewBuilder
-  func glassProfile(width: CGFloat, height: CGFloat, cornerRadius: CGFloat, overlayed: some View) -> some View {
-    glassMorphicView(width: width, height: height, cornerRadius: cornerRadius)
-      .overlay {
-        RoundedRectangle(cornerRadius: cornerRadius)
-          .stroke(lineWidth: 1)
-          .foregroundStyle(
-            LinearGradient.Border_Glass)
-          .frame(width: width, height: height)
-        overlayed
-      }
-  }
-
-  // min max version
-  @ViewBuilder
-  func glassMoriphicView(width: CGFloat, minHeight: CGFloat, maxHeight: CGFloat, cornerRadius: CGFloat) -> some View {
-    ZStack {
-      RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
-        .fill(Color.black.opacity(0.3))
-      CustomBlurView(effect: .systemUltraThinMaterialLight) { view in
-        // FIXME: - 피그마와 비슷하도록 값 고치기
-        view.saturationAmount = 2.2
-        view.gaussianBlurRadius = 36
-      }
-      .clipShape(RoundedRectangle(cornerRadius: cornerRadius, style: .continuous))
-    }
-    .frame(width: width)
-    .frame(minHeight: minHeight, maxHeight: maxHeight)
-  }
-
-  @ViewBuilder
-  func glassProfile(
-    width: CGFloat,
-    minHeight: CGFloat,
-    maxHeight: CGFloat,
-    cornerRadius: CGFloat,
-    overlayed: some View)
-    -> some View
-  {
-    glassMoriphicView(width: width, minHeight: minHeight, maxHeight: maxHeight, cornerRadius: cornerRadius)
+  func glassProfile(cornerRadius: CGFloat, overlayed: some View) -> some View {
+    glassMorphicView(cornerRadius: cornerRadius)
       .overlay {
         RoundedRectangle(cornerRadius: cornerRadius)
           .stroke(lineWidth: 1)
@@ -175,8 +118,7 @@ extension View {
     ZStack {
       Circle()
         .fill(Color.black.opacity(0.3))
-      CustomBlurView(effect: .systemUltraThinMaterialLight) { view in
-        // FIXME: - 피그마와 비슷하도록 값 고치기
+      CustomBlurEffect(effect: .systemUltraThinMaterialLight) { view in
         view.saturationAmount = 2.2
         view.gaussianBlurRadius = 36
       }
@@ -188,6 +130,13 @@ extension View {
 extension View {
   func cornerRadius(_ radius: CGFloat, corners: UIRectCorner) -> some View {
     clipShape(RoundedCorners(radius: radius, corners: corners))
+  }
+}
+
+extension View {
+  func measureSize(perform action: @escaping (CGSize) -> Void) -> some View {
+    modifier(MeasureSizeModifier())
+      .onPreferenceChange(SizePreferenceKey.self, perform: action)
   }
 }
 
@@ -478,7 +427,7 @@ extension View {
         Image(systemName: toPlay ? "play.fill" : "pause.fill")
           .font(.system(size: 20))
           .contentShape(Circle())
-          .foregroundColor(.White)
+          .foregroundColor(.white)
       }
   }
 }

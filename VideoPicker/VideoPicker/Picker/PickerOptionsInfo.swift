@@ -168,9 +168,9 @@ extension PickerSelectionTapAction {
   var hideToolBar: Bool {
     switch self {
     case .quickPick, .openEditor:
-      return true
+      true
     default:
-      return false
+      false
     }
   }
 }

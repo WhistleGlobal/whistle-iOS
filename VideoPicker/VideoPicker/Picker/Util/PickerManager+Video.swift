@@ -12,7 +12,11 @@ typealias _VideoFetchCompletion = (Result<VideoFetchResponse, AnyImageError>) ->
 typealias _VideoURLFetchCompletion = (Result<VideoURLFetchResponse, AnyImageError>) -> Void
 
 extension PickerManager {
-  func requestVideo(for asset: PHAsset, options: VideoFetchOptions = .init(), completion: @escaping _VideoFetchCompletion) {
+  func requestVideo(
+    for asset: PHAsset,
+    options: VideoFetchOptions = .init(),
+    completion: @escaping _VideoFetchCompletion)
+  {
     let requestID = ExportTool.requestVideo(for: asset, options: options) { result, requestID in
       completion(result)
       self.dequeueFetch(for: asset.localIdentifier, requestID: requestID)

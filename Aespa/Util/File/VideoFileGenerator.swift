@@ -36,7 +36,7 @@ struct VideoFileGenerator {
       let thumbnail = UIImage(data: compressedData)
       return thumbnail
     } catch {
-      Logger.log(error: error)
+      AespaLogger.log(error: error)
       return nil
     }
   }

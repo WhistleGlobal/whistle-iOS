@@ -48,25 +48,25 @@ extension BundleHelper {
 
   static func bundle(for module: Module) -> Bundle {
 //        #if ANYIMAGEKIT_ENABLE_SPM
-    Bundle.anyImageKitCore
+//    Bundle.anyImageKitCore
 //        #else
     switch module {
     case .core:
-      return Bundle.anyImageKitCore
+      Bundle.anyImageKitCore
 
 //        #if ANYIMAGEKIT_ENABLE_PICKER
     case .picker:
-      return Bundle.anyImageKitPicker
+      Bundle.anyImageKitPicker
 //        #endif
 
 //        #if ANYIMAGEKIT_ENABLE_EDITOR
     case .editor:
-      return Bundle.anyImageKitEditor
+      Bundle.anyImageKitEditor
 //        #endif
 
 //        #if ANYIMAGEKIT_ENABLE_CAPTURE
     case .capture:
-      return Bundle.anyImageKitCapture
+      Bundle.anyImageKitCapture
 //        #endif
     }
 //        #endif
@@ -84,13 +84,13 @@ extension BundleHelper {
   private static func styledName(_ named: String, style: UserInterfaceStyle?) -> String {
     switch style {
     case .auto:
-      return named + "Auto"
+      named + "Auto"
     case .light:
-      return named + "Light"
+      named + "Light"
     case .dark:
-      return named + "Dark"
+      named + "Dark"
     case .none:
-      return named
+      named
     }
   }
 }

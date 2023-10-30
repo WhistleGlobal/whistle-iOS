@@ -148,7 +148,7 @@ extension VideoPreviewCell {
             setImage(response.image)
           }
         case .failure(let error):
-          _print(error)
+          WhistleLogger.logger.debug("Error: \(error)")
         }
       })
     }
@@ -162,7 +162,7 @@ extension VideoPreviewCell {
         imageView.image = response.image
         imageView.frame = fitFrame
       case .failure(let error):
-        _print(error)
+        WhistleLogger.logger.debug("Error: \(error)")
       }
     }
   }

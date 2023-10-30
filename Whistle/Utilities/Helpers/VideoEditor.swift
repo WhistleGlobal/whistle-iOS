@@ -120,7 +120,7 @@ class VideoEditor {
 
   /// Adding filters
   private func applyFiltersOperations(_ video: EditableVideo, fromURL: URL) async throws -> URL {
-    let filters = Helpers.createFilters(mainFilter: CIFilter(name: video.filterName ?? ""), video.colorCorrection)
+    let filters = VideoFilterHelpers.createFilters(mainFilter: CIFilter(name: video.filterName ?? ""), video.colorCorrection)
 
     if filters.isEmpty {
       return fromURL
@@ -157,7 +157,7 @@ class VideoEditor {
   }
 }
 
-// MARK: - Helpers
+// MARK: - VideoFilterHelpers
 
 extension VideoEditor {
   private func exportSession(

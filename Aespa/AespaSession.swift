@@ -149,7 +149,7 @@ open class AespaSession {
   /// If you don't want to show logs, set `enableLogging` to `false` from `AespaOption.Log`
   public var previewLayerPublisher: AnyPublisher<AVCaptureVideoPreviewLayer, Never> {
     previewLayerSubject.handleEvents(receiveOutput: { _ in
-      Logger.log(message: "Preview layer is updated")
+      AespaLogger.log(message: "Preview layer is updated")
     })
     .compactMap { $0 }
     .eraseToAnyPublisher()

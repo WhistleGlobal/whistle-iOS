@@ -43,13 +43,13 @@ extension PHAuthorizationStatus {
   fileprivate var _status: Permission.Status {
     switch self {
     case .notDetermined:
-      return .notDetermined
+      .notDetermined
     case .authorized:
-      return .authorized
+      .authorized
     case .limited:
-      return .limited
+      .limited
     default:
-      return .denied
+      .denied
     }
   }
 }

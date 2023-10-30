@@ -8,6 +8,12 @@
 import SwiftUI
 
 extension Font {
+  // MARK: Lifecycle
+
+  public init(uiFont: UIFont) {
+    self = Font(uiFont as CTFont)
+  }
+
   // MARK: Public
 
   public static func registerFonts(fontName: String) {
@@ -22,12 +28,6 @@ extension Font {
       bundle: Bundle.main,
       fontName: fontName,
       fontExtension: ".ttf") // change according to your ext.
-  }
-
-  // let Title2_Expanded_Semibold = Font.expanded(.title2, size: 24, weight: .semibold)
-  // let fontHeight = UIFont.preferredFont(forTextStyle: .caption1).lineHeight
-  public static func title2_Expanded_Semibold() -> Font {
-    Font.expanded(.title2, size: 24, weight: .semibold)
   }
 
   // MARK: Fileprivate

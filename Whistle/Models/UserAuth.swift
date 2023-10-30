@@ -32,6 +32,9 @@ class UserAuth: ObservableObject {
     case userResponse
   }
 
+  static let shared = UserAuth()
+  private init() { }
+
   @AppStorage("isAccess") var isAccess = false
   @AppStorage("provider") var provider: Provider = .apple
   @AppStorage("deviceToken") var deviceToken: String?
@@ -52,45 +55,40 @@ class UserAuth: ObservableObject {
     switch provider {
     case .apple:
 //      return URL(string: "\(domainUrl)/user/profile?provider=Apple")
-      return URL(string: "\(domainURL)/user/profile")
+      URL(string: "\(domainURL)/user/profile")
     case .google:
 //      return URL(string: "\(domainUrl)/user/profile?provider=Google")
-      return URL(string: "\(domainURL)/user/profile")
+      URL(string: "\(domainURL)/user/profile")
     }
   }
 
   func loadData(completion: @escaping () -> Void?) {
     guard let idTokenKey = keychain.get("id_token") else {
-      log("id_Token nil")
       return
     }
     guard let url else {
-      log("url nil")
       return
     }
-    log("idToken \(idTokenKey)")
+    WhistleLogger.logger.debug("idToken \(idTokenKey)")
     let headers: HTTPHeaders = ["Authorization": "Bearer \(idTokenKey)"]
     AF.request(url, method: .get, headers: headers)
       .validate(statusCode: 200 ... 300)
       .response { response in
         switch response.result {
-        case .success(let data):
+        case .success:
           guard let deviceToken = self.deviceToken else {
-            log("device token nil")
             return
           }
-          self.apiViewModel.uploadDeviceToken(deviceToken: deviceToken) {
-            log("success upload device token")
-          }
+          self.apiViewModel.uploadDeviceToken(deviceToken: deviceToken) { }
           self.isAccess = true
           completion()
         case .failure(let error):
           switch self.provider {
           case .apple:
-            log(error)
+            WhistleLogger.logger.error("Error: \(error)")
             self.refresh()
           case .google:
-            log(error)
+            WhistleLogger.logger.error("Error: \(error)")
           }
         }
       }
@@ -98,7 +96,6 @@ class UserAuth: ObservableObject {
 
   func refresh() {
     guard let refreshTokenKey = keychain.get("refresh_token") else {
-      log("refreshTokenKey nil")
       return
     }
     guard let url = URL(string: "\(domainURL)/auth/apple/refresh") else {
@@ -109,15 +106,12 @@ class UserAuth: ObservableObject {
     let parameters: Parameters = ["refresh_token": refreshTokenKey]
     AF.request(url, method: .post, parameters: parameters, headers: headers).response { response in
       if let error = response.error {
-        log("\(error.localizedDescription)")
+        WhistleLogger.logger.error("Error: \(error)")
         self.isAccess = false
         return
       }
-      if let statusCode = response.response?.statusCode, statusCode == 401 {
-        log("refresh_token expired or invalid")
-      }
+      if let statusCode = response.response?.statusCode, statusCode == 401 { }
       guard let data = response.data else {
-        log("data nil")
         return
       }
       do {
@@ -129,7 +123,7 @@ class UserAuth: ObservableObject {
           self.loadData { }
         }
       } catch {
-        log(error)
+        WhistleLogger.logger.error("Error: \(error)")
       }
     }
   }

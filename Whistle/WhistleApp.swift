@@ -26,38 +26,29 @@ struct WhistleApp: App {
   }
 
   // MARK: Internal
-
+  @AppStorage("isAccess") var isAccess = false
   @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
-  @StateObject var rootVM = RootViewModel(mainContext: PersistenceController.shared.viewContext)
   @StateObject var appleSignInViewModel = AppleSignInViewModel()
-  @StateObject var userAuth = UserAuth()
+  @StateObject var userAuth = UserAuth.shared
   @StateObject var apiViewModel = APIViewModel.shared
   @StateObject var universalRoutingModel: UniversalRoutingModel = .init()
+  @StateObject var toastInfo = ToastViewModel.shared
   @State var testBool = false
-  @AppStorage("isAccess") var isAccess = false
-  let keychain = KeychainSwift()
+  @State private var pickerOptions = PickerOptionsInfo()
   var domainURL: String {
     AppKeys.domainURL as! String
   }
 
-  @State private var pickerOptions = PickerOptionsInfo()
+  let keychain = KeychainSwift()
+
   var body: some Scene {
     WindowGroup {
-//      AlertPopup(
-//        title: "A Short Title Is Best",
-//        content: "A message should be short, complete sentence",
-//        cancelText: "취소",
-//        destructiveText: "제거",
-//        submitText: "완료")
       if isAccess {
-        TabbarView()
-
-          .environmentObject(userAuth)
+        RootTabView()
           .environmentObject(universalRoutingModel)
           .task {
             if isAccess {
               let updateAvailable = await apiViewModel.checkUpdateAvailable()
-              log(updateAvailable)
               if updateAvailable {
                 await apiViewModel.requestVersionCheck()
               }
@@ -65,12 +56,9 @@ struct WhistleApp: App {
             }
           }
           .onOpenURL { url in
-            log(url)
             var urlString = url.absoluteString
             urlString = urlString.replacingOccurrences(of: "\(domainURL)", with: "")
-            log(urlString)
             if urlString.contains("/profile_uni?") {
-              log("/profile_uni? .contains")
               urlString = urlString.replacingOccurrences(of: "/profile_uni?id=", with: "")
               guard let userId = Int(urlString) else {
                 return
@@ -78,14 +66,10 @@ struct WhistleApp: App {
               universalRoutingModel.userId = userId
               universalRoutingModel.isUniversalProfile = true
             } else if urlString.contains("/content_uni?") {
-              log("/content_uni? .contains")
               urlString = urlString.replacingOccurrences(of: "/content_uni?contentId=", with: "")
-              log("urlString: \(urlString)")
               guard let contentId = Int(urlString) else {
-                log("guard urlString: \(urlString)")
                 return
               }
-              log("contentId: \(contentId)")
               universalRoutingModel.contentId = contentId
               universalRoutingModel.isUniversalContent = true
             }
@@ -93,12 +77,9 @@ struct WhistleApp: App {
       } else {
         NavigationStack {
           SignInView()
-
-            .environmentObject(userAuth)
             .environmentObject(universalRoutingModel)
             .task {
               let updateAvailable = await apiViewModel.checkUpdateAvailable()
-              log(updateAvailable)
               if updateAvailable {
                 await apiViewModel.requestVersionCheck()
               }
@@ -125,7 +106,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     UNUserNotificationCenter.current()
       .requestAuthorization(options: [.alert, .sound, .badge]) {
         [weak self] granted, _ in
-        log("Permission granted: \(granted)")
+        WhistleLogger.logger.debug("Permission granted: \(granted)")
       }
     // APNS 등록
     application.registerForRemoteNotifications()
@@ -133,32 +114,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
   }
 
   func application(_: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: Error) {
-    log("Failed to register for notifications: \(error.localizedDescription)")
+    WhistleLogger.logger.debug("Failed to register for notifications: \(error.localizedDescription)")
   }
 
   // 성공시
   func application(_: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
     let tokenParts = deviceToken.map { data in String(format: "%02.2hhx", data) }
     let token = tokenParts.joined()
-    log("Device Token: \(token)")
+    WhistleLogger.logger.debug("Device Token: \(token)")
     self.deviceToken = token
-    log("Device Token in appstorage: \(self.deviceToken)")
+    WhistleLogger.logger.debug("Device Token in appstorage: \(self.deviceToken)")
   }
-}
-
-public func log<T>(
-  _ object: T?,
-  filename: String = #file,
-  line: Int = #line,
-  funcName: String = #function)
-{
-  #if DEBUG
-  if let obj = object {
-    print("\(filename.components(separatedBy: "/").last ?? "")(\(line)) : \(funcName) : \(obj)")
-  } else {
-    print("\(filename.components(separatedBy: "/").last ?? "")(\(line)) : \(funcName) : nil")
-  }
-  #endif
 }
 
 // MARK: - UniversalRoutingModel

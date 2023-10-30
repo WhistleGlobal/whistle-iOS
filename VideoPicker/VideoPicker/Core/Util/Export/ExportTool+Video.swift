@@ -76,7 +76,7 @@ extension ExportTool {
             completion(.failure(.saveVideoFailed))
           }
         } else if error != nil {
-          _print("Save video error: \(error!.localizedDescription)")
+          WhistleLogger.logger.debug("Save video error: \(error!.localizedDescription)")
           completion(.failure(.saveVideoFailed))
         }
       }

@@ -19,16 +19,16 @@ struct MusicTrimView: View {
 
   @StateObject var apiViewModel = APIViewModel.shared
   @ObservedObject var musicVM: MusicViewModel
-  @ObservedObject var editorVM: EditorViewModel
+  @ObservedObject var editorVM: VideoEditorViewModel
   @ObservedObject var videoPlayer: VideoPlayerManager
 
-  @Binding var showMusicTrimView: Bool
   @State private var audioURL: URL?
-  @State private var startTime: TimeInterval = 0
-  @State private var endTime: TimeInterval = 0
-  @State private var isPlaying = false
   @State private var trimmedAudioURL: URL?
   @State private var player: AVPlayer?
+  @State private var isPlaying = false
+  @State private var startTime: TimeInterval = 0
+  @State private var endTime: TimeInterval = 0
+
   @State var offset: CGFloat = 0
   @State var isAnimated = false
   @State var isScrolling = false
@@ -38,6 +38,7 @@ struct MusicTrimView: View {
   @State var accumulatedOffset: Double = 0
   @State var musicDuration: Double = 80
   @State var indicatorOffset: Double = 0
+  @Binding var showMusicTrimView: Bool
 
   // MARK: Internal
 
@@ -47,7 +48,7 @@ struct MusicTrimView: View {
         .ignoresSafeArea()
       ZStack(alignment: .center) {
         VStack {
-          EditablePlayerView(player: videoPlayer.videoPlayer)
+          EditablePlayer(player: videoPlayer.videoPlayer)
             .frame(height: UIScreen.getHeight(700))
             .overlay {
               VStack {
@@ -190,8 +191,10 @@ extension MusicTrimView {
         musicVM.startTime = (offset / 16.0) * (musicVM.trimDuration / 10)
         Task {
           stopPlaying()
-          showMusicTrimView = false
           trimAudio()
+          if !videoPlayer.isPlaying {
+            showMusicTrimView = false
+          }
         }
         musicVM.isTrimmed = true
       } label: {
@@ -279,7 +282,7 @@ extension MusicTrimView {
 //    } else {
     offset = 0
 //    }
-    if let url = musicVM.url {
+    if let url = musicVM.originalAudioURL {
       musicDuration = audioDuration(url)
     }
     startPlaying()
@@ -318,7 +321,7 @@ extension MusicTrimView {
 
 extension MusicTrimView {
   func loadAudioFile() {
-    if let audioFileURL = musicVM.url {
+    if let audioFileURL = musicVM.originalAudioURL {
       audioURL = audioFileURL
       endTime = audioDuration(audioFileURL)
     }
@@ -363,7 +366,7 @@ extension MusicTrimView {
     exportSession?.exportAsynchronously(completionHandler: {
       DispatchQueue.main.async {
         trimmedAudioURL = outputPath
-        musicVM.url = trimmedAudioURL
+        musicVM.originalAudioURL = trimmedAudioURL
         editorVM.setAudio(Audio(url: trimmedAudioURL!, duration: musicVM.trimDuration))
       }
     })

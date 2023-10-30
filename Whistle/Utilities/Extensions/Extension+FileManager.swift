@@ -32,7 +32,7 @@ extension FileManager {
       let imageData = try Data(contentsOf: url)
       return UIImage(data: imageData)
     } catch {
-      print("Error retrieve image", error.localizedDescription)
+      WhistleLogger.logger.debug("Error retrieve image: \(error.localizedDescription)")
       return nil
     }
   }
@@ -42,9 +42,8 @@ extension FileManager {
     if let data = image.jpegData(compressionQuality: 0.9) {
       do {
         try data.write(to: url)
-        print("success saved \(url)")
       } catch {
-        print("Error to save image", error.localizedDescription)
+        WhistleLogger.logger.debug("Error to save image: \(error.localizedDescription)")
       }
     }
   }
@@ -60,7 +59,7 @@ extension FileManager {
       do {
         try removeItem(at: url)
       } catch {
-        print("Error to remove item", error.localizedDescription)
+        WhistleLogger.logger.debug("Error to remove item: \(error.localizedDescription)")
       }
     }
   }
@@ -70,7 +69,7 @@ extension FileManager {
       do {
         try removeItem(at: url)
       } catch {
-        print("Error to remove item", error.localizedDescription)
+        WhistleLogger.logger.debug("Error to remove item: \(error.localizedDescription)")
       }
     }
   }

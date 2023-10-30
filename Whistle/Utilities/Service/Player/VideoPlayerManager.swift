@@ -244,7 +244,7 @@ extension VideoPlayerManager {
 
 extension VideoPlayerManager {
   func setFilters(mainFilter: CIFilter?, colorCorrection: ColorCorrection?) {
-    let filters = Helpers.createFilters(mainFilter: mainFilter, colorCorrection)
+    let filters = VideoFilterHelpers.createFilters(mainFilter: mainFilter, colorCorrection)
 
     if filters.isEmpty {
       return
@@ -269,10 +269,10 @@ enum LoadState: Identifiable, Equatable {
 
   var id: Int {
     switch self {
-    case .unknown: return 0
-    case .loading: return 1
-    case .loaded: return 2
-    case .failed: return 3
+    case .unknown: 0
+    case .loading: 1
+    case .loaded: 2
+    case .failed: 3
     }
   }
 }

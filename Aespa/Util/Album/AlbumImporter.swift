@@ -49,6 +49,6 @@ struct AlbumImporter {
       PHAssetCollectionChangeRequest.creationRequestForAssetCollection(withTitle: name)
     }
 
-    Logger.log(message: "The album \(name) is created.")
+    AespaLogger.log(message: "The album \(name) is created.")
   }
 }

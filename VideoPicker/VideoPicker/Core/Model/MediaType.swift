@@ -31,22 +31,22 @@ public enum MediaType: Equatable, CustomStringConvertible {
   public var description: String {
     switch self {
     case .photo:
-      return "PHOTO"
+      "PHOTO"
     case .video:
-      return "VIDEO"
+      "VIDEO"
     case .photoLive:
-      return "PHOTO/LIVE"
+      "PHOTO/LIVE"
     }
   }
 
   public var utType: String {
     switch self {
     case .photo:
-      return kUTTypeImage as String
+      kUTTypeImage as String
     case .video:
-      return kUTTypeMovie as String
+      kUTTypeMovie as String
     case .photoLive:
-      return kUTTypeLivePhoto as String
+      kUTTypeLivePhoto as String
     }
   }
 

@@ -32,9 +32,10 @@ final class PickerToolBar: UIView {
     let view = UIButton(frame: .zero)
     view.titleLabel?.font = UIFont.systemFont(ofSize: 16)
     let spacing: CGFloat = 8
-    view.imageEdgeInsets = UIEdgeInsets(top: 0, left: -spacing / 2, bottom: 0, right: spacing / 2)
-    view.titleEdgeInsets = UIEdgeInsets(top: 0, left: spacing / 2, bottom: 0, right: -spacing / 2)
-    view.contentEdgeInsets = UIEdgeInsets(top: 0, left: spacing, bottom: 0, right: spacing)
+//    view.configuration!.contentInsets = NSDirectionalEdgeInsets(top: 5.0, leading: 12.0, bottom: 5.0, trailing: 10.0)
+    view.configuration?.imagePadding = -spacing / 2
+    view.configuration?.titlePadding = spacing / 2
+    view.configuration?.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: spacing, bottom: 0, trailing: spacing)
     return view
   }()
 

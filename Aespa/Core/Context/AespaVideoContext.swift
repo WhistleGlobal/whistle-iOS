@@ -72,7 +72,7 @@ extension AespaVideoContext: VideoContext {
   public var videoFilePublisher: AnyPublisher<Result<URL, Error>, Never> {
     videoFileBufferSubject.handleEvents(receiveOutput: { status in
       if case .failure(let error) = status {
-        Logger.log(error: error)
+        AespaLogger.log(error: error)
       }
     })
     .compactMap { $0 }
@@ -109,7 +109,7 @@ extension AespaVideoContext: VideoContext {
         isRecording = false
         onCompelte(.success(videoFilePath))
       } catch {
-        Logger.log(error: error)
+        AespaLogger.log(error: error)
         onCompelte(.failure(error))
       }
     }

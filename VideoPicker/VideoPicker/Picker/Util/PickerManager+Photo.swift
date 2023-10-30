@@ -40,11 +40,11 @@ struct _PhotoFetchOptions {
   var targetSize: CGSize {
     switch sizeMode {
     case .thumbnail(let width):
-      return CGSize(width: width, height: width)
+      CGSize(width: width, height: width)
     case .preview(let width):
-      return CGSize(width: width, height: width)
+      CGSize(width: width, height: width)
     case .original:
-      return PHImageManagerMaximumSize
+      PHImageManagerMaximumSize
     }
   }
 }
@@ -94,7 +94,11 @@ extension PickerManager {
 // MARK: - Request photo
 
 extension PickerManager {
-  func requestPhoto(for asset: PHAsset, options: _PhotoFetchOptions = .init(), completion: @escaping _PhotoFetchCompletion) {
+  func requestPhoto(
+    for asset: PHAsset,
+    options: _PhotoFetchOptions = .init(),
+    completion: @escaping _PhotoFetchCompletion)
+  {
     let fetchOptions = PhotoFetchOptions(
       size: options.targetSize,
       resizeMode: options.resizeMode,

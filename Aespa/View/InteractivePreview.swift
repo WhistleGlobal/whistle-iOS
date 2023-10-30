@@ -155,10 +155,8 @@ extension InteractivePreview {
         point = CGPoint(
           x: point.x / geometry.size.width,
           y: point.y / geometry.size.height)
-        print("value, point, geometry", value.location, point, point, geometry.size.width, geometry.size.height)
         session.focus(mode: .autoFocus, point: point)
         focusingLocation = value.location
-//        CGPoint(x: value.location.x, y: min(value.location.y))
 
         if option.enableShowingCrosshair, point.y <= 1.0 {
           showCrosshair()

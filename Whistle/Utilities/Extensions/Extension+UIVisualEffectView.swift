@@ -26,7 +26,7 @@ extension UIVisualEffectView {
     }
     set {
       gaussianBlur?.values?["inputRadius"] = newValue
-      backDrop?.perform(Selector("applyRequestedFilterEffects"))
+      backDrop?.perform(Selector(("applyRequestedFilterEffects")))
     }
   }
 

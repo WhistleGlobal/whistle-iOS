@@ -101,6 +101,34 @@ final class AssetPickerViewController: AnyImageViewController {
     return view
   }()
 
+  private lazy var emptyAlbumView: UIView = {
+    let uiView = UIView()
+    let imageConfig = UIImage.SymbolConfiguration(pointSize: 48)
+    let image = UIImageView()
+    image.translatesAutoresizingMaskIntoConstraints = false
+    image.image = UIImage(systemName: "photo.fill", withConfiguration: imageConfig)
+    image.tintColor = .white
+
+    let label = UILabel()
+    label.translatesAutoresizingMaskIntoConstraints = false
+    label.text = "사용할 수 있는 동영상이 없습니다."
+    label.textColor = .white
+    label.font = UIFont(name: "AppleSDGothicNeo-Regular", size: 14)
+
+    uiView.addSubview(image)
+    uiView.addSubview(label)
+
+    image.snp.makeConstraints { maker in
+      maker.centerX.equalToSuperview()
+    }
+
+    label.snp.makeConstraints { maker in
+      maker.centerX.equalToSuperview()
+      maker.top.equalTo(image.snp.bottom).offset(26)
+    }
+    return uiView
+  }()
+
   private(set) lazy var collectionView: UICollectionView = {
     let layout = UICollectionViewFlowLayout()
     layout.minimumLineSpacing = defaultAssetSpacing
@@ -116,7 +144,6 @@ final class AssetPickerViewController: AnyImageViewController {
       right: defaultAssetSpacing * 2)
     // 컬렉션뷰 배경 색상
     view.backgroundColor = UIColor.black.withAlphaComponent(0.3)
-    manager.options.theme[color: .background]
     if #available(iOS 14.0, *) {
     } else {
       view.registerCell(AssetCell.self)
@@ -188,6 +215,13 @@ final class AssetPickerViewController: AnyImageViewController {
     }
     checkPermission()
     update(options: manager.options)
+    if album?.assets.isEmpty ?? true {
+      setupEmptyAlbumView()
+    }
+  }
+
+  override func viewWillAppear(_: Bool) {
+    super.viewWillAppear(false)
   }
 
   override func viewDidLayoutSubviews() {
@@ -206,7 +240,6 @@ final class AssetPickerViewController: AnyImageViewController {
     navigationController?.navigationBar.layer.masksToBounds = true
     navigationItem.titleView = titleView
     navigationItem.titleView?.tintColor = .white
-    //    navigationItem.titleView?.tintColor = .white
 
     let cancel = UIBarButtonItem(
       title: manager.options.theme[string: .cancel],
@@ -215,6 +248,14 @@ final class AssetPickerViewController: AnyImageViewController {
       action: #selector(cancelButtonTapped(_:)))
     navigationItem.rightBarButtonItem = cancel
     navigationItem.rightBarButtonItem?.tintColor = .white
+  }
+
+  private func setupEmptyAlbumView() {
+    view.addSubview(emptyAlbumView)
+    emptyAlbumView.snp.makeConstraints { maker in
+      maker.centerX.equalToSuperview()
+      maker.centerY.equalToSuperview().offset(-50)
+    }
   }
 
   private func setupView() {
@@ -284,7 +325,7 @@ extension AssetPickerViewController {
       loadDefaultAlbumIfNeeded()
 //      showLimitedView()
     }, denied: { [weak self] _ in
-      guard let self else { return }
+      guard self != nil else { return }
 //      permissionView.isHidden = false
     })
   }
@@ -454,7 +495,10 @@ extension AssetPickerViewController {
       selector: #selector(containerSizeDidChange(_:)),
       name: .containerSizeDidChange,
       object: nil)
-    NotificationCenter.default.addObserver(self, selector: #selector(didSyncAsset(_:)), name: .didSyncAsset, object: nil)
+    NotificationCenter.default.addObserver(
+      self,
+      selector: #selector(didSyncAsset(_:)),
+      name: .didSyncAsset, object: nil)
   }
 
   @objc
@@ -473,7 +517,7 @@ extension AssetPickerViewController {
   @objc
   private func didSyncAsset(_ sender: Notification) {
     DispatchQueue.main.async {
-      guard let _ = sender.object as? String else { return }
+      guard sender.object is String else { return }
       guard self.manager.options.selectLimit == 1, self.manager.options.selectionTapAction.hideToolBar else { return }
       guard let asset = self.manager.selectedAssets.first else { return }
       guard let cell = self.collectionView.cellForItem(at: IndexPath(row: asset.idx, section: 0)) as? AssetCell
@@ -493,7 +537,9 @@ extension AssetPickerViewController {
     controller.album = album
     controller.albums = albums
     controller.delegate = self
-    let presentationController = MenuDropDownPresentationController(presentedViewController: controller, presenting: self)
+    let presentationController = MenuDropDownPresentationController(
+      presentedViewController: controller,
+      presenting: self)
     let isFullScreen = ScreenHelper.mainBounds.height == (navigationController?.view ?? view).frame.height
     presentationController.isFullScreen = isFullScreen
     controller.transitioningDelegate = presentationController
@@ -523,7 +569,10 @@ extension AssetPickerViewController {
   private func originalImageButtonTapped(_ sender: UIButton) {
     sender.isSelected.toggle()
     manager.useOriginalImage = sender.isSelected
-    trackObserver?.track(event: .pickerOriginalImage, userInfo: [.isOn: sender.isSelected, .page: AnyImagePage.pickerAsset])
+    trackObserver?
+      .track(
+        event: .pickerOriginalImage,
+        userInfo: [.isOn: sender.isSelected, .page: AnyImagePage.pickerAsset])
   }
 
   @objc

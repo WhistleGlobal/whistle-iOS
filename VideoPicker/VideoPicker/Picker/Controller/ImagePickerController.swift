@@ -296,7 +296,9 @@ extension ImagePickerController: AssetPickerViewControllerDelegate {
 extension ImagePickerController {
   private func addNotifications() {
     beginGeneratingDeviceOrientationNotifications()
-    NotificationCenter.default.addObserver(self, selector: #selector(didSyncAsset(_:)), name: .didSyncAsset, object: nil)
+    NotificationCenter
+      .default
+      .addObserver(self, selector: #selector(didSyncAsset(_:)), name: .didSyncAsset, object: nil)
   }
 
   private func removeNotifications() {

@@ -33,7 +33,7 @@ class AespaCoreSession: AVCaptureSession {
 
         try tuner.tune(self)
       } catch {
-        Logger.log(error: error, message: "in \(tuner)")
+        AespaLogger.log(error: error, message: "in \(tuner)")
         onComplete(.failure(error))
       }
     }
@@ -54,7 +54,7 @@ class AespaCoreSession: AVCaptureSession {
 
         try tuner.tune(device)
       } catch {
-        Logger.log(error: error, message: "in \(tuner)")
+        AespaLogger.log(error: error, message: "in \(tuner)")
         onComplete(.failure(error))
       }
     }
@@ -70,7 +70,7 @@ class AespaCoreSession: AVCaptureSession {
         try tuner.tune(connection)
         onComplete(.success(()))
       } catch {
-        Logger.log(error: error, message: "in \(tuner)")
+        AespaLogger.log(error: error, message: "in \(tuner)")
         onComplete(.failure(error))
       }
     }
@@ -86,7 +86,7 @@ class AespaCoreSession: AVCaptureSession {
         try processor.process(output)
         onComplete(.success(()))
       } catch {
-        Logger.log(error: error, message: "in \(processor)")
+        AespaLogger.log(error: error, message: "in \(processor)")
         onComplete(.failure(error))
       }
     }
@@ -103,6 +103,6 @@ class AespaCoreSession: AVCaptureSession {
     session.startRunning()
 
     workQueue.isSuspended = false
-    Logger.log(message: "Session is configured successfully")
+    AespaLogger.log(message: "Session is configured successfully")
   }
 }

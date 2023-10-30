@@ -97,34 +97,34 @@ extension PickerTheme {
       switch style {
       case .auto:
         switch self {
-        case .primary: return UIColor.primaryColor
+        case .primary: UIColor.primaryColor
         // album title text color
-        case .whiteText: return UIColor.white
-        case .blackText: return UIColor.black
-        case .subText: return UIColor.subText
-        case .toolBar: return UIColor.toolBar
-        case .background: return UIColor.background
-        case .selectedCell: return UIColor.selectedCell
+        case .whiteText: UIColor.white
+        case .blackText: UIColor.black
+        case .subText: UIColor.subText
+        case .toolBar: UIColor.toolBar
+        case .background: UIColor.background
+        case .selectedCell: UIColor.selectedCell
         }
       case .light:
         switch self {
-        case .primary: return UIColor.primaryColor
-        case .whiteText: return UIColor.white
-        case .blackText: return UIColor.black
-        case .subText: return UIColor.subTextLight
-        case .toolBar: return UIColor.toolBarLight
-        case .background: return UIColor.backgroundLight
-        case .selectedCell: return UIColor.selectedCellLight
+        case .primary: UIColor.primaryColor
+        case .whiteText: UIColor.white
+        case .blackText: UIColor.black
+        case .subText: UIColor.subTextLight
+        case .toolBar: UIColor.toolBarLight
+        case .background: UIColor.backgroundLight
+        case .selectedCell: UIColor.selectedCellLight
         }
       case .dark:
         switch self {
-        case .primary: return UIColor.primaryColor
-        case .whiteText: return UIColor.white
-        case .blackText: return UIColor.black
-        case .subText: return UIColor.subTextDark
-        case .toolBar: return UIColor.toolBarDark
-        case .background: return UIColor.backgroundDark
-        case .selectedCell: return UIColor.selectedCellDark
+        case .primary: UIColor.primaryColor
+        case .whiteText: UIColor.white
+        case .blackText: UIColor.black
+        case .subText: UIColor.subTextDark
+        case .toolBar: UIColor.toolBarDark
+        case .background: UIColor.backgroundDark
+        case .selectedCell: UIColor.selectedCellDark
         }
       }
     }
@@ -178,32 +178,32 @@ extension PickerTheme {
       switch self {
       case .albumArrow:
 //        return BundleHelper.image(named: "AlbumArrow", style: style, module: .picker)
-        return UIImage(systemName: "chevron.down")
+        UIImage(systemName: "chevron.down")
       case .arrowRight:
 //        return BundleHelper.image(named: "ArrowRight", style: style, module: .picker)
-        return UIImage(systemName: "chevron.right")
+        UIImage(systemName: "chevron.right")
       case .camera:
-        return BundleHelper.image(named: "Camera", module: .picker)
+        BundleHelper.image(named: "Camera", module: .picker)
       case .checkOff:
-        return BundleHelper.image(named: "CheckOff", module: .picker)
+        BundleHelper.image(named: "CheckOff", module: .picker)
       case .checkOn:
-        return BundleHelper.image(named: "CheckOn", module: .picker)?.withRenderingMode(.alwaysTemplate)
+        BundleHelper.image(named: "CheckOn", module: .picker)?.withRenderingMode(.alwaysTemplate)
       case .iCloud:
-        return BundleHelper.image(named: "iCloud", module: .picker)
+        BundleHelper.image(named: "iCloud", module: .picker)
       case .livePhoto:
-        return BundleHelper.image(named: "LivePhoto", style: style, module: .picker)
+        BundleHelper.image(named: "LivePhoto", style: style, module: .picker)
       case .photoEdited:
-        return BundleHelper.image(named: "PhotoEdited", module: .picker)
+        BundleHelper.image(named: "PhotoEdited", module: .picker)
       case .pickerCircle:
-        return BundleHelper.image(named: "PickerCircle", style: style, module: .picker)
+        BundleHelper.image(named: "PickerCircle", style: style, module: .picker)
       case .returnButton:
-        return BundleHelper.image(named: "ReturnButton", style: style, module: .picker)
+        BundleHelper.image(named: "ReturnButton", style: style, module: .picker)
 //            case .video:
 //                return BundleHelper.image(named: "", module: .picker)
       case .videoPlay:
-        return BundleHelper.image(named: "VideoPlay", module: .picker)
+        BundleHelper.image(named: "VideoPlay", module: .picker)
       case .warning:
-        return BundleHelper.image(named: "Warning", style: style, module: .picker)
+        BundleHelper.image(named: "Warning", style: style, module: .picker)
       }
     }
   }
