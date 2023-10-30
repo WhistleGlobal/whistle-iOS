@@ -130,7 +130,6 @@ struct MainContentLayer: View {
                 toastViewModel.toastInit(message: "저장했습니다.")
                 currentContent.isBookmarked = true
               }
-              apiViewModel.postFeedPlayerChanged()
             }
           } label: {
             VStack(spacing: 2) {
