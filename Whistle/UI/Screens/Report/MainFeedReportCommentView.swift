@@ -62,7 +62,7 @@ struct MainFeedReportCommentView: View {
     .padding(.horizontal, 16)
     .background(Color.reactiveBackground)
     .navigationBarBackButtonHidden()
-    .navigationTitle("신고")
+    .navigationTitle(CommonWords().report)
     .navigationBarTitleDisplayMode(.inline)
     .navigationDestination(isPresented: $goComplete) {
       ReportCompleteView(goReport: $goReport)
@@ -90,7 +90,7 @@ struct MainFeedReportCommentView: View {
       ToolbarItem(placement: .confirmationAction) {
         Button {
           isFocused = false
-          alertViewModel.linearAlert(title: "정말 신고하시겠습니까?", cancelText: "취소", destructiveText: "신고") {
+          alertViewModel.linearAlert(title: "정말 신고하시겠습니까?", cancelText: CommonWords().cancel, destructiveText: "신고") {
             Task {
               let reportSuccess = await apiViewModel.reportContent(
                 userID: uesrId,
@@ -113,7 +113,7 @@ struct MainFeedReportCommentView: View {
             }
           }
         } label: {
-          Text("제출")
+          Text(CommonWords().submit)
             .foregroundColor(.Info)
             .fontSystem(fontDesignSystem: .subtitle2_KO)
             .opacity(alertViewModel.showAlert ? 0.3 : 1)

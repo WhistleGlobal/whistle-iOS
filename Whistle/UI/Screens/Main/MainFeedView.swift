@@ -449,7 +449,7 @@ struct MainFeedView: View {
       }
     }
     .confirmationDialog("", isPresented: $showDialog) {
-      Button("관심없음", role: .none) {
+      Button(CommonWords().hide, role: .none) {
         toastViewModel.cancelToastInit(message: "해당 콘텐츠를 숨겼습니다") {
           Task {
             #if DEBUG
@@ -468,7 +468,7 @@ struct MainFeedView: View {
         }
       }
       if currentVideoUserId != apiViewModel.myProfile.userId {
-        Button("신고", role: .destructive) {
+        Button(CommonWords().report, role: .destructive) {
           showReport = true
         }
       }
@@ -576,7 +576,7 @@ extension MainFeedView {
                   apiViewModel.postFeedPlayerChanged()
                 }
               } label: {
-                Text(isFollowed.wrappedValue ? "팔로잉" : "팔로우")
+                Text(isFollowed.wrappedValue ? CommonWords().following : CommonWords().follow)
                   .fontSystem(fontDesignSystem: .caption_KO_Semibold)
                   .foregroundColor(.Gray10)
                   .frame(width: 58, height: 26)
@@ -639,7 +639,7 @@ extension MainFeedView {
               Image(systemName: currentVideoIsBookmarked ? "bookmark.fill" : "bookmark")
                 .font(.system(size: 26))
                 .frame(width: 36, height: 36)
-              Text("저장")
+              Text(CommonWords().save)
                 .fontSystem(fontDesignSystem: .caption_KO_Semibold)
             }
             .frame(height: UIScreen.getHeight(56))
@@ -654,7 +654,7 @@ extension MainFeedView {
               Image(systemName: "square.and.arrow.up")
                 .font(.system(size: 26))
                 .frame(width: 36, height: 36)
-              Text("공유")
+              Text(CommonWords().share)
                 .fontSystem(fontDesignSystem: .caption_KO_Semibold)
             }
             .frame(height: UIScreen.getHeight(56))
@@ -666,7 +666,7 @@ extension MainFeedView {
               Image(systemName: "ellipsis")
                 .font(.system(size: 26))
                 .frame(width: 36, height: 36)
-              Text("더보기")
+              Text(CommonWords().more)
                 .fontSystem(fontDesignSystem: .caption_KO_Semibold)
             }
             .frame(height: UIScreen.getHeight(56))

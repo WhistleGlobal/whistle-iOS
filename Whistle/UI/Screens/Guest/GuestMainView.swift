@@ -166,7 +166,7 @@ struct GuestMainView: View {
             tabbarModel.tabbarOpacity = 1.0
             bottomSheetPosition = .hidden
           } label: {
-            Text("취소")
+            Text(CommonWords().cancel)
               .fontSystem(fontDesignSystem: .subtitle2_KO)
               .foregroundColor(.white)
               .padding(.horizontal, 16)
@@ -409,7 +409,7 @@ extension GuestMainView {
             Button {
               bottomSheetPosition = .dynamic
             } label: {
-              Text("팔로우")
+              Text(CommonWords().follow)
                 .fontSystem(fontDesignSystem: .caption_KO_Semibold)
                 .foregroundColor(.Gray10)
                 .frame(width: 58, height: 26)
@@ -453,7 +453,7 @@ extension GuestMainView {
               Image(systemName: "square.and.arrow.up")
                 .font(.system(size: 26))
                 .frame(width: 36, height: 36)
-              Text("공유")
+              Text(CommonWords().share)
                 .fontSystem(fontDesignSystem: .caption_KO_Semibold)
             }
             .frame(height: UIScreen.getHeight(56))
@@ -466,7 +466,7 @@ extension GuestMainView {
               Image(systemName: "ellipsis")
                 .font(.system(size: 26))
                 .frame(width: 36, height: 36)
-              Text("더보기")
+              Text(CommonWords().more)
                 .fontSystem(fontDesignSystem: .caption_KO_Semibold)
             }
             .frame(height: UIScreen.getHeight(56))

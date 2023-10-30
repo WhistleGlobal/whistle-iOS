@@ -182,7 +182,7 @@ extension MusicTrimView {
           }
         }
       } label: {
-        Text("취소")
+        Text(CommonWords().cancel)
           .fontSystem(fontDesignSystem: .subtitle2_KO)
           .foregroundStyle(Color.white)
       }
@@ -198,7 +198,7 @@ extension MusicTrimView {
         }
         musicVM.isTrimmed = true
       } label: {
-        Text("완료")
+        Text(CommonWords().confirm)
           .fontSystem(fontDesignSystem: .subtitle2_KO)
           .foregroundStyle(Color.Info)
       }

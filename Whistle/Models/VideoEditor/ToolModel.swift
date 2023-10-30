@@ -6,18 +6,20 @@
 //
 
 import Foundation
+import SwiftUI
 
 enum ToolEnum: Int, CaseIterable {
   //  case cut, speed, music, audio, filters, corrections, frames
   //  case speed, music, audio, filters, corrections, frames
   case music, audio
 
-  var title: String {
+  var title: LocalizedStringKey {
     switch self {
 //    case .cut: return "Cut"
 //    case .speed: return "속도"
-    case .music: "음악"
-    case .audio: "볼륨"
+    case .music: CommonWords().music
+    case .audio: CommonWords().volume
+
 //    case .filters: return "Filters"
 //    case .corrections: return "Corrections"
 //    case .frames: return "Frames"

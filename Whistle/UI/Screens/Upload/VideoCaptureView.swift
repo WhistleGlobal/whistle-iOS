@@ -232,7 +232,7 @@ extension VideoCaptureView {
       HStack {
         Color.clear.frame(width: 28)
         Spacer()
-        Text("타이머")
+        Text(CommonWords().timer)
           .fontSystem(fontDesignSystem: .subtitle1_KO)
           .foregroundColor(.white)
         Spacer()
@@ -240,7 +240,7 @@ extension VideoCaptureView {
           timerSec.1 = false
           bottomSheetPosition = .hidden
         } label: {
-          Text("취소")
+          Text(CommonWords().cancel)
             .fontSystem(fontDesignSystem: .subtitle2_KO)
             .foregroundColor(.white)
         }
@@ -724,7 +724,7 @@ extension VideoCaptureView {
         isPresented = value
       }
       .overlay(alignment: .bottom) {
-        Text("앨범")
+        Text(CommonWords().album)
           .fontSystem(fontDesignSystem: .body2_KO)
           .foregroundColor(.LabelColor_Primary_Dark)
           .offset(y: 16)

@@ -155,17 +155,17 @@ struct SEMemberProfileView: View {
             }
           }
         }
-        Button("신고", role: .destructive) {
+        Button(CommonWords().report, role: .destructive) {
           goReport = true
         }
       }
-      Button("프로필 URL 복사", role: .none) {
+      Button(CommonWords().copyProfileURL, role: .none) {
         UIPasteboard.general.setValue(
           "https://readywhistle.com/profile_uni?id=\(userId)",
           forPasteboardType: UTType.plainText.identifier)
         toastViewModel.toastInit(message: "클립보드에 복사되었습니다")
       }
-      Button("취소", role: .cancel) { }
+      Button(CommonWords().cancel, role: .cancel) { }
     }
     .fullScreenCover(isPresented: $goReport) {
       ProfileReportTypeSelectionView(goReport: $goReport, userId: userId)

@@ -352,7 +352,7 @@ extension RootTabView {
         VStack {
           Image(systemName: tabbarModel.tabSelection == .main ? "play.square.fill" : "play.square")
             .font(.system(size: 19))
-          Text("플레이")
+          Text(CommonWords().play)
             .fontSystem(fontDesignSystem: .caption2_KO_Regular)
         }
         .hCenter()
@@ -381,7 +381,7 @@ extension RootTabView {
         VStack {
           Image(systemName: tabbarModel.tabSelection == .profile ? "person.fill" : "person")
             .font(.system(size: 19))
-          Text("프로필")
+          Text(CommonWords().profile)
             .fontSystem(fontDesignSystem: .caption2_KO_Regular)
         }
         .hCenter()

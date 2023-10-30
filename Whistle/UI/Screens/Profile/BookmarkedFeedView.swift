@@ -187,7 +187,7 @@ struct BookmarkedFeedView: View {
       apiViewModel.postFeedPlayerChanged()
     }
     .confirmationDialog("", isPresented: $showDialog) {
-      Button("저장 취소", role: .destructive) {
+      Button(CommonWords().saveCancel, role: .destructive) {
         toastViewModel.toastInit(message: "저장을 취소했습니다.")
         Task {
           if apiViewModel.bookmark.count - 1 != currentIndex { // 삭제하려는 컨텐츠가 배열 마지막이 아님
@@ -309,7 +309,7 @@ extension BookmarkedFeedView {
               Image(systemName: "square.and.arrow.up")
                 .font(.system(size: 26))
                 .frame(width: 36, height: 36)
-              Text("공유")
+              Text(CommonWords().share)
                 .fontSystem(fontDesignSystem: .caption_KO_Semibold)
             }
             .frame(height: UIScreen.getHeight(56))
@@ -321,7 +321,7 @@ extension BookmarkedFeedView {
               Image(systemName: "ellipsis")
                 .font(.system(size: 26))
                 .frame(width: 36, height: 36)
-              Text("더보기")
+              Text(CommonWords().more)
                 .fontSystem(fontDesignSystem: .caption_KO_Semibold)
             }
             .frame(height: UIScreen.getHeight(56))

@@ -157,7 +157,7 @@ struct DescriptionAndTagEditorView: View {
     .bottomSheet(bottomSheetPosition: $sheetPosition, switchablePositions: [.hidden, .dynamicTop], headerContent: {
       ZStack(alignment: .center) {
         HStack {
-          Text("취소")
+          Text(CommonWords().cancel)
             .fontSystem(fontDesignSystem: .subtitle2_KO)
             .foregroundStyle(Color.black)
             .contentShape(Rectangle())
@@ -165,7 +165,7 @@ struct DescriptionAndTagEditorView: View {
               sheetPosition = .hidden
             }
           Spacer()
-          Text("완료")
+          Text(CommonWords().confirm)
             .fontSystem(fontDesignSystem: .subtitle2_KO)
             .foregroundStyle(Color.Info)
             .contentShape(Rectangle())

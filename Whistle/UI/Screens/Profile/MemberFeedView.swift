@@ -264,7 +264,7 @@ struct MemberFeedView: View {
         userId: apiViewModel.memberFeed[currentIndex].userId ?? 0)
     }
     .confirmationDialog("", isPresented: $showDialog) {
-      Button("관심없음", role: .none) {
+      Button(CommonWords().hide, role: .none) {
         showHideContentToast = true
         toastViewModel.cancelToastInit(message: "해당 콘텐츠를 숨겼습니다") {
           Task {
@@ -276,10 +276,10 @@ struct MemberFeedView: View {
           }
         }
       }
-      Button("신고", role: .destructive) {
+      Button(CommonWords().report, role: .destructive) {
         showReport = true
       }
-      Button("닫기", role: .cancel) { }
+      Button(CommonWords().close, role: .cancel) { }
     }
     .onDisappear {
       if players.count <= currentIndex {
@@ -361,7 +361,7 @@ extension MemberFeedView {
                   apiViewModel.postFeedPlayerChanged()
                 }
               } label: {
-                Text(apiViewModel.memberProfile.isFollowed ? "팔로잉" : "팔로우")
+                Text(apiViewModel.memberProfile.isFollowed ? CommonWords().following : CommonWords().follow)
                   .fontSystem(fontDesignSystem: .caption_SemiBold)
                   .foregroundColor(.Gray10)
                   .background {
@@ -426,7 +426,7 @@ extension MemberFeedView {
                 Image(systemName: currentVideoIsBookmarked ? "bookmark.fill" : "bookmark")
                   .font(.system(size: 26))
                   .frame(width: 36, height: 36)
-                Text("저장")
+                Text(CommonWords().save)
                   .fontSystem(fontDesignSystem: .caption_KO_Semibold)
               }
               .frame(height: UIScreen.getHeight(56))
@@ -444,7 +444,7 @@ extension MemberFeedView {
                 Image(systemName: "square.and.arrow.up")
                   .font(.system(size: 26))
                   .frame(width: 36, height: 36)
-                Text("공유")
+                Text(CommonWords().share)
                   .fontSystem(fontDesignSystem: .caption_KO_Semibold)
               }
               .frame(height: UIScreen.getHeight(56))
@@ -456,7 +456,7 @@ extension MemberFeedView {
                 Image(systemName: "ellipsis")
                   .font(.system(size: 26))
                   .frame(width: 36, height: 36)
-                Text("더보기")
+                Text(CommonWords().more)
                   .fontSystem(fontDesignSystem: .caption_KO_Semibold)
               }
               .frame(height: UIScreen.getHeight(56))

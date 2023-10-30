@@ -24,6 +24,7 @@ extension StringConfigKey {
   public static let done = StringConfigKey(rawValue: "DONE")
   public static let edit = StringConfigKey(rawValue: "EDIT")
   public static let alert = StringConfigKey(rawValue: "ALERT")
+  // FIXME: - cancel localizing
   public static let cancel = StringConfigKey(rawValue: "취소")
   public static let preview = StringConfigKey(rawValue: "PREVIEW")
   public static let photos = StringConfigKey(rawValue: "PHOTOS")

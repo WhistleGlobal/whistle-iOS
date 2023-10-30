@@ -207,7 +207,7 @@ struct SEMyProfileView: View {
             forPasteboardType: UTType.plainText.identifier)
           toastViewModel.toastInit(message: "클립보드에 복사되었습니다")
         } label: {
-          bottomSheetRowWithIcon(systemName: "link", text: "프로필 URL 복사")
+          bottomSheetRowWithIcon(systemName: "link", text: CommonWords().copyProfileURL)
         }
         NavigationLink {
           GuideStatusView()
@@ -215,7 +215,7 @@ struct SEMyProfileView: View {
         } label: {
           bottomSheetRowWithIcon(
             systemName: "exclamationmark.triangle.fill",
-            text: "신고")
+            text: CommonWords().report)
         }
         Group {
           Divider().background(Color("Gray10"))
@@ -307,7 +307,7 @@ extension SEMyProfileView {
         ProfileEditView()
 
       } label: {
-        Text("프로필 편집")
+        Text(ProfileEditWords().edit)
           .fontSystem(fontDesignSystem: .subtitle2_KO)
           .foregroundColor(Color.LabelColor_Primary_Dark)
           .scaleEffect(profileEditButtonScale)
@@ -439,7 +439,7 @@ extension SEMyProfileView {
   @ViewBuilder
   func bottomSheetRowWithIcon(
     systemName: String,
-    text: String)
+    text: LocalizedStringKey)
     -> some View
   {
     HStack(spacing: 12) {

@@ -324,7 +324,7 @@ extension MyFeedView {
               Image(systemName: "square.and.arrow.up")
                 .font(.system(size: 26))
                 .frame(width: 36, height: 36)
-              Text("공유")
+              Text(CommonWords().share)
                 .fontSystem(fontDesignSystem: .caption_KO_Semibold)
             }
             .frame(height: UIScreen.getHeight(56))
@@ -336,7 +336,7 @@ extension MyFeedView {
               Image(systemName: "ellipsis")
                 .font(.system(size: 26))
                 .frame(width: 36, height: 36)
-              Text("더보기")
+              Text(CommonWords().more)
                 .fontSystem(fontDesignSystem: .caption_KO_Semibold)
             }
             .frame(height: UIScreen.getHeight(56))

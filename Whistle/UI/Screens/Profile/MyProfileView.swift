@@ -211,7 +211,7 @@ struct MyProfileView: View {
             forPasteboardType: UTType.plainText.identifier)
           toastViewModel.toastInit(message: "클립보드에 복사되었습니다")
         } label: {
-          bottomSheetRowWithIcon(systemName: "link", text: "프로필 URL 복사")
+          bottomSheetRowWithIcon(systemName: "link", text: CommonWords().copyProfileURL)
         }
         NavigationLink {
           GuideStatusView()
@@ -224,7 +224,7 @@ struct MyProfileView: View {
             withAnimation {
               bottomSheetPosition = .hidden
             }
-            alertViewModel.linearAlert(title: "정말 로그아웃하시겠어요?", cancelText: "취소", destructiveText: "로그아웃") {
+            alertViewModel.linearAlert(title: "정말 로그아웃하시겠어요?", cancelText: CommonWords().cancel, destructiveText: "로그아웃") {
               apiViewModel.reset()
               GIDSignIn.sharedInstance.signOut()
               userAuth.appleSignout()
@@ -240,7 +240,7 @@ struct MyProfileView: View {
             alertViewModel.linearAlert(
               title: "정말 삭제하시겠어요?",
               content: "삭제하시면 회원님의 모든 정보와 활동 기록이 삭제됩니다. 삭제된 정보는 복구할 수 없으니 신중하게 결정해주세요.",
-              cancelText: "취소",
+              cancelText: CommonWords().cancel,
               destructiveText: "삭제")
             {
               Task {
@@ -307,7 +307,7 @@ extension MyProfileView {
       NavigationLink {
         ProfileEditView()
       } label: {
-        Text("프로필 편집")
+        Text(ProfileEditWords().edit)
           .fontSystem(fontDesignSystem: .subtitle2_KO)
           .foregroundColor(Color.LabelColor_Primary_Dark)
           .scaleEffect(profileEditButtonScale)
@@ -322,7 +322,7 @@ extension MyProfileView {
             .foregroundColor(Color.LabelColor_Primary_Dark)
             .fontSystem(fontDesignSystem: .title2_Expanded)
             .scaleEffect(whistleFollowerTextScale)
-          Text("휘슬")
+          Text(CommonWords().whistle)
             .foregroundColor(Color.LabelColor_Secondary_Dark)
             .fontSystem(fontDesignSystem: .caption_SemiBold)
             .scaleEffect(whistleFollowerTextScale)
@@ -337,7 +337,7 @@ extension MyProfileView {
               .foregroundColor(Color.LabelColor_Primary_Dark)
               .fontSystem(fontDesignSystem: .title2_Expanded)
               .scaleEffect(whistleFollowerTextScale)
-            Text("팔로워")
+            Text(CommonWords().follower)
               .foregroundColor(Color.LabelColor_Secondary_Dark)
               .fontSystem(fontDesignSystem: .caption_SemiBold)
               .scaleEffect(whistleFollowerTextScale)
@@ -447,7 +447,7 @@ extension MyProfileView {
   @ViewBuilder
   func bottomSheetRowWithIcon(
     systemName: String,
-    text: String)
+    text: LocalizedStringKey)
     -> some View
   {
     HStack(spacing: 12) {

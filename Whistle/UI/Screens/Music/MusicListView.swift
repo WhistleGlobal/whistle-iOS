@@ -376,7 +376,7 @@ struct SearchBar: View {
             }
           }
         if isSearching {
-          Text("취소")
+          Text(CommonWords().cancel)
             .foregroundStyle(Color.LabelColor_Primary_Dark)
             .fontSystem(fontDesignSystem: .body1_KO)
             .padding(.horizontal, 16)

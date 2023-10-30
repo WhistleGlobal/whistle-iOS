@@ -51,7 +51,7 @@ struct MainFeedReportReasonSelectionView: View {
       .padding(.horizontal, 16)
       .background(Color.reactiveBackground)
       .navigationBarBackButtonHidden()
-      .navigationTitle("신고")
+      .navigationTitle(CommonWords().report)
       .navigationBarTitleDisplayMode(.inline)
       .navigationDestination(isPresented: $goComplete) {
         ReportCompleteView(goReport: $goReport)

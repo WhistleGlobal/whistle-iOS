@@ -151,7 +151,7 @@ struct MemberProfileView: View {
             alertViewModel.linearAlert(
               title: "\(apiViewModel.memberProfile.userName) 님을 차단하시겠어요?",
               content: "차단된 사람은 회원님의 프로필 또는 콘텐츠를 찾을 수 없게 되며, 상대방에게 차단되었다는 알림이 전송되지 않습니다.",
-              cancelText: "취소",
+              cancelText: CommonWords().cancel,
               destructiveText: "차단")
             {
               toastViewModel.toastInit(message: "\(apiViewModel.memberProfile.userName)님이 차단되었습니다.")
@@ -170,17 +170,17 @@ struct MemberProfileView: View {
             }
           }
         }
-        Button("신고", role: .destructive) {
+        Button(CommonWords().report, role: .destructive) {
           goReport = true
         }
       }
-      Button("프로필 URL 복사", role: .none) {
+      Button(CommonWords().copyProfileURL, role: .none) {
         UIPasteboard.general.setValue(
           "https://readywhistle.com/profile_uni?id=\(userId)",
           forPasteboardType: UTType.plainText.identifier)
         toastViewModel.toastInit(message: "클립보드에 복사되었습니다")
       }
-      Button("취소", role: .cancel) { }
+      Button(CommonWords().cancel, role: .cancel) { }
     }
     .fullScreenCover(isPresented: $goReport) {
       ProfileReportTypeSelectionView(goReport: $goReport, userId: userId)
@@ -231,7 +231,7 @@ extension MemberProfileView {
           alertViewModel.linearAlert(
             title: "\(apiViewModel.memberProfile.userName) 님을 차단 해제하시겠어요?",
             content: "이제 상대방이 회원님의 게시물을 보거나 팔로우할 수 있습니다. 상대방에게 회원님이 차단을 해제했다는 정보를 알리지 않습니다.",
-            cancelText: "취소",
+            cancelText: CommonWords().cancel,
             destructiveText: "차단해제")
           {
             toastViewModel.toastInit(message: "\(apiViewModel.memberProfile.userName)님이 차단 해제되었습니다.")
@@ -290,7 +290,7 @@ extension MemberProfileView {
               .fontSystem(fontDesignSystem: .title2_Expanded)
               .scaleEffect(whistleFollowerTextScale)
           }
-          Text("휘슬")
+          Text(CommonWords().whistle)
             .foregroundColor(Color.LabelColor_Secondary_Dark)
             .fontSystem(fontDesignSystem: .caption_SemiBold)
             .scaleEffect(whistleFollowerTextScale)
@@ -314,7 +314,7 @@ extension MemberProfileView {
                 .fontSystem(fontDesignSystem: .title2_Expanded)
                 .scaleEffect(whistleFollowerTextScale)
             }
-            Text("팔로워")
+            Text(CommonWords().follower)
               .foregroundColor(Color.LabelColor_Secondary_Dark)
               .fontSystem(fontDesignSystem: .caption_SemiBold)
               .scaleEffect(whistleFollowerTextScale)

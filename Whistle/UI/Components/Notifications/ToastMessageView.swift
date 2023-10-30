@@ -48,6 +48,7 @@ struct ToastMessageView: View {
       .padding(.horizontal, 16)
       .padding(.bottom, toastViewModel.padding)
 //      .transition(.move(edge: .bottom))
+//      .animation(.easeIn.speed(1.0))
       .animation(.easeIn, value: toastViewModel.showToast)
       .onReceive(toastViewModel.$message, perform: { _ in
         if toastViewModel.showToast {

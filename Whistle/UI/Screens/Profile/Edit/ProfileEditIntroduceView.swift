@@ -39,7 +39,7 @@ struct ProfileEditIntroduceView: View {
     }
     .padding(.horizontal, 16)
     .navigationBarBackButtonHidden()
-    .navigationTitle("소개")
+    .navigationTitle(ProfileEditWords().intro)
     .navigationBarTitleDisplayMode(.inline)
     .toolbar {
       ToolbarItem(placement: .cancellationAction) {
@@ -62,7 +62,7 @@ struct ProfileEditIntroduceView: View {
             toastViewModel.toastInit(message: "소개가 수정되었습니다.", padding: 32)
           }
         } label: {
-          Text("완료")
+          Text(CommonWords().confirm)
             .foregroundColor(.Info)
             .fontSystem(fontDesignSystem: .subtitle2_KO)
         }
