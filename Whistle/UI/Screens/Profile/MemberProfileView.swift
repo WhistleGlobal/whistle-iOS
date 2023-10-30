@@ -14,9 +14,9 @@ import UniformTypeIdentifiers
 
 struct MemberProfileView: View {
   @Environment(\.dismiss) var dismiss
-  @StateObject var apiViewModel = APIViewModel.shared
+  @StateObject private var apiViewModel = APIViewModel.shared
   @StateObject private var toastViewModel = ToastViewModel.shared
-  @StateObject var alertViewModel = AlertViewModel.shared
+  @StateObject private var alertViewModel = AlertViewModel.shared
 
   @State var isFollow = false
   @State var isProfileLoaded = false
@@ -24,9 +24,6 @@ struct MemberProfileView: View {
 
   @State var showDialog = false
   @State var offsetY: CGFloat = 0
-
-  @Binding var players: [AVPlayer?]
-  @Binding var currentIndex: Int
   let userId: Int
   let processor = BlurImageProcessor(blurRadius: 10)
 
@@ -196,11 +193,6 @@ struct MemberProfileView: View {
     .task {
       await apiViewModel.requestMemberPostFeed(userID: userId)
     }
-    .onAppear {
-      if !players.isEmpty {
-        players[currentIndex]?.pause()
-      }
-    }
   }
 }
 
@@ -333,9 +325,6 @@ extension MemberProfileView {
       VStack(spacing: 0) {
         HStack {
           Button {
-            if !players.isEmpty {
-              players[currentIndex]?.play()
-            }
             dismiss()
           } label: {
             Image(systemName: "chevron.left")

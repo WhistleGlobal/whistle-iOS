@@ -24,6 +24,7 @@ struct MyFeedView: View {
   @State var showPlayButton = false
   @State var timer: Timer? = nil
   @State var players: [AVPlayer?] = []
+  @State var isRootStacked = false
 
   var body: some View {
     GeometryReader { proxy in
@@ -99,7 +100,6 @@ struct MyFeedView: View {
                     showDialog = true
                   }
                   .overlay {
-                    // TODO: - contentId 백엔드 수정 필요, contentId & whistleCount
                     LinearGradient(
                       colors: [.clear, .black.opacity(0.24)],
                       startPoint: .center,
@@ -107,22 +107,17 @@ struct MyFeedView: View {
                       .frame(maxWidth: .infinity, maxHeight: .infinity)
                       .allowsHitTesting(false)
                     if tabbarModel.tabWidth != 56 {
-                      userInfo(
-                        contentId: content.contentId ?? 0,
-                        caption: content.caption ?? "",
-                        musicTitle: content.musicTitle ?? "원본 오디오",
-                        isWhistled:
-                        Binding(get: {
-                          content.isWhistled
-                        }, set: { newValue in
-                          content.isWhistled = newValue
-                        }),
-                        whistleCount:
-                        Binding(get: {
-                          content.contentWhistleCount ?? 0
-                        }, set: { newValue in
-                          content.contentWhistleCount = newValue
-                        }))
+                      MyContentLayer(
+                        currentVideoInfo: content,
+                        isRootStacked: $isRootStacked,
+                        showDialog: $showDialog,
+                        whistleAction: {
+                          whistleToggle()
+                        },
+                        stopCurrentPlayer: {
+                          players[currentIndex]?.pause()
+                          players.removeAll()
+                        })
                     }
                     playButton(toPlay: player.rate == 0)
                       .opacity(showPlayButton ? 1 : 0)
@@ -153,10 +148,10 @@ struct MyFeedView: View {
               }
             }
           }
-          .onReceive(apiViewModel.publisher) { id in
-            newID = id
-          }
-          .id(newID)
+//          .onReceive(apiViewModel.publisher) { id in
+//            newID = id
+//          }
+//          .id(newID)
         }
         .rotationEffect(Angle(degrees: 90))
         .frame(width: proxy.size.height)
@@ -167,6 +162,18 @@ struct MyFeedView: View {
     .ignoresSafeArea(.all, edges: .top)
     .navigationBarBackButtonHidden()
     .background(.black)
+    .navigationDestination(isPresented: $isRootStacked) {
+      if UIDevice.current.userInterfaceIdiom == .phone {
+        switch UIScreen.main.nativeBounds.height {
+        case 1334: // iPhone SE 3rd generation
+          SEMemberProfileView(
+            userId: apiViewModel.myFeed[currentIndex].userId ?? 0)
+        default:
+          MemberProfileView(
+            userId: apiViewModel.myFeed[currentIndex].userId ?? 0)
+        }
+      }
+    }
     .onAppear {
       for _ in 0 ..< apiViewModel.myFeed.count {
         players.append(nil)
@@ -366,6 +373,124 @@ extension MyFeedView {
       apiViewModel.myFeed[currentIndex].contentWhistleCount! += 1
     }
     apiViewModel.myFeed[currentIndex].isWhistled.toggle()
-    apiViewModel.postFeedPlayerChanged()
+  }
+}
+
+// MARK: - MyContentLayer
+
+struct MyContentLayer: View {
+  @Environment(\.dismiss) var dismiss
+  @StateObject var currentVideoInfo = MyContent()
+  @StateObject var apiViewModel = APIViewModel.shared
+  @StateObject var toastViewModel = ToastViewModel.shared
+  @Binding var isRootStacked: Bool
+  @Binding var showDialog: Bool
+  var whistleAction: () -> Void
+  var stopCurrentPlayer: () -> Void
+
+  var body: some View {
+    VStack(spacing: 0) {
+      HStack(spacing: 0) {
+        Button {
+          stopCurrentPlayer()
+          dismiss()
+        } label: {
+          Image(systemName: "chevron.backward")
+            .font(.system(size: 20))
+            .foregroundColor(.white)
+            .padding(.vertical, 16)
+            .padding(.trailing, 16)
+        }
+        Spacer()
+      }
+      .padding(.top, 38)
+      Spacer()
+      HStack(spacing: 0) {
+        VStack(alignment: .leading, spacing: 12) {
+          Spacer()
+          HStack(spacing: 0) {
+            if currentVideoInfo.userName ?? "" != apiViewModel.myProfile.userName {
+              Button {
+                isRootStacked = true
+              } label: {
+                Group {
+                  profileImageView(url: currentVideoInfo.profileImg, size: 36)
+                    .padding(.trailing, UIScreen.getWidth(8))
+                  Text(currentVideoInfo.userName ?? "")
+                    .foregroundColor(.white)
+                    .fontSystem(fontDesignSystem: .subtitle1)
+                    .padding(.trailing, 16)
+                }
+              }
+            } else {
+              Group {
+                profileImageView(url: currentVideoInfo.profileImg, size: 36)
+                  .padding(.trailing, 12)
+                Text(currentVideoInfo.userName ?? "")
+                  .foregroundColor(.white)
+                  .fontSystem(fontDesignSystem: .subtitle1)
+                  .padding(.trailing, 16)
+              }
+            }
+          }
+          if (currentVideoInfo.caption?.isEmpty) != nil {
+            HStack(spacing: 0) {
+              Text(currentVideoInfo.caption ?? "")
+                .fontSystem(fontDesignSystem: .body2_KO)
+                .foregroundColor(.white)
+            }
+          }
+          Label(currentVideoInfo.musicTitle ?? "원본 오디오", systemImage: "music.note")
+            .fontSystem(fontDesignSystem: .body2_KO)
+            .foregroundColor(.white)
+            .padding(.top, 4)
+        }
+        .padding(.bottom, 4)
+        .padding(.leading, 4)
+        Spacer()
+        VStack(spacing: 28) {
+          Spacer()
+          Button {
+            whistleAction()
+          } label: {
+            VStack(spacing: 0) {
+              Image(systemName: currentVideoInfo.isWhistled ? "heart.fill" : "heart")
+                .font(.system(size: 30))
+                .contentShape(Rectangle())
+                .foregroundColor(.Gray10)
+                .frame(width: 36, height: 36)
+              Text("\(currentVideoInfo.contentWhistleCount ?? 0)")
+                .foregroundColor(.Gray10)
+                .fontSystem(fontDesignSystem: .subtitle3_KO)
+            }
+            .padding(.bottom, -4)
+          }
+          Button {
+            toastViewModel.toastInit(message: "클립보드에 복사되었어요")
+            UIPasteboard.general.setValue(
+              "https://readywhistle.com/content_uni?contentId=\(currentVideoInfo.contentId ?? 0)",
+              forPasteboardType: UTType.plainText.identifier)
+          } label: {
+            Image(systemName: "square.and.arrow.up")
+              .font(.system(size: 30))
+              .contentShape(Rectangle())
+              .foregroundColor(.Gray10)
+              .frame(width: 36, height: 36)
+          }
+          Button {
+            showDialog = true
+          } label: {
+            Image(systemName: "ellipsis")
+              .font(.system(size: 30))
+              .contentShape(Rectangle())
+              .foregroundColor(.Gray10)
+              .frame(width: 36, height: 36)
+          }
+        }
+      }
+    }
+    .padding(.bottom, UIScreen.getHeight(48))
+    .padding(.trailing, UIScreen.getWidth(12))
+    .padding(.leading, UIScreen.getWidth(16))
   }
 }

@@ -7,7 +7,7 @@
 
 import Foundation
 
-class MyContent: ObservableObject, Codable, Hashable {
+class MyContent: ObservableObject, Decodable, Hashable {
   enum CodingKeys: String, CodingKey {
     case contentId = "content_id"
     case userId = "user_id"
@@ -24,19 +24,21 @@ class MyContent: ObservableObject, Codable, Hashable {
     case isWhistled = "is_whistled"
   }
 
-  var contentId: Int?
-  var userId: Int?
-  var userName: String?
-  var profileImg: String?
-  var caption: String?
-  var videoUrl: String?
-  var thumbnailUrl: String?
-  var musicArtist: String?
-  var musicTitle: String?
-  var hashtags: [String]?
-  var contentWhistleCount: Int?
-  var contentViewCount: Int?
-  var isWhistled = false
+  @Published var contentId: Int?
+  @Published var userId: Int?
+  @Published var userName: String?
+  @Published var profileImg: String?
+  @Published var caption: String?
+  @Published var videoUrl: String?
+  @Published var thumbnailUrl: String?
+  @Published var musicArtist: String?
+  @Published var musicTitle: String?
+  @Published var hashtags: [String]?
+  @Published var contentWhistleCount: Int?
+  @Published var contentViewCount: Int?
+  @Published var isWhistled = false
+
+  init() { }
 
   required init(from decoder: Decoder) throws {
     let container = try decoder.container(keyedBy: CodingKeys.self)
@@ -63,3 +65,4 @@ class MyContent: ObservableObject, Codable, Hashable {
     hasher.combine(videoUrl)
   }
 }
+

@@ -23,9 +23,6 @@ struct SEMemberProfileView: View {
   @State var showDialog = false
   @State var offsetY: CGFloat = 0
 
-  @Binding var players: [AVPlayer?]
-  @Binding var currentIndex: Int
-
   let userId: Int
   let processor = BlurImageProcessor(blurRadius: 10)
 
@@ -180,11 +177,6 @@ struct SEMemberProfileView: View {
     .task {
       await apiViewModel.requestMemberPostFeed(userID: userId)
     }
-    .onAppear {
-      if !players.isEmpty {
-        players[currentIndex]?.pause()
-      }
-    }
   }
 }
 
@@ -297,9 +289,6 @@ extension SEMemberProfileView {
       VStack(spacing: 0) {
         HStack {
           Button {
-            if !players.isEmpty {
-              players[currentIndex]?.play()
-            }
             dismiss()
           } label: {
             Image(systemName: "chevron.left")
