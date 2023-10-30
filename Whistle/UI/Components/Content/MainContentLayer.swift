@@ -16,8 +16,8 @@ struct MainContentLayer: View {
   @StateObject var currentVideoInfo: MainContent = .init()
   @StateObject var apiViewModel = APIViewModel.shared
   @StateObject var toastViewModel = ToastViewModel.shared
-  @StateObject private var feedMoreModel = FeedMoreModel.shared
-  @StateObject var feedPlayersViewModel = FeedPlayersViewModel.shared
+  @StateObject private var feedMoreModel = MainFeedMoreModel.shared
+  @StateObject var feedPlayersViewModel = MainFeedPlayersViewModel.shared
   @Binding var showDialog: Bool
   var whistleAction: () -> Void
 

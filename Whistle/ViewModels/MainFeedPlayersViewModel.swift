@@ -7,9 +7,9 @@
 
 import AVFoundation
 
-class FeedPlayersViewModel: ObservableObject {
+class MainFeedPlayersViewModel: ObservableObject {
 
-  static let shared = FeedPlayersViewModel()
+  static let shared = MainFeedPlayersViewModel()
   private init() { }
 
   @Published var prevPlayer: AVPlayer?

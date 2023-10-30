@@ -365,12 +365,17 @@
 		78F493E12AEA558800A08FC1 /* MainFeedKitView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78F493E02AEA558800A08FC1 /* MainFeedKitView.swift */; };
 		78F493E32AEA559000A08FC1 /* MainFeedPageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78F493E22AEA559000A08FC1 /* MainFeedPageView.swift */; };
 		78F493E52AEA55A000A08FC1 /* MainContentPlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78F493E42AEA55A000A08FC1 /* MainContentPlayerView.swift */; };
-		78F493E72AEA7BB200A08FC1 /* FeedPlayersViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78F493E62AEA7BB200A08FC1 /* FeedPlayersViewModel.swift */; };
+		78F493E72AEA7BB200A08FC1 /* MainFeedPlayersViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78F493E62AEA7BB200A08FC1 /* MainFeedPlayersViewModel.swift */; };
 		78F780052AB34876005623CD /* GoogleSignIn in Frameworks */ = {isa = PBXBuildFile; productRef = 78F780042AB34876005623CD /* GoogleSignIn */; };
 		78F780072AB34876005623CD /* GoogleSignInSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 78F780062AB34876005623CD /* GoogleSignInSwift */; };
 		78F980812A9F32C800AD542A /* RootTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78F980802A9F32C800AD542A /* RootTabView.swift */; };
 		78F980892A9F5B2500AD542A /* RoundedCorners.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78F980882A9F5B2500AD542A /* RoundedCorners.swift */; };
 		78FDA53A2AEF7319001C3DA4 /* MainContentLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78FDA5392AEF7319001C3DA4 /* MainContentLayer.swift */; };
+		78FDA53C2AEFC447001C3DA4 /* MyFeedKitView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78FDA53B2AEFC447001C3DA4 /* MyFeedKitView.swift */; };
+		78FDA5402AEFC519001C3DA4 /* MyFeedPageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78FDA53F2AEFC519001C3DA4 /* MyFeedPageView.swift */; };
+		78FDA5422AEFC65B001C3DA4 /* MyFeedPlayersViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78FDA5412AEFC65B001C3DA4 /* MyFeedPlayersViewModel.swift */; };
+		78FDA5442AEFC6E4001C3DA4 /* MyContentPlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78FDA5432AEFC6E4001C3DA4 /* MyContentPlayerView.swift */; };
+		78FDA5462AEFC967001C3DA4 /* MyContentLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78FDA5452AEFC967001C3DA4 /* MyContentLayer.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -757,10 +762,15 @@
 		78F493E02AEA558800A08FC1 /* MainFeedKitView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainFeedKitView.swift; sourceTree = "<group>"; };
 		78F493E22AEA559000A08FC1 /* MainFeedPageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainFeedPageView.swift; sourceTree = "<group>"; };
 		78F493E42AEA55A000A08FC1 /* MainContentPlayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainContentPlayerView.swift; sourceTree = "<group>"; };
-		78F493E62AEA7BB200A08FC1 /* FeedPlayersViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedPlayersViewModel.swift; sourceTree = "<group>"; };
+		78F493E62AEA7BB200A08FC1 /* MainFeedPlayersViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainFeedPlayersViewModel.swift; sourceTree = "<group>"; };
 		78F980802A9F32C800AD542A /* RootTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootTabView.swift; sourceTree = "<group>"; };
 		78F980882A9F5B2500AD542A /* RoundedCorners.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoundedCorners.swift; sourceTree = "<group>"; };
 		78FDA5392AEF7319001C3DA4 /* MainContentLayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainContentLayer.swift; sourceTree = "<group>"; };
+		78FDA53B2AEFC447001C3DA4 /* MyFeedKitView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyFeedKitView.swift; sourceTree = "<group>"; };
+		78FDA53F2AEFC519001C3DA4 /* MyFeedPageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyFeedPageView.swift; sourceTree = "<group>"; };
+		78FDA5412AEFC65B001C3DA4 /* MyFeedPlayersViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyFeedPlayersViewModel.swift; sourceTree = "<group>"; };
+		78FDA5432AEFC6E4001C3DA4 /* MyContentPlayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyContentPlayerView.swift; sourceTree = "<group>"; };
+		78FDA5452AEFC967001C3DA4 /* MyContentLayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyContentLayer.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1091,7 +1101,8 @@
 				1BE8E9FE2AAE2DFB00EB0A55 /* MusicServiceProtocol.swift */,
 				1B0A29A72AA64AA2009077A1 /* MusicViewModel.swift */,
 				1BEB20152AE12866008A7253 /* UploadProgressViewModel.swift */,
-				78F493E62AEA7BB200A08FC1 /* FeedPlayersViewModel.swift */,
+				78F493E62AEA7BB200A08FC1 /* MainFeedPlayersViewModel.swift */,
+				78FDA5412AEFC65B001C3DA4 /* MyFeedPlayersViewModel.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -1987,19 +1998,14 @@
 		78D148E12A9E132700DDCE48 /* Profile */ = {
 			isa = PBXGroup;
 			children = (
+				78FDA53E2AEFC4CC001C3DA4 /* MemberProfile */,
+				78FDA53D2AEFC4B3001C3DA4 /* MyProfile */,
 				1B8931482AE68F9000F8579B /* Policy */,
 				1B8931472AE68F3700F8579B /* Edit */,
-				78D148EA2A9E13CC00DDCE48 /* MyProfileView.swift */,
 				782DD4722AA30BDD006183D3 /* MyFollowListView.swift */,
-				7819532D2ABA261A0053B975 /* MyFeedView.swift */,
-				78EFDA8D2ACF95C10035FD83 /* BookmarkedFeedView.swift */,
-				786CFEAE2AAC4DCF00DB2ADD /* MemberProfileView.swift */,
-				789BCB422ABBF2E1002164C4 /* MemberFeedView.swift */,
 				788010862ABC7EF800116FD5 /* MemberFollowListView.swift */,
 				7874CB8F2AA0B5350081DE54 /* NotificationSettingView.swift */,
 				7874CB932AA0B5430081DE54 /* GuideStatusView.swift */,
-				78C6E33C2AD598200071BD6F /* SEMyProfileView.swift */,
-				78C6E33E2AD5A6D80071BD6F /* SEMemberProfileView.swift */,
 			);
 			path = Profile;
 			sourceTree = "<group>";
@@ -2022,8 +2028,33 @@
 			isa = PBXGroup;
 			children = (
 				78FDA5392AEF7319001C3DA4 /* MainContentLayer.swift */,
+				78FDA5452AEFC967001C3DA4 /* MyContentLayer.swift */,
 			);
 			path = Content;
+			sourceTree = "<group>";
+		};
+		78FDA53D2AEFC4B3001C3DA4 /* MyProfile */ = {
+			isa = PBXGroup;
+			children = (
+				78D148EA2A9E13CC00DDCE48 /* MyProfileView.swift */,
+				78C6E33C2AD598200071BD6F /* SEMyProfileView.swift */,
+				7819532D2ABA261A0053B975 /* MyFeedView.swift */,
+				78FDA53B2AEFC447001C3DA4 /* MyFeedKitView.swift */,
+				78EFDA8D2ACF95C10035FD83 /* BookmarkedFeedView.swift */,
+				78FDA53F2AEFC519001C3DA4 /* MyFeedPageView.swift */,
+				78FDA5432AEFC6E4001C3DA4 /* MyContentPlayerView.swift */,
+			);
+			path = MyProfile;
+			sourceTree = "<group>";
+		};
+		78FDA53E2AEFC4CC001C3DA4 /* MemberProfile */ = {
+			isa = PBXGroup;
+			children = (
+				786CFEAE2AAC4DCF00DB2ADD /* MemberProfileView.swift */,
+				789BCB422ABBF2E1002164C4 /* MemberFeedView.swift */,
+				78C6E33E2AD5A6D80071BD6F /* SEMemberProfileView.swift */,
+			);
+			path = MemberProfile;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -2259,6 +2290,7 @@
 				78DA58D52AA445E400F8D2F1 /* ProfileEditView.swift in Sources */,
 				78C6E33F2AD5A6D80071BD6F /* SEMemberProfileView.swift in Sources */,
 				78730CED2ACE86C9008B9981 /* PhotoAsset.swift in Sources */,
+				78FDA5422AEFC65B001C3DA4 /* MyFeedPlayersViewModel.swift in Sources */,
 				78E1755B2ABA802000731259 /* PrivacyPolicyView.swift in Sources */,
 				785E9E6A2AB9DCB1003A93E8 /* CancelableToastMessage.swift in Sources */,
 				787AF5712AA887E600C190E6 /* MyContent.swift in Sources */,
@@ -2273,6 +2305,7 @@
 				1B38954A2AB9CB7500B4C8DD /* CropperRatio.swift in Sources */,
 				785258572ACC6D680024E466 /* GuestProfileView.swift in Sources */,
 				782DD47C2AA32448006183D3 /* Extension+UINavigationController.swift in Sources */,
+				78FDA5442AEFC6E4001C3DA4 /* MyContentPlayerView.swift in Sources */,
 				1B0A29AE2AA662CB009077A1 /* HapticsManager.swift in Sources */,
 				78730CEB2ACE8691008B9981 /* PhotoAssetCollection.swift in Sources */,
 				1B3895452AB9CB7500B4C8DD /* VideoEditorView.swift in Sources */,
@@ -2299,6 +2332,7 @@
 				1B38956F2AB9CBFC00B4C8DD /* Extension+Int.swift in Sources */,
 				78B6FD2E2AA719190043E461 /* AlbumModel.swift in Sources */,
 				7847A3172AE1311200C4FF61 /* AlbumAccessView.swift in Sources */,
+				78FDA5462AEFC967001C3DA4 /* MyContentLayer.swift in Sources */,
 				78E175602ABA8DE100731259 /* TermsOfServiceView.swift in Sources */,
 				7874CB882AA0842D0081DE54 /* FontSystem.swift in Sources */,
 				786CFEB12AAC5D5100DB2ADD /* ProfileReportTypeSelectionView.swift in Sources */,
@@ -2315,6 +2349,7 @@
 				1B38954B2AB9CB7500B4C8DD /* CropView.swift in Sources */,
 				786669492AA1284F00448EC7 /* UserAuth.swift in Sources */,
 				7880108C2ABC837A00116FD5 /* MainFeedReportCommentView.swift in Sources */,
+				78FDA53C2AEFC447001C3DA4 /* MyFeedKitView.swift in Sources */,
 				1B0A29A62AA64A67009077A1 /* Extension+Array.swift in Sources */,
 				1BF6715A2AE8AA2500CDFADB /* ToastMessage.swift in Sources */,
 				1B0A29A82AA64AA2009077A1 /* MusicViewModel.swift in Sources */,
@@ -2339,7 +2374,7 @@
 				1B3955532A9507E300BCB4DF /* Extension+UIScreen.swift in Sources */,
 				787AF5672AA87D2E00C190E6 /* MemberProfile.swift in Sources */,
 				7861E68A2ACD092B00612E2F /* NavigationUtil.swift in Sources */,
-				78F493E72AEA7BB200A08FC1 /* FeedPlayersViewModel.swift in Sources */,
+				78F493E72AEA7BB200A08FC1 /* MainFeedPlayersViewModel.swift in Sources */,
 				78BECCD72AAAE169003FA7B5 /* ProfileProtocol.swift in Sources */,
 				1B3895762AB9CBFC00B4C8DD /* Extension+UIImage.swift in Sources */,
 				78EFDA8E2ACF95C10035FD83 /* BookmarkedFeedView.swift in Sources */,
@@ -2378,6 +2413,7 @@
 				7897C3762AE6B58600DE36A2 /* View+GoogleSignIn.swift in Sources */,
 				1B3895642AB9CBD300B4C8DD /* VideoQuality.swift in Sources */,
 				78730CEF2ACE86EA008B9981 /* CachedImageManager.swift in Sources */,
+				78FDA5402AEFC519001C3DA4 /* MyFeedPageView.swift in Sources */,
 				788F43F72AA6136F00718D38 /* ContentPlayer.swift in Sources */,
 				78DA58D72AA448A100F8D2F1 /* ProfileEditIDView.swift in Sources */,
 				788E68672AD6B6710056C18B /* VideoCaptureView.swift in Sources */,

@@ -1,38 +1,39 @@
 //
-//  MainFeedPageView.swift
+//  MyFeedPageView.swift
 //  Whistle
 //
-//  Created by ChoiYujin on 10/26/23.
+//  Created by ChoiYujin on 10/30/23.
 //
 
 import SwiftUI
 
-// MARK: - MainFeedPageView
+// MARK: - MyFeedPageView
 
-struct MainFeedPageView: UIViewRepresentable {
+struct MyFeedPageView: UIViewRepresentable {
 
-  @ObservedObject var refreshableModel = MainRefreshableModel()
+  @ObservedObject var refreshableModel = MyFeedRefreshableModel()
   @StateObject var apiViewModel = APIViewModel.shared
-  @StateObject var feedPlayersViewModel = MainFeedPlayersViewModel.shared
-  @State var currentContentInfo: MainContent?
+  @StateObject var feedPlayersViewModel = MyFeedPlayersViewModel.shared
+  @State var currentContentInfo: MyContent?
   @Binding var index: Int
+  let dismissAction: DismissAction
 
   func makeUIView(context: Context) -> UIScrollView {
     let view = UIScrollView()
     let childView = UIHostingController(
-      rootView: MainContentPlayerView(
+      rootView: MyContentPlayerView(
         currentContentInfo: $currentContentInfo,
         index: $index,
-        lifecycleDelegate: context.coordinator))
-
+        lifecycleDelegate: context.coordinator,
+        dismissAction: dismissAction))
     childView.view.frame = CGRect(
       x: 0,
       y: 0,
       width: UIScreen.main.bounds.width,
-      height: UIScreen.main.bounds.height * CGFloat(apiViewModel.mainFeed.count))
+      height: UIScreen.main.bounds.height * CGFloat(apiViewModel.myFeed.count))
     view.contentSize = CGSize(
       width: UIScreen.main.bounds.width,
-      height: UIScreen.main.bounds.height * CGFloat(apiViewModel.mainFeed.count))
+      height: UIScreen.main.bounds.height * CGFloat(apiViewModel.myFeed.count))
     view.addSubview(childView.view)
     view.showsVerticalScrollIndicator = false
     view.showsHorizontalScrollIndicator = false
@@ -42,7 +43,8 @@ struct MainFeedPageView: UIViewRepresentable {
     let refreshControl = UIRefreshControl()
     refreshControl.addTarget(context.coordinator, action: #selector(context.coordinator.refresh), for: .valueChanged)
     view.refreshControl = refreshControl
-
+    let yOffset = CGFloat(index) * UIScreen.height
+    view.contentOffset = CGPoint(x: 0, y: yOffset)
     return view
   }
 
@@ -54,49 +56,47 @@ struct MainFeedPageView: UIViewRepresentable {
     }
     uiView.contentSize = CGSize(
       width: UIScreen.width,
-      height: UIScreen.height * CGFloat(apiViewModel.mainFeed.count))
+      height: UIScreen.height * CGFloat(apiViewModel.myFeed.count))
 
     for i in 0..<uiView.subviews.count {
       uiView.subviews[i].frame = CGRect(
         x: 0,
         y: 0,
         width: UIScreen.width,
-        height: UIScreen.height * CGFloat(apiViewModel.mainFeed.count))
+        height: UIScreen.height * CGFloat(apiViewModel.myFeed.count))
     }
   }
 
   func makeCoordinator() -> Coordinator {
-    MainFeedPageView.Coordinator(parent: self, index: $index)
+    MyFeedPageView.Coordinator(parent: self, index: $index)
   }
 
   class Coordinator: NSObject, UIScrollViewDelegate, ViewLifecycleDelegate {
 
-    var parent: MainFeedPageView
+    var parent: MyFeedPageView
     @Binding var index: Int
 
-    init(parent: MainFeedPageView, index: Binding<Int>) {
+    init(parent: MyFeedPageView, index: Binding<Int>) {
       self.parent = parent
       _index = index
     }
 
     func onAppear() {
-      WhistleLogger.logger.debug("onAppear()")
-      if index == 0 {
-        parent.feedPlayersViewModel.initialPlayers()
-      }
+      parent.currentContentInfo = parent.apiViewModel.myFeed[index]
+      parent.feedPlayersViewModel.currentVideoIndex = index
+      parent.feedPlayersViewModel.initialPlayers(index: index)
       parent.feedPlayersViewModel.currentPlayer?.seek(to: .zero)
       parent.feedPlayersViewModel.currentPlayer?.play()
     }
 
     func onDisappear() {
-      WhistleLogger.logger.debug("onDisappear()")
       parent.feedPlayersViewModel.stopPlayer()
     }
 
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
       parent.feedPlayersViewModel.currentVideoIndex = Int(scrollView.contentOffset.y / UIScreen.main.bounds.height)
       if index < parent.feedPlayersViewModel.currentVideoIndex {
-        if index == parent.apiViewModel.mainFeed.count - 1 {
+        if index == parent.apiViewModel.myFeed.count - 1 {
           return
         }
         parent.feedPlayersViewModel.goPlayerNext()
@@ -106,7 +106,7 @@ struct MainFeedPageView: UIViewRepresentable {
         index = parent.feedPlayersViewModel.currentVideoIndex
       }
       index = parent.feedPlayersViewModel.currentVideoIndex
-      parent.currentContentInfo = parent.apiViewModel.mainFeed[index]
+      parent.currentContentInfo = parent.apiViewModel.myFeed[index]
     }
 
     func scrollViewDidScrollToTop(_ scrollView: UIScrollView) {
@@ -126,24 +126,24 @@ struct MainFeedPageView: UIViewRepresentable {
       parent.refreshableModel.isRefreshing = true
       parent.refreshableModel.refresh()
     }
-
   }
 }
 
-// MARK: - MainRefreshableModel
 
-class MainRefreshableModel: ObservableObject {
+// MARK: - MyFeedRefreshableModel
+
+class MyFeedRefreshableModel: ObservableObject {
   @Published var isRefreshing = false
   @Published var apiViewModel = APIViewModel.shared
   @Published var feedPlayersViewModel = MainFeedPlayersViewModel.shared
 
   func refresh() {
-    apiViewModel.requestMainFeed {
-      self.feedPlayersViewModel.stopPlayer()
-      self.feedPlayersViewModel.initialPlayers()
-      self.apiViewModel.postFeedPlayerChanged()
-      self.feedPlayersViewModel.currentPlayer?.play()
-      self.isRefreshing = false
-    }
+//        apiViewModel.requestMainFeed {
+//            self.feedPlayersViewModel.stopPlayer()
+//            self.feedPlayersViewModel.initialPlayers()
+//            self.apiViewModel.postFeedPlayerChanged()
+//            self.feedPlayersViewModel.currentPlayer?.play()
+//            self.isRefreshing = false
+//        }
   }
 }

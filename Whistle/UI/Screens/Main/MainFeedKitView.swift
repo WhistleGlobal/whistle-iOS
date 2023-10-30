@@ -14,9 +14,9 @@ struct MainFeedKitView: View {
 
   @EnvironmentObject var universalRoutingModel: UniversalRoutingModel
   @StateObject private var apiViewModel = APIViewModel.shared
-  @StateObject private var feedPlayersViewModel = FeedPlayersViewModel.shared
+  @StateObject private var feedPlayersViewModel = MainFeedPlayersViewModel.shared
   @StateObject private var toastViewModel = ToastViewModel.shared
-  @StateObject private var feedMoreModel = FeedMoreModel.shared
+  @StateObject private var feedMoreModel = MainFeedMoreModel.shared
   @State var index = 0
 
   var body: some View {
@@ -108,10 +108,10 @@ struct MainFeedKitView: View {
   }
 }
 
-// MARK: - FeedMoreModel
+// MARK: - MainFeedMoreModel
 
-class FeedMoreModel: ObservableObject {
-  static let shared = FeedMoreModel()
+class MainFeedMoreModel: ObservableObject {
+  static let shared = MainFeedMoreModel()
   private init() { }
   @Published var showDialog = false
   @Published var showReport = false
