@@ -22,6 +22,7 @@ class MyContent: ObservableObject, Decodable, Hashable {
     case contentWhistleCount = "content_whistle_count"
     case contentViewCount = "content_view_count"
     case isWhistled = "is_whistled"
+    case isBookmarked = "is_bookmarked"
   }
 
   @Published var contentId: Int?
@@ -37,6 +38,8 @@ class MyContent: ObservableObject, Decodable, Hashable {
   @Published var contentWhistleCount: Int?
   @Published var contentViewCount: Int?
   @Published var isWhistled = false
+//  // FIXME: - API 수정 후 적용
+//  @Published var isBookmarked = false
 
   init() { }
 
@@ -54,7 +57,9 @@ class MyContent: ObservableObject, Decodable, Hashable {
     hashtags = try container.decode([String]?.self, forKey: .hashtags)
     contentWhistleCount = try container.decode(Int?.self, forKey: .contentWhistleCount)
     contentViewCount = try container.decode(Int?.self, forKey: .contentViewCount)
-    isWhistled = try container.decode(Int.self, forKey: .isWhistled) == 1 ? true : false
+    isWhistled = try container.decode(Int.self, forKey: .isWhistled) == 1
+    //  // FIXME: - API 수정 후 적용
+//    isBookmarked = try container.decode(Int?.self, forKey: .isBookmarked) == 1
   }
 
   static func == (lhs: MyContent, rhs: MyContent) -> Bool {
