@@ -30,24 +30,6 @@ struct MainFeedKitView: View {
     .edgesIgnoringSafeArea(.all)
     .confirmationDialog("", isPresented: $feedMoreModel.showDialog) {
       if !apiViewModel.mainFeed.isEmpty {
-        Button(
-          apiViewModel.mainFeed[feedPlayersViewModel.currentVideoIndex].isBookmarked ? "저장 취소" : "저장하기",
-          role: .none)
-        {
-          Task {
-            let currentContent = apiViewModel.mainFeed[feedPlayersViewModel.currentVideoIndex]
-            if currentContent.isBookmarked {
-              let tempBool = await apiViewModel.bookmarkAction(contentID: currentContent.contentId ?? 0, method: .delete)
-              toastViewModel.toastInit(message: "저장 취소했습니다.")
-              currentContent.isBookmarked = false
-            } else {
-              let tempBool = await apiViewModel.bookmarkAction(contentID: currentContent.contentId ?? 0, method: .post)
-              toastViewModel.toastInit(message: "저장했습니다.")
-              currentContent.isBookmarked = true
-            }
-            apiViewModel.postFeedPlayerChanged()
-          }
-        }
         Button("관심없음", role: .none) {
           toastViewModel.cancelToastInit(message: "해당 콘텐츠를 숨겼습니다") {
             Task {

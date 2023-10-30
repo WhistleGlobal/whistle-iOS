@@ -132,6 +132,7 @@
 //                  playButton(toPlay: player.rate == 0)
 //                    .opacity(showPlayButton ? 1 : 0)
 //                    .allowsHitTesting(false)
+// MARK: - mark
 //                  if BlockList.shared.userIds.contains(content.userId ?? 0) {
 //                    KFImage.url(URL(string: content.thumbnailUrl ?? ""))
 //                      .placeholder {
@@ -161,6 +162,7 @@
 //                        }
 //                      }
 //                  }
+// MARK: - mark
 //                }
 //                .padding()
 //                .rotationEffect(Angle(degrees: -90))
@@ -204,6 +206,7 @@
 //          newId = id
 //        }
 //        .id(newId)
+
 //        .onReceive(UploadProgressViewModel.shared.isUploadingSubject) { value in
 //          switch value {
 //          case true:
@@ -222,6 +225,7 @@
 //        .onReceive(UploadProgressViewModel.shared.progressSubject) { value in
 //          uploadProgress = value
 //        }
+
 //      }
 //      .rotationEffect(Angle(degrees: 90))
 //      .frame(width: proxy.size.height)
@@ -293,6 +297,7 @@
 //          }
 //        }
 //      }
+
 //      .overlay(alignment: .topLeading) {
 //        if isUploading {
 //          uploadingThumbnail
@@ -321,6 +326,7 @@
 //            }
 //        }
 //      }
+
 //    }
 //    .ignoresSafeArea(.all, edges: .top)
 //    .navigationBarBackButtonHidden()
