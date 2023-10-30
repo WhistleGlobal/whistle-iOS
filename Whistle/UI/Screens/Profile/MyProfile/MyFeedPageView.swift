@@ -11,7 +11,6 @@ import SwiftUI
 
 struct MyFeedPageView: UIViewRepresentable {
 
-  @ObservedObject var refreshableModel = MyFeedRefreshableModel()
   @StateObject var apiViewModel = APIViewModel.shared
   @StateObject var feedPlayersViewModel = MyFeedPlayersViewModel.shared
   @State var currentContentInfo: MyContent?
@@ -40,20 +39,12 @@ struct MyFeedPageView: UIViewRepresentable {
     view.contentInsetAdjustmentBehavior = .never
     view.isPagingEnabled = true
     view.delegate = context.coordinator
-    let refreshControl = UIRefreshControl()
-    refreshControl.addTarget(context.coordinator, action: #selector(context.coordinator.refresh), for: .valueChanged)
-    view.refreshControl = refreshControl
     let yOffset = CGFloat(index) * UIScreen.height
     view.contentOffset = CGPoint(x: 0, y: yOffset)
     return view
   }
 
-  func updateUIView(_ uiView: UIScrollView, context: Context) {
-    if context.coordinator.parent.refreshableModel.isRefreshing {
-      uiView.refreshControl?.beginRefreshing()
-    } else {
-      uiView.refreshControl?.endRefreshing()
-    }
+  func updateUIView(_ uiView: UIScrollView, context _: Context) {
     uiView.contentSize = CGSize(
       width: UIScreen.width,
       height: UIScreen.height * CGFloat(apiViewModel.myFeed.count))
@@ -119,31 +110,5 @@ struct MyFeedPageView: UIViewRepresentable {
         parent.feedPlayersViewModel.currentPlayer?.play()
       }
     }
-
-    @objc
-    func refresh() {
-      parent.feedPlayersViewModel.stopPlayer()
-      parent.refreshableModel.isRefreshing = true
-      parent.refreshableModel.refresh()
-    }
-  }
-}
-
-
-// MARK: - MyFeedRefreshableModel
-
-class MyFeedRefreshableModel: ObservableObject {
-  @Published var isRefreshing = false
-  @Published var apiViewModel = APIViewModel.shared
-  @Published var feedPlayersViewModel = MainFeedPlayersViewModel.shared
-
-  func refresh() {
-//        apiViewModel.requestMainFeed {
-//            self.feedPlayersViewModel.stopPlayer()
-//            self.feedPlayersViewModel.initialPlayers()
-//            self.apiViewModel.postFeedPlayerChanged()
-//            self.feedPlayersViewModel.currentPlayer?.play()
-//            self.isRefreshing = false
-//        }
   }
 }

@@ -141,7 +141,7 @@ class MainRefreshableModel: ObservableObject {
     apiViewModel.requestMainFeed {
       self.feedPlayersViewModel.stopPlayer()
       self.feedPlayersViewModel.initialPlayers()
-      self.apiViewModel.postFeedPlayerChanged()
+      self.apiViewModel.publisherSend()
       self.feedPlayersViewModel.currentPlayer?.play()
       self.isRefreshing = false
     }

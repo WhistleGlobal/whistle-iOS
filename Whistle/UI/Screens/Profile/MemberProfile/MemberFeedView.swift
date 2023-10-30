@@ -234,7 +234,7 @@ struct MemberFeedView: View {
       if !apiViewModel.memberFeed[currentIndex].isHated {
         players[currentIndex]?.play()
       }
-      apiViewModel.postFeedPlayerChanged()
+      apiViewModel.publisherSend()
     }
     .onChange(of: currentIndex) { newValue in
       if apiViewModel.memberFeed.isEmpty {
@@ -255,7 +255,7 @@ struct MemberFeedView: View {
         players[currentIndex]?.play()
       }
       playerIndex = newValue
-      apiViewModel.postFeedPlayerChanged()
+      apiViewModel.publisherSend()
     }
     .fullScreenCover(isPresented: $showReport) {
       MainFeedReportReasonSelectionView(
@@ -271,7 +271,7 @@ struct MemberFeedView: View {
             guard let contentId = apiViewModel.memberFeed[currentIndex].contentId else { return }
             apiViewModel.memberFeed[currentIndex].isHated = true
             players[currentIndex]?.pause()
-            apiViewModel.postFeedPlayerChanged()
+            apiViewModel.publisherSend()
             await apiViewModel.actionContentHate(contentID: contentId)
           }
         }
@@ -358,7 +358,7 @@ extension MemberFeedView {
                     }
                     return mutableItem
                   }
-                  apiViewModel.postFeedPlayerChanged()
+                  apiViewModel.publisherSend()
                 }
               } label: {
                 Text(apiViewModel.memberProfile.isFollowed ? "팔로잉" : "팔로우")
@@ -419,7 +419,7 @@ extension MemberFeedView {
                   apiViewModel.memberFeed[currentIndex].isBookmarked = true
                   currentVideoIsBookmarked = true
                 }
-                apiViewModel.postFeedPlayerChanged()
+                apiViewModel.publisherSend()
               }
             } label: {
               VStack(spacing: 2) {
@@ -500,6 +500,6 @@ extension MemberFeedView {
     } else {
       apiViewModel.memberFeed[currentIndex].isWhistled = false
     }
-    apiViewModel.postFeedPlayerChanged()
+    apiViewModel.publisherSend()
   }
 }

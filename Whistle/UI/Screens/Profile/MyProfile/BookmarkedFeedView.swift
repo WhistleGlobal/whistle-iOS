@@ -184,7 +184,7 @@ struct BookmarkedFeedView: View {
       players[newValue]?.seek(to: .zero)
       players[newValue]?.play()
       playerIndex = newValue
-      apiViewModel.postFeedPlayerChanged()
+      apiViewModel.publisherSend()
     }
     .confirmationDialog("", isPresented: $showDialog) {
       Button("저장 취소", role: .destructive) {
@@ -200,7 +200,7 @@ struct BookmarkedFeedView: View {
               await players[currentIndex]?.seek(to: .zero)
               players[currentIndex]?.play()
             }
-            apiViewModel.postFeedPlayerChanged()
+            apiViewModel.publisherSend()
             _ = await apiViewModel.bookmarkAction(contentID: contentId, method: .delete)
           } else {
             let contentId = apiViewModel.bookmark[currentIndex].contentId
@@ -208,7 +208,7 @@ struct BookmarkedFeedView: View {
             players.last??.pause()
             players.removeLast()
             currentIndex -= 1
-            apiViewModel.postFeedPlayerChanged()
+            apiViewModel.publisherSend()
             _ = await apiViewModel.bookmarkAction(contentID: contentId, method: .delete)
           }
         }
@@ -287,7 +287,7 @@ extension BookmarkedFeedView {
                 whistleCount.wrappedValue += 1
               }
               isWhistled.wrappedValue.toggle()
-              apiViewModel.postFeedPlayerChanged()
+              apiViewModel.publisherSend()
             }
           } label: {
             VStack(spacing: 2) {
@@ -360,6 +360,6 @@ extension BookmarkedFeedView {
       apiViewModel.bookmark[currentIndex].whistleCount += 1
     }
     apiViewModel.bookmark[currentIndex].isWhistled.toggle()
-    apiViewModel.postFeedPlayerChanged()
+    apiViewModel.publisherSend()
   }
 }
