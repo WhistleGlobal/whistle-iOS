@@ -112,6 +112,30 @@ struct MainContentPlayerView: View {
                 .opacity(showPlayButton ? 1 : 0)
                 .allowsHitTesting(false)
             }
+            if BlockList.shared.userIds.contains(content.userId ?? 0) {
+              KFImage.url(URL(string: content.thumbnailUrl ?? ""))
+                .placeholder {
+                  Color.black
+                }
+                .resizable()
+                .scaledToFill()
+                .blur(radius: 30)
+                .overlay {
+                  VStack {
+                    Image(systemName: "eye.slash.fill")
+                      .font(.system(size: 44))
+                      .foregroundColor(.Gray10)
+                      .padding(.bottom, 26)
+                    Text("차단된 계정의 콘텐츠입니다.")
+                      .fontSystem(fontDesignSystem: .subtitle1_KO)
+                      .foregroundColor(.LabelColor_Primary_Dark)
+                      .padding(.bottom, 12)
+                    Text("차단된 계정의 모든 콘텐츠는 \n회원님의 피드에 노출되지 않습니다.")
+                      .fontSystem(fontDesignSystem: .body2_KO)
+                      .foregroundColor(.LabelColor_Secondary_Dark)
+                  }
+                }
+            }
             if showGuide {
               VStack {
                 Spacer()
