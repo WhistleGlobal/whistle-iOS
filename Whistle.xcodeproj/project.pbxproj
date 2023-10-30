@@ -370,6 +370,7 @@
 		78F780072AB34876005623CD /* GoogleSignInSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 78F780062AB34876005623CD /* GoogleSignInSwift */; };
 		78F980812A9F32C800AD542A /* RootTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78F980802A9F32C800AD542A /* RootTabView.swift */; };
 		78F980892A9F5B2500AD542A /* RoundedCorners.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78F980882A9F5B2500AD542A /* RoundedCorners.swift */; };
+		78FDA53A2AEF7319001C3DA4 /* MainContentLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78FDA5392AEF7319001C3DA4 /* MainContentLayer.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -759,6 +760,7 @@
 		78F493E62AEA7BB200A08FC1 /* FeedPlayersViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedPlayersViewModel.swift; sourceTree = "<group>"; };
 		78F980802A9F32C800AD542A /* RootTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootTabView.swift; sourceTree = "<group>"; };
 		78F980882A9F5B2500AD542A /* RoundedCorners.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoundedCorners.swift; sourceTree = "<group>"; };
+		78FDA5392AEF7319001C3DA4 /* MainContentLayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainContentLayer.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1132,6 +1134,7 @@
 		1B3955552A95081400BCB4DF /* Components */ = {
 			isa = PBXGroup;
 			children = (
+				78FDA5382AEF72E1001C3DA4 /* Content */,
 				1B8132DA2AE624E100000C32 /* VideoEditor */,
 				1BD4E7C42ABA689E00ADB783 /* VideoPicker */,
 				1BAC07F22AD559A70087D8CD /* TagsContent.swift */,
@@ -2015,6 +2018,14 @@
 			path = Report;
 			sourceTree = "<group>";
 		};
+		78FDA5382AEF72E1001C3DA4 /* Content */ = {
+			isa = PBXGroup;
+			children = (
+				78FDA5392AEF7319001C3DA4 /* MainContentLayer.swift */,
+			);
+			path = Content;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -2372,6 +2383,7 @@
 				788E68672AD6B6710056C18B /* VideoCaptureView.swift in Sources */,
 				787AF5752AA88F4000C190E6 /* BookMark.swift in Sources */,
 				1B3895882AB9CC4300B4C8DD /* CoreDataContainer.xcdatamodeld in Sources */,
+				78FDA53A2AEF7319001C3DA4 /* MainContentLayer.swift in Sources */,
 				78F980812A9F32C800AD542A /* RootTabView.swift in Sources */,
 				1BE8E9FF2AAE2DFB00EB0A55 /* MusicServiceProtocol.swift in Sources */,
 				1BCB90332AEEBCE60088B2F2 /* DimmedBackground.swift in Sources */,
