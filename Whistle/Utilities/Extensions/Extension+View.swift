@@ -133,6 +133,13 @@ extension View {
   }
 }
 
+extension View {
+  func measureSize(perform action: @escaping (CGSize) -> Void) -> some View {
+    modifier(MeasureSizeModifier())
+      .onPreferenceChange(SizePreferenceKey.self, perform: action)
+  }
+}
+
 // MARK: - 스크롤 모니터링 관련 코드
 
 extension View {

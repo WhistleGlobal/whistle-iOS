@@ -67,7 +67,7 @@ struct AlertPopup: View {
               .padding(.horizontal, UIScreen.getWidth(16))
               .padding(.bottom, UIScreen.getHeight(22))
           }
-          Divider().overlay(Color.Border_Default)
+          Divider().overlay(Color.Border_Default_Light)
           alerButton()
         }
         .padding(.top, UIScreen.getHeight(24)) // 텍스트와 경계 사이의 여백 추가
@@ -108,7 +108,7 @@ extension AlertPopup {
               .padding(.vertical, UIScreen.getHeight(10))
           }
         }
-        Divider().overlay(Color.Border_Default)
+        Divider().overlay(Color.Border_Default_Light)
         Button {
           alertViewModel.cancelAction?()
           alertViewModel.dismissAlert()
@@ -139,7 +139,7 @@ extension AlertPopup {
           }
         }
         Divider()
-          .overlay(Color.Border_Default)
+          .overlay(Color.Border_Default_Light)
         Button {
           alertViewModel.destructiveAction?()
           alertViewModel.dismissAlert()

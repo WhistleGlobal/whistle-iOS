@@ -44,6 +44,7 @@ struct ReportCompleteView: View {
         .padding(.bottom, 64)
       Spacer()
     }
+    .background(Color.reactiveBackground)
     .navigationBarBackButtonHidden()
     .onAppear {
       DispatchQueue.main.asyncAfter(deadline: .now() + 3) {

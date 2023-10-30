@@ -53,12 +53,14 @@ struct MainFeedReportCommentView: View {
         .onTapGesture {
           isFocused = true
         }
+        .background(UITraitCollection.current.userInterfaceStyle == .dark ? Color.Elevated_Dark : Color.white)
       Spacer()
     }
     .onTapGesture {
       isFocused = false
     }
     .padding(.horizontal, 16)
+    .background(Color.reactiveBackground)
     .navigationBarBackButtonHidden()
     .navigationTitle("신고")
     .navigationBarTitleDisplayMode(.inline)

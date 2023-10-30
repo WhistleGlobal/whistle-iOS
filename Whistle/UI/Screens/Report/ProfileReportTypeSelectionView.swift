@@ -61,6 +61,7 @@ struct ProfileReportTypeSelectionView: View {
         Spacer()
       }
       .padding(.horizontal, 16)
+      .background(Color.reactiveBackground)
       .navigationTitle("신고")
       .navigationBarTitleDisplayMode(.inline)
       .navigationDestination(isPresented: .constant(apiViewModel.memberFeed.isEmpty)) {

@@ -49,6 +49,7 @@ struct MainFeedReportReasonSelectionView: View {
         Spacer()
       }
       .padding(.horizontal, 16)
+      .background(Color.reactiveBackground)
       .navigationBarBackButtonHidden()
       .navigationTitle("신고")
       .navigationBarTitleDisplayMode(.inline)

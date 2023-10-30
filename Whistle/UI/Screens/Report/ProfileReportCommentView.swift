@@ -48,6 +48,7 @@ struct ProfileReportCommentView: View {
             .stroke(lineWidth: 1)
             .foregroundColor(.Disable_Placeholder)
         }
+        .background(Color.reactiveBackground)
         .onSubmit {
           isFocused = false
         }
@@ -60,6 +61,7 @@ struct ProfileReportCommentView: View {
       isFocused = false
     }
     .padding(.horizontal, 16)
+    .background(Color.reactiveBackground)
     .navigationBarBackButtonHidden()
     .navigationTitle("신고")
     .navigationBarTitleDisplayMode(.inline)

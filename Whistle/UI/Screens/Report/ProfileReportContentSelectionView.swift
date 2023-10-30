@@ -44,6 +44,7 @@ struct ProfileReportContentSelectionView: View {
       .padding(.top, 12)
     }
     .padding(.horizontal, 16)
+    .background(Color.reactiveBackground)
     .navigationBarBackButtonHidden()
     .navigationTitle("콘텐츠 선택")
     .navigationBarTitleDisplayMode(.inline)

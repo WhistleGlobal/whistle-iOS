@@ -208,10 +208,3 @@ struct MeasureSizeModifier: ViewModifier {
     })
   }
 }
-
-extension View {
-  func measureSize(perform action: @escaping (CGSize) -> Void) -> some View {
-    modifier(MeasureSizeModifier())
-      .onPreferenceChange(SizePreferenceKey.self, perform: action)
-  }
-}

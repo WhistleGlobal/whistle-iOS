@@ -124,6 +124,7 @@ extension Color {
     Color.lightAndDarkColor(light: "Gray30", dark: "Gray60")
   }
 
+  static var Border_Default_Light = Color.Gray30_Light
   // static var Border_Glass => extension LinearGradient 참고
 
   // MARK: - Label Color
