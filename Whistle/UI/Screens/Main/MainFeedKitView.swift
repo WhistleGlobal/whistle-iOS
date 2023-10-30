@@ -21,7 +21,7 @@ struct MainFeedKitView: View {
 
   var body: some View {
     ZStack {
-      Color.black
+      Color.white
       if !apiViewModel.mainFeed.isEmpty {
         MainFeedPageView(index: $index)
       }
