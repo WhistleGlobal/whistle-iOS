@@ -84,9 +84,9 @@ class FeedPlayersViewModel: ObservableObject {
   func initialPlayers() {
     if apiViewModel.mainFeed.isEmpty { return }
     guard let urlString = apiViewModel.mainFeed.first?.videoUrl else { return }
+    currentPlayer = AVPlayer(url: URL(string: urlString)!)
     if apiViewModel.mainFeed.count < 2 { return }
     guard let urlStringNext = apiViewModel.mainFeed[1].videoUrl else { return }
-    currentPlayer = AVPlayer(url: URL(string: urlString)!)
     nextPlayer = AVPlayer(url: URL(string: urlStringNext)!)
   }
 
