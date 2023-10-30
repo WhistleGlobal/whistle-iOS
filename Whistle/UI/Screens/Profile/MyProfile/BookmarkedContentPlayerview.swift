@@ -1,5 +1,5 @@
 //
-//  MyContentPlayerView.swift
+//  BookmarkedContentPlayerview.swift
 //  Whistle
 //
 //  Created by ChoiYujin on 10/30/23.
@@ -11,15 +11,15 @@ import Combine
 import Kingfisher
 import SwiftUI
 
-// MARK: - MyContentPlayerView
+// MARK: - BookmarkedContentPlayerview
 
-struct MyContentPlayerView: View {
+struct BookmarkedContentPlayerview: View {
   @AppStorage("showGuide") var showGuide = true
   @Environment(\.scenePhase) var scenePhase
   @StateObject var apiViewModel = APIViewModel.shared
-  @StateObject var feedPlayersViewModel = MyFeedPlayersViewModel.shared
+  @StateObject var feedPlayersViewModel = BookmarkedPlayersViewModel.shared
   @StateObject private var toastViewModel = ToastViewModel.shared
-  @StateObject private var feedMoreModel = MyFeedMoreModel.shared
+  @StateObject private var feedMoreModel = BookmarkedFeedMoreModel.shared
   @StateObject private var tabbarModel = TabbarModel.shared
 
   @State var newId = UUID()
@@ -31,26 +31,24 @@ struct MyContentPlayerView: View {
   @State var uploadingThumbnail = Image("noVideo")
   @State var uploadProgress = 0.0
   @State var isUploading = false
-  @Binding var currentContentInfo: MyContent?
+  @Binding var currentContentInfo: Bookmark?
   @Binding var index: Int
   let lifecycleDelegate: ViewLifecycleDelegate?
   let dismissAction: DismissAction
 
   var body: some View {
     VStack(spacing: 0) {
-      ForEach(Array(apiViewModel.myFeed.enumerated()), id: \.element) { index, content in
+      ForEach(Array(apiViewModel.bookmark.enumerated()), id: \.element) { index, content in
         ZStack {
           Color.clear.overlay {
-            if let url = apiViewModel.myFeed[index].thumbnailUrl {
-              KFImage.url(URL(string: url))
-                .placeholder {
-                  Color.black
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
-                }
-                .resizable()
-                .scaledToFill()
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
-            }
+            KFImage.url(URL(string: apiViewModel.bookmark[index].thumbnailUrl))
+              .placeholder {
+                Color.black
+                  .frame(maxWidth: .infinity, maxHeight: .infinity)
+              }
+              .resizable()
+              .scaledToFill()
+              .frame(maxWidth: .infinity, maxHeight: .infinity)
             if let player = feedPlayersViewModel.currentPlayer, index == feedPlayersViewModel.currentVideoIndex {
               ContentPlayer(player: player)
                 .frame(width: UIScreen.width, height: UIScreen.height)
@@ -64,7 +62,7 @@ struct MyContentPlayerView: View {
                   if let index = viewCount.views.firstIndex(where: { $0.contentId == content.contentId }) {
                     viewCount.views[index].viewDate = dateString
                   } else {
-                    viewCount.views.append(.init(contentId: content.contentId ?? 0, viewDate: dateString))
+                    viewCount.views.append(.init(contentId: content.contentId, viewDate: dateString))
                   }
                 }
                 .onDisappear {
@@ -101,9 +99,10 @@ struct MyContentPlayerView: View {
                 }
                 .overlay {
                   if tabbarModel.tabWidth != 56 {
-                    MyContentLayer(
+                    BookmarkedContentLayer(
                       currentVideoInfo: content,
                       showDialog: $feedMoreModel.showDialog,
+                      index: $index,
                       whistleAction: {
                         whistleToggle(content: content, index)
                       },
@@ -114,8 +113,8 @@ struct MyContentPlayerView: View {
                 .opacity(showPlayButton ? 1 : 0)
                 .allowsHitTesting(false)
             }
-            if BlockList.shared.userIds.contains(content.userId ?? 0) {
-              KFImage.url(URL(string: content.thumbnailUrl ?? ""))
+            if BlockList.shared.userIds.contains(content.userId) {
+              KFImage.url(URL(string: content.thumbnailUrl))
                 .placeholder {
                   Color.black
                 }
@@ -217,10 +216,8 @@ struct MyContentPlayerView: View {
     .navigationBarBackButtonHidden()
     .onAppear {
       if index == 0 {
-        WhistleLogger.logger.debug("onAppear index == 0")
         lifecycleDelegate?.onAppear()
       } else {
-        WhistleLogger.logger.debug("onAppear index == \(index)")
         lifecycleDelegate?.onAppear()
         feedPlayersViewModel.currentPlayer?.seek(to: .zero)
         feedPlayersViewModel.currentPlayer?.play()
@@ -281,25 +278,25 @@ struct MyContentPlayerView: View {
 
 }
 
-extension MyContentPlayerView {
-  func whistleToggle(content: MyContent, _ index: Int) {
+extension BookmarkedContentPlayerview {
+  func whistleToggle(content: Bookmark, _ index: Int) {
     HapticManager.instance.impact(style: .medium)
     timer?.invalidate()
-    if apiViewModel.myFeed[index].isWhistled {
+    if apiViewModel.bookmark[index].isWhistled {
       timer = Timer.scheduledTimer(withTimeInterval: 2, repeats: false) { _ in
         Task {
-          await apiViewModel.whistleAction(contentID: content.contentId ?? 0, method: .delete)
+          await apiViewModel.whistleAction(contentID: content.contentId, method: .delete)
         }
       }
-      apiViewModel.myFeed[index].contentWhistleCount! -= 1
+      apiViewModel.bookmark[index].whistleCount -= 1
     } else {
       timer = Timer.scheduledTimer(withTimeInterval: 2, repeats: false) { _ in
         Task {
-          await apiViewModel.whistleAction(contentID: content.contentId ?? 0, method: .post)
+          await apiViewModel.whistleAction(contentID: content.contentId, method: .post)
         }
       }
-      apiViewModel.myFeed[index].contentWhistleCount! += 1
+      apiViewModel.bookmark[index].whistleCount += 1
     }
-    apiViewModel.myFeed[index].isWhistled.toggle()
+    apiViewModel.bookmark[index].isWhistled.toggle()
   }
 }

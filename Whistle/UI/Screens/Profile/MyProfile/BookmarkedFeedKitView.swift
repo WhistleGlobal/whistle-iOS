@@ -1,5 +1,5 @@
 //
-//  MyFeedKitView.swift
+//  BookmarkedFeedKitView.swift
 //  Whistle
 //
 //  Created by ChoiYujin on 10/30/23.
@@ -8,31 +8,26 @@
 import _AVKit_SwiftUI
 import SwiftUI
 
-// MARK: - MyFeedKitView
+// MARK: - BookMarkedFeedKitView
 
-struct MyFeedKitView: View {
+struct BookMarkedFeedKitView: View {
 
   @Environment(\.dismiss) var dismiss
   @StateObject private var apiViewModel = APIViewModel.shared
-  @StateObject private var feedPlayersViewModel = MyFeedPlayersViewModel.shared
+  @StateObject private var feedPlayersViewModel = BookmarkedPlayersViewModel.shared
   @StateObject private var toastViewModel = ToastViewModel.shared
-  @StateObject private var feedMoreModel = MyFeedMoreModel.shared
+  @StateObject private var feedMoreModel = BookmarkedFeedMoreModel.shared
   @State var index = 0
 
   var body: some View {
     ZStack {
       Color.black
-      if !apiViewModel.myFeed.isEmpty {
-        MyFeedPageView(index: $index, dismissAction: dismiss)
+      if !apiViewModel.bookmark.isEmpty {
+        BookmarkedPageView(index: $index, dismissAction: dismiss)
       } else {
         VStack {
           Spacer()
-          Image(systemName: "photo")
-            .resizable()
-            .scaledToFit()
-            .frame(width: 60)
-            .foregroundColor(.LabelColor_Primary_Dark)
-          Text("콘텐츠가 없습니다")
+          Text("저장한 콘텐츠가 없습니다")
             .fontSystem(fontDesignSystem: .body1_KO)
             .foregroundColor(.LabelColor_Primary_Dark)
           Spacer()
@@ -42,14 +37,21 @@ struct MyFeedKitView: View {
     .background(Color.black.edgesIgnoringSafeArea(.all))
     .edgesIgnoringSafeArea(.all)
     .confirmationDialog("", isPresented: $feedMoreModel.showDialog) {
-      if !apiViewModel.myFeed.isEmpty {
-        Button("삭제", role: .destructive) {
-          toastViewModel.cancelToastInit(message: "삭제되었습니다") {
+      if !apiViewModel.bookmark.isEmpty {
+        Button("저장 취소", role: .none) {
+          toastViewModel.cancelToastInit(message: "저장 취소되었습니다.") {
             Task {
-              let currentContent = apiViewModel.myFeed[feedPlayersViewModel.currentVideoIndex]
-              await apiViewModel.deleteContent(contentID: currentContent.contentId ?? 0)
+              let currentContent = apiViewModel.bookmark[feedPlayersViewModel.currentVideoIndex]
+              _ = await apiViewModel.bookmarkAction(contentID: currentContent.contentId, method: .delete)
               feedPlayersViewModel.removePlayer {
                 index -= 1
+                apiViewModel.mainFeed = apiViewModel.mainFeed.map { item in
+                  let mutableItem = item
+                  if mutableItem.contentId == currentContent.contentId {
+                    mutableItem.isBookmarked = false
+                  }
+                  return mutableItem
+                }
               }
             }
           }
@@ -69,21 +71,21 @@ struct MyFeedKitView: View {
       if apiViewModel.myProfile.userName.isEmpty {
         await apiViewModel.requestMyProfile()
       }
-      if apiViewModel.myFeed.isEmpty {
-        await apiViewModel.requestMyPostFeed()
+      if apiViewModel.bookmark.isEmpty {
+        await apiViewModel.requestMyBookmark()
       }
     }
     .navigationDestination(isPresented: $feedMoreModel.isRootStacked) {
       if UIDevice.current.userInterfaceIdiom == .phone {
         switch UIScreen.main.nativeBounds.height {
         case 1334: // iPhone SE 3rd generation
-          if !apiViewModel.myFeed.isEmpty {
+          if !apiViewModel.bookmark.isEmpty {
             SEMemberProfileView(
-              userId: apiViewModel.myFeed[feedPlayersViewModel.currentVideoIndex].userId ?? 0)
+              userId: apiViewModel.bookmark[feedPlayersViewModel.currentVideoIndex].userId)
           }
         default:
-          if !apiViewModel.myFeed.isEmpty {
-            MemberProfileView(userId: apiViewModel.myFeed[feedPlayersViewModel.currentVideoIndex].userId ?? 0)
+          if !apiViewModel.bookmark.isEmpty {
+            MemberProfileView(userId: apiViewModel.bookmark[feedPlayersViewModel.currentVideoIndex].userId)
           }
         }
       }
@@ -91,10 +93,10 @@ struct MyFeedKitView: View {
   }
 }
 
-// MARK: - MyFeedMoreModel
+// MARK: - BookmarkedFeedMoreModel
 
-class MyFeedMoreModel: ObservableObject {
-  static let shared = MyFeedMoreModel()
+class BookmarkedFeedMoreModel: ObservableObject {
+  static let shared = BookmarkedFeedMoreModel()
   private init() { }
   @Published var showDialog = false
   @Published var showReport = false

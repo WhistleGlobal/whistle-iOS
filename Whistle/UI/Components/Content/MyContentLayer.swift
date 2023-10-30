@@ -73,6 +73,19 @@ struct MyContentLayer: View {
           Spacer()
           Button {
             whistleAction()
+            let currentContent = apiViewModel.myFeed[feedPlayersViewModel.currentVideoIndex]
+            apiViewModel.mainFeed = apiViewModel.mainFeed.map { item in
+              let mutableItem = item
+              if mutableItem.contentId == currentContent.contentId {
+                if mutableItem.isWhistled {
+                  mutableItem.whistleCount -= 1
+                } else {
+                  mutableItem.whistleCount += 1
+                }
+                mutableItem.isWhistled.toggle()
+              }
+              return mutableItem
+            }
           } label: {
             VStack(spacing: 2) {
               Image(systemName: currentVideoInfo.isWhistled ? "heart.fill" : "heart")

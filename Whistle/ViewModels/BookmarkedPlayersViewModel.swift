@@ -1,5 +1,5 @@
 //
-//  MyFeedPlayersViewModel.swift
+//  BookmarkedPlayersViewModel.swift
 //  Whistle
 //
 //  Created by ChoiYujin on 10/30/23.
@@ -7,9 +7,9 @@
 
 import AVFoundation
 
-class MyFeedPlayersViewModel: ObservableObject {
+class BookmarkedPlayersViewModel: ObservableObject {
 
-  static let shared = MyFeedPlayersViewModel()
+  static let shared = BookmarkedPlayersViewModel()
   private init() { }
 
   @Published var prevPlayer: AVPlayer?
@@ -19,8 +19,8 @@ class MyFeedPlayersViewModel: ObservableObject {
   @Published var currentVideoIndex = 0
 
   func goPlayerNext() {
-    let index = min(max(0, currentVideoIndex), apiViewModel.myFeed.count - 1)
-    if index == apiViewModel.myFeed.count - 1 {
+    let index = min(max(0, currentVideoIndex), apiViewModel.bookmark.count - 1)
+    if index == apiViewModel.bookmark.count - 1 {
       stopPlayer()
       prevPlayer = nil
       prevPlayer = currentPlayer
@@ -34,7 +34,7 @@ class MyFeedPlayersViewModel: ObservableObject {
       prevPlayer = currentPlayer
       currentPlayer = nextPlayer
       nextPlayer = nil
-      nextPlayer = AVPlayer(url: URL(string: apiViewModel.myFeed[index + 1].videoUrl ?? "")!)
+      nextPlayer = AVPlayer(url: URL(string: apiViewModel.bookmark[index + 1].videoUrl)!)
       currentPlayer?.seek(to: .zero)
       currentPlayer?.play()
     }
@@ -59,7 +59,7 @@ class MyFeedPlayersViewModel: ObservableObject {
     currentPlayer = prevPlayer
     prevPlayer = nil
     if currentVideoIndex != 0 {
-      prevPlayer = AVPlayer(url: URL(string: apiViewModel.myFeed[currentVideoIndex - 1].videoUrl ?? "")!)
+      prevPlayer = AVPlayer(url: URL(string: apiViewModel.bookmark[currentVideoIndex - 1].videoUrl)!)
     }
     currentPlayer?.seek(to: .zero)
     currentPlayer?.play()
@@ -87,69 +87,68 @@ class MyFeedPlayersViewModel: ObservableObject {
   }
 
   func initialPlayers() {
-    if apiViewModel.myFeed.isEmpty { return }
-    guard let urlString = apiViewModel.myFeed.first?.videoUrl else { return }
+    if apiViewModel.bookmark.isEmpty { return }
+    guard let urlString = apiViewModel.bookmark.first?.videoUrl else { return }
     currentPlayer = AVPlayer(url: URL(string: urlString)!)
-    if apiViewModel.myFeed.count < 2 { return }
-    guard let urlStringNext = apiViewModel.myFeed[1].videoUrl else { return }
+    if apiViewModel.bookmark.count < 2 { return }
+    let urlStringNext = apiViewModel.bookmark[1].videoUrl
     nextPlayer = AVPlayer(url: URL(string: urlStringNext)!)
   }
 
   func initialPlayers(index: Int) {
-    WhistleLogger.logger.debug("initialPlayers(index: \(index))")
-    if apiViewModel.myFeed.isEmpty { return }
-    if apiViewModel.myFeed.count == 1 {
-      guard let urlString = apiViewModel.myFeed.first?.videoUrl else { return }
+    if apiViewModel.bookmark.isEmpty { return }
+    if apiViewModel.bookmark.count == 1 {
+      guard let urlString = apiViewModel.bookmark.first?.videoUrl else { return }
       currentPlayer = AVPlayer(url: URL(string: urlString)!)
       return
     }
     if index == 0 {
-      guard let urlString = apiViewModel.myFeed.first?.videoUrl else { return }
+      guard let urlString = apiViewModel.bookmark.first?.videoUrl else { return }
       currentPlayer = AVPlayer(url: URL(string: urlString)!)
-      guard let urlStringNext = apiViewModel.myFeed[1].videoUrl else { return }
+      let urlStringNext = apiViewModel.bookmark[1].videoUrl
       nextPlayer = AVPlayer(url: URL(string: urlStringNext)!)
-    } else if index == apiViewModel.myFeed.count - 1 {
-      guard let urlString = apiViewModel.myFeed.last?.videoUrl else { return }
+    } else if index == apiViewModel.bookmark.count - 1 {
+      guard let urlString = apiViewModel.bookmark.last?.videoUrl else { return }
       currentPlayer = AVPlayer(url: URL(string: urlString)!)
-      guard let urlStringPrev = apiViewModel.myFeed[index - 1].videoUrl else { return }
+      let urlStringPrev = apiViewModel.bookmark[index - 1].videoUrl
       prevPlayer = AVPlayer(url: URL(string: urlStringPrev)!)
     } else {
-      guard let urlString = apiViewModel.myFeed[index].videoUrl else { return }
+      let urlString = apiViewModel.bookmark[index].videoUrl
       currentPlayer = AVPlayer(url: URL(string: urlString)!)
-      guard let urlStringPrev = apiViewModel.myFeed[index - 1].videoUrl else { return }
+      let urlStringPrev = apiViewModel.bookmark[index - 1].videoUrl
       prevPlayer = AVPlayer(url: URL(string: urlStringPrev)!)
-      guard let urlStringNext = apiViewModel.myFeed[index + 1].videoUrl else { return }
+      let urlStringNext = apiViewModel.bookmark[index + 1].videoUrl
       nextPlayer = AVPlayer(url: URL(string: urlStringNext)!)
     }
   }
 
   func removePlayer(completion: @escaping () -> Void) {
     stopPlayer()
-    if apiViewModel.myFeed.count == 1 {
-      apiViewModel.myFeed.removeAll()
+    if apiViewModel.bookmark.count == 1 {
+      apiViewModel.bookmark.removeAll()
       prevPlayer = nil
       currentPlayer = nil
       nextPlayer = nil
       return
     }
-    if apiViewModel.myFeed.count == 2, currentVideoIndex == 0 {
+    if apiViewModel.bookmark.count == 2, currentVideoIndex == 0 {
       currentPlayer = nil
       currentPlayer = nextPlayer
-      apiViewModel.myFeed.remove(at: currentVideoIndex)
-      nextPlayer = AVPlayer(url: URL(string: apiViewModel.myFeed[currentVideoIndex].videoUrl ?? "")!)
+      apiViewModel.bookmark.remove(at: currentVideoIndex)
+      nextPlayer = AVPlayer(url: URL(string: apiViewModel.bookmark[currentVideoIndex].videoUrl)!)
       currentPlayer?.seek(to: .zero)
       currentPlayer?.play()
       return
     }
-    if currentVideoIndex == apiViewModel.myFeed.count - 1 {
+    if currentVideoIndex == apiViewModel.bookmark.count - 1 {
       currentPlayer = nil
       currentPlayer = prevPlayer
-      apiViewModel.myFeed.removeLast()
+      apiViewModel.bookmark.removeLast()
       currentVideoIndex -= 1
       if currentVideoIndex == 0 {
         prevPlayer = nil
       } else {
-        prevPlayer = AVPlayer(url: URL(string: apiViewModel.myFeed[currentVideoIndex - 1].videoUrl ?? "")!)
+        prevPlayer = AVPlayer(url: URL(string: apiViewModel.bookmark[currentVideoIndex - 1].videoUrl)!)
       }
       currentPlayer?.seek(to: .zero)
       currentPlayer?.play()
@@ -157,8 +156,8 @@ class MyFeedPlayersViewModel: ObservableObject {
     } else {
       currentPlayer = nil
       currentPlayer = nextPlayer
-      apiViewModel.myFeed.remove(at: currentVideoIndex)
-      nextPlayer = AVPlayer(url: URL(string: apiViewModel.myFeed[currentVideoIndex + 1].videoUrl ?? "")!)
+      apiViewModel.bookmark.remove(at: currentVideoIndex)
+      nextPlayer = AVPlayer(url: URL(string: apiViewModel.bookmark[currentVideoIndex + 1].videoUrl)!)
       currentPlayer?.seek(to: .zero)
       currentPlayer?.play()
     }

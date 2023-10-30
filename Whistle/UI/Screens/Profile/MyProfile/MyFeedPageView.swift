@@ -73,11 +73,13 @@ struct MyFeedPageView: UIViewRepresentable {
     }
 
     func onAppear() {
-      parent.currentContentInfo = parent.apiViewModel.myFeed[index]
-      parent.feedPlayersViewModel.currentVideoIndex = index
-      parent.feedPlayersViewModel.initialPlayers(index: index)
-      parent.feedPlayersViewModel.currentPlayer?.seek(to: .zero)
-      parent.feedPlayersViewModel.currentPlayer?.play()
+      if !parent.apiViewModel.myFeed.isEmpty {
+        parent.currentContentInfo = parent.apiViewModel.myFeed[index]
+        parent.feedPlayersViewModel.currentVideoIndex = index
+        parent.feedPlayersViewModel.initialPlayers(index: index)
+        parent.feedPlayersViewModel.currentPlayer?.seek(to: .zero)
+        parent.feedPlayersViewModel.currentPlayer?.play()
+      }
     }
 
     func onDisappear() {
