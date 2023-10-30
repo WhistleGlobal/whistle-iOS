@@ -7,8 +7,11 @@
 
 import SwiftUI
 
+// MARK: - MainFeedPageView
+
 struct MainFeedPageView: UIViewRepresentable {
 
+  @ObservedObject var refreshableModel = RefreshableModel()
   @StateObject var apiViewModel = APIViewModel.shared
   @StateObject var feedPlayersViewModel = FeedPlayersViewModel.shared
   @State var currentContentInfo: MainContent?
@@ -36,10 +39,19 @@ struct MainFeedPageView: UIViewRepresentable {
     view.contentInsetAdjustmentBehavior = .never
     view.isPagingEnabled = true
     view.delegate = context.coordinator
+    let refreshControl = UIRefreshControl()
+    refreshControl.addTarget(context.coordinator, action: #selector(context.coordinator.refresh), for: .valueChanged)
+    view.refreshControl = refreshControl
+
     return view
   }
 
-  func updateUIView(_ uiView: UIScrollView, context _: Context) {
+  func updateUIView(_ uiView: UIScrollView, context: Context) {
+    if context.coordinator.parent.refreshableModel.isRefreshing {
+      uiView.refreshControl?.beginRefreshing()
+    } else {
+      uiView.refreshControl?.endRefreshing()
+    }
     uiView.contentSize = CGSize(
       width: UIScreen.width,
       height: UIScreen.height * CGFloat(apiViewModel.mainFeed.count))
@@ -95,6 +107,43 @@ struct MainFeedPageView: UIViewRepresentable {
       }
       index = parent.feedPlayersViewModel.currentVideoIndex
       parent.currentContentInfo = parent.apiViewModel.mainFeed[index]
+    }
+
+    func scrollViewDidScrollToTop(_ scrollView: UIScrollView) {
+      if scrollView.contentOffset.y <= -scrollView.contentInset.top {
+        index = 0
+        parent.feedPlayersViewModel.currentVideoIndex = 0
+        parent.feedPlayersViewModel.stopPlayer()
+        parent.feedPlayersViewModel.resetPlayer()
+        parent.feedPlayersViewModel.initialPlayers()
+        parent.feedPlayersViewModel.currentPlayer?.play()
+      }
+    }
+
+    @objc
+    func refresh() {
+      parent.feedPlayersViewModel.stopPlayer()
+      parent.refreshableModel.isRefreshing = true
+      parent.refreshableModel.refresh()
+    }
+
+  }
+}
+
+// MARK: - RefreshableModel
+
+class RefreshableModel: ObservableObject {
+  @Published var isRefreshing = false
+  @Published var apiViewModel = APIViewModel.shared
+  @Published var feedPlayersViewModel = FeedPlayersViewModel.shared
+
+  func refresh() {
+    apiViewModel.requestMainFeed {
+      self.feedPlayersViewModel.stopPlayer()
+      self.feedPlayersViewModel.initialPlayers()
+      self.apiViewModel.postFeedPlayerChanged()
+      self.feedPlayersViewModel.currentPlayer?.play()
+      self.isRefreshing = false
     }
   }
 }

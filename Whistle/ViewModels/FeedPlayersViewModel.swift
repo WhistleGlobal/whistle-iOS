@@ -81,6 +81,12 @@ class FeedPlayersViewModel: ObservableObject {
     }
   }
 
+  func resetPlayer() {
+    prevPlayer = nil
+    currentPlayer = nil
+    nextPlayer = nil
+  }
+
   func initialPlayers() {
     if apiViewModel.mainFeed.isEmpty { return }
     guard let urlString = apiViewModel.mainFeed.first?.videoUrl else { return }

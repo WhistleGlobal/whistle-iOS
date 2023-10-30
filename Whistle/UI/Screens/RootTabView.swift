@@ -339,11 +339,6 @@ extension RootTabView {
           if isAccess {
             if isRootStacked {
               NavigationUtil.popToRootView()
-            } else {
-              apiViewModel.requestMainFeed {
-                HapticManager.instance.impact(style: .medium)
-                refreshCount += 1
-              }
             }
           }
         } else {
