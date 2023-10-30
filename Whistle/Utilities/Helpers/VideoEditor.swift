@@ -19,8 +19,8 @@ class VideoEditor {
   func startRender(video: EditableVideo, videoQuality: VideoQuality, start: Double) async throws -> URL {
     do {
       let url = try await resizeAndLayerOperation(video: video, videoQuality: videoQuality, start: start)
-      let finalURL = try await applyFiltersOperations(video, fromURL: url)
-      return finalURL
+//      let finalURL = try await applyFiltersOperations(video, fromURL: url)
+      return url
     } catch {
       throw error
     }
@@ -58,6 +58,7 @@ class VideoEditor {
     let naturalSize = videoTrack.naturalSize
     let videoTrackPreferredTransform = try await videoTrack.load(.preferredTransform)
 
+    /// export 영상 사이즈 지정
     let outputSize = getSizeFromOrientation(
       newSize: naturalSize,
       videoTrackPreferredTransform: videoTrackPreferredTransform)
@@ -309,9 +310,11 @@ extension VideoEditor {
 
     var aspectFillRatio: CGFloat = 1
     if naturalSize.height < naturalSize.width {
-      aspectFillRatio = newSize.height / naturalSize.height
+//      aspectFillRatio = newSize.height / naturalSize.height
+      aspectFillRatio = 1
     } else {
-      aspectFillRatio = newSize.width / naturalSize.width
+//      aspectFillRatio = newSize.width / naturalSize.width
+      aspectFillRatio = 1
     }
 
     let scaleFactor = CGAffineTransform(scaleX: aspectFillRatio, y: aspectFillRatio)

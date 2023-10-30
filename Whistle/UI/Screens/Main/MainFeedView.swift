@@ -452,7 +452,10 @@ struct MainFeedView: View {
       Button("관심없음", role: .none) {
         toastViewModel.cancelToastInit(message: "해당 콘텐츠를 숨겼습니다") {
           Task {
+            #if DEBUG
+            #else
             await apiViewModel.actionContentHate(contentID: currentVideoContentId)
+            #endif
             apiViewModel.mainFeed.remove(at: currentIndex)
             guard let url = apiViewModel.mainFeed[currentIndex].videoUrl else {
               return
@@ -599,7 +602,9 @@ extension MainFeedView {
         .padding(.bottom, 4)
         .padding(.leading, 4)
         Spacer()
+
         // MARK: - Action Buttons
+
         VStack(spacing: 26) {
           Spacer()
           Button {

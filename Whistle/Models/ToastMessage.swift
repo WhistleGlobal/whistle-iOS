@@ -6,6 +6,7 @@
 ////
 
 import Foundation
+import SwiftUI
 
 class ToastViewModel: ObservableObject {
   static let shared = ToastViewModel()
@@ -15,7 +16,6 @@ class ToastViewModel: ObservableObject {
   @Published var showToast = false
   @Published var message = ""
   @Published var padding: CGFloat = 58
-  @Published var toastOpacity = 0.0
   @Published var isCancelled = false
 
   @Published var isCancellable = false
@@ -26,7 +26,9 @@ class ToastViewModel: ObservableObject {
     message: String,
     padding: CGFloat = 58)
   {
-    self.showToast = showToast
+    withAnimation {
+      self.showToast = showToast
+    }
     self.message = message
     self.padding = padding
     isCancellable = false
@@ -40,7 +42,9 @@ class ToastViewModel: ObservableObject {
     padding: CGFloat = 58,
     cancelAction: @escaping () -> Void)
   {
-    self.showToast = showToast
+    withAnimation {
+      self.showToast = showToast
+    }
     isCancellable = true
     isCancelled = false
     self.message = message
