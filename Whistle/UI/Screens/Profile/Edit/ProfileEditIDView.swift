@@ -93,7 +93,7 @@ struct ProfileEditIDView: View {
           alertViewModel.linearAlert(
             title: "정말 사용자 ID를\n 변경하시겠습니까?",
             content: "14일마다 한 번씩 사용자 ID를\n 변경할 수 있습니다.",
-            cancelText: "취소",
+            cancelText: CommonWords().cancel,
             destructiveText: "변경")
           {
             Task {
@@ -108,7 +108,7 @@ struct ProfileEditIDView: View {
             }
           }
         } label: {
-          Text("완료")
+          Text(CommonWords().confirm)
             .foregroundColor(inputValidationStatus == .valid ? .Info : .Disable_Placeholder)
             .fontSystem(fontDesignSystem: .subtitle2_KO)
         }

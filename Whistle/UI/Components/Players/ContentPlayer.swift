@@ -30,7 +30,7 @@ struct ContentPlayer: UIViewControllerRepresentable {
     }
     view.showsPlaybackControls = false
     view.videoGravity = .resizeAspect
-
+    view.view.isUserInteractionEnabled = false
     NotificationCenter.default.addObserver(
       forName: .AVPlayerItemDidPlayToEndTime,
       object: player.currentItem,

@@ -12,6 +12,7 @@ import SwiftUI
 // MARK: - AlbumAccessView
 
 struct AlbumAccessView: View {
+  @StateObject var alertViewModel = AlertViewModel.shared
   @State var showAlert = false
   @Binding var isAlbumAuthorized: Bool
   @Binding var showAlbumAccessView: Bool
@@ -66,6 +67,17 @@ struct AlbumAccessView: View {
           if isAlbumAuthorized {
             showAlbumAccessView = false
           }
+          alertViewModel.linearAlert(
+            isRed: false,
+            title: "'Whistle'에 대해 라이브러리 읽기/쓰기 권한이 없습니다. 설정에서 라이브러리 읽기/쓰기 권한을 켜시겠습니까?",
+            cancelText: "취소",
+            destructiveText: "설정으로 가기")
+          {
+            guard let url = URL(string: UIApplication.openSettingsURLString) else { return }
+            if UIApplication.shared.canOpenURL(url) {
+              UIApplication.shared.open(url)
+            }
+          }
         } label: {
           Text("계속")
             .fontSystem(fontDesignSystem: .subtitle2_KO)
@@ -84,16 +96,10 @@ struct AlbumAccessView: View {
       .padding(.bottom, 58 + 12)
     }
     .ignoresSafeArea()
-    .alert(isPresented: $showAlert) {
-      Alert(
-        title: Text("'Whistle'에 대해 라이브러리 읽기/쓰기 권한이 없습니다. 설정에서 라이브러리 읽기/쓰기 권한을 켜시겠습니까?"),
-        primaryButton: .default(Text("설정으로 가기"), action: {
-          guard let url = URL(string: UIApplication.openSettingsURLString) else { return }
-          if UIApplication.shared.canOpenURL(url) {
-            UIApplication.shared.open(url)
-          }
-        }),
-        secondaryButton: .cancel())
+    .overlay {
+      if !alertViewModel.onFullScreenCover {
+        AlertPopup()
+      }
     }
   }
 }

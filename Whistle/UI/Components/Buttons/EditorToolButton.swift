@@ -10,7 +10,7 @@ import SwiftUI
 // MARK: - EditorToolButton
 
 struct EditorToolButton: View {
-  let label: String
+  let label: LocalizedStringKey
   let image: String
   let isChange: Bool
   let action: () -> Void

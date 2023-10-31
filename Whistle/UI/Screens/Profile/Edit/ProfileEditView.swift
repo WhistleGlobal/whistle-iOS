@@ -40,7 +40,7 @@ struct ProfileEditView: View {
           showAlbumAccessView = true
         }
       } label: {
-        Text("프로필 사진 수정")
+        Text(ProfileEditWords().photoEdit)
           .foregroundColor(.Info)
           .fontSystem(fontDesignSystem: .subtitle2_KO)
       }
@@ -48,13 +48,13 @@ struct ProfileEditView: View {
       Divider().frame(height: 0.5).padding(.leading, 16).foregroundColor(.Disable_Placeholder)
       profileEditLink(
         destination: ProfileEditIDView(),
-        title: "사용자 ID",
+        title: ProfileEditWords().userID,
         content: apiViewModel.myProfile.userName)
       Divider().padding(.leading, 96).foregroundColor(.Disable_Placeholder)
       profileEditLink(
         destination: ProfileEditIntroduceView(
           introduce: apiViewModel.myProfile.introduce ?? ""),
-        title: "소개",
+        title: ProfileEditWords().intro,
         content: apiViewModel.myProfile.introduce ?? "")
       Divider().frame(height: 0.5).padding(.leading, 16).foregroundColor(.Disable_Placeholder)
       Spacer()
@@ -67,7 +67,7 @@ struct ProfileEditView: View {
     }
     .navigationBarBackButtonHidden()
     .confirmationDialog("", isPresented: $editProfileImage) {
-      Button("앨범에서 사진 업로드", role: .none) {
+      Button(ProfileEditWords().albumUpload, role: .none) {
         PHPhotoLibrary.requestAuthorization(for: .readWrite) { status in
           switch status {
           case .notDetermined, .restricted, .denied:
@@ -79,15 +79,15 @@ struct ProfileEditView: View {
           }
         }
       }
-      Button("기본 이미지로 변경", role: .none) {
+      Button(ProfileEditWords().setDefaultImage, role: .none) {
         Task {
           await apiViewModel.deleteProfileImage()
           await apiViewModel.requestMyProfile()
         }
       }
-      Button("취소", role: .cancel) { }
+      Button(CommonWords().cancel, role: .cancel) { }
     }
-    .navigationTitle("프로필 편집")
+    .navigationTitle(ProfileEditWords().edit)
     .navigationBarTitleDisplayMode(.inline)
     .toolbar {
       ToolbarItem(placement: .cancellationAction) {
@@ -104,7 +104,7 @@ struct ProfileEditView: View {
           tabbarModel.tabbarOpacity = 1.0
           dismiss()
         } label: {
-          Text("완료")
+          Text(CommonWords().confirm)
             .foregroundColor(.Info)
             .fontSystem(fontDesignSystem: .subtitle2_KO)
         }
@@ -122,7 +122,7 @@ struct ProfileEditView: View {
 
 extension ProfileEditView {
   @ViewBuilder
-  func profileEditLink(destination: some View, title: String, content: String) -> some View {
+  func profileEditLink(destination: some View, title: LocalizedStringKey, content: String) -> some View {
     NavigationLink(destination: destination) {
       HStack(spacing: 0) {
         Text(title)

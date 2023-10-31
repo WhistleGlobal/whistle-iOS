@@ -49,7 +49,7 @@ struct MyContentPlayerView: View {
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
                 }
                 .resizable()
-                .scaledToFill()
+                .scaledToFit()
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
             }
             if let player = feedPlayersViewModel.currentPlayer, index == feedPlayersViewModel.currentVideoIndex {

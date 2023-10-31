@@ -70,6 +70,8 @@
 		1B7D801D2AC881490030CAC3 /* CustomNavigationBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B7D801C2AC881490030CAC3 /* CustomNavigationBarViewController.swift */; };
 		1B8132DD2AE6285E00000C32 /* NavigationModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B8132DC2AE6285E00000C32 /* NavigationModel.swift */; };
 		1B89314A2AE6903100F8579B /* TabbarModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B8931492AE6903100F8579B /* TabbarModel.swift */; };
+		1B9398462AEFF0A70050089D /* CommonWords.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B9398452AEFF0A70050089D /* CommonWords.swift */; };
+		1B9398492AEFF1290050089D /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 1B93984B2AEFF1290050089D /* Localizable.strings */; };
 		1BA24AC22ADBFF4200DB0992 /* Aespa.h in Headers */ = {isa = PBXBuildFile; fileRef = 1BA24AC12ADBFF4200DB0992 /* Aespa.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		1BA24B192ADBFF8600DB0992 /* AespaSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BA24ACA2ADBFF8500DB0992 /* AespaSession.swift */; };
 		1BA24B1A2ADBFF8600DB0992 /* Aespa.docc in Sources */ = {isa = PBXBuildFile; fileRef = 1BA24ACB2ADBFF8500DB0992 /* Aespa.docc */; };
@@ -479,6 +481,9 @@
 		1B7D801C2AC881490030CAC3 /* CustomNavigationBarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomNavigationBarViewController.swift; sourceTree = "<group>"; };
 		1B8132DC2AE6285E00000C32 /* NavigationModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationModel.swift; sourceTree = "<group>"; };
 		1B8931492AE6903100F8579B /* TabbarModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabbarModel.swift; sourceTree = "<group>"; };
+		1B9398452AEFF0A70050089D /* CommonWords.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommonWords.swift; sourceTree = "<group>"; };
+		1B93984A2AEFF1290050089D /* ko */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ko; path = ko.lproj/Localizable.strings; sourceTree = "<group>"; };
+		1B93984C2AEFF12D0050089D /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		1BA24ABF2ADBFF4200DB0992 /* Aespa.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Aespa.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		1BA24AC12ADBFF4200DB0992 /* Aespa.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Aespa.h; sourceTree = "<group>"; };
 		1BA24ACA2ADBFF8500DB0992 /* AespaSession.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AespaSession.swift; sourceTree = "<group>"; };
@@ -997,6 +1002,7 @@
 		1B3955332A95069C00BCB4DF = {
 			isa = PBXGroup;
 			children = (
+				1B93984B2AEFF1290050089D /* Localizable.strings */,
 				1B21C9EC2AA0AB8A0036158F /* .swiftformat */,
 				1BB7A0692A9514B4002DD86F /* .swiftlint.yml */,
 				1B39553E2A95069C00BCB4DF /* Whistle */,
@@ -1086,6 +1092,7 @@
 				1B8132DC2AE6285E00000C32 /* NavigationModel.swift */,
 				1B8931492AE6903100F8579B /* TabbarModel.swift */,
 				1BF671592AE8AA2500CDFADB /* ToastMessage.swift */,
+				1B9398452AEFF0A70050089D /* CommonWords.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -2230,6 +2237,7 @@
 			files = (
 				1B21C9ED2AA0AB8A0036158F /* .swiftformat in Resources */,
 				78D148D82A9E0A3600DDCE48 /* SF-Pro-Display-Semibold.otf in Resources */,
+				1B9398492AEFF1290050089D /* Localizable.strings in Resources */,
 				1BB7A06A2A9514B4002DD86F /* .swiftlint.yml in Resources */,
 				78D148D72A9E0A3600DDCE48 /* SF-Pro-Text-Regular.otf in Resources */,
 				78D148D62A9E0A3600DDCE48 /* SF-Pro.ttf in Resources */,
@@ -2412,6 +2420,7 @@
 				1BD4E7D42ABA6B2A00ADB783 /* PickerConfigViewControllerWrapper.swift in Sources */,
 				1BD4E7D22ABA690400ADB783 /* Extension+UITableViewCell.swift in Sources */,
 				787AF56F2AA884B700C190E6 /* User.swift in Sources */,
+				1B9398462AEFF0A70050089D /* CommonWords.swift in Sources */,
 				787AF5732AA888FC00C190E6 /* MemberContent.swift in Sources */,
 				1B3895212AB9CB6000B4C8DD /* EditablePlayer.swift in Sources */,
 				78BECCDB2AAAE1F5003FA7B5 /* SettingProtocol.swift in Sources */,
@@ -2684,6 +2693,18 @@
 		};
 /* End PBXTargetDependency section */
 
+/* Begin PBXVariantGroup section */
+		1B93984B2AEFF1290050089D /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				1B93984A2AEFF1290050089D /* ko */,
+				1B93984C2AEFF12D0050089D /* en */,
+			);
+			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
 /* Begin XCBuildConfiguration section */
 		1B3955482A95069D00BCB4DF /* Debug */ = {
 			isa = XCBuildConfiguration;
@@ -2838,7 +2859,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.1.0;
+				MARKETING_VERSION = 1.1.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.newcompany.Whistle;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -2885,7 +2906,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.1.0;
+				MARKETING_VERSION = 1.1.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.newcompany.Whistle;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
