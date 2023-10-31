@@ -27,6 +27,9 @@ class MainFeedPlayersViewModel: ObservableObject {
       currentPlayer = nextPlayer
       nextPlayer = nil
       currentPlayer?.seek(to: .zero)
+      if BlockList.shared.userIds.contains(apiViewModel.mainFeed[currentVideoIndex].userId ?? 0) {
+        return
+      }
       currentPlayer?.play()
     } else {
       stopPlayer()
@@ -36,6 +39,9 @@ class MainFeedPlayersViewModel: ObservableObject {
       nextPlayer = nil
       nextPlayer = AVPlayer(url: URL(string: apiViewModel.mainFeed[index + 1].videoUrl ?? "")!)
       currentPlayer?.seek(to: .zero)
+      if BlockList.shared.userIds.contains(apiViewModel.mainFeed[currentVideoIndex].userId ?? 0) {
+        return
+      }
       currentPlayer?.play()
     }
   }
@@ -49,6 +55,9 @@ class MainFeedPlayersViewModel: ObservableObject {
       currentPlayer = prevPlayer
       prevPlayer = nil
       currentPlayer?.seek(to: .zero)
+      if BlockList.shared.userIds.contains(apiViewModel.mainFeed[currentVideoIndex].userId ?? 0) {
+        return
+      }
       currentPlayer?.play()
       return
     }
@@ -62,6 +71,9 @@ class MainFeedPlayersViewModel: ObservableObject {
       prevPlayer = AVPlayer(url: URL(string: apiViewModel.mainFeed[currentVideoIndex - 1].videoUrl ?? "")!)
     }
     currentPlayer?.seek(to: .zero)
+    if BlockList.shared.userIds.contains(apiViewModel.mainFeed[currentVideoIndex].userId ?? 0) {
+      return
+    }
     currentPlayer?.play()
   }
 
@@ -110,6 +122,9 @@ class MainFeedPlayersViewModel: ObservableObject {
       apiViewModel.mainFeed.remove(at: currentVideoIndex)
       nextPlayer = AVPlayer(url: URL(string: apiViewModel.mainFeed[currentVideoIndex].videoUrl ?? "")!)
       currentPlayer?.seek(to: .zero)
+      if BlockList.shared.userIds.contains(apiViewModel.mainFeed[currentVideoIndex].userId ?? 0) {
+        return
+      }
       currentPlayer?.play()
       return
     }
@@ -124,6 +139,9 @@ class MainFeedPlayersViewModel: ObservableObject {
         prevPlayer = AVPlayer(url: URL(string: apiViewModel.mainFeed[currentVideoIndex - 1].videoUrl ?? "")!)
       }
       currentPlayer?.seek(to: .zero)
+      if BlockList.shared.userIds.contains(apiViewModel.mainFeed[currentVideoIndex].userId ?? 0) {
+        return
+      }
       currentPlayer?.play()
       completion()
     } else {
@@ -132,6 +150,9 @@ class MainFeedPlayersViewModel: ObservableObject {
       apiViewModel.mainFeed.remove(at: currentVideoIndex)
       nextPlayer = AVPlayer(url: URL(string: apiViewModel.mainFeed[currentVideoIndex + 1].videoUrl ?? "")!)
       currentPlayer?.seek(to: .zero)
+      if BlockList.shared.userIds.contains(apiViewModel.mainFeed[currentVideoIndex].userId ?? 0) {
+        return
+      }
       currentPlayer?.play()
     }
   }

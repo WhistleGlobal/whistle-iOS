@@ -209,17 +209,20 @@ struct MainContentPlayerView: View {
         }
         .frame(width: UIScreen.width, height: UIScreen.height)
         .ignoresSafeArea()
-        .onReceive(apiViewModel.publisher) { id in
-          newId = id
-        }
-        .id(newId)
       }
+      .onReceive(apiViewModel.publisher) { id in
+        newId = id
+      }
+      .id(newId)
     }
     .onAppear {
       if index == 0 {
         lifecycleDelegate?.onAppear()
       } else {
         feedPlayersViewModel.currentPlayer?.seek(to: .zero)
+        if BlockList.shared.userIds.contains(currentContentInfo?.userId ?? 0) {
+          return
+        }
         feedPlayersViewModel.currentPlayer?.play()
       }
     }

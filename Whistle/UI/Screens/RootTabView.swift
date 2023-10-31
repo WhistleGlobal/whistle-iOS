@@ -56,15 +56,6 @@ struct RootTabView: View {
       }
       if isAccess {
         NavigationStack {
-//          MainFeedView(
-//            mainOpacity: $mainOpacity,
-//            isRootStacked: $isRootStacked,
-//            refreshCount: $refreshCount)
-//            .environmentObject(universalRoutingModel)
-//            .opacity(mainOpacity)
-//            .onChange(of: tabbarModel.tabSelectionNoAnimation) { newValue in
-//              mainOpacity = newValue == .main ? 1 : 0
-//            }
           MainFeedView()
             .environmentObject(universalRoutingModel)
         }
@@ -323,6 +314,9 @@ struct RootTabView: View {
       PrivacyPolicyView()
     }
     .navigationBarBackButtonHidden()
+    .onChange(of: tabbarModel.tabSelectionNoAnimation) { _ in
+      apiViewModel.publisherSend()
+    }
   }
 }
 
