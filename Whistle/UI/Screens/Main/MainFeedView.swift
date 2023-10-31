@@ -8,9 +8,9 @@
 import _AVKit_SwiftUI
 import SwiftUI
 
-// MARK: - MainFeedKitView
+// MARK: - MainFeedView
 
-struct MainFeedKitView: View {
+struct MainFeedView: View {
 
   @EnvironmentObject var universalRoutingModel: UniversalRoutingModel
   @StateObject private var apiViewModel = APIViewModel.shared

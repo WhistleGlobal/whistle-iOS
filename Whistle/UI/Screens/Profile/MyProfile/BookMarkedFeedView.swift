@@ -8,9 +8,9 @@
 import _AVKit_SwiftUI
 import SwiftUI
 
-// MARK: - BookMarkedFeedKitView
+// MARK: - BookMarkedFeedView
 
-struct BookMarkedFeedKitView: View {
+struct BookMarkedFeedView: View {
 
   @Environment(\.dismiss) var dismiss
   @StateObject private var apiViewModel = APIViewModel.shared

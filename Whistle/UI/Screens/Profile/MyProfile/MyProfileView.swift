@@ -116,7 +116,7 @@ struct MyProfileView: View {
             ], spacing: 20) {
               ForEach(Array(apiViewModel.myFeed.enumerated()), id: \.element) { index , content in
                 NavigationLink {
-                  MyFeedKitView(index: index)
+                  MyFeedView(index: index)
                 } label: {
                   videoThumbnailView(
                     thumbnailURL: content.thumbnailUrl ?? "",
@@ -145,7 +145,7 @@ struct MyProfileView: View {
             ], spacing: 20) {
               ForEach(Array(apiViewModel.bookmark.enumerated()), id: \.element) { index, content in
                 NavigationLink {
-                  BookMarkedFeedKitView(index: index)
+                  BookMarkedFeedView(index: index)
                 } label: {
                   videoThumbnailView(thumbnailURL: content.thumbnailUrl, viewCount: content.viewCount)
                 }

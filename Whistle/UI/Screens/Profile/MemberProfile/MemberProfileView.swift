@@ -92,7 +92,7 @@ struct MemberProfileView: View {
             ], spacing: 20) {
               ForEach(Array(apiViewModel.memberFeed.enumerated()), id: \.element) { index, content in
                 NavigationLink {
-                  MemberFeedKitView(index: index, userId: apiViewModel.memberFeed[index].userId ?? 0)
+                  MemberFeedView(index: index, userId: apiViewModel.memberFeed[index].userId ?? 0)
                     .id(UUID())
                 } label: {
                   videoThumbnailView(
