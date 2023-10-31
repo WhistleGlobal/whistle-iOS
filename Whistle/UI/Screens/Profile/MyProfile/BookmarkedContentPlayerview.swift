@@ -40,7 +40,7 @@ struct BookmarkedContentPlayerview: View {
     VStack(spacing: 0) {
       ForEach(Array(apiViewModel.bookmark.enumerated()), id: \.element) { index, content in
         ZStack {
-          Color.clear.overlay {
+          Color.black.overlay {
             KFImage.url(URL(string: apiViewModel.bookmark[index].thumbnailUrl))
               .placeholder {
                 Color.black
@@ -95,18 +95,20 @@ struct BookmarkedContentPlayerview: View {
                 }
                 .onLongPressGesture {
                   HapticManager.instance.impact(style: .medium)
-                  feedMoreModel.showDialog = true
+                  feedMoreModel.bottomSheetPosition = .absolute(186)
                 }
                 .overlay {
                   if tabbarModel.tabWidth != 56 {
                     BookmarkedContentLayer(
                       currentVideoInfo: content,
-                      showDialog: $feedMoreModel.showDialog,
                       index: $index,
                       whistleAction: {
                         whistleToggle(content: content, index)
                       },
                       dismissAction: dismissAction)
+                  }
+                  if feedMoreModel.bottomSheetPosition != .hidden {
+                    DimmedBackground()
                   }
                 }
               playButton(toPlay: player.rate == 0)
@@ -298,5 +300,6 @@ extension BookmarkedContentPlayerview {
       apiViewModel.bookmark[index].whistleCount += 1
     }
     apiViewModel.bookmark[index].isWhistled.toggle()
+    currentContentInfo = apiViewModel.bookmark[index]
   }
 }

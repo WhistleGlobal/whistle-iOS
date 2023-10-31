@@ -86,6 +86,9 @@ struct MainFeedPageView: UIViewRepresentable {
           parent.feedPlayersViewModel.initialPlayers()
         }
         parent.feedPlayersViewModel.currentPlayer?.seek(to: .zero)
+        if BlockList.shared.userIds.contains(parent.currentContentInfo?.userId ?? 0) {
+          return
+        }
         parent.feedPlayersViewModel.currentPlayer?.play()
       }
     }
@@ -118,6 +121,9 @@ struct MainFeedPageView: UIViewRepresentable {
         parent.feedPlayersViewModel.stopPlayer()
         parent.feedPlayersViewModel.resetPlayer()
         parent.feedPlayersViewModel.initialPlayers()
+        if BlockList.shared.userIds.contains(parent.currentContentInfo?.userId ?? 0) {
+          return
+        }
         parent.feedPlayersViewModel.currentPlayer?.play()
       }
     }

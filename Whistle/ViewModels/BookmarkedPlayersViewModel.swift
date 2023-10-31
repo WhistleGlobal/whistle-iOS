@@ -157,7 +157,9 @@ class BookmarkedPlayersViewModel: ObservableObject {
       currentPlayer = nil
       currentPlayer = nextPlayer
       apiViewModel.bookmark.remove(at: currentVideoIndex)
-      nextPlayer = AVPlayer(url: URL(string: apiViewModel.bookmark[currentVideoIndex + 1].videoUrl)!)
+      if currentVideoIndex != apiViewModel.bookmark.count - 1 {
+        nextPlayer = AVPlayer(url: URL(string: apiViewModel.bookmark[currentVideoIndex + 1].videoUrl)!)
+      }
       currentPlayer?.seek(to: .zero)
       currentPlayer?.play()
     }

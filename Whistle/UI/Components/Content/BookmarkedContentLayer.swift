@@ -18,7 +18,6 @@ struct BookmarkedContentLayer: View {
   @StateObject var toastViewModel = ToastViewModel.shared
   @StateObject private var feedMoreModel = BookmarkedFeedMoreModel.shared
   @StateObject var feedPlayersViewModel = BookmarkedPlayersViewModel.shared
-  @Binding var showDialog: Bool
   @Binding var index: Int
   var whistleAction: () -> Void
   let dismissAction: DismissAction
@@ -120,16 +119,12 @@ struct BookmarkedContentLayer: View {
           Spacer()
           Button {
             whistleAction()
-            let currentContent = apiViewModel.myFeed[feedPlayersViewModel.currentVideoIndex]
+            let currentContent = apiViewModel.bookmark[feedPlayersViewModel.currentVideoIndex]
             apiViewModel.mainFeed = apiViewModel.mainFeed.map { item in
               let mutableItem = item
               if mutableItem.contentId == currentContent.contentId {
-                if mutableItem.isWhistled {
-                  mutableItem.whistleCount -= 1
-                } else {
-                  mutableItem.whistleCount += 1
-                }
-                mutableItem.isWhistled.toggle()
+                mutableItem.whistleCount = currentContent.whistleCount
+                mutableItem.isWhistled = currentContent.isWhistled
               }
               return mutableItem
             }
@@ -144,7 +139,7 @@ struct BookmarkedContentLayer: View {
             .frame(height: UIScreen.getHeight(56))
           }
           Button {
-            toastViewModel.cancelToastInit(message: "저장 취소되었습니다.") {
+            toastViewModel.cancelToastInit(message: "북마크를 취소했습니다") {
               Task {
                 let currentContent = apiViewModel.bookmark[feedPlayersViewModel.currentVideoIndex]
                 _ = await apiViewModel.bookmarkAction(contentID: currentContent.contentId, method: .delete)
@@ -171,10 +166,12 @@ struct BookmarkedContentLayer: View {
             .frame(height: UIScreen.getHeight(56))
           }
           Button {
-            toastViewModel.toastInit(message: "클립보드에 복사되었습니다")
-            UIPasteboard.general.setValue(
-              "https://readywhistle.com/content_uni?contentId=\(currentVideoInfo.contentId)",
-              forPasteboardType: UTType.plainText.identifier)
+            let shareURL = URL(string: "https://readywhistle.com/content_uni?contentId=\(currentVideoInfo.contentId ?? 0)")!
+            let activityViewController = UIActivityViewController(activityItems: [shareURL], applicationActivities: nil)
+            UIApplication.shared.windows.first?.rootViewController?.present(
+              activityViewController,
+              animated: true,
+              completion: nil)
           } label: {
             VStack(spacing: 2) {
               Image(systemName: "square.and.arrow.up")
@@ -186,7 +183,7 @@ struct BookmarkedContentLayer: View {
             .frame(height: UIScreen.getHeight(56))
           }
           Button {
-            showDialog = true
+            feedMoreModel.bottomSheetPosition = .absolute(186)
           } label: {
             VStack(spacing: 2) {
               Image(systemName: "ellipsis")

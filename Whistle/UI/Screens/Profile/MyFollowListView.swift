@@ -47,6 +47,7 @@ struct MyFollowListView: View {
             tab: profileTabStatus.following.rawValue,
             selectedTab: $tabStatus))
       }
+      .padding(.horizontal, 16)
       .frame(height: 48)
       // FIXME: - 코드 리팩 필요
       if tabStatus == .follower {
@@ -74,7 +75,6 @@ struct MyFollowListView: View {
       }
       Spacer()
     }
-    .padding(.horizontal, 16)
     .navigationBarBackButtonHidden()
     .toolbar {
       ToolbarItem(placement: .cancellationAction) {
@@ -106,51 +106,52 @@ extension MyFollowListView {
     userId: Int)
     -> some View
   {
-    HStack(spacing: 0) {
-      profileImageView(url: profileImage, size: 48)
-      VStack(spacing: 0) {
-        Text(userName)
-          .fontSystem(fontDesignSystem: .subtitle2_KO)
-          .foregroundColor(.LabelColor_Primary)
-          .frame(maxWidth: .infinity, alignment: .leading)
-//        Text(description)
-//          .fontSystem(fontDesignSystem: .body2_KO)
-//          .foregroundColor(.LabelColor_Secondary)
-//          .frame(maxWidth: .infinity, alignment: .leading)
-      }
-      .padding(.leading, 16)
-      if userName != apiViewModel.myProfile.userName {
-        Button("") {
-          Task {
-            if isFollowed.wrappedValue {
-              await apiViewModel.followAction(userID: userId, method: .delete)
-              apiViewModel.mainFeed = apiViewModel.mainFeed.map { content in
-                let updatedContent = content
-                if content.userId == userId {
-                  updatedContent.isFollowed.toggle()
-                }
-                return updatedContent
-              }
-            } else {
-              await apiViewModel.followAction(userID: userId, method: .post)
-              apiViewModel.mainFeed = apiViewModel.mainFeed.map { content in
-                let updatedContent = content
-                if content.userId == userId {
-                  updatedContent.isFollowed.toggle()
-                }
-                return updatedContent
-              }
-            }
-            isFollowed.wrappedValue.toggle()
-            apiViewModel.publisherSend()
-          }
+    VStack(spacing: 0) {
+      HStack(spacing: 0) {
+        profileImageView(url: profileImage, size: 48)
+        VStack(spacing: 0) {
+          Text(userName)
+            .fontSystem(fontDesignSystem: .subtitle2_KO)
+            .foregroundColor(.LabelColor_Primary)
+            .frame(maxWidth: .infinity, alignment: .leading)
         }
-        .buttonStyle(FollowButtonStyle(isFollowed: isFollowed))
+        .padding(.leading, 16)
+        if userName != apiViewModel.myProfile.userName {
+          Button("") {
+            Task {
+              if isFollowed.wrappedValue {
+                await apiViewModel.followAction(userID: userId, method: .delete)
+                apiViewModel.mainFeed = apiViewModel.mainFeed.map { content in
+                  let updatedContent = content
+                  if content.userId == userId {
+                    updatedContent.isFollowed.toggle()
+                  }
+                  return updatedContent
+                }
+              } else {
+                await apiViewModel.followAction(userID: userId, method: .post)
+                apiViewModel.mainFeed = apiViewModel.mainFeed.map { content in
+                  let updatedContent = content
+                  if content.userId == userId {
+                    updatedContent.isFollowed.toggle()
+                  }
+                  return updatedContent
+                }
+              }
+              isFollowed.wrappedValue.toggle()
+              apiViewModel.publisherSend()
+            }
+          }
+          .buttonStyle(FollowButtonStyle(isFollowed: isFollowed))
+        }
+        Spacer()
       }
-      Spacer()
+      .padding(.horizontal, 16)
+      .frame(height: 72)
+      .frame(maxWidth: .infinity)
+      Divider().frame(height: 0.5).padding(.leading, 80)
+        .foregroundColor(.Disable_Placeholder)
     }
-    .frame(height: 72)
-    .frame(maxWidth: .infinity)
   }
 
   @ViewBuilder

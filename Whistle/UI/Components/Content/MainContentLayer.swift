@@ -8,6 +8,7 @@
 import AVFoundation
 import Combine
 import SwiftUI
+import UIKit
 
 // MARK: - MainContentLayer
 
@@ -18,7 +19,6 @@ struct MainContentLayer: View {
   @StateObject var toastViewModel = ToastViewModel.shared
   @StateObject private var feedMoreModel = MainFeedMoreModel.shared
   @StateObject var feedPlayersViewModel = MainFeedPlayersViewModel.shared
-  @Binding var showDialog: Bool
   var whistleAction: () -> Void
 
   var body: some View {
@@ -121,13 +121,13 @@ struct MainContentLayer: View {
                 _ = await apiViewModel.bookmarkAction(
                   contentID: currentContent.contentId ?? 0,
                   method: .delete)
-                toastViewModel.toastInit(message: "저장 취소했습니다.")
+                toastViewModel.toastInit(message: "북마크를 취소했습니다")
                 currentContent.isBookmarked = false
               } else {
                 _ = await apiViewModel.bookmarkAction(
                   contentID: currentContent.contentId ?? 0,
                   method: .post)
-                toastViewModel.toastInit(message: "저장했습니다.")
+                toastViewModel.toastInit(message: "북마크에 저장했습니다")
                 currentContent.isBookmarked = true
               }
             }
@@ -142,10 +142,13 @@ struct MainContentLayer: View {
             .frame(height: UIScreen.getHeight(56))
           }
           Button {
-            toastViewModel.toastInit(message: "클립보드에 복사되었습니다")
-            UIPasteboard.general.setValue(
-              "https://readywhistle.com/content_uni?contentId=\(currentVideoInfo.contentId ?? 0)",
-              forPasteboardType: UTType.plainText.identifier)
+            let shareURL = URL(
+              string: "https://readywhistle.com/content_uni?contentId=\(currentVideoInfo.contentId ?? 0)")!
+            let activityViewController = UIActivityViewController(activityItems: [shareURL], applicationActivities: nil)
+            UIApplication.shared.windows.first?.rootViewController?.present(
+              activityViewController,
+              animated: true,
+              completion: nil)
           } label: {
             VStack(spacing: 2) {
               Image(systemName: "square.and.arrow.up")
@@ -157,7 +160,7 @@ struct MainContentLayer: View {
             .frame(height: UIScreen.getHeight(56))
           }
           Button {
-            showDialog = true
+            feedMoreModel.bottomSheetPosition = .absolute(242)
           } label: {
             VStack(spacing: 2) {
               Image(systemName: "ellipsis")

@@ -18,7 +18,6 @@ struct MyContentLayer: View {
   @StateObject var toastViewModel = ToastViewModel.shared
   @StateObject private var feedMoreModel = MyFeedMoreModel.shared
   @StateObject var feedPlayersViewModel = MyFeedPlayersViewModel.shared
-  @Binding var showDialog: Bool
   var whistleAction: () -> Void
   let dismissAction: DismissAction
 
@@ -76,12 +75,8 @@ struct MyContentLayer: View {
             apiViewModel.mainFeed = apiViewModel.mainFeed.map { item in
               let mutableItem = item
               if mutableItem.contentId == currentContent.contentId {
-                if mutableItem.isWhistled {
-                  mutableItem.whistleCount -= 1
-                } else {
-                  mutableItem.whistleCount += 1
-                }
-                mutableItem.isWhistled.toggle()
+                mutableItem.whistleCount = currentContent.whistleCount ?? 0
+                mutableItem.isWhistled = currentContent.isWhistled
               }
               return mutableItem
             }
@@ -90,7 +85,7 @@ struct MyContentLayer: View {
               Image(systemName: currentVideoInfo.isWhistled ? "heart.fill" : "heart")
                 .font(.system(size: 26))
                 .frame(width: 36, height: 36)
-              Text("\(currentVideoInfo.contentWhistleCount ?? 0)")
+              Text("\(currentVideoInfo.whistleCount ?? 0)")
                 .fontSystem(fontDesignSystem: .caption_KO_Semibold)
             }
             .frame(height: UIScreen.getHeight(56))
@@ -102,14 +97,21 @@ struct MyContentLayer: View {
                 _ = await apiViewModel.bookmarkAction(
                   contentID: currentContent.contentId ?? 0,
                   method: .delete)
-                toastViewModel.toastInit(message: "저장 취소했습니다.")
+                toastViewModel.toastInit(message: "북마크를 취소했습니다")
                 currentContent.isBookmarked = false
               } else {
                 _ = await apiViewModel.bookmarkAction(
                   contentID: currentContent.contentId ?? 0,
                   method: .post)
-                toastViewModel.toastInit(message: "저장했습니다.")
+                toastViewModel.toastInit(message: "북마크를 취소했습니다")
                 currentContent.isBookmarked = true
+              }
+              apiViewModel.mainFeed = apiViewModel.mainFeed.map { item in
+                let mutableItem = item
+                if mutableItem.contentId == currentContent.contentId {
+                  mutableItem.isBookmarked = currentContent.isBookmarked
+                }
+                return mutableItem
               }
             }
           } label: {
@@ -123,10 +125,12 @@ struct MyContentLayer: View {
             .frame(height: UIScreen.getHeight(56))
           }
           Button {
-            toastViewModel.toastInit(message: "클립보드에 복사되었습니다")
-            UIPasteboard.general.setValue(
-              "https://readywhistle.com/content_uni?contentId=\(currentVideoInfo.contentId ?? 0)",
-              forPasteboardType: UTType.plainText.identifier)
+            let shareURL = URL(string: "https://readywhistle.com/content_uni?contentId=\(currentVideoInfo.contentId ?? 0)")!
+            let activityViewController = UIActivityViewController(activityItems: [shareURL], applicationActivities: nil)
+            UIApplication.shared.windows.first?.rootViewController?.present(
+              activityViewController,
+              animated: true,
+              completion: nil)
           } label: {
             VStack(spacing: 2) {
               Image(systemName: "square.and.arrow.up")
@@ -138,7 +142,7 @@ struct MyContentLayer: View {
             .frame(height: UIScreen.getHeight(56))
           }
           Button {
-            showDialog = true
+            feedMoreModel.bottomSheetPosition = .absolute(186)
           } label: {
             VStack(spacing: 2) {
               Image(systemName: "ellipsis")
