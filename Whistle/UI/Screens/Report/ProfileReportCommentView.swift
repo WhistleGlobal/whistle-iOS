@@ -80,7 +80,12 @@ struct ProfileReportCommentView: View {
       ToolbarItem(placement: .confirmationAction) {
         Button {
           isFocused = false
-          alertViewModel.linearAlert(title: "정말 신고하시겠습니까?", cancelText: CommonWords().cancel, destructiveText: "신고") {
+          alertViewModel.linearAlert(
+            isRed: true,
+            title: "정말 신고하시겠습니까?",
+            cancelText: "취소",
+            destructiveText: "신고")
+          {
             if reportCategory == .post {
               Task {
                 let reportSuccess = await apiViewModel.reportContent(

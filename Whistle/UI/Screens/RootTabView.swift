@@ -56,16 +56,17 @@ struct RootTabView: View {
       }
       if isAccess {
         NavigationStack {
-          MainFeedView(
-            mainOpacity: $mainOpacity,
-            isRootStacked: $isRootStacked,
-            refreshCount: $refreshCount)
-
+//          MainFeedView(
+//            mainOpacity: $mainOpacity,
+//            isRootStacked: $isRootStacked,
+//            refreshCount: $refreshCount)
+//            .environmentObject(universalRoutingModel)
+//            .opacity(mainOpacity)
+//            .onChange(of: tabbarModel.tabSelectionNoAnimation) { newValue in
+//              mainOpacity = newValue == .main ? 1 : 0
+//            }
+          MainFeedView()
             .environmentObject(universalRoutingModel)
-            .opacity(mainOpacity)
-            .onChange(of: tabbarModel.tabSelectionNoAnimation) { newValue in
-              mainOpacity = newValue == .main ? 1 : 0
-            }
         }
         .tint(.black)
       } else {
@@ -338,11 +339,6 @@ extension RootTabView {
           if isAccess {
             if isRootStacked {
               NavigationUtil.popToRootView()
-            } else {
-              apiViewModel.requestMainFeed {
-                HapticManager.instance.impact(style: .medium)
-                refreshCount += 1
-              }
             }
           }
         } else {

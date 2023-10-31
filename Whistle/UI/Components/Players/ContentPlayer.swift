@@ -19,16 +19,11 @@ struct ContentPlayer: UIViewControllerRepresentable {
     let view = AVPlayerViewController()
     let audioSession = AVAudioSession.sharedInstance()
     do {
-      try audioSession.setCategory(
-        .playback,
-        mode: .default,
-        options: [
-          .defaultToSpeaker,
-          .allowAirPlay,
-          .allowBluetooth,
-        ])
+      try audioSession.setCategory(.playback)
       try audioSession.setActive(true)
-    } catch { }
+    } catch {
+      WhistleLogger.logger.error("\(error)")
+    }
     view.player = player
     if #available(iOS 16.0, *) {
       view.allowsVideoFrameAnalysis = false

@@ -321,7 +321,7 @@ struct GuestMainView: View {
       playerIndex = newValue
       currentVideoUserId = apiViewModel.guestFeed[newValue].userId ?? 0
       currentVideoContentId = apiViewModel.guestFeed[newValue].contentId ?? 0
-      apiViewModel.postFeedPlayerChanged()
+      apiViewModel.publisherSend()
       if (newValue + 1) % 3 == 0, newValue + 1 != 1 {
         bottomSheetPosition = .dynamic
       }

@@ -16,7 +16,7 @@ protocol PostFeedProtocol {
   func requestMainFeed(completion: @escaping () -> Void)
   func requestReportedFeed() async
   // TODO: - MainView 정리 시 함께 정리
-  func postFeedPlayerChanged()
+  func publisherSend()
   func bookmarkAction(contentID: Int, method: HTTPMethod) async -> Bool
   func whistleAction(contentID: Int, method: HTTPMethod) async
   func actionContentHate(contentID: Int) async

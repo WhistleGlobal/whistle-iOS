@@ -108,8 +108,7 @@ struct SEMyProfileView: View {
             ], spacing: 20) {
               ForEach(Array(apiViewModel.myFeed.enumerated()), id: \.element) { index, content in
                 NavigationLink {
-                  MyFeedView(currentIndex: index)
-
+                  MyFeedView(index: index)
                 } label: {
                   videoThumbnailView(
                     thumbnailUrl: content.thumbnailUrl ?? "",
@@ -138,7 +137,7 @@ struct SEMyProfileView: View {
             ], spacing: 20) {
               ForEach(Array(apiViewModel.bookmark.enumerated()), id: \.element) { index, content in
                 NavigationLink {
-                  BookmarkedFeedView(currentIndex: index)
+                  BookMarkedFeedView(index: index)
                 } label: {
                   videoThumbnailView(thumbnailUrl: content.thumbnailUrl, viewCount: content.viewCount)
                 }
@@ -223,7 +222,10 @@ struct SEMyProfileView: View {
             withAnimation {
               bottomSheetPosition = .hidden
             }
-            alertViewModel.linearAlert(title: "정말 로그아웃하시겠어요?", destructiveText: "로그아웃") {
+            alertViewModel.linearAlert(
+              title: "정말 로그아웃하시겠어요?",
+              destructiveText: "로그아웃")
+            {
               apiViewModel.reset()
               GIDSignIn.sharedInstance.signOut()
               userAuth.appleSignout()

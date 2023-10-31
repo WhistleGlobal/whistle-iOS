@@ -142,7 +142,7 @@ extension MyFollowListView {
               }
             }
             isFollowed.wrappedValue.toggle()
-            apiViewModel.postFeedPlayerChanged()
+            apiViewModel.publisherSend()
           }
         }
         .buttonStyle(FollowButtonStyle(isFollowed: isFollowed))
@@ -176,11 +176,11 @@ extension MyFollowListView {
           if UIDevice.current.userInterfaceIdiom == .phone {
             switch UIScreen.main.nativeBounds.height {
             case 1334: // iPhone SE 3rd generation
-              SEMemberProfileView(players: .constant([]), currentIndex: .constant(0), userId: follower.followerId)
+              SEMemberProfileView(userId: follower.followerId)
                 .environmentObject(apiViewModel)
                 .id(UUID())
             default:
-              MemberProfileView(players: .constant([]), currentIndex: .constant(0), userId: follower.followerId)
+              MemberProfileView(userId: follower.followerId)
                 .environmentObject(apiViewModel)
                 .id(UUID())
             }
@@ -211,11 +211,11 @@ extension MyFollowListView {
           if UIDevice.current.userInterfaceIdiom == .phone {
             switch UIScreen.main.nativeBounds.height {
             case 1334: // iPhone SE 3rd generation
-              SEMemberProfileView(players: .constant([]), currentIndex: .constant(0), userId: following.followingId)
+              SEMemberProfileView(userId: following.followingId)
                 .environmentObject(apiViewModel)
                 .id(UUID())
             default:
-              MemberProfileView(players: .constant([]), currentIndex: .constant(0), userId: following.followingId)
+              MemberProfileView(userId: following.followingId)
                 .environmentObject(apiViewModel)
                 .id(UUID())
             }

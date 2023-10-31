@@ -27,6 +27,7 @@ struct MyProfileView: View {
   @StateObject private var tabbarModel = TabbarModel.shared
   @StateObject private var toastViewModel = ToastViewModel.shared
   @StateObject var alertViewModel = AlertViewModel.shared
+  @StateObject private var feedPlayersViewModel = MainFeedPlayersViewModel.shared
 
   @State var isShowingBottomSheet = false
   @State var tabbarDirection: CGFloat = -1.0
@@ -113,9 +114,9 @@ struct MyProfileView: View {
               GridItem(.flexible()),
               GridItem(.flexible()),
             ], spacing: 20) {
-              ForEach(Array(apiViewModel.myFeed.enumerated()), id: \.element) { index, content in
+              ForEach(Array(apiViewModel.myFeed.enumerated()), id: \.element) { index , content in
                 NavigationLink {
-                  MyFeedView(currentIndex: index)
+                  MyFeedView(index: index)
                 } label: {
                   videoThumbnailView(
                     thumbnailURL: content.thumbnailUrl ?? "",
@@ -144,7 +145,7 @@ struct MyProfileView: View {
             ], spacing: 20) {
               ForEach(Array(apiViewModel.bookmark.enumerated()), id: \.element) { index, content in
                 NavigationLink {
-                  BookmarkedFeedView(currentIndex: index)
+                  BookMarkedFeedView(index: index)
                 } label: {
                   videoThumbnailView(thumbnailURL: content.thumbnailUrl, viewCount: content.viewCount)
                 }
@@ -226,8 +227,13 @@ struct MyProfileView: View {
             }
             alertViewModel.linearAlert(title: "정말 로그아웃하시겠어요?", cancelText: CommonWords().cancel, destructiveText: "로그아웃") {
               apiViewModel.reset()
+              apiViewModel.publisherSend()
+              NavigationUtil.popToRootView()
+              feedPlayersViewModel.resetPlayer()
               GIDSignIn.sharedInstance.signOut()
               userAuth.appleSignout()
+              tabbarModel.tabSelectionNoAnimation = .main
+              tabbarModel.tabSelection = .main
               isFirstProfileLoaded = false
             }
           } label: {
@@ -238,6 +244,7 @@ struct MyProfileView: View {
               bottomSheetPosition = .hidden
             }
             alertViewModel.linearAlert(
+              isRed: true,
               title: "정말 삭제하시겠어요?",
               content: "삭제하시면 회원님의 모든 정보와 활동 기록이 삭제됩니다. 삭제된 정보는 복구할 수 없으니 신중하게 결정해주세요.",
               cancelText: CommonWords().cancel,
