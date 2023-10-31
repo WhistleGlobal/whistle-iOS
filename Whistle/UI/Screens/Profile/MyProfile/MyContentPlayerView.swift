@@ -7,6 +7,7 @@
 
 import _AVKit_SwiftUI
 import AVFoundation
+import BottomSheet
 import Combine
 import Kingfisher
 import SwiftUI
@@ -19,7 +20,7 @@ struct MyContentPlayerView: View {
   @StateObject var apiViewModel = APIViewModel.shared
   @StateObject var feedPlayersViewModel = MyFeedPlayersViewModel.shared
   @StateObject private var toastViewModel = ToastViewModel.shared
-  @StateObject private var feedMoreModel = MyFeedMoreModel.shared
+  @StateObject var feedMoreModel = MyFeedMoreModel.shared
   @StateObject private var tabbarModel = TabbarModel.shared
 
   @State var newId = UUID()
@@ -97,17 +98,19 @@ struct MyContentPlayerView: View {
                 }
                 .onLongPressGesture {
                   HapticManager.instance.impact(style: .medium)
-                  feedMoreModel.showDialog = true
+                  feedMoreModel.bottomSheetPotision = .absolute(186)
                 }
                 .overlay {
                   if tabbarModel.tabWidth != 56 {
                     MyContentLayer(
                       currentVideoInfo: content,
-                      showDialog: $feedMoreModel.showDialog,
                       whistleAction: {
                         whistleToggle(content: content, index)
                       },
                       dismissAction: dismissAction)
+                  }
+                  if feedMoreModel.bottomSheetPotision != .hidden {
+                    DimmedBackground()
                   }
                 }
               playButton(toPlay: player.rate == 0)

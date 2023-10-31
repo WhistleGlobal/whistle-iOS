@@ -143,8 +143,7 @@ struct MainContentLayer: View {
           }
           Button {
             let shareURL = URL(
-                string: "https://readywhistle.com/content_uni?contentId=\(currentVideoInfo.contentId ?? 0)"
-            )!
+              string: "https://readywhistle.com/content_uni?contentId=\(currentVideoInfo.contentId ?? 0)")!
             let activityViewController = UIActivityViewController(activityItems: [shareURL], applicationActivities: nil)
             UIApplication.shared.windows.first?.rootViewController?.present(
               activityViewController,

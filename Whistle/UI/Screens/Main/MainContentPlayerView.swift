@@ -7,6 +7,7 @@
 
 import _AVKit_SwiftUI
 import AVFoundation
+import BottomSheet
 import Combine
 import Kingfisher
 import SwiftUI
@@ -105,6 +106,9 @@ struct MainContentPlayerView: View {
                       whistleAction: {
                         whistleToggle(content: content, index)
                       })
+                  }
+                  if feedMoreModel.bottomSheetPotision != .hidden {
+                    DimmedBackground()
                   }
                 }
               playButton(toPlay: player.rate == 0)
