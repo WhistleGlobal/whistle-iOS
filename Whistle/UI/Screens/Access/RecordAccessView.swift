@@ -13,6 +13,7 @@ import SwiftUI
 
 struct RecordAccessView: View {
   @StateObject private var tabbarModel = TabbarModel.shared
+  @StateObject var alertViewModel = AlertViewModel.shared
   @State var showAlert = (false, VideoUsageAuth.none)
   @State var opacity = 0.1
   @Binding var isCameraAuthorized: Bool
@@ -67,6 +68,19 @@ struct RecordAccessView: View {
           requestCameraPermission()
           requestMicrophonePermission()
           showAuthAlert()
+          if showAlert.0 {
+            alertViewModel.linearAlert(
+              isRed: false,
+              title: "'Whistle'에 대해 \(showAlert.1.rawValue)이 없습니다. 설정에서 \(showAlert.1.rawValue) 권한을 켜시겠습니까?",
+              cancelText: "취소",
+              destructiveText: "설정으로 가기")
+            {
+              guard let url = URL(string: UIApplication.openSettingsURLString) else { return }
+              if UIApplication.shared.canOpenURL(url) {
+                UIApplication.shared.open(url)
+              }
+            }
+          }
         } label: {
           Text("계속")
             .fontSystem(fontDesignSystem: .subtitle2_KO)
@@ -85,16 +99,10 @@ struct RecordAccessView: View {
       .padding(.bottom, 58)
     }
     .ignoresSafeArea()
-    .alert(isPresented: $showAlert.0) {
-      Alert(
-        title: Text("'Whistle'에 대해 \(showAlert.1.rawValue)이 없습니다. 설정에서 \(showAlert.1.rawValue) 권한을 켜시겠습니까?"),
-        primaryButton: .default(Text("설정으로 가기"), action: {
-          guard let url = URL(string: UIApplication.openSettingsURLString) else { return }
-          if UIApplication.shared.canOpenURL(url) {
-            UIApplication.shared.open(url)
-          }
-        }),
-        secondaryButton: .cancel())
+    .overlay {
+      if !alertViewModel.onFullScreenCover {
+        AlertPopup()
+      }
     }
   }
 }

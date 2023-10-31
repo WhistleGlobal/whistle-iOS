@@ -672,6 +672,7 @@ extension VideoCaptureView {
       .overlay(alignment: .leading) {
         Button {
           alertViewModel.linearAlert(
+            isRed: true,
             title: "영상을 삭제하시겠어요?",
             content: "지금 돌아가면 변경 사항이 모두 삭제됩니다.",
             cancelText: "계속 수정",

@@ -124,6 +124,7 @@ struct MemberProfileView: View {
         Button(apiViewModel.memberProfile.isBlocked ? "차단 해제" : "차단", role: .destructive) {
           if apiViewModel.memberProfile.isBlocked {
             alertViewModel.linearAlert(
+              isRed: true,
               title: "\(apiViewModel.memberProfile.userName) 님을 차단 해제하시겠어요?",
               content: "이제 상대방이 회원님의 게시물을 보거나 팔로우할 수 있습니다. 상대방에게 회원님이 차단을 해제했다는 정보를 알리지 않습니다.",
               destructiveText: "차단해제")
@@ -145,6 +146,7 @@ struct MemberProfileView: View {
             }
           } else {
             alertViewModel.linearAlert(
+              isRed: true,
               title: "\(apiViewModel.memberProfile.userName) 님을 차단하시겠어요?",
               content: "차단된 사람은 회원님의 프로필 또는 콘텐츠를 찾을 수 없게 되며, 상대방에게 차단되었다는 알림이 전송되지 않습니다.",
               cancelText: "취소",
@@ -220,6 +222,7 @@ extension MemberProfileView {
       if apiViewModel.memberProfile.isBlocked {
         Button {
           alertViewModel.linearAlert(
+            isRed: true,
             title: "\(apiViewModel.memberProfile.userName) 님을 차단 해제하시겠어요?",
             content: "이제 상대방이 회원님의 게시물을 보거나 팔로우할 수 있습니다. 상대방에게 회원님이 차단을 해제했다는 정보를 알리지 않습니다.",
             cancelText: "취소",
