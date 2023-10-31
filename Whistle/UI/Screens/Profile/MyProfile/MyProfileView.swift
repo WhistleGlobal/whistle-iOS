@@ -29,6 +29,7 @@ struct MyProfileView: View {
   @StateObject var alertViewModel = AlertViewModel.shared
   @StateObject private var feedPlayersViewModel = MainFeedPlayersViewModel.shared
 
+  @State private var goNotiSetting = false
   @State var isShowingBottomSheet = false
   @State var tabbarDirection: CGFloat = -1.0
   @State var tabSelection: profileTabCase = .myVideo
@@ -37,6 +38,7 @@ struct MyProfileView: View {
 
   @Binding var isFirstProfileLoaded: Bool
   let processor = BlurImageProcessor(blurRadius: 10)
+  let center = UNUserNotificationCenter.current()
 
   var body: some View {
     ZStack {
@@ -181,6 +183,9 @@ struct MyProfileView: View {
         tabbarModel.tabbarOpacity = 0.0
       }
     }
+    .navigationDestination(isPresented: $goNotiSetting) {
+      NotificationSettingView()
+    }
     .bottomSheet(
       bottomSheetPosition: $bottomSheetPosition,
       switchablePositions: [.hidden, .absolute(420)])
@@ -193,11 +198,32 @@ struct MyProfileView: View {
         }
         .frame(height: 52)
         Divider().background(Color("Gray10"))
-        NavigationLink {
-          NotificationSettingView()
+        Button {
+          center.requestAuthorization(options: [.sound , .alert , .badge]) { granted, error in
+            if let error {
+              WhistleLogger.logger.error("\(error)")
+              return
+            }
+            if !granted {
+              alertViewModel.linearAlert(
+                isRed: false,
+                title: "휘슬 앱 알림이 허용되지 않았습니다.\n설정에서 알림을 켜시겠습니까?",
+                cancelText: "취소",
+                destructiveText: "설정으로 가기", cancelAction: { })
+              {
+                guard let url = URL(string: UIApplication.openSettingsURLString) else { return }
+                if UIApplication.shared.canOpenURL(url) {
+                  UIApplication.shared.open(url)
+                }
+              }
+            } else {
+              goNotiSetting = true
+            }
+          }
         } label: {
           bottomSheetRowWithIcon(systemName: "bell", text: "알림")
         }
+
         NavigationLink {
           LegalInfoView()
         } label: {
