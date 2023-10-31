@@ -38,8 +38,7 @@ class MyContent: ObservableObject, Decodable, Hashable {
   @Published var contentWhistleCount: Int?
   @Published var contentViewCount: Int?
   @Published var isWhistled = false
-//  // FIXME: - API 수정 후 적용
-//  @Published var isBookmarked = false
+  @Published var isBookmarked = false
 
   init() { }
 
@@ -58,8 +57,7 @@ class MyContent: ObservableObject, Decodable, Hashable {
     contentWhistleCount = try container.decode(Int?.self, forKey: .contentWhistleCount)
     contentViewCount = try container.decode(Int?.self, forKey: .contentViewCount)
     isWhistled = try container.decode(Int.self, forKey: .isWhistled) == 1
-    //  // FIXME: - API 수정 후 적용
-//    isBookmarked = try container.decode(Int?.self, forKey: .isBookmarked) == 1
+    isBookmarked = try container.decode(Int?.self, forKey: .isBookmarked) == 1
   }
 
   static func == (lhs: MyContent, rhs: MyContent) -> Bool {

@@ -22,7 +22,6 @@ struct MyContentLayer: View {
   var whistleAction: () -> Void
   let dismissAction: DismissAction
 
-
   var body: some View {
     VStack(spacing: 0) {
       HStack(spacing: 0) {
@@ -96,33 +95,33 @@ struct MyContentLayer: View {
             }
             .frame(height: UIScreen.getHeight(56))
           }
-//          Button {
-//            Task {
-//              let currentContent = apiViewModel.myFeed[feedPlayersViewModel.currentVideoIndex]
-//              if currentContent.isBookmarked {
-//                _ = await apiViewModel.bookmarkAction(
-//                  contentID: currentContent.contentId ?? 0,
-//                  method: .delete)
-//                toastViewModel.toastInit(message: "저장 취소했습니다.")
-//                currentContent.isBookmarked = false
-//              } else {
-//                _ = await apiViewModel.bookmarkAction(
-//                  contentID: currentContent.contentId ?? 0,
-//                  method: .post)
-//                toastViewModel.toastInit(message: "저장했습니다.")
-//                currentContent.isBookmarked = true
-//              }
-//            }
-//          } label: {
-//            VStack(spacing: 2) {
-//              Image(systemName: currentVideoInfo.isBookmarked ? "bookmark.fill" : "bookmark")
-//                .font(.system(size: 26))
-//                .frame(width: 36, height: 36)
-//              Text("저장")
-//                .fontSystem(fontDesignSystem: .caption_KO_Semibold)
-//            }
-//            .frame(height: UIScreen.getHeight(56))
-//          }
+          Button {
+            Task {
+              let currentContent = apiViewModel.myFeed[feedPlayersViewModel.currentVideoIndex]
+              if currentContent.isBookmarked {
+                _ = await apiViewModel.bookmarkAction(
+                  contentID: currentContent.contentId ?? 0,
+                  method: .delete)
+                toastViewModel.toastInit(message: "저장 취소했습니다.")
+                currentContent.isBookmarked = false
+              } else {
+                _ = await apiViewModel.bookmarkAction(
+                  contentID: currentContent.contentId ?? 0,
+                  method: .post)
+                toastViewModel.toastInit(message: "저장했습니다.")
+                currentContent.isBookmarked = true
+              }
+            }
+          } label: {
+            VStack(spacing: 2) {
+              Image(systemName: currentVideoInfo.isBookmarked ? "bookmark.fill" : "bookmark")
+                .font(.system(size: 26))
+                .frame(width: 36, height: 36)
+              Text("저장")
+                .fontSystem(fontDesignSystem: .caption_KO_Semibold)
+            }
+            .frame(height: UIScreen.getHeight(56))
+          }
           Button {
             toastViewModel.toastInit(message: "클립보드에 복사되었습니다")
             UIPasteboard.general.setValue(
