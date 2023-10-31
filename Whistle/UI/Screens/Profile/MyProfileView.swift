@@ -238,6 +238,7 @@ struct MyProfileView: View {
               bottomSheetPosition = .hidden
             }
             alertViewModel.linearAlert(
+              isRed: true,
               title: "정말 삭제하시겠어요?",
               content: "삭제하시면 회원님의 모든 정보와 활동 기록이 삭제됩니다. 삭제된 정보는 복구할 수 없으니 신중하게 결정해주세요.",
               cancelText: "취소",

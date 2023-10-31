@@ -223,7 +223,10 @@ struct SEMyProfileView: View {
             withAnimation {
               bottomSheetPosition = .hidden
             }
-            alertViewModel.linearAlert(title: "정말 로그아웃하시겠어요?", destructiveText: "로그아웃") {
+            alertViewModel.linearAlert(
+              title: "정말 로그아웃하시겠어요?",
+              destructiveText: "로그아웃")
+            {
               apiViewModel.reset()
               GIDSignIn.sharedInstance.signOut()
               userAuth.appleSignout()
