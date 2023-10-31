@@ -262,5 +262,7 @@ extension MemberContentPlayerView {
       apiViewModel.memberFeed[index].whistleCount! += 1
     }
     apiViewModel.memberFeed[index].isWhistled.toggle()
+    currentContentInfo = apiViewModel.memberFeed[index]
   }
+
 }

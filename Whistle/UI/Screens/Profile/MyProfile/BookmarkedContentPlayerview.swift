@@ -300,5 +300,6 @@ extension BookmarkedContentPlayerview {
       apiViewModel.bookmark[index].whistleCount += 1
     }
     apiViewModel.bookmark[index].isWhistled.toggle()
+    currentContentInfo = apiViewModel.bookmark[index]
   }
 }

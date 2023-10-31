@@ -119,16 +119,12 @@ struct BookmarkedContentLayer: View {
           Spacer()
           Button {
             whistleAction()
-            let currentContent = apiViewModel.myFeed[feedPlayersViewModel.currentVideoIndex]
+            let currentContent = apiViewModel.bookmark[feedPlayersViewModel.currentVideoIndex]
             apiViewModel.mainFeed = apiViewModel.mainFeed.map { item in
               let mutableItem = item
               if mutableItem.contentId == currentContent.contentId {
-                if mutableItem.isWhistled {
-                  mutableItem.whistleCount -= 1
-                } else {
-                  mutableItem.whistleCount += 1
-                }
-                mutableItem.isWhistled.toggle()
+                mutableItem.whistleCount = currentContent.whistleCount
+                mutableItem.isWhistled = currentContent.isWhistled
               }
               return mutableItem
             }
@@ -187,7 +183,6 @@ struct BookmarkedContentLayer: View {
             .frame(height: UIScreen.getHeight(56))
           }
           Button {
-//            showDialog = true
             feedMoreModel.bottomSheetPotision = .absolute(186)
           } label: {
             VStack(spacing: 2) {

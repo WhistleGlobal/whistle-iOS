@@ -304,5 +304,6 @@ extension MyContentPlayerView {
       apiViewModel.myFeed[index].whistleCount! += 1
     }
     apiViewModel.myFeed[index].isWhistled.toggle()
+    currentContentInfo = apiViewModel.myFeed[index]
   }
 }

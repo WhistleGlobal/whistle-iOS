@@ -111,35 +111,6 @@ struct BookMarkedFeedView: View {
         tabbarModel.tabbarOpacity = 0.0
       }
     }
-//    .confirmationDialog("", isPresented: $feedMoreModel.showDialog) {
-//      if !apiViewModel.bookmark.isEmpty {
-//        Button("저장 취소", role: .none) {
-//          toastViewModel.cancelToastInit(message: "저장 취소되었습니다.") {
-//            Task {
-//              let currentContent = apiViewModel.bookmark[feedPlayersViewModel.currentVideoIndex]
-//              _ = await apiViewModel.bookmarkAction(contentID: currentContent.contentId, method: .delete)
-//              feedPlayersViewModel.removePlayer {
-//                index -= 1
-//                apiViewModel.mainFeed = apiViewModel.mainFeed.map { item in
-//                  let mutableItem = item
-//                  if mutableItem.contentId == currentContent.contentId {
-//                    mutableItem.isBookmarked = false
-//                  }
-//                  return mutableItem
-//                }
-//              }
-//            }
-//          }
-//        }
-//        if apiViewModel.bookmark[feedPlayersViewModel.currentVideoIndex].userId != apiViewModel.myProfile.userId {
-//          Button("신고", role: .destructive) {
-//            feedPlayersViewModel.stopPlayer()
-//            feedMoreModel.showReport = true
-//          }
-//        }
-//        Button("닫기", role: .cancel) { }
-//      }
-//    }
     .task {
       if apiViewModel.myProfile.userName.isEmpty {
         await apiViewModel.requestMyProfile()

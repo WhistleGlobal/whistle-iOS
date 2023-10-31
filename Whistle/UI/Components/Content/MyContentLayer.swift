@@ -75,12 +75,8 @@ struct MyContentLayer: View {
             apiViewModel.mainFeed = apiViewModel.mainFeed.map { item in
               let mutableItem = item
               if mutableItem.contentId == currentContent.contentId {
-                if mutableItem.isWhistled {
-                  mutableItem.whistleCount -= 1
-                } else {
-                  mutableItem.whistleCount += 1
-                }
-                mutableItem.isWhistled.toggle()
+                mutableItem.whistleCount = currentContent.whistleCount ?? 0
+                mutableItem.isWhistled = currentContent.isWhistled
               }
               return mutableItem
             }
@@ -109,6 +105,13 @@ struct MyContentLayer: View {
                   method: .post)
                 toastViewModel.toastInit(message: "저장했습니다.")
                 currentContent.isBookmarked = true
+              }
+              apiViewModel.mainFeed = apiViewModel.mainFeed.map { item in
+                let mutableItem = item
+                if mutableItem.contentId == currentContent.contentId {
+                  mutableItem.isBookmarked = currentContent.isBookmarked
+                }
+                return mutableItem
               }
             }
           } label: {

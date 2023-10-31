@@ -308,5 +308,6 @@ extension MainContentPlayerView {
       apiViewModel.mainFeed[index].whistleCount += 1
     }
     apiViewModel.mainFeed[index].isWhistled.toggle()
+    currentContentInfo = apiViewModel.mainFeed[index]
   }
 }

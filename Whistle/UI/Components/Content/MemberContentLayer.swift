@@ -117,6 +117,15 @@ struct MemberContentLayer: View {
           Spacer()
           Button {
             whistleAction()
+            let currentContent = apiViewModel.memberFeed[feedPlayersViewModel.currentVideoIndex]
+            apiViewModel.mainFeed = apiViewModel.mainFeed.map { item in
+              let mutableItem = item
+              if mutableItem.contentId == currentContent.contentId {
+                mutableItem.whistleCount = currentContent.whistleCount ?? 0
+                mutableItem.isWhistled = currentContent.isWhistled
+              }
+              return mutableItem
+            }
           } label: {
             VStack(spacing: 2) {
               Image(systemName: currentVideoInfo.isWhistled ? "heart.fill" : "heart")
@@ -129,7 +138,7 @@ struct MemberContentLayer: View {
           }
           Button {
             Task {
-              let currentContent = apiViewModel.mainFeed[feedPlayersViewModel.currentVideoIndex]
+              let currentContent = apiViewModel.memberFeed[feedPlayersViewModel.currentVideoIndex]
               if currentContent.isBookmarked {
                 _ = await apiViewModel.bookmarkAction(
                   contentID: currentContent.contentId ?? 0,
@@ -142,6 +151,13 @@ struct MemberContentLayer: View {
                   method: .post)
                 toastViewModel.toastInit(message: "저장했습니다.")
                 currentContent.isBookmarked = true
+              }
+              apiViewModel.mainFeed = apiViewModel.mainFeed.map { item in
+                let mutableItem = item
+                if mutableItem.contentId == currentContent.contentId {
+                  mutableItem.isBookmarked = currentContent.isBookmarked
+                }
+                return mutableItem
               }
             }
           } label: {
