@@ -21,6 +21,7 @@ class AlertViewModel: ObservableObject {
   @Published var destructiveText: String? = nil
   @Published var submitText: String? = nil
   @Published var onFullScreenCover = false
+  @Published var isRed = false
 
   var cancelAction: (() -> Void)? = nil
   var destructiveAction: (() -> Void)? = nil
@@ -29,6 +30,7 @@ class AlertViewModel: ObservableObject {
   func linearAlert(
     showAlert: Bool = true,
     alertStyle: AlertStyle = .linear,
+    isRed: Bool = false,
     title: String? = nil,
     content: String? = nil,
     cancelText: String? = "취소",
@@ -41,6 +43,7 @@ class AlertViewModel: ObservableObject {
     }
     self.alertStyle = alertStyle
     self.title = title
+    self.isRed = isRed
     self.content = content
     self.cancelText = cancelText
     self.destructiveText = destructiveText
