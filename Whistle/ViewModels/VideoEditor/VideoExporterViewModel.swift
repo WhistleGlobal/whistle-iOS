@@ -13,6 +13,7 @@ import UIKit
 
 class VideoExporterViewModel: ObservableObject {
   let video: EditableVideo
+  let musicVolume: Float
 
   @Published var renderState: ExportState = .unknown
   @Published var showAlert = false
@@ -23,8 +24,9 @@ class VideoExporterViewModel: ObservableObject {
   private let editorHelper = VideoEditor()
   private var timer: Timer?
   var videoData = Data()
-  init(video: EditableVideo) {
+  init(video: EditableVideo, musicVolume: Float) {
     self.video = video
+    self.musicVolume = musicVolume
     startRenderStateSubs()
   }
 
@@ -37,7 +39,11 @@ class VideoExporterViewModel: ObservableObject {
   private func renderVideo(start: Double) async {
     renderState = .loading
     do {
-      let url = try await editorHelper.startRender(video: video, videoQuality: selectedQuality, start: start)
+      let url = try await editorHelper.startRender(
+        video: video,
+        videoQuality: selectedQuality,
+        start: start,
+        musicVolume: musicVolume)
       if let videoData = try? Data(contentsOf: url) {
         self.videoData = videoData
       }

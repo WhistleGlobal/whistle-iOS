@@ -41,7 +41,7 @@ struct DescriptionAndTagEditorView: View {
     isInitial: Binding<Bool>)
   {
     self.video = video
-    _exporterVM = StateObject(wrappedValue: VideoExporterViewModel(video: video))
+    _exporterVM = StateObject(wrappedValue: VideoExporterViewModel(video: video, musicVolume: musicVM.musicVolume))
     self.editorVM = editorVM
     self.videoPlayer = videoPlayer
     self.musicVM = musicVM

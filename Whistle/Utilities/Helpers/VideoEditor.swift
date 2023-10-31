@@ -16,9 +16,13 @@ class VideoEditor {
   @Published var currentTimePublisher: TimeInterval = 0.0
 
   /// The renderer is made up of half-sequential operations:
-  func startRender(video: EditableVideo, videoQuality: VideoQuality, start: Double) async throws -> URL {
+  func startRender(video: EditableVideo, videoQuality: VideoQuality, start: Double, musicVolume: Float) async throws -> URL {
     do {
-      let url = try await resizeAndLayerOperation(video: video, videoQuality: videoQuality, start: start)
+      let url = try await resizeAndLayerOperation(
+        video: video,
+        videoQuality: videoQuality,
+        start: start,
+        musicVolume: musicVolume)
 //      let finalURL = try await applyFiltersOperations(video, fromURL: url)
       return url
     } catch {
@@ -30,7 +34,8 @@ class VideoEditor {
   private func resizeAndLayerOperation(
     video: EditableVideo,
     videoQuality _: VideoQuality,
-    start: Double)
+    start: Double,
+    musicVolume: Float)
     async throws -> URL
   {
     let composition = AVMutableComposition()
@@ -38,6 +43,7 @@ class VideoEditor {
     let timeRange = getTimeRange(for: video.originalDuration, with: video.rangeDuration)
     let asset = video.asset
     let audioMix = AVMutableAudioMix()
+    var mixParameters = [AVMutableAudioMixInputParameters]()
 
     /// Set new timeScale
     try await setTimeScaleAndAddTracks(
@@ -46,8 +52,10 @@ class VideoEditor {
       audio: video.audio,
       timeScale: Float64(video.rate),
       videoVolume: video.volume,
+      musicVolume: musicVolume,
       start: start,
-      audioMix: audioMix)
+      audioMix: audioMix,
+      audioParameter: &mixParameters)
 
     /// Get new timeScale video track
     guard let videoTrack = try await composition.loadTracks(withMediaType: .video).first else {
@@ -82,9 +90,10 @@ class VideoEditor {
     /// Set frame duration 30fps
     videoComposition.frameDuration = CMTimeMake(value: 1, timescale: 30)
 
-    let videoAudioMixInputParams = AVMutableAudioMixInputParameters(track: asset.tracks(withMediaType: .video).first)
-    videoAudioMixInputParams.setVolume(video.volume, at: CMTime.zero)
-    audioMix.inputParameters.append(videoAudioMixInputParams)
+    audioMix.inputParameters = mixParameters
+//    let videoAudioMixInputParams = AVMutableAudioMixInputParameters(track: asset.tracks(withMediaType: .video).first)
+//    videoAudioMixInputParams.setVolume(video.volume, at: CMTime.zero)
+//    audioMix.inputParameters.append(videoAudioMixInputParams)
 
     /// Create background layer color and scale video
     createLayers(video.videoFrames, video: video, size: outputSize, videoComposition: videoComposition)
@@ -226,8 +235,10 @@ extension VideoEditor {
     audio: Audio?,
     timeScale: Float64,
     videoVolume: Float,
+    musicVolume: Float,
     start: Double,
-    audioMix _: AVMutableAudioMix)
+    audioMix _: AVMutableAudioMix,
+    audioParameter: inout [AVMutableAudioMixInputParameters])
     async throws
   {
     let videoTracks = try await asset.loadTracks(withMediaType: .video)
@@ -240,50 +251,55 @@ extension VideoEditor {
     let destinationTimeRange = CMTimeMultiplyByFloat64(duration, multiplier: 1 / timeScale)
     // set new time range in audio track
     if !audioTracks.isEmpty {
-      let compositionAudioTrack = composition.addMutableTrack(
-        withMediaType: AVMediaType.audio,
-        preferredTrackID: kCMPersistentTrackID_Invalid)
-      compositionAudioTrack?.preferredVolume = videoVolume
-      let audioTrack = audioTracks.first!
-      try compositionAudioTrack?.insertTimeRange(oldTimeRange, of: audioTrack, at: CMTime.zero)
-      compositionAudioTrack?.scaleTimeRange(oldTimeRange, toDuration: destinationTimeRange)
+      let audioCompositionTrack = composition.addMutableTrack(
+        withMediaType: .audio,
+        preferredTrackID: .init())
+      audioCompositionTrack?.preferredVolume = videoVolume
+      let audioAssetTrack = audioTracks.first!
+      let audioParams = AVMutableAudioMixInputParameters(track: audioAssetTrack)
+      audioParams.trackID = audioCompositionTrack!.trackID
+      audioParams.setVolume(videoVolume, at: .zero)
+      audioParameter.append(audioParams)
+      try audioCompositionTrack?.insertTimeRange(oldTimeRange, of: audioAssetTrack, at: CMTime.zero)
+      audioCompositionTrack?.scaleTimeRange(oldTimeRange, toDuration: destinationTimeRange)
 
-      let auduoPreferredTransform = try await audioTrack.load(.preferredTransform)
-      compositionAudioTrack?.preferredTransform = auduoPreferredTransform
+      let audioPreferredTransform = try await audioAssetTrack.load(.preferredTransform)
+      audioCompositionTrack?.preferredTransform = audioPreferredTransform
     }
 
     // set new time range in video track
     if !videoTracks.isEmpty {
-      let compositionVideoTrack = composition.addMutableTrack(
-        withMediaType: AVMediaType.video,
-        preferredTrackID: kCMPersistentTrackID_Invalid)
+      let videoCompositionTrack = composition.addMutableTrack(
+        withMediaType: .video,
+        preferredTrackID: .init())
 
-      let videoTrack = videoTracks.first!
-      try compositionVideoTrack?.insertTimeRange(oldTimeRange, of: videoTrack, at: CMTime.zero)
-      compositionVideoTrack?.scaleTimeRange(oldTimeRange, toDuration: destinationTimeRange)
+      let videoAssetTrack = videoTracks.first!
+      try videoCompositionTrack?.insertTimeRange(oldTimeRange, of: videoAssetTrack, at: CMTime.zero)
+      videoCompositionTrack?.scaleTimeRange(oldTimeRange, toDuration: destinationTimeRange)
 
-      let videoPreferredTransform = try await videoTrack.load(.preferredTransform)
-      compositionVideoTrack?.preferredTransform = videoPreferredTransform
+      let videoPreferredTransform = try await videoAssetTrack.load(.preferredTransform)
+      videoCompositionTrack?.preferredTransform = videoPreferredTransform
     }
 
 //     Adding audio
     if let audio {
       let asset = AVAsset(url: audio.url)
-      guard let secondAudioTrack = try await asset.loadTracks(withMediaType: .audio).first else { return }
-//      let audioMixInputParam = AVMutableAudioMixInputParameters(track: secondAudioTrack)
-//      print("audio track", secondAudioTrack)
-//      audioMixInputParam.setVolume(0, at: CMTime.zero)
-//      audioMix.inputParameters.append(audioMixInputParam)
-      ////print("audio track 2", audioMixInputParam)
-      let compositionAudioTrack = composition.addMutableTrack(
-        withMediaType: AVMediaType.audio,
-        preferredTrackID: kCMPersistentTrackID_Invalid)
-      compositionAudioTrack?.preferredVolume = 0
-      try compositionAudioTrack?.insertTimeRange(
+      guard let musicAssetTrack = try await asset.loadTracks(withMediaType: .audio).first else { return }
+      let musicCompositionTrack = composition.addMutableTrack(
+        withMediaType: .audio,
+        preferredTrackID: .init())
+      musicCompositionTrack?.preferredVolume = 0
+      let musicParams = AVMutableAudioMixInputParameters(track: musicAssetTrack)
+      musicParams.trackID = musicCompositionTrack!.trackID
+      musicParams.setVolume(musicVolume, at: .zero)
+      audioParameter.append(musicParams)
+      try musicCompositionTrack?.insertTimeRange(
         oldTimeRange,
-        of: secondAudioTrack,
+        of: musicAssetTrack,
         at: CMTimeMakeWithSeconds(start, preferredTimescale: 1000))
-      compositionAudioTrack?.scaleTimeRange(oldTimeRange, toDuration: destinationTimeRange)
+      musicCompositionTrack?.scaleTimeRange(oldTimeRange, toDuration: destinationTimeRange)
+      let musicPreferredTransform = try await musicAssetTrack.load(.preferredTransform)
+      musicCompositionTrack?.preferredTransform = musicPreferredTransform
     }
   }
 

@@ -1051,7 +1051,7 @@ extension VideoCaptureView {
               if let thumbnail {
                 UploadProgressViewModel.shared.thumbnail = Image(uiImage: thumbnail)
               }
-              let exporterVM = VideoExporterViewModel(video: video)
+              let exporterVM = VideoExporterViewModel(video: video, musicVolume: musicVM.musicVolume)
               await exporterVM.action(.save, start: video.rangeDuration.lowerBound)
               apiViewModel.uploadContent(
                 video: exporterVM.videoData,
