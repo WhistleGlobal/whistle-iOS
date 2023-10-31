@@ -8,6 +8,7 @@
 import AVFoundation
 import Combine
 import SwiftUI
+import UIKit
 
 // MARK: - MainContentLayer
 
@@ -142,10 +143,12 @@ struct MainContentLayer: View {
             .frame(height: UIScreen.getHeight(56))
           }
           Button {
-            toastViewModel.toastInit(message: "클립보드에 복사되었습니다")
-            UIPasteboard.general.setValue(
-              "https://readywhistle.com/content_uni?contentId=\(currentVideoInfo.contentId ?? 0)",
-              forPasteboardType: UTType.plainText.identifier)
+            let shareURL = URL(string: "https://readywhistle.com/content_uni?contentId=\(currentVideoInfo.contentId ?? 0)")!
+            let activityViewController = UIActivityViewController(activityItems: [shareURL], applicationActivities: nil)
+            UIApplication.shared.windows.first?.rootViewController?.present(
+              activityViewController,
+              animated: true,
+              completion: nil)
           } label: {
             VStack(spacing: 2) {
               Image(systemName: "square.and.arrow.up")
