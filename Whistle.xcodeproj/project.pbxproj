@@ -329,6 +329,11 @@
 		78B6FD2E2AA719190043E461 /* AlbumModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78B6FD2D2AA719190043E461 /* AlbumModel.swift */; };
 		78BCA9542AEFF6140084E92F /* BookmarkedPlayersViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78BCA9532AEFF6140084E92F /* BookmarkedPlayersViewModel.swift */; };
 		78BCA9562AEFFAEE0084E92F /* BookmarkedContentLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78BCA9552AEFFAEE0084E92F /* BookmarkedContentLayer.swift */; };
+		78BCA9582AF085940084E92F /* MemberFeedKitView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78BCA9572AF085940084E92F /* MemberFeedKitView.swift */; };
+		78BCA95A2AF085B20084E92F /* MemberFeedPageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78BCA9592AF085B20084E92F /* MemberFeedPageView.swift */; };
+		78BCA95C2AF085C10084E92F /* MemberContentPlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78BCA95B2AF085C10084E92F /* MemberContentPlayerView.swift */; };
+		78BCA95E2AF086970084E92F /* MemeberPlayersViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78BCA95D2AF086970084E92F /* MemeberPlayersViewModel.swift */; };
+		78BCA9602AF08A010084E92F /* MemberContentLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78BCA95F2AF08A010084E92F /* MemberContentLayer.swift */; };
 		78BECCD72AAAE169003FA7B5 /* ProfileProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78BECCD62AAAE169003FA7B5 /* ProfileProtocol.swift */; };
 		78BECCD92AAAE1E6003FA7B5 /* PostFeedProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78BECCD82AAAE1E6003FA7B5 /* PostFeedProtocol.swift */; };
 		78BECCDB2AAAE1F5003FA7B5 /* SettingProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78BECCDA2AAAE1F5003FA7B5 /* SettingProtocol.swift */; };
@@ -731,6 +736,11 @@
 		78B6FD2D2AA719190043E461 /* AlbumModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlbumModel.swift; sourceTree = "<group>"; };
 		78BCA9532AEFF6140084E92F /* BookmarkedPlayersViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarkedPlayersViewModel.swift; sourceTree = "<group>"; };
 		78BCA9552AEFFAEE0084E92F /* BookmarkedContentLayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarkedContentLayer.swift; sourceTree = "<group>"; };
+		78BCA9572AF085940084E92F /* MemberFeedKitView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemberFeedKitView.swift; sourceTree = "<group>"; };
+		78BCA9592AF085B20084E92F /* MemberFeedPageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemberFeedPageView.swift; sourceTree = "<group>"; };
+		78BCA95B2AF085C10084E92F /* MemberContentPlayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemberContentPlayerView.swift; sourceTree = "<group>"; };
+		78BCA95D2AF086970084E92F /* MemeberPlayersViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemeberPlayersViewModel.swift; sourceTree = "<group>"; };
+		78BCA95F2AF08A010084E92F /* MemberContentLayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemberContentLayer.swift; sourceTree = "<group>"; };
 		78BECCD62AAAE169003FA7B5 /* ProfileProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileProtocol.swift; sourceTree = "<group>"; };
 		78BECCD82AAAE1E6003FA7B5 /* PostFeedProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostFeedProtocol.swift; sourceTree = "<group>"; };
 		78BECCDA2AAAE1F5003FA7B5 /* SettingProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingProtocol.swift; sourceTree = "<group>"; };
@@ -1112,6 +1122,7 @@
 				78F493E62AEA7BB200A08FC1 /* MainFeedPlayersViewModel.swift */,
 				78FDA5412AEFC65B001C3DA4 /* MyFeedPlayersViewModel.swift */,
 				78BCA9532AEFF6140084E92F /* BookmarkedPlayersViewModel.swift */,
+				78BCA95D2AF086970084E92F /* MemeberPlayersViewModel.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -2038,6 +2049,7 @@
 				78FDA5392AEF7319001C3DA4 /* MainContentLayer.swift */,
 				78FDA5452AEFC967001C3DA4 /* MyContentLayer.swift */,
 				78BCA9552AEFFAEE0084E92F /* BookmarkedContentLayer.swift */,
+				78BCA95F2AF08A010084E92F /* MemberContentLayer.swift */,
 			);
 			path = Content;
 			sourceTree = "<group>";
@@ -2063,8 +2075,11 @@
 			isa = PBXGroup;
 			children = (
 				786CFEAE2AAC4DCF00DB2ADD /* MemberProfileView.swift */,
-				789BCB422ABBF2E1002164C4 /* MemberFeedView.swift */,
 				78C6E33E2AD5A6D80071BD6F /* SEMemberProfileView.swift */,
+				789BCB422ABBF2E1002164C4 /* MemberFeedView.swift */,
+				78BCA9572AF085940084E92F /* MemberFeedKitView.swift */,
+				78BCA9592AF085B20084E92F /* MemberFeedPageView.swift */,
+				78BCA95B2AF085C10084E92F /* MemberContentPlayerView.swift */,
 			);
 			path = MemberProfile;
 			sourceTree = "<group>";
@@ -2383,6 +2398,7 @@
 				786CFEAF2AAC4DCF00DB2ADD /* MemberProfileView.swift in Sources */,
 				78C6E33D2AD598200071BD6F /* SEMyProfileView.swift in Sources */,
 				787C8AE02AB3293C00723085 /* ProfileReportCommentView.swift in Sources */,
+				78BCA9582AF085940084E92F /* MemberFeedKitView.swift in Sources */,
 				1B3955532A9507E300BCB4DF /* Extension+UIScreen.swift in Sources */,
 				78433E482AEFEB870054035C /* BookmarkedFeedKitView.swift in Sources */,
 				787AF5672AA87D2E00C190E6 /* MemberProfile.swift in Sources */,
@@ -2391,6 +2407,7 @@
 				78BECCD72AAAE169003FA7B5 /* ProfileProtocol.swift in Sources */,
 				1B3895762AB9CBFC00B4C8DD /* Extension+UIImage.swift in Sources */,
 				78EFDA8E2ACF95C10035FD83 /* BookmarkedFeedView.swift in Sources */,
+				78BCA95C2AF085C10084E92F /* MemberContentPlayerView.swift in Sources */,
 				1B3895632AB9CBD300B4C8DD /* VideoItem.swift in Sources */,
 				78D148E72A9E137100DDCE48 /* Extension+UIVisualEffectView.swift in Sources */,
 				786385742AA45ED4004F8EF4 /* ProfileEditIntroduceView.swift in Sources */,
@@ -2426,6 +2443,7 @@
 				1BE8EA032AAE321200EB0A55 /* MusicProtocol.swift in Sources */,
 				7897C3762AE6B58600DE36A2 /* View+GoogleSignIn.swift in Sources */,
 				1B3895642AB9CBD300B4C8DD /* VideoQuality.swift in Sources */,
+				78BCA95E2AF086970084E92F /* MemeberPlayersViewModel.swift in Sources */,
 				78730CEF2ACE86EA008B9981 /* CachedImageManager.swift in Sources */,
 				78FDA5402AEFC519001C3DA4 /* MyFeedPageView.swift in Sources */,
 				788F43F72AA6136F00718D38 /* ContentPlayer.swift in Sources */,
@@ -2473,6 +2491,7 @@
 				78D148E02A9E0D1B00DDCE48 /* AppleSDGothic.swift in Sources */,
 				1B08DCC32AA1872200CA1DE1 /* MusicTrimView.swift in Sources */,
 				1B38957A2AB9CC2C00B4C8DD /* VideoFilterHelpers.swift in Sources */,
+				78BCA95A2AF085B20084E92F /* MemberFeedPageView.swift in Sources */,
 				787AF5792AA8930700C190E6 /* NotiSetting.swift in Sources */,
 				787AF56D2AA8846100C190E6 /* MyFollow.swift in Sources */,
 				78730CF12ACE8F23008B9981 /* PhotoLibrary.swift in Sources */,
@@ -2480,6 +2499,7 @@
 				78F493E52AEA55A000A08FC1 /* MainContentPlayerView.swift in Sources */,
 				78D368CD2ADFED080054929F /* BlockList.swift in Sources */,
 				782DD4772AA30C5C006183D3 /* FollowTabItemButtonStyle.swift in Sources */,
+				78BCA9602AF08A010084E92F /* MemberContentLayer.swift in Sources */,
 				1B3895492AB9CB7500B4C8DD /* ThumbnailsSliderView.swift in Sources */,
 				78433E4C2AEFEBA50054035C /* BookmarkedContentPlayerview.swift in Sources */,
 				1BE8EA012AAE315200EB0A55 /* APIViewModel+Music.swift in Sources */,

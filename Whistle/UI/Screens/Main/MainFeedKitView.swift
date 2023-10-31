@@ -105,6 +105,12 @@ struct MainFeedKitView: View {
         }
       }
     }
+    .fullScreenCover(isPresented: $feedMoreModel.showReport) {
+      MainFeedReportReasonSelectionView(
+        goReport: $feedMoreModel.showReport,
+        contentId: apiViewModel.mainFeed[feedPlayersViewModel.currentVideoIndex].contentId ?? 0,
+        userId: apiViewModel.mainFeed[feedPlayersViewModel.currentVideoIndex].userId ?? 0)
+    }
   }
 }
 
