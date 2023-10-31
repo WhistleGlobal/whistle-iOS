@@ -6,6 +6,7 @@
 //
 
 import _AVKit_SwiftUI
+import BottomSheet
 import SwiftUI
 
 // MARK: - MemberFeedView
@@ -17,6 +18,7 @@ struct MemberFeedView: View {
   @StateObject private var feedPlayersViewModel = MemeberPlayersViewModel.shared
   @StateObject private var toastViewModel = ToastViewModel.shared
   @StateObject private var feedMoreModel = MemberFeedMoreModel.shared
+  @StateObject private var tabbarModel = TabbarModel.shared
   @State var index = 0
   let userId: Int
 
@@ -37,9 +39,32 @@ struct MemberFeedView: View {
     }
     .background(Color.black.edgesIgnoringSafeArea(.all))
     .edgesIgnoringSafeArea(.all)
-    .confirmationDialog("", isPresented: $feedMoreModel.showDialog) {
-      if !apiViewModel.memberFeed.isEmpty {
-        Button("관심없음", role: .none) {
+    .bottomSheet(
+      bottomSheetPosition: $feedMoreModel.bottomSheetPotision,
+      switchablePositions: [.hidden, .absolute(242)])
+    {
+      VStack(spacing: 0) {
+        HStack {
+          Color.clear.frame(width: 28)
+          Spacer()
+          Text("더보기")
+            .fontSystem(fontDesignSystem: .subtitle1_KO)
+            .foregroundColor(.white)
+          Spacer()
+          Button {
+            feedMoreModel.bottomSheetPotision = .hidden
+          } label: {
+            Text("취소")
+              .fontSystem(fontDesignSystem: .subtitle2_KO)
+              .foregroundColor(.white)
+          }
+        }
+        .frame(height: 24)
+        .padding(.vertical, 12)
+        .padding(.horizontal, 16)
+        Divider().frame(width: UIScreen.width)
+        Button {
+          feedMoreModel.bottomSheetPotision = .hidden
           toastViewModel.cancelToastInit(message: "해당 콘텐츠를 숨겼습니다") {
             Task {
               let currentContent = apiViewModel.memberFeed[feedPlayersViewModel.currentVideoIndex]
@@ -49,14 +74,42 @@ struct MemberFeedView: View {
               }
             }
           }
+        } label: {
+          bottomSheetRowWithIcon(systemName: "eye.fill", text: "관심없음")
         }
-        if apiViewModel.mainFeed[feedPlayersViewModel.currentVideoIndex].userId ?? 0 != apiViewModel.myProfile.userId {
-          Button("신고", role: .destructive) {
-            feedPlayersViewModel.stopPlayer()
-            feedMoreModel.showReport = true
-          }
+        Button {
+          feedMoreModel.bottomSheetPotision = .hidden
+          feedPlayersViewModel.stopPlayer()
+          feedMoreModel.showReport = true
+        } label: {
+          bottomSheetRowWithIcon(systemName: "exclamationmark.triangle.fill", text: "신고하기")
         }
-        Button("닫기", role: .cancel) { }
+
+        Spacer()
+      }
+      .frame(height: 242)
+    }
+    .enableSwipeToDismiss(true)
+    .enableTapToDismiss(true)
+    .enableContentDrag(true)
+    .enableAppleScrollBehavior(false)
+    .dragIndicatorColor(Color.Border_Default_Dark)
+    .customBackground(
+      glassMorphicView(cornerRadius: 24)
+        .overlay {
+          RoundedRectangle(cornerRadius: 24)
+            .stroke(lineWidth: 1)
+            .foregroundStyle(
+              LinearGradient.Border_Glass)
+        })
+    .onDismiss {
+      tabbarModel.tabbarOpacity = 1.0
+    }
+    .onChange(of: feedMoreModel.bottomSheetPotision) { newValue in
+      if newValue == .hidden {
+        tabbarModel.tabbarOpacity = 1.0
+      } else {
+        tabbarModel.tabbarOpacity = 0.0
       }
     }
     .task {
@@ -95,7 +148,7 @@ struct MemberFeedView: View {
 class MemberFeedMoreModel: ObservableObject {
   static let shared = MemberFeedMoreModel()
   private init() { }
-  @Published var showDialog = false
   @Published var showReport = false
   @Published var isRootStacked = false
+  @Published var bottomSheetPotision: BottomSheetPosition = .hidden
 }

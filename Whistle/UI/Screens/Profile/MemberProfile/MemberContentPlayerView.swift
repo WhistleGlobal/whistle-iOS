@@ -95,17 +95,18 @@ struct MemberContentPlayerView: View {
                 }
                 .onLongPressGesture {
                   HapticManager.instance.impact(style: .medium)
-                  feedMoreModel.showDialog = true
+                  feedMoreModel.bottomSheetPotision = .absolute(242)
                 }
                 .overlay {
                   if tabbarModel.tabWidth != 56 {
                     MemberContentLayer(
                       currentVideoInfo: content,
-                      showDialog: $feedMoreModel.showDialog,
                       whistleAction: whistleToggle,
                       dismissAction: dismissAction)
                   }
-                  // let dismissAction: DismissAction
+                  if feedMoreModel.bottomSheetPotision != .hidden {
+                    DimmedBackground()
+                  }
                 }
               playButton(toPlay: player.rate == 0)
                 .opacity(showPlayButton ? 1 : 0)

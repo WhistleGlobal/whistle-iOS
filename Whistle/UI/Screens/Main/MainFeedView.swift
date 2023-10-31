@@ -73,7 +73,7 @@ struct MainFeedView: View {
           feedPlayersViewModel.stopPlayer()
           feedMoreModel.showReport = true
         } label: {
-          bottomSheetRowWithIcon(systemName: "exclamationmark.triangle.fill", text: "신고")
+          bottomSheetRowWithIcon(systemName: "exclamationmark.triangle.fill", text: "신고하기")
         }
 
         Spacer()

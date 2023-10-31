@@ -18,7 +18,6 @@ struct MemberContentLayer: View {
   @StateObject var toastViewModel = ToastViewModel.shared
   @StateObject private var feedMoreModel = MemberFeedMoreModel.shared
   @StateObject var feedPlayersViewModel = MemeberPlayersViewModel.shared
-  @Binding var showDialog: Bool
   var whistleAction: () -> Void
   let dismissAction: DismissAction
 
@@ -173,7 +172,7 @@ struct MemberContentLayer: View {
             .frame(height: UIScreen.getHeight(56))
           }
           Button {
-            showDialog = true
+            feedMoreModel.bottomSheetPotision = .absolute(242)
           } label: {
             VStack(spacing: 2) {
               Image(systemName: "ellipsis")
