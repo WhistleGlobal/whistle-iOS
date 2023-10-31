@@ -58,15 +58,39 @@ struct VolumeSliderSheetView: View {
       if musicVM.isTrimmed {
         subtitleText(text: "추가된 음악 사운드")
           .padding(.top, 12)
-        RoundedRectangle(cornerRadius: 12)
-          .foregroundColor(Color.Gray30_Light)
+        UniSlider(
+          value: audioValue,
+          in: 0 ... 1,
+          onChanged: {
+            onChange()
+          },
+          track: {
+            RoundedRectangle(cornerRadius: 12)
+              .foregroundColor(Color.Dim_Default)
+              .frame(width: UIScreen.getWidth(361), height: UIScreen.getHeight(56))
+          },
+          thumb: {
+            RoundedRectangle(cornerRadius: 12)
+              .foregroundColor(.white)
+              .shadow(radius: 20 / 1)
+          },
+          thumbSize: CGSize(width: UIScreen.getWidth(16), height: UIScreen.getHeight(56)))
           .frame(width: UIScreen.getWidth(361), height: UIScreen.getHeight(56))
           .overlay(alignment: .leading) {
-            Text("100")
+            Text("\(Int(audioValue.wrappedValue * 100))")
               .fontSystem(fontDesignSystem: .subtitle3)
               .vCenter()
               .padding(.leading, UIScreen.getWidth(24))
           }
+//        RoundedRectangle(cornerRadius: 12)
+//          .foregroundColor(Color.Gray30_Light)
+//          .frame(width: UIScreen.getWidth(361), height: UIScreen.getHeight(56))
+//          .overlay(alignment: .leading) {
+//            Text("100")
+//              .fontSystem(fontDesignSystem: .subtitle3)
+//              .vCenter()
+//              .padding(.leading, UIScreen.getWidth(24))
+//          }
       }
       completeButton()
     }
@@ -78,9 +102,9 @@ struct VolumeSliderSheetView: View {
   }
 }
 
-// MARK: - AudioSheetView_Previews
+// MARK: - VolumeSliderSheetView_Previews
 
-struct AudioSheetView_Previews: PreviewProvider {
+struct VolumeSliderSheetView_Previews: PreviewProvider {
   static var previews: some View {
     VolumeSliderSheetView(videoPlayer: VideoPlayerManager(), editorVM: VideoEditorViewModel(), musicVM: MusicViewModel()) { }
   }

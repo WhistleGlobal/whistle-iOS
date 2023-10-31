@@ -131,7 +131,7 @@ struct ProfileReportCommentView: View {
             }
           }
         } label: {
-          Text("제출")
+          Text(CommonWords().submit)
             .foregroundColor(.Info)
             .fontSystem(fontDesignSystem: .subtitle2_KO)
             .opacity(alertViewModel.showAlert ? 0.3 : 1)

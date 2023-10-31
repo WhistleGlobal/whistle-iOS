@@ -62,7 +62,7 @@ struct MainFeedReportCommentView: View {
     .padding(.horizontal, 16)
     .background(Color.reactiveBackground)
     .navigationBarBackButtonHidden()
-    .navigationTitle("신고")
+    .navigationTitle(CommonWords().report)
     .navigationBarTitleDisplayMode(.inline)
     .navigationDestination(isPresented: $goComplete) {
       ReportCompleteView(goReport: $goReport)
@@ -113,7 +113,7 @@ struct MainFeedReportCommentView: View {
             }
           }
         } label: {
-          Text("제출")
+          Text(CommonWords().submit)
             .foregroundColor(.Info)
             .fontSystem(fontDesignSystem: .subtitle2_KO)
             .opacity(alertViewModel.showAlert ? 0.3 : 1)

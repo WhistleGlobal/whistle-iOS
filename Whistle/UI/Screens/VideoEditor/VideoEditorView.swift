@@ -148,7 +148,7 @@ struct VideoEditorView: View {
             Text(bottomSheetTitle)
               .fontSystem(fontDesignSystem: .subtitle1_KO)
               .hCenter()
-            Text("취소")
+            Text(CommonWords().cancel)
               .fontSystem(fontDesignSystem: .subtitle2_KO)
               .contentShape(Rectangle())
               .hTrailing()

@@ -54,7 +54,7 @@ struct ProfileImagePickerView: View {
             .frame(width: 24, height: 24)
         }
         Spacer()
-        Text("앨범")
+        Text(CommonWords().album)
           .fontSystem(fontDesignSystem: .subtitle1_KO)
           .foregroundColor(.LabelColor_Primary)
         Spacer()
@@ -76,7 +76,7 @@ struct ProfileImagePickerView: View {
             dismiss()
           }
         } label: {
-          Text("완료")
+          Text(CommonWords().confirm)
             .fontSystem(fontDesignSystem: .subtitle2_KO)
             .foregroundColor(.Info)
         }
@@ -358,7 +358,7 @@ struct AlbumListView: View {
             .foregroundColor(.LabelColor_Primary)
         }
         Spacer()
-        Text("앨범")
+        Text(CommonWords().album)
           .fontSystem(fontDesignSystem: .subtitle1_KO)
           .foregroundColor(.LabelColor_Primary)
         Spacer()

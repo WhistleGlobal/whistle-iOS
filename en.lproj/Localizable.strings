@@ -1,0 +1,45 @@
+/* 
+  Localizable.strings
+  Whistle
+
+  Created by 박상원 on 10/30/23.
+  
+*/
+// 일반적인 단어
+"취소" = "cancel";
+"다음" = "next";
+"음악" = "Music";
+"볼륨" = "Volume";
+"완료" = "Confirm";
+"제출" = "Submit";
+"앨범" = "Album";
+"타이머" = "Timer";
+"팔로잉" = "following";
+"팔로워" = "follower";
+"팔로우" = "follow";
+"휘슬" = "Whistle";
+"프로필" = "Profile";
+"플레이" = "Play";
+"저장" = "Save";
+"저장 취소" = "Cancel Save";
+"공유" = "Share";
+"더보기" = "More";
+"신고" = "Report";
+"차단" = "Block";
+"닫기" = "Close";
+"관심없음" = "Hide";
+"원본 오디오" = "Original audio";
+"프로필 URL 복사" = "Copy profile URL";
+
+// 프로필 편집 관련
+"프로필 편집" = "Edit Profile";
+"사용자 ID" = "User ID";
+"소개" = "Introduction";
+"프로필 사진 수정" = "Edit profile image";
+"앨범에서 사진 업로드" = "Upload from Album";
+"기본 이미지로 변경" = "Set to Default";
+"최근 항목" = "Recents";
+//"플레이" = "플레이";
+//"플레이" = "플레이";
+//"플레이" = "플레이";
+//"플레이" = "플레이";
