@@ -146,7 +146,7 @@ extension AlertPopup {
         } label: {
           if let destructiveText = alertViewModel.destructiveText {
             Text(destructiveText)
-              .foregroundStyle(Color.Danger)
+              .foregroundStyle(alertViewModel.isRed ? Color.Danger : Color.Info)
               .fontSystem(fontDesignSystem: .subtitle2_KO)
               .hCenter()
               .padding(.vertical, UIScreen.getHeight(10))
