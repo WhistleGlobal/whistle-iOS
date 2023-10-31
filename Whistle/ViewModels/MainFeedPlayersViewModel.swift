@@ -7,9 +7,9 @@
 
 import AVFoundation
 
-class FeedPlayersViewModel: ObservableObject {
+class MainFeedPlayersViewModel: ObservableObject {
 
-  static let shared = FeedPlayersViewModel()
+  static let shared = MainFeedPlayersViewModel()
   private init() { }
 
   @Published var prevPlayer: AVPlayer?
@@ -58,7 +58,6 @@ class FeedPlayersViewModel: ObservableObject {
     currentPlayer = nil
     currentPlayer = prevPlayer
     prevPlayer = nil
-    print("goPlayerPrev currentVideoIndex: \(currentVideoIndex)")
     if currentVideoIndex != 0 {
       prevPlayer = AVPlayer(url: URL(string: apiViewModel.mainFeed[currentVideoIndex - 1].videoUrl ?? "")!)
     }
@@ -105,13 +104,20 @@ class FeedPlayersViewModel: ObservableObject {
       nextPlayer = nil
       return
     }
+    if apiViewModel.mainFeed.count == 2, currentVideoIndex == 0 {
+      currentPlayer = nil
+      currentPlayer = nextPlayer
+      apiViewModel.mainFeed.remove(at: currentVideoIndex)
+      nextPlayer = AVPlayer(url: URL(string: apiViewModel.mainFeed[currentVideoIndex].videoUrl ?? "")!)
+      currentPlayer?.seek(to: .zero)
+      currentPlayer?.play()
+      return
+    }
     if currentVideoIndex == apiViewModel.mainFeed.count - 1 {
       currentPlayer = nil
       currentPlayer = prevPlayer
       apiViewModel.mainFeed.removeLast()
       currentVideoIndex -= 1
-      print("removePlayer apiViewModel.mainFeed.count: \(apiViewModel.mainFeed.count)")
-      print("removePlayer currentVideoIndex: \(currentVideoIndex)")
       if currentVideoIndex == 0 {
         prevPlayer = nil
       } else {

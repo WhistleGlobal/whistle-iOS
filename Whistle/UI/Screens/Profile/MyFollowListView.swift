@@ -142,7 +142,7 @@ extension MyFollowListView {
               }
             }
             isFollowed.wrappedValue.toggle()
-            apiViewModel.postFeedPlayerChanged()
+            apiViewModel.publisherSend()
           }
         }
         .buttonStyle(FollowButtonStyle(isFollowed: isFollowed))

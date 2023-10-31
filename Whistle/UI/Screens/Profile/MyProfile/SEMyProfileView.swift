@@ -1,8 +1,8 @@
 //
-//  MyProfileView.swift
+//  SEMyProfileView.swift
 //  Whistle
 //
-//  Created by ChoiYujin on 8/29/23.
+//  Created by ChoiYujin on 10/10/23.
 //
 
 import AVKit
@@ -12,31 +12,24 @@ import GoogleSignInSwift
 import Kingfisher
 import SwiftUI
 
-// MARK: - profileTabCase
+// MARK: - SEMyProfileView
 
-public enum profileTabCase: String {
-  case myVideo
-  case bookmark
-}
-
-// MARK: - MyProfileView
-
-struct MyProfileView: View {
+struct SEMyProfileView: View {
   @StateObject var userAuth = UserAuth.shared
-  @StateObject var apiViewModel = APIViewModel.shared
   @StateObject private var tabbarModel = TabbarModel.shared
+  @StateObject var apiViewModel = APIViewModel.shared
   @StateObject private var toastViewModel = ToastViewModel.shared
   @StateObject var alertViewModel = AlertViewModel.shared
 
   @State var isShowingBottomSheet = false
   @State var tabbarDirection: CGFloat = -1.0
   @State var tabSelection: profileTabCase = .myVideo
+
   @State var bottomSheetPosition: BottomSheetPosition = .hidden
   @State var offsetY: CGFloat = 0
-
   @Binding var isFirstProfileLoaded: Bool
-  let processor = BlurImageProcessor(blurRadius: 10)
 
+  let processor = BlurImageProcessor(blurRadius: 10)
   var body: some View {
     ZStack {
       if bottomSheetPosition == .absolute(420) {
@@ -68,8 +61,8 @@ struct MyProfileView: View {
           glassProfile(
             cornerRadius: profileCornerRadius,
             overlayed: profileInfo())
-            .frame(height: 418 + (240 * progress))
-            .padding(.bottom, 12)
+            .frame(height: 278 + (146 * progress))
+            .padding(.bottom, 8)
         }
         .padding(.horizontal, profileHorizontalPadding)
         .zIndex(1)
@@ -115,10 +108,10 @@ struct MyProfileView: View {
             ], spacing: 20) {
               ForEach(Array(apiViewModel.myFeed.enumerated()), id: \.element) { index, content in
                 NavigationLink {
-                  MyFeedView(currentIndex: index)
+                  MyFeedView(index: index)
                 } label: {
                   videoThumbnailView(
-                    thumbnailURL: content.thumbnailUrl ?? "",
+                    thumbnailUrl: content.thumbnailUrl ?? "",
                     viewCount: content.contentViewCount ?? 0)
                 }
               }
@@ -134,7 +127,7 @@ struct MyProfileView: View {
           .coordinateSpace(name: "SCROLL")
           .zIndex(0)
           Spacer()
-        // O 탭 & 올린 컨텐츠 있음
+        // 북마크 탭 & 올린 컨텐츠 있음
         case (.bookmark, _, false):
           ScrollView {
             LazyVGrid(columns: [
@@ -144,9 +137,9 @@ struct MyProfileView: View {
             ], spacing: 20) {
               ForEach(Array(apiViewModel.bookmark.enumerated()), id: \.element) { index, content in
                 NavigationLink {
-                  BookmarkedFeedView(currentIndex: index)
+                  BookMarkedFeedView(index: index)
                 } label: {
-                  videoThumbnailView(thumbnailURL: content.thumbnailUrl, viewCount: content.viewCount)
+                  videoThumbnailView(thumbnailUrl: content.thumbnailUrl, viewCount: content.viewCount)
                 }
               }
             }
@@ -194,11 +187,13 @@ struct MyProfileView: View {
         Divider().background(Color("Gray10"))
         NavigationLink {
           NotificationSettingView()
+
         } label: {
           bottomSheetRowWithIcon(systemName: "bell", text: "알림")
         }
         NavigationLink {
           LegalInfoView()
+
         } label: {
           bottomSheetRowWithIcon(systemName: "info.circle", text: "약관 및 정책")
         }
@@ -215,8 +210,11 @@ struct MyProfileView: View {
         }
         NavigationLink {
           GuideStatusView()
+
         } label: {
-          bottomSheetRowWithIcon(systemName: "exclamationmark.triangle.fill", text: "가이드 상태")
+          bottomSheetRowWithIcon(
+            systemName: "exclamationmark.triangle.fill",
+            text: "신고")
         }
         Group {
           Divider().background(Color("Gray10"))
@@ -224,7 +222,7 @@ struct MyProfileView: View {
             withAnimation {
               bottomSheetPosition = .hidden
             }
-            alertViewModel.linearAlert(title: "정말 로그아웃하시겠어요?", cancelText: "취소", destructiveText: "로그아웃") {
+            alertViewModel.linearAlert(title: "정말 로그아웃하시겠어요?", destructiveText: "로그아웃") {
               apiViewModel.reset()
               GIDSignIn.sharedInstance.signOut()
               userAuth.appleSignout()
@@ -240,7 +238,6 @@ struct MyProfileView: View {
             alertViewModel.linearAlert(
               title: "정말 삭제하시겠어요?",
               content: "삭제하시면 회원님의 모든 정보와 활동 기록이 삭제됩니다. 삭제된 정보는 복구할 수 없으니 신중하게 결정해주세요.",
-              cancelText: "취소",
               destructiveText: "삭제")
             {
               Task {
@@ -279,33 +276,35 @@ struct MyProfileView: View {
   }
 }
 
-extension MyProfileView {
+extension SEMyProfileView {
   @ViewBuilder
   func profileInfo() -> some View {
     VStack(spacing: 0) {
-      Spacer().frame(height: 64)
+      Spacer().frame(height: 48)
       profileImageView(url: apiViewModel.myProfile.profileImage, size: profileImageSize)
-        .padding(.bottom, 16)
+        .padding(.bottom, 12)
       Text(apiViewModel.myProfile.userName)
+        .font(.system(size: 18, weight: .semibold).width(.expanded))
         .foregroundColor(Color.LabelColor_Primary_Dark)
-        .fontSystem(fontDesignSystem: .title2_Expanded)
-        .padding(.bottom, 4)
-      Spacer()
+        .frame(height: 28)
+      Spacer().frame(minHeight: 10)
       Color.clear.overlay {
         Text(apiViewModel.myProfile.introduce ?? "")
           .foregroundColor(Color.LabelColor_Secondary_Dark)
+          .font(.system(size: 14, weight: .regular))
           .fontSystem(fontDesignSystem: .body2_KO)
           .lineLimit(nil)
           .multilineTextAlignment(.center)
           .fixedSize(horizontal: false, vertical: true)
           .scaleEffect(introduceScale)
       }
-      .frame(height: introduceHeight)
-      .padding(.bottom, 16)
+      .frame(height: introduceHeight) // 20 max
+      .padding(.bottom, 8)
       .padding(.horizontal, 48)
       Spacer()
       NavigationLink {
         ProfileEditView()
+
       } label: {
         Text("프로필 편집")
           .fontSystem(fontDesignSystem: .subtitle2_KO)
@@ -314,41 +313,41 @@ extension MyProfileView {
           .frame(width: profileEditButtonWidth, height: profileEditButtonHeight)
       }
       .frame(width: profileEditButtonWidth, height: profileEditButtonHeight)
-      .padding(.bottom, 24)
+      .padding(.bottom, 16)
       .buttonStyle(ProfileEditButtonStyle())
-      HStack(spacing: 0) {
+      HStack(spacing: 48) {
         VStack(spacing: 4) {
           Text("\(apiViewModel.myWhistleCount)")
             .foregroundColor(Color.LabelColor_Primary_Dark)
-            .fontSystem(fontDesignSystem: .title2_Expanded)
+            .font(.system(size: 16, weight: .semibold).width(.expanded))
             .scaleEffect(whistleFollowerTextScale)
-          Text("휘슬")
+          Text("whistle")
             .foregroundColor(Color.LabelColor_Secondary_Dark)
-            .fontSystem(fontDesignSystem: .caption_SemiBold)
+            .font(.system(size: 10, weight: .semibold))
             .scaleEffect(whistleFollowerTextScale)
         }
-        .hCenter()
-        Rectangle().frame(width: 1).foregroundColor(.white).scaleEffect(0.5)
+        Rectangle().frame(width: 1, height: .infinity).foregroundColor(.white)
         NavigationLink {
           MyFollowListView()
+
         } label: {
           VStack(spacing: 4) {
-            Text("\(filteredFollower.count)")
+            Text("\(apiViewModel.myFollow.followerCount)")
               .foregroundColor(Color.LabelColor_Primary_Dark)
-              .fontSystem(fontDesignSystem: .title2_Expanded)
+              .font(.system(size: 16, weight: .semibold).width(.expanded))
               .scaleEffect(whistleFollowerTextScale)
-            Text("팔로워")
+            Text("follower")
               .foregroundColor(Color.LabelColor_Secondary_Dark)
-              .fontSystem(fontDesignSystem: .caption_SemiBold)
+              .font(.system(size: 10, weight: .semibold))
               .scaleEffect(whistleFollowerTextScale)
           }
-          .hCenter()
         }
       }
-      .frame(height: whistleFollowerTabHeight)
-      .padding(.bottom, 32)
+      .frame(height: whistleFollowerTabHeight) // 42 max
+      .padding(.bottom, 10)
+      Spacer()
     }
-    .frame(height: 418 + (240 * progress))
+    .frame(height: 278 + (146 * progress))
     .frame(maxWidth: .infinity)
     .overlay {
       VStack(spacing: 0) {
@@ -361,7 +360,7 @@ extension MyProfileView {
           } label: {
             Circle()
               .foregroundColor(.Gray_Default)
-              .frame(width: 48, height: 48)
+              .frame(width: 40, height: 40)
               .overlay {
                 Image(systemName: "ellipsis")
                   .resizable()
@@ -371,19 +370,21 @@ extension MyProfileView {
                   .frame(width: 20, height: 20)
               }
           }
-          .offset(y: 64 - topSpacerHeight)
+          .offset(y: 28 - topSpacerHeight)
+          .padding(.top, 16)
           .padding(.horizontal, 16 - profileHorizontalPadding)
         }
         Spacer()
       }
-      .padding(16)
+      .padding(.horizontal, 16)
+      .padding(.top, 8)
     }
   }
 
   @ViewBuilder
-  func videoThumbnailView(thumbnailURL: String, viewCount: Int) -> some View {
+  func videoThumbnailView(thumbnailUrl: String, viewCount: Int) -> some View {
     Color.black.overlay {
-      KFImage.url(URL(string: thumbnailURL))
+      KFImage.url(URL(string: thumbnailUrl))
         .placeholder {
           Color.black
         }
@@ -406,7 +407,7 @@ extension MyProfileView {
         .frame(maxWidth: .infinity, alignment: .leading)
       }
     }
-    .frame(height: 204)
+    .frame(height: UIScreen.getHeight(204))
     .cornerRadius(12)
   }
 
@@ -431,19 +432,9 @@ extension MyProfileView {
     .padding(.bottom, 76)
     Spacer()
   }
-
-  @ViewBuilder
-  func bookmarkEmptyView() -> some View {
-    Spacer()
-    Text("저장한 콘텐츠가 없습니다")
-      .fontSystem(fontDesignSystem: .body1_KO)
-      .foregroundColor(.LabelColor_Primary_Dark)
-      .padding(.bottom, 64)
-    Spacer()
-  }
 }
 
-extension MyProfileView {
+extension SEMyProfileView {
   @ViewBuilder
   func bottomSheetRowWithIcon(
     systemName: String,
@@ -480,13 +471,23 @@ extension MyProfileView {
     .frame(height: 56)
     .padding(.horizontal, 16)
   }
+
+  @ViewBuilder
+  func bookmarkEmptyView() -> some View {
+    Spacer()
+    Text("저장한 콘텐츠가 없습니다")
+      .fontSystem(fontDesignSystem: .body1_KO)
+      .foregroundColor(.LabelColor_Primary_Dark)
+      .padding(.bottom, 64)
+    Spacer()
+  }
 }
 
 // MARK: - Sticky Header Computed Properties
 
-extension MyProfileView {
+extension SEMyProfileView {
   var progress: CGFloat {
-    -(offsetY / 177) > 1 ? -1 : (offsetY > 0 ? 0 : (offsetY / 177))
+    -(offsetY / 132) > 1 ? -1 : (offsetY > 0 ? 0 : (offsetY / 132))
   }
 
   var progressOpacity: CGFloat {
@@ -497,8 +498,8 @@ extension MyProfileView {
     switch -offsetY {
     case ..<0:
       16
-    case 0 ..< 64:
-      16 + (16 * (offsetY / 64))
+    case 0 ..< 28:
+      16 + (16 * (offsetY / 28))
     default:
       0
     }
@@ -508,8 +509,8 @@ extension MyProfileView {
     switch -offsetY {
     case ..<0:
       32
-    case 0 ..< 64:
-      32 + (32 * (offsetY / 64))
+    case 0 ..< 28:
+      32 + (32 * (offsetY / 28))
     default:
       0
     }
@@ -518,9 +519,9 @@ extension MyProfileView {
   var topSpacerHeight: CGFloat {
     switch -offsetY {
     case ..<0:
-      64
-    case 0 ..< 64:
-      64 + offsetY
+      28
+    case 0 ..< 28:
+      28 + offsetY
     default:
       0
     }
@@ -529,9 +530,9 @@ extension MyProfileView {
   var profileImageSize: CGFloat {
     switch -offsetY {
     case ..<0:
-      100
-    case 0 ..< 122:
-      100 + (100 * (offsetY / 122))
+      56
+    case 0 ..< 68:
+      56 + (56 * (offsetY / 68))
     default:
       0
     }
@@ -539,10 +540,10 @@ extension MyProfileView {
 
   var whistleFollowerTabHeight: CGFloat {
     switch -offsetY {
-    case ..<122:
-      54
-    case 122 ..< 200:
-      54 + (54 * ((offsetY + 122) / 78))
+    case ..<68:
+      42
+    case 68 ..< 126:
+      42 + (42 * ((offsetY + 68) / 58))
     default:
       0
     }
@@ -552,8 +553,8 @@ extension MyProfileView {
     switch -offsetY {
     case ..<122:
       1
-    case 122 ..< 200:
-      1 - abs((offsetY + 122) / 78)
+    case 68 ..< 126:
+      1 - abs((offsetY + 68) / 58)
     default:
       0
     }
@@ -561,10 +562,10 @@ extension MyProfileView {
 
   var profileEditButtonHeight: CGFloat {
     switch -offsetY {
-    case ..<200:
+    case ..<126:
       36
-    case 200 ..< 252:
-      36 + (36 * ((offsetY + 200) / 52))
+    case 126 ..< 146:
+      28 + (28 * ((offsetY + 126) / 20))
     default:
       0
     }
@@ -572,10 +573,10 @@ extension MyProfileView {
 
   var profileEditButtonWidth: CGFloat {
     switch -offsetY {
-    case ..<200:
+    case ..<126:
       114
-    case 200 ..< 252:
-      114 + (114 * ((offsetY + 200) / 52))
+    case 126 ..< 146:
+      79 + (79 * ((offsetY + 126) / 20))
     default:
       0
     }
@@ -583,10 +584,10 @@ extension MyProfileView {
 
   var profileEditButtonScale: CGFloat {
     switch -offsetY {
-    case ..<200:
+    case ..<126:
       1
-    case 200 ..< 252:
-      1 - abs((offsetY + 200) / 52)
+    case 126 ..< 146:
+      1 - abs((offsetY + 126) / 20)
     default:
       0
     }
@@ -594,10 +595,10 @@ extension MyProfileView {
 
   var introduceHeight: CGFloat {
     switch -offsetY {
-    case ..<252:
+    case ..<146:
       20
-    case 252 ..< 305:
-      20 + (20 * ((offsetY + 252) / 53))
+    case 146 ..< 202:
+      20 + (20 * ((offsetY + 146) / 56))
     default:
       0
     }
@@ -605,10 +606,10 @@ extension MyProfileView {
 
   var introduceScale: CGFloat {
     switch -offsetY {
-    case ..<252:
+    case ..<146:
       1
-    case 252 ..< 305:
-      1 - abs((offsetY + 252) / 53)
+    case 146 ..< 202:
+      1 - abs((offsetY + 146) / 56)
     default:
       0
     }
@@ -616,12 +617,12 @@ extension MyProfileView {
 
   var tabOffset: CGFloat {
     switch -offsetY {
-    case ..<252:
+    case ..<146:
       0
-    case 252 ..< 305:
-      36 * ((offsetY + 252) / 53)
-    case 305...:
-      -36
+    case 146 ..< 202:
+      32 * ((offsetY + 146) / 56)
+    case 202...:
+      -32
     default:
       0
     }
@@ -629,11 +630,11 @@ extension MyProfileView {
 
   var tabPadding: CGFloat {
     switch -offsetY {
-    case ..<252:
+    case ..<146:
       16
-    case 252 ..< 305:
-      16 + (16 * ((offsetY + 252) / 53))
-    case 305...:
+    case 146 ..< 202:
+      8 + (8 * ((offsetY + 146) / 56))
+    case 202...:
       0
     default:
       0
@@ -642,11 +643,11 @@ extension MyProfileView {
 
   var tabHeight: CGFloat {
     switch -offsetY {
-    case ..<252:
+    case ..<146:
       48
-    case 252 ..< 305:
-      48 + (48 * ((offsetY + 252) / 53))
-    case 305...:
+    case 146 ..< 202:
+      48 + (48 * ((offsetY + 146) / 56))
+    case 202...:
       0
     default:
       0
@@ -654,12 +655,6 @@ extension MyProfileView {
   }
 
   var videoOffset: CGFloat {
-    offsetY < -305 ? 305 : -offsetY
-  }
-}
-
-extension MyProfileView {
-  var filteredFollower: [FollowerData] {
-    apiViewModel.myFollow.followerList.filter { !BlockList.shared.userIds.contains($0.followerId) }
+    offsetY < -202 ? 202 : -offsetY
   }
 }

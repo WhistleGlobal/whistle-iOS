@@ -1,8 +1,8 @@
 //
-//  MainContentPlayerView.swift
+//  MemberContentPlayerView.swift
 //  Whistle
 //
-//  Created by ChoiYujin on 10/26/23.
+//  Created by ChoiYujin on 10/31/23.
 //
 
 import _AVKit_SwiftUI
@@ -11,15 +11,15 @@ import Combine
 import Kingfisher
 import SwiftUI
 
-// MARK: - MainContentPlayerView
+// MARK: - MemberContentPlayerView
 
-struct MainContentPlayerView: View {
+struct MemberContentPlayerView: View {
   @AppStorage("showGuide") var showGuide = true
   @Environment(\.scenePhase) var scenePhase
   @StateObject var apiViewModel = APIViewModel.shared
-  @StateObject var feedPlayersViewModel = MainFeedPlayersViewModel.shared
+  @StateObject var feedPlayersViewModel = MemeberPlayersViewModel.shared
   @StateObject private var toastViewModel = ToastViewModel.shared
-  @StateObject private var feedMoreModel = MainFeedMoreModel.shared
+  @StateObject private var feedMoreModel = MemberFeedMoreModel.shared
   @StateObject private var tabbarModel = TabbarModel.shared
 
   @State var newId = UUID()
@@ -31,30 +31,29 @@ struct MainContentPlayerView: View {
   @State var uploadingThumbnail = Image("noVideo")
   @State var uploadProgress = 0.0
   @State var isUploading = false
-  @Binding var currentContentInfo: MainContent?
+  @Binding var currentContentInfo: MemberContent?
   @Binding var index: Int
   let lifecycleDelegate: ViewLifecycleDelegate?
+  let dismissAction: DismissAction
 
   var body: some View {
     VStack(spacing: 0) {
-      ForEach(Array(apiViewModel.mainFeed.enumerated()), id: \.element) { index, content in
+      ForEach(Array(apiViewModel.memberFeed.enumerated()), id: \.element) { index, content in
         ZStack {
           Color.clear.overlay {
-            if let url = apiViewModel.mainFeed[index].thumbnailUrl {
-              KFImage.url(URL(string: url))
-                .placeholder {
-                  Color.black
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
-                }
-                .resizable()
-                .scaledToFill()
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
-            }
+            KFImage.url(URL(string: apiViewModel.memberFeed[index].thumbnailUrl ?? ""))
+              .placeholder {
+                Color.black
+                  .frame(maxWidth: .infinity, maxHeight: .infinity)
+              }
+              .resizable()
+              .scaledToFill()
+              .frame(maxWidth: .infinity, maxHeight: .infinity)
             if let player = feedPlayersViewModel.currentPlayer, index == feedPlayersViewModel.currentVideoIndex {
               ContentPlayer(player: player)
                 .frame(width: UIScreen.width, height: UIScreen.height)
                 .onTapGesture(count: 2) {
-                  whistleToggle(content: content, index)
+                  whistleToggle()
                 }
                 .onAppear {
                   let dateFormatter = DateFormatter()
@@ -100,13 +99,13 @@ struct MainContentPlayerView: View {
                 }
                 .overlay {
                   if tabbarModel.tabWidth != 56 {
-                    MainContentLayer(
+                    MemberContentLayer(
                       currentVideoInfo: content,
                       showDialog: $feedMoreModel.showDialog,
-                      whistleAction: {
-                        whistleToggle(content: content, index)
-                      })
+                      whistleAction: whistleToggle,
+                      dismissAction: dismissAction)
                   }
+                  // let dismissAction: DismissAction
                 }
               playButton(toPlay: player.rate == 0)
                 .opacity(showPlayButton ? 1 : 0)
@@ -135,43 +134,6 @@ struct MainContentPlayerView: View {
                       .foregroundColor(.LabelColor_Secondary_Dark)
                   }
                 }
-            }
-            if showGuide {
-              VStack {
-                Spacer()
-                Button {
-                  showGuide = false
-                } label: {
-                  Text("닫기")
-                    .fontSystem(fontDesignSystem: .subtitle2_KO)
-                    .foregroundColor(Color.LabelColor_Primary_Dark)
-                    .frame(width: UIScreen.width - 32, height: 56)
-                    .background {
-                      glassMorphicView(cornerRadius: 12)
-                        .overlay {
-                          RoundedRectangle(cornerRadius: 12)
-                            .stroke(lineWidth: 1)
-                            .foregroundStyle(
-                              LinearGradient.Border_Glass)
-                        }
-                    }
-                }
-                .padding(.bottom, 32)
-              }
-              .frame(width: UIScreen.width, height: UIScreen.height)
-              .ignoresSafeArea()
-              .ignoresSafeArea(.all, edges: .top)
-              .background {
-                Color.clear.overlay {
-                  Image("gestureGuide")
-                    .resizable()
-                    .scaledToFill()
-                    .ignoresSafeArea()
-                    .ignoresSafeArea(.all, edges: .top)
-                }
-                .ignoresSafeArea()
-                .ignoresSafeArea(.all, edges: .top)
-              }
             }
           }
           .overlay(alignment: .topLeading) {
@@ -212,10 +174,12 @@ struct MainContentPlayerView: View {
         .id(newId)
       }
     }
+    .navigationBarBackButtonHidden()
     .onAppear {
       if index == 0 {
         lifecycleDelegate?.onAppear()
       } else {
+        lifecycleDelegate?.onAppear()
         feedPlayersViewModel.currentPlayer?.seek(to: .zero)
         feedPlayersViewModel.currentPlayer?.play()
       }
@@ -275,32 +239,27 @@ struct MainContentPlayerView: View {
 
 }
 
-// MARK: - ViewLifecycleDelegate
+extension MemberContentPlayerView {
 
-protocol ViewLifecycleDelegate {
-  func onAppear()
-  func onDisappear()
-}
-
-extension MainContentPlayerView {
-  func whistleToggle(content: MainContent, _ index: Int) {
+  func whistleToggle() {
+    let index = feedPlayersViewModel.currentVideoIndex
     HapticManager.instance.impact(style: .medium)
     timer?.invalidate()
-    if apiViewModel.mainFeed[index].isWhistled {
+    if apiViewModel.memberFeed[index].isWhistled {
       timer = Timer.scheduledTimer(withTimeInterval: 2, repeats: false) { _ in
         Task {
-          await apiViewModel.whistleAction(contentID: content.contentId ?? 0, method: .delete)
+          await apiViewModel.whistleAction(contentID: currentContentInfo?.contentId ?? 0, method: .delete)
         }
       }
-      apiViewModel.mainFeed[index].whistleCount -= 1
+      apiViewModel.memberFeed[index].contentWhistleCount! -= 1
     } else {
       timer = Timer.scheduledTimer(withTimeInterval: 2, repeats: false) { _ in
         Task {
-          await apiViewModel.whistleAction(contentID: content.contentId ?? 0, method: .post)
+          await apiViewModel.whistleAction(contentID: currentContentInfo?.contentId ?? 0, method: .post)
         }
       }
-      apiViewModel.mainFeed[index].whistleCount += 1
+      apiViewModel.memberFeed[index].contentWhistleCount! += 1
     }
-    apiViewModel.mainFeed[index].isWhistled.toggle()
+    apiViewModel.memberFeed[index].isWhistled.toggle()
   }
 }

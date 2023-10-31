@@ -391,11 +391,7 @@ extension APIViewModel: PostFeedProtocol {
       }
   }
 
-  func postFeedPlayerChanged() {
-    publisher.send(UUID())
-  }
-
-  func postWhistled() {
+  func publisherSend() {
     publisher.send(UUID())
   }
 }

@@ -1,5 +1,5 @@
 //
-//  MainContentLayer.swift
+//  MyContentLayer.swift
 //  Whistle
 //
 //  Created by ChoiYujin on 10/30/23.
@@ -9,79 +9,47 @@ import AVFoundation
 import Combine
 import SwiftUI
 
-// MARK: - MainContentLayer
+// MARK: - MyContentLayer
 
-struct MainContentLayer: View {
+struct MyContentLayer: View {
 
-  @StateObject var currentVideoInfo: MainContent = .init()
+  @StateObject var currentVideoInfo: MyContent = .init()
   @StateObject var apiViewModel = APIViewModel.shared
   @StateObject var toastViewModel = ToastViewModel.shared
-  @StateObject private var feedMoreModel = MainFeedMoreModel.shared
-  @StateObject var feedPlayersViewModel = MainFeedPlayersViewModel.shared
+  @StateObject private var feedMoreModel = MyFeedMoreModel.shared
+  @StateObject var feedPlayersViewModel = MyFeedPlayersViewModel.shared
   @Binding var showDialog: Bool
   var whistleAction: () -> Void
+  let dismissAction: DismissAction
 
   var body: some View {
     VStack(spacing: 0) {
+      HStack(spacing: 0) {
+        Button {
+          dismissAction()
+        } label: {
+          Image(systemName: "chevron.backward")
+            .font(.system(size: 20))
+            .foregroundColor(.white)
+            .padding(.vertical, 16)
+            .padding(.trailing, 16)
+        }
+        Spacer()
+      }
+      .padding(.top, 38)
+      Spacer()
       Spacer()
       HStack(spacing: 0) {
         VStack(alignment: .leading, spacing: 12) {
           Spacer()
           HStack(spacing: 0) {
-            if currentVideoInfo.userName ?? "" != apiViewModel.myProfile.userName {
-              Button {
-                feedMoreModel.isRootStacked = true
-              } label: {
-                Group {
-                  profileImageView(url: currentVideoInfo.profileImg, size: 36)
-                    .padding(.trailing, UIScreen.getWidth(8))
-                  Text(currentVideoInfo.userName ?? "")
-                    .foregroundColor(.white)
-                    .fontSystem(fontDesignSystem: .subtitle1)
-                    .padding(.trailing, 16)
-                }
-              }
-            } else {
-              Group {
-                profileImageView(url: currentVideoInfo.profileImg, size: 36)
-                  .padding(.trailing, 12)
-                Text(currentVideoInfo.userName ?? "")
-                  .foregroundColor(.white)
-                  .fontSystem(fontDesignSystem: .subtitle1)
-                  .padding(.trailing, 16)
-              }
-            }
-            if currentVideoInfo.userName ?? "" != apiViewModel.myProfile.userName {
-              Button {
-                Task {
-                  if currentVideoInfo.isFollowed {
-                    await apiViewModel.followAction(userID: currentVideoInfo.userId ?? 0, method: .delete)
-                    toastViewModel.toastInit(message: "\(currentVideoInfo.userName ?? "")님을 팔로우 취소함")
-                  } else {
-                    await apiViewModel.followAction(userID: currentVideoInfo.userId ?? 0, method: .post)
-                    toastViewModel.toastInit(message: "\(currentVideoInfo.userName ?? "")님을 팔로우 중")
-                  }
-                  currentVideoInfo.isFollowed.toggle()
-
-                  apiViewModel.mainFeed = apiViewModel.mainFeed.map { item in
-                    let mutableItem = item
-                    if mutableItem.userId == currentVideoInfo.userId {
-                      mutableItem.isFollowed = currentVideoInfo.isFollowed
-                    }
-                    return mutableItem
-                  }
-                }
-              } label: {
-                Text(currentVideoInfo.isFollowed ? "팔로잉" : "팔로우")
-                  .fontSystem(fontDesignSystem: .caption_KO_Semibold)
-                  .foregroundColor(.Gray10)
-                  .background {
-                    Capsule()
-                      .stroke(Color.Gray10, lineWidth: 1)
-                      .frame(width: 58, height: 26)
-                  }
-                  .frame(width: 58, height: 26)
-              }
+            Group {
+              profileImageView(url: currentVideoInfo.profileImg, size: 36)
+                .padding(.trailing, 12)
+              Text(currentVideoInfo.userName ?? "")
+                .foregroundColor(.white)
+                .fontSystem(fontDesignSystem: .subtitle1)
+                .padding(.trailing, 16)
             }
           }
           if (currentVideoInfo.caption?.isEmpty) != nil {
@@ -104,19 +72,32 @@ struct MainContentLayer: View {
           Spacer()
           Button {
             whistleAction()
+            let currentContent = apiViewModel.myFeed[feedPlayersViewModel.currentVideoIndex]
+            apiViewModel.mainFeed = apiViewModel.mainFeed.map { item in
+              let mutableItem = item
+              if mutableItem.contentId == currentContent.contentId {
+                if mutableItem.isWhistled {
+                  mutableItem.whistleCount -= 1
+                } else {
+                  mutableItem.whistleCount += 1
+                }
+                mutableItem.isWhistled.toggle()
+              }
+              return mutableItem
+            }
           } label: {
             VStack(spacing: 2) {
               Image(systemName: currentVideoInfo.isWhistled ? "heart.fill" : "heart")
                 .font(.system(size: 26))
                 .frame(width: 36, height: 36)
-              Text("\(currentVideoInfo.whistleCount)")
+              Text("\(currentVideoInfo.contentWhistleCount ?? 0)")
                 .fontSystem(fontDesignSystem: .caption_KO_Semibold)
             }
             .frame(height: UIScreen.getHeight(56))
           }
           Button {
             Task {
-              let currentContent = apiViewModel.mainFeed[feedPlayersViewModel.currentVideoIndex]
+              let currentContent = apiViewModel.myFeed[feedPlayersViewModel.currentVideoIndex]
               if currentContent.isBookmarked {
                 _ = await apiViewModel.bookmarkAction(
                   contentID: currentContent.contentId ?? 0,

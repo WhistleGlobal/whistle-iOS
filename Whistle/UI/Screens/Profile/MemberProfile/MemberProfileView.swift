@@ -1,8 +1,8 @@
 //
-//  SEMemberProfileView.swift
+//  MemberProfileView.swift
 //  Whistle
 //
-//  Created by ChoiYujin on 10/11/23.
+//  Created by ChoiYujin on 9/9/23.
 //
 
 import _AVKit_SwiftUI
@@ -10,65 +10,78 @@ import Kingfisher
 import SwiftUI
 import UniformTypeIdentifiers
 
-// MARK: - SEMemberProfileView
+// MARK: - MemberProfileView
 
-struct SEMemberProfileView: View {
+struct MemberProfileView: View {
   @Environment(\.dismiss) var dismiss
-  @StateObject var apiViewModel = APIViewModel.shared
+  @StateObject private var apiViewModel = APIViewModel.shared
   @StateObject private var toastViewModel = ToastViewModel.shared
-  @StateObject var alertViewModel = AlertViewModel.shared
+  @StateObject private var alertViewModel = AlertViewModel.shared
 
   @State var isFollow = false
+  @State var isProfileLoaded = false
   @State var goReport = false
+
   @State var showDialog = false
   @State var offsetY: CGFloat = 0
-
   let userId: Int
   let processor = BlurImageProcessor(blurRadius: 10)
 
   var body: some View {
     ZStack {
-      Color.clear.overlay {
-        if let url = apiViewModel.memberProfile.profileImg, !url.isEmpty {
-          KFImage.url(URL(string: url))
-            .placeholder { _ in
-              Image("BlurredDefaultBG")
-                .resizable()
-                .scaledToFill()
-                .ignoresSafeArea()
-            }
-            .resizable()
-            .setProcessor(processor)
-            .scaledToFill()
-            .scaleEffect(2.0)
-        } else {
-          Image("BlurredDefaultBG")
-            .resizable()
-            .scaledToFill()
-            .ignoresSafeArea()
+      Color.clear
+        .overlay {
+          if let url = apiViewModel.memberProfile.profileImg, !url.isEmpty {
+            KFImage.url(URL(string: url))
+              .placeholder { _ in
+                Image("BlurredDefaultBG")
+                  .resizable()
+                  .scaledToFill()
+                  .ignoresSafeArea()
+              }
+              .resizable()
+              .setProcessor(processor)
+              .scaledToFill()
+              .scaleEffect(2.0)
+          } else {
+            Image("BlurredDefaultBG")
+              .resizable()
+              .scaledToFill()
+              .ignoresSafeArea()
+          }
         }
-      }
       VStack {
         Spacer().frame(height: topSpacerHeight)
         glassProfile(
           cornerRadius: profileCornerRadius,
           overlayed: profileInfo())
-          .frame(height: 278 + (146 * progress) + profileHeightLast)
-          .padding(.bottom, 8)
+          .frame(height: 418 + (240 * progress) + profileHeightLast)
           .padding(.horizontal, profileHorizontalPadding)
           .zIndex(1)
+          .padding(.bottom, 12)
         if apiViewModel.memberFeed.isEmpty {
-          Spacer()
-          Image(systemName: "photo.fill")
-            .resizable()
-            .scaledToFit()
-            .frame(width: 48, height: 48)
-            .foregroundColor(.LabelColor_Primary_Dark)
-            .padding(.bottom, 24)
-          Text("아직 콘텐츠가 없습니다.")
-            .fontSystem(fontDesignSystem: .body1_KO)
-            .foregroundColor(.LabelColor_Primary_Dark)
-            .padding(.bottom, 76)
+          if !apiViewModel.memberProfile.isBlocked {
+            Spacer()
+            Image(systemName: "photo.fill")
+              .resizable()
+              .scaledToFit()
+              .frame(width: 48, height: 48)
+              .foregroundColor(.LabelColor_Primary_Dark)
+              .padding(.bottom, 24)
+            Text("아직 콘텐츠가 없습니다.")
+              .fontSystem(fontDesignSystem: .body1_KO)
+              .foregroundColor(.LabelColor_Primary_Dark)
+              .padding(.bottom, 76)
+          } else {
+            Spacer()
+            Text("차단된 계정")
+              .fontSystem(fontDesignSystem: .subtitle1_KO)
+              .foregroundColor(.LabelColor_Primary_Dark)
+            Text("사용자에 의해 차단된 계정입니다")
+              .fontSystem(fontDesignSystem: .body1_KO)
+              .foregroundColor(.LabelColor_Primary_Dark)
+              .padding(.bottom, 56)
+          }
           Spacer()
         } else {
           ScrollView {
@@ -79,13 +92,13 @@ struct SEMemberProfileView: View {
             ], spacing: 20) {
               ForEach(Array(apiViewModel.memberFeed.enumerated()), id: \.element) { index, content in
                 NavigationLink {
-                  MemberFeedView(currentIndex: index)
-                    .environmentObject(apiViewModel)
+                  MemberFeedView(index: index, userId: apiViewModel.memberFeed[index].userId ?? 0)
                     .id(UUID())
                 } label: {
                   videoThumbnailView(
                     thumbnailUrl: content.thumbnailUrl ?? "",
-                    viewCount: content.contentViewCount ?? 0)
+                    viewCount: content.contentViewCount ?? 0,
+                    isHated: content.isHated)
                 }
                 .id(UUID())
               }
@@ -134,6 +147,7 @@ struct SEMemberProfileView: View {
             alertViewModel.linearAlert(
               title: "\(apiViewModel.memberProfile.userName) 님을 차단하시겠어요?",
               content: "차단된 사람은 회원님의 프로필 또는 콘텐츠를 찾을 수 없게 되며, 상대방에게 차단되었다는 알림이 전송되지 않습니다.",
+              cancelText: "취소",
               destructiveText: "차단")
             {
               toastViewModel.toastInit(message: "\(apiViewModel.memberProfile.userName)님이 차단되었습니다.")
@@ -170,9 +184,10 @@ struct SEMemberProfileView: View {
     }
     .task {
       await apiViewModel.requestMemberProfile(userID: userId)
+      isFollow = apiViewModel.memberProfile.isFollowed
+      isProfileLoaded = true
       await apiViewModel.requestMemberFollow(userID: userId)
       await apiViewModel.requestMemberWhistlesCount(userID: userId)
-      isFollow = apiViewModel.memberProfile.isFollowed
     }
     .task {
       await apiViewModel.requestMemberPostFeed(userID: userId)
@@ -180,37 +195,34 @@ struct SEMemberProfileView: View {
   }
 }
 
-extension SEMemberProfileView {
+extension MemberProfileView {
   @ViewBuilder
   func profileInfo() -> some View {
     VStack(spacing: 0) {
-      Spacer().frame(height: 48)
+      Spacer().frame(height: 64)
       profileImageView(url: apiViewModel.memberProfile.profileImg, size: profileImageSize)
-        .padding(.bottom, 12)
+        .padding(.bottom, 16)
       Text(apiViewModel.memberProfile.userName)
-        .font(.system(size: 18, weight: .semibold).width(.expanded))
         .foregroundColor(Color.LabelColor_Primary_Dark)
-        .frame(height: 28)
-      Spacer().frame(minHeight: 10)
+        .fontSystem(fontDesignSystem: .title2_Expanded)
+      Spacer().frame(maxHeight: 20)
       Color.clear.overlay {
         Text(apiViewModel.memberProfile.introduce ?? "")
           .foregroundColor(Color.LabelColor_Secondary_Dark)
-          .font(.system(size: 14, weight: .regular))
           .fontSystem(fontDesignSystem: .body2_KO)
           .lineLimit(nil)
           .multilineTextAlignment(.center)
           .fixedSize(horizontal: false, vertical: true)
           .scaleEffect(introduceScale)
+          .padding(.bottom, 16)
       }
-      .frame(height: introduceHeight) // 20 max
-      .padding(.bottom, 8)
-      .padding(.horizontal, 48)
-      Spacer()
+      .frame(height: introduceHeight)
       if apiViewModel.memberProfile.isBlocked {
         Button {
           alertViewModel.linearAlert(
             title: "\(apiViewModel.memberProfile.userName) 님을 차단 해제하시겠어요?",
             content: "이제 상대방이 회원님의 게시물을 보거나 팔로우할 수 있습니다. 상대방에게 회원님이 차단을 해제했다는 정보를 알리지 않습니다.",
+            cancelText: "취소",
             destructiveText: "차단해제")
           {
             toastViewModel.toastInit(message: "\(apiViewModel.memberProfile.userName)님이 차단 해제되었습니다.")
@@ -233,57 +245,80 @@ extension SEMemberProfileView {
         }
         .padding(.bottom, 24)
       } else {
-        Button("") {
-          Task {
-            if isFollow {
-              isFollow.toggle()
-              await apiViewModel.followAction(userID: userId, method: .delete)
-            } else {
-              isFollow.toggle()
-              await apiViewModel.followAction(userID: userId, method: .post)
+        Capsule()
+          .frame(width: 112, height: 36)
+          .foregroundColor(isProfileLoaded ? .clear : .Gray_Default)
+          .overlay {
+            Button("") {
+              Task {
+                if isFollow {
+                  isFollow.toggle()
+                  await apiViewModel.followAction(userID: userId, method: .delete)
+                } else {
+                  isFollow.toggle()
+                  await apiViewModel.followAction(userID: userId, method: .post)
+                }
+              }
             }
+            .buttonStyle(FollowButtonStyle(isFollowed: $isFollow))
+            .scaleEffect(profileEditButtonScale)
+            .opacity(isProfileLoaded ? 1 : 0)
+            .disabled(userId == apiViewModel.myProfile.userId)
           }
-        }
-        .buttonStyle(FollowButtonStyle(isFollowed: $isFollow))
-        .scaleEffect(profileEditButtonScale)
-        .padding(.bottom, 16)
-        .disabled(userId == apiViewModel.myProfile.userId)
+          .padding(.bottom, 24)
+          .scaleEffect(profileEditButtonScale)
       }
-      HStack(spacing: 48) {
+      HStack(spacing: 0) {
         VStack(spacing: 4) {
-          Text("\(apiViewModel.memberWhistleCount)")
-            .foregroundColor(Color.LabelColor_Primary_Dark)
-            .font(.system(size: 16, weight: .semibold).width(.expanded))
-            .scaleEffect(whistleFollowerTextScale)
-          Text("whistle")
+          if apiViewModel.memberProfile.isBlocked {
+            Text("0")
+              .foregroundColor(Color.LabelColor_Primary_Dark)
+              .fontSystem(fontDesignSystem: .title2_Expanded)
+              .scaleEffect(whistleFollowerTextScale)
+          } else {
+            Text("\(apiViewModel.memberWhistleCount)")
+              .foregroundColor(Color.LabelColor_Primary_Dark)
+              .fontSystem(fontDesignSystem: .title2_Expanded)
+              .scaleEffect(whistleFollowerTextScale)
+          }
+          Text("휘슬")
             .foregroundColor(Color.LabelColor_Secondary_Dark)
-            .font(.system(size: 10, weight: .semibold))
+            .fontSystem(fontDesignSystem: .caption_SemiBold)
             .scaleEffect(whistleFollowerTextScale)
         }
-        Rectangle().frame(width: 1, height: .infinity).foregroundColor(.white)
+        .hCenter()
+        Rectangle().frame(width: 1).foregroundColor(.white).scaleEffect(0.5)
         NavigationLink {
           MemberFollowListView(userId: userId)
             .environmentObject(apiViewModel)
             .id(UUID())
         } label: {
           VStack(spacing: 4) {
-            Text("\(apiViewModel.memberFollow.followerCount)")
-              .foregroundColor(Color.LabelColor_Primary_Dark)
-              .font(.system(size: 16, weight: .semibold).width(.expanded))
-              .scaleEffect(whistleFollowerTextScale)
-            Text("follower")
+            if apiViewModel.memberProfile.isBlocked {
+              Text("0")
+                .foregroundColor(Color.LabelColor_Primary_Dark)
+                .fontSystem(fontDesignSystem: .title2_Expanded)
+                .scaleEffect(whistleFollowerTextScale)
+            } else {
+              Text("\(apiViewModel.memberFollow.followerCount)")
+                .foregroundColor(Color.LabelColor_Primary_Dark)
+                .fontSystem(fontDesignSystem: .title2_Expanded)
+                .scaleEffect(whistleFollowerTextScale)
+            }
+            Text("팔로워")
               .foregroundColor(Color.LabelColor_Secondary_Dark)
-              .font(.system(size: 10, weight: .semibold))
+              .fontSystem(fontDesignSystem: .caption_SemiBold)
               .scaleEffect(whistleFollowerTextScale)
           }
+          .hCenter()
         }
+        .disabled(apiViewModel.memberProfile.isBlocked)
         .id(UUID())
       }
-      .frame(height: whistleFollowerTabHeight) // 42 max
-      .padding(.bottom, 10)
+      .frame(height: whistleFollowerTabHeight)
       Spacer()
     }
-    .frame(height: 278 + (146 * progress))
+    .frame(height: 418 + (240 * progress) + profileHeightLast)
     .frame(maxWidth: .infinity)
     .overlay {
       VStack(spacing: 0) {
@@ -294,11 +329,11 @@ extension SEMemberProfileView {
             Image(systemName: "chevron.left")
               .foregroundColor(.white)
               .fontWeight(.semibold)
-              .frame(width: 40, height: 40)
+              .frame(width: 48, height: 48)
               .background(
                 Circle()
                   .foregroundColor(.Gray_Default)
-                  .frame(width: 40, height: 40))
+                  .frame(width: 48, height: 48))
           }
           Spacer()
           Button {
@@ -307,25 +342,26 @@ extension SEMemberProfileView {
             Image(systemName: "ellipsis")
               .foregroundColor(.white)
               .fontWeight(.semibold)
-              .frame(width: 40, height: 40)
+              .frame(width: 48, height: 48)
               .background(
                 Circle()
                   .foregroundColor(.Gray_Default)
-                  .frame(width: 40, height: 40))
+                  .frame(width: 48, height: 48))
           }
         }
-        .offset(y: 28 - topSpacerHeight)
-        .padding(.top, 16)
+        .offset(y: 64 - topSpacerHeight)
         .padding(.horizontal, 16 - profileHorizontalPadding)
         Spacer()
       }
-      .padding(.horizontal, 16)
-      .padding(.top, 8)
+      .padding(16)
     }
   }
 
+  // var isFollowed = false
+  // var isBlocked = false
+
   @ViewBuilder
-  func videoThumbnailView(thumbnailUrl: String, viewCount: Int) -> some View {
+  func videoThumbnailView(thumbnailUrl: String, viewCount: Int, isHated: Bool) -> some View {
     Color.black.overlay {
       KFImage.url(URL(string: thumbnailUrl))
         .placeholder { // 플레이스 홀더 설정
@@ -333,6 +369,15 @@ extension SEMemberProfileView {
         }
         .resizable()
         .scaledToFit()
+        .blur(radius: isHated ? 30 : 0, opaque: false)
+        .scaleEffect(isHated ? 1.3 : 1)
+        .overlay {
+          if isHated {
+            Image(systemName: "eye.slash.fill")
+              .font(.system(size: 30))
+              .foregroundColor(.Gray10)
+          }
+        }
       VStack {
         Spacer()
         HStack(spacing: 4) {
@@ -350,7 +395,7 @@ extension SEMemberProfileView {
         .frame(maxWidth: .infinity, alignment: .leading)
       }
     }
-    .frame(height: UIScreen.getHeight(204))
+    .frame(width: 204 * 9 / 16, height: 204)
     .cornerRadius(12)
   }
 
@@ -368,11 +413,9 @@ extension SEMemberProfileView {
   }
 }
 
-// MARK: - Sticky Header Computed Properties
-
-extension SEMemberProfileView {
+extension MemberProfileView {
   var progress: CGFloat {
-    -(offsetY / 132) > 1 ? -1 : (offsetY > 0 ? 0 : (offsetY / 132))
+    -(offsetY / 177) > 1 ? -1 : (offsetY > 0 ? 0 : (offsetY / 177))
   }
 
   var progressOpacity: CGFloat {
@@ -383,8 +426,8 @@ extension SEMemberProfileView {
     switch -offsetY {
     case ..<0:
       16
-    case 0 ..< 28:
-      16 + (16 * (offsetY / 28))
+    case 0 ..< 64:
+      16 + (16 * (offsetY / 64))
     default:
       0
     }
@@ -394,8 +437,8 @@ extension SEMemberProfileView {
     switch -offsetY {
     case ..<0:
       32
-    case 0 ..< 28:
-      32 + (32 * (offsetY / 28))
+    case 0 ..< 64:
+      32 + (32 * (offsetY / 64))
     default:
       0
     }
@@ -404,9 +447,9 @@ extension SEMemberProfileView {
   var topSpacerHeight: CGFloat {
     switch -offsetY {
     case ..<0:
-      28
-    case 0 ..< 28:
-      28 + offsetY
+      64
+    case 0 ..< 64:
+      64 + offsetY
     default:
       0
     }
@@ -415,9 +458,9 @@ extension SEMemberProfileView {
   var profileImageSize: CGFloat {
     switch -offsetY {
     case ..<0:
-      56
-    case 0 ..< 68:
-      56 + (56 * (offsetY / 68))
+      100
+    case 0 ..< 122:
+      100 + (100 * (offsetY / 122))
     default:
       0
     }
@@ -425,10 +468,10 @@ extension SEMemberProfileView {
 
   var whistleFollowerTabHeight: CGFloat {
     switch -offsetY {
-    case ..<68:
-      42
-    case 68 ..< 126:
-      42 + (42 * ((offsetY + 68) / 58))
+    case ..<122:
+      54
+    case 122 ..< 200:
+      54 + (54 * ((offsetY + 122) / 78))
     default:
       0
     }
@@ -438,8 +481,8 @@ extension SEMemberProfileView {
     switch -offsetY {
     case ..<122:
       1
-    case 68 ..< 126:
-      1 - abs((offsetY + 68) / 58)
+    case 122 ..< 200:
+      1 - abs((offsetY + 122) / 78)
     default:
       0
     }
@@ -447,10 +490,10 @@ extension SEMemberProfileView {
 
   var profileEditButtonHeight: CGFloat {
     switch -offsetY {
-    case ..<126:
+    case ..<200:
       36
-    case 126 ..< 146:
-      28 + (28 * ((offsetY + 126) / 20))
+    case 200 ..< 252:
+      36 + (36 * ((offsetY + 200) / 52))
     default:
       0
     }
@@ -458,10 +501,10 @@ extension SEMemberProfileView {
 
   var profileEditButtonWidth: CGFloat {
     switch -offsetY {
-    case ..<126:
+    case ..<200:
       114
-    case 126 ..< 146:
-      79 + (79 * ((offsetY + 126) / 20))
+    case 200 ..< 252:
+      114 + (114 * ((offsetY + 200) / 52))
     default:
       0
     }
@@ -469,10 +512,10 @@ extension SEMemberProfileView {
 
   var profileEditButtonScale: CGFloat {
     switch -offsetY {
-    case ..<126:
+    case ..<200:
       1
-    case 126 ..< 146:
-      1 - abs((offsetY + 126) / 20)
+    case 200 ..< 252:
+      1 - abs((offsetY + 200) / 52)
     default:
       0
     }
@@ -480,10 +523,10 @@ extension SEMemberProfileView {
 
   var introduceHeight: CGFloat {
     switch -offsetY {
-    case ..<146:
+    case ..<252:
       20
-    case 146 ..< 202:
-      20 + (20 * ((offsetY + 146) / 56))
+    case 252 ..< 305:
+      20 + (20 * ((offsetY + 252) / 53))
     default:
       0
     }
@@ -491,10 +534,10 @@ extension SEMemberProfileView {
 
   var introduceScale: CGFloat {
     switch -offsetY {
-    case ..<146:
+    case ..<252:
       1
-    case 146 ..< 202:
-      1 - abs((offsetY + 146) / 56)
+    case 252 ..< 305:
+      1 - abs((offsetY + 252) / 53)
     default:
       0
     }
@@ -502,57 +545,31 @@ extension SEMemberProfileView {
 
   var tabOffset: CGFloat {
     switch -offsetY {
-    case ..<146:
+    case ..<252:
       0
-    case 146 ..< 202:
-      32 * ((offsetY + 146) / 56)
-    case 202...:
-      -32
+    case 252 ..< 305:
+      offsetY + 252
+    case 305...:
+      -60
     default:
       0
     }
   }
 
-  var tabPadding: CGFloat {
+  var profileHeightLast: CGFloat {
     switch -offsetY {
-    case ..<146:
-      16
-    case 146 ..< 202:
-      8 + (8 * ((offsetY + 146) / 56))
-    case 202...:
+    case ..<252:
       0
-    default:
-      0
-    }
-  }
-
-  var tabHeight: CGFloat {
-    switch -offsetY {
-    case ..<146:
-      48
-    case 146 ..< 202:
-      48 + (48 * ((offsetY + 146) / 56))
-    case 202...:
-      0
+    case 252 ..< 305:
+      (offsetY + 252) / 53 * 36
+    case 305...:
+      -36
     default:
       0
     }
   }
 
   var videoOffset: CGFloat {
-    offsetY < -202 ? 202 : -offsetY
-  }
-
-  var profileHeightLast: CGFloat {
-    switch -offsetY {
-    case ..<146:
-      0
-    case 146 ..< 202:
-      (offsetY + 146) / 56 * 32
-    case 202...:
-      -32
-    default:
-      0
-    }
+    offsetY < -305 ? 305 : -offsetY
   }
 }

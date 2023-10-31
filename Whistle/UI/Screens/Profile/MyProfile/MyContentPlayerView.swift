@@ -1,8 +1,8 @@
 //
-//  MainContentPlayerView.swift
+//  MyContentPlayerView.swift
 //  Whistle
 //
-//  Created by ChoiYujin on 10/26/23.
+//  Created by ChoiYujin on 10/30/23.
 //
 
 import _AVKit_SwiftUI
@@ -11,15 +11,15 @@ import Combine
 import Kingfisher
 import SwiftUI
 
-// MARK: - MainContentPlayerView
+// MARK: - MyContentPlayerView
 
-struct MainContentPlayerView: View {
+struct MyContentPlayerView: View {
   @AppStorage("showGuide") var showGuide = true
   @Environment(\.scenePhase) var scenePhase
   @StateObject var apiViewModel = APIViewModel.shared
-  @StateObject var feedPlayersViewModel = MainFeedPlayersViewModel.shared
+  @StateObject var feedPlayersViewModel = MyFeedPlayersViewModel.shared
   @StateObject private var toastViewModel = ToastViewModel.shared
-  @StateObject private var feedMoreModel = MainFeedMoreModel.shared
+  @StateObject private var feedMoreModel = MyFeedMoreModel.shared
   @StateObject private var tabbarModel = TabbarModel.shared
 
   @State var newId = UUID()
@@ -31,16 +31,17 @@ struct MainContentPlayerView: View {
   @State var uploadingThumbnail = Image("noVideo")
   @State var uploadProgress = 0.0
   @State var isUploading = false
-  @Binding var currentContentInfo: MainContent?
+  @Binding var currentContentInfo: MyContent?
   @Binding var index: Int
   let lifecycleDelegate: ViewLifecycleDelegate?
+  let dismissAction: DismissAction
 
   var body: some View {
     VStack(spacing: 0) {
-      ForEach(Array(apiViewModel.mainFeed.enumerated()), id: \.element) { index, content in
+      ForEach(Array(apiViewModel.myFeed.enumerated()), id: \.element) { index, content in
         ZStack {
           Color.clear.overlay {
-            if let url = apiViewModel.mainFeed[index].thumbnailUrl {
+            if let url = apiViewModel.myFeed[index].thumbnailUrl {
               KFImage.url(URL(string: url))
                 .placeholder {
                   Color.black
@@ -100,12 +101,13 @@ struct MainContentPlayerView: View {
                 }
                 .overlay {
                   if tabbarModel.tabWidth != 56 {
-                    MainContentLayer(
+                    MyContentLayer(
                       currentVideoInfo: content,
                       showDialog: $feedMoreModel.showDialog,
                       whistleAction: {
                         whistleToggle(content: content, index)
-                      })
+                      },
+                      dismissAction: dismissAction)
                   }
                 }
               playButton(toPlay: player.rate == 0)
@@ -212,10 +214,14 @@ struct MainContentPlayerView: View {
         .id(newId)
       }
     }
+    .navigationBarBackButtonHidden()
     .onAppear {
       if index == 0 {
+        WhistleLogger.logger.debug("onAppear index == 0")
         lifecycleDelegate?.onAppear()
       } else {
+        WhistleLogger.logger.debug("onAppear index == \(index)")
+        lifecycleDelegate?.onAppear()
         feedPlayersViewModel.currentPlayer?.seek(to: .zero)
         feedPlayersViewModel.currentPlayer?.play()
       }
@@ -275,32 +281,25 @@ struct MainContentPlayerView: View {
 
 }
 
-// MARK: - ViewLifecycleDelegate
-
-protocol ViewLifecycleDelegate {
-  func onAppear()
-  func onDisappear()
-}
-
-extension MainContentPlayerView {
-  func whistleToggle(content: MainContent, _ index: Int) {
+extension MyContentPlayerView {
+  func whistleToggle(content: MyContent, _ index: Int) {
     HapticManager.instance.impact(style: .medium)
     timer?.invalidate()
-    if apiViewModel.mainFeed[index].isWhistled {
+    if apiViewModel.myFeed[index].isWhistled {
       timer = Timer.scheduledTimer(withTimeInterval: 2, repeats: false) { _ in
         Task {
           await apiViewModel.whistleAction(contentID: content.contentId ?? 0, method: .delete)
         }
       }
-      apiViewModel.mainFeed[index].whistleCount -= 1
+      apiViewModel.myFeed[index].contentWhistleCount! -= 1
     } else {
       timer = Timer.scheduledTimer(withTimeInterval: 2, repeats: false) { _ in
         Task {
           await apiViewModel.whistleAction(contentID: content.contentId ?? 0, method: .post)
         }
       }
-      apiViewModel.mainFeed[index].whistleCount += 1
+      apiViewModel.myFeed[index].contentWhistleCount! += 1
     }
-    apiViewModel.mainFeed[index].isWhistled.toggle()
+    apiViewModel.myFeed[index].isWhistled.toggle()
   }
 }

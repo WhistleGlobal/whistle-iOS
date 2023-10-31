@@ -65,7 +65,7 @@ struct RootTabView: View {
 //            .onChange(of: tabbarModel.tabSelectionNoAnimation) { newValue in
 //              mainOpacity = newValue == .main ? 1 : 0
 //            }
-          MainFeedKitView()
+          MainFeedView()
             .environmentObject(universalRoutingModel)
         }
         .tint(.black)

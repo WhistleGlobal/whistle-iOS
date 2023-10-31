@@ -1,5 +1,5 @@
 //
-//  MainContentLayer.swift
+//  BookmarkedContentLayer.swift
 //  Whistle
 //
 //  Created by ChoiYujin on 10/30/23.
@@ -9,33 +9,49 @@ import AVFoundation
 import Combine
 import SwiftUI
 
-// MARK: - MainContentLayer
+// MARK: - BookmarkedContentLayer
 
-struct MainContentLayer: View {
+struct BookmarkedContentLayer: View {
 
-  @StateObject var currentVideoInfo: MainContent = .init()
+  @StateObject var currentVideoInfo: Bookmark = .init()
   @StateObject var apiViewModel = APIViewModel.shared
   @StateObject var toastViewModel = ToastViewModel.shared
-  @StateObject private var feedMoreModel = MainFeedMoreModel.shared
-  @StateObject var feedPlayersViewModel = MainFeedPlayersViewModel.shared
+  @StateObject private var feedMoreModel = BookmarkedFeedMoreModel.shared
+  @StateObject var feedPlayersViewModel = BookmarkedPlayersViewModel.shared
   @Binding var showDialog: Bool
+  @Binding var index: Int
   var whistleAction: () -> Void
+  let dismissAction: DismissAction
 
   var body: some View {
     VStack(spacing: 0) {
+      HStack(spacing: 0) {
+        Button {
+          dismissAction()
+        } label: {
+          Image(systemName: "chevron.backward")
+            .font(.system(size: 20))
+            .foregroundColor(.white)
+            .padding(.vertical, 16)
+            .padding(.trailing, 16)
+        }
+        Spacer()
+      }
+      .padding(.top, 38)
+      Spacer()
       Spacer()
       HStack(spacing: 0) {
         VStack(alignment: .leading, spacing: 12) {
           Spacer()
           HStack(spacing: 0) {
-            if currentVideoInfo.userName ?? "" != apiViewModel.myProfile.userName {
+            if currentVideoInfo.userName != apiViewModel.myProfile.userName {
               Button {
                 feedMoreModel.isRootStacked = true
               } label: {
                 Group {
                   profileImageView(url: currentVideoInfo.profileImg, size: 36)
                     .padding(.trailing, UIScreen.getWidth(8))
-                  Text(currentVideoInfo.userName ?? "")
+                  Text(currentVideoInfo.userName)
                     .foregroundColor(.white)
                     .fontSystem(fontDesignSystem: .subtitle1)
                     .padding(.trailing, 16)
@@ -45,21 +61,21 @@ struct MainContentLayer: View {
               Group {
                 profileImageView(url: currentVideoInfo.profileImg, size: 36)
                   .padding(.trailing, 12)
-                Text(currentVideoInfo.userName ?? "")
+                Text(currentVideoInfo.userName)
                   .foregroundColor(.white)
                   .fontSystem(fontDesignSystem: .subtitle1)
                   .padding(.trailing, 16)
               }
             }
-            if currentVideoInfo.userName ?? "" != apiViewModel.myProfile.userName {
+            if currentVideoInfo.userName != apiViewModel.myProfile.userName {
               Button {
                 Task {
                   if currentVideoInfo.isFollowed {
-                    await apiViewModel.followAction(userID: currentVideoInfo.userId ?? 0, method: .delete)
-                    toastViewModel.toastInit(message: "\(currentVideoInfo.userName ?? "")님을 팔로우 취소함")
+                    await apiViewModel.followAction(userID: currentVideoInfo.userId, method: .delete)
+                    toastViewModel.toastInit(message: "\(currentVideoInfo.userName)님을 팔로우 취소함")
                   } else {
-                    await apiViewModel.followAction(userID: currentVideoInfo.userId ?? 0, method: .post)
-                    toastViewModel.toastInit(message: "\(currentVideoInfo.userName ?? "")님을 팔로우 중")
+                    await apiViewModel.followAction(userID: currentVideoInfo.userId, method: .post)
+                    toastViewModel.toastInit(message: "\(currentVideoInfo.userName)님을 팔로우 중")
                   }
                   currentVideoInfo.isFollowed.toggle()
 
@@ -104,6 +120,19 @@ struct MainContentLayer: View {
           Spacer()
           Button {
             whistleAction()
+            let currentContent = apiViewModel.myFeed[feedPlayersViewModel.currentVideoIndex]
+            apiViewModel.mainFeed = apiViewModel.mainFeed.map { item in
+              let mutableItem = item
+              if mutableItem.contentId == currentContent.contentId {
+                if mutableItem.isWhistled {
+                  mutableItem.whistleCount -= 1
+                } else {
+                  mutableItem.whistleCount += 1
+                }
+                mutableItem.isWhistled.toggle()
+              }
+              return mutableItem
+            }
           } label: {
             VStack(spacing: 2) {
               Image(systemName: currentVideoInfo.isWhistled ? "heart.fill" : "heart")
@@ -115,25 +144,25 @@ struct MainContentLayer: View {
             .frame(height: UIScreen.getHeight(56))
           }
           Button {
-            Task {
-              let currentContent = apiViewModel.mainFeed[feedPlayersViewModel.currentVideoIndex]
-              if currentContent.isBookmarked {
-                _ = await apiViewModel.bookmarkAction(
-                  contentID: currentContent.contentId ?? 0,
-                  method: .delete)
-                toastViewModel.toastInit(message: "저장 취소했습니다.")
-                currentContent.isBookmarked = false
-              } else {
-                _ = await apiViewModel.bookmarkAction(
-                  contentID: currentContent.contentId ?? 0,
-                  method: .post)
-                toastViewModel.toastInit(message: "저장했습니다.")
-                currentContent.isBookmarked = true
+            toastViewModel.cancelToastInit(message: "저장 취소되었습니다.") {
+              Task {
+                let currentContent = apiViewModel.bookmark[feedPlayersViewModel.currentVideoIndex]
+                _ = await apiViewModel.bookmarkAction(contentID: currentContent.contentId, method: .delete)
+                feedPlayersViewModel.removePlayer {
+                  index -= 1
+                  apiViewModel.mainFeed = apiViewModel.mainFeed.map { item in
+                    let mutableItem = item
+                    if mutableItem.contentId == currentContent.contentId {
+                      mutableItem.isBookmarked = false
+                    }
+                    return mutableItem
+                  }
+                }
               }
             }
           } label: {
             VStack(spacing: 2) {
-              Image(systemName: currentVideoInfo.isBookmarked ? "bookmark.fill" : "bookmark")
+              Image(systemName: "bookmark.fill")
                 .font(.system(size: 26))
                 .frame(width: 36, height: 36)
               Text("저장")
@@ -144,7 +173,7 @@ struct MainContentLayer: View {
           Button {
             toastViewModel.toastInit(message: "클립보드에 복사되었습니다")
             UIPasteboard.general.setValue(
-              "https://readywhistle.com/content_uni?contentId=\(currentVideoInfo.contentId ?? 0)",
+              "https://readywhistle.com/content_uni?contentId=\(currentVideoInfo.contentId)",
               forPasteboardType: UTType.plainText.identifier)
           } label: {
             VStack(spacing: 2) {

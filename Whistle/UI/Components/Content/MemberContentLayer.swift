@@ -1,28 +1,42 @@
 //
-//  MainContentLayer.swift
+//  MemberContentLayer.swift
 //  Whistle
 //
-//  Created by ChoiYujin on 10/30/23.
+//  Created by ChoiYujin on 10/31/23.
 //
 
 import AVFoundation
 import Combine
 import SwiftUI
 
-// MARK: - MainContentLayer
+// MARK: - MemberContentLayer
 
-struct MainContentLayer: View {
+struct MemberContentLayer: View {
 
-  @StateObject var currentVideoInfo: MainContent = .init()
+  @StateObject var currentVideoInfo: MemberContent = .init()
   @StateObject var apiViewModel = APIViewModel.shared
   @StateObject var toastViewModel = ToastViewModel.shared
-  @StateObject private var feedMoreModel = MainFeedMoreModel.shared
-  @StateObject var feedPlayersViewModel = MainFeedPlayersViewModel.shared
+  @StateObject private var feedMoreModel = MemberFeedMoreModel.shared
+  @StateObject var feedPlayersViewModel = MemeberPlayersViewModel.shared
   @Binding var showDialog: Bool
   var whistleAction: () -> Void
+  let dismissAction: DismissAction
 
   var body: some View {
     VStack(spacing: 0) {
+      HStack(spacing: 0) {
+        Button {
+          dismissAction()
+        } label: {
+          Image(systemName: "chevron.backward")
+            .font(.system(size: 20))
+            .foregroundColor(.white)
+            .padding(.vertical, 16)
+            .padding(.trailing, 16)
+        }
+        Spacer()
+      }
+      .padding(.top, 38)
       Spacer()
       HStack(spacing: 0) {
         VStack(alignment: .leading, spacing: 12) {
@@ -109,7 +123,7 @@ struct MainContentLayer: View {
               Image(systemName: currentVideoInfo.isWhistled ? "heart.fill" : "heart")
                 .font(.system(size: 26))
                 .frame(width: 36, height: 36)
-              Text("\(currentVideoInfo.whistleCount)")
+              Text("\(currentVideoInfo.contentWhistleCount ?? 0)")
                 .fontSystem(fontDesignSystem: .caption_KO_Semibold)
             }
             .frame(height: UIScreen.getHeight(56))
