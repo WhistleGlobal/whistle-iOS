@@ -19,7 +19,6 @@ struct MainContentLayer: View {
   @StateObject var toastViewModel = ToastViewModel.shared
   @StateObject private var feedMoreModel = MainFeedMoreModel.shared
   @StateObject var feedPlayersViewModel = MainFeedPlayersViewModel.shared
-  @Binding var showDialog: Bool
   var whistleAction: () -> Void
 
   var body: some View {
@@ -143,7 +142,9 @@ struct MainContentLayer: View {
             .frame(height: UIScreen.getHeight(56))
           }
           Button {
-            let shareURL = URL(string: "https://readywhistle.com/content_uni?contentId=\(currentVideoInfo.contentId ?? 0)")!
+            let shareURL = URL(
+                string: "https://readywhistle.com/content_uni?contentId=\(currentVideoInfo.contentId ?? 0)"
+            )!
             let activityViewController = UIActivityViewController(activityItems: [shareURL], applicationActivities: nil)
             UIApplication.shared.windows.first?.rootViewController?.present(
               activityViewController,

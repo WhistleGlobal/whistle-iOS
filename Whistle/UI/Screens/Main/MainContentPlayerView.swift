@@ -96,13 +96,12 @@ struct MainContentPlayerView: View {
                 }
                 .onLongPressGesture {
                   HapticManager.instance.impact(style: .medium)
-                  feedMoreModel.showDialog = true
+                  feedMoreModel.bottomSheetPotision = .absolute(242)
                 }
                 .overlay {
                   if tabbarModel.tabWidth != 56 {
                     MainContentLayer(
                       currentVideoInfo: content,
-                      showDialog: $feedMoreModel.showDialog,
                       whistleAction: {
                         whistleToggle(content: content, index)
                       })
