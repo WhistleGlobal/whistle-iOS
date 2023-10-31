@@ -40,7 +40,7 @@ struct MemberFeedView: View {
     .background(Color.black.edgesIgnoringSafeArea(.all))
     .edgesIgnoringSafeArea(.all)
     .bottomSheet(
-      bottomSheetPosition: $feedMoreModel.bottomSheetPotision,
+      bottomSheetPosition: $feedMoreModel.bottomSheetPosition,
       switchablePositions: [.hidden, .absolute(242)])
     {
       VStack(spacing: 0) {
@@ -52,7 +52,7 @@ struct MemberFeedView: View {
             .foregroundColor(.white)
           Spacer()
           Button {
-            feedMoreModel.bottomSheetPotision = .hidden
+            feedMoreModel.bottomSheetPosition = .hidden
           } label: {
             Text("취소")
               .fontSystem(fontDesignSystem: .subtitle2_KO)
@@ -64,7 +64,7 @@ struct MemberFeedView: View {
         .padding(.horizontal, 16)
         Divider().frame(width: UIScreen.width)
         Button {
-          feedMoreModel.bottomSheetPotision = .hidden
+          feedMoreModel.bottomSheetPosition = .hidden
           toastViewModel.cancelToastInit(message: "해당 콘텐츠를 숨겼습니다") {
             Task {
               let currentContent = apiViewModel.memberFeed[feedPlayersViewModel.currentVideoIndex]
@@ -78,7 +78,7 @@ struct MemberFeedView: View {
           bottomSheetRowWithIcon(systemName: "eye.fill", text: "관심없음")
         }
         Button {
-          feedMoreModel.bottomSheetPotision = .hidden
+          feedMoreModel.bottomSheetPosition = .hidden
           feedPlayersViewModel.stopPlayer()
           feedMoreModel.showReport = true
         } label: {
@@ -105,7 +105,7 @@ struct MemberFeedView: View {
     .onDismiss {
       tabbarModel.tabbarOpacity = 1.0
     }
-    .onChange(of: feedMoreModel.bottomSheetPotision) { newValue in
+    .onChange(of: feedMoreModel.bottomSheetPosition) { newValue in
       if newValue == .hidden {
         tabbarModel.tabbarOpacity = 1.0
       } else {
@@ -150,5 +150,5 @@ class MemberFeedMoreModel: ObservableObject {
   private init() { }
   @Published var showReport = false
   @Published var isRootStacked = false
-  @Published var bottomSheetPotision: BottomSheetPosition = .hidden
+  @Published var bottomSheetPosition: BottomSheetPosition = .hidden
 }

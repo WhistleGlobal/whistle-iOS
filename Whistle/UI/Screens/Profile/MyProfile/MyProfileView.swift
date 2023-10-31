@@ -207,12 +207,15 @@ struct MyProfileView: View {
           withAnimation {
             bottomSheetPosition = .hidden
           }
-          UIPasteboard.general.setValue(
-            "https://readywhistle.com/profile_uni?id=\(apiViewModel.myProfile.userId)",
-            forPasteboardType: UTType.plainText.identifier)
-          toastViewModel.toastInit(message: "클립보드에 복사되었습니다")
+          let shareURL = URL(
+            string: "https://readywhistle.com/profile_uni?id=\(apiViewModel.myProfile.userId)")!
+          let activityViewController = UIActivityViewController(activityItems: [shareURL], applicationActivities: nil)
+          UIApplication.shared.windows.first?.rootViewController?.present(
+            activityViewController,
+            animated: true,
+            completion: nil)
         } label: {
-          bottomSheetRowWithIcon(systemName: "link", text: "프로필 URL 복사")
+          bottomSheetRowWithIcon(systemName: "square.and.arrow.up", text: "프로필 공유")
         }
         NavigationLink {
           GuideStatusView()

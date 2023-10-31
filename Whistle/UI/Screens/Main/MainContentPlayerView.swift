@@ -97,7 +97,7 @@ struct MainContentPlayerView: View {
                 }
                 .onLongPressGesture {
                   HapticManager.instance.impact(style: .medium)
-                  feedMoreModel.bottomSheetPotision = .absolute(242)
+                  feedMoreModel.bottomSheetPosition = .absolute(242)
                 }
                 .overlay {
                   if tabbarModel.tabWidth != 56 {
@@ -107,7 +107,7 @@ struct MainContentPlayerView: View {
                         whistleToggle(content: content, index)
                       })
                   }
-                  if feedMoreModel.bottomSheetPotision != .hidden {
+                  if feedMoreModel.bottomSheetPosition != .hidden {
                     DimmedBackground()
                   }
                 }

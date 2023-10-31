@@ -183,7 +183,7 @@ struct BookmarkedContentLayer: View {
             .frame(height: UIScreen.getHeight(56))
           }
           Button {
-            feedMoreModel.bottomSheetPotision = .absolute(186)
+            feedMoreModel.bottomSheetPosition = .absolute(186)
           } label: {
             VStack(spacing: 2) {
               Image(systemName: "ellipsis")

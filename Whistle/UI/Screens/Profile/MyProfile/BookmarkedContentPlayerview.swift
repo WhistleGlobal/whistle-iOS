@@ -95,7 +95,7 @@ struct BookmarkedContentPlayerview: View {
                 }
                 .onLongPressGesture {
                   HapticManager.instance.impact(style: .medium)
-                  feedMoreModel.bottomSheetPotision = .absolute(186)
+                  feedMoreModel.bottomSheetPosition = .absolute(186)
                 }
                 .overlay {
                   if tabbarModel.tabWidth != 56 {
@@ -107,7 +107,7 @@ struct BookmarkedContentPlayerview: View {
                       },
                       dismissAction: dismissAction)
                   }
-                  if feedMoreModel.bottomSheetPotision != .hidden {
+                  if feedMoreModel.bottomSheetPosition != .hidden {
                     DimmedBackground()
                   }
                 }

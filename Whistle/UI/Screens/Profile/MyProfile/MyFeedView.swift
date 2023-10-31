@@ -52,7 +52,7 @@ struct MyFeedView: View {
       }
     }
     .bottomSheet(
-      bottomSheetPosition: $feedMoreModel.bottomSheetPotision,
+      bottomSheetPosition: $feedMoreModel.bottomSheetPosition,
       switchablePositions: [.hidden, .absolute(186)])
     {
       VStack(spacing: 0) {
@@ -64,7 +64,7 @@ struct MyFeedView: View {
             .foregroundColor(.white)
           Spacer()
           Button {
-            feedMoreModel.bottomSheetPotision = .hidden
+            feedMoreModel.bottomSheetPosition = .hidden
           } label: {
             Text("취소")
               .fontSystem(fontDesignSystem: .subtitle2_KO)
@@ -76,7 +76,7 @@ struct MyFeedView: View {
         .padding(.horizontal, 16)
         Divider().frame(width: UIScreen.width)
         Button {
-          feedMoreModel.bottomSheetPotision = .hidden
+          feedMoreModel.bottomSheetPosition = .hidden
           toastViewModel.cancelToastInit(message: "삭제되었습니다") {
             Task {
               let currentContent = apiViewModel.myFeed[feedPlayersViewModel.currentVideoIndex]
@@ -109,7 +109,7 @@ struct MyFeedView: View {
     .onDismiss {
       tabbarModel.tabbarOpacity = 1.0
     }
-    .onChange(of: feedMoreModel.bottomSheetPotision) { newValue in
+    .onChange(of: feedMoreModel.bottomSheetPosition) { newValue in
       if newValue == .hidden {
         tabbarModel.tabbarOpacity = 1.0
       } else {
@@ -124,5 +124,5 @@ struct MyFeedView: View {
 class MyFeedMoreModel: ObservableObject {
   static let shared = MyFeedMoreModel()
   private init() { }
-  @Published var bottomSheetPotision: BottomSheetPosition = .hidden
+  @Published var bottomSheetPosition: BottomSheetPosition = .hidden
 }
