@@ -65,7 +65,7 @@ class VideoExporterViewModel: ObservableObject {
         case .loaded(let url):
           if action == .save {
             renderState = .saved
-//            saveVideoInLib(url)
+            saveVideoInLib(url)
           }
           resetTimer()
         default:

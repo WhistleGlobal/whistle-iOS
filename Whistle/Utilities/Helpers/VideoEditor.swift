@@ -54,6 +54,9 @@ class VideoEditor {
       throw ExporterError.unknow
     }
 
+    let videoTracks = try await composition.loadTracks(withMediaType: .video)
+    WhistleLogger.logger.debug("videoTracks1: \(videoTracks)")
+
     /// Prepair new video size
     let naturalSize = videoTrack.naturalSize
     let videoTrackPreferredTransform = try await videoTrack.load(.preferredTransform)
@@ -138,7 +141,7 @@ class VideoEditor {
         asset: asset,
         presetName: isSimulator ? AVAssetExportPresetPassthrough : AVAssetExportPresetHighestQuality)
     else {
-      print("Cannot create export session.")
+      WhistleLogger.logger.debug("Cannot create export session.")
       throw ExporterError.cannotCreateExportSession
     }
     session.videoComposition = composition
@@ -174,7 +177,7 @@ extension VideoEditor {
         asset: composition,
         presetName: isSimulator ? AVAssetExportPresetPassthrough : AVAssetExportPresetHighestQuality)
     else {
-      print("Cannot create export session.")
+      WhistleLogger.logger.debug("Cannot create export session.")
       throw ExporterError.cannotCreateExportSession
     }
     export.audioMix = audioMix
@@ -228,6 +231,7 @@ extension VideoEditor {
     async throws
   {
     let videoTracks = try await asset.loadTracks(withMediaType: .video)
+    WhistleLogger.logger.debug("videoTracks2: \(videoTracks)")
     let audioTracks = try await asset.loadTracks(withMediaType: .audio)
 
     let duration = try await asset.load(.duration)
