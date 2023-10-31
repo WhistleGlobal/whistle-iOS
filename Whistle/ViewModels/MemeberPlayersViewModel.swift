@@ -27,6 +27,9 @@ class MemeberPlayersViewModel: ObservableObject {
       currentPlayer = nextPlayer
       nextPlayer = nil
       currentPlayer?.seek(to: .zero)
+      if apiViewModel.memberFeed[currentVideoIndex].isHated {
+        return
+      }
       currentPlayer?.play()
     } else {
       stopPlayer()
@@ -36,6 +39,9 @@ class MemeberPlayersViewModel: ObservableObject {
       nextPlayer = nil
       nextPlayer = AVPlayer(url: URL(string: apiViewModel.memberFeed[index + 1].videoUrl ?? "")!)
       currentPlayer?.seek(to: .zero)
+      if apiViewModel.memberFeed[currentVideoIndex].isHated {
+        return
+      }
       currentPlayer?.play()
     }
   }
@@ -49,6 +55,9 @@ class MemeberPlayersViewModel: ObservableObject {
       currentPlayer = prevPlayer
       prevPlayer = nil
       currentPlayer?.seek(to: .zero)
+      if apiViewModel.memberFeed[currentVideoIndex].isHated {
+        return
+      }
       currentPlayer?.play()
       return
     }
@@ -62,6 +71,9 @@ class MemeberPlayersViewModel: ObservableObject {
       prevPlayer = AVPlayer(url: URL(string: apiViewModel.memberFeed[currentVideoIndex - 1].videoUrl ?? "")!)
     }
     currentPlayer?.seek(to: .zero)
+    if apiViewModel.memberFeed[currentVideoIndex].isHated {
+      return
+    }
     currentPlayer?.play()
   }
 
@@ -137,6 +149,9 @@ class MemeberPlayersViewModel: ObservableObject {
       apiViewModel.memberFeed.remove(at: currentVideoIndex)
       nextPlayer = AVPlayer(url: URL(string: apiViewModel.memberFeed[currentVideoIndex].videoUrl ?? "")!)
       currentPlayer?.seek(to: .zero)
+      if apiViewModel.memberFeed[currentVideoIndex].isHated {
+        return
+      }
       currentPlayer?.play()
       return
     }
@@ -151,6 +166,9 @@ class MemeberPlayersViewModel: ObservableObject {
         prevPlayer = AVPlayer(url: URL(string: apiViewModel.memberFeed[currentVideoIndex - 1].videoUrl ?? "")!)
       }
       currentPlayer?.seek(to: .zero)
+      if apiViewModel.memberFeed[currentVideoIndex].isHated {
+        return
+      }
       currentPlayer?.play()
       completion()
     } else {
@@ -159,6 +177,9 @@ class MemeberPlayersViewModel: ObservableObject {
       apiViewModel.memberFeed.remove(at: currentVideoIndex)
       nextPlayer = AVPlayer(url: URL(string: apiViewModel.memberFeed[currentVideoIndex + 1].videoUrl ?? "")!)
       currentPlayer?.seek(to: .zero)
+      if apiViewModel.memberFeed[currentVideoIndex].isHated {
+        return
+      }
       currentPlayer?.play()
     }
   }

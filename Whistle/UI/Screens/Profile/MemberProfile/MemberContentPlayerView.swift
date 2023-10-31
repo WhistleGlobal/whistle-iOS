@@ -40,7 +40,7 @@ struct MemberContentPlayerView: View {
     VStack(spacing: 0) {
       ForEach(Array(apiViewModel.memberFeed.enumerated()), id: \.element) { index, content in
         ZStack {
-          Color.clear.overlay {
+          Color.black.overlay {
             KFImage.url(URL(string: apiViewModel.memberFeed[index].thumbnailUrl ?? ""))
               .placeholder {
                 Color.black
@@ -49,93 +49,113 @@ struct MemberContentPlayerView: View {
               .resizable()
               .scaledToFit()
               .frame(maxWidth: .infinity, maxHeight: .infinity)
-            if let player = feedPlayersViewModel.currentPlayer, index == feedPlayersViewModel.currentVideoIndex {
-              ContentPlayer(player: player)
-                .frame(width: UIScreen.width, height: UIScreen.height)
-                .onTapGesture(count: 2) {
-                  whistleToggle()
-                }
-                .onAppear {
-                  let dateFormatter = DateFormatter()
-                  dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
-                  let dateString = dateFormatter.string(from: .now)
-                  if let index = viewCount.views.firstIndex(where: { $0.contentId == content.contentId }) {
-                    viewCount.views[index].viewDate = dateString
-                  } else {
-                    viewCount.views.append(.init(contentId: content.contentId ?? 0, viewDate: dateString))
-                  }
-                }
-                .onDisappear {
-                  if let index = viewCount.views.firstIndex(where: { $0.contentId == content.contentId }) {
-                    let viewDate = viewCount.views[index].viewDate.toDate()
-                    var nowDate = Date.now
-                    nowDate.addTimeInterval(3600 * 9)
-                    let viewTime = nowDate.timeIntervalSince(viewDate ?? Date.now)
-                    viewCount.views[index].viewTime = "\(Int(viewTime))"
-                  }
-                }
-                .onTapGesture {
-                  if player.rate == 0.0 {
-                    player.play()
-                    showPlayButton = true
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
-                      withAnimation {
-                        showPlayButton = false
-                      }
-                    }
-                  } else {
-                    player.pause()
-                    showPlayButton = true
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
-                      withAnimation {
-                        showPlayButton = false
-                      }
-                    }
-                  }
-                }
-                .onLongPressGesture {
-                  HapticManager.instance.impact(style: .medium)
-                  feedMoreModel.bottomSheetPosition = .absolute(242)
-                }
-                .overlay {
-                  if tabbarModel.tabWidth != 56 {
-                    MemberContentLayer(
-                      currentVideoInfo: content,
-                      whistleAction: whistleToggle,
-                      dismissAction: dismissAction)
-                  }
-                  if feedMoreModel.bottomSheetPosition != .hidden {
-                    DimmedBackground()
-                  }
-                }
-              playButton(toPlay: player.rate == 0)
-                .opacity(showPlayButton ? 1 : 0)
-                .allowsHitTesting(false)
-            }
-            if BlockList.shared.userIds.contains(content.userId ?? 0) {
-              KFImage.url(URL(string: content.thumbnailUrl ?? ""))
-                .placeholder {
-                  Color.black
-                }
-                .resizable()
-                .scaledToFill()
-                .blur(radius: 30)
-                .overlay {
+              .blur(radius: content.isHated ? 30 : 0)
+              .overlay {
+                if content.isHated {
                   VStack {
                     Image(systemName: "eye.slash.fill")
                       .font(.system(size: 44))
                       .foregroundColor(.Gray10)
                       .padding(.bottom, 26)
-                    Text("차단된 계정의 콘텐츠입니다.")
+                    Text("관심없음 설정한 콘텐츠입니다.")
                       .fontSystem(fontDesignSystem: .subtitle1_KO)
                       .foregroundColor(.LabelColor_Primary_Dark)
                       .padding(.bottom, 12)
-                    Text("차단된 계정의 모든 콘텐츠는 \n회원님의 피드에 노출되지 않습니다.")
+                    Text("관심없음 설정한 모든 콘텐츠는 \n회원님의 피드에 노출되지 않습니다.")
                       .fontSystem(fontDesignSystem: .body2_KO)
                       .foregroundColor(.LabelColor_Secondary_Dark)
                   }
                 }
-            }
+              }
+            if !content.isHated {
+              if let player = feedPlayersViewModel.currentPlayer, index == feedPlayersViewModel.currentVideoIndex {
+                ContentPlayer(player: player)
+                  .frame(width: UIScreen.width, height: UIScreen.height)
+                  .onTapGesture(count: 2) {
+                    whistleToggle()
+                  }
+                  .onAppear {
+                    let dateFormatter = DateFormatter()
+                    dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+                    let dateString = dateFormatter.string(from: .now)
+                    if let index = viewCount.views.firstIndex(where: { $0.contentId == content.contentId }) {
+                      viewCount.views[index].viewDate = dateString
+                    } else {
+                      viewCount.views.append(.init(contentId: content.contentId ?? 0, viewDate: dateString))
+                    }
+                  }
+                  .onDisappear {
+                    if let index = viewCount.views.firstIndex(where: { $0.contentId == content.contentId }) {
+                      let viewDate = viewCount.views[index].viewDate.toDate()
+                      var nowDate = Date.now
+                      nowDate.addTimeInterval(3600 * 9)
+                      let viewTime = nowDate.timeIntervalSince(viewDate ?? Date.now)
+                      viewCount.views[index].viewTime = "\(Int(viewTime))"
+                    }
+                  }
+                  .onTapGesture {
+                    if player.rate == 0.0 {
+                      player.play()
+                      showPlayButton = true
+                      DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
+                        withAnimation {
+                          showPlayButton = false
+                        }
+                      }
+                    } else {
+                      player.pause()
+                      showPlayButton = true
+                      DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
+                        withAnimation {
+                          showPlayButton = false
+                        }
+                      }
+                    }
+                  }
+                  .onLongPressGesture {
+                    HapticManager.instance.impact(style: .medium)
+                    feedMoreModel.bottomSheetPosition = .absolute(242)
+                  }
+                  .overlay {
+                    if tabbarModel.tabWidth != 56 {
+                      MemberContentLayer(
+                        currentVideoInfo: content,
+                        whistleAction: whistleToggle,
+                        dismissAction: dismissAction)
+                    }
+                    if feedMoreModel.bottomSheetPosition != .hidden {
+                      DimmedBackground()
+                    }
+                  }
+                playButton(toPlay: player.rate == 0)
+                  .opacity(showPlayButton ? 1 : 0)
+                  .allowsHitTesting(false)
+              }
+              if BlockList.shared.userIds.contains(content.userId ?? 0) {
+                KFImage.url(URL(string: content.thumbnailUrl ?? ""))
+                  .placeholder {
+                    Color.black
+                  }
+                  .resizable()
+                  .scaledToFill()
+                  .blur(radius: 30)
+                  .overlay {
+                    VStack {
+                      Image(systemName: "eye.slash.fill")
+                        .font(.system(size: 44))
+                        .foregroundColor(.Gray10)
+                        .padding(.bottom, 26)
+                      Text("차단된 계정의 콘텐츠입니다.")
+                        .fontSystem(fontDesignSystem: .subtitle1_KO)
+                        .foregroundColor(.LabelColor_Primary_Dark)
+                        .padding(.bottom, 12)
+                      Text("차단된 계정의 모든 콘텐츠는 \n회원님의 피드에 노출되지 않습니다.")
+                        .fontSystem(fontDesignSystem: .body2_KO)
+                        .foregroundColor(.LabelColor_Secondary_Dark)
+                    }
+                  }
+              }
+            } else { }
           }
           .overlay(alignment: .topLeading) {
             if isUploading {

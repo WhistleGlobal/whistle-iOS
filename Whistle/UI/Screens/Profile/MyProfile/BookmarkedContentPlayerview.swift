@@ -40,7 +40,7 @@ struct BookmarkedContentPlayerview: View {
     VStack(spacing: 0) {
       ForEach(Array(apiViewModel.bookmark.enumerated()), id: \.element) { index, content in
         ZStack {
-          Color.clear.overlay {
+          Color.black.overlay {
             KFImage.url(URL(string: apiViewModel.bookmark[index].thumbnailUrl))
               .placeholder {
                 Color.black

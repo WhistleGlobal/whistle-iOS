@@ -40,7 +40,7 @@ struct MainContentPlayerView: View {
     VStack(spacing: 0) {
       ForEach(Array(apiViewModel.mainFeed.enumerated()), id: \.element) { index, content in
         ZStack {
-          Color.clear.overlay {
+          Color.black.overlay {
             if let url = apiViewModel.mainFeed[index].thumbnailUrl {
               KFImage.url(URL(string: url))
                 .placeholder {
