@@ -72,7 +72,7 @@ struct MainContentLayer: View {
                   }
                 }
               } label: {
-                Text(currentVideoInfo.isFollowed ? "팔로잉" : "팔로우")
+                Text(currentVideoInfo.isFollowed ? CommonWords().following : CommonWords().follow)
                   .fontSystem(fontDesignSystem: .caption_KO_Semibold)
                   .foregroundColor(.Gray10)
                   .background {
@@ -84,14 +84,16 @@ struct MainContentLayer: View {
               }
             }
           }
-          if (currentVideoInfo.caption?.isEmpty) != nil {
-            HStack(spacing: 0) {
-              Text(currentVideoInfo.caption ?? "")
-                .fontSystem(fontDesignSystem: .body2_KO)
-                .foregroundColor(.white)
+          if let caption = currentVideoInfo.caption {
+            if !caption.isEmpty {
+              HStack(spacing: 0) {
+                Text(currentVideoInfo.caption ?? "")
+                  .fontSystem(fontDesignSystem: .body2_KO)
+                  .foregroundColor(.white)
+              }
             }
           }
-          Label(currentVideoInfo.musicTitle ?? "원본 오디오", systemImage: "music.note")
+          Label(LocalizedStringKey(stringLiteral: currentVideoInfo.musicTitle ?? "원본 오디오"), systemImage: "music.note")
             .fontSystem(fontDesignSystem: .body2_KO)
             .foregroundColor(.white)
             .padding(.top, 4)
@@ -121,13 +123,13 @@ struct MainContentLayer: View {
                 _ = await apiViewModel.bookmarkAction(
                   contentID: currentContent.contentId ?? 0,
                   method: .delete)
-                toastViewModel.toastInit(message: "저장 취소했습니다.")
+                toastViewModel.toastInit(message: ToastMessages().bookmarkDeleted)
                 currentContent.isBookmarked = false
               } else {
                 _ = await apiViewModel.bookmarkAction(
                   contentID: currentContent.contentId ?? 0,
                   method: .post)
-                toastViewModel.toastInit(message: "저장했습니다.")
+                toastViewModel.toastInit(message: ToastMessages().bookmark)
                 currentContent.isBookmarked = true
               }
             }
@@ -136,13 +138,13 @@ struct MainContentLayer: View {
               Image(systemName: currentVideoInfo.isBookmarked ? "bookmark.fill" : "bookmark")
                 .font(.system(size: 26))
                 .frame(width: 36, height: 36)
-              Text("저장")
+              Text(CommonWords().save)
                 .fontSystem(fontDesignSystem: .caption_KO_Semibold)
             }
             .frame(height: UIScreen.getHeight(56))
           }
           Button {
-            toastViewModel.toastInit(message: "클립보드에 복사되었습니다")
+            toastViewModel.toastInit(message: ToastMessages().copied)
             UIPasteboard.general.setValue(
               "https://readywhistle.com/content_uni?contentId=\(currentVideoInfo.contentId ?? 0)",
               forPasteboardType: UTType.plainText.identifier)
@@ -151,7 +153,7 @@ struct MainContentLayer: View {
               Image(systemName: "square.and.arrow.up")
                 .font(.system(size: 26))
                 .frame(width: 36, height: 36)
-              Text("공유")
+              Text(CommonWords().share)
                 .fontSystem(fontDesignSystem: .caption_KO_Semibold)
             }
             .frame(height: UIScreen.getHeight(56))
@@ -163,7 +165,7 @@ struct MainContentLayer: View {
               Image(systemName: "ellipsis")
                 .font(.system(size: 26))
                 .frame(width: 36, height: 36)
-              Text("더보기")
+              Text(CommonWords().more)
                 .fontSystem(fontDesignSystem: .caption_KO_Semibold)
             }
             .frame(height: UIScreen.getHeight(56))

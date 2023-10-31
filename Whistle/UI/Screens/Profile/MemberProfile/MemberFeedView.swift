@@ -39,8 +39,8 @@ struct MemberFeedView: View {
     .edgesIgnoringSafeArea(.all)
     .confirmationDialog("", isPresented: $feedMoreModel.showDialog) {
       if !apiViewModel.memberFeed.isEmpty {
-        Button("관심없음", role: .none) {
-          toastViewModel.cancelToastInit(message: "해당 콘텐츠를 숨겼습니다") {
+        Button(CommonWords().hide, role: .none) {
+          toastViewModel.cancelToastInit(message: ToastMessages().hiddenContent) {
             Task {
               let currentContent = apiViewModel.memberFeed[feedPlayersViewModel.currentVideoIndex]
               await apiViewModel.actionContentHate(contentID: currentContent.contentId ?? 0)
@@ -56,7 +56,7 @@ struct MemberFeedView: View {
             feedMoreModel.showReport = true
           }
         }
-        Button("닫기", role: .cancel) { }
+        Button(CommonWords().close, role: .cancel) { }
       }
     }
     .task {

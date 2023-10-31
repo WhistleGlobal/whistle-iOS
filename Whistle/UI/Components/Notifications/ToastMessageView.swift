@@ -1,5 +1,5 @@
 //
-//  ToastMessage.swift
+//  ToastMessageView.swift
 //  Whistle
 //
 //  Created by ChoiYujin on 9/3/23.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-// MARK: - ProfileToastMessage
+// MARK: - ToastMessageView
 
 struct ToastMessageView: View {
   @StateObject var toastViewModel = ToastViewModel.shared
@@ -24,7 +24,7 @@ struct ToastMessageView: View {
             .padding(.horizontal, 24)
           if toastViewModel.isCancellable {
             Spacer()
-            Button("실행 취소") {
+            Button(ToastMessages().undo) {
               toastViewModel.cancelCancellableAction()
               withAnimation {
                 toastViewModel.showToast = false

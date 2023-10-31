@@ -29,8 +29,8 @@ struct VolumeSliderSheetView: View {
   let tapDismiss: (() -> Void)?
 
   var body: some View {
-    VStack(alignment: .leading, spacing: 12) {
-      subtitleText(text: "원본 사운드")
+    VStack(spacing: 12) {
+      subtitleText(text: VideoEditorWords().originalSound)
       UniSlider(
         value: videoValue,
         in: 0 ... 1,
@@ -51,12 +51,13 @@ struct VolumeSliderSheetView: View {
         .frame(width: UIScreen.getWidth(361), height: UIScreen.getHeight(56))
         .overlay(alignment: .leading) {
           Text("\(Int(videoValue.wrappedValue * 100))")
+            .foregroundStyle(Color.secondary)
             .fontSystem(fontDesignSystem: .subtitle3)
             .vCenter()
             .padding(.leading, UIScreen.getWidth(24))
         }
       if musicVM.isTrimmed {
-        subtitleText(text: "추가된 음악 사운드")
+        subtitleText(text: VideoEditorWords().musicSound)
           .padding(.top, 12)
         UniSlider(
           value: audioValue,
@@ -79,21 +80,14 @@ struct VolumeSliderSheetView: View {
           .overlay(alignment: .leading) {
             Text("\(Int(audioValue.wrappedValue * 100))")
               .fontSystem(fontDesignSystem: .subtitle3)
+              .foregroundStyle(Color.secondary)
               .vCenter()
               .padding(.leading, UIScreen.getWidth(24))
           }
-//        RoundedRectangle(cornerRadius: 12)
-//          .foregroundColor(Color.Gray30_Light)
-//          .frame(width: UIScreen.getWidth(361), height: UIScreen.getHeight(56))
-//          .overlay(alignment: .leading) {
-//            Text("100")
-//              .fontSystem(fontDesignSystem: .subtitle3)
-//              .vCenter()
-//              .padding(.leading, UIScreen.getWidth(24))
-//          }
       }
       completeButton()
     }
+    .frame(width: UIScreen.getWidth(361))
     .padding(.top, UIScreen.getHeight(20))
     .padding(.bottom, UIScreen.getHeight(32))
     .onAppear {
@@ -112,19 +106,21 @@ struct VolumeSliderSheetView_Previews: PreviewProvider {
 
 extension VolumeSliderSheetView {
   @ViewBuilder
-  func subtitleText(text: String) -> some View {
-    Text(text)
-      .fontSystem(fontDesignSystem: .subtitle2_KO)
-      .foregroundStyle(Color.Gray10_Dark)
+  func subtitleText(text: LocalizedStringKey) -> some View {
+    HStack {
+      Text(text)
+        .fontSystem(fontDesignSystem: .subtitle2_KO)
+        .foregroundStyle(Color.LabelColor_Primary_Dark)
+      Spacer()
+    }
   }
 
   @ViewBuilder
   func completeButton() -> some View {
-    Text("음량 설정")
+    Text(VideoEditorWords().setVolume)
       .fontSystem(fontDesignSystem: .subtitle2_KO)
       .foregroundStyle(Color.white)
-      .padding(.horizontal, UIScreen.getWidth(150))
-      .padding(.vertical, UIScreen.getHeight(12))
+      .frame(width: UIScreen.getWidth(361), height: UIScreen.getHeight(48))
       .background(Capsule().fill(Color.Blue_Default))
       .onTapGesture {
         tapDismiss?()

@@ -25,7 +25,7 @@ struct VideoEditorView: View {
   @State var goUpload = false
   @State var showMusicTrimView = false
   @State var showVideoQualitySheet = false
-  @State var bottomSheetTitle = ""
+  @State var bottomSheetTitle: LocalizedStringKey = ""
   @State var bottomSheetPosition: BottomSheetPosition = .hidden
   @State var sheetPositions: [BottomSheetPosition] = [.hidden, .dynamic]
 
@@ -128,11 +128,11 @@ struct VideoEditorView: View {
           }
           bottomSheetPosition = .relative(1)
           sheetPositions = [.absolute(UIScreen.getHeight(400)), .hidden, .relative(1)]
-          bottomSheetTitle = "음악 검색"
+          bottomSheetTitle = VideoEditorWords().searchMusic
         case .audio:
           bottomSheetPosition = .dynamic
           sheetPositions = [.hidden, .dynamic]
-          bottomSheetTitle = "볼륨 조절"
+          bottomSheetTitle = VideoEditorWords().mutateVolume
         //      case .filters: print("filters")
         //      case .corrections: print("corrections")
         //      case .frames: print("frames")
@@ -250,7 +250,7 @@ extension VideoEditorView {
   }
 
   private var helpText: some View {
-    Text("최대 15초까지 동영상을 올릴 수 있어요.")
+    Text(VideoEditorWords().editorComment)
       .foregroundStyle(Color.white)
       .fontSystem(fontDesignSystem: .body2_KO)
       .padding(.vertical, 32)
@@ -327,7 +327,7 @@ struct MusicInfo: View {
     } else {
       HStack {
         Image(systemName: "music.note")
-        Text("음악 추가")
+        Text(VideoEditorWords().addMusic)
           .frame(maxWidth: UIScreen.getWidth(90))
           .lineLimit(1)
           .truncationMode(.tail)

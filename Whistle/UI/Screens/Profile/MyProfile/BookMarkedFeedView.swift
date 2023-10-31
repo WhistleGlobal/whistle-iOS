@@ -38,8 +38,8 @@ struct BookMarkedFeedView: View {
     .edgesIgnoringSafeArea(.all)
     .confirmationDialog("", isPresented: $feedMoreModel.showDialog) {
       if !apiViewModel.bookmark.isEmpty {
-        Button("저장 취소", role: .none) {
-          toastViewModel.cancelToastInit(message: "저장 취소되었습니다.") {
+        Button(CommonWords().saveCancel, role: .none) {
+          toastViewModel.cancelToastInit(message: ToastMessages().bookmarkDeleted) {
             Task {
               let currentContent = apiViewModel.bookmark[feedPlayersViewModel.currentVideoIndex]
               _ = await apiViewModel.bookmarkAction(contentID: currentContent.contentId, method: .delete)
@@ -62,7 +62,7 @@ struct BookMarkedFeedView: View {
             feedMoreModel.showReport = true
           }
         }
-        Button("닫기", role: .cancel) { }
+        Button(CommonWords().close, role: .cancel) { }
       }
     }
     .task {

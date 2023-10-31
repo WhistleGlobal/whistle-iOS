@@ -179,7 +179,7 @@ struct SEMyProfileView: View {
     {
       VStack(spacing: 0) {
         HStack {
-          Text("설정")
+          Text(CommonWords().settings)
             .fontSystem(fontDesignSystem: .subtitle1_KO)
             .foregroundColor(.white)
         }
@@ -187,15 +187,13 @@ struct SEMyProfileView: View {
         Divider().background(Color("Gray10"))
         NavigationLink {
           NotificationSettingView()
-
         } label: {
-          bottomSheetRowWithIcon(systemName: "bell", text: "알림")
+          bottomSheetRowWithIcon(systemName: "bell", text: CommonWords().notification)
         }
         NavigationLink {
           LegalInfoView()
-
         } label: {
-          bottomSheetRowWithIcon(systemName: "info.circle", text: "약관 및 정책")
+          bottomSheetRowWithIcon(systemName: "info.circle", text: CommonWords().about)
         }
         Button {
           withAnimation {
@@ -204,17 +202,14 @@ struct SEMyProfileView: View {
           UIPasteboard.general.setValue(
             "https://readywhistle.com/profile_uni?id=\(apiViewModel.myProfile.userId)",
             forPasteboardType: UTType.plainText.identifier)
-          toastViewModel.toastInit(message: "클립보드에 복사되었습니다")
+          toastViewModel.toastInit(message: ToastMessages().copied)
         } label: {
           bottomSheetRowWithIcon(systemName: "link", text: CommonWords().copyProfileURL)
         }
         NavigationLink {
           GuideStatusView()
-
         } label: {
-          bottomSheetRowWithIcon(
-            systemName: "exclamationmark.triangle.fill",
-            text: CommonWords().report)
+          bottomSheetRowWithIcon(systemName: "exclamationmark.triangle.fill", text: CommonWords().guideStatus)
         }
         Group {
           Divider().background(Color("Gray10"))
@@ -223,25 +218,33 @@ struct SEMyProfileView: View {
               bottomSheetPosition = .hidden
             }
             alertViewModel.linearAlert(
-              title: "정말 로그아웃하시겠어요?",
-              destructiveText: "로그아웃")
+              title: AlertTitles().logout,
+              cancelText: CommonWords().cancel,
+              destructiveText: CommonWords().logout)
             {
               apiViewModel.reset()
+              apiViewModel.publisherSend()
+              NavigationUtil.popToRootView()
+//              feedPlayersViewModel.resetPlayer()
               GIDSignIn.sharedInstance.signOut()
               userAuth.appleSignout()
+              tabbarModel.tabSelectionNoAnimation = .main
+              tabbarModel.tabSelection = .main
               isFirstProfileLoaded = false
             }
           } label: {
-            bottomSheetRow(text: "로그아웃", color: Color.Info)
+            bottomSheetRow(text: CommonWords().logout, color: Color.Info)
           }
           Button {
             withAnimation {
               bottomSheetPosition = .hidden
             }
             alertViewModel.linearAlert(
-              title: "정말 삭제하시겠어요?",
-              content: "삭제하시면 회원님의 모든 정보와 활동 기록이 삭제됩니다. 삭제된 정보는 복구할 수 없으니 신중하게 결정해주세요.",
-              destructiveText: "삭제")
+              isRed: true,
+              title: AlertTitles().removeAccount,
+              content: AlertContents().removeAccount,
+              cancelText: CommonWords().cancel,
+              destructiveText: CommonWords().delete)
             {
               Task {
                 apiViewModel.myProfile.userName.removeAll()
@@ -252,7 +255,7 @@ struct SEMyProfileView: View {
               }
             }
           } label: {
-            bottomSheetRow(text: "계정삭제", color: Color.Danger)
+            bottomSheetRow(text: CommonWords().deleteAccount, color: Color.Danger)
           }
         }
         Spacer()
@@ -461,7 +464,7 @@ extension SEMyProfileView {
   }
 
   @ViewBuilder
-  func bottomSheetRow(text: String, color: Color) -> some View {
+  func bottomSheetRow(text: LocalizedStringKey, color: Color) -> some View {
     HStack {
       Text(text)
         .foregroundColor(color)

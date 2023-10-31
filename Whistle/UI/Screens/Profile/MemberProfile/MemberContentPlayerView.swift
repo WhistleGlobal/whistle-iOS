@@ -159,7 +159,7 @@ struct MemberContentPlayerView: View {
                 .padding(.leading, 16)
                 .onDisappear {
                   DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.2) {
-                    toastViewModel.toastInit(message: "영상이 게시되었습니다.")
+                    toastViewModel.toastInit(message: ToastMessages().contentUploaded)
                   }
                 }
             }

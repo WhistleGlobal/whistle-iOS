@@ -54,7 +54,7 @@ struct LegalInfoView: View {
     }
     .navigationBarBackButtonHidden()
     .navigationBarTitleDisplayMode(.inline)
-    .navigationTitle("약관 및 정책")
+    .navigationTitle(CommonWords().about)
     .task {
       apiViewModel.requestUserCreateDate()
     }

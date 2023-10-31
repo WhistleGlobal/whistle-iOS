@@ -124,7 +124,7 @@ struct GuestMainView: View {
             Button {
               showGuide = false
             } label: {
-              Text("닫기")
+              Text(CommonWords().close)
                 .fontSystem(fontDesignSystem: .subtitle2_KO)
                 .foregroundColor(Color.LabelColor_Primary_Dark)
                 .frame(width: UIScreen.width - 32, height: 56)

@@ -205,7 +205,7 @@ extension MusicTrimView {
     }
     .padding(.horizontal, 16)
     .overlay {
-      Text("음악 편집")
+      Text(VideoEditorWords().trimMusic)
         .fontSystem(fontDesignSystem: .subtitle1_KO)
         .foregroundStyle(Color.white)
     }

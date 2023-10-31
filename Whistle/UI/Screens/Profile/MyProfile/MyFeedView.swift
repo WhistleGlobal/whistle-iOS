@@ -43,8 +43,8 @@ struct MyFeedView: View {
     .edgesIgnoringSafeArea(.all)
     .confirmationDialog("", isPresented: $feedMoreModel.showDialog) {
       if !apiViewModel.myFeed.isEmpty {
-        Button("삭제", role: .destructive) {
-          toastViewModel.cancelToastInit(message: "삭제되었습니다") {
+        Button(CommonWords().delete, role: .destructive) {
+          toastViewModel.cancelToastInit(message: ToastMessages().contentDeleted) {
             Task {
               let currentContent = apiViewModel.myFeed[feedPlayersViewModel.currentVideoIndex]
               await apiViewModel.deleteContent(contentID: currentContent.contentId ?? 0)
@@ -54,7 +54,7 @@ struct MyFeedView: View {
             }
           }
         }
-        Button("닫기", role: .cancel) { }
+        Button(CommonWords().close, role: .cancel) { }
       }
     }
     .task {

@@ -49,7 +49,7 @@ struct GuideStatusView: View {
     }
     .navigationBarBackButtonHidden()
     .navigationBarTitleDisplayMode(.inline)
-    .navigationTitle("가이드 상태")
+    .navigationTitle(CommonWords().guideStatus)
     .task {
       if apiViewModel.reportedContent.isEmpty {
 //        await apiViewModel.requestReportedFeed()

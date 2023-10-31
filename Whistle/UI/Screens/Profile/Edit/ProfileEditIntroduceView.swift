@@ -59,7 +59,7 @@ struct ProfileEditIntroduceView: View {
             apiViewModel.myProfile.introduce = introduce
             _ = await apiViewModel.updateMyProfile()
             dismiss()
-            toastViewModel.toastInit(message: "소개가 수정되었습니다.", padding: 32)
+            toastViewModel.toastInit(message: ToastMessages().bioUpdated, padding: 32)
           }
         } label: {
           Text(CommonWords().confirm)
