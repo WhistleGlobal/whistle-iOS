@@ -153,15 +153,15 @@ struct SEMemberProfileView: View {
             }
           }
         }
-        Button(CommonWords().report, role: .destructive) {
+        Button(CommonWords().reportAction, role: .destructive) {
           goReport = true
         }
       }
-      Button(CommonWords().copyProfileURL, role: .none) {
+      Button(CommonWords().shareProfile, role: .none) {
         UIPasteboard.general.setValue(
           "https://readywhistle.com/profile_uni?id=\(userId)",
           forPasteboardType: UTType.plainText.identifier)
-        toastViewModel.toastInit(message: ToastMessages().copied)
+//        toastViewModel.toastInit(message: ToastMessages().copied)
       }
       Button(CommonWords().cancel, role: .cancel) { }
     }

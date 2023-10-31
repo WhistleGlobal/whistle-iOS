@@ -16,20 +16,23 @@ import SwiftUI
 
 struct SEMyProfileView: View {
   @StateObject var userAuth = UserAuth.shared
-  @StateObject private var tabbarModel = TabbarModel.shared
   @StateObject var apiViewModel = APIViewModel.shared
+  @StateObject private var tabbarModel = TabbarModel.shared
   @StateObject private var toastViewModel = ToastViewModel.shared
   @StateObject var alertViewModel = AlertViewModel.shared
+  @StateObject private var feedPlayersViewModel = MainFeedPlayersViewModel.shared
 
+  @State private var goNotiSetting = false
   @State var isShowingBottomSheet = false
   @State var tabbarDirection: CGFloat = -1.0
   @State var tabSelection: profileTabCase = .myVideo
-
   @State var bottomSheetPosition: BottomSheetPosition = .hidden
   @State var offsetY: CGFloat = 0
-  @Binding var isFirstProfileLoaded: Bool
 
+  @Binding var isFirstProfileLoaded: Bool
   let processor = BlurImageProcessor(blurRadius: 10)
+  let center = UNUserNotificationCenter.current()
+
   var body: some View {
     ZStack {
       if bottomSheetPosition == .absolute(420) {
@@ -185,11 +188,32 @@ struct SEMyProfileView: View {
         }
         .frame(height: 52)
         Divider().background(Color("Gray10"))
-        NavigationLink {
-          NotificationSettingView()
+        Button {
+          center.requestAuthorization(options: [.sound , .alert , .badge]) { granted, error in
+            if let error {
+              WhistleLogger.logger.error("\(error)")
+              return
+            }
+            if !granted {
+              alertViewModel.linearAlert(
+                isRed: false,
+                title: "휘슬 앱 알림이 허용되지 않았습니다.\n설정에서 알림을 켜시겠습니까?",
+                cancelText: CommonWords().cancel,
+                destructiveText: "설정으로 가기", cancelAction: { })
+              {
+                guard let url = URL(string: UIApplication.openSettingsURLString) else { return }
+                if UIApplication.shared.canOpenURL(url) {
+                  UIApplication.shared.open(url)
+                }
+              }
+            } else {
+              goNotiSetting = true
+            }
+          }
         } label: {
           bottomSheetRowWithIcon(systemName: "bell", text: CommonWords().notification)
         }
+
         NavigationLink {
           LegalInfoView()
         } label: {
@@ -199,12 +223,15 @@ struct SEMyProfileView: View {
           withAnimation {
             bottomSheetPosition = .hidden
           }
-          UIPasteboard.general.setValue(
-            "https://readywhistle.com/profile_uni?id=\(apiViewModel.myProfile.userId)",
-            forPasteboardType: UTType.plainText.identifier)
-          toastViewModel.toastInit(message: ToastMessages().copied)
+          let shareURL = URL(
+            string: "https://readywhistle.com/profile_uni?id=\(apiViewModel.myProfile.userId)")!
+          let activityViewController = UIActivityViewController(activityItems: [shareURL], applicationActivities: nil)
+          UIApplication.shared.windows.first?.rootViewController?.present(
+            activityViewController,
+            animated: true,
+            completion: nil)
         } label: {
-          bottomSheetRowWithIcon(systemName: "link", text: CommonWords().copyProfileURL)
+          bottomSheetRowWithIcon(systemName: "square.and.arrow.up", text: CommonWords().shareProfile)
         }
         NavigationLink {
           GuideStatusView()
@@ -225,7 +252,7 @@ struct SEMyProfileView: View {
               apiViewModel.reset()
               apiViewModel.publisherSend()
               NavigationUtil.popToRootView()
-//              feedPlayersViewModel.resetPlayer()
+              feedPlayersViewModel.resetPlayer()
               GIDSignIn.sharedInstance.signOut()
               userAuth.appleSignout()
               tabbarModel.tabSelectionNoAnimation = .main
@@ -290,14 +317,13 @@ extension SEMyProfileView {
       profileImageView(url: apiViewModel.myProfile.profileImage, size: profileImageSize)
         .padding(.bottom, 12)
       Text(apiViewModel.myProfile.userName)
-        .font(.system(size: 18, weight: .semibold).width(.expanded))
         .foregroundColor(Color.LabelColor_Primary_Dark)
-        .frame(height: 28)
-      Spacer().frame(minHeight: 10)
+        .fontSystem(fontDesignSystem: .title2_Expanded)
+        .padding(.bottom, 4)
+      Spacer()
       Color.clear.overlay {
         Text(apiViewModel.myProfile.introduce ?? "")
           .foregroundColor(Color.LabelColor_Secondary_Dark)
-          .font(.system(size: 14, weight: .regular))
           .fontSystem(fontDesignSystem: .body2_KO)
           .lineLimit(nil)
           .multilineTextAlignment(.center)
@@ -310,7 +336,6 @@ extension SEMyProfileView {
       Spacer()
       NavigationLink {
         ProfileEditView()
-
       } label: {
         Text(ProfileEditWords().edit)
           .fontSystem(fontDesignSystem: .subtitle2_KO)
@@ -327,26 +352,27 @@ extension SEMyProfileView {
             .foregroundColor(Color.LabelColor_Primary_Dark)
             .font(.system(size: 16, weight: .semibold).width(.expanded))
             .scaleEffect(whistleFollowerTextScale)
-          Text("whistle")
+          Text(CommonWords().whistle)
             .foregroundColor(Color.LabelColor_Secondary_Dark)
             .font(.system(size: 10, weight: .semibold))
             .scaleEffect(whistleFollowerTextScale)
         }
-        Rectangle().frame(width: 1, height: .infinity).foregroundColor(.white)
+        .hCenter()
+        Rectangle().frame(width: 1).foregroundColor(.white).scaleEffect(0.5)
         NavigationLink {
           MyFollowListView()
-
         } label: {
           VStack(spacing: 4) {
             Text("\(apiViewModel.myFollow.followerCount)")
               .foregroundColor(Color.LabelColor_Primary_Dark)
               .font(.system(size: 16, weight: .semibold).width(.expanded))
               .scaleEffect(whistleFollowerTextScale)
-            Text("follower")
+            Text(CommonWords().follower)
               .foregroundColor(Color.LabelColor_Secondary_Dark)
               .font(.system(size: 10, weight: .semibold))
               .scaleEffect(whistleFollowerTextScale)
           }
+          .hCenter()
         }
       }
       .frame(height: whistleFollowerTabHeight) // 42 max

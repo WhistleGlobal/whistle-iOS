@@ -38,12 +38,15 @@ struct CommonWords {
   let share: LocalizedStringKey = "공유"
   let more: LocalizedStringKey = "더보기"
   let report: LocalizedStringKey = "신고"
+  let reportAction: LocalizedStringKey = "신고하기"
   let block: LocalizedStringKey = "차단"
+  let blockAction: LocalizedStringKey = "차단하기"
   let unblock: LocalizedStringKey = "차단 해제"
+  let unblockAction: LocalizedStringKey = "차단 해제하기"
   let close: LocalizedStringKey = "닫기"
   let hide: LocalizedStringKey = "관심없음"
   let originalAudio: LocalizedStringKey = "원본 오디오"
-  let copyProfileURL: LocalizedStringKey = "프로필 URL 복사"
+  let shareProfile: LocalizedStringKey = "프로필 공유"
 }
 
 // MARK: - ProfileEditWords
@@ -114,7 +117,6 @@ struct ToastMessages {
   let bookmark: LocalizedStringKey = "북마크에 저장했습니다"
   let bookmarkDeleted: LocalizedStringKey = "북마크를 취소했습니다"
   let contentDeleted: LocalizedStringKey = "삭제되었습니다"
-  let copied: LocalizedStringKey = "클립보드에 복사되었습니다"
   let profileImageUpdated: LocalizedStringKey = "프로필 사진이 수정되었습니다."
   let bioUpdated: LocalizedStringKey = "소개가 수정되었습니다."
   let usernameUpdated: LocalizedStringKey = "사용자 ID가 수정되었습니다."

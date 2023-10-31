@@ -72,7 +72,7 @@ struct RecordAccessView: View {
             alertViewModel.linearAlert(
               isRed: false,
               title: "'Whistle'에 대해 \(showAlert.1.rawValue)이 없습니다. 설정에서 \(showAlert.1.rawValue) 권한을 켜시겠습니까?",
-              cancelText: "취소",
+              cancelText: CommonWords().cancel,
               destructiveText: "설정으로 가기")
             {
               guard let url = URL(string: UIApplication.openSettingsURLString) else { return }

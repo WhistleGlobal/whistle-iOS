@@ -34,13 +34,16 @@
 "가이드 상태" = "Guide Status";
 "공유" = "Share";
 "더보기" = "More";
+"신고하기" = "Report";
 "신고" = "Report";
 "차단" = "Block";
+"차단하기" = "Block";
 "차단 해제" = "Unblock";
+"차단 해제하기" = "Unblock";
 "닫기" = "Close";
 "관심없음" = "Hide";
 "원본 오디오" = "Original Sound";
-"프로필 URL 복사" = "Copy profile URL";
+"프로필 공유" = "Share profile";
 
 // MARK: - ProfileEditWords
 "프로필 편집" = "Edit Profile";
@@ -94,9 +97,6 @@
   // 저장 관련
 "북마크에 저장했습니다" = "Saved to bookmark";
 "북마크를 취소했습니다" = "Deleted from bookmark";
-
-  // 공유 관련
-"클립보드에 복사되었습니다" = "Link copied to clipboard";
 
   // 콘텐츠 관련
 "영상이 게시되었습니다." = "Posted";

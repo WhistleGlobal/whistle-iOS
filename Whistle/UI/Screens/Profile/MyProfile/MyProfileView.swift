@@ -208,7 +208,7 @@ struct MyProfileView: View {
               alertViewModel.linearAlert(
                 isRed: false,
                 title: "휘슬 앱 알림이 허용되지 않았습니다.\n설정에서 알림을 켜시겠습니까?",
-                cancelText: "취소",
+                cancelText: CommonWords().cancel,
                 destructiveText: "설정으로 가기", cancelAction: { })
               {
                 guard let url = URL(string: UIApplication.openSettingsURLString) else { return }
@@ -241,7 +241,7 @@ struct MyProfileView: View {
             animated: true,
             completion: nil)
         } label: {
-          bottomSheetRowWithIcon(systemName: "square.and.arrow.up", text: "프로필 공유")
+          bottomSheetRowWithIcon(systemName: "square.and.arrow.up", text: CommonWords().shareProfile)
         }
         NavigationLink {
           GuideStatusView()
@@ -347,7 +347,7 @@ extension MyProfileView {
       NavigationLink {
         ProfileEditView()
       } label: {
-        Text("프로필 편집")
+        Text(ProfileEditWords().edit)
           .fontSystem(fontDesignSystem: .subtitle2_KO)
           .foregroundColor(Color.LabelColor_Primary_Dark)
           .scaleEffect(profileEditButtonScale)
@@ -362,7 +362,7 @@ extension MyProfileView {
             .foregroundColor(Color.LabelColor_Primary_Dark)
             .fontSystem(fontDesignSystem: .title2_Expanded)
             .scaleEffect(whistleFollowerTextScale)
-          Text("휘슬")
+          Text(CommonWords().whistle)
             .foregroundColor(Color.LabelColor_Secondary_Dark)
             .fontSystem(fontDesignSystem: .caption_SemiBold)
             .scaleEffect(whistleFollowerTextScale)
@@ -377,7 +377,7 @@ extension MyProfileView {
               .foregroundColor(Color.LabelColor_Primary_Dark)
               .fontSystem(fontDesignSystem: .title2_Expanded)
               .scaleEffect(whistleFollowerTextScale)
-            Text("팔로워")
+            Text(CommonWords().follower)
               .foregroundColor(Color.LabelColor_Secondary_Dark)
               .fontSystem(fontDesignSystem: .caption_SemiBold)
               .scaleEffect(whistleFollowerTextScale)
