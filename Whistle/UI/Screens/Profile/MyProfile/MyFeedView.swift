@@ -8,7 +8,7 @@
 import _AVKit_SwiftUI
 import SwiftUI
 
-// MARK: - MyFeedKitView
+// MARK: - MyFeedView
 
 struct MyFeedView: View {
 
@@ -58,34 +58,11 @@ struct MyFeedView: View {
       }
     }
     .task {
-      let updateAvailable = await apiViewModel.checkUpdateAvailable()
-      if updateAvailable {
-        await apiViewModel.requestVersionCheck()
-        feedMoreModel.showUpdate = apiViewModel.versionCheck.forceUpdate
-        if feedMoreModel.showUpdate {
-          return
-        }
-      }
       if apiViewModel.myProfile.userName.isEmpty {
         await apiViewModel.requestMyProfile()
       }
       if apiViewModel.myFeed.isEmpty {
         await apiViewModel.requestMyPostFeed()
-      }
-    }
-    .navigationDestination(isPresented: $feedMoreModel.isRootStacked) {
-      if UIDevice.current.userInterfaceIdiom == .phone {
-        switch UIScreen.main.nativeBounds.height {
-        case 1334: // iPhone SE 3rd generation
-          if !apiViewModel.myFeed.isEmpty {
-            SEMemberProfileView(
-              userId: apiViewModel.myFeed[feedPlayersViewModel.currentVideoIndex].userId ?? 0)
-          }
-        default:
-          if !apiViewModel.myFeed.isEmpty {
-            MemberProfileView(userId: apiViewModel.myFeed[feedPlayersViewModel.currentVideoIndex].userId ?? 0)
-          }
-        }
       }
     }
   }
@@ -97,7 +74,4 @@ class MyFeedMoreModel: ObservableObject {
   static let shared = MyFeedMoreModel()
   private init() { }
   @Published var showDialog = false
-  @Published var showReport = false
-  @Published var showUpdate = false
-  @Published var isRootStacked = false
 }

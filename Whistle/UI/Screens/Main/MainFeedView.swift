@@ -43,6 +43,7 @@ struct MainFeedView: View {
         }
         if apiViewModel.mainFeed[feedPlayersViewModel.currentVideoIndex].userId ?? 0 != apiViewModel.myProfile.userId {
           Button("신고", role: .destructive) {
+            feedPlayersViewModel.stopPlayer()
             feedMoreModel.showReport = true
           }
         }
@@ -105,7 +106,9 @@ struct MainFeedView: View {
         }
       }
     }
-    .fullScreenCover(isPresented: $feedMoreModel.showReport) {
+    .fullScreenCover(isPresented: $feedMoreModel.showReport, onDismiss: {
+      feedPlayersViewModel.currentPlayer?.play()
+    }) {
       MainFeedReportReasonSelectionView(
         goReport: $feedMoreModel.showReport,
         contentId: apiViewModel.mainFeed[feedPlayersViewModel.currentVideoIndex].contentId ?? 0,

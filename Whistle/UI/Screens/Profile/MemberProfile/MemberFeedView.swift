@@ -8,7 +8,7 @@
 import _AVKit_SwiftUI
 import SwiftUI
 
-// MARK: - MemberFeedKitView
+// MARK: - MemberFeedView
 
 struct MemberFeedView: View {
 
@@ -52,6 +52,7 @@ struct MemberFeedView: View {
         }
         if apiViewModel.mainFeed[feedPlayersViewModel.currentVideoIndex].userId ?? 0 != apiViewModel.myProfile.userId {
           Button("신고", role: .destructive) {
+            feedPlayersViewModel.stopPlayer()
             feedMoreModel.showReport = true
           }
         }
@@ -78,7 +79,9 @@ struct MemberFeedView: View {
         }
       }
     }
-    .fullScreenCover(isPresented: $feedMoreModel.showReport) {
+    .fullScreenCover(isPresented: $feedMoreModel.showReport, onDismiss: {
+      feedPlayersViewModel.currentPlayer?.play()
+    }) {
       MainFeedReportReasonSelectionView(
         goReport: $feedMoreModel.showReport,
         contentId: apiViewModel.memberFeed[feedPlayersViewModel.currentVideoIndex].contentId ?? 0,
@@ -94,6 +97,5 @@ class MemberFeedMoreModel: ObservableObject {
   private init() { }
   @Published var showDialog = false
   @Published var showReport = false
-  @Published var showUpdate = false
   @Published var isRootStacked = false
 }

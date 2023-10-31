@@ -56,18 +56,16 @@ struct BookMarkedFeedView: View {
             }
           }
         }
+        if apiViewModel.bookmark[feedPlayersViewModel.currentVideoIndex].userId != apiViewModel.myProfile.userId {
+          Button("신고", role: .destructive) {
+            feedPlayersViewModel.stopPlayer()
+            feedMoreModel.showReport = true
+          }
+        }
         Button("닫기", role: .cancel) { }
       }
     }
     .task {
-      let updateAvailable = await apiViewModel.checkUpdateAvailable()
-      if updateAvailable {
-        await apiViewModel.requestVersionCheck()
-        feedMoreModel.showUpdate = apiViewModel.versionCheck.forceUpdate
-        if feedMoreModel.showUpdate {
-          return
-        }
-      }
       if apiViewModel.myProfile.userName.isEmpty {
         await apiViewModel.requestMyProfile()
       }
@@ -90,6 +88,14 @@ struct BookMarkedFeedView: View {
         }
       }
     }
+    .fullScreenCover(isPresented: $feedMoreModel.showReport, onDismiss: {
+      feedPlayersViewModel.currentPlayer?.play()
+    }) {
+      MainFeedReportReasonSelectionView(
+        goReport: $feedMoreModel.showReport,
+        contentId: apiViewModel.bookmark[feedPlayersViewModel.currentVideoIndex].contentId,
+        userId: apiViewModel.bookmark[feedPlayersViewModel.currentVideoIndex].userId)
+    }
   }
 }
 
@@ -100,6 +106,5 @@ class BookmarkedFeedMoreModel: ObservableObject {
   private init() { }
   @Published var showDialog = false
   @Published var showReport = false
-  @Published var showUpdate = false
   @Published var isRootStacked = false
 }
