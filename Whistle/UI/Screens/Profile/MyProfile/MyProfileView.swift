@@ -120,7 +120,7 @@ struct MyProfileView: View {
                 } label: {
                   videoThumbnailView(
                     thumbnailURL: content.thumbnailUrl ?? "",
-                    viewCount: content.contentViewCount ?? 0)
+                    whistleCount: content.whistleCount ?? 0)
                 }
               }
             }
@@ -147,7 +147,7 @@ struct MyProfileView: View {
                 NavigationLink {
                   BookMarkedFeedView(index: index)
                 } label: {
-                  videoThumbnailView(thumbnailURL: content.thumbnailUrl, viewCount: content.viewCount)
+                  videoThumbnailView(thumbnailURL: content.thumbnailUrl, whistleCount: content.whistleCount)
                 }
               }
             }
@@ -387,7 +387,7 @@ extension MyProfileView {
   }
 
   @ViewBuilder
-  func videoThumbnailView(thumbnailURL: String, viewCount: Int) -> some View {
+  func videoThumbnailView(thumbnailURL: String, whistleCount: Int) -> some View {
     Color.black.overlay {
       KFImage.url(URL(string: thumbnailURL))
         .placeholder {
@@ -398,12 +398,10 @@ extension MyProfileView {
       VStack {
         Spacer()
         HStack(spacing: 4) {
-          Image(systemName: "play.circle.fill")
-            .resizable()
-            .scaledToFit()
-            .frame(width: 17, height: 17)
-            .foregroundColor(.Primary_Default)
-          Text("\(viewCount)")
+          Image(systemName: "heart.fill")
+            .font(.system(size: 16))
+            .foregroundColor(.Danger)
+          Text("\(whistleCount)")
             .fontSystem(fontDesignSystem: .caption_KO_Semibold)
             .foregroundColor(Color.LabelColor_Primary_Dark)
         }

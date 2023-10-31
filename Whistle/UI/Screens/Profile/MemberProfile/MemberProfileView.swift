@@ -97,7 +97,7 @@ struct MemberProfileView: View {
                 } label: {
                   videoThumbnailView(
                     thumbnailUrl: content.thumbnailUrl ?? "",
-                    viewCount: content.contentViewCount ?? 0,
+                    whistleCount: content.whistleCount ?? 0,
                     isHated: content.isHated)
                 }
                 .id(UUID())
@@ -361,7 +361,7 @@ extension MemberProfileView {
   // var isBlocked = false
 
   @ViewBuilder
-  func videoThumbnailView(thumbnailUrl: String, viewCount: Int, isHated: Bool) -> some View {
+  func videoThumbnailView(thumbnailUrl: String, whistleCount: Int, isHated: Bool) -> some View {
     Color.black.overlay {
       KFImage.url(URL(string: thumbnailUrl))
         .placeholder { // 플레이스 홀더 설정
@@ -381,12 +381,10 @@ extension MemberProfileView {
       VStack {
         Spacer()
         HStack(spacing: 4) {
-          Image(systemName: "play.circle.fill")
-            .resizable()
-            .scaledToFit()
-            .frame(width: 17, height: 17)
-            .foregroundColor(.Primary_Default)
-          Text("\(viewCount)")
+          Image(systemName: "heart.fill")
+            .font(.system(size: 16))
+            .foregroundColor(.Danger)
+          Text("\(whistleCount)")
             .fontSystem(fontDesignSystem: .caption_KO_Semibold)
             .foregroundColor(Color.LabelColor_Primary_Dark)
         }

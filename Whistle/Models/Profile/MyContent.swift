@@ -19,8 +19,8 @@ class MyContent: ObservableObject, Decodable, Hashable {
     case musicArtist = "music_artist"
     case musicTitle = "music_title"
     case hashtags = "content_hashtags"
-    case contentWhistleCount = "content_whistle_count"
-    case contentViewCount = "content_view_count"
+    case whistleCount = "content_whistle_count"
+    case viewCount = "content_view_count"
     case isWhistled = "is_whistled"
     case isBookmarked = "is_bookmarked"
   }
@@ -35,8 +35,8 @@ class MyContent: ObservableObject, Decodable, Hashable {
   @Published var musicArtist: String?
   @Published var musicTitle: String?
   @Published var hashtags: [String]?
-  @Published var contentWhistleCount: Int?
-  @Published var contentViewCount: Int?
+  @Published var whistleCount: Int?
+  @Published var viewCount: Int?
   @Published var isWhistled = false
   @Published var isBookmarked = false
 
@@ -54,8 +54,8 @@ class MyContent: ObservableObject, Decodable, Hashable {
     musicArtist = try container.decode(String?.self, forKey: .musicArtist)
     musicTitle = try container.decode(String?.self, forKey: .musicTitle)
     hashtags = try container.decode([String]?.self, forKey: .hashtags)
-    contentWhistleCount = try container.decode(Int?.self, forKey: .contentWhistleCount)
-    contentViewCount = try container.decode(Int?.self, forKey: .contentViewCount)
+    whistleCount = try container.decode(Int?.self, forKey: .whistleCount)
+    viewCount = try container.decode(Int?.self, forKey: .viewCount)
     isWhistled = try container.decode(Int.self, forKey: .isWhistled) == 1
     isBookmarked = try container.decode(Int?.self, forKey: .isBookmarked) == 1
   }
@@ -68,4 +68,3 @@ class MyContent: ObservableObject, Decodable, Hashable {
     hasher.combine(videoUrl)
   }
 }
-

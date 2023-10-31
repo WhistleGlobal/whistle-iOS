@@ -29,8 +29,7 @@ struct ProfileEditView: View {
 
   var body: some View {
     VStack(spacing: 0) {
-      Divider()
-        .frame(width: UIScreen.width)
+      Divider().frame(height: 0.5).padding(.leading, 16).foregroundColor(.Disable_Placeholder)
         .padding(.bottom, 36)
       profileImageView(url: apiViewModel.myProfile.profileImage, size: 100)
         .padding(.bottom, 16)
@@ -46,18 +45,18 @@ struct ProfileEditView: View {
           .fontSystem(fontDesignSystem: .subtitle2_KO)
       }
       .padding(.bottom, 40)
-      Divider()
+      Divider().frame(height: 0.5).padding(.leading, 16).foregroundColor(.Disable_Placeholder)
       profileEditLink(
         destination: ProfileEditIDView(),
         title: "사용자 ID",
         content: apiViewModel.myProfile.userName)
-      Divider().padding(.leading, 96)
+      Divider().padding(.leading, 96).foregroundColor(.Disable_Placeholder)
       profileEditLink(
         destination: ProfileEditIntroduceView(
           introduce: apiViewModel.myProfile.introduce ?? ""),
         title: "소개",
         content: apiViewModel.myProfile.introduce ?? "")
-      Divider()
+      Divider().frame(height: 0.5).padding(.leading, 16).foregroundColor(.Disable_Placeholder)
       Spacer()
     }
     .fullScreenCover(isPresented: $showGallery) {
@@ -66,7 +65,6 @@ struct ProfileEditView: View {
     .fullScreenCover(isPresented: $showAlbumAccessView) {
       AlbumAccessView(isAlbumAuthorized: $isAlbumAuthorized, showAlbumAccessView: $showAlbumAccessView)
     }
-    .padding(.horizontal, 16)
     .navigationBarBackButtonHidden()
     .confirmationDialog("", isPresented: $editProfileImage) {
       Button("앨범에서 사진 업로드", role: .none) {
@@ -143,6 +141,7 @@ extension ProfileEditView {
       }
       .frame(height: 56)
     }
+    .padding(.horizontal, 16)
   }
 }
 

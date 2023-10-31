@@ -90,7 +90,7 @@ struct MyContentLayer: View {
               Image(systemName: currentVideoInfo.isWhistled ? "heart.fill" : "heart")
                 .font(.system(size: 26))
                 .frame(width: 36, height: 36)
-              Text("\(currentVideoInfo.contentWhistleCount ?? 0)")
+              Text("\(currentVideoInfo.whistleCount ?? 0)")
                 .fontSystem(fontDesignSystem: .caption_KO_Semibold)
             }
             .frame(height: UIScreen.getHeight(56))

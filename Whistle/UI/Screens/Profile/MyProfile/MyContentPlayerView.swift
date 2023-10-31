@@ -291,14 +291,14 @@ extension MyContentPlayerView {
           await apiViewModel.whistleAction(contentID: content.contentId ?? 0, method: .delete)
         }
       }
-      apiViewModel.myFeed[index].contentWhistleCount! -= 1
+      apiViewModel.myFeed[index].whistleCount! -= 1
     } else {
       timer = Timer.scheduledTimer(withTimeInterval: 2, repeats: false) { _ in
         Task {
           await apiViewModel.whistleAction(contentID: content.contentId ?? 0, method: .post)
         }
       }
-      apiViewModel.myFeed[index].contentWhistleCount! += 1
+      apiViewModel.myFeed[index].whistleCount! += 1
     }
     apiViewModel.myFeed[index].isWhistled.toggle()
   }

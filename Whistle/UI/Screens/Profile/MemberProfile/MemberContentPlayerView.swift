@@ -251,14 +251,14 @@ extension MemberContentPlayerView {
           await apiViewModel.whistleAction(contentID: currentContentInfo?.contentId ?? 0, method: .delete)
         }
       }
-      apiViewModel.memberFeed[index].contentWhistleCount! -= 1
+      apiViewModel.memberFeed[index].whistleCount! -= 1
     } else {
       timer = Timer.scheduledTimer(withTimeInterval: 2, repeats: false) { _ in
         Task {
           await apiViewModel.whistleAction(contentID: currentContentInfo?.contentId ?? 0, method: .post)
         }
       }
-      apiViewModel.memberFeed[index].contentWhistleCount! += 1
+      apiViewModel.memberFeed[index].whistleCount! += 1
     }
     apiViewModel.memberFeed[index].isWhistled.toggle()
   }

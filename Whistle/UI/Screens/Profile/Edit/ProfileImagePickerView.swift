@@ -32,7 +32,7 @@ struct ProfileImagePickerView: View {
     CGSize(width: 800, height: 800)
   }
 
-  private static let itemSize = CGSize(width: UIScreen.width / 4, height: UIScreen.width / 4)
+  private static let itemSize = CGSize(width: UIScreen.width / 4 - 1, height: UIScreen.width / 4 - 1)
 
   let columns = [
     GridItem(.flexible(minimum: 40), spacing: 0),
@@ -112,7 +112,7 @@ struct ProfileImagePickerView: View {
       }
       .padding(.horizontal, 16)
       ScrollView {
-        LazyVGrid(columns: columns, spacing: 0) {
+        LazyVGrid(columns: columns, spacing: 1) {
           ForEach(photoCollection.photoAssets) { asset in
             Button {
               photoCollection
