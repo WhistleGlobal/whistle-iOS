@@ -97,13 +97,13 @@ struct MyContentLayer: View {
                 _ = await apiViewModel.bookmarkAction(
                   contentID: currentContent.contentId ?? 0,
                   method: .delete)
-                toastViewModel.toastInit(message: "저장 취소했습니다.")
+                toastViewModel.toastInit(message: "북마크를 취소했습니다")
                 currentContent.isBookmarked = false
               } else {
                 _ = await apiViewModel.bookmarkAction(
                   contentID: currentContent.contentId ?? 0,
                   method: .post)
-                toastViewModel.toastInit(message: "저장했습니다.")
+                toastViewModel.toastInit(message: "북마크를 취소했습니다")
                 currentContent.isBookmarked = true
               }
               apiViewModel.mainFeed = apiViewModel.mainFeed.map { item in

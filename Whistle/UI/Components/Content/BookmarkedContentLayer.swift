@@ -139,7 +139,7 @@ struct BookmarkedContentLayer: View {
             .frame(height: UIScreen.getHeight(56))
           }
           Button {
-            toastViewModel.cancelToastInit(message: "저장 취소되었습니다.") {
+            toastViewModel.cancelToastInit(message: "북마크를 취소했습니다") {
               Task {
                 let currentContent = apiViewModel.bookmark[feedPlayersViewModel.currentVideoIndex]
                 _ = await apiViewModel.bookmarkAction(contentID: currentContent.contentId, method: .delete)
