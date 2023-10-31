@@ -18,7 +18,6 @@ struct BookmarkedContentLayer: View {
   @StateObject var toastViewModel = ToastViewModel.shared
   @StateObject private var feedMoreModel = BookmarkedFeedMoreModel.shared
   @StateObject var feedPlayersViewModel = BookmarkedPlayersViewModel.shared
-  @Binding var showDialog: Bool
   @Binding var index: Int
   var whistleAction: () -> Void
   let dismissAction: DismissAction
@@ -188,7 +187,8 @@ struct BookmarkedContentLayer: View {
             .frame(height: UIScreen.getHeight(56))
           }
           Button {
-            showDialog = true
+//            showDialog = true
+            feedMoreModel.bottomSheetPotision = .absolute(186)
           } label: {
             VStack(spacing: 2) {
               Image(systemName: "ellipsis")

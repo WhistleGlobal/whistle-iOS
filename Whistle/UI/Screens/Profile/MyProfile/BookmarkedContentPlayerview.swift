@@ -95,18 +95,20 @@ struct BookmarkedContentPlayerview: View {
                 }
                 .onLongPressGesture {
                   HapticManager.instance.impact(style: .medium)
-                  feedMoreModel.showDialog = true
+                  feedMoreModel.bottomSheetPotision = .absolute(186)
                 }
                 .overlay {
                   if tabbarModel.tabWidth != 56 {
                     BookmarkedContentLayer(
                       currentVideoInfo: content,
-                      showDialog: $feedMoreModel.showDialog,
                       index: $index,
                       whistleAction: {
                         whistleToggle(content: content, index)
                       },
                       dismissAction: dismissAction)
+                  }
+                  if feedMoreModel.bottomSheetPotision != .hidden {
+                    DimmedBackground()
                   }
                 }
               playButton(toPlay: player.rate == 0)

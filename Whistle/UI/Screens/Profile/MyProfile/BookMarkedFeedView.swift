@@ -6,6 +6,7 @@
 //
 
 import _AVKit_SwiftUI
+import BottomSheet
 import SwiftUI
 
 // MARK: - BookMarkedFeedView
@@ -17,6 +18,7 @@ struct BookMarkedFeedView: View {
   @StateObject private var feedPlayersViewModel = BookmarkedPlayersViewModel.shared
   @StateObject private var toastViewModel = ToastViewModel.shared
   @StateObject private var feedMoreModel = BookmarkedFeedMoreModel.shared
+  @StateObject private var tabbarModel = TabbarModel.shared
   @State var index = 0
 
   var body: some View {
@@ -36,35 +38,108 @@ struct BookMarkedFeedView: View {
     }
     .background(Color.black.edgesIgnoringSafeArea(.all))
     .edgesIgnoringSafeArea(.all)
-    .confirmationDialog("", isPresented: $feedMoreModel.showDialog) {
-      if !apiViewModel.bookmark.isEmpty {
-        Button("저장 취소", role: .none) {
-          toastViewModel.cancelToastInit(message: "저장 취소되었습니다.") {
-            Task {
-              let currentContent = apiViewModel.bookmark[feedPlayersViewModel.currentVideoIndex]
-              _ = await apiViewModel.bookmarkAction(contentID: currentContent.contentId, method: .delete)
-              feedPlayersViewModel.removePlayer {
-                index -= 1
-                apiViewModel.mainFeed = apiViewModel.mainFeed.map { item in
-                  let mutableItem = item
-                  if mutableItem.contentId == currentContent.contentId {
-                    mutableItem.isBookmarked = false
-                  }
-                  return mutableItem
-                }
-              }
-            }
+    .bottomSheet(
+      bottomSheetPosition: $feedMoreModel.bottomSheetPotision,
+      switchablePositions: [.hidden, .absolute(186)])
+    {
+      VStack(spacing: 0) {
+        HStack {
+          Color.clear.frame(width: 28)
+          Spacer()
+          Text("더보기")
+            .fontSystem(fontDesignSystem: .subtitle1_KO)
+            .foregroundColor(.white)
+          Spacer()
+          Button {
+            feedMoreModel.bottomSheetPotision = .hidden
+          } label: {
+            Text("취소")
+              .fontSystem(fontDesignSystem: .subtitle2_KO)
+              .foregroundColor(.white)
           }
         }
-        if apiViewModel.bookmark[feedPlayersViewModel.currentVideoIndex].userId != apiViewModel.myProfile.userId {
-          Button("신고", role: .destructive) {
-            feedPlayersViewModel.stopPlayer()
-            feedMoreModel.showReport = true
-          }
+        .frame(height: 24)
+        .padding(.vertical, 12)
+        .padding(.horizontal, 16)
+        Divider().frame(width: UIScreen.width)
+//        Button {
+//          feedMoreModel.bottomSheetPotision = .hidden
+//          toastViewModel.cancelToastInit(message: "해당 콘텐츠를 숨겼습니다") {
+//            Task {
+//              let currentContent = apiViewModel.mainFeed[feedPlayersViewModel.currentVideoIndex]
+//              await apiViewModel.actionContentHate(contentID: currentContent.contentId ?? 0)
+//              feedPlayersViewModel.removePlayer {
+//                index -= 1
+//              }
+//            }
+//          }
+//        } label: {
+//          bottomSheetRowWithIcon(systemName: "eye.fill", text: "관심없음")
+//        }
+        Button {
+          feedMoreModel.bottomSheetPotision = .hidden
+          feedPlayersViewModel.stopPlayer()
+          feedMoreModel.showReport = true
+        } label: {
+          bottomSheetRowWithIcon(systemName: "exclamationmark.triangle.fill", text: "신고")
         }
-        Button("닫기", role: .cancel) { }
+
+        Spacer()
+      }
+      .frame(height: 186)
+    }
+    .enableSwipeToDismiss(true)
+    .enableTapToDismiss(true)
+    .enableContentDrag(true)
+    .enableAppleScrollBehavior(false)
+    .dragIndicatorColor(Color.Border_Default_Dark)
+    .customBackground(
+      glassMorphicView(cornerRadius: 24)
+        .overlay {
+          RoundedRectangle(cornerRadius: 24)
+            .stroke(lineWidth: 1)
+            .foregroundStyle(
+              LinearGradient.Border_Glass)
+        })
+    .onDismiss {
+      tabbarModel.tabbarOpacity = 1.0
+    }
+    .onChange(of: feedMoreModel.bottomSheetPotision) { newValue in
+      if newValue == .hidden {
+        tabbarModel.tabbarOpacity = 1.0
+      } else {
+        tabbarModel.tabbarOpacity = 0.0
       }
     }
+//    .confirmationDialog("", isPresented: $feedMoreModel.showDialog) {
+//      if !apiViewModel.bookmark.isEmpty {
+//        Button("저장 취소", role: .none) {
+//          toastViewModel.cancelToastInit(message: "저장 취소되었습니다.") {
+//            Task {
+//              let currentContent = apiViewModel.bookmark[feedPlayersViewModel.currentVideoIndex]
+//              _ = await apiViewModel.bookmarkAction(contentID: currentContent.contentId, method: .delete)
+//              feedPlayersViewModel.removePlayer {
+//                index -= 1
+//                apiViewModel.mainFeed = apiViewModel.mainFeed.map { item in
+//                  let mutableItem = item
+//                  if mutableItem.contentId == currentContent.contentId {
+//                    mutableItem.isBookmarked = false
+//                  }
+//                  return mutableItem
+//                }
+//              }
+//            }
+//          }
+//        }
+//        if apiViewModel.bookmark[feedPlayersViewModel.currentVideoIndex].userId != apiViewModel.myProfile.userId {
+//          Button("신고", role: .destructive) {
+//            feedPlayersViewModel.stopPlayer()
+//            feedMoreModel.showReport = true
+//          }
+//        }
+//        Button("닫기", role: .cancel) { }
+//      }
+//    }
     .task {
       if apiViewModel.myProfile.userName.isEmpty {
         await apiViewModel.requestMyProfile()
@@ -104,7 +179,7 @@ struct BookMarkedFeedView: View {
 class BookmarkedFeedMoreModel: ObservableObject {
   static let shared = BookmarkedFeedMoreModel()
   private init() { }
-  @Published var showDialog = false
   @Published var showReport = false
   @Published var isRootStacked = false
+  @Published var bottomSheetPotision: BottomSheetPosition = .hidden
 }
