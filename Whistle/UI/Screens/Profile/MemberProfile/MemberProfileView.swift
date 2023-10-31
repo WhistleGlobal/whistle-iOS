@@ -6,6 +6,7 @@
 //
 
 import _AVKit_SwiftUI
+import BottomSheet
 import Kingfisher
 import SwiftUI
 import UniformTypeIdentifiers
@@ -17,10 +18,12 @@ struct MemberProfileView: View {
   @StateObject private var apiViewModel = APIViewModel.shared
   @StateObject private var toastViewModel = ToastViewModel.shared
   @StateObject private var alertViewModel = AlertViewModel.shared
+  @StateObject private var tabbarModel = TabbarModel.shared
 
   @State var isFollow = false
   @State var isProfileLoaded = false
   @State var goReport = false
+  @State var bottomSheetPosition: BottomSheetPosition = .hidden
 
   @State var showDialog = false
   @State var offsetY: CGFloat = 0
@@ -97,7 +100,7 @@ struct MemberProfileView: View {
                 } label: {
                   videoThumbnailView(
                     thumbnailUrl: content.thumbnailUrl ?? "",
-                    viewCount: content.contentViewCount ?? 0,
+                    whistleCount: content.whistleCount ?? 0,
                     isHated: content.isHated)
                 }
                 .id(UUID())
@@ -117,11 +120,51 @@ struct MemberProfileView: View {
         }
       }
       .ignoresSafeArea()
+      if bottomSheetPosition != .hidden {
+        DimmedBackground()
+      }
     }
     .navigationBarBackButtonHidden()
-    .confirmationDialog("", isPresented: $showDialog) {
-      if apiViewModel.myProfile.userId != userId {
-        Button(apiViewModel.memberProfile.isBlocked ? CommonWords().unblock : CommonWords().block, role: .destructive) {
+    .fullScreenCover(isPresented: $goReport) {
+      ProfileReportTypeSelectionView(goReport: $goReport, userId: userId)
+        .environmentObject(apiViewModel)
+    }
+    .task {
+      await apiViewModel.requestMemberProfile(userID: userId)
+      isFollow = apiViewModel.memberProfile.isFollowed
+      isProfileLoaded = true
+      await apiViewModel.requestMemberFollow(userID: userId)
+      await apiViewModel.requestMemberWhistlesCount(userID: userId)
+    }
+    .task {
+      await apiViewModel.requestMemberPostFeed(userID: userId)
+    }
+    .bottomSheet(
+      bottomSheetPosition: $bottomSheetPosition,
+      switchablePositions: [.hidden, .absolute(298)])
+    {
+      VStack(spacing: 0) {
+        HStack {
+          Color.clear.frame(width: 28)
+          Spacer()
+          Text("더보기")
+            .fontSystem(fontDesignSystem: .subtitle1_KO)
+            .foregroundColor(.white)
+          Spacer()
+          Button {
+            bottomSheetPosition = .hidden
+          } label: {
+            Text("취소")
+              .fontSystem(fontDesignSystem: .subtitle2_KO)
+              .foregroundColor(.white)
+          }
+        }
+        .frame(height: 24)
+        .padding(.vertical, 12)
+        .padding(.horizontal, 16)
+        Divider().frame(width: UIScreen.width)
+        Button {
+          bottomSheetPosition = .hidden
           if apiViewModel.memberProfile.isBlocked {
             alertViewModel.linearAlert(
               isRed: true,
@@ -167,32 +210,53 @@ struct MemberProfileView: View {
               }
             }
           }
+        } label: {
+          bottomSheetRowWithIcon(systemName: "nosign", text: apiViewModel.memberProfile.isBlocked ? "차단 해제 하기" : "차단하기")
         }
-        Button(CommonWords().report, role: .destructive) {
+        Button {
+          bottomSheetPosition = .hidden
           goReport = true
+        } label: {
+          bottomSheetRowWithIcon(systemName: "exclamationmark.triangle.fill", text: "신고하기")
         }
+        Button {
+          bottomSheetPosition = .hidden
+          let shareURL = URL(
+            string: "https://readywhistle.com/profile_uni?id=\(userId)")!
+          let activityViewController = UIActivityViewController(activityItems: [shareURL], applicationActivities: nil)
+          UIApplication.shared.windows.first?.rootViewController?.present(
+            activityViewController,
+            animated: true,
+            completion: nil)
+        } label: {
+          bottomSheetRowWithIcon(systemName: "square.and.arrow.up", text: "프로필 공유")
+        }
+        Spacer()
       }
-      Button(CommonWords().copyProfileURL, role: .none) {
-        UIPasteboard.general.setValue(
-          "https://readywhistle.com/profile_uni?id=\(userId)",
-          forPasteboardType: UTType.plainText.identifier)
-        toastViewModel.toastInit(message: ToastMessages().copied)
+      .frame(height: 298)
+    }
+    .enableSwipeToDismiss(true)
+    .enableTapToDismiss(true)
+    .enableContentDrag(true)
+    .enableAppleScrollBehavior(false)
+    .dragIndicatorColor(Color.Border_Default_Dark)
+    .customBackground(
+      glassMorphicView(cornerRadius: 24)
+        .overlay {
+          RoundedRectangle(cornerRadius: 24)
+            .stroke(lineWidth: 1)
+            .foregroundStyle(
+              LinearGradient.Border_Glass)
+        })
+    .onDismiss {
+      tabbarModel.tabbarOpacity = 1.0
+    }
+    .onChange(of: bottomSheetPosition) { newValue in
+      if newValue == .hidden {
+        tabbarModel.tabbarOpacity = 1.0
+      } else {
+        tabbarModel.tabbarOpacity = 0.0
       }
-      Button(CommonWords().cancel, role: .cancel) { }
-    }
-    .fullScreenCover(isPresented: $goReport) {
-      ProfileReportTypeSelectionView(goReport: $goReport, userId: userId)
-        .environmentObject(apiViewModel)
-    }
-    .task {
-      await apiViewModel.requestMemberProfile(userID: userId)
-      isFollow = apiViewModel.memberProfile.isFollowed
-      isProfileLoaded = true
-      await apiViewModel.requestMemberFollow(userID: userId)
-      await apiViewModel.requestMemberWhistlesCount(userID: userId)
-    }
-    .task {
-      await apiViewModel.requestMemberPostFeed(userID: userId)
     }
   }
 }
@@ -340,7 +404,7 @@ extension MemberProfileView {
           }
           Spacer()
           Button {
-            showDialog = true
+            bottomSheetPosition = .absolute(298)
           } label: {
             Image(systemName: "ellipsis")
               .foregroundColor(.white)
@@ -361,7 +425,7 @@ extension MemberProfileView {
   }
 
   @ViewBuilder
-  func videoThumbnailView(thumbnailUrl: String, viewCount: Int, isHated: Bool) -> some View {
+  func videoThumbnailView(thumbnailUrl: String, whistleCount: Int, isHated: Bool) -> some View {
     Color.black.overlay {
       KFImage.url(URL(string: thumbnailUrl))
         .placeholder { // 플레이스 홀더 설정
@@ -381,12 +445,10 @@ extension MemberProfileView {
       VStack {
         Spacer()
         HStack(spacing: 4) {
-          Image(systemName: "play.circle.fill")
-            .resizable()
-            .scaledToFit()
-            .frame(width: 17, height: 17)
-            .foregroundColor(.Primary_Default)
-          Text("\(viewCount)")
+          Image(systemName: "heart.fill")
+            .font(.system(size: 16))
+            .foregroundColor(.Danger)
+          Text("\(whistleCount)")
             .fontSystem(fontDesignSystem: .caption_KO_Semibold)
             .foregroundColor(Color.LabelColor_Primary_Dark)
         }

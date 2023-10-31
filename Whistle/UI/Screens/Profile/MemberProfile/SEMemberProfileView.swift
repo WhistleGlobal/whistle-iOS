@@ -84,7 +84,7 @@ struct SEMemberProfileView: View {
                 } label: {
                   videoThumbnailView(
                     thumbnailUrl: content.thumbnailUrl ?? "",
-                    viewCount: content.contentViewCount ?? 0)
+                    viewCount: content.viewCount ?? 0)
                 }
                 .id(UUID())
               }

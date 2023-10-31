@@ -78,6 +78,9 @@ struct MemberFeedPageView: UIViewRepresentable {
         parent.feedPlayersViewModel.currentVideoIndex = index
         parent.feedPlayersViewModel.initialPlayers(index: index)
         parent.feedPlayersViewModel.currentPlayer?.seek(to: .zero)
+        if parent.currentContentInfo?.isHated ?? false {
+          return
+        }
         parent.feedPlayersViewModel.currentPlayer?.play()
       }
     }
@@ -109,6 +112,9 @@ struct MemberFeedPageView: UIViewRepresentable {
         parent.feedPlayersViewModel.stopPlayer()
         parent.feedPlayersViewModel.resetPlayer()
         parent.feedPlayersViewModel.initialPlayers()
+        if parent.currentContentInfo?.isHated ?? false {
+          return
+        }
         parent.feedPlayersViewModel.currentPlayer?.play()
       }
     }

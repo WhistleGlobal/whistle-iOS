@@ -29,6 +29,7 @@ struct MyProfileView: View {
   @StateObject var alertViewModel = AlertViewModel.shared
   @StateObject private var feedPlayersViewModel = MainFeedPlayersViewModel.shared
 
+  @State private var goNotiSetting = false
   @State var isShowingBottomSheet = false
   @State var tabbarDirection: CGFloat = -1.0
   @State var tabSelection: profileTabCase = .myVideo
@@ -37,6 +38,7 @@ struct MyProfileView: View {
 
   @Binding var isFirstProfileLoaded: Bool
   let processor = BlurImageProcessor(blurRadius: 10)
+  let center = UNUserNotificationCenter.current()
 
   var body: some View {
     ZStack {
@@ -120,7 +122,7 @@ struct MyProfileView: View {
                 } label: {
                   videoThumbnailView(
                     thumbnailURL: content.thumbnailUrl ?? "",
-                    viewCount: content.contentViewCount ?? 0)
+                    whistleCount: content.whistleCount ?? 0)
                 }
               }
             }
@@ -147,7 +149,7 @@ struct MyProfileView: View {
                 NavigationLink {
                   BookMarkedFeedView(index: index)
                 } label: {
-                  videoThumbnailView(thumbnailURL: content.thumbnailUrl, viewCount: content.viewCount)
+                  videoThumbnailView(thumbnailURL: content.thumbnailUrl, whistleCount: content.whistleCount)
                 }
               }
             }
@@ -181,6 +183,9 @@ struct MyProfileView: View {
         tabbarModel.tabbarOpacity = 0.0
       }
     }
+    .navigationDestination(isPresented: $goNotiSetting) {
+      NotificationSettingView()
+    }
     .bottomSheet(
       bottomSheetPosition: $bottomSheetPosition,
       switchablePositions: [.hidden, .absolute(420)])
@@ -193,11 +198,32 @@ struct MyProfileView: View {
         }
         .frame(height: 52)
         Divider().background(Color("Gray10"))
-        NavigationLink {
-          NotificationSettingView()
+        Button {
+          center.requestAuthorization(options: [.sound , .alert , .badge]) { granted, error in
+            if let error {
+              WhistleLogger.logger.error("\(error)")
+              return
+            }
+            if !granted {
+              alertViewModel.linearAlert(
+                isRed: false,
+                title: "휘슬 앱 알림이 허용되지 않았습니다.\n설정에서 알림을 켜시겠습니까?",
+                cancelText: "취소",
+                destructiveText: "설정으로 가기", cancelAction: { })
+              {
+                guard let url = URL(string: UIApplication.openSettingsURLString) else { return }
+                if UIApplication.shared.canOpenURL(url) {
+                  UIApplication.shared.open(url)
+                }
+              }
+            } else {
+              goNotiSetting = true
+            }
+          }
         } label: {
           bottomSheetRowWithIcon(systemName: "bell", text: CommonWords().notification)
         }
+
         NavigationLink {
           LegalInfoView()
         } label: {
@@ -207,12 +233,15 @@ struct MyProfileView: View {
           withAnimation {
             bottomSheetPosition = .hidden
           }
-          UIPasteboard.general.setValue(
-            "https://readywhistle.com/profile_uni?id=\(apiViewModel.myProfile.userId)",
-            forPasteboardType: UTType.plainText.identifier)
-          toastViewModel.toastInit(message: ToastMessages().copied)
+          let shareURL = URL(
+            string: "https://readywhistle.com/profile_uni?id=\(apiViewModel.myProfile.userId)")!
+          let activityViewController = UIActivityViewController(activityItems: [shareURL], applicationActivities: nil)
+          UIApplication.shared.windows.first?.rootViewController?.present(
+            activityViewController,
+            animated: true,
+            completion: nil)
         } label: {
-          bottomSheetRowWithIcon(systemName: "link", text: CommonWords().copyProfileURL)
+          bottomSheetRowWithIcon(systemName: "square.and.arrow.up", text: "프로필 공유")
         }
         NavigationLink {
           GuideStatusView()
@@ -318,7 +347,7 @@ extension MyProfileView {
       NavigationLink {
         ProfileEditView()
       } label: {
-        Text(ProfileEditWords().edit)
+        Text("프로필 편집")
           .fontSystem(fontDesignSystem: .subtitle2_KO)
           .foregroundColor(Color.LabelColor_Primary_Dark)
           .scaleEffect(profileEditButtonScale)
@@ -333,7 +362,7 @@ extension MyProfileView {
             .foregroundColor(Color.LabelColor_Primary_Dark)
             .fontSystem(fontDesignSystem: .title2_Expanded)
             .scaleEffect(whistleFollowerTextScale)
-          Text(CommonWords().whistle)
+          Text("휘슬")
             .foregroundColor(Color.LabelColor_Secondary_Dark)
             .fontSystem(fontDesignSystem: .caption_SemiBold)
             .scaleEffect(whistleFollowerTextScale)
@@ -348,7 +377,7 @@ extension MyProfileView {
               .foregroundColor(Color.LabelColor_Primary_Dark)
               .fontSystem(fontDesignSystem: .title2_Expanded)
               .scaleEffect(whistleFollowerTextScale)
-            Text(CommonWords().follower)
+            Text("팔로워")
               .foregroundColor(Color.LabelColor_Secondary_Dark)
               .fontSystem(fontDesignSystem: .caption_SemiBold)
               .scaleEffect(whistleFollowerTextScale)
@@ -392,7 +421,7 @@ extension MyProfileView {
   }
 
   @ViewBuilder
-  func videoThumbnailView(thumbnailURL: String, viewCount: Int) -> some View {
+  func videoThumbnailView(thumbnailURL: String, whistleCount: Int) -> some View {
     Color.black.overlay {
       KFImage.url(URL(string: thumbnailURL))
         .placeholder {
@@ -403,12 +432,10 @@ extension MyProfileView {
       VStack {
         Spacer()
         HStack(spacing: 4) {
-          Image(systemName: "play.circle.fill")
-            .resizable()
-            .scaledToFit()
-            .frame(width: 17, height: 17)
-            .foregroundColor(.Primary_Default)
-          Text("\(viewCount)")
+          Image(systemName: "heart.fill")
+            .font(.system(size: 16))
+            .foregroundColor(.Danger)
+          Text("\(whistleCount)")
             .fontSystem(fontDesignSystem: .caption_KO_Semibold)
             .foregroundColor(Color.LabelColor_Primary_Dark)
         }

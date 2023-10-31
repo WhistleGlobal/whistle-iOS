@@ -18,7 +18,6 @@ struct MemberContentLayer: View {
   @StateObject var toastViewModel = ToastViewModel.shared
   @StateObject private var feedMoreModel = MemberFeedMoreModel.shared
   @StateObject var feedPlayersViewModel = MemeberPlayersViewModel.shared
-  @Binding var showDialog: Bool
   var whistleAction: () -> Void
   let dismissAction: DismissAction
 
@@ -120,19 +119,28 @@ struct MemberContentLayer: View {
           Spacer()
           Button {
             whistleAction()
+            let currentContent = apiViewModel.memberFeed[feedPlayersViewModel.currentVideoIndex]
+            apiViewModel.mainFeed = apiViewModel.mainFeed.map { item in
+              let mutableItem = item
+              if mutableItem.contentId == currentContent.contentId {
+                mutableItem.whistleCount = currentContent.whistleCount ?? 0
+                mutableItem.isWhistled = currentContent.isWhistled
+              }
+              return mutableItem
+            }
           } label: {
             VStack(spacing: 2) {
               Image(systemName: currentVideoInfo.isWhistled ? "heart.fill" : "heart")
                 .font(.system(size: 26))
                 .frame(width: 36, height: 36)
-              Text("\(currentVideoInfo.contentWhistleCount ?? 0)")
+              Text("\(currentVideoInfo.whistleCount ?? 0)")
                 .fontSystem(fontDesignSystem: .caption_KO_Semibold)
             }
             .frame(height: UIScreen.getHeight(56))
           }
           Button {
             Task {
-              let currentContent = apiViewModel.mainFeed[feedPlayersViewModel.currentVideoIndex]
+              let currentContent = apiViewModel.memberFeed[feedPlayersViewModel.currentVideoIndex]
               if currentContent.isBookmarked {
                 _ = await apiViewModel.bookmarkAction(
                   contentID: currentContent.contentId ?? 0,
@@ -146,6 +154,13 @@ struct MemberContentLayer: View {
                 toastViewModel.toastInit(message: ToastMessages().bookmark)
                 currentContent.isBookmarked = true
               }
+              apiViewModel.mainFeed = apiViewModel.mainFeed.map { item in
+                let mutableItem = item
+                if mutableItem.contentId == currentContent.contentId {
+                  mutableItem.isBookmarked = currentContent.isBookmarked
+                }
+                return mutableItem
+              }
             }
           } label: {
             VStack(spacing: 2) {
@@ -158,10 +173,12 @@ struct MemberContentLayer: View {
             .frame(height: UIScreen.getHeight(56))
           }
           Button {
-            toastViewModel.toastInit(message: ToastMessages().copied)
-            UIPasteboard.general.setValue(
-              "https://readywhistle.com/content_uni?contentId=\(currentVideoInfo.contentId ?? 0)",
-              forPasteboardType: UTType.plainText.identifier)
+            let shareURL = URL(string: "https://readywhistle.com/content_uni?contentId=\(currentVideoInfo.contentId ?? 0)")!
+            let activityViewController = UIActivityViewController(activityItems: [shareURL], applicationActivities: nil)
+            UIApplication.shared.windows.first?.rootViewController?.present(
+              activityViewController,
+              animated: true,
+              completion: nil)
           } label: {
             VStack(spacing: 2) {
               Image(systemName: "square.and.arrow.up")
@@ -173,7 +190,7 @@ struct MemberContentLayer: View {
             .frame(height: UIScreen.getHeight(56))
           }
           Button {
-            showDialog = true
+            feedMoreModel.bottomSheetPosition = .absolute(242)
           } label: {
             VStack(spacing: 2) {
               Image(systemName: "ellipsis")

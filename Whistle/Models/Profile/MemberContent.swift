@@ -19,8 +19,8 @@ class MemberContent: ObservableObject, Codable, Hashable {
     case musicArtist = "music_artist"
     case musicTitle = "music_title"
     case hashtags = "content_hashtags"
-    case contentWhistleCount = "content_whistle_count"
-    case contentViewCount = "content_view_count"
+    case whistleCount = "content_whistle_count"
+    case viewCount = "content_view_count"
     case isWhistled = "is_whistled"
     case isFollowed = "is_followed"
     case isBookmarked = "is_bookmarked"
@@ -37,8 +37,8 @@ class MemberContent: ObservableObject, Codable, Hashable {
   var musicArtist: String?
   var musicTitle: String?
   var hashtags: [String]?
-  var contentWhistleCount: Int?
-  var contentViewCount: Int?
+  var whistleCount: Int?
+  var viewCount: Int?
   var isWhistled = false
   var isFollowed = false
   var isBookmarked = false
@@ -58,8 +58,8 @@ class MemberContent: ObservableObject, Codable, Hashable {
     musicArtist = try container.decode(String?.self, forKey: .musicArtist)
     musicTitle = try container.decode(String?.self, forKey: .musicTitle)
     hashtags = try container.decode([String]?.self, forKey: .hashtags)
-    contentWhistleCount = try container.decode(Int?.self, forKey: .contentWhistleCount)
-    contentViewCount = try container.decode(Int?.self, forKey: .contentViewCount)
+    whistleCount = try container.decode(Int?.self, forKey: .whistleCount)
+    viewCount = try container.decode(Int?.self, forKey: .viewCount)
     isWhistled = try container.decode(Int.self, forKey: .isWhistled) == 1 ? true : false
     isFollowed = try container.decode(Int.self, forKey: .isFollowed) == 1 ? true : false
     isBookmarked = try container.decode(Int.self, forKey: .isBookmarked) == 1 ? true : false

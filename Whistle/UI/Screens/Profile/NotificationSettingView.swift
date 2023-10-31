@@ -11,10 +11,6 @@ struct NotificationSettingView: View {
   @AppStorage("isAllOff") var isAllOff = false
   @Environment(\.dismiss) var dismiss
   @StateObject var apiViewModel = APIViewModel.shared
-  @StateObject var alertViewModel = AlertViewModel.shared
-  @State var showAlert = false
-  let persistenceController = PersistenceController.shared
-  let center = UNUserNotificationCenter.current()
 
   var body: some View {
     List {
@@ -38,37 +34,8 @@ struct NotificationSettingView: View {
     .navigationBarBackButtonHidden()
     .navigationBarTitleDisplayMode(.inline)
     .navigationTitle("알림")
-    .overlay {
-      if !alertViewModel.onFullScreenCover {
-        AlertPopup()
-      }
-    }
-    .onAppear {
-      center.requestAuthorization(options: [.sound , .alert , .badge]) { granted, error in
-        if let error {
-          WhistleLogger.logger.error("\(error)")
-          return
-        }
-        if !granted {
-          alertViewModel.linearAlert(
-            isRed: false,
-            title: "휘슬 앱 알림이 허용되지 않았습니다.\n설정에서 알림을 켜시겠습니까?",
-            cancelText: "취소",
-            destructiveText: "설정으로 가기", cancelAction: {
-              dismiss()
-            }) {
-              dismiss()
-              guard let url = URL(string: UIApplication.openSettingsURLString) else { return }
-              if UIApplication.shared.canOpenURL(url) {
-                UIApplication.shared.open(url)
-              }
-            }
-        } else {
-          Task {
-            await apiViewModel.requestNotiSetting()
-          }
-        }
-      }
+    .task {
+      await apiViewModel.requestNotiSetting()
     }
     .toolbar {
       ToolbarItem(placement: .cancellationAction) {

@@ -7,6 +7,7 @@
 
 import _AVKit_SwiftUI
 import AVFoundation
+import BottomSheet
 import Combine
 import Kingfisher
 import SwiftUI
@@ -39,7 +40,7 @@ struct MainContentPlayerView: View {
     VStack(spacing: 0) {
       ForEach(Array(apiViewModel.mainFeed.enumerated()), id: \.element) { index, content in
         ZStack {
-          Color.clear.overlay {
+          Color.black.overlay {
             if let url = apiViewModel.mainFeed[index].thumbnailUrl {
               KFImage.url(URL(string: url))
                 .placeholder {
@@ -96,16 +97,18 @@ struct MainContentPlayerView: View {
                 }
                 .onLongPressGesture {
                   HapticManager.instance.impact(style: .medium)
-                  feedMoreModel.showDialog = true
+                  feedMoreModel.bottomSheetPosition = .absolute(242)
                 }
                 .overlay {
                   if tabbarModel.tabWidth != 56 {
                     MainContentLayer(
                       currentVideoInfo: content,
-                      showDialog: $feedMoreModel.showDialog,
                       whistleAction: {
                         whistleToggle(content: content, index)
                       })
+                  }
+                  if feedMoreModel.bottomSheetPosition != .hidden {
+                    DimmedBackground()
                   }
                 }
               playButton(toPlay: player.rate == 0)
@@ -206,17 +209,20 @@ struct MainContentPlayerView: View {
         }
         .frame(width: UIScreen.width, height: UIScreen.height)
         .ignoresSafeArea()
-        .onReceive(apiViewModel.publisher) { id in
-          newId = id
-        }
-        .id(newId)
       }
+      .onReceive(apiViewModel.publisher) { id in
+        newId = id
+      }
+      .id(newId)
     }
     .onAppear {
       if index == 0 {
         lifecycleDelegate?.onAppear()
       } else {
         feedPlayersViewModel.currentPlayer?.seek(to: .zero)
+        if BlockList.shared.userIds.contains(currentContentInfo?.userId ?? 0) {
+          return
+        }
         feedPlayersViewModel.currentPlayer?.play()
       }
     }
@@ -302,5 +308,6 @@ extension MainContentPlayerView {
       apiViewModel.mainFeed[index].whistleCount += 1
     }
     apiViewModel.mainFeed[index].isWhistled.toggle()
+    currentContentInfo = apiViewModel.mainFeed[index]
   }
 }

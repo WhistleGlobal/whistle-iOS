@@ -7,6 +7,7 @@
 
 import _AVKit_SwiftUI
 import AVFoundation
+import BottomSheet
 import Combine
 import Kingfisher
 import SwiftUI
@@ -19,7 +20,7 @@ struct MyContentPlayerView: View {
   @StateObject var apiViewModel = APIViewModel.shared
   @StateObject var feedPlayersViewModel = MyFeedPlayersViewModel.shared
   @StateObject private var toastViewModel = ToastViewModel.shared
-  @StateObject private var feedMoreModel = MyFeedMoreModel.shared
+  @StateObject var feedMoreModel = MyFeedMoreModel.shared
   @StateObject private var tabbarModel = TabbarModel.shared
 
   @State var newId = UUID()
@@ -40,7 +41,7 @@ struct MyContentPlayerView: View {
     VStack(spacing: 0) {
       ForEach(Array(apiViewModel.myFeed.enumerated()), id: \.element) { index, content in
         ZStack {
-          Color.clear.overlay {
+          Color.black.overlay {
             if let url = apiViewModel.myFeed[index].thumbnailUrl {
               KFImage.url(URL(string: url))
                 .placeholder {
@@ -97,17 +98,19 @@ struct MyContentPlayerView: View {
                 }
                 .onLongPressGesture {
                   HapticManager.instance.impact(style: .medium)
-                  feedMoreModel.showDialog = true
+                  feedMoreModel.bottomSheetPosition = .absolute(186)
                 }
                 .overlay {
                   if tabbarModel.tabWidth != 56 {
                     MyContentLayer(
                       currentVideoInfo: content,
-                      showDialog: $feedMoreModel.showDialog,
                       whistleAction: {
                         whistleToggle(content: content, index)
                       },
                       dismissAction: dismissAction)
+                  }
+                  if feedMoreModel.bottomSheetPosition != .hidden {
+                    DimmedBackground()
                   }
                 }
               playButton(toPlay: player.rate == 0)
@@ -291,15 +294,16 @@ extension MyContentPlayerView {
           await apiViewModel.whistleAction(contentID: content.contentId ?? 0, method: .delete)
         }
       }
-      apiViewModel.myFeed[index].contentWhistleCount! -= 1
+      apiViewModel.myFeed[index].whistleCount! -= 1
     } else {
       timer = Timer.scheduledTimer(withTimeInterval: 2, repeats: false) { _ in
         Task {
           await apiViewModel.whistleAction(contentID: content.contentId ?? 0, method: .post)
         }
       }
-      apiViewModel.myFeed[index].contentWhistleCount! += 1
+      apiViewModel.myFeed[index].whistleCount! += 1
     }
     apiViewModel.myFeed[index].isWhistled.toggle()
+    currentContentInfo = apiViewModel.myFeed[index]
   }
 }

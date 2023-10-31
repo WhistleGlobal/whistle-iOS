@@ -430,4 +430,41 @@ extension View {
           .foregroundColor(.white)
       }
   }
+
+  @ViewBuilder
+  func bottomSheetRowWithIcon(
+    systemName: String,
+    text: String)
+    -> some View
+  {
+    HStack(spacing: 12) {
+      Image(systemName: systemName)
+        .font(.system(size: 20))
+        .foregroundColor(Color.LabelColor_Primary_Dark)
+      Text(text)
+        .foregroundColor(Color.LabelColor_Primary_Dark)
+        .fontSystem(fontDesignSystem: .subtitle2_KO)
+      Spacer()
+      Image(systemName: "chevron.forward")
+        .font(.system(size: 16))
+        .foregroundColor(Color.Disable_Placeholder_Light)
+    }
+    .frame(height: 56)
+    .padding(.horizontal, 16)
+  }
+
+  @ViewBuilder
+  func bottomSheetRow(text: String, color: Color) -> some View {
+    HStack {
+      Text(text)
+        .foregroundColor(color)
+        .fontSystem(fontDesignSystem: .subtitle2_KO)
+      Spacer()
+      Image(systemName: "chevron.forward")
+        .font(.system(size: 16))
+        .foregroundColor(Color.Disable_Placeholder_Light)
+    }
+    .frame(height: 56)
+    .padding(.horizontal, 16)
+  }
 }
