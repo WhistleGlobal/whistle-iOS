@@ -140,43 +140,6 @@ struct MainContentPlayerView: View {
                   }
                 }
             }
-            if showGuide {
-              VStack {
-                Spacer()
-                Button {
-                  showGuide = false
-                } label: {
-                  Text(CommonWords().close)
-                    .fontSystem(fontDesignSystem: .subtitle2_KO)
-                    .foregroundColor(Color.LabelColor_Primary_Dark)
-                    .frame(width: UIScreen.width - 32, height: 56)
-                    .background {
-                      glassMorphicView(cornerRadius: 12)
-                        .overlay {
-                          RoundedRectangle(cornerRadius: 12)
-                            .stroke(lineWidth: 1)
-                            .foregroundStyle(
-                              LinearGradient.Border_Glass)
-                        }
-                    }
-                }
-                .padding(.bottom, 32)
-              }
-              .frame(width: UIScreen.width, height: UIScreen.height)
-              .ignoresSafeArea()
-              .ignoresSafeArea(.all, edges: .top)
-              .background {
-                Color.clear.overlay {
-                  Image("gestureGuide")
-                    .resizable()
-                    .scaledToFill()
-                    .ignoresSafeArea()
-                    .ignoresSafeArea(.all, edges: .top)
-                }
-                .ignoresSafeArea()
-                .ignoresSafeArea(.all, edges: .top)
-              }
-            }
           }
           .overlay(alignment: .topLeading) {
             if isUploading {
