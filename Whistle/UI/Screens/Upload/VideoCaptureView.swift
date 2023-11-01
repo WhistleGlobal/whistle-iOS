@@ -494,17 +494,17 @@ extension VideoCaptureView {
               Text("15s")
             }
             .foregroundColor(Color.Gray30_Dark)
-            .fontSystem(fontDesignSystem: .caption_KO_Semibold)
+            .fontSystem(fontDesignSystem: .caption_SemiBold)
             .offset(y: -53)
             HStack {
               Text("\(Int((defaultWidth + dragOffset - 6) / (barSpacing + 6)))s")
                 .foregroundColor(Color.white)
-                .fontSystem(fontDesignSystem: .caption_KO_Semibold)
+                .fontSystem(fontDesignSystem: .caption_SemiBold)
                 .frame(width: dragOffset + defaultWidth, alignment: .trailing)
             }
             .frame(width: UIScreen.width - 32, alignment: .leading)
             .foregroundColor(Color.LabelColor_Primary_Dark)
-            .fontSystem(fontDesignSystem: .caption_KO_Semibold)
+            .fontSystem(fontDesignSystem: .caption_SemiBold)
             .offset(y: -53)
           }
           .frame(height: 104)

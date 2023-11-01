@@ -197,9 +197,9 @@ struct SEMyProfileView: View {
             if !granted {
               alertViewModel.linearAlert(
                 isRed: false,
-                title: "휘슬 앱 알림이 허용되지 않았습니다.\n설정에서 알림을 켜시겠습니까?",
+                title: AlertTitles().setNotification,
                 cancelText: CommonWords().cancel,
-                destructiveText: "설정으로 가기", cancelAction: { })
+                destructiveText: AlertButtons().goSettings, cancelAction: { })
               {
                 guard let url = URL(string: UIApplication.openSettingsURLString) else { return }
                 if UIApplication.shared.canOpenURL(url) {
@@ -429,7 +429,7 @@ extension SEMyProfileView {
             .font(.system(size: 16))
             .foregroundColor(.Danger)
           Text("\(whistleCount)")
-            .fontSystem(fontDesignSystem: .caption_KO_Semibold)
+            .fontSystem(fontDesignSystem: .caption_SemiBold)
             .foregroundColor(Color.LabelColor_Primary_Dark)
         }
         .padding(.bottom, 8.5)
@@ -444,7 +444,7 @@ extension SEMyProfileView {
   @ViewBuilder
   func listEmptyView() -> some View {
     Spacer()
-    Text("공유하고 싶은 첫번째 콘텐츠를 업로드해보세요")
+    Text(ContentWords().noUploadedContent)
       .fontSystem(fontDesignSystem: .body1_KO)
       .foregroundColor(.LabelColor_Primary_Dark)
     Button {
@@ -453,7 +453,7 @@ extension SEMyProfileView {
         tabbarModel.tabSelection = .upload
       }
     } label: {
-      Text("업로드하러 가기")
+      Text(ContentWords().goUpload)
         .fontSystem(fontDesignSystem: .subtitle2_KO)
         .foregroundColor(Color.LabelColor_Primary_Dark)
         .frame(width: 142, height: 36)
@@ -505,7 +505,7 @@ extension SEMyProfileView {
   @ViewBuilder
   func bookmarkEmptyView() -> some View {
     Spacer()
-    Text("저장한 콘텐츠가 없습니다")
+    Text(ContentWords().noBookmarkedContent)
       .fontSystem(fontDesignSystem: .body1_KO)
       .foregroundColor(.LabelColor_Primary_Dark)
       .padding(.bottom, 64)

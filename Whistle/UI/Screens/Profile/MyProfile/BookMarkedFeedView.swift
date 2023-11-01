@@ -29,7 +29,7 @@ struct BookMarkedFeedView: View {
       } else {
         VStack {
           Spacer()
-          Text("저장한 콘텐츠가 없습니다")
+          Text(ContentWords().noBookmarkedContent)
             .fontSystem(fontDesignSystem: .body1_KO)
             .foregroundColor(.LabelColor_Primary_Dark)
           Spacer()

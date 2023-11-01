@@ -73,7 +73,7 @@ struct RecordAccessView: View {
               isRed: false,
               title: "'Whistle'에 대해 \(showAlert.1.rawValue)이 없습니다. 설정에서 \(showAlert.1.rawValue) 권한을 켜시겠습니까?",
               cancelText: CommonWords().cancel,
-              destructiveText: "설정으로 가기")
+              destructiveText: AlertButtons().goSettings)
             {
               guard let url = URL(string: UIApplication.openSettingsURLString) else { return }
               if UIApplication.shared.canOpenURL(url) {
@@ -82,7 +82,7 @@ struct RecordAccessView: View {
             }
           }
         } label: {
-          Text("계속")
+          Text(CommonWords().continueWord)
             .fontSystem(fontDesignSystem: .subtitle2_KO)
             .foregroundColor(.LabelColor_Primary_Dark)
             .frame(width: UIScreen.width - 32, height: 56)

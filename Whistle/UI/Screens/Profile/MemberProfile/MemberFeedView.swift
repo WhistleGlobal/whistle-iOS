@@ -30,7 +30,7 @@ struct MemberFeedView: View {
       } else {
         VStack {
           Spacer()
-          Text("저장한 콘텐츠가 없습니다")
+          Text(ContentWords().noBookmarkedContent)
             .fontSystem(fontDesignSystem: .body1_KO)
             .foregroundColor(.LabelColor_Primary_Dark)
           Spacer()
@@ -65,7 +65,7 @@ struct MemberFeedView: View {
         Divider().frame(width: UIScreen.width)
         Button {
           feedMoreModel.bottomSheetPosition = .hidden
-          toastViewModel.cancelToastInit(message: "해당 콘텐츠를 숨겼습니다") {
+          toastViewModel.cancelToastInit(message: ToastMessages().postHidden) {
             Task {
               let currentContent = apiViewModel.memberFeed[feedPlayersViewModel.currentVideoIndex]
               await apiViewModel.actionContentHate(contentID: currentContent.contentId ?? 0)
@@ -75,7 +75,7 @@ struct MemberFeedView: View {
             }
           }
         } label: {
-          bottomSheetRowWithIcon(systemName: "eye.fill", text: "관심없음")
+          bottomSheetRowWithIcon(systemName: "eye.fill", text: CommonWords().hide)
         }
         Button {
           feedMoreModel.bottomSheetPosition = .hidden

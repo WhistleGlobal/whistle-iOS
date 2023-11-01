@@ -23,8 +23,7 @@
 "휘슬" = "Whistle";
 "프로필" = "Profile";
 "플레이" = "Play";
-"저장" = "Bookmark";
-"저장 취소" = "Delete bookmark";
+"북마크" = "Bookmark";
 "삭제" = "Delete";
 "계정삭제" = "Delete account";
 "로그아웃" = "Log out";
@@ -76,17 +75,24 @@
 // MARK: - Content Words
 "새 게시물" = "New post";
 "게시" = "Post";
+"저장한 콘텐츠가 없습니다" = "No bookmarked post";
+"공유하고 싶은 첫번째 콘텐츠를 업로드해보세요" = "Try uploading the first post you want to share.";
+"업로드하러 가기" = "Go upload";
 
 // MARK: - Alert Title
 "정말 로그아웃하시겠어요?" = "Log out of your account?";
 "정말 삭제하시겠어요?" = "Delete your account?";
 "%@ 님을 차단하시겠어요?" = "Block %@?";
 "%@ 님을 차단 해제하시겠어요?" = "Unblock %@?";
+"휘슬 앱 알림이 허용되지 않았습니다.설정에서 알림을 켜시겠습니까?" = "Turn on notification from your device settings to see updates on your lock screen.";
 
 // MARK: - Alert Content
 "이제 상대방이 회원님의 게시물을 보거나 팔로우할 수 있습니다. 상대방에게 회원님이 차단을 해제했다는 정보를 알리지 않습니다." = "Now they will be able to see your posts and follow you on Whistle. They won't be notified that you unblocked them.";
 "차단된 사람은 회원님의 프로필 또는 콘텐츠를 찾을 수 없게 되며, 상대방에게 차단되었다는 알림이 전송되지 않습니다." = "They won't be able to find your profile or content on Whistle. They won't be notified that you blocked them.";
 "삭제하시면 회원님의 모든 정보와 활동 기록이 삭제됩니다. 삭제된 정보는 복구할 수 없으니 신중하게 결정해주세요." = "If you delete it, all your information and activity history will be permanently removed. Deleted information cannot be recovered, so please decide carefully.";
+
+// MARK: - Alert Buttons
+"설정으로 가기" = "Go to device settings";
 
 // MARK: - 토스트 문구
 "실행 취소" = "Undo";

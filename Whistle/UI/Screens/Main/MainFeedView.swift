@@ -56,7 +56,7 @@ struct MainFeedView: View {
         Divider().frame(width: UIScreen.width)
         Button {
           feedMoreModel.bottomSheetPosition = .hidden
-          toastViewModel.cancelToastInit(message: "해당 콘텐츠를 숨겼습니다") {
+          toastViewModel.cancelToastInit(message: ToastMessages().postHidden) {
             Task {
               let currentContent = apiViewModel.mainFeed[feedPlayersViewModel.currentVideoIndex]
               await apiViewModel.actionContentHate(contentID: currentContent.contentId ?? 0)
