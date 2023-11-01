@@ -73,18 +73,18 @@ struct RootTabView: View {
       }
 
       switch tabbarModel.tabSelectionNoAnimation {
-        case .main, .upload:
-          Color.clear
+      case .main, .upload:
+        Color.clear
 
-        case .profile:
-          if isAccess {
-            NavigationStack {
-              MyProfileView(isFirstProfileLoaded: $isFirstProfileLoaded)
-            }
-            .tint(.black)
-          } else {
-            GuestProfileView()
+      case .profile:
+        if isAccess {
+          NavigationStack {
+            MyProfileView(isFirstProfileLoaded: $isFirstProfileLoaded)
           }
+          .tint(.black)
+        } else {
+          GuestProfileView()
+        }
       }
 
       // MARK: - Tabbar
@@ -152,13 +152,12 @@ struct RootTabView: View {
       CameraOrAccessView(
         isCam: $isCameraAuthorized,
         isMic: $isMicrophoneAuthorized,
-        isNav: $isNavigationActive
-      )
+        isNav: $isNavigationActive)
     }
     .bottomSheet(
       bottomSheetPosition: $uploadBottomSheetPosition,
-      switchablePositions: [.hidden, .absolute(UIScreen.height - 68)]
-    ) {
+      switchablePositions: [.hidden, .absolute(UIScreen.height - 68)])
+    {
       VStack(spacing: 0) {
         HStack {
           Button {
@@ -217,35 +216,34 @@ struct RootTabView: View {
 
         SignInWithAppleButton(
           onRequest: appleSignInViewModel.configureRequest,
-          onCompletion: appleSignInViewModel.handleResult
-        )
-        .frame(maxWidth: 360, maxHeight: 48)
-        .cornerRadius(48)
-        .overlay {
-          Capsule()
-            .foregroundColor(.black)
-            .frame(maxWidth: 360, maxHeight: 48)
-            .overlay {
-              HStack(alignment: .center) {
-                Image(systemName: "apple.logo")
-                  .resizable()
-                  .scaledToFit()
-                  .foregroundColor(.white)
-                  .frame(width: 18, height: 18)
-                Spacer()
-                Text("Apple로 계속하기")
-                  .font(.system(size: 16))
-                  .fontWeight(.semibold)
-                  .foregroundColor(.white)
-                Spacer()
-                Color.clear
-                  .frame(width: 18, height: 18)
+          onCompletion: appleSignInViewModel.handleResult)
+          .frame(maxWidth: 360, maxHeight: 48)
+          .cornerRadius(48)
+          .overlay {
+            Capsule()
+              .foregroundColor(.black)
+              .frame(maxWidth: 360, maxHeight: 48)
+              .overlay {
+                HStack(alignment: .center) {
+                  Image(systemName: "apple.logo")
+                    .resizable()
+                    .scaledToFit()
+                    .foregroundColor(.white)
+                    .frame(width: 18, height: 18)
+                  Spacer()
+                  Text("Apple로 계속하기")
+                    .font(.system(size: 16))
+                    .fontWeight(.semibold)
+                    .foregroundColor(.white)
+                  Spacer()
+                  Color.clear
+                    .frame(width: 18, height: 18)
+                }
+                .padding(.horizontal, 24)
               }
-              .padding(.horizontal, 24)
-            }
-            .allowsHitTesting(false)
-        }
-        .padding(.bottom, 24)
+              .allowsHitTesting(false)
+          }
+          .padding(.bottom, 24)
         Text("가입을 진행할 경우, 아래의 정책에 대해 동의한 것으로 간주합니다.")
           .fontSystem(fontDesignSystem: .caption_KO_Regular)
           .foregroundColor(.LabelColor_Primary_Dark)
@@ -483,20 +481,20 @@ extension RootTabView {
   private func getCameraPermission() {
     let authorizationStatus = AVCaptureDevice.authorizationStatus(for: .video)
     switch authorizationStatus {
-      case .authorized:
-        isCameraAuthorized = true
-      default:
-        break
+    case .authorized:
+      isCameraAuthorized = true
+    default:
+      break
     }
   }
 
   private func getMicrophonePermission() {
     let authorizationStatus = AVCaptureDevice.authorizationStatus(for: .audio)
     switch authorizationStatus {
-      case .authorized:
-        isMicrophoneAuthorized = true
-      default:
-        break
+    case .authorized:
+      isMicrophoneAuthorized = true
+    default:
+      break
     }
   }
 
