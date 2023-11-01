@@ -89,26 +89,12 @@ struct GuestContentLayer: View {
           Button {
             feedMoreModel.bottomSheetPosition = .dynamic
           } label: {
-            VStack(spacing: 2) {
-              Image(systemName: "heart")
-                .font(.system(size: 26))
-                .frame(width: 36, height: 36)
-              Text("\(currentVideoInfo.whistleCount ?? 0)")
-                .fontSystem(fontDesignSystem: .caption_SemiBold)
-            }
-            .frame(height: UIScreen.getHeight(56))
+            ContentLayerButton(image: "heart", label: "\(currentVideoInfo.whistleCount ?? 0)")
           }
           Button {
             feedMoreModel.bottomSheetPosition = .dynamic
           } label: {
-            VStack(spacing: 2) {
-              Image(systemName: "bookmark")
-                .font(.system(size: 26))
-                .frame(width: 36, height: 36)
-              Text(CommonWords().bookmark)
-                .fontSystem(fontDesignSystem: .caption_SemiBold)
-            }
-            .frame(height: UIScreen.getHeight(56))
+            ContentLayerButton(image: "bookmark", label: CommonWords().bookmark)
           }
           Button {
             let shareURL = URL(
@@ -119,26 +105,12 @@ struct GuestContentLayer: View {
               animated: true,
               completion: nil)
           } label: {
-            VStack(spacing: 2) {
-              Image(systemName: "square.and.arrow.up")
-                .font(.system(size: 26))
-                .frame(width: 36, height: 36)
-              Text(CommonWords().share)
-                .fontSystem(fontDesignSystem: .caption_SemiBold)
-            }
-            .frame(height: UIScreen.getHeight(56))
+            ContentLayerButton(image: "square.and.arrow.up", label: CommonWords().share)
           }
           Button {
             feedMoreModel.bottomSheetPosition = .dynamic
           } label: {
-            VStack(spacing: 2) {
-              Image(systemName: "ellipsis")
-                .font(.system(size: 26))
-                .frame(width: 36, height: 36)
-              Text(CommonWords().more)
-                .fontSystem(fontDesignSystem: .caption_SemiBold)
-            }
-            .frame(height: UIScreen.getHeight(56))
+            ContentLayerButton(image: "ellipsis", label: CommonWords().more)
           }
         }
         .foregroundColor(.Gray10)
