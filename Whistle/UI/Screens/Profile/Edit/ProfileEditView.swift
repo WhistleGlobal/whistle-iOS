@@ -16,6 +16,7 @@ struct ProfileEditView: View {
   @StateObject private var tabbarModel = TabbarModel.shared
   @StateObject var apiViewModel = APIViewModel.shared
   @StateObject private var toastViewModel = ToastViewModel.shared
+  @StateObject private var alertViewModel = AlertViewModel.shared
 
   @ObservedObject var photoCollection = PhotoCollection(smartAlbum: .smartAlbumUserLibrary)
 
@@ -61,14 +62,14 @@ struct ProfileEditView: View {
     }
     .onAppear {
       toastViewModel.onFullScreenCover = true
-    }
-    .onDisappear {
-      toastViewModel.onFullScreenCover = false
-      toastViewModel.showToast = false
+      alertViewModel.onFullScreenCover = true
     }
     .overlay {
       if toastViewModel.onFullScreenCover {
         ToastMessageView()
+      }
+      if alertViewModel.onFullScreenCover {
+        AlertPopup()
       }
     }
     .fullScreenCover(isPresented: $showGallery) {
@@ -105,6 +106,9 @@ struct ProfileEditView: View {
       ToolbarItem(placement: .cancellationAction) {
         Button {
           tabbarModel.tabbarOpacity = 1.0
+          toastViewModel.onFullScreenCover = false
+          toastViewModel.showToast = false
+          alertViewModel.onFullScreenCover = false
           dismiss()
         } label: {
           Image(systemName: "xmark")
@@ -114,6 +118,9 @@ struct ProfileEditView: View {
       ToolbarItem(placement: .confirmationAction) {
         Button {
           tabbarModel.tabbarOpacity = 1.0
+          toastViewModel.onFullScreenCover = false
+          toastViewModel.showToast = false
+          alertViewModel.onFullScreenCover = false
           dismiss()
         } label: {
           Text(CommonWords().confirm)

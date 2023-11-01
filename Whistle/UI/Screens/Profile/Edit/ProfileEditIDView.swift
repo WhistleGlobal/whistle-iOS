@@ -111,8 +111,18 @@ struct ProfileEditIDView: View {
           Text(CommonWords().confirm)
             .foregroundColor(inputValidationStatus == .valid ? .Info : .Disable_Placeholder)
             .fontSystem(fontDesignSystem: .subtitle2_KO)
+            .opacity(alertViewModel.showAlert ? 0.3 : 1)
+            .grayscale(alertViewModel.showAlert ? 0.5 : 0)
         }
-        .disabled(inputValidationStatus != .valid)
+        .disabled(alertViewModel.showAlert)
+      }
+    }
+    .overlay {
+      if toastViewModel.onFullScreenCover {
+        ToastMessageView()
+      }
+      if alertViewModel.onFullScreenCover {
+        AlertPopup()
       }
     }
     .onAppear {

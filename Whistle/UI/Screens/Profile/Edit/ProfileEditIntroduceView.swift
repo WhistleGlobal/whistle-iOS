@@ -15,6 +15,7 @@ struct ProfileEditIntroduceView: View {
   @StateObject var apiViewModel = APIViewModel.shared
   @StateObject private var tabbarModel = TabbarModel.shared
   @StateObject private var toastViewModel = ToastViewModel.shared
+  @StateObject private var alertViewModel = AlertViewModel.shared
 
   @State var introduce = ""
 
@@ -66,7 +67,14 @@ struct ProfileEditIntroduceView: View {
             .foregroundColor(.Info)
             .fontSystem(fontDesignSystem: .subtitle2_KO)
         }
-        .disabled(false)
+      }
+    }
+    .overlay {
+      if toastViewModel.onFullScreenCover {
+        ToastMessageView()
+      }
+      if alertViewModel.onFullScreenCover {
+        AlertPopup()
       }
     }
     .onAppear {

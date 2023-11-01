@@ -29,12 +29,13 @@ struct RootTabView: View {
   @State private var videoAuthorizationStatus = AVCaptureDevice.authorizationStatus(for: .video)
   @State private var microphoneAuthorizationStatus = AVCaptureDevice.authorizationStatus(for: .audio)
   // upload
-  @State private var isAlbumAuthorized = false
-  @State private var isCameraAuthorized = false
-  @State private var isMicrophoneAuthorized = false
-  @State private var isNavigationActive = true
+  @State var isAlbumAuthorized = false
+  @State var isCameraAuthorized = false
+  @State var isMicrophoneAuthorized = false
+  @State var isNavigationActive = true
   @State var showTermsOfService = false
   @State var showPrivacyPolicy = false
+  @State var showVideoCaptureView = false
 
   @State private var uploadBottomSheetPosition: BottomSheetPosition = .hidden
   @State private var pickerOptions = PickerOptionsInfo()
@@ -72,30 +73,8 @@ struct RootTabView: View {
       }
 
       switch tabbarModel.tabSelectionNoAnimation {
-      case .main:
+      case .main, .upload:
         Color.clear
-
-      case .upload:
-        NavigationView {
-          if isCameraAuthorized, isMicrophoneAuthorized {
-            VideoCaptureView()
-          } else {
-            if !isNavigationActive {
-              RecordAccessView(
-                isCameraAuthorized: $isCameraAuthorized,
-                isMicrophoneAuthorized: $isMicrophoneAuthorized)
-            }
-          }
-        }
-        .onAppear {
-          getCameraPermission()
-          getMicrophonePermission()
-          checkAllPermissions()
-          tabbarModel.tabbarOpacity = 0.0
-        }
-        .onDisappear {
-          tabbarModel.tabbarOpacity = 1.0
-        }
 
       case .profile:
         if isAccess {
@@ -107,7 +86,9 @@ struct RootTabView: View {
           GuestProfileView()
         }
       }
+
       // MARK: - Tabbar
+
       VStack {
         Spacer()
         glassMorphicTab(width: tabbarModel.tabWidth)
@@ -155,16 +136,23 @@ struct RootTabView: View {
       .padding(.horizontal, 16)
       .opacity(showGuide ? 0.0 : tabbarModel.tabbarOpacity)
       .onReceive(NavigationModel.shared.$navigate, perform: { _ in
-        if tabbarModel.tabSelection == .upload {
-          if UploadProgressViewModel.shared.isUploading {
-            tabbarModel.tabSelection = .main
-            tabbarModel.tabSelectionNoAnimation = .main
-          } else {
-            tabbarModel.tabSelection = tabbarModel.prevTabSelection ?? .main
-            tabbarModel.tabSelectionNoAnimation = tabbarModel.prevTabSelection ?? .main
-          }
+        if UploadProgressViewModel.shared.isUploading {
+          tabbarModel.tabSelection = .main
+          tabbarModel.tabSelectionNoAnimation = .main
+          showVideoCaptureView = false
         }
+//        else {
+//            tabbarModel.tabSelection = tabbarModel.prevTabSelection ?? .main
+//            tabbarModel.tabSelectionNoAnimation = tabbarModel.prevTabSelection ?? .main
+//          }
+//        }
       })
+    }
+    .fullScreenCover(isPresented: $showVideoCaptureView) {
+      CameraOrAccessView(
+        isCam: $isCameraAuthorized,
+        isMic: $isMicrophoneAuthorized,
+        isNav: $isNavigationActive)
     }
     .bottomSheet(
       bottomSheetPosition: $uploadBottomSheetPosition,
@@ -346,7 +334,10 @@ extension RootTabView {
       }
       Button {
         if isAccess {
-          switchTab(to: .upload)
+          getCameraPermission()
+          getMicrophonePermission()
+          checkAllPermissions()
+          showVideoCaptureView = true
         } else {
           uploadBottomSheetPosition = .relative(1)
         }

@@ -22,6 +22,7 @@ class AlertViewModel: ObservableObject {
   @Published var submitText: LocalizedStringKey? = nil
   @Published var onFullScreenCover = false
   @Published var isRed = false
+  var isImmediateDismiss = false
 
   var cancelAction: (() -> Void)? = nil
   var destructiveAction: (() -> Void)? = nil
@@ -72,6 +73,7 @@ class AlertViewModel: ObservableObject {
   func stackAlert(
     showAlert: Bool = true,
     alertStyle: AlertStyle = .stack,
+    isImmediateDismiss: Bool = false,
     title: LocalizedStringKey? = nil,
     content: LocalizedStringKey? = nil,
     cancelText: LocalizedStringKey? = CommonWords().cancel,
@@ -83,6 +85,7 @@ class AlertViewModel: ObservableObject {
       self.showAlert = showAlert
     }
     self.alertStyle = alertStyle
+    self.isImmediateDismiss = isImmediateDismiss
     self.title = title
     self.content = content
     self.cancelText = cancelText
@@ -95,5 +98,9 @@ class AlertViewModel: ObservableObject {
     withAnimation {
       self.showAlert = false
     }
+  }
+
+  func immediateDismissAlert() {
+    showAlert = false
   }
 }

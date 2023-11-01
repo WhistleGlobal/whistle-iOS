@@ -12,6 +12,7 @@ import SwiftUI
 // MARK: - RecordAccessView
 
 struct RecordAccessView: View {
+  @Environment(\.dismiss) var dismiss
   @AppStorage("isFirstRequestRecordAccess") var isFirstRequestRecordAccess = true
   @StateObject private var tabbarModel = TabbarModel.shared
   @StateObject var alertViewModel = AlertViewModel.shared
@@ -30,10 +31,7 @@ struct RecordAccessView: View {
       VStack(spacing: 0) {
         HStack {
           Button {
-            tabbarModel.tabSelectionNoAnimation = .main
-            withAnimation {
-              tabbarModel.tabSelection = .main
-            }
+            dismiss()
           } label: {
             Image(systemName: "xmark")
               .font(.system(size: 20))
@@ -104,8 +102,14 @@ struct RecordAccessView: View {
       .padding(.bottom, 58)
     }
     .ignoresSafeArea()
+    .onAppear {
+      alertViewModel.onFullScreenCover = true
+    }
+    .onDisappear {
+      alertViewModel.onFullScreenCover = false
+    }
     .overlay {
-      if !alertViewModel.onFullScreenCover {
+      if alertViewModel.onFullScreenCover {
         AlertPopup()
       }
     }
