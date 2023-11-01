@@ -108,6 +108,7 @@ struct MyContentPlayerView: View {
                         whistleToggle(content: content, index)
                       },
                       dismissAction: dismissAction)
+                      .padding(.bottom, UIScreen.main.nativeBounds.height == 1334 ? 24 : 0)
                   }
                   if feedMoreModel.bottomSheetPosition != .hidden {
                     DimmedBackground()

@@ -53,7 +53,7 @@ struct MainFeedView: View {
         .frame(height: 24)
         .padding(.vertical, 12)
         .padding(.horizontal, 16)
-        Divider().frame(width: UIScreen.width)
+        Rectangle().frame(width: UIScreen.width, height: 1).foregroundColor(Color.Border_Default_Dark)
         Button {
           feedMoreModel.bottomSheetPosition = .hidden
           toastViewModel.cancelToastInit(message: ToastMessages().postHidden) {
@@ -68,6 +68,7 @@ struct MainFeedView: View {
         } label: {
           bottomSheetRowWithIcon(systemName: "eye.fill", text: CommonWords().hide)
         }
+        Rectangle().frame(height: 0.5).padding(.leading, 52).foregroundColor(Color.Border_Default_Dark)
         Button {
           feedMoreModel.bottomSheetPosition = .hidden
           feedPlayersViewModel.stopPlayer()
@@ -129,33 +130,15 @@ struct MainFeedView: View {
     }
     .navigationDestination(isPresented: $feedMoreModel.isRootStacked) {
       if universalRoutingModel.isUniversalProfile {
-        if UIDevice.current.userInterfaceIdiom == .phone {
-          switch UIScreen.main.nativeBounds.height {
-          case 1334: // iPhone SE 3rd generation
-            SEMemberProfileView(userId: universalRoutingModel.userId)
-              .onDisappear {
-                universalRoutingModel.isUniversalProfile = false
-              }
-          default:
-            MemberProfileView(userId: universalRoutingModel.userId)
-              .onDisappear {
-                universalRoutingModel.isUniversalProfile = false
-              }
-          }
+        if !apiViewModel.mainFeed.isEmpty {
+          MemberProfileView(userId: universalRoutingModel.userId)
+            .onDisappear {
+              universalRoutingModel.isUniversalProfile = false
+            }
         }
       } else {
-        if UIDevice.current.userInterfaceIdiom == .phone {
-          switch UIScreen.main.nativeBounds.height {
-          case 1334: // iPhone SE 3rd generation
-            if !apiViewModel.mainFeed.isEmpty {
-              SEMemberProfileView(
-                userId: apiViewModel.mainFeed[feedPlayersViewModel.currentVideoIndex].userId ?? 0)
-            }
-          default:
-            if !apiViewModel.mainFeed.isEmpty {
-              MemberProfileView(userId: apiViewModel.mainFeed[feedPlayersViewModel.currentVideoIndex].userId ?? 0)
-            }
-          }
+        if !apiViewModel.mainFeed.isEmpty {
+          MemberProfileView(userId: apiViewModel.mainFeed[feedPlayersViewModel.currentVideoIndex].userId ?? 0)
         }
       }
     }

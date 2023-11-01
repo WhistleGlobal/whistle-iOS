@@ -57,6 +57,7 @@ struct RootTabView: View {
       if !alertViewModel.onFullScreenCover {
         AlertPopup().zIndex(1000)
       }
+      guideView
       if isAccess {
         NavigationStack {
           MainFeedView()
@@ -99,14 +100,7 @@ struct RootTabView: View {
       case .profile:
         if isAccess {
           NavigationStack {
-            if UIDevice.current.userInterfaceIdiom == .phone {
-              switch UIScreen.main.nativeBounds.height {
-              case 1334: // iPhone SE 3rd generation
-                SEMyProfileView(isFirstProfileLoaded: $isFirstProfileLoaded)
-              default:
-                MyProfileView(isFirstProfileLoaded: $isFirstProfileLoaded)
-              }
-            }
+            MyProfileView(isFirstProfileLoaded: $isFirstProfileLoaded)
           }
           .tint(.black)
         } else {
@@ -384,6 +378,48 @@ extension RootTabView {
 //    .padding(.horizontal, 16)
     .frame(height: UIScreen.getHeight(56))
     .frame(maxWidth: .infinity)
+  }
+
+  @ViewBuilder
+  var guideView: some View {
+    if showGuide {
+      ZStack {
+        Color.clear.overlay {
+          Image("gestureGuide")
+            .resizable()
+            .scaledToFill()
+        }
+        VStack {
+          Spacer()
+          Button {
+            showGuide = false
+          } label: {
+            Text(CommonWords().close)
+              .fontSystem(fontDesignSystem: .subtitle2_KO)
+              .foregroundColor(Color.LabelColor_Primary_Dark)
+              .frame(width: UIScreen.width - 32, height: 56)
+              .background {
+                glassMorphicView(cornerRadius: 12)
+                  .overlay {
+                    RoundedRectangle(cornerRadius: 12)
+                      .stroke(lineWidth: 1)
+                      .foregroundStyle(
+                        LinearGradient.Border_Glass)
+                  }
+              }
+          }
+          .padding(.bottom, 32)
+        }
+      }
+      .frame(width: UIScreen.width, height: UIScreen.height)
+      .onAppear {
+        tabbarModel.tabbarOpacity = 0.0
+      }
+      .onDisappear {
+        tabbarModel.tabbarOpacity = 1.0
+      }
+      .zIndex(1000)
+    }
   }
 }
 

@@ -61,21 +61,7 @@ struct BookMarkedFeedView: View {
         .frame(height: 24)
         .padding(.vertical, 12)
         .padding(.horizontal, 16)
-        Divider().frame(width: UIScreen.width)
-//        Button {
-//          feedMoreModel.bottomSheetPosition = .hidden
-//          toastViewModel.cancelToastInit(message: "해당 콘텐츠를 숨겼습니다") {
-//            Task {
-//              let currentContent = apiViewModel.mainFeed[feedPlayersViewModel.currentVideoIndex]
-//              await apiViewModel.actionContentHate(contentID: currentContent.contentId ?? 0)
-//              feedPlayersViewModel.removePlayer {
-//                index -= 1
-//              }
-//            }
-//          }
-//        } label: {
-//          bottomSheetRowWithIcon(systemName: "eye.fill", text: "관심없음")
-//        }
+        Rectangle().frame(width: UIScreen.width, height: 1).foregroundColor(Color.Border_Default_Dark)
         Button {
           feedMoreModel.bottomSheetPosition = .hidden
           feedPlayersViewModel.stopPlayer()
@@ -120,18 +106,8 @@ struct BookMarkedFeedView: View {
       }
     }
     .navigationDestination(isPresented: $feedMoreModel.isRootStacked) {
-      if UIDevice.current.userInterfaceIdiom == .phone {
-        switch UIScreen.main.nativeBounds.height {
-        case 1334: // iPhone SE 3rd generation
-          if !apiViewModel.bookmark.isEmpty {
-            SEMemberProfileView(
-              userId: apiViewModel.bookmark[feedPlayersViewModel.currentVideoIndex].userId)
-          }
-        default:
-          if !apiViewModel.bookmark.isEmpty {
-            MemberProfileView(userId: apiViewModel.bookmark[feedPlayersViewModel.currentVideoIndex].userId)
-          }
-        }
+      if !apiViewModel.bookmark.isEmpty {
+        MemberProfileView(userId: apiViewModel.bookmark[feedPlayersViewModel.currentVideoIndex].userId)
       }
     }
     .fullScreenCover(isPresented: $feedMoreModel.showReport, onDismiss: {

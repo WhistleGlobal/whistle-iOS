@@ -111,10 +111,6 @@ extension MemberFollowListView {
           .fontSystem(fontDesignSystem: .subtitle2_KO)
           .foregroundColor(.LabelColor_Primary)
           .frame(maxWidth: .infinity, alignment: .leading)
-//        Text(description)
-//          .fontSystem(fontDesignSystem: .body2_KO)
-//          .foregroundColor(.LabelColor_Secondary)
-//          .frame(maxWidth: .infinity, alignment: .leading)
       }
       .padding(.leading, 16)
       if userName != apiViewModel.myProfile.userName {
@@ -171,18 +167,9 @@ extension MemberFollowListView {
     ScrollView {
       ForEach(filteredFollower, id: \.userName) { follower in
         NavigationLink {
-          if UIDevice.current.userInterfaceIdiom == .phone {
-            switch UIScreen.main.nativeBounds.height {
-            case 1334: // iPhone SE 3rd generation
-              SEMemberProfileView(userId: follower.followerId)
-                .environmentObject(apiViewModel)
-                .id(UUID())
-            default:
-              MemberProfileView(userId: follower.followerId)
-                .environmentObject(apiViewModel)
-                .id(UUID())
-            }
-          }
+          MemberProfileView(userId: follower.followerId)
+            .environmentObject(apiViewModel)
+            .id(UUID())
         } label: {
           personRow(
             isFollowed: Binding(get: {
@@ -197,6 +184,7 @@ extension MemberFollowListView {
         }
         .id(UUID())
       }
+      Spacer().frame(height: 150)
     }
     .scrollIndicators(.hidden)
   }
@@ -206,18 +194,9 @@ extension MemberFollowListView {
     ScrollView {
       ForEach(filteredFollowing, id: \.userName) { following in
         NavigationLink {
-          if UIDevice.current.userInterfaceIdiom == .phone {
-            switch UIScreen.main.nativeBounds.height {
-            case 1334: // iPhone SE 3rd generation
-              SEMemberProfileView(userId: following.followingId)
-                .environmentObject(apiViewModel)
-                .id(UUID())
-            default:
-              MemberProfileView(userId: following.followingId)
-                .environmentObject(apiViewModel)
-                .id(UUID())
-            }
-          }
+          MemberProfileView(userId: following.followingId)
+            .environmentObject(apiViewModel)
+            .id(UUID())
         } label: {
           personRow(
             isFollowed: Binding(get: {
@@ -232,6 +211,7 @@ extension MemberFollowListView {
         }
         .id(UUID())
       }
+      Spacer().frame(height: 150)
     }
     .scrollIndicators(.hidden)
   }
