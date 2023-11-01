@@ -29,6 +29,7 @@ struct MyProfileView: View {
   @StateObject var alertViewModel = AlertViewModel.shared
   @StateObject private var feedPlayersViewModel = MainFeedPlayersViewModel.shared
 
+  @State var showProfileEditView = false
   @State private var goNotiSetting = false
   @State var isShowingBottomSheet = false
   @State var tabbarDirection: CGFloat = -1.0
@@ -116,7 +117,7 @@ struct MyProfileView: View {
               GridItem(.flexible()),
               GridItem(.flexible()),
             ], spacing: 20) {
-              ForEach(Array(apiViewModel.myFeed.enumerated()), id: \.element) { index , content in
+              ForEach(Array(apiViewModel.myFeed.enumerated()), id: \.element) { index, content in
                 NavigationLink {
                   MyFeedView(index: index)
                 } label: {
@@ -199,7 +200,7 @@ struct MyProfileView: View {
         .frame(height: 52)
         Divider().background(Color("Gray10"))
         Button {
-          center.requestAuthorization(options: [.sound , .alert , .badge]) { granted, error in
+          center.requestAuthorization(options: [.sound, .alert, .badge]) { granted, error in
             if let error {
               WhistleLogger.logger.error("\(error)")
               return
@@ -344,8 +345,8 @@ extension MyProfileView {
       .padding(.bottom, 16)
       .padding(.horizontal, 48)
       Spacer()
-      NavigationLink {
-        ProfileEditView()
+      Button {
+        showProfileEditView = true
       } label: {
         Text(ProfileEditWords().edit)
           .fontSystem(fontDesignSystem: .subtitle2_KO)
@@ -387,6 +388,11 @@ extension MyProfileView {
       }
       .frame(height: whistleFollowerTabHeight)
       .padding(.bottom, 32)
+    }
+    .fullScreenCover(isPresented: $showProfileEditView) {
+      NavigationView {
+        ProfileEditView()
+      }
     }
     .frame(height: 418 + (240 * progress))
     .frame(maxWidth: .infinity)
@@ -451,7 +457,7 @@ extension MyProfileView {
   @ViewBuilder
   func listEmptyView() -> some View {
     Spacer()
-    Text(ContentWords().noUploadedContent) .fontSystem(fontDesignSystem: .body1_KO)
+    Text(ContentWords().noUploadedContent).fontSystem(fontDesignSystem: .body1_KO)
       .foregroundColor(.LabelColor_Primary_Dark)
     Button {
       tabbarModel.tabSelectionNoAnimation = .upload
