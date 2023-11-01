@@ -440,6 +440,8 @@ extension View {
     HStack(spacing: 12) {
       Image(systemName: systemName)
         .font(.system(size: 18))
+        .frame(width: 24)
+
         .foregroundColor(Color.LabelColor_Primary_Dark)
       Text(text)
         .foregroundColor(Color.LabelColor_Primary_Dark)
@@ -454,7 +456,7 @@ extension View {
   }
 
   @ViewBuilder
-  func bottomSheetRow(text: String, color: Color) -> some View {
+  func bottomSheetRow(text: LocalizedStringKey, color: Color) -> some View {
     HStack {
       Text(text)
         .foregroundColor(color)
