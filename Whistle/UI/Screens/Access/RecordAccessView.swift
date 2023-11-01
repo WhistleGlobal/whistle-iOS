@@ -70,7 +70,6 @@ struct RecordAccessView: View {
           requestMicrophonePermission()
           showAuthAlert()
           if showAlert.0, !isFirstRequestRecordAccess {
-            isFirstRequestRecordAccess = false
             alertViewModel.linearAlert(
               isRed: false,
               title: "'Whistle'에 대해 \(showAlert.1.rawValue)이 없습니다. 설정에서 \(showAlert.1.rawValue) 권한을 켜시겠습니까?",
@@ -82,6 +81,8 @@ struct RecordAccessView: View {
                 UIApplication.shared.open(url)
               }
             }
+          } else {
+            isFirstRequestRecordAccess = false
           }
         } label: {
           Text(CommonWords().continueWord)
