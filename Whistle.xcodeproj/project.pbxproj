@@ -260,6 +260,11 @@
 		780039082AD7E0020033B9F1 /* VersionCheck.swift in Sources */ = {isa = PBXBuildFile; fileRef = 780039072AD7E0020033B9F1 /* VersionCheck.swift */; };
 		7801398A2AA127AE00D5FBDB /* SignInView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 780139892AA127AE00D5FBDB /* SignInView.swift */; };
 		7822B23A2ADD509C000B15AB /* Notion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7822B2392ADD509C000B15AB /* Notion.swift */; };
+		782A6DD52AF1EAFC004D0A60 /* GuestMainFeedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 782A6DD42AF1EAFC004D0A60 /* GuestMainFeedView.swift */; };
+		782A6DD72AF1EB0D004D0A60 /* GuestMainFeedPageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 782A6DD62AF1EB0D004D0A60 /* GuestMainFeedPageView.swift */; };
+		782A6DD92AF1EB3E004D0A60 /* GuestContentPlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 782A6DD82AF1EB3E004D0A60 /* GuestContentPlayerView.swift */; };
+		782A6DDB2AF1EB50004D0A60 /* GuestContentLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 782A6DDA2AF1EB50004D0A60 /* GuestContentLayer.swift */; };
+		782A6DDD2AF1EBCB004D0A60 /* GuestPlayersViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 782A6DDC2AF1EBCB004D0A60 /* GuestPlayersViewModel.swift */; };
 		782DD4732AA30BDD006183D3 /* MyFollowListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 782DD4722AA30BDD006183D3 /* MyFollowListView.swift */; };
 		782DD4752AA30C22006183D3 /* FollowButtonStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 782DD4742AA30C22006183D3 /* FollowButtonStyle.swift */; };
 		782DD4772AA30C5C006183D3 /* FollowTabItemButtonStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 782DD4762AA30C5C006183D3 /* FollowTabItemButtonStyle.swift */; };
@@ -670,6 +675,11 @@
 		780039072AD7E0020033B9F1 /* VersionCheck.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VersionCheck.swift; sourceTree = "<group>"; };
 		780139892AA127AE00D5FBDB /* SignInView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInView.swift; sourceTree = "<group>"; };
 		7822B2392ADD509C000B15AB /* Notion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Notion.swift; sourceTree = "<group>"; };
+		782A6DD42AF1EAFC004D0A60 /* GuestMainFeedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GuestMainFeedView.swift; sourceTree = "<group>"; };
+		782A6DD62AF1EB0D004D0A60 /* GuestMainFeedPageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GuestMainFeedPageView.swift; sourceTree = "<group>"; };
+		782A6DD82AF1EB3E004D0A60 /* GuestContentPlayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GuestContentPlayerView.swift; sourceTree = "<group>"; };
+		782A6DDA2AF1EB50004D0A60 /* GuestContentLayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GuestContentLayer.swift; sourceTree = "<group>"; };
+		782A6DDC2AF1EBCB004D0A60 /* GuestPlayersViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GuestPlayersViewModel.swift; sourceTree = "<group>"; };
 		782DD4722AA30BDD006183D3 /* MyFollowListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyFollowListView.swift; sourceTree = "<group>"; };
 		782DD4742AA30C22006183D3 /* FollowButtonStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FollowButtonStyle.swift; sourceTree = "<group>"; };
 		782DD4762AA30C5C006183D3 /* FollowTabItemButtonStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FollowTabItemButtonStyle.swift; sourceTree = "<group>"; };
@@ -1122,6 +1132,7 @@
 				78FDA5412AEFC65B001C3DA4 /* MyFeedPlayersViewModel.swift */,
 				78BCA9532AEFF6140084E92F /* BookmarkedPlayersViewModel.swift */,
 				78BCA95D2AF086970084E92F /* MemeberPlayersViewModel.swift */,
+				782A6DDC2AF1EBCB004D0A60 /* GuestPlayersViewModel.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -1945,6 +1956,9 @@
 			children = (
 				785258562ACC6D680024E466 /* GuestProfileView.swift */,
 				786A7D512ACD6E1B001CC4F2 /* GuestMainView.swift */,
+				782A6DD42AF1EAFC004D0A60 /* GuestMainFeedView.swift */,
+				782A6DD62AF1EB0D004D0A60 /* GuestMainFeedPageView.swift */,
+				782A6DD82AF1EB3E004D0A60 /* GuestContentPlayerView.swift */,
 			);
 			path = Guest;
 			sourceTree = "<group>";
@@ -2048,6 +2062,7 @@
 				78FDA5452AEFC967001C3DA4 /* MyContentLayer.swift */,
 				78BCA9552AEFFAEE0084E92F /* BookmarkedContentLayer.swift */,
 				78BCA95F2AF08A010084E92F /* MemberContentLayer.swift */,
+				782A6DDA2AF1EB50004D0A60 /* GuestContentLayer.swift */,
 			);
 			path = Content;
 			sourceTree = "<group>";
@@ -2420,11 +2435,13 @@
 				787AF5732AA888FC00C190E6 /* MemberContent.swift in Sources */,
 				1B3895212AB9CB6000B4C8DD /* EditablePlayer.swift in Sources */,
 				78BECCDB2AAAE1F5003FA7B5 /* SettingProtocol.swift in Sources */,
+				782A6DDB2AF1EB50004D0A60 /* GuestContentLayer.swift in Sources */,
 				1B8132DD2AE6285E00000C32 /* NavigationModel.swift in Sources */,
 				1BA24B542ADC336200DB0992 /* AlertPopup.swift in Sources */,
 				78D148E32A9E134700DDCE48 /* Extension+NSObject.swift in Sources */,
 				1B0A29AA2AA64ADC009077A1 /* MusicService.swift in Sources */,
 				78370B8B2AB87C7D00090522 /* Enums.swift in Sources */,
+				782A6DD72AF1EB0D004D0A60 /* GuestMainFeedPageView.swift in Sources */,
 				1BAC07F32AD559A70087D8CD /* TagsContent.swift in Sources */,
 				78D85E542AB2DF1000B3AD6E /* ProfileReportContentSelectionView.swift in Sources */,
 				78BECCE12AAAE539003FA7B5 /* APIViewModel+PostFeed.swift in Sources */,
@@ -2450,6 +2467,7 @@
 				1BE8E9FF2AAE2DFB00EB0A55 /* MusicServiceProtocol.swift in Sources */,
 				1BCB90332AEEBCE60088B2F2 /* DimmedBackground.swift in Sources */,
 				78730CE72ACE8660008B9981 /* PhotoCollection.swift in Sources */,
+				782A6DD92AF1EB3E004D0A60 /* GuestContentPlayerView.swift in Sources */,
 				1B3895612AB9CBD300B4C8DD /* FilteredImage.swift in Sources */,
 				785E82722AAC8FDD00EF3576 /* MainContent.swift in Sources */,
 				1B7D801D2AC881490030CAC3 /* CustomNavigationBarViewController.swift in Sources */,
@@ -2476,6 +2494,7 @@
 				1B0A29AC2AA64AF3009077A1 /* MusicNote.swift in Sources */,
 				1B547D592AEA864300EDE344 /* AlertViewModel.swift in Sources */,
 				1B3895862AB9CC4300B4C8DD /* CoreDataManager.swift in Sources */,
+				782A6DDD2AF1EBCB004D0A60 /* GuestPlayersViewModel.swift in Sources */,
 				1B38954C2AB9CB7500B4C8DD /* FramesToolView.swift in Sources */,
 				1B2CFECB2AD412D000F34AA3 /* DescriptionAndTagEditorView.swift in Sources */,
 				78F493E32AEA559000A08FC1 /* MainFeedPageView.swift in Sources */,
@@ -2485,6 +2504,7 @@
 				1B08DCC32AA1872200CA1DE1 /* MusicTrimView.swift in Sources */,
 				1B38957A2AB9CC2C00B4C8DD /* VideoFilterHelpers.swift in Sources */,
 				78BCA95A2AF085B20084E92F /* MemberFeedPageView.swift in Sources */,
+				782A6DD52AF1EAFC004D0A60 /* GuestMainFeedView.swift in Sources */,
 				787AF5792AA8930700C190E6 /* NotiSetting.swift in Sources */,
 				787AF56D2AA8846100C190E6 /* MyFollow.swift in Sources */,
 				78730CF12ACE8F23008B9981 /* PhotoLibrary.swift in Sources */,
