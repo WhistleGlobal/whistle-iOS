@@ -260,15 +260,13 @@ struct MyProfileView: View {
               cancelText: CommonWords().cancel,
               destructiveText: CommonWords().logout)
             {
-              apiViewModel.reset()
-              apiViewModel.publisherSend()
               NavigationUtil.popToRootView()
+              isFirstProfileLoaded = true
               feedPlayersViewModel.resetPlayer()
               GIDSignIn.sharedInstance.signOut()
               userAuth.appleSignout()
               tabbarModel.tabSelectionNoAnimation = .main
               tabbarModel.tabSelection = .main
-              isFirstProfileLoaded = false
             }
           } label: {
             bottomSheetRow(text: CommonWords().logout, color: Color.Info)
@@ -285,7 +283,8 @@ struct MyProfileView: View {
               destructiveText: CommonWords().delete)
             {
               Task {
-                apiViewModel.myProfile.userName.removeAll()
+                apiViewModel.reset()
+                apiViewModel.publisherSend()
                 await apiViewModel.rebokeAppleToken()
                 GIDSignIn.sharedInstance.signOut()
                 userAuth.appleSignout()
@@ -483,45 +482,6 @@ extension MyProfileView {
       .foregroundColor(.LabelColor_Primary_Dark)
       .padding(.bottom, 64)
     Spacer()
-  }
-}
-
-extension MyProfileView {
-  @ViewBuilder
-  func bottomSheetRowWithIcon(
-    systemName: String,
-    text: LocalizedStringKey)
-    -> some View
-  {
-    HStack(spacing: 12) {
-      Image(systemName: systemName)
-        .font(.system(size: 18))
-        .foregroundColor(Color.LabelColor_Primary_Dark)
-      Text(text)
-        .foregroundColor(Color.LabelColor_Primary_Dark)
-        .fontSystem(fontDesignSystem: .subtitle2_KO)
-      Spacer()
-      Image(systemName: "chevron.forward")
-        .font(.system(size: 16))
-        .foregroundColor(Color.Disable_Placeholder_Light)
-    }
-    .frame(height: 56)
-    .padding(.horizontal, 16)
-  }
-
-  @ViewBuilder
-  func bottomSheetRow(text: LocalizedStringKey, color: Color) -> some View {
-    HStack {
-      Text(text)
-        .foregroundColor(color)
-        .fontSystem(fontDesignSystem: .subtitle2_KO)
-      Spacer()
-      Image(systemName: "chevron.forward")
-        .font(.system(size: 16))
-        .foregroundColor(Color.Disable_Placeholder_Light)
-    }
-    .frame(height: 56)
-    .padding(.horizontal, 16)
   }
 }
 

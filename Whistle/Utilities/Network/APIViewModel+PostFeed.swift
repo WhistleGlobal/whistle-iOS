@@ -321,6 +321,9 @@ extension APIViewModel: PostFeedProtocol {
         switch response.result {
         case .success(let success):
           self.guestFeed = success
+          if self.guestFeed.count >= 10 {
+            self.guestFeed.removeSubrange(10...)
+          }
           completion()
         case .failure:
           WhistleLogger.logger.error("Error parsing JSON")

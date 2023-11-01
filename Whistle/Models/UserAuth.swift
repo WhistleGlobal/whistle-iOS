@@ -129,6 +129,7 @@ class UserAuth: ObservableObject {
   }
 
   func appleSignout() {
+    keychain.set("", forKey: "id_token")
     isAccess = false
   }
 }
