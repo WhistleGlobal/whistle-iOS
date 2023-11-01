@@ -102,7 +102,7 @@ struct AlbumAccessView: View {
     }
     .ignoresSafeArea()
     .overlay {
-      if !alertViewModel.onFullScreenCover {
+      if alertViewModel.onFullScreenCover {
         AlertPopup()
       }
     }

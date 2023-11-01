@@ -131,13 +131,6 @@ struct VideoCaptureView: View {
             .foregroundColor(.white)
         }
       }
-      .onDisappear {
-        do {
-          try Aespa.terminate()
-          viewModel.preview = nil
-        } catch { }
-        alertViewModel.onFullScreenCover = false
-      }
       .fullScreenCover(isPresented: $showMusicTrimView) {
         MusicTrimView(
           musicVM: musicVM,
@@ -154,7 +147,18 @@ struct VideoCaptureView: View {
       }) {
         AlbumAccessView(isAlbumAuthorized: $isAlbumAuthorized, showAlbumAccessView: $showAlbumAccessView)
       }
+      .overlay {
+        if alertViewModel.onFullScreenCover {
+          AlertPopup()
+        }
+      }
       .navigationBarBackButtonHidden()
+      .onDisappear {
+        do {
+          try Aespa.terminate()
+          viewModel.preview = nil
+        } catch { }
+      }
       .onAppear {
         alertViewModel.onFullScreenCover = true
         getAlbumAuth()
@@ -653,6 +657,7 @@ extension VideoCaptureView {
       .overlay(alignment: .leading) {
         Button {
           dismiss()
+          alertViewModel.onFullScreenCover = false
         } label: {
           Image(systemName: "xmark")
             .font(.system(size: 20))
@@ -1046,6 +1051,7 @@ extension VideoCaptureView {
             UploadProgressViewModel.shared.uploadStarted()
             tabbarModel.tabSelectionNoAnimation = .main
             tabbarModel.tabSelection = .main
+            alertViewModel.onFullScreenCover = false
             dismiss()
           }
           Task {
@@ -1065,7 +1071,6 @@ extension VideoCaptureView {
                 hashtags: [""])
             }
           }
-
         } label: {
           Circle()
             .stroke(lineWidth: 4)
