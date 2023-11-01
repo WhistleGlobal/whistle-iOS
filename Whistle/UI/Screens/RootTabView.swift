@@ -29,12 +29,13 @@ struct RootTabView: View {
   @State private var videoAuthorizationStatus = AVCaptureDevice.authorizationStatus(for: .video)
   @State private var microphoneAuthorizationStatus = AVCaptureDevice.authorizationStatus(for: .audio)
   // upload
-  @State private var isAlbumAuthorized = false
-  @State private var isCameraAuthorized = false
-  @State private var isMicrophoneAuthorized = false
-  @State private var isNavigationActive = true
+  @State var isAlbumAuthorized = false
+  @State var isCameraAuthorized = false
+  @State var isMicrophoneAuthorized = false
+  @State var isNavigationActive = true
   @State var showTermsOfService = false
   @State var showPrivacyPolicy = false
+  @State var showVideoCaptureView = false
 
   @State private var uploadBottomSheetPosition: BottomSheetPosition = .hidden
   @State private var pickerOptions = PickerOptionsInfo()
@@ -76,26 +77,27 @@ struct RootTabView: View {
         Color.clear
 
       case .upload:
-        NavigationView {
-          if isCameraAuthorized, isMicrophoneAuthorized {
-            VideoCaptureView()
-          } else {
-            if !isNavigationActive {
-              RecordAccessView(
-                isCameraAuthorized: $isCameraAuthorized,
-                isMicrophoneAuthorized: $isMicrophoneAuthorized)
-            }
+        Color.clear
+//        NavigationView {
+//          if isCameraAuthorized, isMicrophoneAuthorized {
+//            VideoCaptureView()
+//          } else {
+//            if !isNavigationActive {
+//              RecordAccessView(
+//                isCameraAuthorized: $isCameraAuthorized,
+//                isMicrophoneAuthorized: $isMicrophoneAuthorized)
+//            }
+//          }
+//        }
+          .onAppear {
+            getCameraPermission()
+            getMicrophonePermission()
+            checkAllPermissions()
+            tabbarModel.tabbarOpacity = 0.0
           }
-        }
-        .onAppear {
-          getCameraPermission()
-          getMicrophonePermission()
-          checkAllPermissions()
-          tabbarModel.tabbarOpacity = 0.0
-        }
-        .onDisappear {
-          tabbarModel.tabbarOpacity = 1.0
-        }
+          .onDisappear {
+            tabbarModel.tabbarOpacity = 1.0
+          }
 
       case .profile:
         if isAccess {
@@ -114,7 +116,9 @@ struct RootTabView: View {
           GuestProfileView()
         }
       }
+
       // MARK: - Tabbar
+
       VStack {
         Spacer()
         glassMorphicTab(width: tabbarModel.tabWidth)
@@ -172,6 +176,24 @@ struct RootTabView: View {
           }
         }
       })
+    }
+    .fullScreenCover(isPresented: $showVideoCaptureView) {
+      if isCameraAuthorized, isMicrophoneAuthorized {
+        NavigationView {
+          VideoCaptureView()
+        }
+//        .onAppear {
+//          getCameraPermission()
+//          getMicrophonePermission()
+//          checkAllPermissions()
+//        }
+      } else {
+//        if !isNavigationActive {
+        RecordAccessView(
+          isCameraAuthorized: $isCameraAuthorized,
+          isMicrophoneAuthorized: $isMicrophoneAuthorized)
+//        }
+      }
     }
     .bottomSheet(
       bottomSheetPosition: $uploadBottomSheetPosition,
@@ -353,7 +375,11 @@ extension RootTabView {
       }
       Button {
         if isAccess {
-          switchTab(to: .upload)
+//          switchTab(to: .upload)
+          getCameraPermission()
+          getMicrophonePermission()
+          checkAllPermissions()
+          showVideoCaptureView = true
         } else {
           uploadBottomSheetPosition = .relative(1)
         }

@@ -136,6 +136,7 @@ struct VideoCaptureView: View {
           try Aespa.terminate()
           viewModel.preview = nil
         } catch { }
+        alertViewModel.onFullScreenCover = false
       }
       .fullScreenCover(isPresented: $showMusicTrimView) {
         MusicTrimView(
@@ -155,6 +156,7 @@ struct VideoCaptureView: View {
       }
       .navigationBarBackButtonHidden()
       .onAppear {
+        alertViewModel.onFullScreenCover = true
         getAlbumAuth()
         if isAlbumAuthorized {
           guard let latestVideoAsset = fetchLatestVideo() else { return }
@@ -650,8 +652,7 @@ extension VideoCaptureView {
       .hCenter()
       .overlay(alignment: .leading) {
         Button {
-          tabbarModel.tabSelectionNoAnimation = tabbarModel.prevTabSelection ?? .main
-          tabbarModel.tabSelection = tabbarModel.prevTabSelection ?? .main
+          dismiss()
         } label: {
           Image(systemName: "xmark")
             .font(.system(size: 20))
@@ -1045,6 +1046,7 @@ extension VideoCaptureView {
             UploadProgressViewModel.shared.uploadStarted()
             tabbarModel.tabSelectionNoAnimation = .main
             tabbarModel.tabSelection = .main
+            dismiss()
           }
           Task {
             if let video = editorVM.currentVideo {
