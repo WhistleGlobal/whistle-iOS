@@ -201,11 +201,23 @@ struct MyProfileView: View {
     {
       VStack(spacing: 0) {
         HStack {
+          Color.clear.frame(width: 28)
+          Spacer()
           Text(CommonWords().settings)
             .fontSystem(fontDesignSystem: .subtitle1_KO)
             .foregroundColor(.white)
+          Spacer()
+          Button {
+            bottomSheetPosition = .hidden
+          } label: {
+            Text(CommonWords().cancel)
+              .fontSystem(fontDesignSystem: .subtitle2_KO)
+              .foregroundColor(.white)
+          }
         }
-        .frame(height: 52)
+        .frame(height: 24)
+        .padding(.vertical, 12)
+        .padding(.horizontal, 16)
         Rectangle().frame(width: UIScreen.width, height: 1).foregroundColor(Color.Border_Default_Dark)
         Button {
           center.requestAuthorization(options: [.sound, .alert, .badge]) { granted, error in
