@@ -259,15 +259,13 @@ struct MyProfileView: View {
               cancelText: CommonWords().cancel,
               destructiveText: CommonWords().logout)
             {
-              apiViewModel.reset()
-              apiViewModel.publisherSend()
               NavigationUtil.popToRootView()
+              isFirstProfileLoaded = true
               feedPlayersViewModel.resetPlayer()
               GIDSignIn.sharedInstance.signOut()
               userAuth.appleSignout()
               tabbarModel.tabSelectionNoAnimation = .main
               tabbarModel.tabSelection = .main
-              isFirstProfileLoaded = false
             }
           } label: {
             bottomSheetRow(text: CommonWords().logout, color: Color.Info)
@@ -284,7 +282,8 @@ struct MyProfileView: View {
               destructiveText: CommonWords().delete)
             {
               Task {
-                apiViewModel.myProfile.userName.removeAll()
+                apiViewModel.reset()
+                apiViewModel.publisherSend()
                 await apiViewModel.rebokeAppleToken()
                 GIDSignIn.sharedInstance.signOut()
                 userAuth.appleSignout()
