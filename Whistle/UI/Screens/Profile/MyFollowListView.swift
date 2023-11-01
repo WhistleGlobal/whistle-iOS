@@ -191,6 +191,7 @@ extension MyFollowListView {
         }
         .id(UUID())
       }
+      Spacer().frame(height: 150)
     }
     .scrollIndicators(.hidden)
   }
@@ -217,6 +218,7 @@ extension MyFollowListView {
         }
         .id(UUID())
       }
+      Spacer().frame(height: 150)
     }
     .scrollIndicators(.hidden)
   }

@@ -111,10 +111,6 @@ extension MemberFollowListView {
           .fontSystem(fontDesignSystem: .subtitle2_KO)
           .foregroundColor(.LabelColor_Primary)
           .frame(maxWidth: .infinity, alignment: .leading)
-//        Text(description)
-//          .fontSystem(fontDesignSystem: .body2_KO)
-//          .foregroundColor(.LabelColor_Secondary)
-//          .frame(maxWidth: .infinity, alignment: .leading)
       }
       .padding(.leading, 16)
       if userName != apiViewModel.myProfile.userName {
@@ -188,6 +184,7 @@ extension MemberFollowListView {
         }
         .id(UUID())
       }
+      Spacer().frame(height: 150)
     }
     .scrollIndicators(.hidden)
   }
@@ -214,6 +211,7 @@ extension MemberFollowListView {
         }
         .id(UUID())
       }
+      Spacer().frame(height: 150)
     }
     .scrollIndicators(.hidden)
   }
