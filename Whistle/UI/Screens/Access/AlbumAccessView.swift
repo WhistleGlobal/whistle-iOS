@@ -80,6 +80,8 @@ struct AlbumAccessView: View {
                 UIApplication.shared.open(url)
               }
             }
+          } else {
+            isFirstRequestAlbumAccess = false
           }
         } label: {
           Text(CommonWords().continueWord)
