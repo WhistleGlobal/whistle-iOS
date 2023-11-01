@@ -42,6 +42,7 @@ struct RootTabView: View {
   @StateObject private var tabbarModel = TabbarModel.shared
   @StateObject var apiViewModel = APIViewModel.shared
   @StateObject var alertViewModel = AlertViewModel.shared
+  @StateObject var toastViewModel = ToastViewModel.shared
   @StateObject var userAuth = UserAuth.shared
   @EnvironmentObject var universalRoutingModel: UniversalRoutingModel
   @StateObject var appleSignInViewModel = AppleSignInViewModel()
@@ -50,7 +51,9 @@ struct RootTabView: View {
 
   var body: some View {
     ZStack {
-      ToastMessageView().zIndex(1000)
+      if !toastViewModel.onFullScreenCover {
+        ToastMessageView().zIndex(1000)
+      }
       if !alertViewModel.onFullScreenCover {
         AlertPopup().zIndex(1000)
       }

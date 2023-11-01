@@ -88,7 +88,7 @@ struct BookmarkedContentLayer: View {
                 }
               } label: {
                 Text(currentVideoInfo.isFollowed ? CommonWords().following : CommonWords().follow)
-                  .fontSystem(fontDesignSystem: .caption_KO_Semibold)
+                  .fontSystem(fontDesignSystem: .caption_SemiBold)
                   .foregroundColor(.Gray10)
                   .background {
                     Capsule()
@@ -108,7 +108,7 @@ struct BookmarkedContentLayer: View {
               }
             }
           }
-          Label(currentVideoInfo.musicTitle ?? "원본 오디오", systemImage: "music.note")
+          Label(LocalizedStringKey(stringLiteral: currentVideoInfo.musicTitle ?? "원본 오디오"), systemImage: "music.note")
             .fontSystem(fontDesignSystem: .body2_KO)
             .foregroundColor(.white)
             .padding(.top, 4)
@@ -131,14 +131,11 @@ struct BookmarkedContentLayer: View {
               return mutableItem
             }
           } label: {
-            VStack(spacing: 2) {
-              Image(systemName: currentVideoInfo.isWhistled ? "heart.fill" : "heart")
-                .font(.system(size: 26))
-                .frame(width: 36, height: 36)
-              Text("\(currentVideoInfo.whistleCount)")
-                .fontSystem(fontDesignSystem: .caption_KO_Semibold)
-            }
-            .frame(height: UIScreen.getHeight(56))
+            ContentLayerButton(
+              isFilled: $currentVideoInfo.isWhistled,
+              image: "heart",
+              filledImage: "heart.fill",
+              label: "\(currentVideoInfo.whistleCount)")
           }
           Button {
             toastViewModel.cancelToastInit(message: ToastMessages().bookmarkDeleted) {
@@ -158,14 +155,11 @@ struct BookmarkedContentLayer: View {
               }
             }
           } label: {
-            VStack(spacing: 2) {
-              Image(systemName: "bookmark.fill")
-                .font(.system(size: 26))
-                .frame(width: 36, height: 36)
-              Text(CommonWords().save)
-                .fontSystem(fontDesignSystem: .caption_KO_Semibold)
-            }
-            .frame(height: UIScreen.getHeight(56))
+            ContentLayerButton(
+              isFilled: $currentVideoInfo.isBookmarked,
+              image: "bookmark",
+              filledImage: "bookmark.fill",
+              label: CommonWords().bookmark)
           }
           Button {
             let shareURL = URL(string: "https://readywhistle.com/content_uni?contentId=\(currentVideoInfo.contentId ?? 0)")!
@@ -175,26 +169,12 @@ struct BookmarkedContentLayer: View {
               animated: true,
               completion: nil)
           } label: {
-            VStack(spacing: 2) {
-              Image(systemName: "square.and.arrow.up")
-                .font(.system(size: 26))
-                .frame(width: 36, height: 36)
-              Text(CommonWords().share)
-                .fontSystem(fontDesignSystem: .caption_KO_Semibold)
-            }
-            .frame(height: UIScreen.getHeight(56))
+            ContentLayerButton(image: "square.and.arrow.up", label: CommonWords().share)
           }
           Button {
             feedMoreModel.bottomSheetPosition = .absolute(186)
           } label: {
-            VStack(spacing: 2) {
-              Image(systemName: "ellipsis")
-                .font(.system(size: 26))
-                .frame(width: 36, height: 36)
-              Text(CommonWords().more)
-                .fontSystem(fontDesignSystem: .caption_KO_Semibold)
-            }
-            .frame(height: UIScreen.getHeight(56))
+            ContentLayerButton(image: "ellipsis", label: CommonWords().more)
           }
         }
         .foregroundColor(.Gray10)

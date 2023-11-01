@@ -451,7 +451,7 @@ extension MemberProfileView {
             .font(.system(size: 16))
             .foregroundColor(.Danger)
           Text("\(whistleCount)")
-            .fontSystem(fontDesignSystem: .caption_KO_Semibold)
+            .fontSystem(fontDesignSystem: .caption_SemiBold)
             .foregroundColor(Color.LabelColor_Primary_Dark)
         }
         .padding(.bottom, 8.5)

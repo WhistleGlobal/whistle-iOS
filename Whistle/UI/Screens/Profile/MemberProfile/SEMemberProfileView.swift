@@ -344,7 +344,7 @@ extension SEMemberProfileView {
             .frame(width: 17, height: 17)
             .foregroundColor(.Primary_Default)
           Text("\(viewCount)")
-            .fontSystem(fontDesignSystem: .caption_KO_Semibold)
+            .fontSystem(fontDesignSystem: .caption_SemiBold)
             .foregroundColor(Color.LabelColor_Primary_Dark)
         }
         .padding(.bottom, 8.5)

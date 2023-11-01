@@ -59,6 +59,18 @@ struct ProfileEditView: View {
       Divider().frame(height: 0.5).padding(.leading, 16).foregroundColor(.Disable_Placeholder)
       Spacer()
     }
+    .onAppear {
+      toastViewModel.onFullScreenCover = true
+    }
+    .onDisappear {
+      toastViewModel.onFullScreenCover = false
+      toastViewModel.showToast = false
+    }
+    .overlay {
+      if toastViewModel.onFullScreenCover {
+        ToastMessageView()
+      }
+    }
     .fullScreenCover(isPresented: $showGallery) {
       ProfileImagePickerView(photoCollection: photoCollection)
     }
@@ -95,7 +107,7 @@ struct ProfileEditView: View {
           tabbarModel.tabbarOpacity = 1.0
           dismiss()
         } label: {
-          Image(systemName: "chevron.backward")
+          Image(systemName: "xmark")
             .foregroundColor(.LabelColor_Primary)
         }
       }
@@ -133,6 +145,8 @@ extension ProfileEditView {
         Text(content.isEmpty ? "소개" : content)
           .fontSystem(fontDesignSystem: .body1_KO)
           .foregroundColor(content.isEmpty ? .Disable_Placeholder : .LabelColor_Primary)
+          .lineLimit(1)
+          .truncationMode(.tail)
           .frame(maxWidth: .infinity, alignment: .leading)
 
         Image(systemName: "chevron.right")

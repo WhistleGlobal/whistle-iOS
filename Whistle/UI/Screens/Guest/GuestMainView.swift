@@ -410,7 +410,7 @@ extension GuestMainView {
               bottomSheetPosition = .dynamic
             } label: {
               Text(CommonWords().follow)
-                .fontSystem(fontDesignSystem: .caption_KO_Semibold)
+                .fontSystem(fontDesignSystem: .caption_SemiBold)
                 .foregroundColor(.Gray10)
                 .frame(width: 58, height: 26)
                 .background {
@@ -442,7 +442,7 @@ extension GuestMainView {
                 .font(.system(size: 26))
                 .frame(width: 36, height: 36)
               Text("\(whistleCount)")
-                .fontSystem(fontDesignSystem: .caption_KO_Semibold)
+                .fontSystem(fontDesignSystem: .caption_SemiBold)
             }
             .frame(height: UIScreen.getHeight(56))
           }
@@ -454,7 +454,7 @@ extension GuestMainView {
                 .font(.system(size: 26))
                 .frame(width: 36, height: 36)
               Text(CommonWords().share)
-                .fontSystem(fontDesignSystem: .caption_KO_Semibold)
+                .fontSystem(fontDesignSystem: .caption_SemiBold)
             }
             .frame(height: UIScreen.getHeight(56))
           }
@@ -467,7 +467,7 @@ extension GuestMainView {
                 .font(.system(size: 26))
                 .frame(width: 36, height: 36)
               Text(CommonWords().more)
-                .fontSystem(fontDesignSystem: .caption_KO_Semibold)
+                .fontSystem(fontDesignSystem: .caption_SemiBold)
             }
             .frame(height: UIScreen.getHeight(56))
           }

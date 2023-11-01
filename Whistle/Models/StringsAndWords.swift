@@ -1,5 +1,5 @@
 //
-//  Strings.swift
+//  StringsAndWords.swift
 //  Whistle
 //
 //  Created by 박상원 on 10/30/23.
@@ -26,8 +26,7 @@ struct CommonWords {
   let whistle: LocalizedStringKey = "휘슬"
   let profile: LocalizedStringKey = "프로필"
   let play: LocalizedStringKey = "플레이"
-  let save: LocalizedStringKey = "저장"
-  let saveCancel: LocalizedStringKey = "저장 취소"
+  let bookmark: LocalizedStringKey = "북마크"
   let delete: LocalizedStringKey = "삭제"
   let deleteAccount: LocalizedStringKey = "계정삭제"
   let logout: LocalizedStringKey = "로그아웃"
@@ -47,6 +46,7 @@ struct CommonWords {
   let hide: LocalizedStringKey = "관심없음"
   let originalAudio: LocalizedStringKey = "원본 오디오"
   let shareProfile: LocalizedStringKey = "프로필 공유"
+  let continueWord: LocalizedStringKey = "계속"
 }
 
 // MARK: - ProfileEditWords
@@ -91,6 +91,9 @@ struct VideoEditorWords {
 struct ContentWords {
   let newContent: LocalizedStringKey = "새 게시물"
   let post: LocalizedStringKey = "게시"
+  let noBookmarkedContent: LocalizedStringKey = "저장한 콘텐츠가 없습니다"
+  let noUploadedContent: LocalizedStringKey = "공유하고 싶은 첫번째 콘텐츠를 업로드해보세요"
+  let goUpload: LocalizedStringKey = "업로드하러 가기"
 }
 
 // MARK: - AlertTitles
@@ -100,6 +103,7 @@ struct AlertTitles {
   let unblock: LocalizedStringKey = "%@ 님을 차단 해제하시겠어요?"
   let logout: LocalizedStringKey = "정말 로그아웃하시겠어요?"
   let removeAccount: LocalizedStringKey = "정말 삭제하시겠어요?"
+  let setNotification: LocalizedStringKey = "휘슬 앱 알림이 허용되지 않았습니다.설정에서 알림을 켜시겠습니까?"
 }
 
 // MARK: - AlertContents
@@ -108,6 +112,13 @@ struct AlertContents {
   let unblock: LocalizedStringKey = "이제 상대방이 회원님의 게시물을 보거나 팔로우할 수 있습니다. 상대방에게 회원님이 차단을 해제했다는 정보를 알리지 않습니다."
   let block: LocalizedStringKey = "차단된 사람은 회원님의 프로필 또는 콘텐츠를 찾을 수 없게 되며, 상대방에게 차단되었다는 알림이 전송되지 않습니다."
   let removeAccount: LocalizedStringKey = "삭제하시면 회원님의 모든 정보와 활동 기록이 삭제됩니다. 삭제된 정보는 복구할 수 없으니 신중하게 결정해주세요."
+}
+
+// MARK: - AlertButtons
+
+struct AlertButtons {
+  let goSettings: LocalizedStringKey = "설정으로 가기"
+
 }
 
 // MARK: - ToastMessages
@@ -123,5 +134,5 @@ struct ToastMessages {
   let contentUploaded: LocalizedStringKey = "영상이 게시되었습니다."
   let tagLimit: LocalizedStringKey = "해시태그는 최대 5개까지만 가능합니다"
   let tagLengthLimit: LocalizedStringKey = "해시태그는 최대 16글자까지 가능합니다"
-  let hiddenContent: LocalizedStringKey = "해당 콘텐츠를 숨겼습니다"
+  let postHidden: LocalizedStringKey = "해당 콘텐츠를 숨겼습니다"
 }

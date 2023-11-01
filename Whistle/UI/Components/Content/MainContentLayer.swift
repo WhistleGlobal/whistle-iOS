@@ -73,7 +73,7 @@ struct MainContentLayer: View {
                 }
               } label: {
                 Text(currentVideoInfo.isFollowed ? CommonWords().following : CommonWords().follow)
-                  .fontSystem(fontDesignSystem: .caption_KO_Semibold)
+                  .fontSystem(fontDesignSystem: .caption_SemiBold)
                   .foregroundColor(.Gray10)
                   .background {
                     Capsule()
@@ -107,14 +107,11 @@ struct MainContentLayer: View {
           Button {
             whistleAction()
           } label: {
-            VStack(spacing: 2) {
-              Image(systemName: currentVideoInfo.isWhistled ? "heart.fill" : "heart")
-                .font(.system(size: 26))
-                .frame(width: 36, height: 36)
-              Text("\(currentVideoInfo.whistleCount)")
-                .fontSystem(fontDesignSystem: .caption_KO_Semibold)
-            }
-            .frame(height: UIScreen.getHeight(56))
+            ContentLayerButton(
+              isFilled: $currentVideoInfo.isWhistled,
+              image: "heart",
+              filledImage: "heart.fill",
+              label: "\(currentVideoInfo.whistleCount)")
           }
           Button {
             Task {
@@ -134,14 +131,11 @@ struct MainContentLayer: View {
               }
             }
           } label: {
-            VStack(spacing: 2) {
-              Image(systemName: currentVideoInfo.isBookmarked ? "bookmark.fill" : "bookmark")
-                .font(.system(size: 26))
-                .frame(width: 36, height: 36)
-              Text(CommonWords().save)
-                .fontSystem(fontDesignSystem: .caption_KO_Semibold)
-            }
-            .frame(height: UIScreen.getHeight(56))
+            ContentLayerButton(
+              isFilled: $currentVideoInfo.isBookmarked,
+              image: "bookmark",
+              filledImage: "bookmark.fill",
+              label: CommonWords().bookmark)
           }
           Button {
             let shareURL = URL(
@@ -152,26 +146,12 @@ struct MainContentLayer: View {
               animated: true,
               completion: nil)
           } label: {
-            VStack(spacing: 2) {
-              Image(systemName: "square.and.arrow.up")
-                .font(.system(size: 26))
-                .frame(width: 36, height: 36)
-              Text(CommonWords().share)
-                .fontSystem(fontDesignSystem: .caption_KO_Semibold)
-            }
-            .frame(height: UIScreen.getHeight(56))
+            ContentLayerButton(image: "square.and.arrow.up", label: CommonWords().share)
           }
           Button {
             feedMoreModel.bottomSheetPosition = .absolute(242)
           } label: {
-            VStack(spacing: 2) {
-              Image(systemName: "ellipsis")
-                .font(.system(size: 26))
-                .frame(width: 36, height: 36)
-              Text(CommonWords().more)
-                .fontSystem(fontDesignSystem: .caption_KO_Semibold)
-            }
-            .frame(height: UIScreen.getHeight(56))
+            ContentLayerButton(image: "ellipsis", label: CommonWords().more)
           }
         }
         .foregroundColor(.Gray10)

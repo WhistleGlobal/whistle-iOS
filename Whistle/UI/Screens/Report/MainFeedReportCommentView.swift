@@ -90,28 +90,29 @@ struct MainFeedReportCommentView: View {
       ToolbarItem(placement: .confirmationAction) {
         Button {
           isFocused = false
-          alertViewModel.linearAlert(isRed: true, title: "정말 신고하시겠습니까?", cancelText: "취소", destructiveText: "신고") {
-            Task {
-              let reportSuccess = await apiViewModel.reportContent(
-                userID: uesrId,
-                contentID: contentId,
-                reportReason: reportReason,
-                reportDescription: inputReportDetail)
-              if reportSuccess == 200 {
-                goComplete = true
-              } else if reportSuccess == 400 {
-                alertViewModel.submitAlert(
-                  title: "중복 접수되었습니다.",
-                  content: "같은 아이디로 접수된 신고 사유가 있습니다.",
-                  submitText: "확인")
-              } else {
-                alertViewModel.submitAlert(
-                  title: "신고 처리 중 문제가 생겼습니다. 잠시후 다시 시도해주세요.",
-                  content: "같은 아이디로 접수된 신고 사유가 있습니다.",
-                  submitText: "확인")
+          alertViewModel
+            .linearAlert(isRed: true, title: "정말 신고하시겠습니까?", cancelText: "취소", destructiveText: CommonWords().report) {
+              Task {
+                let reportSuccess = await apiViewModel.reportContent(
+                  userID: uesrId,
+                  contentID: contentId,
+                  reportReason: reportReason,
+                  reportDescription: inputReportDetail)
+                if reportSuccess == 200 {
+                  goComplete = true
+                } else if reportSuccess == 400 {
+                  alertViewModel.submitAlert(
+                    title: "중복 접수되었습니다.",
+                    content: "같은 아이디로 접수된 신고 사유가 있습니다.",
+                    submitText: "확인")
+                } else {
+                  alertViewModel.submitAlert(
+                    title: "신고 처리 중 문제가 생겼습니다. 잠시후 다시 시도해주세요.",
+                    content: "같은 아이디로 접수된 신고 사유가 있습니다.",
+                    submitText: "확인")
+                }
               }
             }
-          }
         } label: {
           Text(CommonWords().submit)
             .foregroundColor(.Info)

@@ -17,8 +17,9 @@ class ToastViewModel: ObservableObject {
   @Published var message: LocalizedStringKey = ""
   @Published var padding: CGFloat = 58
   @Published var isCancelled = false
-
   @Published var isCancellable = false
+  @Published var onFullScreenCover = false
+
   var cancellableAction: (() -> Void)? = { }
 
   func toastInit(

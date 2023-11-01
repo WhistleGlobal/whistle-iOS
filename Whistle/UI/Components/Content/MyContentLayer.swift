@@ -83,14 +83,11 @@ struct MyContentLayer: View {
               return mutableItem
             }
           } label: {
-            VStack(spacing: 2) {
-              Image(systemName: currentVideoInfo.isWhistled ? "heart.fill" : "heart")
-                .font(.system(size: 26))
-                .frame(width: 36, height: 36)
-              Text("\(currentVideoInfo.whistleCount ?? 0)")
-                .fontSystem(fontDesignSystem: .caption_KO_Semibold)
-            }
-            .frame(height: UIScreen.getHeight(56))
+            ContentLayerButton(
+              isFilled: $currentVideoInfo.isWhistled,
+              image: "heart",
+              filledImage: "heart.fill",
+              label: "\(currentVideoInfo.whistleCount ?? 0)")
           }
           Button {
             Task {
@@ -117,14 +114,11 @@ struct MyContentLayer: View {
               }
             }
           } label: {
-            VStack(spacing: 2) {
-              Image(systemName: currentVideoInfo.isBookmarked ? "bookmark.fill" : "bookmark")
-                .font(.system(size: 26))
-                .frame(width: 36, height: 36)
-              Text(CommonWords().save)
-                .fontSystem(fontDesignSystem: .caption_KO_Semibold)
-            }
-            .frame(height: UIScreen.getHeight(56))
+            ContentLayerButton(
+              isFilled: $currentVideoInfo.isBookmarked,
+              image: "bookmark",
+              filledImage: "bookmark.fill",
+              label: CommonWords().bookmark)
           }
           Button {
             let shareURL = URL(string: "https://readywhistle.com/content_uni?contentId=\(currentVideoInfo.contentId ?? 0)")!
@@ -134,26 +128,12 @@ struct MyContentLayer: View {
               animated: true,
               completion: nil)
           } label: {
-            VStack(spacing: 2) {
-              Image(systemName: "square.and.arrow.up")
-                .font(.system(size: 26))
-                .frame(width: 36, height: 36)
-              Text(CommonWords().share)
-                .fontSystem(fontDesignSystem: .caption_KO_Semibold)
-            }
-            .frame(height: UIScreen.getHeight(56))
+            ContentLayerButton(image: "square.and.arrow.up", label: CommonWords().share)
           }
           Button {
             feedMoreModel.bottomSheetPosition = .absolute(186)
           } label: {
-            VStack(spacing: 2) {
-              Image(systemName: "ellipsis")
-                .font(.system(size: 26))
-                .frame(width: 36, height: 36)
-              Text(CommonWords().more)
-                .fontSystem(fontDesignSystem: .caption_KO_Semibold)
-            }
-            .frame(height: UIScreen.getHeight(56))
+            ContentLayerButton(image: "ellipsis", label: CommonWords().more)
           }
         }
         .foregroundColor(.Gray10)
