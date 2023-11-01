@@ -75,6 +75,7 @@ struct GuestContentPlayerView: View {
                 .overlay {
                   if tabbarModel.tabWidth != 56 {
                     GuestContentLayer(currentVideoInfo: content)
+                      .padding(.bottom, UIScreen.main.nativeBounds.height == 1334 ? 24 : 0)
                   }
                   if feedMoreModel.bottomSheetPosition != .hidden {
                     DimmedBackground()

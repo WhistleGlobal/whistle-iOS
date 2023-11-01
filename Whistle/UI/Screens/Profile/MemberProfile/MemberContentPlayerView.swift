@@ -122,6 +122,7 @@ struct MemberContentPlayerView: View {
                         currentVideoInfo: content,
                         whistleAction: whistleToggle,
                         dismissAction: dismissAction)
+                        .padding(.bottom, UIScreen.main.nativeBounds.height == 1334 ? 24 : 0)
                     }
                     if feedMoreModel.bottomSheetPosition != .hidden {
                       DimmedBackground()
