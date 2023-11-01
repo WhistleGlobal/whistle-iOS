@@ -86,7 +86,7 @@ struct VideoCaptureView: View {
           PickerConfigViewControllerWrapper(isImagePickerClosed: $isImagePickerClosed)
         }
         if buttonState != .completed || editorVM.currentVideo == nil {
-          viewModel.preview
+          viewModel.preview.ignoresSafeArea()
         } else {
           if let video = editorVM.currentVideo {
             recordedVideoPreview(video: video)
@@ -116,7 +116,6 @@ struct VideoCaptureView: View {
           // 하단 버튼
           recordButtonSection
         }
-        .frame(width: UIScreen.width, height: UIScreen.width * 16 / 9)
         .padding(.bottom, 74)
         .opacity(showPreparingView ? 0 : 1)
         if showPreparingView {

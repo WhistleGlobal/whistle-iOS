@@ -118,8 +118,8 @@ public struct InteractivePreview: View {
           .animation(.spring(), value: focusFrameOpacity)
       }
     }
-    .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.width * 16 / 9)
-    .padding(.bottom, 68)
+    .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
+//    .padding(.bottom, 68)
   }
 }
 
