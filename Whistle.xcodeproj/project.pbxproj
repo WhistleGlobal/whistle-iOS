@@ -293,6 +293,8 @@
 		786A7D542ACD7278001CC4F2 /* GuestContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 786A7D532ACD7278001CC4F2 /* GuestContent.swift */; };
 		786CFEAF2AAC4DCF00DB2ADD /* MemberProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 786CFEAE2AAC4DCF00DB2ADD /* MemberProfileView.swift */; };
 		786CFEB12AAC5D5100DB2ADD /* ProfileReportTypeSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 786CFEB02AAC5D5100DB2ADD /* ProfileReportTypeSelectionView.swift */; };
+		787093682AF28CB30023B400 /* ZoomFactorViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 787093672AF28CB30023B400 /* ZoomFactorViewModel.swift */; };
+		787093692AF28CED0023B400 /* ZoomFactorViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 787093672AF28CB30023B400 /* ZoomFactorViewModel.swift */; };
 		787173B42AA472070018CB14 /* ToastMessageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 787173B32AA472070018CB14 /* ToastMessageView.swift */; };
 		78730CE72ACE8660008B9981 /* PhotoCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78730CE62ACE8660008B9981 /* PhotoCollection.swift */; };
 		78730CEB2ACE8691008B9981 /* PhotoAssetCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78730CEA2ACE8691008B9981 /* PhotoAssetCollection.swift */; };
@@ -706,6 +708,7 @@
 		786A7D532ACD7278001CC4F2 /* GuestContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GuestContent.swift; sourceTree = "<group>"; };
 		786CFEAE2AAC4DCF00DB2ADD /* MemberProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemberProfileView.swift; sourceTree = "<group>"; };
 		786CFEB02AAC5D5100DB2ADD /* ProfileReportTypeSelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileReportTypeSelectionView.swift; sourceTree = "<group>"; };
+		787093672AF28CB30023B400 /* ZoomFactorViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZoomFactorViewModel.swift; sourceTree = "<group>"; };
 		787173B32AA472070018CB14 /* ToastMessageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToastMessageView.swift; sourceTree = "<group>"; };
 		78730CE62ACE8660008B9981 /* PhotoCollection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoCollection.swift; sourceTree = "<group>"; };
 		78730CEA2ACE8691008B9981 /* PhotoAssetCollection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoAssetCollection.swift; sourceTree = "<group>"; };
@@ -1135,6 +1138,7 @@
 				78BCA9532AEFF6140084E92F /* BookmarkedPlayersViewModel.swift */,
 				78BCA95D2AF086970084E92F /* MemeberPlayersViewModel.swift */,
 				782A6DDC2AF1EBCB004D0A60 /* GuestPlayersViewModel.swift */,
+				787093672AF28CB30023B400 /* ZoomFactorViewModel.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -2364,6 +2368,7 @@
 				1B3895712AB9CBFC00B4C8DD /* Extension+FileManager.swift in Sources */,
 				78D148E52A9E135F00DDCE48 /* Extension+UIView.swift in Sources */,
 				1BE8EA122AB0F7E800EB0A55 /* CircularProgressBar.swift in Sources */,
+				787093682AF28CB30023B400 /* ZoomFactorViewModel.swift in Sources */,
 				1B3895702AB9CBFC00B4C8DD /* Extension+AVAudioSession.swift in Sources */,
 				1B38956F2AB9CBFC00B4C8DD /* Extension+Int.swift in Sources */,
 				78B6FD2E2AA719190043E461 /* AlbumModel.swift in Sources */,
@@ -2559,6 +2564,7 @@
 				1BA24B402ADBFF8600DB0992 /* AlbumImporter.swift in Sources */,
 				1BA24B4D2ADBFF8600DB0992 /* InteractivePreview.swift in Sources */,
 				1BA24B2E2ADBFF8600DB0992 /* AespaCoreCamera.swift in Sources */,
+				787093692AF28CED0023B400 /* ZoomFactorViewModel.swift in Sources */,
 				1BA24B282ADBFF8600DB0992 /* AespaCoreRecorder.swift in Sources */,
 				1BA24B422ADBFF8600DB0992 /* VideoOrientationTuner.swift in Sources */,
 				1BA24B452ADBFF8600DB0992 /* ZoomTuner.swift in Sources */,

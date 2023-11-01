@@ -26,6 +26,7 @@ struct VideoCaptureView: View {
   @StateObject var apiViewModel = APIViewModel.shared
   @StateObject var alertViewModel = AlertViewModel.shared
   @StateObject private var tabbarModel = TabbarModel.shared
+  @StateObject var zoomFactorViewModel = ZoomFactorViewModel.shared
   @ObservedObject private var viewModel = VideoCaptureViewModel()
 
   // MARK: - Datas
@@ -62,6 +63,8 @@ struct VideoCaptureView: View {
   @State var timerSec = (15, false)
   /// 음악 편집기 띄우기용
   @State var showMusicTrimView = false
+
+  @State var currentZoomScale: CGFloat = 1.0
 
   // MARK: - Computed
 
@@ -113,6 +116,34 @@ struct VideoCaptureView: View {
             }
           }
           Spacer()
+          // TODO: - 싱글톤 & combine 테스트
+          Text("\(currentZoomScale)줌")
+            .fontSystem(fontDesignSystem: .subtitle3)
+            .foregroundColor(.LabelColor_Primary)
+            .padding(.vertical, 4)
+            .padding(.horizontal, 16)
+            .background {
+              Capsule()
+                .foregroundColor(.white)
+            }
+            .padding(.bottom, 32)
+            .onChange(of: zoomFactorViewModel.zoomScale) { newValue in
+              currentZoomScale = newValue
+            }
+          Text("\(currentZoomScale)줌")
+            .fontSystem(fontDesignSystem: .subtitle3)
+            .foregroundColor(.LabelColor_Primary)
+            .padding(.vertical, 4)
+            .padding(.horizontal, 16)
+            .background {
+              Capsule()
+                .foregroundColor(.white)
+            }
+            .padding(.bottom, 32)
+            .onReceive(ZoomFactorCombineViewModel.shared.zoomSubject) { value in
+              currentZoomScale = value
+            }
+
           Text("\(timerSec.0)초")
             .fontSystem(fontDesignSystem: .subtitle3)
             .foregroundColor(.LabelColor_Primary)

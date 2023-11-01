@@ -55,7 +55,7 @@ public struct InteractivePreview: View {
 
   // Zoom
   @State private var previousZoomFactor: CGFloat = 1.0
-  @State private var currentZoomFactor: CGFloat = 1.0
+  @State public var currentZoomFactor: CGFloat = 1.0
 
   // Foocus
   @State private var preferredFocusMode: AVCaptureDevice.FocusMode = .continuousAutoFocus
@@ -66,6 +66,9 @@ public struct InteractivePreview: View {
   @State private var showingCrosshairTask: Task<Void, Error>?
 
   private var subjectAreaChangeMonitoringSubscription: Cancellable?
+
+  // TODO: - 싱글톤 테스트
+  @StateObject var zoomFactorViewModel = ZoomFactorViewModel.shared
 
   init(_ preview: Preview, option: InteractivePreviewOption = .init()) {
     self.preview = preview
@@ -176,11 +179,17 @@ extension InteractivePreview {
         if videoZoomFactor <= maxZoomFactor {
           let newZoomFactor = max(1.0, min(videoZoomFactor, maxZoomFactor))
           session.zoom(factor: newZoomFactor)
+
+          // TODO: - 값 변화 넣어주기
+          WhistleLogger.logger.debug("newZoomFactor: \(newZoomFactor)")
+          zoomFactorViewModel.zoomScale = newZoomFactor
+          ZoomFactorCombineViewModel.shared.zoomScale = newZoomFactor
         }
       }
       .onEnded { scale in
         let videoZoomFactor = scale * previousZoomFactor
         previousZoomFactor = videoZoomFactor >= 1 ? videoZoomFactor : 1
+        WhistleLogger.logger.debug("previousZoomFactor: \(previousZoomFactor)")
       }
   }
 
