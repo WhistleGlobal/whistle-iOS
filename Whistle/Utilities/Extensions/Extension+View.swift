@@ -447,9 +447,6 @@ extension View {
         .foregroundColor(Color.LabelColor_Primary_Dark)
         .fontSystem(fontDesignSystem: .subtitle2_KO)
       Spacer()
-      Image(systemName: "chevron.forward")
-        .font(.system(size: 16))
-        .foregroundColor(Color.Disable_Placeholder_Light)
     }
     .frame(height: 56)
     .padding(.horizontal, 16)
@@ -462,9 +459,6 @@ extension View {
         .foregroundColor(color)
         .fontSystem(fontDesignSystem: .subtitle2_KO)
       Spacer()
-      Image(systemName: "chevron.forward")
-        .font(.system(size: 16))
-        .foregroundColor(Color.Disable_Placeholder_Light)
     }
     .frame(height: 56)
     .padding(.horizontal, 16)

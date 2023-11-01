@@ -62,7 +62,7 @@ struct MemberFeedView: View {
         .frame(height: 24)
         .padding(.vertical, 12)
         .padding(.horizontal, 16)
-        Divider().frame(width: UIScreen.width)
+        Rectangle().frame(width: UIScreen.width, height: 1).foregroundColor(Color.Border_Default_Dark)
         Button {
           feedMoreModel.bottomSheetPosition = .hidden
           toastViewModel.cancelToastInit(message: ToastMessages().postHidden) {
@@ -77,6 +77,7 @@ struct MemberFeedView: View {
         } label: {
           bottomSheetRowWithIcon(systemName: "eye.fill", text: CommonWords().hide)
         }
+        Rectangle().frame(height: 0.5).padding(.leading, 52).foregroundColor(Color.Border_Default_Dark)
         Button {
           feedMoreModel.bottomSheetPosition = .hidden
           feedPlayersViewModel.stopPlayer()

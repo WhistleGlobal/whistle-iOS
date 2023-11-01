@@ -206,7 +206,7 @@ struct MyProfileView: View {
             .foregroundColor(.white)
         }
         .frame(height: 52)
-        Divider().background(Color("Gray10"))
+        Rectangle().frame(width: UIScreen.width, height: 1).foregroundColor(Color.Border_Default_Dark)
         Button {
           center.requestAuthorization(options: [.sound, .alert, .badge]) { granted, error in
             if let error {
@@ -232,12 +232,13 @@ struct MyProfileView: View {
         } label: {
           bottomSheetRowWithIcon(systemName: "bell", text: CommonWords().notification)
         }
-
+        Rectangle().frame(height: 0.5).padding(.leading, 52).foregroundColor(Color.Border_Default_Dark)
         NavigationLink {
           LegalInfoView()
         } label: {
           bottomSheetRowWithIcon(systemName: "info.circle", text: CommonWords().about)
         }
+        Rectangle().frame(height: 0.5).padding(.leading, 52).foregroundColor(Color.Border_Default_Dark)
         Button {
           withAnimation {
             bottomSheetPosition = .hidden
@@ -252,13 +253,15 @@ struct MyProfileView: View {
         } label: {
           bottomSheetRowWithIcon(systemName: "square.and.arrow.up", text: CommonWords().shareProfile)
         }
+        Rectangle().frame(height: 0.5).padding(.leading, 52).foregroundColor(Color.Border_Default_Dark)
         NavigationLink {
           GuideStatusView()
         } label: {
           bottomSheetRowWithIcon(systemName: "exclamationmark.triangle.fill", text: CommonWords().guideStatus)
         }
+
         Group {
-          Divider().background(Color("Gray10"))
+          Rectangle().frame(width: UIScreen.width, height: 1).foregroundColor(Color.Border_Default_Dark)
           Button {
             withAnimation {
               bottomSheetPosition = .hidden

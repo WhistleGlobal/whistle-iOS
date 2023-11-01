@@ -166,7 +166,7 @@ struct MemberProfileView: View {
         .frame(height: 24)
         .padding(.vertical, 12)
         .padding(.horizontal, 16)
-        Divider().frame(width: UIScreen.width)
+        Rectangle().frame(width: UIScreen.width, height: 1).foregroundColor(Color.Border_Default_Dark)
         Button {
           bottomSheetPosition = .hidden
           if apiViewModel.memberProfile.isBlocked {
@@ -219,12 +219,14 @@ struct MemberProfileView: View {
             systemName: "nosign",
             text: apiViewModel.memberProfile.isBlocked ? CommonWords().unblockAction : CommonWords().blockAction)
         }
+        Rectangle().frame(height: 0.5).padding(.leading, 52).foregroundColor(Color.Border_Default_Dark)
         Button {
           bottomSheetPosition = .hidden
           goReport = true
         } label: {
           bottomSheetRowWithIcon(systemName: "exclamationmark.triangle.fill", text: CommonWords().reportAction)
         }
+        Rectangle().frame(height: 0.5).padding(.leading, 52).foregroundColor(Color.Border_Default_Dark)
         Button {
           bottomSheetPosition = .hidden
           let shareURL = URL(
