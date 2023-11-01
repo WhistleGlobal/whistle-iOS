@@ -324,7 +324,7 @@
 		788E68652AD6B6710056C18B /* VideoFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 788E685D2AD6B6710056C18B /* VideoFile.swift */; };
 		788E68662AD6B6710056C18B /* PhotoAssetModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 788E685E2AD6B6710056C18B /* PhotoAssetModel.swift */; };
 		788E68672AD6B6710056C18B /* VideoCaptureView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 788E685F2AD6B6710056C18B /* VideoCaptureView.swift */; };
-		788E68682AD6B6710056C18B /* VideoAsset.swift in Sources */ = {isa = PBXBuildFile; fileRef = 788E68602AD6B6710056C18B /* VideoAsset.swift */; };
+		788E68682AD6B6710056C18B /* VideoAsset.swift in Sources */ = {isa = PBXBuildFile; fileRef = 788E68602AD6B6710056C18B /* VideoAsset.swift */; };
 		788E686A2AD6B6710056C18B /* VideoCaptureViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 788E68622AD6B6710056C18B /* VideoCaptureViewModel.swift */; };
 		788E686B2AD6B6710056C18B /* PhotoFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 788E68632AD6B6710056C18B /* PhotoFile.swift */; };
 		788E68702AD6C9DB0056C18B /* RecordAccessView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 788E686F2AD6C9DB0056C18B /* RecordAccessView.swift */; };
@@ -1083,7 +1083,7 @@
 				788E685E2AD6B6710056C18B /* PhotoAssetModel.swift */,
 				788E68632AD6B6710056C18B /* PhotoFile.swift */,
 				788E685D2AD6B6710056C18B /* VideoFile.swift */,
-				788E68602AD6B6710056C18B /* VideoAsset.swift */,
+				788E68602AD6B6710056C18B /* VideoAsset.swift */,
 				1BAC07F62AD559E60087D8CD /* TagsDataModel.swift */,
 				780039072AD7E0020033B9F1 /* VersionCheck.swift */,
 				1B3895662AB9CBD700B4C8DD /* VideoEditor */,
@@ -1349,7 +1349,7 @@
 		1BA24AD02ADBFF8500DB0992 /* Asset */ = {
 			isa = PBXGroup;
 			children = (
-				1BA24AD12ADBFF8500DB0992 /* VideoAsset.swift */,
+				1BA24AD12ADBFF8500DB0992 /* VideoAsset.swift */,
 				1BA24AD22ADBFF8500DB0992 /* PhotoAsset.swift */,
 			);
 			path = Asset;
@@ -2358,7 +2358,7 @@
 				786A7D542ACD7278001CC4F2 /* GuestContent.swift in Sources */,
 				7866694B2AA1287500448EC7 /* UserResponse.swift in Sources */,
 				782DD4732AA30BDD006183D3 /* MyFollowListView.swift in Sources */,
-				788E68682AD6B6710056C18B /* VideoAsset.swift in Sources */,
+				788E68682AD6B6710056C18B /* VideoAsset.swift in Sources */,
 				1B38954D2AB9CB7500B4C8DD /* VolumeSliderSheetView.swift in Sources */,
 				78D148DD2A9E0CBA00DDCE48 /* Extension+View.swift in Sources */,
 				1B38958D2AB9CCCF00B4C8DD /* Color.swift in Sources */,
@@ -2537,7 +2537,7 @@
 				1BA24B2F2ADBFF8600DB0992 /* AVCaptureConnection+AespaRepresentable.swift in Sources */,
 				1BA24B272ADBFF8600DB0992 /* AespaProcessing.swift in Sources */,
 				1BA24B392ADBFF8600DB0992 /* AVFoundation+Extension.swift in Sources */,
-				1BA24B1D2ADBFF8600DB0992 /* VideoAsset.swift in Sources */,
+				1BA24B1D2ADBFF8600DB0992 /* VideoAsset.swift in Sources */,
 				1BA24B432ADBFF8600DB0992 /* VideoStabilizationTuner.swift in Sources */,
 				1BA24B3C2ADBFF8600DB0992 /* FilePathProvider.swift in Sources */,
 				1BA24B312ADBFF8600DB0992 /* AVCapturePhotoOutput+AespaRepresentable.swift in Sources */,

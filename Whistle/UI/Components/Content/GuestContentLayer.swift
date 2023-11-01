@@ -55,7 +55,7 @@ struct GuestContentLayer: View {
                 feedMoreModel.bottomSheetPosition = .dynamic
               } label: {
                 Text(CommonWords().follow)
-                  .fontSystem(fontDesignSystem: .caption_KO_Semibold)
+                  .fontSystem(fontDesignSystem: .caption_SemiBold)
                   .foregroundColor(.Gray10)
                   .background {
                     Capsule()
@@ -94,7 +94,7 @@ struct GuestContentLayer: View {
                 .font(.system(size: 26))
                 .frame(width: 36, height: 36)
               Text("\(currentVideoInfo.whistleCount ?? 0)")
-                .fontSystem(fontDesignSystem: .caption_KO_Semibold)
+                .fontSystem(fontDesignSystem: .caption_SemiBold)
             }
             .frame(height: UIScreen.getHeight(56))
           }
@@ -105,8 +105,8 @@ struct GuestContentLayer: View {
               Image(systemName: "bookmark")
                 .font(.system(size: 26))
                 .frame(width: 36, height: 36)
-              Text(CommonWords().save)
-                .fontSystem(fontDesignSystem: .caption_KO_Semibold)
+              Text(CommonWords().bookmark)
+                .fontSystem(fontDesignSystem: .caption_SemiBold)
             }
             .frame(height: UIScreen.getHeight(56))
           }
@@ -124,7 +124,7 @@ struct GuestContentLayer: View {
                 .font(.system(size: 26))
                 .frame(width: 36, height: 36)
               Text(CommonWords().share)
-                .fontSystem(fontDesignSystem: .caption_KO_Semibold)
+                .fontSystem(fontDesignSystem: .caption_SemiBold)
             }
             .frame(height: UIScreen.getHeight(56))
           }
@@ -136,7 +136,7 @@ struct GuestContentLayer: View {
                 .font(.system(size: 26))
                 .frame(width: 36, height: 36)
               Text(CommonWords().more)
-                .fontSystem(fontDesignSystem: .caption_KO_Semibold)
+                .fontSystem(fontDesignSystem: .caption_SemiBold)
             }
             .frame(height: UIScreen.getHeight(56))
           }
