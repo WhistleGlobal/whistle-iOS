@@ -211,7 +211,6 @@ struct DescriptionAndTagEditorView: View {
         .cornerRadius(24, corners: [.topLeft, .topRight])
         .foregroundStyle(Color.white))
     .toolbar(.hidden)
-//    .ignoresSafeArea(.keyboard)
     .scrollDismissesKeyboard(.interactively)
   }
 

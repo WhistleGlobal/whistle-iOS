@@ -39,6 +39,7 @@ struct VideoEditorView: View {
         VStack(spacing: 0) {
           CustomNavigationBarViewController(title: "새 게시물") {
             alertViewModel.stackAlert(
+              isImmediateDismiss: true,
               title: "처음부터 시작하시겠어요?",
               content: "지금 돌아가면 해당 작업물이 삭제됩니다.",
               cancelText: "계속 수정",
@@ -95,15 +96,31 @@ struct VideoEditorView: View {
           VideoEditorToolsSection(videoPlayer: videoPlayer, editorVM: editorVM)
         }
         .onAppear {
+          alertViewModel.onFullScreenCover = true
           if isInitial {
             setVideo()
           }
         }
+        .overlay {
+          if alertViewModel.onFullScreenCover {
+            AlertPopup()
+          }
+        }
       }
+      .toolbar(.hidden)
       .background(Color.Background_Default_Dark)
       .ignoresSafeArea()
       .navigationBarHidden(true)
       .navigationBarBackButtonHidden(true)
+//      .toolbar {
+//        ToolbarItem(placement: .cancellationAction) {
+//          Button {
+//            dismiss()
+//          } label: {
+//            Image(systemName: "chevron.left")
+//          }
+//        }
+//      }
       .fullScreenCover(isPresented: $showMusicTrimView) {
         MusicTrimView(
           musicVM: musicVM,

@@ -79,14 +79,7 @@ struct RootTabView: View {
         case .profile:
           if isAccess {
             NavigationStack {
-              if UIDevice.current.userInterfaceIdiom == .phone {
-                switch UIScreen.main.nativeBounds.height {
-                  case 1334: // iPhone SE 3rd generation
-                    SEMyProfileView(isFirstProfileLoaded: $isFirstProfileLoaded)
-                  default:
-                    MyProfileView(isFirstProfileLoaded: $isFirstProfileLoaded)
-                }
-              }
+              MyProfileView(isFirstProfileLoaded: $isFirstProfileLoaded)
             }
             .tint(.black)
           } else {
@@ -143,15 +136,16 @@ struct RootTabView: View {
       .padding(.horizontal, 16)
       .opacity(showGuide ? 0.0 : tabbarModel.tabbarOpacity)
       .onReceive(NavigationModel.shared.$navigate, perform: { _ in
-        if tabbarModel.tabSelection == .upload {
-          if UploadProgressViewModel.shared.isUploading {
-            tabbarModel.tabSelection = .main
-            tabbarModel.tabSelectionNoAnimation = .main
-          } else {
-            tabbarModel.tabSelection = tabbarModel.prevTabSelection ?? .main
-            tabbarModel.tabSelectionNoAnimation = tabbarModel.prevTabSelection ?? .main
-          }
+        if UploadProgressViewModel.shared.isUploading {
+          tabbarModel.tabSelection = .main
+          tabbarModel.tabSelectionNoAnimation = .main
+          showVideoCaptureView = false
         }
+//        else {
+//            tabbarModel.tabSelection = tabbarModel.prevTabSelection ?? .main
+//            tabbarModel.tabSelectionNoAnimation = tabbarModel.prevTabSelection ?? .main
+//          }
+//        }
       })
     }
     .fullScreenCover(isPresented: $showVideoCaptureView) {

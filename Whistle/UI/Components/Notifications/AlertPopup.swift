@@ -97,7 +97,11 @@ extension AlertPopup {
       VStack(spacing: 0) {
         Button {
           alertViewModel.destructiveAction?()
-          alertViewModel.dismissAlert()
+          if alertViewModel.isImmediateDismiss {
+            alertViewModel.immediateDismissAlert()
+          } else {
+            alertViewModel.dismissAlert()
+          }
         } label: {
           if let destructiveText = alertViewModel.destructiveText {
             Text(destructiveText)
