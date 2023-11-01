@@ -10,7 +10,7 @@ import SwiftUI
 // MARK: - MainFeedPageView
 
 struct GuestMainFeedPageView: UIViewRepresentable {
- 
+
   @StateObject var apiViewModel = APIViewModel.shared
   @StateObject var feedPlayersViewModel = GuestFeedPlayersViewModel.shared
   @StateObject private var feedMoreModel = GuestMainFeedMoreModel.shared
