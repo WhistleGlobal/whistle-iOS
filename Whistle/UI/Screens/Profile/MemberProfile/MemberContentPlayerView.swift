@@ -53,6 +53,21 @@ struct MemberContentPlayerView: View {
               .overlay {
                 if content.isHated {
                   VStack {
+                    HStack(spacing: 0) {
+                      Button {
+                        dismissAction()
+                      } label: {
+                        Image(systemName: "chevron.backward")
+                          .font(.system(size: 20))
+                          .foregroundColor(.white)
+                          .padding(.vertical, 16)
+                          .padding(.trailing, 16)
+                      }
+                      Spacer()
+                    }
+                    .padding(.top, 38)
+                    .padding(.horizontal, UIScreen.getWidth(16))
+                    Spacer()
                     Image(systemName: "eye.slash.fill")
                       .font(.system(size: 44))
                       .foregroundColor(.Gray10)
@@ -64,6 +79,7 @@ struct MemberContentPlayerView: View {
                     Text("관심없음 설정한 모든 콘텐츠는 \n회원님의 피드에 노출되지 않습니다.")
                       .fontSystem(fontDesignSystem: .body2_KO)
                       .foregroundColor(.LabelColor_Secondary_Dark)
+                    Spacer()
                   }
                 }
               }
