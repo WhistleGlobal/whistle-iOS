@@ -68,14 +68,22 @@ struct MyProfileView: View {
       }
       VStack(spacing: 0) {
         VStack(spacing: 0) {
-          Spacer().frame(height: topSpacerHeight)
+          if UIDevice.current.userInterfaceIdiom == .phone {
+            switch UIScreen.main.nativeBounds.height {
+            case 1334: // iPhone SE 3rd generation
+              Spacer().frame(height: topSpacerHeightSE * 2)
+            default:
+              Spacer().frame(height: topSpacerHeight)
+            }
+          }
           glassProfile(
             cornerRadius: profileCornerRadius,
             overlayed: profileInfo())
-            .frame(height: 418 + (240 * progress))
+            .frame(
+              height: UIScreen.getHeight(418 + (240 * progress)))
             .padding(.bottom, 12)
         }
-        .padding(.horizontal, profileHorizontalPadding)
+        .padding(.horizontal, UIScreen.getHeight(profileHorizontalPadding))
         .zIndex(1)
         Color.clear.overlay {
           HStack(spacing: 0) {
@@ -131,7 +139,7 @@ struct MyProfileView: View {
             .offset(coordinateSpace: .named("SCROLL")) { offset in
               offsetY = offset
             }
-            Spacer().frame(height: 800)
+            Spacer().frame(height: 1800)
           }
           .padding(.horizontal, 16)
           .scrollIndicators(.hidden)
@@ -154,11 +162,11 @@ struct MyProfileView: View {
                 }
               }
             }
-            .offset(y: videoOffset)
+            .offset(y: UIScreen.getHeight(videoOffset))
             .offset(coordinateSpace: .named("SCROLL")) { offset in
               offsetY = offset
             }
-            Spacer().frame(height: 800)
+            Spacer().frame(height: 1800)
           }
           .padding(.horizontal, 16)
           .scrollIndicators(.hidden)
@@ -323,13 +331,23 @@ extension MyProfileView {
   @ViewBuilder
   func profileInfo() -> some View {
     VStack(spacing: 0) {
-      Spacer().frame(height: 64)
-      profileImageView(url: apiViewModel.myProfile.profileImage, size: profileImageSize)
+      if UIDevice.current.userInterfaceIdiom == .phone {
+        switch UIScreen.main.nativeBounds.height {
+        case 1334: // iPhone SE 3rd generation
+          Spacer().frame(height: topSpacerHeightSE + 20)
+        default:
+          Spacer().frame(height: UIScreen.getHeight(64))
+        }
+      }
+      profileImageView(
+        url: apiViewModel.myProfile.profileImage,
+        size: UIScreen.getHeight(profileImageSize))
         .padding(.bottom, 16)
       Text(apiViewModel.myProfile.userName)
         .foregroundColor(Color.LabelColor_Primary_Dark)
         .fontSystem(fontDesignSystem: .title2_Expanded)
-        .padding(.bottom, 4)
+        .offset(y: usernameOffset)
+        .padding(.bottom, UIScreen.getHeight(4))
       Spacer()
       Color.clear.overlay {
         Text(apiViewModel.myProfile.introduce ?? "")
@@ -340,9 +358,9 @@ extension MyProfileView {
           .fixedSize(horizontal: false, vertical: true)
           .scaleEffect(introduceScale)
       }
-      .frame(height: introduceHeight)
-      .padding(.bottom, 16)
-      .padding(.horizontal, 48)
+      .frame(height: UIScreen.getHeight(introduceHeight))
+      .padding(.bottom, UIScreen.getHeight(16))
+      .padding(.horizontal, UIScreen.getWidth(48))
       Spacer()
       Button {
         showProfileEditView = true
@@ -351,10 +369,10 @@ extension MyProfileView {
           .fontSystem(fontDesignSystem: .subtitle2_KO)
           .foregroundColor(Color.LabelColor_Primary_Dark)
           .scaleEffect(profileEditButtonScale)
-          .frame(width: profileEditButtonWidth, height: profileEditButtonHeight)
+          .frame(width: UIScreen.getWidth(profileEditButtonWidth), height: UIScreen.getHeight(profileEditButtonHeight))
       }
-      .frame(width: profileEditButtonWidth, height: profileEditButtonHeight)
-      .padding(.bottom, 24)
+      .frame(width: UIScreen.getWidth(profileEditButtonWidth), height: UIScreen.getHeight(profileEditButtonHeight))
+      .padding(.bottom, UIScreen.getHeight(24))
       .buttonStyle(ProfileEditButtonStyle())
       HStack(spacing: 0) {
         VStack(spacing: 4) {
@@ -385,15 +403,15 @@ extension MyProfileView {
           .hCenter()
         }
       }
-      .frame(height: whistleFollowerTabHeight)
-      .padding(.bottom, 32)
+      .frame(height: UIScreen.getHeight(whistleFollowerTabHeight))
+      .padding(.bottom, UIScreen.getHeight(32))
     }
     .fullScreenCover(isPresented: $showProfileEditView) {
       NavigationView {
         ProfileEditView()
       }
     }
-    .frame(height: 418 + (240 * progress))
+    .frame(height: UIScreen.getHeight(418 + (240 * progress)))
     .frame(maxWidth: .infinity)
     .overlay {
       VStack(spacing: 0) {
@@ -416,8 +434,11 @@ extension MyProfileView {
                   .frame(width: 20, height: 20)
               }
           }
-          .offset(y: 64 - topSpacerHeight)
-          .padding(.horizontal, 16 - profileHorizontalPadding)
+          .offset(
+            y: UIScreen.main.nativeBounds.height == 1334
+              ? UIScreen.getHeight(20 - topSpacerHeightSE)
+              : UIScreen.getHeight(64 - topSpacerHeight))
+            .padding(.horizontal, 16 - profileHorizontalPadding)
         }
         Spacer()
       }
@@ -529,6 +550,17 @@ extension MyProfileView {
     }
   }
 
+  var topSpacerHeightSE: CGFloat {
+    switch -offsetY {
+    case ..<0:
+      20
+    case 0 ..< 20:
+      20 + offsetY
+    default:
+      0
+    }
+  }
+
   var profileImageSize: CGFloat {
     switch -offsetY {
     case ..<0:
@@ -614,6 +646,17 @@ extension MyProfileView {
       1 - abs((offsetY + 252) / 53)
     default:
       0
+    }
+  }
+
+  var usernameOffset: CGFloat {
+    switch -offsetY {
+    case ..<252:
+      0
+    case 252 ..< 305:
+      -20 * ((offsetY + 252) / 53)
+    default:
+      20
     }
   }
 

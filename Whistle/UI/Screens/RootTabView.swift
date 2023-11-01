@@ -99,14 +99,7 @@ struct RootTabView: View {
       case .profile:
         if isAccess {
           NavigationStack {
-            if UIDevice.current.userInterfaceIdiom == .phone {
-              switch UIScreen.main.nativeBounds.height {
-              case 1334: // iPhone SE 3rd generation
-                SEMyProfileView(isFirstProfileLoaded: $isFirstProfileLoaded)
-              default:
-                MyProfileView(isFirstProfileLoaded: $isFirstProfileLoaded)
-              }
-            }
+              MyProfileView(isFirstProfileLoaded: $isFirstProfileLoaded)
           }
           .tint(.black)
         } else {

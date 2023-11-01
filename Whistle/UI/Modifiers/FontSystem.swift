@@ -69,7 +69,7 @@ struct FontSystem: ViewModifier {
         .padding(.vertical, 4)
     case .title2_Expanded:
       content
-        .font(Font(uiFont: uiFontExpanded(fontsize: 24, weight: .semibold)))
+        .font(Font(uiFont: uiFontExpanded(fontsize: UIScreen.getWidth(24), weight: .semibold)))
         .lineSpacing(8)
         .padding(.vertical, 4)
     case .subtitle1:
