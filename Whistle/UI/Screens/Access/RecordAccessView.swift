@@ -22,9 +22,11 @@ struct RecordAccessView: View {
 
   var body: some View {
     ZStack {
-      Image("BlurredDefaultBG")
-        .resizable()
-        .scaledToFill()
+      Color.clear.overlay {
+        Image("BlurredDefaultBG")
+          .resizable()
+          .scaledToFill()
+      }
       VStack(spacing: 0) {
         HStack {
           Button {
@@ -46,9 +48,9 @@ struct RecordAccessView: View {
             .fontSystem(fontDesignSystem: .title2_KO_SemiBold)
             .foregroundColor(.LabelColor_Primary_Dark)
             .multilineTextAlignment(.center)
-            .padding(.bottom, 64)
+            .padding(.bottom, UIScreen.getHeight(64))
 
-          VStack(alignment: .leading, spacing: 36) {
+          VStack(alignment: .leading, spacing: UIScreen.getHeight(36)) {
             labelTitleAndText(
               systemImage: "photo.fill.on.rectangle.fill",
               title: "회원님이 이 권한을 사용하는 방식",
@@ -63,7 +65,7 @@ struct RecordAccessView: View {
               text: "설정에서 언제든지 권한을 변경할 수 있습니다.")
           }
         }
-        .padding(.horizontal, 40)
+        .padding(.horizontal, UIScreen.getHeight(40))
         Spacer()
         Button {
           requestCameraPermission()

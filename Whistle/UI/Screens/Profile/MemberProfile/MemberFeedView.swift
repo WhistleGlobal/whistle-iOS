@@ -118,18 +118,8 @@ struct MemberFeedView: View {
       }
     }
     .navigationDestination(isPresented: $feedMoreModel.isRootStacked) {
-      if UIDevice.current.userInterfaceIdiom == .phone {
-        switch UIScreen.main.nativeBounds.height {
-        case 1334: // iPhone SE 3rd generation
-          if !apiViewModel.memberFeed.isEmpty {
-            SEMemberProfileView(
-              userId: apiViewModel.memberFeed[feedPlayersViewModel.currentVideoIndex].userId ?? 0)
-          }
-        default:
-          if !apiViewModel.memberFeed.isEmpty {
-            MemberProfileView(userId: apiViewModel.memberFeed[feedPlayersViewModel.currentVideoIndex].userId ?? 0)
-          }
-        }
+      if !apiViewModel.memberFeed.isEmpty {
+        MemberProfileView(userId: apiViewModel.memberFeed[feedPlayersViewModel.currentVideoIndex].userId ?? 0)
       }
     }
     .fullScreenCover(isPresented: $feedMoreModel.showReport, onDismiss: {

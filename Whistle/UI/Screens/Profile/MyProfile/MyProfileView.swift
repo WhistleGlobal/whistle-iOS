@@ -83,7 +83,7 @@ struct MyProfileView: View {
               height: UIScreen.getHeight(418 + (240 * progress)))
             .padding(.bottom, 12)
         }
-        .padding(.horizontal, UIScreen.getHeight(profileHorizontalPadding))
+        .padding(.horizontal, profileHorizontalPadding)
         .zIndex(1)
         Color.clear.overlay {
           HStack(spacing: 0) {

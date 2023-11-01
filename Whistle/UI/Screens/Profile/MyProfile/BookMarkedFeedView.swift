@@ -120,18 +120,8 @@ struct BookMarkedFeedView: View {
       }
     }
     .navigationDestination(isPresented: $feedMoreModel.isRootStacked) {
-      if UIDevice.current.userInterfaceIdiom == .phone {
-        switch UIScreen.main.nativeBounds.height {
-        case 1334: // iPhone SE 3rd generation
-          if !apiViewModel.bookmark.isEmpty {
-            SEMemberProfileView(
-              userId: apiViewModel.bookmark[feedPlayersViewModel.currentVideoIndex].userId)
-          }
-        default:
-          if !apiViewModel.bookmark.isEmpty {
-            MemberProfileView(userId: apiViewModel.bookmark[feedPlayersViewModel.currentVideoIndex].userId)
-          }
-        }
+      if !apiViewModel.bookmark.isEmpty {
+        MemberProfileView(userId: apiViewModel.bookmark[feedPlayersViewModel.currentVideoIndex].userId)
       }
     }
     .fullScreenCover(isPresented: $feedMoreModel.showReport, onDismiss: {

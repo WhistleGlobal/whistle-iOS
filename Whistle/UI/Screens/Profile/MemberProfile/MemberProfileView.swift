@@ -54,11 +54,15 @@ struct MemberProfileView: View {
           }
         }
       VStack {
-        Spacer().frame(height: topSpacerHeight)
+        if UIScreen.main.nativeBounds.height == 1334 {
+          Spacer().frame(height: topSpacerHeightSE * 2)
+        } else {
+          Spacer().frame(height: topSpacerHeight)
+        }
         glassProfile(
           cornerRadius: profileCornerRadius,
           overlayed: profileInfo())
-          .frame(height: 418 + (240 * progress) + profileHeightLast)
+          .frame(height: UIScreen.getHeight(418 + (240 * progress) + profileHeightLast))
           .padding(.horizontal, profileHorizontalPadding)
           .zIndex(1)
           .padding(.bottom, 12)
@@ -111,7 +115,7 @@ struct MemberProfileView: View {
             .offset(coordinateSpace: .named("SCROLL")) { offset in
               offsetY = offset
             }
-            Spacer().frame(height: 800)
+            Spacer().frame(height: 1800)
           }
           .scrollIndicators(.hidden)
           .coordinateSpace(name: "SCROLL")
@@ -267,13 +271,20 @@ extension MemberProfileView {
   @ViewBuilder
   func profileInfo() -> some View {
     VStack(spacing: 0) {
-      Spacer().frame(height: 64)
-      profileImageView(url: apiViewModel.memberProfile.profileImg, size: profileImageSize)
-        .padding(.bottom, 16)
+      if UIScreen.main.nativeBounds.height == 1334 {
+        Spacer().frame(height: topSpacerHeightSE + 20)
+      } else {
+        Spacer().frame(height: UIScreen.getHeight(64))
+      }
+      profileImageView(
+        url: apiViewModel.memberProfile.profileImg,
+        size: UIScreen.getHeight(profileImageSize))
+        .padding(.bottom, UIScreen.getHeight(16))
       Text(apiViewModel.memberProfile.userName)
         .foregroundColor(Color.LabelColor_Primary_Dark)
         .fontSystem(fontDesignSystem: .title2_Expanded)
-      Spacer().frame(maxHeight: 20)
+        .offset(y: usernameOffset)
+      Spacer()
       Color.clear.overlay {
         Text(apiViewModel.memberProfile.introduce ?? "")
           .foregroundColor(Color.LabelColor_Secondary_Dark)
@@ -282,9 +293,10 @@ extension MemberProfileView {
           .multilineTextAlignment(.center)
           .fixedSize(horizontal: false, vertical: true)
           .scaleEffect(introduceScale)
-          .padding(.bottom, 16)
+          .padding(.bottom, UIScreen.getHeight(16))
       }
-      .frame(height: introduceHeight)
+      .frame(height: UIScreen.getHeight(introduceHeight))
+      .padding(.horizontal, UIScreen.getWidth(48))
       if apiViewModel.memberProfile.isBlocked {
         Button {
           alertViewModel.linearAlert(
@@ -312,10 +324,10 @@ extension MemberProfileView {
         } label: {
           unblockButton
         }
-        .padding(.bottom, 24)
+        .padding(.bottom, UIScreen.getHeight(24))
       } else {
         Capsule()
-          .frame(width: 112, height: 36)
+          .frame(width: UIScreen.getWidth(112), height: UIScreen.getHeight(36))
           .foregroundColor(isProfileLoaded ? .clear : .Gray_Default)
           .overlay {
             Button("") {
@@ -334,7 +346,7 @@ extension MemberProfileView {
             .opacity(isProfileLoaded ? 1 : 0)
             .disabled(userId == apiViewModel.myProfile.userId)
           }
-          .padding(.bottom, 24)
+          .padding(.bottom, UIScreen.getHeight(24))
           .scaleEffect(profileEditButtonScale)
       }
       HStack(spacing: 0) {
@@ -384,10 +396,10 @@ extension MemberProfileView {
         .disabled(apiViewModel.memberProfile.isBlocked)
         .id(UUID())
       }
-      .frame(height: whistleFollowerTabHeight)
+      .frame(height: UIScreen.getHeight(whistleFollowerTabHeight))
       Spacer()
     }
-    .frame(height: 418 + (240 * progress) + profileHeightLast)
+    .frame(height: UIScreen.getHeight(418 + (240 * progress) + profileHeightLast))
     .frame(maxWidth: .infinity)
     .overlay {
       VStack(spacing: 0) {
@@ -418,8 +430,11 @@ extension MemberProfileView {
                   .frame(width: 48, height: 48))
           }
         }
-        .offset(y: 64 - topSpacerHeight)
-        .padding(.horizontal, 16 - profileHorizontalPadding)
+        .offset(
+          y: UIScreen.main.nativeBounds.height == 1334
+            ? UIScreen.getHeight(20 - topSpacerHeightSE)
+            : UIScreen.getHeight(64 - topSpacerHeight))
+          .padding(.horizontal, 16 - profileHorizontalPadding)
         Spacer()
       }
       .padding(16)
@@ -459,7 +474,7 @@ extension MemberProfileView {
         .frame(maxWidth: .infinity, alignment: .leading)
       }
     }
-    .frame(width: 204 * 9 / 16, height: 204)
+    .frame(width: UIScreen.getWidth(204 * 9 / 16), height: UIScreen.getHeight(204))
     .cornerRadius(12)
   }
 
@@ -635,5 +650,27 @@ extension MemberProfileView {
 
   var videoOffset: CGFloat {
     offsetY < -305 ? 305 : -offsetY
+  }
+
+  var topSpacerHeightSE: CGFloat {
+    switch -offsetY {
+    case ..<0:
+      20
+    case 0 ..< 20:
+      20 + offsetY
+    default:
+      0
+    }
+  }
+
+  var usernameOffset: CGFloat {
+    switch -offsetY {
+    case ..<252:
+      0
+    case 252 ..< 305:
+      -20 * ((offsetY + 252) / 53)
+    default:
+      20
+    }
   }
 }

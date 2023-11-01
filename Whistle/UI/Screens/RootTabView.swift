@@ -99,7 +99,7 @@ struct RootTabView: View {
       case .profile:
         if isAccess {
           NavigationStack {
-              MyProfileView(isFirstProfileLoaded: $isFirstProfileLoaded)
+            MyProfileView(isFirstProfileLoaded: $isFirstProfileLoaded)
           }
           .tint(.black)
         } else {

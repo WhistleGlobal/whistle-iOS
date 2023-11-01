@@ -22,9 +22,11 @@ struct AlbumAccessView: View {
 
   var body: some View {
     ZStack {
-      Image("BlurredDefaultBG")
-        .resizable()
-        .scaledToFill()
+      Color.clear.overlay {
+        Image("BlurredDefaultBG")
+          .resizable()
+          .scaledToFill()
+      }
       VStack(spacing: 0) {
         HStack {
           Button {
@@ -43,9 +45,9 @@ struct AlbumAccessView: View {
             .fontSystem(fontDesignSystem: .title2_KO_SemiBold)
             .foregroundColor(.LabelColor_Primary_Dark)
             .multilineTextAlignment(.center)
-            .padding(.bottom, 64)
+            .padding(.bottom, UIScreen.getHeight(64))
 
-          VStack(alignment: .leading, spacing: 36) {
+          VStack(alignment: .leading, spacing: UIScreen.getHeight(36)) {
             labelTitleAndText(
               systemImage: "photo.fill.on.rectangle.fill",
               title: "회원님이 이 권한을 사용하는 방식",
@@ -61,7 +63,7 @@ struct AlbumAccessView: View {
           }
         }
         .padding(.horizontal, 40)
-        .padding(.bottom, 36)
+        .padding(.bottom, UIScreen.getHeight(36))
         Spacer()
         Button {
           requestAlbumAuthorization()
@@ -97,8 +99,8 @@ struct AlbumAccessView: View {
         }
       }
       .padding(.horizontal, 16)
-      .padding(.top, 68)
-      .padding(.bottom, 58 + 12)
+      .padding(.top, UIScreen.getHeight(68))
+      .padding(.bottom, UIScreen.getHeight(58 + 12))
     }
     .ignoresSafeArea()
     .overlay {
