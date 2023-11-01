@@ -113,6 +113,16 @@ struct VideoCaptureView: View {
             }
           }
           Spacer()
+          Text("\(timerSec.0)초")
+            .fontSystem(fontDesignSystem: .subtitle3)
+            .foregroundColor(.LabelColor_Primary)
+            .padding(.vertical, 4)
+            .padding(.horizontal, 16)
+            .background {
+              Capsule()
+                .foregroundColor(.white)
+            }
+            .padding(.bottom, 32)
           // 하단 버튼
           recordButtonSection
         }
