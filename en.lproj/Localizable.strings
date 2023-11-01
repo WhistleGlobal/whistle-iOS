@@ -5,41 +5,107 @@
   Created by 박상원 on 10/30/23.
   
 */
+
 // 일반적인 단어
-"취소" = "cancel";
-"다음" = "next";
+"취소" = "Cancel";
+"다음" = "Next";
 "음악" = "Music";
 "볼륨" = "Volume";
 "완료" = "Confirm";
 "제출" = "Submit";
 "앨범" = "Album";
 "타이머" = "Timer";
-"팔로잉" = "following";
-"팔로워" = "follower";
-"팔로우" = "follow";
+"팔로잉" = "Following";
+"%lld 팔로잉" = "%lld Following";
+"팔로워" = "Follower";
+"%lld 팔로워" = "%lld Follower";
+"팔로우" = "Follow";
 "휘슬" = "Whistle";
 "프로필" = "Profile";
 "플레이" = "Play";
-"저장" = "Save";
-"저장 취소" = "Cancel Save";
+"저장" = "Bookmark";
+"저장 취소" = "Delete bookmark";
+"삭제" = "Delete";
+"계정삭제" = "Delete account";
+"로그아웃" = "Log out";
+"알림" = "Notifications";
+"설정" = "Settings";
+"약관 및 정책" = "About";
+"가이드 상태" = "Guide Status";
 "공유" = "Share";
 "더보기" = "More";
+"신고하기" = "Report";
 "신고" = "Report";
 "차단" = "Block";
+"차단하기" = "Block";
+"차단 해제" = "Unblock";
+"차단 해제하기" = "Unblock";
 "닫기" = "Close";
 "관심없음" = "Hide";
-"원본 오디오" = "Original audio";
-"프로필 URL 복사" = "Copy profile URL";
+"원본 오디오" = "Original Sound";
+"프로필 공유" = "Share profile";
 
-// 프로필 편집 관련
+// MARK: - ProfileEditWords
 "프로필 편집" = "Edit Profile";
-"사용자 ID" = "User ID";
-"소개" = "Introduction";
-"프로필 사진 수정" = "Edit profile image";
-"앨범에서 사진 업로드" = "Upload from Album";
+"사용자 ID" = "Username";
+"소개" = "Bio";
+"프로필 사진 수정" = "Edit picture";
+"앨범에서 사진 업로드" = "Choose from Library";
 "기본 이미지로 변경" = "Set to Default";
 "최근 항목" = "Recents";
-//"플레이" = "플레이";
-//"플레이" = "플레이";
-//"플레이" = "플레이";
-//"플레이" = "플레이";
+
+// MARK: - Video Capture
+"카운트 다운" = "Count down";
+"영상 길이 설정" = "Set video length";
+"타이머 설정" = "Set timer";
+"타이머 해제" = "Disable timer";
+"화면 전환" = "Switch";
+"끌어서 이 영상의 길이를 선택하세요. 타이머를 설정하면 녹화가 시작되기 전에 카운트 다운이 실행됩니다." = "Drag to select the length of this video. Setting a timer will initiate a countdown before recording begins.";
+
+// MARK: - Video Editor
+"음악 검색" = "Search";
+"볼륨 조절" = "Volume";
+"원본 사운드" = "Original Sound";
+"추가된 음악 사운드" = "Added music sound";
+"음량 설정" = "Set Volume";
+"음악 편집" = "Edit music";
+"음악 추가" = "Add music";
+"최대 15초까지 동영상을 올릴 수 있어요." = "You can upload videos of up to 15 seconds.";
+"드래그하여 영상에 추가할 부분을 선택하세요." = "Drag to select the portion to add to the video.";
+
+// MARK: - Content Words
+"새 게시물" = "New post";
+"게시" = "Post";
+
+// MARK: - Alert Title
+"정말 로그아웃하시겠어요?" = "Log out of your account?";
+"정말 삭제하시겠어요?" = "Delete your account?";
+"%@ 님을 차단하시겠어요?" = "Block %@?";
+"%@ 님을 차단 해제하시겠어요?" = "Unblock %@?";
+
+// MARK: - Alert Content
+"이제 상대방이 회원님의 게시물을 보거나 팔로우할 수 있습니다. 상대방에게 회원님이 차단을 해제했다는 정보를 알리지 않습니다." = "Now they will be able to see your posts and follow you on Whistle. They won't be notified that you unblocked them.";
+"차단된 사람은 회원님의 프로필 또는 콘텐츠를 찾을 수 없게 되며, 상대방에게 차단되었다는 알림이 전송되지 않습니다." = "They won't be able to find your profile or content on Whistle. They won't be notified that you blocked them.";
+"삭제하시면 회원님의 모든 정보와 활동 기록이 삭제됩니다. 삭제된 정보는 복구할 수 없으니 신중하게 결정해주세요." = "If you delete it, all your information and activity history will be permanently removed. Deleted information cannot be recovered, so please decide carefully.";
+
+// MARK: - 토스트 문구
+"실행 취소" = "Undo";
+  // 차단 관련
+"%@님이 차단되었습니다" = "%@ is blocked";
+"%@님이 차단 해제되었습니다" = "%@ unblocked";
+
+  // 저장 관련
+"북마크에 저장했습니다" = "Saved to bookmark";
+"북마크를 취소했습니다" = "Deleted from bookmark";
+
+  // 콘텐츠 관련
+"영상이 게시되었습니다." = "Posted";
+"삭제되었습니다" = "Post deleted";
+"해시태그는 최대 16글자까지 가능합니다" = "Hashtags can be up to 16 characters long";
+"해시태그는 최대 5개까지만 가능합니다" =  "You can only use a maximum of 5 hashtags.";
+"해당 콘텐츠를 숨겼습니다" = "Post hidden";
+
+  // 프로필 관련
+"프로필 사진이 수정되었습니다." = "Profile picture updated";
+"소개가 수정되었습니다." = "Bio updated";
+"사용자 ID가 수정되었습니다." = "Username updated";

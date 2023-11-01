@@ -107,15 +107,15 @@ struct SEMemberProfileView: View {
     .navigationBarBackButtonHidden()
     .confirmationDialog("", isPresented: $showDialog) {
       if apiViewModel.myProfile.userId != userId {
-        Button(apiViewModel.memberProfile.isBlocked ? "차단 해제" : "차단", role: .destructive) {
+        Button(apiViewModel.memberProfile.isBlocked ? CommonWords().unblock : CommonWords().block, role: .destructive) {
           if apiViewModel.memberProfile.isBlocked {
             alertViewModel.linearAlert(
               isRed: true,
               title: "\(apiViewModel.memberProfile.userName) 님을 차단 해제하시겠어요?",
-              content: "이제 상대방이 회원님의 게시물을 보거나 팔로우할 수 있습니다. 상대방에게 회원님이 차단을 해제했다는 정보를 알리지 않습니다.",
-              destructiveText: "차단해제")
+              content: AlertContents().unblock,
+              destructiveText: CommonWords().unblock)
             {
-              toastViewModel.toastInit(message: "\(apiViewModel.memberProfile.userName)님이 차단 해제되었습니다.")
+              toastViewModel.toastInit(message: "\(apiViewModel.memberProfile.userName)님이 차단 해제되었습니다")
               Task {
                 await apiViewModel.blockAction(userID: userId, method: .delete)
                 BlockList.shared.userIds.append(userId)
@@ -134,10 +134,10 @@ struct SEMemberProfileView: View {
             alertViewModel.linearAlert(
               isRed: true,
               title: "\(apiViewModel.memberProfile.userName) 님을 차단하시겠어요?",
-              content: "차단된 사람은 회원님의 프로필 또는 콘텐츠를 찾을 수 없게 되며, 상대방에게 차단되었다는 알림이 전송되지 않습니다.",
-              destructiveText: "차단")
+              content: AlertContents().block,
+              destructiveText: CommonWords().block)
             {
-              toastViewModel.toastInit(message: "\(apiViewModel.memberProfile.userName)님이 차단되었습니다.")
+              toastViewModel.toastInit(message: "\(apiViewModel.memberProfile.userName)님이 차단되었습니다")
               Task {
                 await apiViewModel.blockAction(userID: userId, method: .post)
                 BlockList.shared.userIds.append(userId)
@@ -153,15 +153,15 @@ struct SEMemberProfileView: View {
             }
           }
         }
-        Button(CommonWords().report, role: .destructive) {
+        Button(CommonWords().reportAction, role: .destructive) {
           goReport = true
         }
       }
-      Button(CommonWords().copyProfileURL, role: .none) {
+      Button(CommonWords().shareProfile, role: .none) {
         UIPasteboard.general.setValue(
           "https://readywhistle.com/profile_uni?id=\(userId)",
           forPasteboardType: UTType.plainText.identifier)
-        toastViewModel.toastInit(message: "클립보드에 복사되었습니다")
+//        toastViewModel.toastInit(message: ToastMessages().copied)
       }
       Button(CommonWords().cancel, role: .cancel) { }
     }
@@ -212,10 +212,10 @@ extension SEMemberProfileView {
           alertViewModel.linearAlert(
             isRed: true,
             title: "\(apiViewModel.memberProfile.userName) 님을 차단 해제하시겠어요?",
-            content: "이제 상대방이 회원님의 게시물을 보거나 팔로우할 수 있습니다. 상대방에게 회원님이 차단을 해제했다는 정보를 알리지 않습니다.",
-            destructiveText: "차단해제")
+            content: AlertContents().unblock,
+            destructiveText: CommonWords().unblock)
           {
-            toastViewModel.toastInit(message: "\(apiViewModel.memberProfile.userName)님이 차단 해제되었습니다.")
+            toastViewModel.toastInit(message: "\(apiViewModel.memberProfile.userName)님이 차단 해제되었습니다")
             Task {
               await apiViewModel.blockAction(userID: userId, method: .delete)
               BlockList.shared.userIds.append(userId)
@@ -358,7 +358,7 @@ extension SEMemberProfileView {
 
   @ViewBuilder
   var unblockButton: some View {
-    Text("차단해제")
+    Text(CommonWords().unblock)
       .fontSystem(fontDesignSystem: .subtitle3_KO)
       .foregroundColor(.LabelColor_Primary_Dark)
       .padding(.horizontal, 20)

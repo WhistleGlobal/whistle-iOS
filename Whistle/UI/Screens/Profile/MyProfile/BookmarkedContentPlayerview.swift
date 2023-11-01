@@ -145,7 +145,7 @@ struct BookmarkedContentPlayerview: View {
                 Button {
                   showGuide = false
                 } label: {
-                  Text("닫기")
+                  Text(CommonWords().close)
                     .fontSystem(fontDesignSystem: .subtitle2_KO)
                     .foregroundColor(Color.LabelColor_Primary_Dark)
                     .frame(width: UIScreen.width - 32, height: 56)
@@ -200,7 +200,7 @@ struct BookmarkedContentPlayerview: View {
                 .padding(.leading, 16)
                 .onDisappear {
                   DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.2) {
-                    toastViewModel.toastInit(message: "영상이 게시되었습니다.")
+                    toastViewModel.toastInit(message: ToastMessages().contentUploaded)
                   }
                 }
             }

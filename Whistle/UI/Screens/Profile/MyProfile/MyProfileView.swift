@@ -192,7 +192,7 @@ struct MyProfileView: View {
     {
       VStack(spacing: 0) {
         HStack {
-          Text("설정")
+          Text(CommonWords().settings)
             .fontSystem(fontDesignSystem: .subtitle1_KO)
             .foregroundColor(.white)
         }
@@ -208,7 +208,7 @@ struct MyProfileView: View {
               alertViewModel.linearAlert(
                 isRed: false,
                 title: "휘슬 앱 알림이 허용되지 않았습니다.\n설정에서 알림을 켜시겠습니까?",
-                cancelText: "취소",
+                cancelText: CommonWords().cancel,
                 destructiveText: "설정으로 가기", cancelAction: { })
               {
                 guard let url = URL(string: UIApplication.openSettingsURLString) else { return }
@@ -221,13 +221,13 @@ struct MyProfileView: View {
             }
           }
         } label: {
-          bottomSheetRowWithIcon(systemName: "bell", text: "알림")
+          bottomSheetRowWithIcon(systemName: "bell", text: CommonWords().notification)
         }
 
         NavigationLink {
           LegalInfoView()
         } label: {
-          bottomSheetRowWithIcon(systemName: "info.circle", text: "약관 및 정책")
+          bottomSheetRowWithIcon(systemName: "info.circle", text: CommonWords().about)
         }
         Button {
           withAnimation {
@@ -241,12 +241,12 @@ struct MyProfileView: View {
             animated: true,
             completion: nil)
         } label: {
-          bottomSheetRowWithIcon(systemName: "square.and.arrow.up", text: "프로필 공유")
+          bottomSheetRowWithIcon(systemName: "square.and.arrow.up", text: CommonWords().shareProfile)
         }
         NavigationLink {
           GuideStatusView()
         } label: {
-          bottomSheetRowWithIcon(systemName: "exclamationmark.triangle.fill", text: "가이드 상태")
+          bottomSheetRowWithIcon(systemName: "exclamationmark.triangle.fill", text: CommonWords().guideStatus)
         }
         Group {
           Divider().background(Color("Gray10"))
@@ -254,7 +254,11 @@ struct MyProfileView: View {
             withAnimation {
               bottomSheetPosition = .hidden
             }
-            alertViewModel.linearAlert(title: "정말 로그아웃하시겠어요?", cancelText: "취소", destructiveText: "로그아웃") {
+            alertViewModel.linearAlert(
+              title: AlertTitles().logout,
+              cancelText: CommonWords().cancel,
+              destructiveText: CommonWords().logout)
+            {
               apiViewModel.reset()
               apiViewModel.publisherSend()
               NavigationUtil.popToRootView()
@@ -266,17 +270,18 @@ struct MyProfileView: View {
               isFirstProfileLoaded = false
             }
           } label: {
-            bottomSheetRow(text: "로그아웃", color: Color.Info)
+            bottomSheetRow(text: CommonWords().logout, color: Color.Info)
           }
           Button {
             withAnimation {
               bottomSheetPosition = .hidden
             }
             alertViewModel.linearAlert(
-              title: "정말 삭제하시겠어요?",
-              content: "삭제하시면 회원님의 모든 정보와 활동 기록이 삭제됩니다. 삭제된 정보는 복구할 수 없으니 신중하게 결정해주세요.",
-              cancelText: "취소",
-              destructiveText: "삭제")
+              isRed: true,
+              title: AlertTitles().removeAccount,
+              content: AlertContents().removeAccount,
+              cancelText: CommonWords().cancel,
+              destructiveText: CommonWords().delete)
             {
               Task {
                 apiViewModel.myProfile.userName.removeAll()
@@ -287,7 +292,7 @@ struct MyProfileView: View {
               }
             }
           } label: {
-            bottomSheetRow(text: "계정삭제", color: Color.Danger)
+            bottomSheetRow(text: CommonWords().deleteAccount, color: Color.Danger)
           }
         }
         Spacer()
@@ -342,7 +347,7 @@ extension MyProfileView {
       NavigationLink {
         ProfileEditView()
       } label: {
-        Text("프로필 편집")
+        Text(ProfileEditWords().edit)
           .fontSystem(fontDesignSystem: .subtitle2_KO)
           .foregroundColor(Color.LabelColor_Primary_Dark)
           .scaleEffect(profileEditButtonScale)
@@ -357,7 +362,7 @@ extension MyProfileView {
             .foregroundColor(Color.LabelColor_Primary_Dark)
             .fontSystem(fontDesignSystem: .title2_Expanded)
             .scaleEffect(whistleFollowerTextScale)
-          Text("휘슬")
+          Text(CommonWords().whistle)
             .foregroundColor(Color.LabelColor_Secondary_Dark)
             .fontSystem(fontDesignSystem: .caption_SemiBold)
             .scaleEffect(whistleFollowerTextScale)
@@ -372,7 +377,7 @@ extension MyProfileView {
               .foregroundColor(Color.LabelColor_Primary_Dark)
               .fontSystem(fontDesignSystem: .title2_Expanded)
               .scaleEffect(whistleFollowerTextScale)
-            Text("팔로워")
+            Text(CommonWords().follower)
               .foregroundColor(Color.LabelColor_Secondary_Dark)
               .fontSystem(fontDesignSystem: .caption_SemiBold)
               .scaleEffect(whistleFollowerTextScale)
@@ -473,6 +478,45 @@ extension MyProfileView {
       .foregroundColor(.LabelColor_Primary_Dark)
       .padding(.bottom, 64)
     Spacer()
+  }
+}
+
+extension MyProfileView {
+  @ViewBuilder
+  func bottomSheetRowWithIcon(
+    systemName: String,
+    text: LocalizedStringKey)
+    -> some View
+  {
+    HStack(spacing: 12) {
+      Image(systemName: systemName)
+        .font(.system(size: 18))
+        .foregroundColor(Color.LabelColor_Primary_Dark)
+      Text(text)
+        .foregroundColor(Color.LabelColor_Primary_Dark)
+        .fontSystem(fontDesignSystem: .subtitle2_KO)
+      Spacer()
+      Image(systemName: "chevron.forward")
+        .font(.system(size: 16))
+        .foregroundColor(Color.Disable_Placeholder_Light)
+    }
+    .frame(height: 56)
+    .padding(.horizontal, 16)
+  }
+
+  @ViewBuilder
+  func bottomSheetRow(text: LocalizedStringKey, color: Color) -> some View {
+    HStack {
+      Text(text)
+        .foregroundColor(color)
+        .fontSystem(fontDesignSystem: .subtitle2_KO)
+      Spacer()
+      Image(systemName: "chevron.forward")
+        .font(.system(size: 16))
+        .foregroundColor(Color.Disable_Placeholder_Light)
+    }
+    .frame(height: 56)
+    .padding(.horizontal, 16)
   }
 }
 

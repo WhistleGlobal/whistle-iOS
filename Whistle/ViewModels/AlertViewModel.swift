@@ -15,11 +15,11 @@ class AlertViewModel: ObservableObject {
 
   @Published var showAlert = false
   @Published var alertStyle: AlertStyle = .linear
-  @Published var title: String? = nil
-  @Published var content: String? = nil
+  @Published var title: LocalizedStringKey? = nil
+  @Published var content: LocalizedStringKey? = nil
   @Published var cancelText: LocalizedStringKey? = nil
-  @Published var destructiveText: String? = nil
-  @Published var submitText: String? = nil
+  @Published var destructiveText: LocalizedStringKey? = nil
+  @Published var submitText: LocalizedStringKey? = nil
   @Published var onFullScreenCover = false
   @Published var isRed = false
 
@@ -31,10 +31,10 @@ class AlertViewModel: ObservableObject {
     showAlert: Bool = true,
     alertStyle: AlertStyle = .linear,
     isRed: Bool = false,
-    title: String? = nil,
-    content: String? = nil,
+    title: LocalizedStringKey? = nil,
+    content: LocalizedStringKey? = nil,
     cancelText: LocalizedStringKey? = CommonWords().cancel,
-    destructiveText: String? = nil,
+    destructiveText: LocalizedStringKey? = nil,
     cancelAction: (() -> Void)? = nil,
     destructiveAction: @escaping () -> Void)
   {
@@ -54,9 +54,9 @@ class AlertViewModel: ObservableObject {
   func submitAlert(
     showAlert: Bool = true,
     alertStyle: AlertStyle = .submit,
-    title: String? = nil,
-    content: String? = nil,
-    submitText: String? = "완료",
+    title: LocalizedStringKey? = nil,
+    content: LocalizedStringKey? = nil,
+    submitText: LocalizedStringKey? = "완료",
     submitAction: (() -> Void)? = nil)
   {
     withAnimation {
@@ -72,10 +72,10 @@ class AlertViewModel: ObservableObject {
   func stackAlert(
     showAlert: Bool = true,
     alertStyle: AlertStyle = .stack,
-    title: String? = nil,
-    content: String? = nil,
+    title: LocalizedStringKey? = nil,
+    content: LocalizedStringKey? = nil,
     cancelText: LocalizedStringKey? = CommonWords().cancel,
-    destructiveText: String? = nil,
+    destructiveText: LocalizedStringKey? = nil,
     cancelAction: (() -> Void)? = nil,
     destructiveAction: @escaping () -> Void)
   {

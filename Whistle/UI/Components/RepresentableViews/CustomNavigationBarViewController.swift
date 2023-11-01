@@ -30,7 +30,7 @@ struct CustomNavigationBarViewController: UIViewControllerRepresentable {
     navigationController.navigationBar.scrollEdgeAppearance = appearance
 
     let viewController = UIViewController()
-    viewController.navigationItem.title = title
+    viewController.navigationItem.title = NSLocalizedString(title, comment: "")
     viewController.navigationItem.leftBarButtonItem = UIBarButtonItem(
       image: UIImage(systemName: "chevron.left"),
       style: .plain,
@@ -41,7 +41,7 @@ struct CustomNavigationBarViewController: UIViewControllerRepresentable {
         ? Color.white
         : Color.black)
     viewController.navigationItem.rightBarButtonItem = UIBarButtonItem(
-      title: nextText,
+      title: NSLocalizedString(nextText, comment: ""),
       style: .plain,
       target: context.coordinator,
       action: #selector(Coordinator.nextButtonTapped))

@@ -70,7 +70,7 @@ struct AlbumAccessView: View {
           alertViewModel.linearAlert(
             isRed: false,
             title: "'Whistle'에 대해 라이브러리 읽기/쓰기 권한이 없습니다. 설정에서 라이브러리 읽기/쓰기 권한을 켜시겠습니까?",
-            cancelText: "취소",
+            cancelText: CommonWords().cancel,
             destructiveText: "설정으로 가기")
           {
             guard let url = URL(string: UIApplication.openSettingsURLString) else { return }

@@ -14,7 +14,7 @@ class ToastViewModel: ObservableObject {
   private init() { }
 
   @Published var showToast = false
-  @Published var message = ""
+  @Published var message: LocalizedStringKey = ""
   @Published var padding: CGFloat = 58
   @Published var isCancelled = false
 
@@ -23,7 +23,7 @@ class ToastViewModel: ObservableObject {
 
   func toastInit(
     showToast: Bool = true,
-    message: String,
+    message: LocalizedStringKey,
     padding: CGFloat = 58)
   {
     withAnimation {
@@ -37,7 +37,7 @@ class ToastViewModel: ObservableObject {
 
   func cancelToastInit(
     showToast: Bool = true,
-    message: String,
+    message: LocalizedStringKey,
     isCancelled _: Bool = false,
     padding: CGFloat = 58,
     cancelAction: @escaping () -> Void)

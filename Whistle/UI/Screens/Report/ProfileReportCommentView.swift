@@ -63,7 +63,7 @@ struct ProfileReportCommentView: View {
     .padding(.horizontal, 16)
     .background(Color.reactiveBackground)
     .navigationBarBackButtonHidden()
-    .navigationTitle("신고")
+    .navigationTitle(CommonWords().report)
     .navigationBarTitleDisplayMode(.inline)
     .navigationDestination(isPresented: $goComplete) {
       ReportCompleteView(goReport: $goReport)
@@ -83,8 +83,8 @@ struct ProfileReportCommentView: View {
           alertViewModel.linearAlert(
             isRed: true,
             title: "정말 신고하시겠습니까?",
-            cancelText: "취소",
-            destructiveText: "신고")
+            cancelText: CommonWords().cancel,
+            destructiveText: CommonWords().report)
           {
             if reportCategory == .post {
               Task {

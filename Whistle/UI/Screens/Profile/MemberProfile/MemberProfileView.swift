@@ -147,14 +147,14 @@ struct MemberProfileView: View {
         HStack {
           Color.clear.frame(width: 28)
           Spacer()
-          Text("더보기")
+          Text(CommonWords().more)
             .fontSystem(fontDesignSystem: .subtitle1_KO)
             .foregroundColor(.white)
           Spacer()
           Button {
             bottomSheetPosition = .hidden
           } label: {
-            Text("취소")
+            Text(CommonWords().cancel)
               .fontSystem(fontDesignSystem: .subtitle2_KO)
               .foregroundColor(.white)
           }
@@ -169,10 +169,10 @@ struct MemberProfileView: View {
             alertViewModel.linearAlert(
               isRed: true,
               title: "\(apiViewModel.memberProfile.userName) 님을 차단 해제하시겠어요?",
-              content: "이제 상대방이 회원님의 게시물을 보거나 팔로우할 수 있습니다. 상대방에게 회원님이 차단을 해제했다는 정보를 알리지 않습니다.",
-              destructiveText: "차단해제")
+              content: AlertContents().unblock,
+              destructiveText: CommonWords().unblock)
             {
-              toastViewModel.toastInit(message: "\(apiViewModel.memberProfile.userName)님이 차단 해제되었습니다.")
+              toastViewModel.toastInit(message: "\(apiViewModel.memberProfile.userName)님이 차단 해제되었습니다")
               Task {
                 await apiViewModel.blockAction(userID: userId, method: .delete)
                 BlockList.shared.userIds.append(userId)
@@ -191,11 +191,11 @@ struct MemberProfileView: View {
             alertViewModel.linearAlert(
               isRed: true,
               title: "\(apiViewModel.memberProfile.userName) 님을 차단하시겠어요?",
-              content: "차단된 사람은 회원님의 프로필 또는 콘텐츠를 찾을 수 없게 되며, 상대방에게 차단되었다는 알림이 전송되지 않습니다.",
+              content: AlertContents().block,
               cancelText: CommonWords().cancel,
-              destructiveText: "차단")
+              destructiveText: CommonWords().block)
             {
-              toastViewModel.toastInit(message: "\(apiViewModel.memberProfile.userName)님이 차단되었습니다.")
+              toastViewModel.toastInit(message: "\(apiViewModel.memberProfile.userName)님이 차단되었습니다")
               Task {
                 await apiViewModel.blockAction(userID: userId, method: .post)
                 BlockList.shared.userIds.append(userId)
@@ -211,13 +211,15 @@ struct MemberProfileView: View {
             }
           }
         } label: {
-          bottomSheetRowWithIcon(systemName: "nosign", text: apiViewModel.memberProfile.isBlocked ? "차단 해제 하기" : "차단하기")
+          bottomSheetRowWithIcon(
+            systemName: "nosign",
+            text: apiViewModel.memberProfile.isBlocked ? CommonWords().unblockAction : CommonWords().blockAction)
         }
         Button {
           bottomSheetPosition = .hidden
           goReport = true
         } label: {
-          bottomSheetRowWithIcon(systemName: "exclamationmark.triangle.fill", text: "신고하기")
+          bottomSheetRowWithIcon(systemName: "exclamationmark.triangle.fill", text: CommonWords().reportAction)
         }
         Button {
           bottomSheetPosition = .hidden
@@ -229,7 +231,7 @@ struct MemberProfileView: View {
             animated: true,
             completion: nil)
         } label: {
-          bottomSheetRowWithIcon(systemName: "square.and.arrow.up", text: "프로필 공유")
+          bottomSheetRowWithIcon(systemName: "square.and.arrow.up", text: CommonWords().shareProfile)
         }
         Spacer()
       }
@@ -288,11 +290,11 @@ extension MemberProfileView {
           alertViewModel.linearAlert(
             isRed: true,
             title: "\(apiViewModel.memberProfile.userName) 님을 차단 해제하시겠어요?",
-            content: "이제 상대방이 회원님의 게시물을 보거나 팔로우할 수 있습니다. 상대방에게 회원님이 차단을 해제했다는 정보를 알리지 않습니다.",
+            content: AlertContents().block,
             cancelText: CommonWords().cancel,
-            destructiveText: "차단해제")
+            destructiveText: CommonWords().unblock)
           {
-            toastViewModel.toastInit(message: "\(apiViewModel.memberProfile.userName)님이 차단 해제되었습니다.")
+            toastViewModel.toastInit(message: "\(apiViewModel.memberProfile.userName)님이 차단 해제되었습니다")
             Task {
               await apiViewModel.blockAction(userID: userId, method: .delete)
               BlockList.shared.userIds.append(userId)
@@ -424,9 +426,6 @@ extension MemberProfileView {
     }
   }
 
-  // var isFollowed = false
-  // var isBlocked = false
-
   @ViewBuilder
   func videoThumbnailView(thumbnailUrl: String, whistleCount: Int, isHated: Bool) -> some View {
     Color.black.overlay {
@@ -466,7 +465,7 @@ extension MemberProfileView {
 
   @ViewBuilder
   var unblockButton: some View {
-    Text("차단해제")
+    Text(CommonWords().unblock)
       .fontSystem(fontDesignSystem: .subtitle3_KO)
       .foregroundColor(.LabelColor_Primary_Dark)
       .padding(.horizontal, 20)

@@ -38,14 +38,14 @@ struct MainFeedView: View {
         HStack {
           Color.clear.frame(width: 28)
           Spacer()
-          Text("더보기")
+          Text(CommonWords().more)
             .fontSystem(fontDesignSystem: .subtitle1_KO)
             .foregroundColor(.white)
           Spacer()
           Button {
             feedMoreModel.bottomSheetPosition = .hidden
           } label: {
-            Text("취소")
+            Text(CommonWords().cancel)
               .fontSystem(fontDesignSystem: .subtitle2_KO)
               .foregroundColor(.white)
           }
@@ -66,14 +66,14 @@ struct MainFeedView: View {
             }
           }
         } label: {
-          bottomSheetRowWithIcon(systemName: "eye.fill", text: "관심없음")
+          bottomSheetRowWithIcon(systemName: "eye.fill", text: CommonWords().hide)
         }
         Button {
           feedMoreModel.bottomSheetPosition = .hidden
           feedPlayersViewModel.stopPlayer()
           feedMoreModel.showReport = true
         } label: {
-          bottomSheetRowWithIcon(systemName: "exclamationmark.triangle.fill", text: "신고하기")
+          bottomSheetRowWithIcon(systemName: "exclamationmark.triangle.fill", text: CommonWords().reportAction)
         }
 
         Spacer()

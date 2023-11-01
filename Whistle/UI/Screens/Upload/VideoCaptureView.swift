@@ -250,7 +250,7 @@ extension VideoCaptureView {
       .padding(.horizontal, 16)
       Divider().frame(width: UIScreen.width)
       HStack {
-        Text("카운트 다운")
+        Text(VideoCaptureWords().countdown)
           .fontSystem(fontDesignSystem: .subtitle1_KO)
           .foregroundColor(.LabelColor_Primary_Dark)
         Spacer()
@@ -316,7 +316,7 @@ extension VideoCaptureView {
       .padding(.horizontal, 16)
       .frame(height: 64)
 
-      Text("영상 길이 설정")
+      Text(VideoCaptureWords().setVideoLength)
         .fontSystem(fontDesignSystem: .subtitle2_KO)
         .foregroundColor(.LabelColor_Primary_Dark)
         .frame(height: 52)
@@ -511,7 +511,7 @@ extension VideoCaptureView {
       }
       .frame(width: UIScreen.width - 32, alignment: .leading)
       HStack {
-        Text("끌어서 이 영상의 길이를 선택하세요. 타이머를 설정하면 녹화가 시작되기 전에 카운트 다운이 실행됩니다.")
+        Text(VideoCaptureWords().timerComment)
           .fontSystem(fontDesignSystem: .caption_KO_Regular)
           .foregroundColor(Color.LabelColor_Primary_Dark)
       }
@@ -524,7 +524,7 @@ extension VideoCaptureView {
           bottomSheetPosition = .hidden
         }
       } label: {
-        Text("타이머 설정")
+        Text(VideoCaptureWords().setTimer)
           .fontSystem(fontDesignSystem: .subtitle2_KO)
           .foregroundColor(Color.LabelColor_Primary_Dark)
           .frame(maxWidth: .infinity)
@@ -539,7 +539,7 @@ extension VideoCaptureView {
       .frame(maxWidth: .infinity)
       .padding(.horizontal, 8)
       .padding(.bottom, 8)
-      Button("타이머 해제") {
+      Button(VideoCaptureWords().disableTimer) {
         withAnimation {
           timerSec.0 = 15
           timerSec.1 = false
@@ -664,7 +664,7 @@ extension VideoCaptureView {
       EmptyView()
     case .completed:
       HStack(spacing: 24) {
-        Text("새 게시물")
+        Text(ContentWords().newContent)
           .fontSystem(fontDesignSystem: .subtitle1_KO)
           .foregroundStyle(Color.white)
       }
@@ -676,7 +676,7 @@ extension VideoCaptureView {
             title: "영상을 삭제하시겠어요?",
             content: "지금 돌아가면 변경 사항이 모두 삭제됩니다.",
             cancelText: "계속 수정",
-            destructiveText: "삭제")
+            destructiveText: CommonWords().delete)
           {
             recordingDuration = 0
             withAnimation(.easeInOut) {
@@ -775,7 +775,7 @@ extension VideoCaptureView {
           .vCenter()
       }
       .overlay(alignment: .bottom) {
-        Text("화면 전환")
+        Text(VideoCaptureWords().cameraSwitch)
           .foregroundColor(.white)
           .fontSystem(fontDesignSystem: .body2_KO)
           .offset(y: 16)

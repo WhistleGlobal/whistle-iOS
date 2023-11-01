@@ -434,12 +434,12 @@ extension View {
   @ViewBuilder
   func bottomSheetRowWithIcon(
     systemName: String,
-    text: String)
+    text: LocalizedStringKey)
     -> some View
   {
     HStack(spacing: 12) {
       Image(systemName: systemName)
-        .font(.system(size: 20))
+        .font(.system(size: 18))
         .foregroundColor(Color.LabelColor_Primary_Dark)
       Text(text)
         .foregroundColor(Color.LabelColor_Primary_Dark)

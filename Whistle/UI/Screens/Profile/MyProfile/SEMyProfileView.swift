@@ -16,20 +16,23 @@ import SwiftUI
 
 struct SEMyProfileView: View {
   @StateObject var userAuth = UserAuth.shared
-  @StateObject private var tabbarModel = TabbarModel.shared
   @StateObject var apiViewModel = APIViewModel.shared
+  @StateObject private var tabbarModel = TabbarModel.shared
   @StateObject private var toastViewModel = ToastViewModel.shared
   @StateObject var alertViewModel = AlertViewModel.shared
+  @StateObject private var feedPlayersViewModel = MainFeedPlayersViewModel.shared
 
+  @State private var goNotiSetting = false
   @State var isShowingBottomSheet = false
   @State var tabbarDirection: CGFloat = -1.0
   @State var tabSelection: profileTabCase = .myVideo
-
   @State var bottomSheetPosition: BottomSheetPosition = .hidden
   @State var offsetY: CGFloat = 0
-  @Binding var isFirstProfileLoaded: Bool
 
+  @Binding var isFirstProfileLoaded: Bool
   let processor = BlurImageProcessor(blurRadius: 10)
+  let center = UNUserNotificationCenter.current()
+
   var body: some View {
     ZStack {
       if bottomSheetPosition == .absolute(420) {
@@ -179,42 +182,61 @@ struct SEMyProfileView: View {
     {
       VStack(spacing: 0) {
         HStack {
-          Text("설정")
+          Text(CommonWords().settings)
             .fontSystem(fontDesignSystem: .subtitle1_KO)
             .foregroundColor(.white)
         }
         .frame(height: 52)
         Divider().background(Color("Gray10"))
-        NavigationLink {
-          NotificationSettingView()
-
+        Button {
+          center.requestAuthorization(options: [.sound , .alert , .badge]) { granted, error in
+            if let error {
+              WhistleLogger.logger.error("\(error)")
+              return
+            }
+            if !granted {
+              alertViewModel.linearAlert(
+                isRed: false,
+                title: "휘슬 앱 알림이 허용되지 않았습니다.\n설정에서 알림을 켜시겠습니까?",
+                cancelText: CommonWords().cancel,
+                destructiveText: "설정으로 가기", cancelAction: { })
+              {
+                guard let url = URL(string: UIApplication.openSettingsURLString) else { return }
+                if UIApplication.shared.canOpenURL(url) {
+                  UIApplication.shared.open(url)
+                }
+              }
+            } else {
+              goNotiSetting = true
+            }
+          }
         } label: {
-          bottomSheetRowWithIcon(systemName: "bell", text: "알림")
+          bottomSheetRowWithIcon(systemName: "bell", text: CommonWords().notification)
         }
+
         NavigationLink {
           LegalInfoView()
-
         } label: {
-          bottomSheetRowWithIcon(systemName: "info.circle", text: "약관 및 정책")
+          bottomSheetRowWithIcon(systemName: "info.circle", text: CommonWords().about)
         }
         Button {
           withAnimation {
             bottomSheetPosition = .hidden
           }
-          UIPasteboard.general.setValue(
-            "https://readywhistle.com/profile_uni?id=\(apiViewModel.myProfile.userId)",
-            forPasteboardType: UTType.plainText.identifier)
-          toastViewModel.toastInit(message: "클립보드에 복사되었습니다")
+          let shareURL = URL(
+            string: "https://readywhistle.com/profile_uni?id=\(apiViewModel.myProfile.userId)")!
+          let activityViewController = UIActivityViewController(activityItems: [shareURL], applicationActivities: nil)
+          UIApplication.shared.windows.first?.rootViewController?.present(
+            activityViewController,
+            animated: true,
+            completion: nil)
         } label: {
-          bottomSheetRowWithIcon(systemName: "link", text: CommonWords().copyProfileURL)
+          bottomSheetRowWithIcon(systemName: "square.and.arrow.up", text: CommonWords().shareProfile)
         }
         NavigationLink {
           GuideStatusView()
-
         } label: {
-          bottomSheetRowWithIcon(
-            systemName: "exclamationmark.triangle.fill",
-            text: CommonWords().report)
+          bottomSheetRowWithIcon(systemName: "exclamationmark.triangle.fill", text: CommonWords().guideStatus)
         }
         Group {
           Divider().background(Color("Gray10"))
@@ -223,25 +245,33 @@ struct SEMyProfileView: View {
               bottomSheetPosition = .hidden
             }
             alertViewModel.linearAlert(
-              title: "정말 로그아웃하시겠어요?",
-              destructiveText: "로그아웃")
+              title: AlertTitles().logout,
+              cancelText: CommonWords().cancel,
+              destructiveText: CommonWords().logout)
             {
               apiViewModel.reset()
+              apiViewModel.publisherSend()
+              NavigationUtil.popToRootView()
+              feedPlayersViewModel.resetPlayer()
               GIDSignIn.sharedInstance.signOut()
               userAuth.appleSignout()
+              tabbarModel.tabSelectionNoAnimation = .main
+              tabbarModel.tabSelection = .main
               isFirstProfileLoaded = false
             }
           } label: {
-            bottomSheetRow(text: "로그아웃", color: Color.Info)
+            bottomSheetRow(text: CommonWords().logout, color: Color.Info)
           }
           Button {
             withAnimation {
               bottomSheetPosition = .hidden
             }
             alertViewModel.linearAlert(
-              title: "정말 삭제하시겠어요?",
-              content: "삭제하시면 회원님의 모든 정보와 활동 기록이 삭제됩니다. 삭제된 정보는 복구할 수 없으니 신중하게 결정해주세요.",
-              destructiveText: "삭제")
+              isRed: true,
+              title: AlertTitles().removeAccount,
+              content: AlertContents().removeAccount,
+              cancelText: CommonWords().cancel,
+              destructiveText: CommonWords().delete)
             {
               Task {
                 apiViewModel.myProfile.userName.removeAll()
@@ -252,7 +282,7 @@ struct SEMyProfileView: View {
               }
             }
           } label: {
-            bottomSheetRow(text: "계정삭제", color: Color.Danger)
+            bottomSheetRow(text: CommonWords().deleteAccount, color: Color.Danger)
           }
         }
         Spacer()
@@ -287,14 +317,13 @@ extension SEMyProfileView {
       profileImageView(url: apiViewModel.myProfile.profileImage, size: profileImageSize)
         .padding(.bottom, 12)
       Text(apiViewModel.myProfile.userName)
-        .font(.system(size: 18, weight: .semibold).width(.expanded))
         .foregroundColor(Color.LabelColor_Primary_Dark)
-        .frame(height: 28)
-      Spacer().frame(minHeight: 10)
+        .fontSystem(fontDesignSystem: .title2_Expanded)
+        .padding(.bottom, 4)
+      Spacer()
       Color.clear.overlay {
         Text(apiViewModel.myProfile.introduce ?? "")
           .foregroundColor(Color.LabelColor_Secondary_Dark)
-          .font(.system(size: 14, weight: .regular))
           .fontSystem(fontDesignSystem: .body2_KO)
           .lineLimit(nil)
           .multilineTextAlignment(.center)
@@ -307,7 +336,6 @@ extension SEMyProfileView {
       Spacer()
       NavigationLink {
         ProfileEditView()
-
       } label: {
         Text(ProfileEditWords().edit)
           .fontSystem(fontDesignSystem: .subtitle2_KO)
@@ -324,26 +352,27 @@ extension SEMyProfileView {
             .foregroundColor(Color.LabelColor_Primary_Dark)
             .font(.system(size: 16, weight: .semibold).width(.expanded))
             .scaleEffect(whistleFollowerTextScale)
-          Text("whistle")
+          Text(CommonWords().whistle)
             .foregroundColor(Color.LabelColor_Secondary_Dark)
             .font(.system(size: 10, weight: .semibold))
             .scaleEffect(whistleFollowerTextScale)
         }
-        Rectangle().frame(width: 1, height: .infinity).foregroundColor(.white)
+        .hCenter()
+        Rectangle().frame(width: 1).foregroundColor(.white).scaleEffect(0.5)
         NavigationLink {
           MyFollowListView()
-
         } label: {
           VStack(spacing: 4) {
             Text("\(apiViewModel.myFollow.followerCount)")
               .foregroundColor(Color.LabelColor_Primary_Dark)
               .font(.system(size: 16, weight: .semibold).width(.expanded))
               .scaleEffect(whistleFollowerTextScale)
-            Text("follower")
+            Text(CommonWords().follower)
               .foregroundColor(Color.LabelColor_Secondary_Dark)
               .font(.system(size: 10, weight: .semibold))
               .scaleEffect(whistleFollowerTextScale)
           }
+          .hCenter()
         }
       }
       .frame(height: whistleFollowerTabHeight) // 42 max
@@ -459,7 +488,7 @@ extension SEMyProfileView {
   }
 
   @ViewBuilder
-  func bottomSheetRow(text: String, color: Color) -> some View {
+  func bottomSheetRow(text: LocalizedStringKey, color: Color) -> some View {
     HStack {
       Text(text)
         .foregroundColor(color)
