@@ -17,12 +17,12 @@ struct FollowButtonStyle: ButtonStyle {
 
     var body: some View {
       Text(isFollowed ? CommonWords().following : CommonWords().follow)
-        .frame(width: 85, height: 36)
+        .frame(width: UIScreen.getWidth(85), height: UIScreen.getWidth(36))
         .foregroundColor(isFollowed ? .Gray30_Dark : .LabelColor_Primary_Dark)
         .fontSystem(fontDesignSystem: .subtitle2_KO)
         .background(
           Capsule()
-            .frame(width: 85, height: 36)
+            .frame(width: UIScreen.getWidth(85), height: UIScreen.getHeight(36))
             .foregroundColor(followButtonColor()))
     }
 
