@@ -12,6 +12,7 @@ import SwiftUI
 // MARK: - RecordAccessView
 
 struct RecordAccessView: View {
+  @AppStorage("isFirstRequestRecordAccess") var isFirstRequestRecordAccess = true
   @StateObject private var tabbarModel = TabbarModel.shared
   @StateObject var alertViewModel = AlertViewModel.shared
   @State var showAlert = (false, VideoUsageAuth.none)
@@ -68,7 +69,8 @@ struct RecordAccessView: View {
           requestCameraPermission()
           requestMicrophonePermission()
           showAuthAlert()
-          if showAlert.0 {
+          if showAlert.0, !isFirstRequestRecordAccess {
+            isFirstRequestRecordAccess = false
             alertViewModel.linearAlert(
               isRed: false,
               title: "'Whistle'에 대해 \(showAlert.1.rawValue)이 없습니다. 설정에서 \(showAlert.1.rawValue) 권한을 켜시겠습니까?",

@@ -64,8 +64,7 @@ struct RootTabView: View {
         }
         .tint(.black)
       } else {
-        GuestMainView(mainOpacity: $mainOpacity)
-          .opacity(mainOpacity)
+        GuestMainFeedView()
           .onChange(of: tabbarModel.tabSelectionNoAnimation) { newValue in
             mainOpacity = newValue == .main ? 1 : 0
           }

@@ -465,27 +465,6 @@ extension SEMyProfileView {
 }
 
 extension SEMyProfileView {
-  @ViewBuilder
-  func bottomSheetRowWithIcon(
-    systemName: String,
-    text: LocalizedStringKey)
-    -> some View
-  {
-    HStack(spacing: 12) {
-      Image(systemName: systemName)
-        .font(.system(size: 18))
-        .foregroundColor(Color.LabelColor_Primary_Dark)
-      Text(text)
-        .foregroundColor(Color.LabelColor_Primary_Dark)
-        .fontSystem(fontDesignSystem: .subtitle2_KO)
-      Spacer()
-      Image(systemName: "chevron.forward")
-        .font(.system(size: 16))
-        .foregroundColor(Color.Disable_Placeholder_Light)
-    }
-    .frame(height: 56)
-    .padding(.horizontal, 16)
-  }
 
   @ViewBuilder
   func bottomSheetRow(text: LocalizedStringKey, color: Color) -> some View {

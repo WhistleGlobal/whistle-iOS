@@ -1,0 +1,184 @@
+//
+//  GuestContentPlayerView.swift
+//  Whistle
+//
+//  Created by ChoiYujin on 11/1/23.
+//
+
+import _AVKit_SwiftUI
+import AVFoundation
+import BottomSheet
+import Combine
+import Kingfisher
+import SwiftUI
+
+// MARK: - GuestContentPlayerView
+
+struct GuestContentPlayerView: View {
+  @AppStorage("showGuide") var showGuide = true
+  @Environment(\.scenePhase) var scenePhase
+  @StateObject var apiViewModel = APIViewModel.shared
+  @StateObject var feedPlayersViewModel = GuestFeedPlayersViewModel.shared
+  @StateObject private var toastViewModel = ToastViewModel.shared
+  @StateObject private var feedMoreModel = GuestMainFeedMoreModel.shared
+  @StateObject private var tabbarModel = TabbarModel.shared
+
+  @State var newId = UUID()
+  @State var timer: Timer? = nil
+  @State var viewTimer: Timer? = nil
+  @State var showPlayButton = false
+  @Binding var currentContentInfo: GuestContent?
+  @Binding var index: Int
+  let lifecycleDelegate: ViewLifecycleDelegate?
+
+  var body: some View {
+    VStack(spacing: 0) {
+      ForEach(Array(apiViewModel.guestFeed.enumerated()), id: \.element) { index, content in
+        ZStack {
+          Color.black.overlay {
+            if let url = apiViewModel.guestFeed[index].thumbnailUrl {
+              KFImage.url(URL(string: url))
+                .placeholder {
+                  Color.black
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                }
+                .resizable()
+                .scaledToFit()
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+            }
+            if let player = feedPlayersViewModel.currentPlayer, index == feedPlayersViewModel.currentVideoIndex {
+              ContentPlayer(player: player)
+                .frame(width: UIScreen.width, height: UIScreen.height)
+                .onTapGesture {
+                  if player.rate == 0.0 {
+                    player.play()
+                    showPlayButton = true
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
+                      withAnimation {
+                        showPlayButton = false
+                      }
+                    }
+                  } else {
+                    player.pause()
+                    showPlayButton = true
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
+                      withAnimation {
+                        showPlayButton = false
+                      }
+                    }
+                  }
+                }
+                .onLongPressGesture {
+                  HapticManager.instance.impact(style: .medium)
+                  feedMoreModel.bottomSheetPosition = .dynamic
+                }
+                .overlay {
+                  if tabbarModel.tabWidth != 56 {
+                    GuestContentLayer(currentVideoInfo: content)
+                  }
+                  if feedMoreModel.bottomSheetPosition != .hidden {
+                    DimmedBackground()
+                  }
+                }
+              playButton(toPlay: player.rate == 0)
+                .opacity(showPlayButton ? 1 : 0)
+                .allowsHitTesting(false)
+            }
+            if BlockList.shared.userIds.contains(content.userId ?? 0) {
+              KFImage.url(URL(string: content.thumbnailUrl ?? ""))
+                .placeholder {
+                  Color.black
+                }
+                .resizable()
+                .scaledToFill()
+                .blur(radius: 30)
+                .overlay {
+                  VStack {
+                    Image(systemName: "eye.slash.fill")
+                      .font(.system(size: 44))
+                      .foregroundColor(.Gray10)
+                      .padding(.bottom, 26)
+                    Text("차단된 계정의 콘텐츠입니다.")
+                      .fontSystem(fontDesignSystem: .subtitle1_KO)
+                      .foregroundColor(.LabelColor_Primary_Dark)
+                      .padding(.bottom, 12)
+                    Text("차단된 계정의 모든 콘텐츠는 \n회원님의 피드에 노출되지 않습니다.")
+                      .fontSystem(fontDesignSystem: .body2_KO)
+                      .foregroundColor(.LabelColor_Secondary_Dark)
+                  }
+                }
+            }
+            if showGuide {
+              VStack {
+                Spacer()
+                Button {
+                  showGuide = false
+                } label: {
+                  Text(CommonWords().close)
+                    .fontSystem(fontDesignSystem: .subtitle2_KO)
+                    .foregroundColor(Color.LabelColor_Primary_Dark)
+                    .frame(width: UIScreen.width - 32, height: 56)
+                    .background {
+                      glassMorphicView(cornerRadius: 12)
+                        .overlay {
+                          RoundedRectangle(cornerRadius: 12)
+                            .stroke(lineWidth: 1)
+                            .foregroundStyle(
+                              LinearGradient.Border_Glass)
+                        }
+                    }
+                }
+                .padding(.bottom, 32)
+              }
+              .frame(width: UIScreen.width, height: UIScreen.height)
+              .ignoresSafeArea()
+              .ignoresSafeArea(.all, edges: .top)
+              .background {
+                Color.clear.overlay {
+                  Image("gestureGuide")
+                    .resizable()
+                    .scaledToFill()
+                    .ignoresSafeArea()
+                    .ignoresSafeArea(.all, edges: .top)
+                }
+                .ignoresSafeArea()
+                .ignoresSafeArea(.all, edges: .top)
+              }
+            }
+          }
+          .ignoresSafeArea()
+        }
+        .frame(width: UIScreen.width, height: UIScreen.height)
+        .ignoresSafeArea()
+      }
+      .onReceive(apiViewModel.publisher) { id in
+        newId = id
+      }
+      .id(newId)
+    }
+    .onAppear {
+      if index == 0 {
+        lifecycleDelegate?.onAppear()
+      } else {
+        feedPlayersViewModel.currentPlayer?.seek(to: .zero)
+        if BlockList.shared.userIds.contains(currentContentInfo?.userId ?? 0) {
+          return
+        }
+        feedPlayersViewModel.currentPlayer?.play()
+      }
+    }
+    .onDisappear {
+      lifecycleDelegate?.onDisappear()
+    }
+    .ignoresSafeArea()
+    .onChange(of: tabbarModel.tabSelectionNoAnimation) { newValue in
+      if newValue == .main {
+        feedPlayersViewModel.currentPlayer?.seek(to: .zero)
+        feedPlayersViewModel.currentPlayer?.play()
+        return
+      }
+    }
+  }
+
+}
+

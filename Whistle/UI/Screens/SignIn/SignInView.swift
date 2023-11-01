@@ -143,6 +143,8 @@ struct SignInView: View {
         }))
     }
     .onAppear {
+      apiViewModel.reset()
+      apiViewModel.publisherSend()
       DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
         if apiViewModel.versionCheck.forceUpdate {
           showUpdate = true
