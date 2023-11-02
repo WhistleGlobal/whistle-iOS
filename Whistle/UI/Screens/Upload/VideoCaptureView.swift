@@ -122,20 +122,22 @@ struct VideoCaptureView: View {
             }
           }
           Spacer()
-          Text("\(timerSec.0)초")
-            .fontSystem(fontDesignSystem: .subtitle3)
-            .foregroundColor(.LabelColor_Primary)
-            .padding(.vertical, 4)
-            .padding(.horizontal, 16)
-            .background {
-              Capsule()
-                .foregroundColor(.white)
-            }
-            .padding(.bottom, 32)
+          if buttonState != .completed {
+            Text("\(timerSec.0)초")
+              .fontSystem(fontDesignSystem: .subtitle3)
+              .foregroundColor(.LabelColor_Primary)
+              .padding(.vertical, 4)
+              .padding(.horizontal, 16)
+              .background {
+                Capsule()
+                  .foregroundColor(.white)
+              }
+              .padding(.bottom, 32)
+          }
           // 하단 버튼
           recordButtonSection
         }
-        .padding(.bottom, 74)
+        .padding(.bottom, buttonState == .completed ? 0 : 74)
         .opacity(showPreparingView ? 0 : 1)
         if showPreparingView {
           Circle()
@@ -836,51 +838,12 @@ extension VideoCaptureView {
     .hCenter()
     .fixedSize(horizontal: false, vertical: true)
     .padding(.horizontal, buttonState == .idle ? 42 : 0)
-    .padding(.bottom, 24 + 16)
+    .padding(.bottom, buttonState == .completed ? 24 : 40)
   }
 
   @ViewBuilder
   func recordedVideoPreview(video: EditableVideo) -> some View {
     EditablePlayer(player: videoPlayer.videoPlayer)
-      .overlay(alignment: .bottom) {
-        Rectangle()
-          .frame(height: UIScreen.getHeight(2))
-          .foregroundStyle(.white)
-          .overlay(alignment: .leading) {
-            Rectangle()
-              .frame(
-                width: UIScreen
-                  .getWidth(UIScreen.width / video.totalDuration * videoPlayer.currentTime))
-              .foregroundStyle(Color.Blue_Default)
-          }
-          .onAppear {
-            DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.1) {
-              if videoPlayer.isPlaying == false {
-                videoPlayer.playLoop(video)
-              }
-            }
-          }
-          .onChange(of: videoPlayer.isPlaying) { value in
-            if musicVM.musicInfo != nil {
-              switch value {
-              case true:
-                musicVM
-                  .playAudio(startTime: 0)
-              case false:
-                musicVM.stopAudio()
-              }
-            }
-          }
-          .onChange(of: musicVM.isTrimmed) { value in
-            switch value {
-            case true:
-              videoPlayer.action(video)
-              musicVM.playAudio(startTime: 0)
-            case false:
-              videoPlayer.action(video)
-            }
-          }
-      }
       .onAppear {
         videoPlayer.playLoop(video)
       }
