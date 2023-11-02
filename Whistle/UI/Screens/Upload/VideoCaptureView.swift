@@ -5,6 +5,7 @@
 //  Created by ChoiYujin on 10/11/23.
 //
 
+import _AuthenticationServices_SwiftUI
 import Aespa
 import AVFoundation
 import BottomSheet
@@ -17,7 +18,7 @@ import SwiftUI
 
 struct VideoCaptureView: View {
   // MARK: - Objects
-
+  @AppStorage("isAccess") var isAccess = false
   @Environment(\.dismiss) var dismiss
   @Environment(\.scenePhase) var scenePhase
   @StateObject var editorVM = VideoEditorViewModel()
@@ -26,6 +27,8 @@ struct VideoCaptureView: View {
   @StateObject var apiViewModel = APIViewModel.shared
   @StateObject var alertViewModel = AlertViewModel.shared
   @StateObject private var tabbarModel = TabbarModel.shared
+  @StateObject var appleSignInViewModel = AppleSignInViewModel()
+  @StateObject var guestUploadModel = GuestUploadModel.shared
   @ObservedObject private var viewModel = VideoCaptureViewModel()
 
   // MARK: - Datas
@@ -44,7 +47,8 @@ struct VideoCaptureView: View {
   @State var dragOffset: CGFloat = 0
   @State var accumulatedOffset: CGFloat = 0
   @State var sheetPositions: [BottomSheetPosition] = [.hidden, .absolute(514)]
-  @State var bottomSheetPosition: BottomSheetPosition = .hidden
+  @State var musicBottomSheetPosition: BottomSheetPosition = .hidden
+  @State private var uploadBottomSheetPosition: BottomSheetPosition = .hidden
   @State var albumCover = Image("noVideo")
 
   // MARK: - Bools
@@ -62,6 +66,10 @@ struct VideoCaptureView: View {
   @State var timerSec = (15, false)
   /// 음악 편집기 띄우기용
   @State var showMusicTrimView = false
+  @State var currentZoomScale: CGFloat = 1.0
+  // 방침
+  @State var showTermsOfService = false
+  @State var showPrivacyPolicy = false
 
   // MARK: - Computed
 
@@ -73,23 +81,49 @@ struct VideoCaptureView: View {
     CGFloat(6 + (6 + barSpacing) * 15)
   }
 
+  var zoomFormattedString: String {
+    let formattedString = String(format: "%.1fx", currentZoomScale)
+    return formattedString.hasSuffix(".0x") ? String(format: "%.0fx", currentZoomScale) : formattedString
+  }
+
   // MARK: - Body
 
   var body: some View {
     GeometryReader { _ in
       ZStack {
         Color.black.ignoresSafeArea()
-        if bottomSheetPosition == .absolute(UIScreen.getHeight(514)) {
+        NavigationLink(destination: PrivacyPolicyView(), isActive: $showPrivacyPolicy) {
+          EmptyView()
+        }
+        NavigationLink(destination: TermsOfServiceView(), isActive: $showTermsOfService) {
+          EmptyView()
+        }
+        if let video = editorVM.currentVideo {
+          NavigationLink(
+            destination:
+            DescriptionAndTagEditorView(
+              video: video,
+              editorVM: editorVM,
+              videoPlayer: videoPlayer,
+              musicVM: musicVM,
+              isInitial: .constant(false)),
+            isActive: $guestUploadModel.goDescriptionTagView)
+          {
+            EmptyView()
+          }
+        }
+        if musicBottomSheetPosition == .absolute(UIScreen.getHeight(514)) {
           DimmedBackground().zIndex(1000)
         }
         if isPresented {
           PickerConfigViewControllerWrapper(isImagePickerClosed: $isImagePickerClosed)
         }
         if buttonState != .completed || editorVM.currentVideo == nil {
-          viewModel.preview
+          viewModel.preview.ignoresSafeArea()
         } else {
           if let video = editorVM.currentVideo {
             recordedVideoPreview(video: video)
+              .ignoresSafeArea()
           } else {
             Image("BlurredDefaultBG")
           }
@@ -101,9 +135,14 @@ struct VideoCaptureView: View {
           // 음악 추가 버튼
           if buttonState == .completed {
             MusicInfo(musicVM: musicVM, showMusicTrimView: $showMusicTrimView) {
-              if musicVM.musicInfo == nil {
-                sheetPositions = [.absolute(UIScreen.getHeight(400)), .hidden, .relative(1)]
-                bottomSheetPosition = .absolute(UIScreen.getHeight(400))
+              if guestUploadModel.istempAccess {
+                if musicVM.musicInfo == nil {
+                  sheetPositions = [.absolute(UIScreen.getHeight(400)), .hidden, .relative(1)]
+                  musicBottomSheetPosition = .absolute(UIScreen.getHeight(400))
+                }
+              } else {
+                guestUploadModel.isMusicEdit = true
+                uploadBottomSheetPosition = .relative(1)
               }
             } onDelete: {
               withAnimation(.easeInOut) {
@@ -113,11 +152,22 @@ struct VideoCaptureView: View {
             }
           }
           Spacer()
+          if buttonState != .completed {
+            Text("\(timerSec.0)초")
+              .fontSystem(fontDesignSystem: .subtitle3)
+              .foregroundColor(.LabelColor_Primary)
+              .padding(.vertical, 4)
+              .padding(.horizontal, 16)
+              .background {
+                Capsule()
+                  .foregroundColor(.white)
+              }
+              .padding(.bottom, 32)
+          }
           // 하단 버튼
           recordButtonSection
         }
-        .frame(width: UIScreen.width, height: UIScreen.width * 16 / 9)
-        .padding(.bottom, 74)
+        .padding(.bottom, buttonState == .completed ? 0 : 74)
         .opacity(showPreparingView ? 0 : 1)
         if showPreparingView {
           Circle()
@@ -157,9 +207,11 @@ struct VideoCaptureView: View {
         do {
           try Aespa.terminate()
           viewModel.preview = nil
+          guestUploadModel.isNotAccessRecord = false
         } catch { }
       }
       .onAppear {
+        guestUploadModel.isNotAccessRecord = !isAccess
         alertViewModel.onFullScreenCover = true
         getAlbumAuth()
         if isAlbumAuthorized {
@@ -188,10 +240,25 @@ struct VideoCaptureView: View {
           } else {
             WhistleLogger.logger.debug("Device does not have a Torch")
           }
+          if guestUploadModel.istempAccess {
+            isAccess = true
+            tabbarModel.tabbarOpacity = 1.0
+          }
+        }
+      }
+      .onChange(of: guestUploadModel.istempAccess) { newValue in
+        if newValue {
+          uploadBottomSheetPosition = .hidden
+          if guestUploadModel.isMusicEdit {
+            musicBottomSheetPosition = .relative(1)
+          }
+          if guestUploadModel.isPhotoLibraryAccess {
+            isImagePickerClosed.send(true)
+          }
         }
       }
       .bottomSheet(
-        bottomSheetPosition: $bottomSheetPosition,
+        bottomSheetPosition: $musicBottomSheetPosition,
         switchablePositions: sheetPositions)
       {
         switch buttonState {
@@ -204,10 +271,10 @@ struct VideoCaptureView: View {
             musicVM: musicVM,
             editorVM: editorVM,
             videoPlayer: videoPlayer,
-            bottomSheetPosition: $bottomSheetPosition,
+            bottomSheetPosition: $musicBottomSheetPosition,
             showMusicTrimView: $showMusicTrimView)
           {
-            bottomSheetPosition = .relative(1)
+            musicBottomSheetPosition = .relative(1)
           }
         }
       }
@@ -225,6 +292,143 @@ struct VideoCaptureView: View {
                 LinearGradient.Border_Glass)
           })
       .ignoresSafeArea(.keyboard)
+      .bottomSheet(
+        bottomSheetPosition: $uploadBottomSheetPosition,
+        switchablePositions: [.hidden, .absolute(UIScreen.height - 68)])
+      {
+        VStack(spacing: 0) {
+          HStack {
+            Button {
+              uploadBottomSheetPosition = .hidden
+            } label: {
+              Image(systemName: "xmark")
+                .foregroundColor(.white)
+                .frame(width: 18, height: 18)
+                .padding(.horizontal, 16)
+            }
+            Spacer()
+          }
+          .frame(height: 52)
+          .padding(.bottom, 56)
+          Group {
+            Text("Whistle")
+              .font(.system(size: 24, weight: .semibold)) +
+              Text("에 로그인")
+              .font(.custom("AppleSDGothicNeo-SemiBold", size: 24))
+          }
+          .fontWidth(.expanded)
+          .lineSpacing(8)
+          .padding(.vertical, 4)
+          .padding(.bottom, 12)
+          .foregroundColor(.LabelColor_Primary_Dark)
+
+          Text("더 많은 스포츠 콘텐츠를 즐겨보세요")
+            .fontSystem(fontDesignSystem: .body1_KO)
+            .foregroundColor(.LabelColor_Secondary_Dark)
+          Spacer()
+          Button {
+            handleSignInButton()
+          } label: {
+            Capsule()
+              .foregroundColor(.white)
+              .frame(maxWidth: 360, maxHeight: 48)
+              .overlay {
+                HStack(alignment: .center) {
+                  Image("GoogleLogo")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 18, height: 18)
+                  Spacer()
+                  Text("Google로 계속하기")
+                    .font(.custom("Roboto-Medium", size: 16))
+                    .fontWeight(.semibold)
+                    .foregroundColor(.black.opacity(0.54))
+                  Spacer()
+                  Color.clear
+                    .frame(width: 18, height: 18)
+                }
+                .padding(.horizontal, 24)
+              }
+              .padding(.bottom, 16)
+          }
+
+          SignInWithAppleButton(
+            onRequest: appleSignInViewModel.configureRequest,
+            onCompletion: appleSignInViewModel.handleResult)
+            .frame(maxWidth: 360, maxHeight: 48)
+            .cornerRadius(48)
+            .overlay {
+              Capsule()
+                .foregroundColor(.black)
+                .frame(maxWidth: 360, maxHeight: 48)
+                .overlay {
+                  HStack(alignment: .center) {
+                    Image(systemName: "apple.logo")
+                      .resizable()
+                      .scaledToFit()
+                      .foregroundColor(.white)
+                      .frame(width: 18, height: 18)
+                    Spacer()
+                    Text("Apple로 계속하기")
+                      .font(.system(size: 16))
+                      .fontWeight(.semibold)
+                      .foregroundColor(.white)
+                    Spacer()
+                    Color.clear
+                      .frame(width: 18, height: 18)
+                  }
+                  .padding(.horizontal, 24)
+                }
+                .allowsHitTesting(false)
+            }
+            .padding(.bottom, 24)
+          Text("가입을 진행할 경우, 아래의 정책에 대해 동의한 것으로 간주합니다.")
+            .fontSystem(fontDesignSystem: .caption_KO_Regular)
+            .foregroundColor(.LabelColor_Primary_Dark)
+          HStack(spacing: 16) {
+            Button {
+              showTermsOfService = true
+            } label: {
+              Text("이용약관")
+                .font(.system(size: 12, weight: .semibold))
+                .underline(true, color: .LabelColor_Primary_Dark)
+            }
+            Button {
+              showPrivacyPolicy = true
+            } label: {
+              Text("개인정보처리방침")
+                .font(.system(size: 12, weight: .semibold))
+                .underline(true, color: .LabelColor_Primary_Dark)
+            }
+          }
+          .foregroundColor(.LabelColor_Primary_Dark)
+          .padding(.bottom, 64)
+        }
+        .frame(height: UIScreen.height - 68)
+      }
+      .enableSwipeToDismiss(true)
+      .enableTapToDismiss(true)
+      .enableContentDrag(true)
+      .enableAppleScrollBehavior(false)
+      .dragIndicatorColor(Color.Border_Default_Dark)
+      .customBackground(
+        glassMorphicView(cornerRadius: 24)
+          .overlay {
+            RoundedRectangle(cornerRadius: 24)
+              .stroke(lineWidth: 1)
+              .foregroundStyle(
+                LinearGradient.Border_Glass)
+          })
+      .onDismiss {
+        tabbarModel.tabbarOpacity = 1.0
+      }
+      .onChange(of: uploadBottomSheetPosition) { newValue in
+        if newValue == .hidden {
+          tabbarModel.tabbarOpacity = 1.0
+        } else {
+          tabbarModel.tabbarOpacity = 0.0
+        }
+      }
     }
   }
 }
@@ -244,7 +448,7 @@ extension VideoCaptureView {
         Spacer()
         Button {
           timerSec.1 = false
-          bottomSheetPosition = .hidden
+          musicBottomSheetPosition = .hidden
         } label: {
           Text(CommonWords().cancel)
             .fontSystem(fontDesignSystem: .subtitle2_KO)
@@ -527,7 +731,7 @@ extension VideoCaptureView {
         withAnimation {
           timerSec.1 = true
           selectedSec.1 = true
-          bottomSheetPosition = .hidden
+          musicBottomSheetPosition = .hidden
         }
       } label: {
         Text(VideoCaptureWords().setTimer)
@@ -551,7 +755,7 @@ extension VideoCaptureView {
           timerSec.1 = false
           selectedSec.0 = .sec3
           selectedSec.1 = false
-          bottomSheetPosition = .hidden
+          musicBottomSheetPosition = .hidden
         }
       }
       .fontSystem(fontDesignSystem: .subtitle2_KO)
@@ -595,7 +799,7 @@ extension VideoCaptureView {
     case .idle:
       HStack(spacing: 24) {
         Button {
-          bottomSheetPosition = .absolute(UIScreen.getHeight(514))
+          musicBottomSheetPosition = .absolute(UIScreen.getHeight(514))
         } label: {
           HStack {
             Image(systemName: "clock")
@@ -621,6 +825,29 @@ extension VideoCaptureView {
                 .foregroundStyle(LinearGradient.Border_Glass)
             }
           }
+        }
+        Button {
+          currentZoomScale = 1.0
+          viewModel.preview?.resetZoom()
+        } label: {
+          Text(zoomFormattedString)
+            .font(.system(size: 14, weight: .semibold))
+            .lineSpacing(6)
+            .padding(.vertical, 3)
+            .frame(width: UIScreen.getWidth(36), height: UIScreen.getHeight(36))
+            .foregroundColor(.white)
+            .contentShape(Circle())
+            .background {
+              glassMoriphicCircleView()
+                .overlay {
+                  Circle()
+                    .stroke(lineWidth: 1)
+                    .foregroundStyle(LinearGradient.Border_Glass)
+                }
+            }
+        }
+        .onReceive(ZoomFactorCombineViewModel.shared.zoomSubject) { value in
+          currentZoomScale = value
         }
         Button {
           if !isFront {
@@ -656,6 +883,9 @@ extension VideoCaptureView {
       .hCenter()
       .overlay(alignment: .leading) {
         Button {
+          if guestUploadModel.istempAccess {
+            isAccess = true
+          }
           dismiss()
           alertViewModel.onFullScreenCover = false
         } label: {
@@ -715,136 +945,107 @@ extension VideoCaptureView {
   var recordButtonSection: some View {
     HStack(spacing: 0) {
       // Album thumbnail + button
-      Button {
-        if isAlbumAuthorized {
-          isImagePickerClosed.send(true)
-        } else {
-          showAlbumAccessView = true
+      if buttonState == .idle {
+        Button {
+          if isAlbumAuthorized {
+            if isAccess {
+              isImagePickerClosed.send(true)
+            } else {
+              guestUploadModel.isPhotoLibraryAccess = true
+              if guestUploadModel.istempAccess {
+                isImagePickerClosed.send(true)
+              } else {
+                uploadBottomSheetPosition = .relative(1)
+              }
+            }
+          } else {
+            showAlbumAccessView = true
+          }
+        } label: {
+          roundRectangleShape(with: albumCover, size: 56)
+            .vCenter()
         }
-      } label: {
-        roundRectangleShape(with: albumCover, size: 56)
-          .vCenter()
+        .shadow(radius: 5)
+        .contentShape(Rectangle())
+        .onReceive(isImagePickerClosed) { value in
+          isPresented = value
+        }
+        .overlay(alignment: .bottom) {
+          Text(CommonWords().album)
+            .fontSystem(fontDesignSystem: .body2_KO)
+            .foregroundColor(.LabelColor_Primary_Dark)
+            .offset(y: 16)
+        }
       }
-      .shadow(radius: 5)
-      .contentShape(Rectangle())
-      .onReceive(isImagePickerClosed) { value in
-        isPresented = value
-      }
-      .overlay(alignment: .bottom) {
-        Text(CommonWords().album)
-          .fontSystem(fontDesignSystem: .body2_KO)
-          .foregroundColor(.LabelColor_Primary_Dark)
-          .offset(y: 16)
-      }
-      .opacity(buttonState == .idle ? 1 : 0)
-      Spacer()
+      Spacer().frame(minWidth: 0)
       // Shutter + button
       recordingButton(
         state: buttonState,
         timerText: timeStringFromTimeInterval(recordingDuration),
         progress: min(recordingDuration / Double(timerSec.1 ? Double(timerSec.0) : 15.0), 1.0))
-      Spacer()
+      Spacer().frame(minWidth: 0)
       // Position change + button
-      Button(action: {
-        guard let device = AVCaptureDevice.default(for: .video) else { return }
+      if buttonState == .idle {
+        Button(action: {
+          guard let device = AVCaptureDevice.default(for: .video) else { return }
 
-        if device.hasTorch {
-          do {
-            try device.lockForConfiguration()
+          if device.hasTorch {
+            do {
+              try device.lockForConfiguration()
 
-            if device.torchMode == .on {
-              device.torchMode = .off
-              isFlashOn = false
-            }
-            device.unlockForConfiguration()
-          } catch {
-            WhistleLogger.logger.debug("Flash could not be used")
-          }
-        } else {
-          WhistleLogger.logger.debug("Device does not have a Torch")
-        }
-        viewModel.aespaSession.position(to: isFront ? .back : .front)
-        isFront.toggle()
-      }) {
-        Image(systemName: "arrow.triangle.2.circlepath")
-          .font(.system(size: 20))
-          .foregroundColor(.white)
-          .padding(16)
-          .background {
-            glassMoriphicCircleView()
-              .overlay {
-                Circle()
-                  .stroke(lineWidth: 1)
-                  .foregroundStyle(LinearGradient.Border_Glass)
+              if device.torchMode == .on {
+                device.torchMode = .off
+                isFlashOn = false
               }
+              device.unlockForConfiguration()
+            } catch {
+              WhistleLogger.logger.debug("Flash could not be used")
+            }
+          } else {
+            WhistleLogger.logger.debug("Device does not have a Torch")
           }
-          .vCenter()
+          viewModel.aespaSession.position(to: isFront ? .back : .front)
+          isFront.toggle()
+        }) {
+          Image(systemName: "arrow.triangle.2.circlepath")
+            .font(.system(size: 20))
+            .foregroundColor(.white)
+            .padding(16)
+            .background {
+              glassMoriphicCircleView()
+                .overlay {
+                  Circle()
+                    .stroke(lineWidth: 1)
+                    .foregroundStyle(LinearGradient.Border_Glass)
+                }
+            }
+            .vCenter()
+        }
+        .overlay(alignment: .bottom) {
+          Text(VideoCaptureWords().cameraSwitch)
+            .foregroundColor(.white)
+            .fontSystem(fontDesignSystem: .body2_KO)
+            .offset(y: 16)
+        }
+        .contentShape(Circle())
+        .opacity(buttonState == .idle ? 1 : 0)
       }
-      .overlay(alignment: .bottom) {
-        Text(VideoCaptureWords().cameraSwitch)
-          .foregroundColor(.white)
-          .fontSystem(fontDesignSystem: .body2_KO)
-          .offset(y: 16)
-      }
-      .contentShape(Circle())
-      .opacity(buttonState == .idle ? 1 : 0)
     }
     .hCenter()
     .fixedSize(horizontal: false, vertical: true)
-    .padding(.horizontal, 42)
-    .padding(.bottom, 24 + 16)
+    .padding(.horizontal, buttonState == .idle ? 42 : 0)
+    .padding(.bottom, buttonState == .completed ? 24 : 40)
   }
 
   @ViewBuilder
   func recordedVideoPreview(video: EditableVideo) -> some View {
     EditablePlayer(player: videoPlayer.videoPlayer)
-      .overlay(alignment: .bottom) {
-        Rectangle()
-          .frame(height: UIScreen.getHeight(2))
-          .foregroundStyle(.white)
-          .overlay(alignment: .leading) {
-            Rectangle()
-              .frame(
-                width: UIScreen
-                  .getWidth(UIScreen.width / video.totalDuration * videoPlayer.currentTime))
-              .foregroundStyle(Color.Blue_Default)
-          }
-          .onAppear {
-            DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.1) {
-              if videoPlayer.isPlaying == false {
-                videoPlayer.playLoop(video)
-              }
-            }
-          }
-          .onChange(of: videoPlayer.isPlaying) { value in
-            if musicVM.musicInfo != nil {
-              switch value {
-              case true:
-                musicVM
-                  .playAudio(startTime: 0)
-              case false:
-                musicVM.stopAudio()
-              }
-            }
-          }
-          .onChange(of: musicVM.isTrimmed) { value in
-            switch value {
-            case true:
-              videoPlayer.action(video)
-              musicVM.playAudio(startTime: 0)
-            case false:
-              videoPlayer.action(video)
-            }
-          }
-      }
       .onAppear {
         videoPlayer.playLoop(video)
       }
       .onTapGesture {
         videoPlayer.playLoop(video)
       }
-      .frame(width: UIScreen.width, height: UIScreen.width * 16 / 9)
-      .padding(.bottom, 68)
   }
 }
 
@@ -1042,49 +1243,71 @@ extension VideoCaptureView {
           isRecording = false
         }
       case .completed:
-        Button {
-          disableUploadButton = true
-          if musicVM.isTrimmed {
-            editorVM.currentVideo?.setVolume(0)
-          }
-          Task {
-            UploadProgressViewModel.shared.uploadStarted()
-            tabbarModel.tabSelectionNoAnimation = .main
-            tabbarModel.tabSelection = .main
-            alertViewModel.onFullScreenCover = false
-          }
-          Task {
-            if let video = editorVM.currentVideo {
-              let exporterVM = VideoExporterViewModel(video: video, musicVolume: musicVM.musicVolume)
-              await exporterVM.action(.save, start: video.rangeDuration.lowerBound)
-              if let thumbnail = exporterVM.thumbnailImage {
-                UploadProgressViewModel.shared.thumbnail = Image(uiImage: thumbnail)
-              }
+
+        HStack(spacing: 8) {
+          // MARK: - 바로 업로드
+          Button {
+            disableUploadButton = true
+            if musicVM.isTrimmed {
+              editorVM.currentVideo?.setVolume(0)
+            }
+            Task {
+              UploadProgressViewModel.shared.uploadStarted()
+              tabbarModel.tabSelectionNoAnimation = .main
+              tabbarModel.tabSelection = .main
+              alertViewModel.onFullScreenCover = false
               dismiss()
-              apiViewModel.uploadContent(
-                video: exporterVM.videoData,
-                thumbnail: exporterVM.thumbnailData,
-                caption: "",
-                musicID: musicVM.musicInfo?.musicID ?? 0,
-                videoLength: video.totalDuration,
-                hashtags: [""])
             }
+            Task {
+              if let video = editorVM.currentVideo {
+                let thumbnail = video.getFirstThumbnail()
+                if let thumbnail {
+                  UploadProgressViewModel.shared.thumbnail = Image(uiImage: thumbnail)
+                }
+                let exporterVM = VideoExporterViewModel(video: video, musicVolume: musicVM.musicVolume)
+                await exporterVM.action(.save, start: video.rangeDuration.lowerBound)
+                apiViewModel.uploadContent(
+                  video: exporterVM.videoData,
+                  thumbnail: thumbnail?.jpegData(compressionQuality: 0.5)! ?? Data(),
+                  caption: "",
+                  musicID: musicVM.musicInfo?.musicID ?? 0,
+                  videoLength: video.totalDuration,
+                  hashtags: [""])
+              }
+            }
+          } label: {
+            Text(ContentWords().uploadNow)
+              .foregroundColor(.LabelColor_Primary_Dark)
+              .hCenter()
+              .vCenter()
+              .background {
+                glassMorphicView(cornerRadius: 24)
+                  .overlay {
+                    RoundedRectangle(cornerRadius: 24)
+                      .stroke(LinearGradient.Border_Glass)
+                  }
+              }
           }
-        } label: {
-          Circle()
-            .stroke(lineWidth: 4)
-            .foregroundColor(.white)
-            .frame(width: 84, height: 84, alignment: .center)
-            .overlay {
-              Circle()
-                .foregroundColor(.Primary_Default)
-                .frame(width: 72, height: 72, alignment: .center)
-              Image(systemName: "checkmark")
-                .font(.custom("SFCompactText-Regular", size: 44))
-                .foregroundColor(.white)
+          .disabled(disableUploadButton)
+          // MARK: - 다음
+          Button {
+            if guestUploadModel.istempAccess {
+              guestUploadModel.goDescriptionTagView = true
+            } else {
+              uploadBottomSheetPosition = .relative(1)
             }
+          } label: {
+            Text(CommonWords().next)
+              .foregroundColor(.LabelColor_Primary_Dark)
+              .hCenter()
+              .vCenter()
+              .background {
+                Capsule()
+                  .foregroundColor(Color.Primary_Default)
+              }
+          }
         }
-        .disabled(disableUploadButton)
+        .frame(width: UIScreen.width - 32, height: 48)
       }
     }
   }

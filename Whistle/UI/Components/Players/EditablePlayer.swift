@@ -17,7 +17,7 @@ struct EditablePlayer: UIViewControllerRepresentable {
     let view = AVPlayerViewController()
     view.player = player
     view.showsPlaybackControls = false
-    view.videoGravity = .resizeAspect
+    view.videoGravity = .resizeAspectFill
     view.contentOverlayView?.layer.cornerRadius = 12
     view.contentOverlayView?.layer.masksToBounds = true
     view.allowsVideoFrameAnalysis = false

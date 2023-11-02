@@ -19,6 +19,7 @@ struct GuestProfileView: View {
   @StateObject var apiViewModel = APIViewModel.shared
   @StateObject var appleSignInViewModel = AppleSignInViewModel()
   @StateObject private var tabbarModel = TabbarModel.shared
+  @StateObject var guestUploadModel = GuestUploadModel.shared
   @State var bottomSheetPosition: BottomSheetPosition = .hidden
   @State var showTermsOfService = false
   @State var showPrivacyPolicy = false
@@ -43,6 +44,9 @@ struct GuestProfileView: View {
           .padding(.bottom, 12)
         Spacer()
       }
+    }
+    .onAppear {
+      GuestUploadModel.shared.isNotAccessRecord = false
     }
     .ignoresSafeArea()
     .onChange(of: isAccess) { newValue in

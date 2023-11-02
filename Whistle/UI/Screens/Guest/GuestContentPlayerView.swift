@@ -16,6 +16,7 @@ import SwiftUI
 
 struct GuestContentPlayerView: View {
   @AppStorage("showGuide") var showGuide = true
+  @AppStorage("isAccess") var isAccess = false
   @Environment(\.scenePhase) var scenePhase
   @StateObject var apiViewModel = APIViewModel.shared
   @StateObject var feedPlayersViewModel = GuestFeedPlayersViewModel.shared
@@ -81,6 +82,16 @@ struct GuestContentPlayerView: View {
                     DimmedBackground()
                   }
                 }
+                .onChange(of: tabbarModel.tabSelectionNoAnimation) { newValue in
+                  if newValue == .main {
+                    guard let currentPlayer = feedPlayersViewModel.currentPlayer else {
+                      return
+                    }
+                    currentPlayer.play()
+                  } else {
+                    feedPlayersViewModel.stopPlayer()
+                  }
+                }
               playButton(toPlay: player.rate == 0)
                 .opacity(showPlayButton ? 1 : 0)
                 .allowsHitTesting(false)
@@ -121,6 +132,7 @@ struct GuestContentPlayerView: View {
       .id(newId)
     }
     .onAppear {
+      GuestUploadModel.shared.isNotAccessRecord = false
       if index == 0 {
         lifecycleDelegate?.onAppear()
       } else {

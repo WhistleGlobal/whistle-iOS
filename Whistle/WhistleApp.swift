@@ -31,6 +31,7 @@ struct WhistleApp: App {
   @StateObject var appleSignInViewModel = AppleSignInViewModel()
   @StateObject var userAuth = UserAuth.shared
   @StateObject var apiViewModel = APIViewModel.shared
+  @StateObject var guestUploadModel = GuestUploadModel.shared
   @StateObject var universalRoutingModel: UniversalRoutingModel = .init()
   @StateObject var toastInfo = ToastViewModel.shared
   @State var testBool = false
@@ -134,4 +135,16 @@ class UniversalRoutingModel: ObservableObject {
   @Published var isUniversalContent = false
   @Published var userId = 0
   @Published var contentId = 0
+}
+
+// MARK: - GuestUploadModel
+
+class GuestUploadModel: ObservableObject {
+  static let shared = GuestUploadModel()
+  private init() { }
+  @Published var isNotAccessRecord = false
+  @Published var goDescriptionTagView = false
+  @Published var istempAccess = false
+  @Published var isMusicEdit = false
+  @Published var isPhotoLibraryAccess = false
 }

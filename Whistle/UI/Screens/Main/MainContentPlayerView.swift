@@ -181,6 +181,7 @@ struct MainContentPlayerView: View {
       .id(newId)
     }
     .onAppear {
+      tabbarModel.tabbarOpacity = 1.0
       if index == 0 {
         lifecycleDelegate?.onAppear()
       } else {
