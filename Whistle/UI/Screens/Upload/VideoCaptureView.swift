@@ -98,6 +98,7 @@ struct VideoCaptureView: View {
         } else {
           if let video = editorVM.currentVideo {
             recordedVideoPreview(video: video)
+              .ignoresSafeArea()
           } else {
             Image("BlurredDefaultBG")
           }
@@ -755,83 +756,86 @@ extension VideoCaptureView {
   var recordButtonSection: some View {
     HStack(spacing: 0) {
       // Album thumbnail + button
-      Button {
-        if isAlbumAuthorized {
-          isImagePickerClosed.send(true)
-        } else {
-          showAlbumAccessView = true
+      if buttonState == .idle {
+        Button {
+          if isAlbumAuthorized {
+            isImagePickerClosed.send(true)
+          } else {
+            showAlbumAccessView = true
+          }
+        } label: {
+          roundRectangleShape(with: albumCover, size: 56)
+            .vCenter()
         }
-      } label: {
-        roundRectangleShape(with: albumCover, size: 56)
-          .vCenter()
+        .shadow(radius: 5)
+        .contentShape(Rectangle())
+        .onReceive(isImagePickerClosed) { value in
+          isPresented = value
+        }
+        .overlay(alignment: .bottom) {
+          Text(CommonWords().album)
+            .fontSystem(fontDesignSystem: .body2_KO)
+            .foregroundColor(.LabelColor_Primary_Dark)
+            .offset(y: 16)
+        }
       }
-      .shadow(radius: 5)
-      .contentShape(Rectangle())
-      .onReceive(isImagePickerClosed) { value in
-        isPresented = value
-      }
-      .overlay(alignment: .bottom) {
-        Text(CommonWords().album)
-          .fontSystem(fontDesignSystem: .body2_KO)
-          .foregroundColor(.LabelColor_Primary_Dark)
-          .offset(y: 16)
-      }
-      .opacity(buttonState == .idle ? 1 : 0)
-      Spacer()
+      Spacer().frame(minWidth: 0)
       // Shutter + button
       recordingButton(
         state: buttonState,
         timerText: timeStringFromTimeInterval(recordingDuration),
         progress: min(recordingDuration / Double(timerSec.1 ? Double(timerSec.0) : 15.0), 1.0))
-      Spacer()
+      Spacer().frame(minWidth: 0)
       // Position change + button
-      Button(action: {
-        guard let device = AVCaptureDevice.default(for: .video) else { return }
+      if buttonState == .idle {
+        Button(action: {
+          guard let device = AVCaptureDevice.default(for: .video) else { return }
 
-        if device.hasTorch {
-          do {
-            try device.lockForConfiguration()
+          if device.hasTorch {
+            do {
+              try device.lockForConfiguration()
 
-            if device.torchMode == .on {
-              device.torchMode = .off
-              isFlashOn = false
-            }
-            device.unlockForConfiguration()
-          } catch {
-            WhistleLogger.logger.debug("Flash could not be used")
-          }
-        } else {
-          WhistleLogger.logger.debug("Device does not have a Torch")
-        }
-        viewModel.aespaSession.position(to: isFront ? .back : .front)
-        isFront.toggle()
-      }) {
-        Image(systemName: "arrow.triangle.2.circlepath")
-          .font(.system(size: 20))
-          .foregroundColor(.white)
-          .padding(16)
-          .background {
-            glassMoriphicCircleView()
-              .overlay {
-                Circle()
-                  .stroke(lineWidth: 1)
-                  .foregroundStyle(LinearGradient.Border_Glass)
+              if device.torchMode == .on {
+                device.torchMode = .off
+                isFlashOn = false
               }
+              device.unlockForConfiguration()
+            } catch {
+              WhistleLogger.logger.debug("Flash could not be used")
+            }
+          } else {
+            WhistleLogger.logger.debug("Device does not have a Torch")
           }
-          .vCenter()
+          viewModel.aespaSession.position(to: isFront ? .back : .front)
+          isFront.toggle()
+        }) {
+          Image(systemName: "arrow.triangle.2.circlepath")
+            .font(.system(size: 20))
+            .foregroundColor(.white)
+            .padding(16)
+            .background {
+              glassMoriphicCircleView()
+                .overlay {
+                  Circle()
+                    .stroke(lineWidth: 1)
+                    .foregroundStyle(LinearGradient.Border_Glass)
+                }
+            }
+            .vCenter()
+        }
+        .overlay(alignment: .bottom) {
+          Text(VideoCaptureWords().cameraSwitch)
+            .foregroundColor(.white)
+            .fontSystem(fontDesignSystem: .body2_KO)
+            .offset(y: 16)
+        }
+        .contentShape(Circle())
+        .opacity(buttonState == .idle ? 1 : 0)
       }
-      .overlay(alignment: .bottom) {
-        Text(VideoCaptureWords().cameraSwitch)
-          .foregroundColor(.white)
-          .fontSystem(fontDesignSystem: .body2_KO)
-          .offset(y: 16)
-      }
-      .contentShape(Circle())
-      .opacity(buttonState == .idle ? 1 : 0)
     }
     .hCenter()
     .fixedSize(horizontal: false, vertical: true)
-    .padding(.horizontal, 42)
+    .padding(.horizontal, buttonState == .idle ? 42 : 0)
     .padding(.bottom, 24 + 16)
   }
 
@@ -883,8 +887,6 @@ extension VideoCaptureView {
       .onTapGesture {
         videoPlayer.playLoop(video)
       }
-      .frame(width: UIScreen.width, height: UIScreen.width * 16 / 9)
-      .padding(.bottom, 68)
   }
 }
 
@@ -1082,50 +1084,67 @@ extension VideoCaptureView {
           isRecording = false
         }
       case .completed:
-        Button {
-          disableUploadButton = true
-          if musicVM.isTrimmed {
-            editorVM.currentVideo?.setVolume(0)
-          }
-          Task {
-            UploadProgressViewModel.shared.uploadStarted()
-            tabbarModel.tabSelectionNoAnimation = .main
-            tabbarModel.tabSelection = .main
-            alertViewModel.onFullScreenCover = false
-            dismiss()
-          }
-          Task {
-            if let video = editorVM.currentVideo {
-              let thumbnail = video.getFirstThumbnail()
-              if let thumbnail {
-                UploadProgressViewModel.shared.thumbnail = Image(uiImage: thumbnail)
+
+        HStack(spacing: 8) {
+          // MARK: - 바로 업로드
+          Button {
+            disableUploadButton = true
+            if musicVM.isTrimmed {
+              editorVM.currentVideo?.setVolume(0)
+            }
+            Task {
+              UploadProgressViewModel.shared.uploadStarted()
+              tabbarModel.tabSelectionNoAnimation = .main
+              tabbarModel.tabSelection = .main
+              alertViewModel.onFullScreenCover = false
+              dismiss()
+            }
+            Task {
+              if let video = editorVM.currentVideo {
+                let thumbnail = video.getFirstThumbnail()
+                if let thumbnail {
+                  UploadProgressViewModel.shared.thumbnail = Image(uiImage: thumbnail)
+                }
+                let exporterVM = VideoExporterViewModel(video: video, musicVolume: musicVM.musicVolume)
+                await exporterVM.action(.save, start: video.rangeDuration.lowerBound)
+                apiViewModel.uploadContent(
+                  video: exporterVM.videoData,
+                  thumbnail: thumbnail?.jpegData(compressionQuality: 0.5)! ?? Data(),
+                  caption: "",
+                  musicID: musicVM.musicInfo?.musicID ?? 0,
+                  videoLength: video.totalDuration,
+                  hashtags: [""])
               }
-              let exporterVM = VideoExporterViewModel(video: video, musicVolume: musicVM.musicVolume)
-              await exporterVM.action(.save, start: video.rangeDuration.lowerBound)
-              apiViewModel.uploadContent(
-                video: exporterVM.videoData,
-                thumbnail: thumbnail?.jpegData(compressionQuality: 0.5)! ?? Data(),
-                caption: "",
-                musicID: musicVM.musicInfo?.musicID ?? 0,
-                videoLength: video.totalDuration,
-                hashtags: [""])
             }
+          } label: {
+            Text(ContentWords().uploadNow)
+              .foregroundColor(.LabelColor_Primary_Dark)
+              .hCenter()
+              .vCenter()
+              .background {
+                glassMorphicView(cornerRadius: 24)
+                  .overlay {
+                    RoundedRectangle(cornerRadius: 24)
+                      .stroke(LinearGradient.Border_Glass)
+                  }
+              }
           }
-        } label: {
-          Circle()
-            .stroke(lineWidth: 4)
-            .foregroundColor(.white)
-            .frame(width: 84, height: 84, alignment: .center)
-            .overlay {
-              Circle()
-                .foregroundColor(.Primary_Default)
-                .frame(width: 72, height: 72, alignment: .center)
-              Image(systemName: "checkmark")
-                .font(.custom("SFCompactText-Regular", size: 44))
-                .foregroundColor(.white)
-            }
+          .disabled(disableUploadButton)
+          // MARK: - 다음
+          Button {
+            //
+          } label: {
+            Text(CommonWords().next)
+              .foregroundColor(.LabelColor_Primary_Dark)
+              .hCenter()
+              .vCenter()
+              .background {
+                Capsule()
+                  .foregroundColor(Color.Primary_Default)
+              }
+          }
         }
-        .disabled(disableUploadButton)
+        .frame(width: UIScreen.width - 32, height: 48)
       }
     }
   }

@@ -110,6 +110,7 @@
 "해시태그는 최대 16글자까지 가능합니다" = "Hashtags can be up to 16 characters long";
 "해시태그는 최대 5개까지만 가능합니다" =  "You can only use a maximum of 5 hashtags.";
 "해당 콘텐츠를 숨겼습니다" = "Post hidden";
+"바로 업로드" = "Upload now";
 
   // 프로필 관련
 "프로필 사진이 수정되었습니다." = "Profile picture updated";
