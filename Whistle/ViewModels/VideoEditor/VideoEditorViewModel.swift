@@ -35,6 +35,9 @@ class VideoEditorViewModel: ObservableObject {
   }
 
   func returnThumbnail(_ index: Int) -> UIImage {
+    if currentVideo?.thumbHQImages.isEmpty ?? true {
+      return UIImage()
+    }
     if let image = currentVideo?.thumbHQImages[index].image {
       return image
     }

@@ -94,6 +94,7 @@ struct ContentWords {
   let noBookmarkedContent: LocalizedStringKey = "저장한 콘텐츠가 없습니다"
   let noUploadedContent: LocalizedStringKey = "공유하고 싶은 첫번째 콘텐츠를 업로드해보세요"
   let goUpload: LocalizedStringKey = "업로드하러 가기"
+  let uploadNow: LocalizedStringKey = "바로 업로드"
 }
 
 // MARK: - AlertTitles

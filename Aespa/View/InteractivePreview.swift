@@ -55,7 +55,7 @@ public struct InteractivePreview: View {
 
   // Zoom
   @State private var previousZoomFactor: CGFloat = 1.0
-  @State private var currentZoomFactor: CGFloat = 1.0
+  @State public var currentZoomFactor: CGFloat = 1.0
 
   // Foocus
   @State private var preferredFocusMode: AVCaptureDevice.FocusMode = .continuousAutoFocus
@@ -98,7 +98,6 @@ public struct InteractivePreview: View {
     session.currentCameraPosition
   }
 
-  let viewWidth = UIScreen.main.bounds.width
   public var body: some View {
     GeometryReader { geometry in
       ZStack(alignment: .top) {
@@ -106,7 +105,6 @@ public struct InteractivePreview: View {
           .gesture(changePositionGesture)
           .gesture(tapToFocusGesture(geometry)) // Currently disabled
           .gesture(pinchZoomGesture)
-
         // Crosshair
         Circle()
           .stroke(lineWidth: 1)
@@ -118,8 +116,8 @@ public struct InteractivePreview: View {
           .animation(.spring(), value: focusFrameOpacity)
       }
     }
-    .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.width * 16 / 9)
-    .padding(.bottom, 68)
+    .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
+//    .padding(.bottom, 68)
   }
 }
 
@@ -172,16 +170,26 @@ extension InteractivePreview {
     let maxZoomFactor = session.maxZoomFactor ?? 1.0
     return MagnificationGesture()
       .onChanged { scale in
+        if scale * previousZoomFactor > 5.0 {
+          return
+        }
         let videoZoomFactor = scale * previousZoomFactor
-        if videoZoomFactor <= maxZoomFactor {
-          let newZoomFactor = max(1.0, min(videoZoomFactor, maxZoomFactor))
+        if videoZoomFactor <= 5.0 {
+          let newZoomFactor = max(1.0, min(videoZoomFactor, 5.0))
           session.zoom(factor: newZoomFactor)
+          ZoomFactorCombineViewModel.shared.zoomScale = newZoomFactor
         }
       }
       .onEnded { scale in
-        let videoZoomFactor = scale * previousZoomFactor
+        let videoZoomFactor = max(1.0, min(scale * previousZoomFactor, 5.0))
         previousZoomFactor = videoZoomFactor >= 1 ? videoZoomFactor : 1
+        ZoomFactorCombineViewModel.shared.zoomScale = previousZoomFactor
       }
+  }
+
+  public func resetZoom() {
+    previousZoomFactor = 1.0
+    session.zoom(factor: 1.0)
   }
 
   private func resetFocusMode() {
