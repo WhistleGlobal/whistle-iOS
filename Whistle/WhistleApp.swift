@@ -146,4 +146,5 @@ class GuestUploadModel: ObservableObject {
   @Published var goDescriptionTagView = false
   @Published var istempAccess = false
   @Published var isMusicEdit = false
+  @Published var isPhotoLibraryAccess = false
 }

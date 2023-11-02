@@ -157,8 +157,8 @@ class MyFeedPlayersViewModel: ObservableObject {
     } else {
       currentPlayer = nil
       currentPlayer = nextPlayer
-      apiViewModel.myFeed.remove(at: currentVideoIndex)
       nextPlayer = AVPlayer(url: URL(string: apiViewModel.myFeed[currentVideoIndex + 1].videoUrl ?? "")!)
+      apiViewModel.myFeed.remove(at: currentVideoIndex)
       currentPlayer?.seek(to: .zero)
       currentPlayer?.play()
     }

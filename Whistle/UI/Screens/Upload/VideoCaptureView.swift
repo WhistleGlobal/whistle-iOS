@@ -252,6 +252,9 @@ struct VideoCaptureView: View {
           if guestUploadModel.isMusicEdit {
             musicBottomSheetPosition = .relative(1)
           }
+          if guestUploadModel.isPhotoLibraryAccess {
+            isImagePickerClosed.send(true)
+          }
         }
       }
       .bottomSheet(
@@ -880,6 +883,9 @@ extension VideoCaptureView {
       .hCenter()
       .overlay(alignment: .leading) {
         Button {
+          if guestUploadModel.istempAccess {
+            isAccess = true
+          }
           dismiss()
           alertViewModel.onFullScreenCover = false
         } label: {
@@ -942,7 +948,16 @@ extension VideoCaptureView {
       if buttonState == .idle {
         Button {
           if isAlbumAuthorized {
-            isImagePickerClosed.send(true)
+            if isAccess {
+              isImagePickerClosed.send(true)
+            } else {
+              guestUploadModel.isPhotoLibraryAccess = true
+              if guestUploadModel.istempAccess {
+                isImagePickerClosed.send(true)
+              } else {
+                uploadBottomSheetPosition = .relative(1)
+              }
+            }
           } else {
             showAlbumAccessView = true
           }
