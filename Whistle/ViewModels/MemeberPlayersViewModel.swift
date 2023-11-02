@@ -174,7 +174,7 @@ class MemeberPlayersViewModel: ObservableObject {
     } else {
       currentPlayer = nil
       currentPlayer = nextPlayer
-        nextPlayer = AVPlayer(url: URL(string: apiViewModel.memberFeed[currentVideoIndex + 1].videoUrl ?? "")!)
+      nextPlayer = AVPlayer(url: URL(string: apiViewModel.memberFeed[currentVideoIndex + 1].videoUrl ?? "")!)
       apiViewModel.memberFeed.remove(at: currentVideoIndex)
       currentPlayer?.seek(to: .zero)
       if apiViewModel.memberFeed[currentVideoIndex].isHated {
