@@ -67,6 +67,9 @@ public struct InteractivePreview: View {
 
   private var subjectAreaChangeMonitoringSubscription: Cancellable?
 
+  // TODO: - 싱글톤 테스트
+  @StateObject var zoomFactorViewModel = ZoomFactorViewModel.shared
+
   init(_ preview: Preview, option: InteractivePreviewOption = .init()) {
     self.preview = preview
     self.option = option

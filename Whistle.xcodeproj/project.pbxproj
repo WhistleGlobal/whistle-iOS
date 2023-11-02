@@ -2375,6 +2375,7 @@
 				1B3895712AB9CBFC00B4C8DD /* Extension+FileManager.swift in Sources */,
 				78D148E52A9E135F00DDCE48 /* Extension+UIView.swift in Sources */,
 				1BE8EA122AB0F7E800EB0A55 /* CircularProgressBar.swift in Sources */,
+				787093682AF28CB30023B400 /* ZoomFactorViewModel.swift in Sources */,
 				1B3895702AB9CBFC00B4C8DD /* Extension+AVAudioSession.swift in Sources */,
 				1B38956F2AB9CBFC00B4C8DD /* Extension+Int.swift in Sources */,
 				78B6FD2E2AA719190043E461 /* AlbumModel.swift in Sources */,
