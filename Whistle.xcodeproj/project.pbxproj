@@ -481,6 +481,7 @@
 		1BF6715A2AE8AA2500CDFADB /* ToastMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BF671592AE8AA2500CDFADB /* ToastMessage.swift */; };
 		780039082AD7E0020033B9F1 /* VersionCheck.swift in Sources */ = {isa = PBXBuildFile; fileRef = 780039072AD7E0020033B9F1 /* VersionCheck.swift */; };
 		7801398A2AA127AE00D5FBDB /* SignInView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 780139892AA127AE00D5FBDB /* SignInView.swift */; };
+		780CF0A92AF3A2E50010E773 /* Dev-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 780CF0A82AF3A2E50010E773 /* Dev-Info.plist */; };
 		7822B23A2ADD509C000B15AB /* Notion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7822B2392ADD509C000B15AB /* Notion.swift */; };
 		782A6DD52AF1EAFC004D0A60 /* GuestMainFeedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 782A6DD42AF1EAFC004D0A60 /* GuestMainFeedView.swift */; };
 		782A6DD72AF1EB0D004D0A60 /* GuestMainFeedPageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 782A6DD62AF1EB0D004D0A60 /* GuestMainFeedPageView.swift */; };
@@ -942,6 +943,7 @@
 		1BF671592AE8AA2500CDFADB /* ToastMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToastMessage.swift; sourceTree = "<group>"; };
 		780039072AD7E0020033B9F1 /* VersionCheck.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VersionCheck.swift; sourceTree = "<group>"; };
 		780139892AA127AE00D5FBDB /* SignInView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInView.swift; sourceTree = "<group>"; };
+		780CF0A82AF3A2E50010E773 /* Dev-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Dev-Info.plist"; sourceTree = "<group>"; };
 		7822B2392ADD509C000B15AB /* Notion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Notion.swift; sourceTree = "<group>"; };
 		782A6DD42AF1EAFC004D0A60 /* GuestMainFeedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GuestMainFeedView.swift; sourceTree = "<group>"; };
 		782A6DD62AF1EB0D004D0A60 /* GuestMainFeedPageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GuestMainFeedPageView.swift; sourceTree = "<group>"; };
@@ -1323,7 +1325,7 @@
 		1B39553E2A95069C00BCB4DF /* Whistle */ = {
 			isa = PBXGroup;
 			children = (
-				1B9937092AF3699E00F5C619 /* Dev-Info.plist */,
+				780CF0A82AF3A2E50010E773 /* Dev-Info.plist */,
 				1BDE03CF2AC3CECB006CD966 /* Info.plist */,
 				1B0A29AF2AA75087009077A1 /* WhistleDebug.entitlements */,
 				1B21C9E82AA034500036158F /* Whistle.entitlements */,
@@ -2618,6 +2620,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				780CF0A92AF3A2E50010E773 /* Dev-Info.plist in Resources */,
 				1B21C9ED2AA0AB8A0036158F /* .swiftformat in Resources */,
 				78D148D82A9E0A3600DDCE48 /* SF-Pro-Display-Semibold.otf in Resources */,
 				1B9937322AF3769B00F5C619 /* Assets.xcassets in Resources */,
@@ -3620,10 +3623,10 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.1.1;
-				PRODUCT_BUNDLE_IDENTIFIER = com.newcompany.Whistle;
+				PRODUCT_BUNDLE_IDENTIFIER = com.newcompany.WhistleDev;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = dev_Whistle;
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = WhistleDev;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
