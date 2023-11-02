@@ -69,23 +69,22 @@ struct DescriptionAndTagEditorView: View {
             tabbarModel.tabbarOpacity = 1.0
           }
           UploadProgressViewModel.shared.uploadStarted()
-          NavigationModel.shared.navigate.toggle()
         }
         Task {
-          let thumbnail = editorVM
-            .returnThumbnail(Int(
-              (editorVM.currentVideo?.rangeDuration.lowerBound)! / (editorVM.currentVideo?.originalDuration)! *
-                21))
-          UploadProgressViewModel.shared.thumbnail = Image(uiImage: thumbnail)
-          await exporterVM.action(.save, start: (editorVM.currentVideo?.rangeDuration.lowerBound)!)
-          let video = exporterVM.videoData
-          apiViewModel.uploadContent(
-            video: video,
-            thumbnail: thumbnail.jpegData(compressionQuality: 0.5)!,
-            caption: content,
-            musicID: musicVM.musicInfo?.musicID ?? 0,
-            videoLength: editorVM.currentVideo!.totalDuration,
-            hashtags: tagsViewModel.getTags())
+          if let video = editorVM.currentVideo {
+            await exporterVM.action(.save, start: video.rangeDuration.lowerBound)
+            if let thumbnail = exporterVM.thumbnailImage {
+              UploadProgressViewModel.shared.thumbnail = Image(uiImage: thumbnail)
+            }
+            NavigationModel.shared.navigate.toggle()
+            apiViewModel.uploadContent(
+              video: exporterVM.videoData,
+              thumbnail: exporterVM.thumbnailData,
+              caption: content,
+              musicID: musicVM.musicInfo?.musicID ?? 0,
+              videoLength: video.totalDuration,
+              hashtags: tagsViewModel.getTags())
+          }
         }
       }
       .frame(height: UIScreen.getHeight(44))

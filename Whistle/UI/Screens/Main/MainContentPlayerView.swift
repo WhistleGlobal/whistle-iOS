@@ -35,6 +35,7 @@ struct MainContentPlayerView: View {
   @Binding var currentContentInfo: MainContent?
   @Binding var index: Int
   let lifecycleDelegate: ViewLifecycleDelegate?
+  let processor = BlurImageProcessor(blurRadius: 100)
 
   var body: some View {
     VStack(spacing: 0) {
