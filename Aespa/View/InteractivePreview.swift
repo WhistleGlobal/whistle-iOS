@@ -67,9 +67,6 @@ public struct InteractivePreview: View {
 
   private var subjectAreaChangeMonitoringSubscription: Cancellable?
 
-  // TODO: - 싱글톤 테스트
-  @StateObject var zoomFactorViewModel = ZoomFactorViewModel.shared
-
   init(_ preview: Preview, option: InteractivePreviewOption = .init()) {
     self.preview = preview
     self.option = option
@@ -101,7 +98,6 @@ public struct InteractivePreview: View {
     session.currentCameraPosition
   }
 
-  let viewWidth = UIScreen.main.bounds.width
   public var body: some View {
     GeometryReader { geometry in
       ZStack(alignment: .top) {
@@ -109,7 +105,6 @@ public struct InteractivePreview: View {
           .gesture(changePositionGesture)
           .gesture(tapToFocusGesture(geometry)) // Currently disabled
           .gesture(pinchZoomGesture)
-
         // Crosshair
         Circle()
           .stroke(lineWidth: 1)
@@ -175,22 +170,26 @@ extension InteractivePreview {
     let maxZoomFactor = session.maxZoomFactor ?? 1.0
     return MagnificationGesture()
       .onChanged { scale in
+        if scale * previousZoomFactor > 6.5 {
+          return
+        }
         let videoZoomFactor = scale * previousZoomFactor
-        if videoZoomFactor <= maxZoomFactor {
-          let newZoomFactor = max(1.0, min(videoZoomFactor, maxZoomFactor))
+        if videoZoomFactor <= 5.0 {
+          let newZoomFactor = max(1.0, min(videoZoomFactor, 5.0))
           session.zoom(factor: newZoomFactor)
-
-          // TODO: - 값 변화 넣어주기
-          WhistleLogger.logger.debug("newZoomFactor: \(newZoomFactor)")
-          zoomFactorViewModel.zoomScale = newZoomFactor
           ZoomFactorCombineViewModel.shared.zoomScale = newZoomFactor
         }
       }
       .onEnded { scale in
-        let videoZoomFactor = scale * previousZoomFactor
+//        let videoZoomFactor = scale * previousZoomFactor
+        let videoZoomFactor = max(1.0, min(scale * previousZoomFactor, 5.0))
         previousZoomFactor = videoZoomFactor >= 1 ? videoZoomFactor : 1
-        WhistleLogger.logger.debug("previousZoomFactor: \(previousZoomFactor)")
       }
+  }
+
+  public func resetZoom() {
+    previousZoomFactor = 1.0
+    session.zoom(factor: 1.0)
   }
 
   private func resetFocusMode() {

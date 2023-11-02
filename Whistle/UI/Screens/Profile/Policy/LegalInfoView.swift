@@ -39,7 +39,6 @@ struct LegalInfoView: View {
           .foregroundColor(.Disable_Placeholder)
         NavigationLink {
           PrivacyPolicyView()
-            .id(UUID())
         } label: {
           HStack {
             Text("개인정보처리방침")
@@ -58,7 +57,6 @@ struct LegalInfoView: View {
           .foregroundColor(.Disable_Placeholder)
         NavigationLink {
           TermsOfServiceView()
-            .id(UUID())
         } label: {
           HStack {
             Text("이용약관")
