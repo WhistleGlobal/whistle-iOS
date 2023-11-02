@@ -82,6 +82,16 @@ struct GuestContentPlayerView: View {
                     DimmedBackground()
                   }
                 }
+                .onChange(of: tabbarModel.tabSelectionNoAnimation) { newValue in
+                    if newValue == .main {
+                        guard let currentPlayer = feedPlayersViewModel.currentPlayer else {
+                            return
+                        }
+                        currentPlayer.play()
+                    } else {
+                        feedPlayersViewModel.stopPlayer()
+                    }
+                }
               playButton(toPlay: player.rate == 0)
                 .opacity(showPlayButton ? 1 : 0)
                 .allowsHitTesting(false)
