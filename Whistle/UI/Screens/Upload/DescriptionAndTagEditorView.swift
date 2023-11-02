@@ -101,7 +101,14 @@ struct DescriptionAndTagEditorView: View {
             .scaledToFit()
             .frame(width: UIScreen.getWidth(videoWidth), height: UIScreen.getHeight(videoWidth * videoScale))
             .cornerRadius(12)
-            .background(Color.black.clipShape(RoundedRectangle(cornerRadius: 12)))
+            .background {
+              Color.black.clipShape(RoundedRectangle(cornerRadius: 12))
+            }
+            .overlay {
+              if editorVM.currentVideo?.thumbHQImages.isEmpty ?? true {
+                ProgressView()
+              }
+            }
           TextField(
             "",
             text: $content,

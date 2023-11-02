@@ -1131,8 +1131,15 @@ extension VideoCaptureView {
           }
           .disabled(disableUploadButton)
           // MARK: - 다음
-          Button {
-            //
+          NavigationLink {
+            if let video = editorVM.currentVideo {
+              DescriptionAndTagEditorView(
+                video: video,
+                editorVM: editorVM,
+                videoPlayer: videoPlayer,
+                musicVM: musicVM,
+                isInitial: .constant(false))
+            }
           } label: {
             Text(CommonWords().next)
               .foregroundColor(.LabelColor_Primary_Dark)
