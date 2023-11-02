@@ -16,6 +16,7 @@ import SwiftUI
 
 struct GuestContentPlayerView: View {
   @AppStorage("showGuide") var showGuide = true
+  @AppStorage("isAccess") var isAccess = false
   @Environment(\.scenePhase) var scenePhase
   @StateObject var apiViewModel = APIViewModel.shared
   @StateObject var feedPlayersViewModel = GuestFeedPlayersViewModel.shared
@@ -121,6 +122,7 @@ struct GuestContentPlayerView: View {
       .id(newId)
     }
     .onAppear {
+      GuestUploadModel.shared.isNotAccessRecord = false
       if index == 0 {
         lifecycleDelegate?.onAppear()
       } else {

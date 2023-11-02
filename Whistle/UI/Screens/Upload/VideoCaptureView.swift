@@ -207,6 +207,7 @@ struct VideoCaptureView: View {
         do {
           try Aespa.terminate()
           viewModel.preview = nil
+          guestUploadModel.isNotAccessRecord = false
         } catch { }
       }
       .onAppear {
@@ -248,9 +249,9 @@ struct VideoCaptureView: View {
       .onChange(of: guestUploadModel.istempAccess) { newValue in
         if newValue {
           uploadBottomSheetPosition = .hidden
-            if guestUploadModel.isMusicEdit {
-                musicBottomSheetPosition = .relative(1)
-            }
+          if guestUploadModel.isMusicEdit {
+            musicBottomSheetPosition = .relative(1)
+          }
         }
       }
       .bottomSheet(
