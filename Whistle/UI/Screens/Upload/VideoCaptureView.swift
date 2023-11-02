@@ -26,7 +26,7 @@ struct VideoCaptureView: View {
   @StateObject var apiViewModel = APIViewModel.shared
   @StateObject var alertViewModel = AlertViewModel.shared
   @StateObject private var tabbarModel = TabbarModel.shared
-  @StateObject var zoomFactorViewModel = ZoomFactorViewModel.shared
+//  @StateObject var zoomFactorViewModel = ZoomFactorViewModel.shared
   @ObservedObject private var viewModel = VideoCaptureViewModel()
 
   // MARK: - Datas
@@ -76,8 +76,8 @@ struct VideoCaptureView: View {
   }
 
   var zoomFormattedString: String {
-    let formattedString = String(format: "%.1fx", zoomfactor)
-    return formattedString.hasSuffix(".0x") ? String(format: "%.0fx", zoomfactor) : formattedString
+    let formattedString = String(format: "%.1fx", currentZoomScale)
+    return formattedString.hasSuffix(".0x") ? String(format: "%.0fx", currentZoomScale) : formattedString
   }
 
   // MARK: - Body
@@ -642,7 +642,7 @@ extension VideoCaptureView {
           }
         }
         Button {
-          zoomfactor = 1.0
+          currentZoomScale = 1.0
           viewModel.preview?.resetZoom()
         } label: {
           Text(zoomFormattedString)
@@ -662,7 +662,7 @@ extension VideoCaptureView {
             }
         }
         .onReceive(ZoomFactorCombineViewModel.shared.zoomSubject) { value in
-          zoomfactor = value
+          currentZoomScale = value
         }
         Button {
           if !isFront {
