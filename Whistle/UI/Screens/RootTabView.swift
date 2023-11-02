@@ -18,7 +18,7 @@ import VideoPicker
 
 struct RootTabView: View {
   @AppStorage("showGuide") var showGuide = true
-
+  @AppStorage("isAccess") var isAccess = false
   @State var isFirstProfileLoaded = true
   @State var mainOpacity = 1.0
   @State var isRootStacked = false
@@ -39,7 +39,6 @@ struct RootTabView: View {
 
   @State private var uploadBottomSheetPosition: BottomSheetPosition = .hidden
   @State private var pickerOptions = PickerOptionsInfo()
-  @AppStorage("isAccess") var isAccess = false
   @StateObject private var tabbarModel = TabbarModel.shared
   @StateObject var apiViewModel = APIViewModel.shared
   @StateObject var alertViewModel = AlertViewModel.shared
@@ -333,14 +332,18 @@ extension RootTabView {
         .padding(.leading, 4)
       }
       Button {
-        if isAccess {
-          getCameraPermission()
-          getMicrophonePermission()
-          checkAllPermissions()
-          showVideoCaptureView = true
-        } else {
-          uploadBottomSheetPosition = .relative(1)
-        }
+//        if isAccess {
+//          getCameraPermission()
+//          getMicrophonePermission()
+//          checkAllPermissions()
+//          showVideoCaptureView = true
+//        } else {
+//          uploadBottomSheetPosition = .relative(1)
+//        }
+        getCameraPermission()
+        getMicrophonePermission()
+        checkAllPermissions()
+        showVideoCaptureView = true
       } label: {
         Capsule()
           .fill(Color.Dim_Thin)

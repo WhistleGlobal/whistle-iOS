@@ -12,10 +12,14 @@ import SwiftUI
 // MARK: - DescriptionAndTagEditorView
 
 struct DescriptionAndTagEditorView: View {
+  @AppStorage("isAccess") var isAccess = false
   @Environment(\.dismiss) private var dismiss
+  @Environment(\.scenePhase) var scenePhase
   @StateObject var tagsViewModel = TagsViewModel()
   @StateObject var apiViewModel = APIViewModel.shared
   @StateObject var exporterVM: VideoExporterViewModel
+  @StateObject var guestUploadModel = GuestUploadModel.shared
+  @StateObject private var tabbarModel = TabbarModel.shared
   @ObservedObject var editorVM: VideoEditorViewModel
   @ObservedObject var videoPlayer: VideoPlayerManager
   @ObservedObject var musicVM: MusicViewModel
@@ -60,6 +64,10 @@ struct DescriptionAndTagEditorView: View {
         dismiss()
       } nextButtonAction: {
         Task {
+          if guestUploadModel.istempAccess {
+            isAccess = true
+            tabbarModel.tabbarOpacity = 1.0
+          }
           UploadProgressViewModel.shared.uploadStarted()
           NavigationModel.shared.navigate.toggle()
         }
@@ -219,6 +227,14 @@ struct DescriptionAndTagEditorView: View {
         .foregroundStyle(Color.white))
     .toolbar(.hidden)
     .scrollDismissesKeyboard(.interactively)
+    .onChange(of: scenePhase) { newValue in
+      if newValue == .background {
+        if guestUploadModel.istempAccess {
+          isAccess = true
+          tabbarModel.tabbarOpacity = 1.0
+        }
+      }
+    }
   }
 
   func limitText(_ upper: Int) {

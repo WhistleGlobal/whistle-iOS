@@ -5,6 +5,7 @@
 //  Created by ChoiYujin on 10/11/23.
 //
 
+import _AuthenticationServices_SwiftUI
 import Aespa
 import AVFoundation
 import BottomSheet
@@ -17,7 +18,7 @@ import SwiftUI
 
 struct VideoCaptureView: View {
   // MARK: - Objects
-
+  @AppStorage("isAccess") var isAccess = false
   @Environment(\.dismiss) var dismiss
   @Environment(\.scenePhase) var scenePhase
   @StateObject var editorVM = VideoEditorViewModel()
@@ -26,7 +27,8 @@ struct VideoCaptureView: View {
   @StateObject var apiViewModel = APIViewModel.shared
   @StateObject var alertViewModel = AlertViewModel.shared
   @StateObject private var tabbarModel = TabbarModel.shared
-//  @StateObject var zoomFactorViewModel = ZoomFactorViewModel.shared
+  @StateObject var appleSignInViewModel = AppleSignInViewModel()
+  @StateObject var guestUploadModel = GuestUploadModel.shared
   @ObservedObject private var viewModel = VideoCaptureViewModel()
 
   // MARK: - Datas
@@ -45,7 +47,8 @@ struct VideoCaptureView: View {
   @State var dragOffset: CGFloat = 0
   @State var accumulatedOffset: CGFloat = 0
   @State var sheetPositions: [BottomSheetPosition] = [.hidden, .absolute(514)]
-  @State var bottomSheetPosition: BottomSheetPosition = .hidden
+  @State var musicBottomSheetPosition: BottomSheetPosition = .hidden
+  @State private var uploadBottomSheetPosition: BottomSheetPosition = .hidden
   @State var albumCover = Image("noVideo")
 
   // MARK: - Bools
@@ -64,6 +67,9 @@ struct VideoCaptureView: View {
   /// 음악 편집기 띄우기용
   @State var showMusicTrimView = false
   @State var currentZoomScale: CGFloat = 1.0
+  // 방침
+  @State var showTermsOfService = false
+  @State var showPrivacyPolicy = false
 
   // MARK: - Computed
 
@@ -86,7 +92,27 @@ struct VideoCaptureView: View {
     GeometryReader { _ in
       ZStack {
         Color.black.ignoresSafeArea()
-        if bottomSheetPosition == .absolute(UIScreen.getHeight(514)) {
+        NavigationLink(destination: PrivacyPolicyView(), isActive: $showPrivacyPolicy) {
+          EmptyView()
+        }
+        NavigationLink(destination: TermsOfServiceView(), isActive: $showTermsOfService) {
+          EmptyView()
+        }
+        if let video = editorVM.currentVideo {
+          NavigationLink(
+            destination:
+            DescriptionAndTagEditorView(
+              video: video,
+              editorVM: editorVM,
+              videoPlayer: videoPlayer,
+              musicVM: musicVM,
+              isInitial: .constant(false)),
+            isActive: $guestUploadModel.goDescriptionTagView)
+          {
+            EmptyView()
+          }
+        }
+        if musicBottomSheetPosition == .absolute(UIScreen.getHeight(514)) {
           DimmedBackground().zIndex(1000)
         }
         if isPresented {
@@ -109,9 +135,14 @@ struct VideoCaptureView: View {
           // 음악 추가 버튼
           if buttonState == .completed {
             MusicInfo(musicVM: musicVM, showMusicTrimView: $showMusicTrimView) {
-              if musicVM.musicInfo == nil {
-                sheetPositions = [.absolute(UIScreen.getHeight(400)), .hidden, .relative(1)]
-                bottomSheetPosition = .absolute(UIScreen.getHeight(400))
+              if guestUploadModel.istempAccess {
+                if musicVM.musicInfo == nil {
+                  sheetPositions = [.absolute(UIScreen.getHeight(400)), .hidden, .relative(1)]
+                  musicBottomSheetPosition = .absolute(UIScreen.getHeight(400))
+                }
+              } else {
+                guestUploadModel.isMusicEdit = true
+                uploadBottomSheetPosition = .relative(1)
               }
             } onDelete: {
               withAnimation(.easeInOut) {
@@ -179,6 +210,7 @@ struct VideoCaptureView: View {
         } catch { }
       }
       .onAppear {
+        guestUploadModel.isNotAccessRecord = !isAccess
         alertViewModel.onFullScreenCover = true
         getAlbumAuth()
         if isAlbumAuthorized {
@@ -207,10 +239,22 @@ struct VideoCaptureView: View {
           } else {
             WhistleLogger.logger.debug("Device does not have a Torch")
           }
+          if guestUploadModel.istempAccess {
+            isAccess = true
+            tabbarModel.tabbarOpacity = 1.0
+          }
+        }
+      }
+      .onChange(of: guestUploadModel.istempAccess) { newValue in
+        if newValue {
+          uploadBottomSheetPosition = .hidden
+            if guestUploadModel.isMusicEdit {
+                musicBottomSheetPosition = .relative(1)
+            }
         }
       }
       .bottomSheet(
-        bottomSheetPosition: $bottomSheetPosition,
+        bottomSheetPosition: $musicBottomSheetPosition,
         switchablePositions: sheetPositions)
       {
         switch buttonState {
@@ -223,10 +267,10 @@ struct VideoCaptureView: View {
             musicVM: musicVM,
             editorVM: editorVM,
             videoPlayer: videoPlayer,
-            bottomSheetPosition: $bottomSheetPosition,
+            bottomSheetPosition: $musicBottomSheetPosition,
             showMusicTrimView: $showMusicTrimView)
           {
-            bottomSheetPosition = .relative(1)
+            musicBottomSheetPosition = .relative(1)
           }
         }
       }
@@ -244,6 +288,143 @@ struct VideoCaptureView: View {
                 LinearGradient.Border_Glass)
           })
       .ignoresSafeArea(.keyboard)
+      .bottomSheet(
+        bottomSheetPosition: $uploadBottomSheetPosition,
+        switchablePositions: [.hidden, .absolute(UIScreen.height - 68)])
+      {
+        VStack(spacing: 0) {
+          HStack {
+            Button {
+              uploadBottomSheetPosition = .hidden
+            } label: {
+              Image(systemName: "xmark")
+                .foregroundColor(.white)
+                .frame(width: 18, height: 18)
+                .padding(.horizontal, 16)
+            }
+            Spacer()
+          }
+          .frame(height: 52)
+          .padding(.bottom, 56)
+          Group {
+            Text("Whistle")
+              .font(.system(size: 24, weight: .semibold)) +
+              Text("에 로그인")
+              .font(.custom("AppleSDGothicNeo-SemiBold", size: 24))
+          }
+          .fontWidth(.expanded)
+          .lineSpacing(8)
+          .padding(.vertical, 4)
+          .padding(.bottom, 12)
+          .foregroundColor(.LabelColor_Primary_Dark)
+
+          Text("더 많은 스포츠 콘텐츠를 즐겨보세요")
+            .fontSystem(fontDesignSystem: .body1_KO)
+            .foregroundColor(.LabelColor_Secondary_Dark)
+          Spacer()
+          Button {
+            handleSignInButton()
+          } label: {
+            Capsule()
+              .foregroundColor(.white)
+              .frame(maxWidth: 360, maxHeight: 48)
+              .overlay {
+                HStack(alignment: .center) {
+                  Image("GoogleLogo")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 18, height: 18)
+                  Spacer()
+                  Text("Google로 계속하기")
+                    .font(.custom("Roboto-Medium", size: 16))
+                    .fontWeight(.semibold)
+                    .foregroundColor(.black.opacity(0.54))
+                  Spacer()
+                  Color.clear
+                    .frame(width: 18, height: 18)
+                }
+                .padding(.horizontal, 24)
+              }
+              .padding(.bottom, 16)
+          }
+
+          SignInWithAppleButton(
+            onRequest: appleSignInViewModel.configureRequest,
+            onCompletion: appleSignInViewModel.handleResult)
+            .frame(maxWidth: 360, maxHeight: 48)
+            .cornerRadius(48)
+            .overlay {
+              Capsule()
+                .foregroundColor(.black)
+                .frame(maxWidth: 360, maxHeight: 48)
+                .overlay {
+                  HStack(alignment: .center) {
+                    Image(systemName: "apple.logo")
+                      .resizable()
+                      .scaledToFit()
+                      .foregroundColor(.white)
+                      .frame(width: 18, height: 18)
+                    Spacer()
+                    Text("Apple로 계속하기")
+                      .font(.system(size: 16))
+                      .fontWeight(.semibold)
+                      .foregroundColor(.white)
+                    Spacer()
+                    Color.clear
+                      .frame(width: 18, height: 18)
+                  }
+                  .padding(.horizontal, 24)
+                }
+                .allowsHitTesting(false)
+            }
+            .padding(.bottom, 24)
+          Text("가입을 진행할 경우, 아래의 정책에 대해 동의한 것으로 간주합니다.")
+            .fontSystem(fontDesignSystem: .caption_KO_Regular)
+            .foregroundColor(.LabelColor_Primary_Dark)
+          HStack(spacing: 16) {
+            Button {
+              showTermsOfService = true
+            } label: {
+              Text("이용약관")
+                .font(.system(size: 12, weight: .semibold))
+                .underline(true, color: .LabelColor_Primary_Dark)
+            }
+            Button {
+              showPrivacyPolicy = true
+            } label: {
+              Text("개인정보처리방침")
+                .font(.system(size: 12, weight: .semibold))
+                .underline(true, color: .LabelColor_Primary_Dark)
+            }
+          }
+          .foregroundColor(.LabelColor_Primary_Dark)
+          .padding(.bottom, 64)
+        }
+        .frame(height: UIScreen.height - 68)
+      }
+      .enableSwipeToDismiss(true)
+      .enableTapToDismiss(true)
+      .enableContentDrag(true)
+      .enableAppleScrollBehavior(false)
+      .dragIndicatorColor(Color.Border_Default_Dark)
+      .customBackground(
+        glassMorphicView(cornerRadius: 24)
+          .overlay {
+            RoundedRectangle(cornerRadius: 24)
+              .stroke(lineWidth: 1)
+              .foregroundStyle(
+                LinearGradient.Border_Glass)
+          })
+      .onDismiss {
+        tabbarModel.tabbarOpacity = 1.0
+      }
+      .onChange(of: uploadBottomSheetPosition) { newValue in
+        if newValue == .hidden {
+          tabbarModel.tabbarOpacity = 1.0
+        } else {
+          tabbarModel.tabbarOpacity = 0.0
+        }
+      }
     }
   }
 }
@@ -263,7 +444,7 @@ extension VideoCaptureView {
         Spacer()
         Button {
           timerSec.1 = false
-          bottomSheetPosition = .hidden
+          musicBottomSheetPosition = .hidden
         } label: {
           Text(CommonWords().cancel)
             .fontSystem(fontDesignSystem: .subtitle2_KO)
@@ -546,7 +727,7 @@ extension VideoCaptureView {
         withAnimation {
           timerSec.1 = true
           selectedSec.1 = true
-          bottomSheetPosition = .hidden
+          musicBottomSheetPosition = .hidden
         }
       } label: {
         Text(VideoCaptureWords().setTimer)
@@ -570,7 +751,7 @@ extension VideoCaptureView {
           timerSec.1 = false
           selectedSec.0 = .sec3
           selectedSec.1 = false
-          bottomSheetPosition = .hidden
+          musicBottomSheetPosition = .hidden
         }
       }
       .fontSystem(fontDesignSystem: .subtitle2_KO)
@@ -614,7 +795,7 @@ extension VideoCaptureView {
     case .idle:
       HStack(spacing: 24) {
         Button {
-          bottomSheetPosition = .absolute(UIScreen.getHeight(514))
+          musicBottomSheetPosition = .absolute(UIScreen.getHeight(514))
         } label: {
           HStack {
             Image(systemName: "clock")
@@ -1093,14 +1274,11 @@ extension VideoCaptureView {
           }
           .disabled(disableUploadButton)
           // MARK: - 다음
-          NavigationLink {
-            if let video = editorVM.currentVideo {
-              DescriptionAndTagEditorView(
-                video: video,
-                editorVM: editorVM,
-                videoPlayer: videoPlayer,
-                musicVM: musicVM,
-                isInitial: .constant(false))
+          Button {
+            if guestUploadModel.istempAccess {
+              guestUploadModel.goDescriptionTagView = true
+            } else {
+              uploadBottomSheetPosition = .relative(1)
             }
           } label: {
             Text(CommonWords().next)

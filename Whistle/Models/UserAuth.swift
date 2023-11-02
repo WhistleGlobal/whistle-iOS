@@ -80,7 +80,14 @@ class UserAuth: ObservableObject {
             return
           }
           self.apiViewModel.uploadDeviceToken(deviceToken: deviceToken) { }
-          self.isAccess = true
+          if GuestUploadModel.shared.isNotAccessRecord {
+            if !GuestUploadModel.shared.isMusicEdit {
+              GuestUploadModel.shared.goDescriptionTagView = true
+            }
+            GuestUploadModel.shared.istempAccess = true
+          } else {
+            self.isAccess = true
+          }
           completion()
         case .failure(let error):
           switch self.provider {
