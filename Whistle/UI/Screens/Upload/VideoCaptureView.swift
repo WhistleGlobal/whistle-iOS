@@ -76,6 +76,11 @@ struct VideoCaptureView: View {
     CGFloat(6 + (6 + barSpacing) * 15)
   }
 
+  var zoomFormattedString: String {
+    let formattedString = String(format: "%.1fx", zoomfactor)
+    return formattedString.hasSuffix(".0x") ? String(format: "%.0fx", zoomfactor) : formattedString
+  }
+
   // MARK: - Body
 
   var body: some View {
@@ -638,7 +643,7 @@ extension VideoCaptureView {
           zoomfactor = 1.0
           viewModel.preview?.resetZoom()
         } label: {
-          Text(String(format: "%.1fx", zoomfactor))
+          Text(zoomFormattedString)
             .font(.system(size: 14, weight: .semibold))
             .lineSpacing(6)
             .padding(.vertical, 3)

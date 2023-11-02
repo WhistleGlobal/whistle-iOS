@@ -170,7 +170,7 @@ extension InteractivePreview {
     let maxZoomFactor = session.maxZoomFactor ?? 1.0
     return MagnificationGesture()
       .onChanged { scale in
-        if scale * previousZoomFactor > 6.5 {
+        if scale * previousZoomFactor > 5.0 {
           return
         }
         let videoZoomFactor = scale * previousZoomFactor
@@ -181,9 +181,9 @@ extension InteractivePreview {
         }
       }
       .onEnded { scale in
-//        let videoZoomFactor = scale * previousZoomFactor
         let videoZoomFactor = max(1.0, min(scale * previousZoomFactor, 5.0))
         previousZoomFactor = videoZoomFactor >= 1 ? videoZoomFactor : 1
+        ZoomFactorCombineViewModel.shared.zoomScale = previousZoomFactor
       }
   }
 
