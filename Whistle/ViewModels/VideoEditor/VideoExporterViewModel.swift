@@ -24,6 +24,8 @@ class VideoExporterViewModel: ObservableObject {
   private let editorHelper = VideoEditor()
   private var timer: Timer?
   var videoData = Data()
+  var thumbnailImage = UIImage(named: "noVideo")
+  var thumbnailData = Data()
   init(video: EditableVideo, musicVolume: Float) {
     self.video = video
     self.musicVolume = musicVolume
@@ -38,6 +40,10 @@ class VideoExporterViewModel: ObservableObject {
   @MainActor
   private func renderVideo(start: Double) async {
     renderState = .loading
+    thumbnailImage = video.asset.getImage(second: start)
+    if let thumbnailData = thumbnailImage?.jpegData(compressionQuality: 0.05) {
+      self.thumbnailData = thumbnailData
+    }
     do {
       let url = try await editorHelper.startRender(
         video: video,
@@ -47,6 +53,9 @@ class VideoExporterViewModel: ObservableObject {
       if let videoData = try? Data(contentsOf: url) {
         self.videoData = videoData
       }
+      let asset = AVAsset(url: url)
+//      video.asset.getImage(second: start)
+      thumbnailImage = asset.getImage(second: 0, compressionQuality: 0.5)
       renderState = .loaded(url)
     } catch {
       renderState = .failed(error)

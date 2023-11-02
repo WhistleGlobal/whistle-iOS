@@ -1052,19 +1052,18 @@ extension VideoCaptureView {
             tabbarModel.tabSelectionNoAnimation = .main
             tabbarModel.tabSelection = .main
             alertViewModel.onFullScreenCover = false
-            dismiss()
           }
           Task {
             if let video = editorVM.currentVideo {
-              let thumbnail = video.getFirstThumbnail()
-              if let thumbnail {
-                UploadProgressViewModel.shared.thumbnail = Image(uiImage: thumbnail)
-              }
               let exporterVM = VideoExporterViewModel(video: video, musicVolume: musicVM.musicVolume)
               await exporterVM.action(.save, start: video.rangeDuration.lowerBound)
+              if let thumbnail = exporterVM.thumbnailImage {
+                UploadProgressViewModel.shared.thumbnail = Image(uiImage: thumbnail)
+              }
+              dismiss()
               apiViewModel.uploadContent(
                 video: exporterVM.videoData,
-                thumbnail: thumbnail?.jpegData(compressionQuality: 0.5)! ?? Data(),
+                thumbnail: exporterVM.thumbnailData,
                 caption: "",
                 musicID: musicVM.musicInfo?.musicID ?? 0,
                 videoLength: video.totalDuration,
