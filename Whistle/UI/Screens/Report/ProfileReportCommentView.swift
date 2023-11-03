@@ -57,6 +57,9 @@ struct ProfileReportCommentView: View {
         }
       Spacer()
     }
+    .onAppear {
+      print("selectedContentId: \(selectedContentId)")
+    }
     .onTapGesture {
       isFocused = false
     }
