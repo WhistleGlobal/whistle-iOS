@@ -133,6 +133,8 @@ struct MemberContentPlayerView: View {
                     feedMoreModel.bottomSheetPosition = .absolute(242)
                   }
                   .overlay {
+                    ContentGradientLayer()
+                      .allowsHitTesting(false)
                     if tabbarModel.tabWidth != 56 {
                       MemberContentLayer(
                         currentVideoInfo: content,

@@ -101,6 +101,8 @@ struct MainContentPlayerView: View {
                   feedMoreModel.bottomSheetPosition = .absolute(242)
                 }
                 .overlay {
+                  ContentGradientLayer()
+                    .allowsHitTesting(false)
                   if tabbarModel.tabWidth != 56 {
                     MainContentLayer(
                       currentVideoInfo: content,
@@ -244,7 +246,6 @@ struct MainContentPlayerView: View {
       uploadProgress = value
     }
   }
-
 }
 
 // MARK: - ViewLifecycleDelegate

@@ -98,6 +98,8 @@ struct BookmarkedContentPlayerview: View {
                   feedMoreModel.bottomSheetPosition = .absolute(186)
                 }
                 .overlay {
+                  ContentGradientLayer()
+                    .allowsHitTesting(false)
                   if tabbarModel.tabWidth != 56 {
                     BookmarkedContentLayer(
                       currentVideoInfo: content,

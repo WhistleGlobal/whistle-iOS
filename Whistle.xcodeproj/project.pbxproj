@@ -469,6 +469,8 @@
 		1BDE48D72AF3CEF200E33585 /* DimsDefault.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BDE48D52AF3CE7000E33585 /* DimsDefault.swift */; };
 		1BDE48D92AF3D2F900E33585 /* DimsUltraThin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BDE48D82AF3D2F900E33585 /* DimsUltraThin.swift */; };
 		1BDE48DA2AF3D2F900E33585 /* DimsUltraThin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BDE48D82AF3D2F900E33585 /* DimsUltraThin.swift */; };
+		1BDE48DC2AF49EA300E33585 /* ContentGradientLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BDE48DB2AF49EA300E33585 /* ContentGradientLayer.swift */; };
+		1BDE48DD2AF49EA300E33585 /* ContentGradientLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BDE48DB2AF49EA300E33585 /* ContentGradientLayer.swift */; };
 		1BE8E9FF2AAE2DFB00EB0A55 /* MusicServiceProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BE8E9FE2AAE2DFB00EB0A55 /* MusicServiceProtocol.swift */; };
 		1BE8EA012AAE315200EB0A55 /* APIViewModel+Music.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BE8EA002AAE315200EB0A55 /* APIViewModel+Music.swift */; };
 		1BE8EA032AAE321200EB0A55 /* MusicProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BE8EA022AAE321200EB0A55 /* MusicProtocol.swift */; };
@@ -929,6 +931,7 @@
 		1BDE03CF2AC3CECB006CD966 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		1BDE48D52AF3CE7000E33585 /* DimsDefault.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DimsDefault.swift; sourceTree = "<group>"; };
 		1BDE48D82AF3D2F900E33585 /* DimsUltraThin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DimsUltraThin.swift; sourceTree = "<group>"; };
+		1BDE48DB2AF49EA300E33585 /* ContentGradientLayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentGradientLayer.swift; sourceTree = "<group>"; };
 		1BE8E9FE2AAE2DFB00EB0A55 /* MusicServiceProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MusicServiceProtocol.swift; sourceTree = "<group>"; };
 		1BE8EA002AAE315200EB0A55 /* APIViewModel+Music.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "APIViewModel+Music.swift"; sourceTree = "<group>"; };
 		1BE8EA022AAE321200EB0A55 /* MusicProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MusicProtocol.swift; sourceTree = "<group>"; };
@@ -1463,6 +1466,7 @@
 		1B3955552A95081400BCB4DF /* Components */ = {
 			isa = PBXGroup;
 			children = (
+				1BDE48DE2AF49F8400E33585 /* Layers */,
 				78FDA5382AEF72E1001C3DA4 /* Content */,
 				1B8132DA2AE624E100000C32 /* VideoEditor */,
 				1BD4E7C42ABA689E00ADB783 /* VideoPicker */,
@@ -1475,9 +1479,6 @@
 				1B3895182AB9CB6000B4C8DD /* Sliders */,
 				1B33AA602AE610A3003F8099 /* ButtonStyles */,
 				1B8132D82AE618DE00000C32 /* RepresentableViews */,
-				1BCB90322AEEBCE60088B2F2 /* DimsThick.swift */,
-				1BDE48D82AF3D2F900E33585 /* DimsUltraThin.swift */,
-				1BDE48D52AF3CE7000E33585 /* DimsDefault.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -2252,6 +2253,17 @@
 			path = VideoPicker;
 			sourceTree = "<group>";
 		};
+		1BDE48DE2AF49F8400E33585 /* Layers */ = {
+			isa = PBXGroup;
+			children = (
+				1BCB90322AEEBCE60088B2F2 /* DimsThick.swift */,
+				1BDE48D82AF3D2F900E33585 /* DimsUltraThin.swift */,
+				1BDE48D52AF3CE7000E33585 /* DimsDefault.swift */,
+				1BDE48DB2AF49EA300E33585 /* ContentGradientLayer.swift */,
+			);
+			path = Layers;
+			sourceTree = "<group>";
+		};
 		1BE8EA062AAE554400EB0A55 /* Music */ = {
 			isa = PBXGroup;
 			children = (
@@ -2828,6 +2840,7 @@
 				787AF5672AA87D2E00C190E6 /* MemberProfile.swift in Sources */,
 				7861E68A2ACD092B00612E2F /* NavigationUtil.swift in Sources */,
 				78F493E72AEA7BB200A08FC1 /* MainFeedPlayersViewModel.swift in Sources */,
+				1BDE48DC2AF49EA300E33585 /* ContentGradientLayer.swift in Sources */,
 				78BECCD72AAAE169003FA7B5 /* ProfileProtocol.swift in Sources */,
 				1B3895762AB9CBFC00B4C8DD /* Extension+UIImage.swift in Sources */,
 				78BCA95C2AF085C10084E92F /* MemberContentPlayerView.swift in Sources */,
@@ -3027,6 +3040,7 @@
 				1B9936802AF3699E00F5C619 /* MemberProfile.swift in Sources */,
 				1B9936812AF3699E00F5C619 /* NavigationUtil.swift in Sources */,
 				1B9936822AF3699E00F5C619 /* MainFeedPlayersViewModel.swift in Sources */,
+				1BDE48DD2AF49EA300E33585 /* ContentGradientLayer.swift in Sources */,
 				1B9936832AF3699E00F5C619 /* ProfileProtocol.swift in Sources */,
 				1B9936842AF3699E00F5C619 /* Extension+UIImage.swift in Sources */,
 				1B9936852AF3699E00F5C619 /* MemberContentPlayerView.swift in Sources */,
