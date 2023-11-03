@@ -251,15 +251,15 @@ struct RootTabView: View {
             showTermsOfService = true
           } label: {
             Text("이용약관")
-              .font(.system(size: 12, weight: .semibold))
               .underline(true, color: .LabelColor_Primary_Dark)
+              .fontSystem(fontDesignSystem: .caption_SemiBold)
           }
           Button {
             showPrivacyPolicy = true
           } label: {
             Text("개인정보처리방침")
-              .font(.system(size: 12, weight: .semibold))
               .underline(true, color: .LabelColor_Primary_Dark)
+              .fontSystem(fontDesignSystem: .caption_SemiBold)
           }
         }
         .foregroundColor(.LabelColor_Primary_Dark)
@@ -378,11 +378,9 @@ extension RootTabView {
   var guideView: some View {
     if showGuide {
       ZStack {
-        Color.clear.overlay {
-          Image("gestureGuide")
-            .resizable()
-            .scaledToFill()
-        }
+        Image("gestureGuide")
+          .resizable()
+          .scaledToFill()
         VStack {
           Spacer()
           Button {
@@ -405,6 +403,7 @@ extension RootTabView {
           .padding(.bottom, 32)
         }
       }
+      .ignoresSafeArea()
       .frame(width: UIScreen.width, height: UIScreen.height)
       .onAppear {
         tabbarModel.tabbarOpacity = 0.0

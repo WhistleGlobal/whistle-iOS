@@ -96,7 +96,6 @@
 		1B9936412AF3699E00F5C619 /* FiltersView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B3895322AB9CB7400B4C8DD /* FiltersView.swift */; };
 		1B9936422AF3699E00F5C619 /* PhotoAssetModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 788E685E2AD6B6710056C18B /* PhotoAssetModel.swift */; };
 		1B9936432AF3699E00F5C619 /* VersionCheck.swift in Sources */ = {isa = PBXBuildFile; fileRef = 780039072AD7E0020033B9F1 /* VersionCheck.swift */; };
-		1B9936442AF3699E00F5C619 /* GuestMainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 786A7D512ACD6E1B001CC4F2 /* GuestMainView.swift */; };
 		1B9936452AF3699E00F5C619 /* EditorToolButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B38951F2AB9CB6000B4C8DD /* EditorToolButton.swift */; };
 		1B9936462AF3699E00F5C619 /* GuestContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 786A7D532ACD7278001CC4F2 /* GuestContent.swift */; };
 		1B9936472AF3699E00F5C619 /* UserResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7866694A2AA1287500448EC7 /* UserResponse.swift */; };
@@ -515,7 +514,6 @@
 		7866694B2AA1287500448EC7 /* UserResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7866694A2AA1287500448EC7 /* UserResponse.swift */; };
 		7866694E2AA1289900448EC7 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 7866694D2AA1289900448EC7 /* Alamofire */; };
 		786669552AA12F7F00448EC7 /* KeychainSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 786669542AA12F7F00448EC7 /* KeychainSwift */; };
-		786A7D522ACD6E1B001CC4F2 /* GuestMainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 786A7D512ACD6E1B001CC4F2 /* GuestMainView.swift */; };
 		786A7D542ACD7278001CC4F2 /* GuestContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 786A7D532ACD7278001CC4F2 /* GuestContent.swift */; };
 		786CFEAF2AAC4DCF00DB2ADD /* MemberProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 786CFEAE2AAC4DCF00DB2ADD /* MemberProfileView.swift */; };
 		786CFEB12AAC5D5100DB2ADD /* ProfileReportTypeSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 786CFEB02AAC5D5100DB2ADD /* ProfileReportTypeSelectionView.swift */; };
@@ -967,7 +965,6 @@
 		786669462AA1282D00448EC7 /* AppleSignInViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppleSignInViewModel.swift; sourceTree = "<group>"; };
 		786669482AA1284F00448EC7 /* UserAuth.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserAuth.swift; sourceTree = "<group>"; };
 		7866694A2AA1287500448EC7 /* UserResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserResponse.swift; sourceTree = "<group>"; };
-		786A7D512ACD6E1B001CC4F2 /* GuestMainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GuestMainView.swift; sourceTree = "<group>"; };
 		786A7D532ACD7278001CC4F2 /* GuestContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GuestContent.swift; sourceTree = "<group>"; };
 		786CFEAE2AAC4DCF00DB2ADD /* MemberProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemberProfileView.swift; sourceTree = "<group>"; };
 		786CFEB02AAC5D5100DB2ADD /* ProfileReportTypeSelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileReportTypeSelectionView.swift; sourceTree = "<group>"; };
@@ -2286,7 +2283,6 @@
 			isa = PBXGroup;
 			children = (
 				785258562ACC6D680024E466 /* GuestProfileView.swift */,
-				786A7D512ACD6E1B001CC4F2 /* GuestMainView.swift */,
 				782A6DD42AF1EAFC004D0A60 /* GuestMainFeedView.swift */,
 				782A6DD62AF1EB0D004D0A60 /* GuestMainFeedPageView.swift */,
 				782A6DD82AF1EB3E004D0A60 /* GuestContentPlayerView.swift */,
@@ -2770,7 +2766,6 @@
 				1B3895472AB9CB7500B4C8DD /* FiltersView.swift in Sources */,
 				788E68662AD6B6710056C18B /* PhotoAssetModel.swift in Sources */,
 				780039082AD7E0020033B9F1 /* VersionCheck.swift in Sources */,
-				786A7D522ACD6E1B001CC4F2 /* GuestMainView.swift in Sources */,
 				1B3895272AB9CB6000B4C8DD /* EditorToolButton.swift in Sources */,
 				786A7D542ACD7278001CC4F2 /* GuestContent.swift in Sources */,
 				7866694B2AA1287500448EC7 /* UserResponse.swift in Sources */,
@@ -2970,7 +2965,6 @@
 				1B9936412AF3699E00F5C619 /* FiltersView.swift in Sources */,
 				1B9936422AF3699E00F5C619 /* PhotoAssetModel.swift in Sources */,
 				1B9936432AF3699E00F5C619 /* VersionCheck.swift in Sources */,
-				1B9936442AF3699E00F5C619 /* GuestMainView.swift in Sources */,
 				1B9936452AF3699E00F5C619 /* EditorToolButton.swift in Sources */,
 				1B9936462AF3699E00F5C619 /* GuestContent.swift in Sources */,
 				1B9936472AF3699E00F5C619 /* UserResponse.swift in Sources */,

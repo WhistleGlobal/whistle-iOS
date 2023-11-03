@@ -71,10 +71,10 @@ struct BookmarkedContentLayer: View {
                 Task {
                   if currentVideoInfo.isFollowed {
                     await apiViewModel.followAction(userID: currentVideoInfo.userId, method: .delete)
-                    toastViewModel.toastInit(message: "\(currentVideoInfo.userName)님을 팔로우 취소함")
+                    toastViewModel.toastInit(message: "\(currentVideoInfo.userName)님을 팔로우 취소했습니다")
                   } else {
                     await apiViewModel.followAction(userID: currentVideoInfo.userId, method: .post)
-                    toastViewModel.toastInit(message: "\(currentVideoInfo.userName)님을 팔로우 중")
+                    toastViewModel.toastInit(message: "\(currentVideoInfo.userName)님을 팔로우 중입니다")
                   }
                   currentVideoInfo.isFollowed.toggle()
 

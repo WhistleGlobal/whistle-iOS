@@ -50,6 +50,9 @@ struct GuestContentPlayerView: View {
             if let player = feedPlayersViewModel.currentPlayer, index == feedPlayersViewModel.currentVideoIndex {
               ContentPlayer(player: player)
                 .frame(width: UIScreen.width, height: UIScreen.height)
+                .onTapGesture(count: 2) {
+                  feedMoreModel.bottomSheetPosition = .dynamic
+                }
                 .onTapGesture {
                   if player.rate == 0.0 {
                     player.play()
@@ -155,6 +158,4 @@ struct GuestContentPlayerView: View {
       }
     }
   }
-
 }
-
