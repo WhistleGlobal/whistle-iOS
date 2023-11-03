@@ -39,14 +39,14 @@ struct MainFeedView: View {
           Color.clear.frame(width: 28)
           Spacer()
           Text(CommonWords().more)
-            .fontSystem(fontDesignSystem: .subtitle1_KO)
+            .fontSystem(fontDesignSystem: .subtitle1)
             .foregroundColor(.white)
           Spacer()
           Button {
             feedMoreModel.bottomSheetPosition = .hidden
           } label: {
             Text(CommonWords().cancel)
-              .fontSystem(fontDesignSystem: .subtitle2_KO)
+              .fontSystem(fontDesignSystem: .subtitle2)
               .foregroundColor(.white)
           }
         }

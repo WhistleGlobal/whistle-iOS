@@ -56,10 +56,10 @@ struct MainContentLayer: View {
                 Task {
                   if currentVideoInfo.isFollowed {
                     await apiViewModel.followAction(userID: currentVideoInfo.userId ?? 0, method: .delete)
-                    toastViewModel.toastInit(message: "\(currentVideoInfo.userName ?? "")님을 팔로우 취소함")
+                    toastViewModel.toastInit(message: "\(currentVideoInfo.userName ?? "")님을 팔로우 취소했습니다")
                   } else {
                     await apiViewModel.followAction(userID: currentVideoInfo.userId ?? 0, method: .post)
-                    toastViewModel.toastInit(message: "\(currentVideoInfo.userName ?? "")님을 팔로우 중")
+                    toastViewModel.toastInit(message: "\(currentVideoInfo.userName ?? "")님을 팔로우 중입니다")
                   }
                   currentVideoInfo.isFollowed.toggle()
 
@@ -88,13 +88,13 @@ struct MainContentLayer: View {
             if !caption.isEmpty {
               HStack(spacing: 0) {
                 Text(currentVideoInfo.caption ?? "")
-                  .fontSystem(fontDesignSystem: .body2_KO)
+                  .fontSystem(fontDesignSystem: .body2)
                   .foregroundColor(.white)
               }
             }
           }
           Label(LocalizedStringKey(stringLiteral: currentVideoInfo.musicTitle ?? "원본 오디오"), systemImage: "music.note")
-            .fontSystem(fontDesignSystem: .body2_KO)
+            .fontSystem(fontDesignSystem: .body2)
             .foregroundColor(.white)
             .padding(.top, 4)
         }

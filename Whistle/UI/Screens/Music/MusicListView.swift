@@ -24,6 +24,7 @@ enum DownloadStatus {
 // MARK: - MusicListView
 
 struct MusicListView: View {
+  @Environment(\.dismiss) var dismiss
   @StateObject var apiViewModel = APIViewModel.shared
   @ObservedObject var musicVM: MusicViewModel
   @ObservedObject var editorVM: VideoEditorViewModel
@@ -64,13 +65,59 @@ struct MusicListView: View {
   let tapSearchBar: (() -> Void)?
 
   var body: some View {
-    VStack {
+    VStack(spacing: 0) {
+      ZStack {
+        Button { } label: {
+          Text(CommonWords().cancel)
+            .fontSystem(fontDesignSystem: .subtitle2)
+            .hLeading()
+            .foregroundStyle(.white)
+        }
+        Text(ContentWords().newContent)
+          .fontSystem(fontDesignSystem: .subtitle1)
+          .hCenter()
+          .foregroundStyle(.white)
+        Button {
+          audioPlayer?.stop()
+          DispatchQueue.main.async {
+            if let currentMusic {
+              musicVM.musicInfo = currentMusic
+              musicVM.originalAudioURL = fileDirectories[currentMusic]
+              Task {
+                if let url = musicVM.originalAudioURL, let duration = editorVM.currentVideo?.totalDuration {
+                  musicVM.sample_count = Int(audioDuration(url) / (duration / 10))
+                  musicVM.trimDuration = duration
+                }
+                await musicVM.visualizeAudio()
+                bottomSheetPosition = .hidden
+                editorVM.selectedTools = nil
+                showMusicTrimView = true
+              }
+            }
+          }
+        } label: {
+          Text(CommonWords().done)
+            .fontSystem(fontDesignSystem: .subtitle2)
+            .hTrailing()
+//            .foregroundStyle(currentMusic == nil ? Color.Disable_Placeholder_Dark : Color.Info)
+            .foregroundStyle(Color.Info)
+        }
+        .disabled(currentMusic == nil)
+      }
+      .padding(.horizontal, 16)
+      .frame(height: 44)
+      .overlay(alignment: .bottom) {
+        Rectangle().fill(Color.Border_Default_Dark)
+          .frame(height: 1)
+      }
+
       SearchBar(
         searchText: $searchQueryString,
         isSearching: $isSearching)
         .simultaneousGesture(TapGesture().onEnded {
           tapSearchBar?()
         })
+
       if musicList.isEmpty {
         ProgressView()
           .scaleEffect(2.0)
@@ -81,59 +128,92 @@ struct MusicListView: View {
         if !filteredMusicList.isEmpty {
           List(filteredMusicList, id: \.musicID) { music in
             HStack(spacing: 0) {
-              HStack {
-                KFImage(URL(string: music.albumCover))
-                  .cancelOnDisappear(true)
-                  .placeholder {
-                    ProgressView()
-                  }
-                  .retry(maxCount: 3, interval: .seconds(0.5))
-                  .onSuccess { _ in
-                  }
-                  .onFailure { _ in
-                  }
-                  .resizable()
-                  .frame(width: UIScreen.getWidth(64), height: UIScreen.getWidth(64))
-                  .cornerRadius(8)
-                  .padding(.trailing, 16)
-
-                Text("\(music.musicTitle)")
-                  .foregroundStyle(Color.LabelColor_Primary_Dark)
-                  .fontSystem(fontDesignSystem: .subtitle1)
-                  .truncationMode(.tail)
-                  .lineLimit(1)
-                  .frame(width: UIScreen.getWidth(210), alignment: .leading)
-                Rectangle().fill(.white).opacity(0.01)
-              }
-              .hLeading()
-              .highPriorityGesture(TapGesture().onEnded {
-                let directoryURL = FileManager.default.temporaryDirectory
-                let uniqueFileName = music.musicTitle + ".mp3"
-                let fileURL = directoryURL.appendingPathComponent(uniqueFileName)
-                fileDirectories[music] = fileURL
-                if FileManager.default.fileExists(atPath: fileURL.path) {
-                  audioPlayer?.stop()
-                  DispatchQueue.main.async {
-                    musicVM.musicInfo = music
-                    musicVM.originalAudioURL = fileDirectories[music]
-                    Task {
-                      if let url = musicVM.originalAudioURL, let duration = editorVM.currentVideo?.totalDuration {
-                        musicVM.sample_count = Int(audioDuration(url) / (duration / 10))
-                        musicVM.trimDuration = duration
-                      }
-                      await musicVM.visualizeAudio()
-                      bottomSheetPosition = .hidden
-                      editorVM.selectedTools = nil
-                      showMusicTrimView = true
-                    }
-                  }
-                } else {
-                  downloadAudioUsingAlamofire(for: music)
+              KFImage(URL(string: music.albumCover))
+                .cancelOnDisappear(true)
+                .placeholder {
+                  ProgressView()
                 }
-              })
-              handleDownloadButton(for: music)
-                .fixedSize(horizontal: true, vertical: false)
+                .retry(maxCount: 3, interval: .seconds(0.5))
+                .onSuccess { _ in
+                }
+                .onFailure { _ in
+                }
+                .resizable()
+                .frame(width: UIScreen.getWidth(64), height: UIScreen.getWidth(64))
+                .cornerRadius(8)
+                .overlay {
+                  if downloadStatus[music] == .inProgress {
+                    DimsDefault().clipShape(RoundedRectangle(cornerRadius: 8))
+                    CircularProgressBar(progress: progressStatus[music] ?? 0.0, width: 4)
+                      .padding(8)
+                  }
+                  if downloadStatus[music] == .playing {
+                    RoundedRectangle(cornerRadius: 8).strokeBorder(Color.white, lineWidth: 2)
+                  }
+                }
+                .padding(.trailing, 16)
+              Text("\(music.musicTitle)")
+                .foregroundStyle(Color.LabelColor_Primary_Dark)
+                .fontSystem(fontDesignSystem: .subtitle1)
+                .truncationMode(.tail)
+                .lineLimit(1)
+                .hLeading()
+//              handleDownloadButton(for: music)
+//                .fixedSize(horizontal: true, vertical: false)
             }
+            .padding(.vertical, 8)
+            .padding(.horizontal, 16)
+            .overlay(alignment: .bottom) {
+              // Separator
+              Rectangle()
+                .fill(Color.Border_Default_Dark)
+                .frame(height: 0.5)
+                .padding(.leading, 16 + 64 + 16)
+            }
+            .background {
+              if music == currentMusic {
+                DimsUltraThin()
+              }
+            }
+            .contentShape(Rectangle())
+            .onTapGesture {
+              currentMusic = music
+              switch downloadStatus[music] ?? .beforeDownload {
+              case .beforeDownload:
+                downloadAudioUsingAlamofire(for: music)
+              case .inProgress:
+                break
+              case .complete:
+                playAudioFromTemporaryDirectory(for: music, fileURL: fileDirectories[music]!)
+              case .playing:
+                stopAudioFromTemporayDirectory(for: music)
+              }
+//              let directoryURL = FileManager.default.temporaryDirectory
+//              let uniqueFileName = music.musicTitle + ".mp3"
+//              let fileURL = directoryURL.appendingPathComponent(uniqueFileName)
+//              fileDirectories[music] = fileURL
+//              if FileManager.default.fileExists(atPath: fileURL.path) {
+//                audioPlayer?.stop()
+//                DispatchQueue.main.async {
+//                  musicVM.musicInfo = music
+//                  musicVM.originalAudioURL = fileDirectories[music]
+//                  Task {
+//                    if let url = musicVM.originalAudioURL, let duration = editorVM.currentVideo?.totalDuration {
+//                      musicVM.sample_count = Int(audioDuration(url) / (duration / 10))
+//                      musicVM.trimDuration = duration
+//                    }
+//                    await musicVM.visualizeAudio()
+//                    bottomSheetPosition = .hidden
+//                    editorVM.selectedTools = nil
+//                    showMusicTrimView = true
+//                  }
+//                }
+//              }
+//            else {
+//                downloadAudioUsingAlamofire(for: music)
+//              }
+            }
+            .listRowInsets(EdgeInsets())
             .listRowSeparator(.hidden)
             .listRowBackground(Color.clear)
           }
@@ -143,7 +223,7 @@ struct MusicListView: View {
         } else {
           List {
             Text("검색 결과가 없습니다.")
-              .fontSystem(fontDesignSystem: .subtitle2_KO)
+              .fontSystem(fontDesignSystem: .subtitle2)
               .foregroundStyle(Color.white)
               .listRowSeparator(.hidden)
               .listRowBackground(Color.clear)
@@ -159,20 +239,6 @@ struct MusicListView: View {
         musicList = await apiViewModel.requestMusicList()
         downloadStatus = Dictionary(uniqueKeysWithValues: musicList.map { ($0, .beforeDownload) })
       }
-    }
-  }
-
-  @ViewBuilder
-  func glassMoriphicView(width _: CGFloat, height _: CGFloat, cornerRadius: CGFloat) -> some View {
-    ZStack {
-      RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
-        .fill(Color.black.opacity(0.3))
-      CustomBlurEffect(effect: .systemUltraThinMaterialLight) { view in
-        // FIXME: - 피그마와 비슷하도록 값 고치기
-        view.saturationAmount = 2.2
-        view.gaussianBlurRadius = 36
-      }
-      .clipShape(RoundedRectangle(cornerRadius: cornerRadius, style: .continuous))
     }
   }
 
@@ -360,7 +426,7 @@ struct SearchBar: View {
           .padding(.horizontal, 34)
           .frame(height: UIScreen.getHeight(28))
           .foregroundStyle(Color.LabelColor_Primary_Dark)
-          .fontSystem(fontDesignSystem: .body1_KO)
+          .fontSystem(fontDesignSystem: .body1)
           .background(Color.Dim_Default)
           .cornerRadius(10)
           .padding(.leading, 16)
@@ -378,7 +444,7 @@ struct SearchBar: View {
         if isSearching {
           Text(CommonWords().cancel)
             .foregroundStyle(Color.LabelColor_Primary_Dark)
-            .fontSystem(fontDesignSystem: .body1_KO)
+            .fontSystem(fontDesignSystem: .body1)
             .padding(.horizontal, 16)
             .contentShape(Rectangle())
             .onTapGesture {

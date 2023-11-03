@@ -101,6 +101,8 @@ struct MyContentPlayerView: View {
                   feedMoreModel.bottomSheetPosition = .absolute(186)
                 }
                 .overlay {
+                  ContentGradientLayer()
+                    .allowsHitTesting(false)
                   if tabbarModel.tabWidth != 56 {
                     MyContentLayer(
                       currentVideoInfo: content,
@@ -111,7 +113,7 @@ struct MyContentPlayerView: View {
                       .padding(.bottom, UIScreen.main.nativeBounds.height == 1334 ? 24 : 0)
                   }
                   if feedMoreModel.bottomSheetPosition != .hidden {
-                    DimmedBackground()
+                    DimsThick()
                   }
                 }
               playButton(toPlay: player.rate == 0)
@@ -133,51 +135,14 @@ struct MyContentPlayerView: View {
                       .foregroundColor(.Gray10)
                       .padding(.bottom, 26)
                     Text("차단된 계정의 콘텐츠입니다.")
-                      .fontSystem(fontDesignSystem: .subtitle1_KO)
+                      .fontSystem(fontDesignSystem: .subtitle1)
                       .foregroundColor(.LabelColor_Primary_Dark)
                       .padding(.bottom, 12)
                     Text("차단된 계정의 모든 콘텐츠는 \n회원님의 피드에 노출되지 않습니다.")
-                      .fontSystem(fontDesignSystem: .body2_KO)
+                      .fontSystem(fontDesignSystem: .body2)
                       .foregroundColor(.LabelColor_Secondary_Dark)
                   }
                 }
-            }
-            if showGuide {
-              VStack {
-                Spacer()
-                Button {
-                  showGuide = false
-                } label: {
-                  Text(CommonWords().close)
-                    .fontSystem(fontDesignSystem: .subtitle2_KO)
-                    .foregroundColor(Color.LabelColor_Primary_Dark)
-                    .frame(width: UIScreen.width - 32, height: 56)
-                    .background {
-                      glassMorphicView(cornerRadius: 12)
-                        .overlay {
-                          RoundedRectangle(cornerRadius: 12)
-                            .stroke(lineWidth: 1)
-                            .foregroundStyle(
-                              LinearGradient.Border_Glass)
-                        }
-                    }
-                }
-                .padding(.bottom, 32)
-              }
-              .frame(width: UIScreen.width, height: UIScreen.height)
-              .ignoresSafeArea()
-              .ignoresSafeArea(.all, edges: .top)
-              .background {
-                Color.clear.overlay {
-                  Image("gestureGuide")
-                    .resizable()
-                    .scaledToFill()
-                    .ignoresSafeArea()
-                    .ignoresSafeArea(.all, edges: .top)
-                }
-                .ignoresSafeArea()
-                .ignoresSafeArea(.all, edges: .top)
-              }
             }
           }
           .overlay(alignment: .topLeading) {
@@ -196,7 +161,7 @@ struct MyContentPlayerView: View {
                       .padding(8)
                     Text("\(Int(uploadProgress * 100))%")
                       .foregroundStyle(Color.white)
-                      .fontSystem(fontDesignSystem: .body2_KO)
+                      .fontSystem(fontDesignSystem: .body2)
                   }
                 }
                 .padding(.top, 70)

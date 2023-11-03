@@ -128,6 +128,11 @@ extension View {
 }
 
 extension View {
+  /// 선택한 코너에 radius를 줄 수 있는 함수입니다.
+  /// - Parameters:
+  ///   - radius: radius 값
+  ///   - corners: 배열 또는 하나의 값을 할당할 수 있습니다.
+  /// - Returns: corners에 radius가 적용된 view
   func cornerRadius(_ radius: CGFloat, corners: UIRectCorner) -> some View {
     clipShape(RoundedCorners(radius: radius, corners: corners))
   }
@@ -445,7 +450,7 @@ extension View {
         .foregroundColor(Color.LabelColor_Primary_Dark)
       Text(text)
         .foregroundColor(Color.LabelColor_Primary_Dark)
-        .fontSystem(fontDesignSystem: .subtitle2_KO)
+        .fontSystem(fontDesignSystem: .subtitle2)
       Spacer()
     }
     .frame(height: 56)
@@ -457,7 +462,7 @@ extension View {
     HStack {
       Text(text)
         .foregroundColor(color)
-        .fontSystem(fontDesignSystem: .subtitle2_KO)
+        .fontSystem(fontDesignSystem: .subtitle2)
       Spacer()
     }
     .frame(height: 56)

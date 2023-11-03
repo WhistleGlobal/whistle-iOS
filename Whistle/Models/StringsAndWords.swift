@@ -16,7 +16,7 @@ struct CommonWords {
   let next: LocalizedStringKey = "다음"
   let music: LocalizedStringKey = "음악"
   let volume: LocalizedStringKey = "볼륨"
-  let confirm: LocalizedStringKey = "완료"
+  let done: LocalizedStringKey = "완료"
   let submit: LocalizedStringKey = "제출"
   let album: LocalizedStringKey = "앨범"
   let timer: LocalizedStringKey = "타이머"

@@ -113,7 +113,7 @@ struct VideoCaptureView: View {
           }
         }
         if musicBottomSheetPosition == .absolute(UIScreen.getHeight(514)) {
-          DimmedBackground().zIndex(1000)
+          DimsThick().zIndex(1000)
         }
         if isPresented {
           PickerConfigViewControllerWrapper(isImagePickerClosed: $isImagePickerClosed)
@@ -135,7 +135,7 @@ struct VideoCaptureView: View {
           // 음악 추가 버튼
           if buttonState == .completed {
             MusicInfo(musicVM: musicVM, showMusicTrimView: $showMusicTrimView) {
-              if guestUploadModel.istempAccess {
+              if isAccess {
                 if musicVM.musicInfo == nil {
                   sheetPositions = [.absolute(UIScreen.getHeight(400)), .hidden, .relative(1)]
                   musicBottomSheetPosition = .absolute(UIScreen.getHeight(400))
@@ -323,7 +323,7 @@ struct VideoCaptureView: View {
           .foregroundColor(.LabelColor_Primary_Dark)
 
           Text("더 많은 스포츠 콘텐츠를 즐겨보세요")
-            .fontSystem(fontDesignSystem: .body1_KO)
+            .fontSystem(fontDesignSystem: .body1)
             .foregroundColor(.LabelColor_Secondary_Dark)
           Spacer()
           Button {
@@ -383,7 +383,7 @@ struct VideoCaptureView: View {
             }
             .padding(.bottom, 24)
           Text("가입을 진행할 경우, 아래의 정책에 대해 동의한 것으로 간주합니다.")
-            .fontSystem(fontDesignSystem: .caption_KO_Regular)
+            .fontSystem(fontDesignSystem: .caption_Regular)
             .foregroundColor(.LabelColor_Primary_Dark)
           HStack(spacing: 16) {
             Button {
@@ -443,7 +443,7 @@ extension VideoCaptureView {
         Color.clear.frame(width: 28)
         Spacer()
         Text(CommonWords().timer)
-          .fontSystem(fontDesignSystem: .subtitle1_KO)
+          .fontSystem(fontDesignSystem: .subtitle1)
           .foregroundColor(.white)
         Spacer()
         Button {
@@ -451,7 +451,7 @@ extension VideoCaptureView {
           musicBottomSheetPosition = .hidden
         } label: {
           Text(CommonWords().cancel)
-            .fontSystem(fontDesignSystem: .subtitle2_KO)
+            .fontSystem(fontDesignSystem: .subtitle2)
             .foregroundColor(.white)
         }
       }
@@ -461,7 +461,7 @@ extension VideoCaptureView {
       Divider().frame(width: UIScreen.width)
       HStack {
         Text(VideoCaptureWords().countdown)
-          .fontSystem(fontDesignSystem: .subtitle1_KO)
+          .fontSystem(fontDesignSystem: .subtitle1)
           .foregroundColor(.LabelColor_Primary_Dark)
         Spacer()
         ZStack {
@@ -500,7 +500,7 @@ extension VideoCaptureView {
               }
             } label: {
               Text("3s")
-                .fontSystem(fontDesignSystem: .subtitle3_KO)
+                .fontSystem(fontDesignSystem: .subtitle3)
                 .foregroundColor(selectedSec.0 == .sec3 ? .white : Color.LabelColor_DisablePlaceholder)
                 .frame(width: 58, height: 30)
             }
@@ -511,7 +511,7 @@ extension VideoCaptureView {
               }
             } label: {
               Text("10s")
-                .fontSystem(fontDesignSystem: .subtitle3_KO)
+                .fontSystem(fontDesignSystem: .subtitle3)
                 .foregroundColor(selectedSec.0 == .sec10 ? .white : Color.LabelColor_DisablePlaceholder)
                 .frame(width: 58, height: 30)
             }
@@ -527,7 +527,7 @@ extension VideoCaptureView {
       .frame(height: 64)
 
       Text(VideoCaptureWords().setVideoLength)
-        .fontSystem(fontDesignSystem: .subtitle2_KO)
+        .fontSystem(fontDesignSystem: .subtitle2)
         .foregroundColor(.LabelColor_Primary_Dark)
         .frame(height: 52)
         .frame(maxWidth: .infinity, alignment: .leading)
@@ -722,7 +722,7 @@ extension VideoCaptureView {
       .frame(width: UIScreen.width - 32, alignment: .leading)
       HStack {
         Text(VideoCaptureWords().timerComment)
-          .fontSystem(fontDesignSystem: .caption_KO_Regular)
+          .fontSystem(fontDesignSystem: .caption_Regular)
           .foregroundColor(Color.LabelColor_Primary_Dark)
       }
       .padding([.horizontal, .bottom], 16)
@@ -735,7 +735,7 @@ extension VideoCaptureView {
         }
       } label: {
         Text(VideoCaptureWords().setTimer)
-          .fontSystem(fontDesignSystem: .subtitle2_KO)
+          .fontSystem(fontDesignSystem: .subtitle2)
           .foregroundColor(Color.LabelColor_Primary_Dark)
           .frame(maxWidth: .infinity)
           .background {
@@ -758,7 +758,7 @@ extension VideoCaptureView {
           musicBottomSheetPosition = .hidden
         }
       }
-      .fontSystem(fontDesignSystem: .subtitle2_KO)
+      .fontSystem(fontDesignSystem: .subtitle2)
       .foregroundColor(Color.Info)
       .frame(height: 48)
       .frame(maxWidth: .infinity)
@@ -808,7 +808,7 @@ extension VideoCaptureView {
               .contentShape(Circle())
             if selectedSec.1 {
               Text("\(selectedSec.0 == .sec3 ? 3 : 10)초")
-                .fontSystem(fontDesignSystem: .subtitle3_KO)
+                .fontSystem(fontDesignSystem: .subtitle3)
                 .foregroundColor(.white)
             }
           }
@@ -888,6 +888,11 @@ extension VideoCaptureView {
           }
           dismiss()
           alertViewModel.onFullScreenCover = false
+          if let video = editorVM.currentVideo {
+            if videoPlayer.isPlaying {
+              videoPlayer.action(video)
+            }
+          }
         } label: {
           Image(systemName: "xmark")
             .font(.system(size: 20))
@@ -901,7 +906,7 @@ extension VideoCaptureView {
     case .completed:
       HStack(spacing: 24) {
         Text(ContentWords().newContent)
-          .fontSystem(fontDesignSystem: .subtitle1_KO)
+          .fontSystem(fontDesignSystem: .subtitle1)
           .foregroundStyle(Color.white)
       }
       .hCenter()
@@ -972,7 +977,7 @@ extension VideoCaptureView {
         }
         .overlay(alignment: .bottom) {
           Text(CommonWords().album)
-            .fontSystem(fontDesignSystem: .body2_KO)
+            .fontSystem(fontDesignSystem: .body2)
             .foregroundColor(.LabelColor_Primary_Dark)
             .offset(y: 16)
         }
@@ -1024,7 +1029,7 @@ extension VideoCaptureView {
         .overlay(alignment: .bottom) {
           Text(VideoCaptureWords().cameraSwitch)
             .foregroundColor(.white)
-            .fontSystem(fontDesignSystem: .body2_KO)
+            .fontSystem(fontDesignSystem: .body2)
             .offset(y: 16)
         }
         .contentShape(Circle())

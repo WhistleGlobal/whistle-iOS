@@ -127,7 +127,7 @@ struct MusicTrimView: View {
         VStack {
           Spacer()
           Text("드래그하여 영상에 추가할 부분을 선택하세요.")
-            .fontSystem(fontDesignSystem: .body2_KO)
+            .fontSystem(fontDesignSystem: .body2)
             .foregroundColor(.white)
             .padding(.bottom, UIScreen.getHeight(32))
         }
@@ -183,7 +183,7 @@ extension MusicTrimView {
         }
       } label: {
         Text(CommonWords().cancel)
-          .fontSystem(fontDesignSystem: .subtitle2_KO)
+          .fontSystem(fontDesignSystem: .subtitle2)
           .foregroundStyle(Color.white)
       }
       Spacer()
@@ -198,15 +198,15 @@ extension MusicTrimView {
         }
         musicVM.isTrimmed = true
       } label: {
-        Text(CommonWords().confirm)
-          .fontSystem(fontDesignSystem: .subtitle2_KO)
+        Text(CommonWords().done)
+          .fontSystem(fontDesignSystem: .subtitle2)
           .foregroundStyle(Color.Info)
       }
     }
     .padding(.horizontal, 16)
     .overlay {
       Text(VideoEditorWords().trimMusic)
-        .fontSystem(fontDesignSystem: .subtitle1_KO)
+        .fontSystem(fontDesignSystem: .subtitle1)
         .foregroundStyle(Color.white)
     }
     .frame(height: UIScreen.getHeight(44))

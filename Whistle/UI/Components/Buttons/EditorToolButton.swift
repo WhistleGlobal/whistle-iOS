@@ -26,7 +26,7 @@ struct EditorToolButton: View {
           Image(systemName: image)
             .font(.system(size: 20))
           Text(label)
-            .fontSystem(fontDesignSystem: .body2_KO)
+            .fontSystem(fontDesignSystem: .body2)
         }
         .hCenter()
       }

@@ -43,7 +43,7 @@ struct RecordAccessView: View {
         VStack(alignment: .leading, spacing: 0) {
           Text("Whistle의 카메라 및 마이크\n액세스를 허용해 주세요")
             .lineSpacing(2)
-            .fontSystem(fontDesignSystem: .title2_KO_SemiBold)
+            .fontSystem(fontDesignSystem: .title2_SemiBold)
             .foregroundColor(.LabelColor_Primary_Dark)
             .multilineTextAlignment(.center)
             .padding(.bottom, UIScreen.getHeight(64))
@@ -86,7 +86,7 @@ struct RecordAccessView: View {
           }
         } label: {
           Text(CommonWords().continueWord)
-            .fontSystem(fontDesignSystem: .subtitle2_KO)
+            .fontSystem(fontDesignSystem: .subtitle2)
             .foregroundColor(.LabelColor_Primary_Dark)
             .frame(width: UIScreen.width - 32, height: 56)
             .background {
@@ -167,10 +167,10 @@ extension RecordAccessView {
 
       VStack(alignment: .leading, spacing: 8) {
         Text(title)
-          .fontSystem(fontDesignSystem: .subtitle3_KO)
+          .fontSystem(fontDesignSystem: .subtitle3)
           .foregroundColor(.LabelColor_Primary_Dark)
         Text(text)
-          .fontSystem(fontDesignSystem: .caption_KO_Regular)
+          .fontSystem(fontDesignSystem: .caption_Regular)
           .lineLimit(nil)
           .multilineTextAlignment(.leading)
           .fixedSize(horizontal: false, vertical: true)

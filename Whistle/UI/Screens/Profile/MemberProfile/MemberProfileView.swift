@@ -76,16 +76,16 @@ struct MemberProfileView: View {
               .foregroundColor(.LabelColor_Primary_Dark)
               .padding(.bottom, 24)
             Text("아직 콘텐츠가 없습니다.")
-              .fontSystem(fontDesignSystem: .body1_KO)
+              .fontSystem(fontDesignSystem: .body1)
               .foregroundColor(.LabelColor_Primary_Dark)
               .padding(.bottom, 76)
           } else {
             Spacer()
             Text("차단된 계정")
-              .fontSystem(fontDesignSystem: .subtitle1_KO)
+              .fontSystem(fontDesignSystem: .subtitle1)
               .foregroundColor(.LabelColor_Primary_Dark)
             Text("사용자에 의해 차단된 계정입니다")
-              .fontSystem(fontDesignSystem: .body1_KO)
+              .fontSystem(fontDesignSystem: .body1)
               .foregroundColor(.LabelColor_Primary_Dark)
               .padding(.bottom, 56)
           }
@@ -125,7 +125,7 @@ struct MemberProfileView: View {
       }
       .ignoresSafeArea()
       if bottomSheetPosition != .hidden {
-        DimmedBackground()
+        DimsThick()
       }
     }
     .navigationBarBackButtonHidden()
@@ -152,14 +152,14 @@ struct MemberProfileView: View {
           Color.clear.frame(width: 28)
           Spacer()
           Text(CommonWords().more)
-            .fontSystem(fontDesignSystem: .subtitle1_KO)
+            .fontSystem(fontDesignSystem: .subtitle1)
             .foregroundColor(.white)
           Spacer()
           Button {
             bottomSheetPosition = .hidden
           } label: {
             Text(CommonWords().cancel)
-              .fontSystem(fontDesignSystem: .subtitle2_KO)
+              .fontSystem(fontDesignSystem: .subtitle2)
               .foregroundColor(.white)
           }
         }
@@ -290,7 +290,7 @@ extension MemberProfileView {
       Color.clear.overlay {
         Text(apiViewModel.memberProfile.introduce ?? "")
           .foregroundColor(Color.LabelColor_Secondary_Dark)
-          .fontSystem(fontDesignSystem: .body2_KO)
+          .fontSystem(fontDesignSystem: .body2)
           .lineLimit(2)
           .truncationMode(.tail)
           .multilineTextAlignment(.center)
@@ -484,7 +484,7 @@ extension MemberProfileView {
   @ViewBuilder
   var unblockButton: some View {
     Text(CommonWords().unblock)
-      .fontSystem(fontDesignSystem: .subtitle3_KO)
+      .fontSystem(fontDesignSystem: .subtitle3)
       .foregroundColor(.LabelColor_Primary_Dark)
       .padding(.horizontal, 20)
       .padding(.vertical, 6)

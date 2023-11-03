@@ -96,7 +96,6 @@
 		1B9936412AF3699E00F5C619 /* FiltersView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B3895322AB9CB7400B4C8DD /* FiltersView.swift */; };
 		1B9936422AF3699E00F5C619 /* PhotoAssetModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 788E685E2AD6B6710056C18B /* PhotoAssetModel.swift */; };
 		1B9936432AF3699E00F5C619 /* VersionCheck.swift in Sources */ = {isa = PBXBuildFile; fileRef = 780039072AD7E0020033B9F1 /* VersionCheck.swift */; };
-		1B9936442AF3699E00F5C619 /* GuestMainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 786A7D512ACD6E1B001CC4F2 /* GuestMainView.swift */; };
 		1B9936452AF3699E00F5C619 /* EditorToolButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B38951F2AB9CB6000B4C8DD /* EditorToolButton.swift */; };
 		1B9936462AF3699E00F5C619 /* GuestContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 786A7D532ACD7278001CC4F2 /* GuestContent.swift */; };
 		1B9936472AF3699E00F5C619 /* UserResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7866694A2AA1287500448EC7 /* UserResponse.swift */; };
@@ -210,7 +209,7 @@
 		1B9936B32AF3699E00F5C619 /* MainContentLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78FDA5392AEF7319001C3DA4 /* MainContentLayer.swift */; };
 		1B9936B42AF3699E00F5C619 /* RootTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78F980802A9F32C800AD542A /* RootTabView.swift */; };
 		1B9936B52AF3699E00F5C619 /* MusicServiceProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BE8E9FE2AAE2DFB00EB0A55 /* MusicServiceProtocol.swift */; };
-		1B9936B62AF3699E00F5C619 /* DimmedBackground.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BCB90322AEEBCE60088B2F2 /* DimmedBackground.swift */; };
+		1B9936B62AF3699E00F5C619 /* DimsThick.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BCB90322AEEBCE60088B2F2 /* DimsThick.swift */; };
 		1B9936B72AF3699E00F5C619 /* PhotoCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78730CE62ACE8660008B9981 /* PhotoCollection.swift */; };
 		1B9936B82AF3699E00F5C619 /* ContentLayerButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B9E6ACC2AF1F21A00E94A9E /* ContentLayerButton.swift */; };
 		1B9936B92AF3699E00F5C619 /* GuestContentPlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 782A6DD82AF1EB3E004D0A60 /* GuestContentPlayerView.swift */; };
@@ -354,7 +353,7 @@
 		1BB7A06A2A9514B4002DD86F /* .swiftlint.yml in Resources */ = {isa = PBXBuildFile; fileRef = 1BB7A0692A9514B4002DD86F /* .swiftlint.yml */; };
 		1BCB902F2AEEB0740088B2F2 /* Extension+String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BCB902E2AEEB0740088B2F2 /* Extension+String.swift */; };
 		1BCB90312AEEB0890088B2F2 /* Extension+Date.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BCB90302AEEB0890088B2F2 /* Extension+Date.swift */; };
-		1BCB90332AEEBCE60088B2F2 /* DimmedBackground.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BCB90322AEEBCE60088B2F2 /* DimmedBackground.swift */; };
+		1BCB90332AEEBCE60088B2F2 /* DimsThick.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BCB90322AEEBCE60088B2F2 /* DimsThick.swift */; };
 		1BD4E56B2ABA275200ADB783 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 1BD4E56A2ABA275200ADB783 /* SnapKit */; };
 		1BD4E5B62ABA2F5600ADB783 /* VideoPicker.h in Headers */ = {isa = PBXBuildFile; fileRef = 1BD4E5B52ABA2F5600ADB783 /* VideoPicker.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		1BD4E5B92ABA2F5600ADB783 /* VideoPicker.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1BD4E5B32ABA2F5600ADB783 /* VideoPicker.framework */; platformFilter = ios; };
@@ -466,6 +465,12 @@
 		1BD4E7DA2ABC706A00ADB783 /* Picker+UIVisualEffectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BD4E7D92ABC706A00ADB783 /* Picker+UIVisualEffectView.swift */; };
 		1BD4E7DC2ABC70A000ADB783 /* Picker+UIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BD4E7DB2ABC70A000ADB783 /* Picker+UIView.swift */; };
 		1BD4E7DE2ABC70C400ADB783 /* Picker+NSObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BD4E7DD2ABC70C400ADB783 /* Picker+NSObject.swift */; };
+		1BDE48D62AF3CE7000E33585 /* DimsDefault.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BDE48D52AF3CE7000E33585 /* DimsDefault.swift */; };
+		1BDE48D72AF3CEF200E33585 /* DimsDefault.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BDE48D52AF3CE7000E33585 /* DimsDefault.swift */; };
+		1BDE48D92AF3D2F900E33585 /* DimsUltraThin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BDE48D82AF3D2F900E33585 /* DimsUltraThin.swift */; };
+		1BDE48DA2AF3D2F900E33585 /* DimsUltraThin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BDE48D82AF3D2F900E33585 /* DimsUltraThin.swift */; };
+		1BDE48DC2AF49EA300E33585 /* ContentGradientLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BDE48DB2AF49EA300E33585 /* ContentGradientLayer.swift */; };
+		1BDE48DD2AF49EA300E33585 /* ContentGradientLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BDE48DB2AF49EA300E33585 /* ContentGradientLayer.swift */; };
 		1BE8E9FF2AAE2DFB00EB0A55 /* MusicServiceProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BE8E9FE2AAE2DFB00EB0A55 /* MusicServiceProtocol.swift */; };
 		1BE8EA012AAE315200EB0A55 /* APIViewModel+Music.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BE8EA002AAE315200EB0A55 /* APIViewModel+Music.swift */; };
 		1BE8EA032AAE321200EB0A55 /* MusicProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BE8EA022AAE321200EB0A55 /* MusicProtocol.swift */; };
@@ -511,7 +516,6 @@
 		7866694B2AA1287500448EC7 /* UserResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7866694A2AA1287500448EC7 /* UserResponse.swift */; };
 		7866694E2AA1289900448EC7 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 7866694D2AA1289900448EC7 /* Alamofire */; };
 		786669552AA12F7F00448EC7 /* KeychainSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 786669542AA12F7F00448EC7 /* KeychainSwift */; };
-		786A7D522ACD6E1B001CC4F2 /* GuestMainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 786A7D512ACD6E1B001CC4F2 /* GuestMainView.swift */; };
 		786A7D542ACD7278001CC4F2 /* GuestContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 786A7D532ACD7278001CC4F2 /* GuestContent.swift */; };
 		786CFEAF2AAC4DCF00DB2ADD /* MemberProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 786CFEAE2AAC4DCF00DB2ADD /* MemberProfileView.swift */; };
 		786CFEB12AAC5D5100DB2ADD /* ProfileReportTypeSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 786CFEB02AAC5D5100DB2ADD /* ProfileReportTypeSelectionView.swift */; };
@@ -738,7 +742,7 @@
 		1B93984A2AEFF1290050089D /* ko */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ko; path = ko.lproj/Localizable.strings; sourceTree = "<group>"; };
 		1B93984C2AEFF12D0050089D /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		1B9937082AF3699E00F5C619 /* WhistleDev.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WhistleDev.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		1B9937092AF3699E00F5C619 /* Dev-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "Dev-Info.plist"; path = "/Users/sangwon/Developer/whistle-iOS/Dev-Info.plist"; sourceTree = "<absolute>"; };
+		1B9937092AF3699E00F5C619 /* Dev-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "Dev-Info.plist"; path = "/Users/sangwon/Developer/whistle-iOS/Whistle/Dev-Info.plist"; sourceTree = "<absolute>"; };
 		1B9937102AF3708C00F5C619 /* Whistle_DevApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Whistle_DevApp.swift; sourceTree = "<group>"; };
 		1B9937122AF3708C00F5C619 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		1B9937142AF3708D00F5C619 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -813,7 +817,7 @@
 		1BB7A0692A9514B4002DD86F /* .swiftlint.yml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = .swiftlint.yml; sourceTree = "<group>"; };
 		1BCB902E2AEEB0740088B2F2 /* Extension+String.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Extension+String.swift"; sourceTree = "<group>"; };
 		1BCB90302AEEB0890088B2F2 /* Extension+Date.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Extension+Date.swift"; sourceTree = "<group>"; };
-		1BCB90322AEEBCE60088B2F2 /* DimmedBackground.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DimmedBackground.swift; sourceTree = "<group>"; };
+		1BCB90322AEEBCE60088B2F2 /* DimsThick.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DimsThick.swift; sourceTree = "<group>"; };
 		1BD4E5B32ABA2F5600ADB783 /* VideoPicker.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = VideoPicker.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		1BD4E5B52ABA2F5600ADB783 /* VideoPicker.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VideoPicker.h; sourceTree = "<group>"; };
 		1BD4E5EF2ABA2F8600ADB783 /* Core+Notification.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Core+Notification.swift"; sourceTree = "<group>"; };
@@ -925,6 +929,9 @@
 		1BD4E7DB2ABC70A000ADB783 /* Picker+UIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Picker+UIView.swift"; sourceTree = "<group>"; };
 		1BD4E7DD2ABC70C400ADB783 /* Picker+NSObject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Picker+NSObject.swift"; sourceTree = "<group>"; };
 		1BDE03CF2AC3CECB006CD966 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		1BDE48D52AF3CE7000E33585 /* DimsDefault.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DimsDefault.swift; sourceTree = "<group>"; };
+		1BDE48D82AF3D2F900E33585 /* DimsUltraThin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DimsUltraThin.swift; sourceTree = "<group>"; };
+		1BDE48DB2AF49EA300E33585 /* ContentGradientLayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentGradientLayer.swift; sourceTree = "<group>"; };
 		1BE8E9FE2AAE2DFB00EB0A55 /* MusicServiceProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MusicServiceProtocol.swift; sourceTree = "<group>"; };
 		1BE8EA002AAE315200EB0A55 /* APIViewModel+Music.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "APIViewModel+Music.swift"; sourceTree = "<group>"; };
 		1BE8EA022AAE321200EB0A55 /* MusicProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MusicProtocol.swift; sourceTree = "<group>"; };
@@ -961,7 +968,6 @@
 		786669462AA1282D00448EC7 /* AppleSignInViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppleSignInViewModel.swift; sourceTree = "<group>"; };
 		786669482AA1284F00448EC7 /* UserAuth.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserAuth.swift; sourceTree = "<group>"; };
 		7866694A2AA1287500448EC7 /* UserResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserResponse.swift; sourceTree = "<group>"; };
-		786A7D512ACD6E1B001CC4F2 /* GuestMainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GuestMainView.swift; sourceTree = "<group>"; };
 		786A7D532ACD7278001CC4F2 /* GuestContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GuestContent.swift; sourceTree = "<group>"; };
 		786CFEAE2AAC4DCF00DB2ADD /* MemberProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemberProfileView.swift; sourceTree = "<group>"; };
 		786CFEB02AAC5D5100DB2ADD /* ProfileReportTypeSelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileReportTypeSelectionView.swift; sourceTree = "<group>"; };
@@ -1460,6 +1466,7 @@
 		1B3955552A95081400BCB4DF /* Components */ = {
 			isa = PBXGroup;
 			children = (
+				1BDE48DE2AF49F8400E33585 /* Layers */,
 				78FDA5382AEF72E1001C3DA4 /* Content */,
 				1B8132DA2AE624E100000C32 /* VideoEditor */,
 				1BD4E7C42ABA689E00ADB783 /* VideoPicker */,
@@ -1472,7 +1479,6 @@
 				1B3895182AB9CB6000B4C8DD /* Sliders */,
 				1B33AA602AE610A3003F8099 /* ButtonStyles */,
 				1B8132D82AE618DE00000C32 /* RepresentableViews */,
-				1BCB90322AEEBCE60088B2F2 /* DimmedBackground.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -2247,6 +2253,17 @@
 			path = VideoPicker;
 			sourceTree = "<group>";
 		};
+		1BDE48DE2AF49F8400E33585 /* Layers */ = {
+			isa = PBXGroup;
+			children = (
+				1BCB90322AEEBCE60088B2F2 /* DimsThick.swift */,
+				1BDE48D82AF3D2F900E33585 /* DimsUltraThin.swift */,
+				1BDE48D52AF3CE7000E33585 /* DimsDefault.swift */,
+				1BDE48DB2AF49EA300E33585 /* ContentGradientLayer.swift */,
+			);
+			path = Layers;
+			sourceTree = "<group>";
+		};
 		1BE8EA062AAE554400EB0A55 /* Music */ = {
 			isa = PBXGroup;
 			children = (
@@ -2278,7 +2295,6 @@
 			isa = PBXGroup;
 			children = (
 				785258562ACC6D680024E466 /* GuestProfileView.swift */,
-				786A7D512ACD6E1B001CC4F2 /* GuestMainView.swift */,
 				782A6DD42AF1EAFC004D0A60 /* GuestMainFeedView.swift */,
 				782A6DD62AF1EB0D004D0A60 /* GuestMainFeedPageView.swift */,
 				782A6DD82AF1EB3E004D0A60 /* GuestContentPlayerView.swift */,
@@ -2762,7 +2778,6 @@
 				1B3895472AB9CB7500B4C8DD /* FiltersView.swift in Sources */,
 				788E68662AD6B6710056C18B /* PhotoAssetModel.swift in Sources */,
 				780039082AD7E0020033B9F1 /* VersionCheck.swift in Sources */,
-				786A7D522ACD6E1B001CC4F2 /* GuestMainView.swift in Sources */,
 				1B3895272AB9CB6000B4C8DD /* EditorToolButton.swift in Sources */,
 				786A7D542ACD7278001CC4F2 /* GuestContent.swift in Sources */,
 				7866694B2AA1287500448EC7 /* UserResponse.swift in Sources */,
@@ -2776,7 +2791,6 @@
 				1B3895712AB9CBFC00B4C8DD /* Extension+FileManager.swift in Sources */,
 				78D148E52A9E135F00DDCE48 /* Extension+UIView.swift in Sources */,
 				1BE8EA122AB0F7E800EB0A55 /* CircularProgressBar.swift in Sources */,
-				787093682AF28CB30023B400 /* ZoomFactorViewModel.swift in Sources */,
 				1B3895702AB9CBFC00B4C8DD /* Extension+AVAudioSession.swift in Sources */,
 				1B38956F2AB9CBFC00B4C8DD /* Extension+Int.swift in Sources */,
 				78B6FD2E2AA719190043E461 /* AlbumModel.swift in Sources */,
@@ -2826,6 +2840,7 @@
 				787AF5672AA87D2E00C190E6 /* MemberProfile.swift in Sources */,
 				7861E68A2ACD092B00612E2F /* NavigationUtil.swift in Sources */,
 				78F493E72AEA7BB200A08FC1 /* MainFeedPlayersViewModel.swift in Sources */,
+				1BDE48DC2AF49EA300E33585 /* ContentGradientLayer.swift in Sources */,
 				78BECCD72AAAE169003FA7B5 /* ProfileProtocol.swift in Sources */,
 				1B3895762AB9CBFC00B4C8DD /* Extension+UIImage.swift in Sources */,
 				78BCA95C2AF085C10084E92F /* MemberContentPlayerView.swift in Sources */,
@@ -2860,10 +2875,12 @@
 				78BCA9562AEFFAEE0084E92F /* BookmarkedContentLayer.swift in Sources */,
 				1B3895742AB9CBFC00B4C8DD /* Extension+TimeInterval.swift in Sources */,
 				7874CB922AA0B53A0081DE54 /* LegalInfoView.swift in Sources */,
+				1BDE48D92AF3D2F900E33585 /* DimsUltraThin.swift in Sources */,
 				788E68652AD6B6710056C18B /* VideoFile.swift in Sources */,
 				1B3895562AB9CB8C00B4C8DD /* VideoEditorViewModel.swift in Sources */,
 				78BECCDD2AAAE204003FA7B5 /* UploadProtocol.swift in Sources */,
 				1BE8EA032AAE321200EB0A55 /* MusicProtocol.swift in Sources */,
+				1BDE48D62AF3CE7000E33585 /* DimsDefault.swift in Sources */,
 				7897C3762AE6B58600DE36A2 /* View+GoogleSignIn.swift in Sources */,
 				1B3895642AB9CBD300B4C8DD /* VideoQuality.swift in Sources */,
 				78BCA95E2AF086970084E92F /* MemeberPlayersViewModel.swift in Sources */,
@@ -2877,7 +2894,7 @@
 				78FDA53A2AEF7319001C3DA4 /* MainContentLayer.swift in Sources */,
 				78F980812A9F32C800AD542A /* RootTabView.swift in Sources */,
 				1BE8E9FF2AAE2DFB00EB0A55 /* MusicServiceProtocol.swift in Sources */,
-				1BCB90332AEEBCE60088B2F2 /* DimmedBackground.swift in Sources */,
+				1BCB90332AEEBCE60088B2F2 /* DimsThick.swift in Sources */,
 				78730CE72ACE8660008B9981 /* PhotoCollection.swift in Sources */,
 				1B9E6ACD2AF1F21A00E94A9E /* ContentLayerButton.swift in Sources */,
 				782A6DD92AF1EB3E004D0A60 /* GuestContentPlayerView.swift in Sources */,
@@ -2961,7 +2978,6 @@
 				1B9936412AF3699E00F5C619 /* FiltersView.swift in Sources */,
 				1B9936422AF3699E00F5C619 /* PhotoAssetModel.swift in Sources */,
 				1B9936432AF3699E00F5C619 /* VersionCheck.swift in Sources */,
-				1B9936442AF3699E00F5C619 /* GuestMainView.swift in Sources */,
 				1B9936452AF3699E00F5C619 /* EditorToolButton.swift in Sources */,
 				1B9936462AF3699E00F5C619 /* GuestContent.swift in Sources */,
 				1B9936472AF3699E00F5C619 /* UserResponse.swift in Sources */,
@@ -3024,6 +3040,7 @@
 				1B9936802AF3699E00F5C619 /* MemberProfile.swift in Sources */,
 				1B9936812AF3699E00F5C619 /* NavigationUtil.swift in Sources */,
 				1B9936822AF3699E00F5C619 /* MainFeedPlayersViewModel.swift in Sources */,
+				1BDE48DD2AF49EA300E33585 /* ContentGradientLayer.swift in Sources */,
 				1B9936832AF3699E00F5C619 /* ProfileProtocol.swift in Sources */,
 				1B9936842AF3699E00F5C619 /* Extension+UIImage.swift in Sources */,
 				1B9936852AF3699E00F5C619 /* MemberContentPlayerView.swift in Sources */,
@@ -3058,10 +3075,12 @@
 				1B9936A22AF3699E00F5C619 /* BookmarkedContentLayer.swift in Sources */,
 				1B9936A32AF3699E00F5C619 /* Extension+TimeInterval.swift in Sources */,
 				1B9936A42AF3699E00F5C619 /* LegalInfoView.swift in Sources */,
+				1BDE48DA2AF3D2F900E33585 /* DimsUltraThin.swift in Sources */,
 				1B9936A52AF3699E00F5C619 /* VideoFile.swift in Sources */,
 				1B9936A62AF3699E00F5C619 /* VideoEditorViewModel.swift in Sources */,
 				1B9936A72AF3699E00F5C619 /* UploadProtocol.swift in Sources */,
 				1B9936A82AF3699E00F5C619 /* MusicProtocol.swift in Sources */,
+				1BDE48D72AF3CEF200E33585 /* DimsDefault.swift in Sources */,
 				1B9936A92AF3699E00F5C619 /* View+GoogleSignIn.swift in Sources */,
 				1B9936AA2AF3699E00F5C619 /* VideoQuality.swift in Sources */,
 				1B9936AB2AF3699E00F5C619 /* MemeberPlayersViewModel.swift in Sources */,
@@ -3075,7 +3094,7 @@
 				1B9936B32AF3699E00F5C619 /* MainContentLayer.swift in Sources */,
 				1B9936B42AF3699E00F5C619 /* RootTabView.swift in Sources */,
 				1B9936B52AF3699E00F5C619 /* MusicServiceProtocol.swift in Sources */,
-				1B9936B62AF3699E00F5C619 /* DimmedBackground.swift in Sources */,
+				1B9936B62AF3699E00F5C619 /* DimsThick.swift in Sources */,
 				1B9936B72AF3699E00F5C619 /* PhotoCollection.swift in Sources */,
 				1B9936B82AF3699E00F5C619 /* ContentLayerButton.swift in Sources */,
 				1B9936B92AF3699E00F5C619 /* GuestContentPlayerView.swift in Sources */,
@@ -3622,6 +3641,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
 				CODE_SIGN_ENTITLEMENTS = Whistle/Whistle.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;

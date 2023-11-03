@@ -15,7 +15,7 @@ struct Tags: View {
   var body: some View {
     HStack(alignment: .center, spacing: 8) {
       Text("#\(titleKey)")
-        .fontSystem(fontDesignSystem: .body1_KO)
+        .fontSystem(fontDesignSystem: .body1)
         .frame(minWidth: UIScreen.getWidth(28))
         .lineLimit(1)
       if editable {

@@ -55,7 +55,7 @@ struct ProfileImagePickerView: View {
         }
         Spacer()
         Text(CommonWords().album)
-          .fontSystem(fontDesignSystem: .subtitle1_KO)
+          .fontSystem(fontDesignSystem: .subtitle1)
           .foregroundColor(.LabelColor_Primary)
         Spacer()
         Button {
@@ -76,8 +76,8 @@ struct ProfileImagePickerView: View {
             dismiss()
           }
         } label: {
-          Text(CommonWords().confirm)
-            .fontSystem(fontDesignSystem: .subtitle2_KO)
+          Text(CommonWords().done)
+            .fontSystem(fontDesignSystem: .subtitle2)
             .foregroundColor(.Info)
         }
       }
@@ -101,7 +101,7 @@ struct ProfileImagePickerView: View {
         } label: {
           HStack {
             Text(albumName)
-              .fontSystem(fontDesignSystem: .subtitle2_KO)
+              .fontSystem(fontDesignSystem: .subtitle2)
               .foregroundColor(.LabelColor_Primary)
             Image(systemName: "chevron.down")
               .foregroundColor(.LabelColor_Primary)
@@ -359,7 +359,7 @@ struct AlbumListView: View {
         }
         Spacer()
         Text(CommonWords().album)
-          .fontSystem(fontDesignSystem: .subtitle1_KO)
+          .fontSystem(fontDesignSystem: .subtitle1)
           .foregroundColor(.LabelColor_Primary)
         Spacer()
         EmptyView()
@@ -393,7 +393,7 @@ struct AlbumListView: View {
               }
             VStack(spacing: 0) {
               Text("\(album.name)")
-                .fontSystem(fontDesignSystem: .subtitle1_KO)
+                .fontSystem(fontDesignSystem: .subtitle1)
                 .foregroundColor(.LabelColor_Primary)
                 .frame(maxWidth: .infinity, alignment: .leading)
               Text("\(album.count)")

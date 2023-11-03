@@ -44,7 +44,7 @@ struct MyProfileView: View {
   var body: some View {
     ZStack {
       if bottomSheetPosition == .absolute(420) {
-        DimmedBackground().zIndex(1000)
+        DimsThick().zIndex(1000)
       }
       Color.clear.overlay {
         if let url = apiViewModel.myProfile.profileImage, !url.isEmpty {
@@ -204,14 +204,14 @@ struct MyProfileView: View {
           Color.clear.frame(width: 28)
           Spacer()
           Text(CommonWords().settings)
-            .fontSystem(fontDesignSystem: .subtitle1_KO)
+            .fontSystem(fontDesignSystem: .subtitle1)
             .foregroundColor(.white)
           Spacer()
           Button {
             bottomSheetPosition = .hidden
           } label: {
             Text(CommonWords().cancel)
-              .fontSystem(fontDesignSystem: .subtitle2_KO)
+              .fontSystem(fontDesignSystem: .subtitle2)
               .foregroundColor(.white)
           }
         }
@@ -367,7 +367,7 @@ extension MyProfileView {
       Color.clear.overlay {
         Text(apiViewModel.myProfile.introduce ?? "")
           .foregroundColor(Color.LabelColor_Secondary_Dark)
-          .fontSystem(fontDesignSystem: .body2_KO)
+          .fontSystem(fontDesignSystem: .body2)
           .lineLimit(2)
           .truncationMode(.tail)
           .multilineTextAlignment(.center)
@@ -382,7 +382,7 @@ extension MyProfileView {
         showProfileEditView = true
       } label: {
         Text(ProfileEditWords().edit)
-          .fontSystem(fontDesignSystem: .subtitle2_KO)
+          .fontSystem(fontDesignSystem: .subtitle2)
           .foregroundColor(Color.LabelColor_Primary_Dark)
           .scaleEffect(profileEditButtonScale)
           .frame(width: UIScreen.getWidth(profileEditButtonWidth), height: UIScreen.getHeight(profileEditButtonHeight))
@@ -493,7 +493,7 @@ extension MyProfileView {
   @ViewBuilder
   func listEmptyView() -> some View {
     Spacer()
-    Text(ContentWords().noUploadedContent).fontSystem(fontDesignSystem: .body1_KO)
+    Text(ContentWords().noUploadedContent).fontSystem(fontDesignSystem: .body1)
       .foregroundColor(.LabelColor_Primary_Dark)
     Button {
       tabbarModel.tabSelectionNoAnimation = .upload
@@ -502,7 +502,7 @@ extension MyProfileView {
       }
     } label: {
       Text(ContentWords().goUpload)
-        .fontSystem(fontDesignSystem: .subtitle2_KO)
+        .fontSystem(fontDesignSystem: .subtitle2)
         .foregroundColor(Color.LabelColor_Primary_Dark)
         .frame(width: 142, height: 36)
     }
@@ -515,7 +515,7 @@ extension MyProfileView {
   func bookmarkEmptyView() -> some View {
     Spacer()
     Text(ContentWords().noBookmarkedContent)
-      .fontSystem(fontDesignSystem: .body1_KO)
+      .fontSystem(fontDesignSystem: .body1)
       .foregroundColor(.LabelColor_Primary_Dark)
       .padding(.bottom, 64)
     Spacer()

@@ -35,7 +35,7 @@ struct MyFeedView: View {
             .frame(width: 60)
             .foregroundColor(.LabelColor_Primary_Dark)
           Text("콘텐츠가 없습니다")
-            .fontSystem(fontDesignSystem: .body1_KO)
+            .fontSystem(fontDesignSystem: .body1)
             .foregroundColor(.LabelColor_Primary_Dark)
           Spacer()
         }
@@ -60,14 +60,14 @@ struct MyFeedView: View {
           Color.clear.frame(width: 28)
           Spacer()
           Text(CommonWords().more)
-            .fontSystem(fontDesignSystem: .subtitle1_KO)
+            .fontSystem(fontDesignSystem: .subtitle1)
             .foregroundColor(.white)
           Spacer()
           Button {
             feedMoreModel.bottomSheetPosition = .hidden
           } label: {
             Text(CommonWords().cancel)
-              .fontSystem(fontDesignSystem: .subtitle2_KO)
+              .fontSystem(fontDesignSystem: .subtitle2)
               .foregroundColor(.white)
           }
         }

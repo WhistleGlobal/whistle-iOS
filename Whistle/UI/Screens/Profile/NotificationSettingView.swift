@@ -25,7 +25,7 @@ struct NotificationSettingView: View {
       Toggle("광고 알림", isOn: $apiViewModel.notiSetting.adEnabled)
         .listRowSeparator(.hidden)
     }
-    .fontSystem(fontDesignSystem: .subtitle2_KO)
+    .fontSystem(fontDesignSystem: .subtitle2)
     .listRowSpacing(16)
     .scrollDisabled(true)
     .foregroundColor(.LabelColor_Primary)

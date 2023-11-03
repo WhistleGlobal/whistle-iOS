@@ -26,11 +26,11 @@ struct LegalInfoView: View {
           .foregroundColor(.Disable_Placeholder)
         HStack {
           Text("가입한 날짜")
-            .fontSystem(fontDesignSystem: .subtitle2_KO)
+            .fontSystem(fontDesignSystem: .subtitle2)
             .foregroundColor(.LabelColor_Primary)
           Spacer()
           Text("\(apiViewModel.userCreatedDate)")
-            .fontSystem(fontDesignSystem: .body1_KO)
+            .fontSystem(fontDesignSystem: .body1)
             .foregroundColor(.Disable_Placeholder)
         }
         .padding(.horizontal, 16)
@@ -42,7 +42,7 @@ struct LegalInfoView: View {
         } label: {
           HStack {
             Text("개인정보처리방침")
-              .fontSystem(fontDesignSystem: .subtitle2_KO)
+              .fontSystem(fontDesignSystem: .subtitle2)
               .foregroundColor(.LabelColor_Primary)
             Spacer()
             Image(systemName: "chevron.forward")
@@ -60,7 +60,7 @@ struct LegalInfoView: View {
         } label: {
           HStack {
             Text("이용약관")
-              .fontSystem(fontDesignSystem: .subtitle2_KO)
+              .fontSystem(fontDesignSystem: .subtitle2)
               .foregroundColor(.LabelColor_Primary)
             Spacer()
             Image(systemName: "chevron.forward")

@@ -137,14 +137,14 @@ struct TagsContent<Overlay>: View where Overlay: View {
     TextField(" ", text: $inputText)
       .autocorrectionDisabled()
       .focused($isFocused)
-      .fontSystem(fontDesignSystem: .body1_KO)
+      .fontSystem(fontDesignSystem: .body1)
       .foregroundColor(Color.Gray60_Light)
       .lineLimit(1)
       .truncationMode(.tail)
       .padding(.leading, 8)
       .overlay(alignment: .leading) {
         Text("#")
-          .fontSystem(fontDesignSystem: .body1_KO)
+          .fontSystem(fontDesignSystem: .body1)
           .foregroundColor(Color.Gray60_Light)
       }
       .padding(.vertical, 4)

@@ -87,7 +87,7 @@ struct MyFollowListView: View {
       }
       ToolbarItem(placement: .principal) {
         Text("\(apiViewModel.myProfile.userName)")
-          .fontSystem(fontDesignSystem: .subtitle2_KO)
+          .fontSystem(fontDesignSystem: .subtitle2)
       }
     }
     .task {
@@ -111,7 +111,7 @@ extension MyFollowListView {
         profileImageView(url: profileImage, size: 48)
         VStack(spacing: 0) {
           Text(userName)
-            .fontSystem(fontDesignSystem: .subtitle2_KO)
+            .fontSystem(fontDesignSystem: .subtitle2)
             .foregroundColor(.LabelColor_Primary)
             .frame(maxWidth: .infinity, alignment: .leading)
         }
@@ -164,7 +164,7 @@ extension MyFollowListView {
       .padding(.bottom, 32)
     Text(
       tabStatus == .follower ? "아직 회원님을 팔로우하는 사람이 없습니다" : "아직 회원님이 팔로우하는 사람이 없습니다")
-      .fontSystem(fontDesignSystem: .body1_KO)
+      .fontSystem(fontDesignSystem: .body1)
       .foregroundColor(.LabelColor_Secondary)
       .padding(.bottom, 64)
   }

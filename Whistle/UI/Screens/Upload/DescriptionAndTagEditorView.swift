@@ -141,7 +141,7 @@ struct DescriptionAndTagEditorView: View {
               Text("\(content.count)자 / 40자")
                 .padding()
                 .foregroundStyle(Color.Disable_Placeholder_Light)
-                .fontSystem(fontDesignSystem: .body2_KO)
+                .fontSystem(fontDesignSystem: .body2)
             }
             .padding(.horizontal, UIScreen.getWidth(16))
 
@@ -172,15 +172,15 @@ struct DescriptionAndTagEditorView: View {
       ZStack(alignment: .center) {
         HStack {
           Text(CommonWords().cancel)
-            .fontSystem(fontDesignSystem: .subtitle2_KO)
+            .fontSystem(fontDesignSystem: .subtitle2)
             .foregroundStyle(Color.black)
             .contentShape(Rectangle())
             .onTapGesture {
               sheetPosition = .hidden
             }
           Spacer()
-          Text(CommonWords().confirm)
-            .fontSystem(fontDesignSystem: .subtitle2_KO)
+          Text(CommonWords().done)
+            .fontSystem(fontDesignSystem: .subtitle2)
             .foregroundStyle(Color.Info)
             .contentShape(Rectangle())
             .onTapGesture {
@@ -194,7 +194,7 @@ struct DescriptionAndTagEditorView: View {
             }
         }
         Text("해시태그")
-          .fontSystem(fontDesignSystem: .subtitle1_KO)
+          .fontSystem(fontDesignSystem: .subtitle1)
           .foregroundStyle(Color.black)
       }
       .padding(.top, 10)

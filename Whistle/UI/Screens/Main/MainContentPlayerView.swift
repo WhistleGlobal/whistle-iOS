@@ -101,6 +101,8 @@ struct MainContentPlayerView: View {
                   feedMoreModel.bottomSheetPosition = .absolute(242)
                 }
                 .overlay {
+                  ContentGradientLayer()
+                    .allowsHitTesting(false)
                   if tabbarModel.tabWidth != 56 {
                     MainContentLayer(
                       currentVideoInfo: content,
@@ -110,7 +112,7 @@ struct MainContentPlayerView: View {
                       .padding(.bottom, UIScreen.main.nativeBounds.height == 1334 ? 24 : 0)
                   }
                   if feedMoreModel.bottomSheetPosition != .hidden {
-                    DimmedBackground()
+                    DimsThick()
                   }
                 }
               playButton(toPlay: player.rate == 0)
@@ -132,11 +134,11 @@ struct MainContentPlayerView: View {
                       .foregroundColor(.Gray10)
                       .padding(.bottom, 26)
                     Text("차단된 계정의 콘텐츠입니다.")
-                      .fontSystem(fontDesignSystem: .subtitle1_KO)
+                      .fontSystem(fontDesignSystem: .subtitle1)
                       .foregroundColor(.LabelColor_Primary_Dark)
                       .padding(.bottom, 12)
                     Text("차단된 계정의 모든 콘텐츠는 \n회원님의 피드에 노출되지 않습니다.")
-                      .fontSystem(fontDesignSystem: .body2_KO)
+                      .fontSystem(fontDesignSystem: .body2)
                       .foregroundColor(.LabelColor_Secondary_Dark)
                   }
                 }
@@ -158,7 +160,7 @@ struct MainContentPlayerView: View {
                       .padding(8)
                     Text("\(Int(uploadProgress * 100))%")
                       .foregroundStyle(Color.white)
-                      .fontSystem(fontDesignSystem: .body2_KO)
+                      .fontSystem(fontDesignSystem: .body2)
                   }
                 }
                 .padding(.top, 70)
@@ -244,7 +246,6 @@ struct MainContentPlayerView: View {
       uploadProgress = value
     }
   }
-
 }
 
 // MARK: - ViewLifecycleDelegate
