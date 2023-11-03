@@ -255,7 +255,7 @@ extension APIViewModel: PostFeedProtocol {
 
   func reportUser(usedID: Int, contentID: Int, reportReason: Int, reportDescription: String) async -> Int {
     let params: [String: Any] = [
-      "content_id": "\(contentID)",
+      "content_id": "\(String(describing: contentID <= 0 ? nil : contentID))",
       "report_reason": "\(reportReason)",
       "report_description": "\(reportDescription)",
     ]
@@ -270,6 +270,7 @@ extension APIViewModel: PostFeedProtocol {
         .response { response in
           switch response.result {
           case .success:
+            WhistleLogger.logger.debug("성공")
             continuation.resume(returning: 200)
           case .failure(let error):
             WhistleLogger.logger.error("Failure: \(error)")
