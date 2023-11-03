@@ -34,7 +34,11 @@ struct ProfileReportContentSelectionView: View {
             if let url = content.thumbnailUrl {
               videoThumbnail(url: url, index: index)
                 .onTapGesture {
-                  selectedIndex = selectedIndex == index ? -1 : index
+                  if reportCategory == .user {
+                    selectedIndex = selectedIndex == index ? -1 : index
+                  } else {
+                    selectedIndex = index
+                  }
                   if selectedIndex < 0 {
                     selectedContentId = -1
                   } else {
