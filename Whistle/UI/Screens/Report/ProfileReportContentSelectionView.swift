@@ -77,7 +77,7 @@ struct ProfileReportContentSelectionView: View {
           }
         } label: {
           Text("다음")
-            .fontSystem(fontDesignSystem: .subtitle2_KO)
+            .fontSystem(fontDesignSystem: .subtitle2)
             .foregroundColor(.Info)
         }
         .disabled(isSelected)

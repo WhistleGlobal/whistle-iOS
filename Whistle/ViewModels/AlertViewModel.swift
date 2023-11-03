@@ -57,7 +57,7 @@ class AlertViewModel: ObservableObject {
     alertStyle: AlertStyle = .submit,
     title: LocalizedStringKey? = nil,
     content: LocalizedStringKey? = nil,
-    submitText: LocalizedStringKey? = CommonWords().confirm,
+    submitText: LocalizedStringKey? = CommonWords().done,
     submitAction: (() -> Void)? = nil)
   {
     withAnimation {

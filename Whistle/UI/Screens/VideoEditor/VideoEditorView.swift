@@ -143,8 +143,8 @@ struct VideoEditorView: View {
             }
             videoPlayer.scrubState = .scrubEnded(video.rangeDuration.lowerBound)
           }
-          bottomSheetPosition = .relative(1)
-          sheetPositions = [.absolute(UIScreen.getHeight(400)), .hidden, .relative(1)]
+          bottomSheetPosition = .relative(0.5)
+          sheetPositions = [.relative(1), .hidden, .relative(0.5)]
           bottomSheetTitle = VideoEditorWords().searchMusic
         case .audio:
           bottomSheetPosition = .dynamic
@@ -160,26 +160,28 @@ struct VideoEditorView: View {
         bottomSheetPosition: $bottomSheetPosition,
         switchablePositions: sheetPositions)
       {
-        VStack(spacing: 0) {
-          ZStack {
-            Text(bottomSheetTitle)
-              .fontSystem(fontDesignSystem: .subtitle1_KO)
-              .hCenter()
-            Text(CommonWords().cancel)
-              .fontSystem(fontDesignSystem: .subtitle2_KO)
-              .contentShape(Rectangle())
-              .hTrailing()
-              .onTapGesture {
-                bottomSheetPosition = .hidden
-                editorVM.selectedTools = nil
-              }
+        if editorVM.selectedTools != .music {
+          VStack(spacing: 0) {
+            ZStack {
+              Text(bottomSheetTitle)
+                .fontSystem(fontDesignSystem: .subtitle1)
+                .hCenter()
+              Text(CommonWords().cancel)
+                .fontSystem(fontDesignSystem: .subtitle2)
+                .contentShape(Rectangle())
+                .hTrailing()
+                .onTapGesture {
+                  bottomSheetPosition = .hidden
+                  editorVM.selectedTools = nil
+                }
+            }
+            .foregroundStyle(.white)
+            .padding(.horizontal, 16)
+            .padding(.vertical, 6)
+            Rectangle()
+              .fill(Color.Border_Default_Dark)
+              .frame(height: 1)
           }
-          .foregroundStyle(.white)
-          .padding(.horizontal, 16)
-          .padding(.vertical, 6)
-          Rectangle()
-            .fill(Color.Border_Default_Dark)
-            .frame(height: 1)
         }
       } mainContent: {
         switch editorVM.selectedTools {
@@ -193,7 +195,7 @@ struct VideoEditorView: View {
         //              print("range: \(editorVM.currentVideo?.rangeDuration)")
         //            }
         //            Text("속도 설정")
-        //              .fontSystem(fontDesignSystem: .subtitle2_KO)
+        //              .fontSystem(fontDesignSystem: .subtitle2)
         //              .foregroundColor(.white)
         //              .padding(.horizontal, UIScreen.getWidth(150))
         //              .padding(.vertical, UIScreen.getHeight(12))
@@ -269,7 +271,7 @@ extension VideoEditorView {
   private var helpText: some View {
     Text(VideoEditorWords().editorComment)
       .foregroundStyle(Color.white)
-      .fontSystem(fontDesignSystem: .body2_KO)
+      .fontSystem(fontDesignSystem: .body2)
       .padding(.vertical, 32)
   }
 

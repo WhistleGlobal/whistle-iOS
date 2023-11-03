@@ -10,10 +10,13 @@ import SwiftUI
 struct FontSystem: ViewModifier {
   enum FontDesignSystem {
     case largeTitle
+    case largeTitle_SemiBold
     case largeTitle_Expanded
     case title1
+    case title1_SemiBold
     case title1_Expanded
     case title2
+    case title2_SemiBold
     case title2_Expanded
     case subtitle1
     case subtitle2
@@ -22,20 +25,8 @@ struct FontSystem: ViewModifier {
     case body2
     case caption_Regular
     case caption_SemiBold
-//    case largeTitle
-    case largeTitle_KO_SemiBold
-    case title1_KO_Regular
-    case title1_KO_SemiBold
-    case title2_KO_Regular
-    case title2_KO_SemiBold
-    case subtitle1_KO
-    case subtitle2_KO
-    case subtitle3_KO
-    case body1_KO
-    case body2_KO
-    case caption_KO_Regular
-    case caption2_KO_Regular
-//    case caption_SemiBold
+    case caption2_Regular
+
   }
 
   @State var fontDesignSystem: FontDesignSystem
@@ -45,6 +36,12 @@ struct FontSystem: ViewModifier {
     case .largeTitle:
       content
         .font(.system(size: 32))
+        .lineSpacing(8)
+        .padding(.vertical, 4)
+    case .largeTitle_SemiBold:
+      content
+        .font(.system(size: 32))
+        .fontWeight(.semibold)
         .lineSpacing(8)
         .padding(.vertical, 4)
     case .largeTitle_Expanded:
@@ -57,6 +54,12 @@ struct FontSystem: ViewModifier {
         .font(.system(size: 28))
         .lineSpacing(8)
         .padding(.vertical, 4)
+    case .title1_SemiBold:
+      content
+        .font(.system(size: 32))
+        .fontWeight(.semibold)
+        .lineSpacing(8)
+        .padding(.vertical, 4)
     case .title1_Expanded:
       content
         .font(Font(uiFont: uiFontExpanded(fontsize: 28, weight: .semibold)))
@@ -65,6 +68,12 @@ struct FontSystem: ViewModifier {
     case .title2:
       content
         .font(.system(size: 24))
+        .lineSpacing(8)
+        .padding(.vertical, 4)
+    case .title2_SemiBold:
+      content
+        .font(.system(size: 24))
+        .fontWeight(.semibold)
         .lineSpacing(8)
         .padding(.vertical, 4)
     case .title2_Expanded:
@@ -109,82 +118,11 @@ struct FontSystem: ViewModifier {
         .lineSpacing(6)
 //        .padding(.vertical, 4)
         .padding(.vertical, 3)
-//
-//    case .largeTitle:
-//      content
-//        .font(.custom("AppleSDGothicNeo-Regular", size: 32))
-//        .fontWeight(.regular)
-//        .lineSpacing(8)
-//        .padding(.vertical, 4)
-    case .largeTitle_KO_SemiBold:
+    case .caption2_Regular:
       content
-        .font(.custom("AppleSDGothicNeo-SemiBold", size: 32))
-        .fontWeight(.semibold)
-        .lineSpacing(8)
-        .padding(.vertical, 4)
-    case .title1_KO_Regular:
-      content
-        .font(.custom("AppleSDGothicNeo-Regular", size: 28))
-        .fontWeight(.regular)
-    case .title1_KO_SemiBold:
-      content
-        .font(.custom("AppleSDGothicNeo-SemiBold", size: 32))
-        .fontWeight(.semibold)
-        .lineSpacing(8)
-        .padding(.vertical, 4)
-    case .title2_KO_Regular:
-      content
-        .font(.custom("AppleSDGothicNeo-Regular", size: 24))
-        .lineSpacing(8)
-        .padding(.vertical, 4)
-    case .title2_KO_SemiBold:
-      content
-        .font(.custom("AppleSDGothicNeo-SemiBold", size: 24))
-        .fontWeight(.semibold)
-        .lineSpacing(8)
-        .padding(.vertical, 4)
-    case .subtitle1_KO:
-      content
-        .font(.custom("AppleSDGothicNeo-SemiBold", size: 18))
-        .fontWeight(.semibold)
-        .lineSpacing(10)
-        .padding(.vertical, 5)
-    case .subtitle2_KO:
-      content
-        .font(.custom("AppleSDGothicNeo-SemiBold", size: UIScreen.getWidth(16)))
-        .fontWeight(.semibold)
-        .lineSpacing(8)
-        .padding(.vertical, 4)
-    case .subtitle3_KO:
-      content
-        .fontWeight(.semibold)
-        .font(.custom("AppleSDGothicNeo-SemiBold", size: 14))
-        .lineSpacing(6)
-        .padding(.vertical, 3)
-    case .body1_KO:
-      content
-        .font(.custom("AppleSDGothicNeo-Regular", size: 16))
-        .lineSpacing(8)
-        .padding(.vertical, 4)
-    case .body2_KO:
-      content
-        .font(.custom("AppleSDGothicNeo-Regular", size: 14))
-    case .caption_KO_Regular:
-      content
-        .font(.custom("AppleSDGothicNeo-Regular", size: 12))
-        .lineSpacing(6)
-        .padding(.vertical, 3)
-    case .caption2_KO_Regular:
-      content
-        .font(.custom("AppleSDGothicNeo-Regular", size: 10))
+        .font(.system(size: 10))
         .lineSpacing(6)
         .padding(.vertical, 1)
-//    case .caption_SemiBold:
-//      content
-//        .font(.custom("AppleSDGothicNeo-SemiBold", size: 12))
-//        .fontWeight(.semibold)
-//        .lineSpacing(6)
-//        .padding(.vertical, 3)
     }
   }
 

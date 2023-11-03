@@ -125,7 +125,7 @@ struct GuestMainView: View {
               showGuide = false
             } label: {
               Text(CommonWords().close)
-                .fontSystem(fontDesignSystem: .subtitle2_KO)
+                .fontSystem(fontDesignSystem: .subtitle2)
                 .foregroundColor(Color.LabelColor_Primary_Dark)
                 .frame(width: UIScreen.width - 32, height: 56)
                 .background {
@@ -167,7 +167,7 @@ struct GuestMainView: View {
             bottomSheetPosition = .hidden
           } label: {
             Text(CommonWords().cancel)
-              .fontSystem(fontDesignSystem: .subtitle2_KO)
+              .fontSystem(fontDesignSystem: .subtitle2)
               .foregroundColor(.white)
               .padding(.horizontal, 16)
           }
@@ -187,7 +187,7 @@ struct GuestMainView: View {
         .foregroundColor(.LabelColor_Primary_Dark)
 
         Text("더 많은 스포츠 콘텐츠를 즐겨보세요")
-          .fontSystem(fontDesignSystem: .body1_KO)
+          .fontSystem(fontDesignSystem: .body1)
           .foregroundColor(.LabelColor_Secondary_Dark)
         Spacer()
         Button {
@@ -247,7 +247,7 @@ struct GuestMainView: View {
           }
           .padding(.bottom, 24)
         Text("가입을 진행할 경우, 아래의 정책에 대해 동의한 것으로 간주합니다.")
-          .fontSystem(fontDesignSystem: .caption_KO_Regular)
+          .fontSystem(fontDesignSystem: .caption_Regular)
           .foregroundColor(.LabelColor_Primary_Dark)
         HStack(spacing: 16) {
           Button {
@@ -422,12 +422,12 @@ extension GuestMainView {
           if !caption.isEmpty {
             HStack(spacing: 0) {
               Text(caption)
-                .fontSystem(fontDesignSystem: .body2_KO)
+                .fontSystem(fontDesignSystem: .body2)
                 .foregroundColor(.white)
             }
           }
           Label(musicTitle, systemImage: "music.note")
-            .fontSystem(fontDesignSystem: .body2_KO)
+            .fontSystem(fontDesignSystem: .body2)
             .foregroundColor(.white)
             .padding(.top, 4)
         }

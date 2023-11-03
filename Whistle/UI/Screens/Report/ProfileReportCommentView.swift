@@ -25,7 +25,7 @@ struct ProfileReportCommentView: View {
     VStack(spacing: 0) {
       Divider().frame(width: UIScreen.width)
       Text("이 \(reportCategory == .post ? "콘텐츠를" : "계정을") 신고하는 이유는 무엇인가요?")
-        .fontSystem(fontDesignSystem: .subtitle2_KO)
+        .fontSystem(fontDesignSystem: .subtitle2)
         .frame(maxWidth: .infinity, alignment: .leading)
         .foregroundColor(.LabelColor_Primary)
         .padding(.top, 16)
@@ -133,7 +133,7 @@ struct ProfileReportCommentView: View {
         } label: {
           Text(CommonWords().submit)
             .foregroundColor(.Info)
-            .fontSystem(fontDesignSystem: .subtitle2_KO)
+            .fontSystem(fontDesignSystem: .subtitle2)
             .opacity(alertViewModel.showAlert ? 0.3 : 1)
             .grayscale(alertViewModel.showAlert ? 0.5 : 0)
         }

@@ -19,7 +19,7 @@ struct ToastMessageView: View {
         Spacer()
         HStack {
           Text(toastViewModel.message)
-            .fontSystem(fontDesignSystem: .body1_KO)
+            .fontSystem(fontDesignSystem: .body1)
             .foregroundColor(.Gray10)
             .padding(.horizontal, 24)
           if toastViewModel.isCancellable {
@@ -30,7 +30,7 @@ struct ToastMessageView: View {
                 toastViewModel.showToast = false
               }
             }
-            .fontSystem(fontDesignSystem: .body2_KO)
+            .fontSystem(fontDesignSystem: .body2)
             .foregroundColor(.Info)
             .padding(.horizontal, 24)
           }

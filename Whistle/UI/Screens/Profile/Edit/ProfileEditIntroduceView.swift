@@ -23,13 +23,13 @@ struct ProfileEditIntroduceView: View {
     VStack(spacing: 0) {
       Divider().frame(width: UIScreen.width)
       TextField("소개글을 입력해주세요.", text: $introduce, axis: .vertical)
-        .fontSystem(fontDesignSystem: .body1_KO)
+        .fontSystem(fontDesignSystem: .body1)
         .frame(height: 100, alignment: .top)
         .multilineTextAlignment(.leading)
         .onReceive(Just(introduce)) { _ in limitText(40) }
         .overlay(alignment: .bottom) {
           Text("\(introduce.count)/40자")
-            .fontSystem(fontDesignSystem: .body1_KO)
+            .fontSystem(fontDesignSystem: .body1)
             .foregroundColor(.Disable_Placeholder)
             .frame(maxWidth: .infinity, alignment: .trailing)
         }
@@ -63,9 +63,9 @@ struct ProfileEditIntroduceView: View {
             toastViewModel.toastInit(message: ToastMessages().bioUpdated, padding: 32)
           }
         } label: {
-          Text(CommonWords().confirm)
+          Text(CommonWords().done)
             .foregroundColor(.Info)
-            .fontSystem(fontDesignSystem: .subtitle2_KO)
+            .fontSystem(fontDesignSystem: .subtitle2)
         }
       }
     }

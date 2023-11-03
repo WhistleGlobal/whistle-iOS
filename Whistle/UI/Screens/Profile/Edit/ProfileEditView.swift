@@ -43,7 +43,7 @@ struct ProfileEditView: View {
       } label: {
         Text(ProfileEditWords().photoEdit)
           .foregroundColor(.Info)
-          .fontSystem(fontDesignSystem: .subtitle2_KO)
+          .fontSystem(fontDesignSystem: .subtitle2)
       }
       .padding(.bottom, 40)
       Divider().frame(height: 0.5).padding(.leading, 16).foregroundColor(.Disable_Placeholder)
@@ -123,9 +123,9 @@ struct ProfileEditView: View {
           alertViewModel.onFullScreenCover = false
           dismiss()
         } label: {
-          Text(CommonWords().confirm)
+          Text(CommonWords().done)
             .foregroundColor(.Info)
-            .fontSystem(fontDesignSystem: .subtitle2_KO)
+            .fontSystem(fontDesignSystem: .subtitle2)
         }
       }
     }
@@ -146,11 +146,11 @@ extension ProfileEditView {
       HStack(spacing: 0) {
         Text(title)
           .multilineTextAlignment(.leading)
-          .fontSystem(fontDesignSystem: .subtitle2_KO)
+          .fontSystem(fontDesignSystem: .subtitle2)
           .foregroundColor(.LabelColor_Primary)
           .frame(width: 96, height: 56, alignment: .leading)
         Text(content.isEmpty ? "소개" : content)
-          .fontSystem(fontDesignSystem: .body1_KO)
+          .fontSystem(fontDesignSystem: .body1)
           .foregroundColor(content.isEmpty ? .Disable_Placeholder : .LabelColor_Primary)
           .lineLimit(1)
           .truncationMode(.tail)

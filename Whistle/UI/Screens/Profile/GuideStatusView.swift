@@ -17,12 +17,12 @@ struct GuideStatusView: View {
 //      if apiViewModel.reportedContent.isEmpty {
       if true {
         Text("회원님의 콘텐츠는\n 현재 영향을 받지 않습니다.")
-          .fontSystem(fontDesignSystem: .subtitle1_KO)
+          .fontSystem(fontDesignSystem: .subtitle1)
           .foregroundColor(.LabelColor_Primary)
           .multilineTextAlignment(.center)
           .padding(.bottom, 12)
         Text("커뮤니티 가이드라인을 준수해주셔서 감사합니다.")
-          .fontSystem(fontDesignSystem: .body2_KO)
+          .fontSystem(fontDesignSystem: .body2)
           .foregroundColor(.LabelColor_Secondary)
       } else {
         Divider()
@@ -86,10 +86,10 @@ struct GuideStatusView: View {
         Text(title)
           .frame(maxWidth: .infinity, alignment: .leading)
           .foregroundColor(.black)
-          .fontSystem(fontDesignSystem: .subtitle1_KO)
+          .fontSystem(fontDesignSystem: .subtitle1)
         Text(dateString)
           .frame(maxWidth: .infinity, alignment: .leading)
-          .fontSystem(fontDesignSystem: .body2_KO)
+          .fontSystem(fontDesignSystem: .body2)
           .foregroundColor(.LabelColor_Secondary)
           .lineLimit(1)
       }

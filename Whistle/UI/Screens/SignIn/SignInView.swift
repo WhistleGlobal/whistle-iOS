@@ -44,7 +44,7 @@ struct SignInView: View {
               .environmentObject(universalRoutingModel)
           } label: {
             Text("건너뛰기")
-              .fontSystem(fontDesignSystem: .subtitle2_KO)
+              .fontSystem(fontDesignSystem: .subtitle2)
               .foregroundColor(.LabelColor_Secondary_Dark)
           }
         }
@@ -108,7 +108,7 @@ struct SignInView: View {
           }
           .padding(.bottom, 24)
         Text("가입을 진행할 경우, 아래의 정책에 대해 동의한 것으로 간주합니다.")
-          .fontSystem(fontDesignSystem: .caption_KO_Regular)
+          .fontSystem(fontDesignSystem: .caption_Regular)
           .foregroundColor(.LabelColor_Primary_Dark)
         HStack(spacing: 16) {
           Button {

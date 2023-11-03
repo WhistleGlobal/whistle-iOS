@@ -184,7 +184,7 @@ struct RootTabView: View {
         .foregroundColor(.LabelColor_Primary_Dark)
 
         Text("더 많은 스포츠 콘텐츠를 즐겨보세요")
-          .fontSystem(fontDesignSystem: .body1_KO)
+          .fontSystem(fontDesignSystem: .body1)
           .foregroundColor(.LabelColor_Secondary_Dark)
         Spacer()
         Button {
@@ -244,7 +244,7 @@ struct RootTabView: View {
           }
           .padding(.bottom, 24)
         Text("가입을 진행할 경우, 아래의 정책에 대해 동의한 것으로 간주합니다.")
-          .fontSystem(fontDesignSystem: .caption_KO_Regular)
+          .fontSystem(fontDesignSystem: .caption_Regular)
           .foregroundColor(.LabelColor_Primary_Dark)
         HStack(spacing: 16) {
           Button {
@@ -326,7 +326,7 @@ extension RootTabView {
           Image(systemName: tabbarModel.tabSelection == .main ? "play.square.fill" : "play.square")
             .font(.system(size: 19))
           Text(CommonWords().play)
-            .fontSystem(fontDesignSystem: .caption2_KO_Regular)
+            .fontSystem(fontDesignSystem: .caption2_Regular)
         }
         .hCenter()
         .padding(.leading, 4)
@@ -362,7 +362,7 @@ extension RootTabView {
           Image(systemName: tabbarModel.tabSelection == .profile ? "person.fill" : "person")
             .font(.system(size: 19))
           Text(CommonWords().profile)
-            .fontSystem(fontDesignSystem: .caption2_KO_Regular)
+            .fontSystem(fontDesignSystem: .caption2_Regular)
         }
         .hCenter()
         .padding(.trailing, 4)
@@ -389,7 +389,7 @@ extension RootTabView {
             showGuide = false
           } label: {
             Text(CommonWords().close)
-              .fontSystem(fontDesignSystem: .subtitle2_KO)
+              .fontSystem(fontDesignSystem: .subtitle2)
               .foregroundColor(Color.LabelColor_Primary_Dark)
               .frame(width: UIScreen.width - 32, height: 56)
               .background {

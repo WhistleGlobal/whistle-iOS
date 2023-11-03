@@ -63,7 +63,7 @@ struct ProfileEditIDView: View {
         validationLabel()
       }
       Text("사용자 ID는 영문, 숫자, 밑줄 및 마침표만 포함 가능하며 4자 이상 16자 이하로 입력해주세요. 사용자 ID를 변경하면 프로필 링크도 변경되며 14일마다 한 번씩 ID를 변경할 수 있습니다.")
-        .fontSystem(fontDesignSystem: .body2_KO)
+        .fontSystem(fontDesignSystem: .body2)
         .foregroundColor(.LabelColor_Secondary)
         .frame(maxWidth: .infinity)
         .multilineTextAlignment(.leading)
@@ -108,9 +108,9 @@ struct ProfileEditIDView: View {
             }
           }
         } label: {
-          Text(CommonWords().confirm)
+          Text(CommonWords().done)
             .foregroundColor(inputValidationStatus == .valid ? .Info : .Disable_Placeholder)
-            .fontSystem(fontDesignSystem: .subtitle2_KO)
+            .fontSystem(fontDesignSystem: .subtitle2)
             .opacity(alertViewModel.showAlert ? 0.3 : 1)
             .grayscale(alertViewModel.showAlert ? 0.5 : 0)
         }
@@ -179,7 +179,7 @@ extension ProfileEditIDView {
   @ViewBuilder
   func validationLabel() -> some View {
     Label(validationText(), systemImage: validationSystemImagename())
-      .fontSystem(fontDesignSystem: .body2_KO)
+      .fontSystem(fontDesignSystem: .body2)
       .foregroundColor(validationColor())
       .frame(height: 42)
       .frame(maxWidth: .infinity, alignment: .leading)

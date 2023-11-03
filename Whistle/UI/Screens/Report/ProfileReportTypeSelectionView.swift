@@ -28,14 +28,14 @@ struct ProfileReportTypeSelectionView: View {
         Divider().frame(width: UIScreen.width)
         Group {
           Text("무엇을 신고하려고 하시나요?")
-            .fontSystem(fontDesignSystem: .subtitle2_KO)
+            .fontSystem(fontDesignSystem: .subtitle2)
             .foregroundColor(.LabelColor_Primary)
             .frame(maxWidth: .infinity, alignment: .leading)
             .padding(.top, 16)
             .padding(.bottom, 4)
           Text("지식재산권 침해를 신고하는 경우를 제외하고 회원님의 신고는 익명으로 처리됩니다. 누군가 위급한 상황에 있다고 생각된다면 즉시 현지 응급 서비스 기관에 연락하시기 바랍니다.")
             .lineLimit(5)
-            .fontSystem(fontDesignSystem: .caption_KO_Regular)
+            .fontSystem(fontDesignSystem: .caption_Regular)
             .foregroundColor(.LabelColor_Secondary)
             .padding(.bottom, 16)
         }
@@ -96,7 +96,7 @@ extension ProfileReportTypeSelectionView {
   func reportRow(text: String) -> some View {
     HStack {
       Text(text)
-        .fontSystem(fontDesignSystem: .subtitle2_KO)
+        .fontSystem(fontDesignSystem: .subtitle2)
         .foregroundColor(.LabelColor_Primary)
         .frame(maxWidth: .infinity, alignment: .leading)
         .listRowSeparator(.hidden)

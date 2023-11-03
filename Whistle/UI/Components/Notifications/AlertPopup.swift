@@ -47,11 +47,11 @@ struct AlertPopup: View {
   var body: some View {
     if alertViewModel.showAlert {
       ZStack {
-        DimmedBackground()
+        DimsThick()
         VStack(spacing: 0) {
           if let title = alertViewModel.title {
             Text(title)
-              .fontSystem(fontDesignSystem: .subtitle2_KO)
+              .fontSystem(fontDesignSystem: .subtitle2)
               .foregroundStyle(Color.LabelColor_Primary_Dark)
               .padding(.bottom, alertViewModel.content != nil ? UIScreen.getHeight(8) : UIScreen.getHeight(20))
               .padding(.horizontal, UIScreen.getWidth(16))
@@ -59,7 +59,7 @@ struct AlertPopup: View {
           }
           if let content = alertViewModel.content {
             Text(content)
-              .fontSystem(fontDesignSystem: .body2_KO)
+              .fontSystem(fontDesignSystem: .body2)
               .foregroundStyle(Color.LabelColor_Secondary_Dark)
               .lineLimit(nil) // 줄바꿈을 제한하지 않음
               .multilineTextAlignment(.center) // 중앙 정렬
@@ -106,7 +106,7 @@ extension AlertPopup {
           if let destructiveText = alertViewModel.destructiveText {
             Text(destructiveText)
               .foregroundStyle(Color.Danger)
-              .fontSystem(fontDesignSystem: .subtitle2_KO)
+              .fontSystem(fontDesignSystem: .subtitle2)
               .vCenter()
               .hCenter()
               .padding(.vertical, UIScreen.getHeight(10))
@@ -120,7 +120,7 @@ extension AlertPopup {
           if let cancelText = alertViewModel.cancelText {
             Text(cancelText)
               .foregroundStyle(Color.Info)
-              .fontSystem(fontDesignSystem: .body1_KO)
+              .fontSystem(fontDesignSystem: .body1)
               .vCenter()
               .hCenter()
               .padding(.vertical, UIScreen.getHeight(10))
@@ -137,7 +137,7 @@ extension AlertPopup {
           if let cancelText = alertViewModel.cancelText {
             Text(cancelText)
               .foregroundStyle(Color.Info)
-              .fontSystem(fontDesignSystem: .body1_KO)
+              .fontSystem(fontDesignSystem: .body1)
               .hCenter()
               .padding(.vertical, UIScreen.getHeight(10))
           }
@@ -151,7 +151,7 @@ extension AlertPopup {
           if let destructiveText = alertViewModel.destructiveText {
             Text(destructiveText)
               .foregroundStyle(alertViewModel.isRed ? Color.Danger : Color.Info)
-              .fontSystem(fontDesignSystem: .subtitle2_KO)
+              .fontSystem(fontDesignSystem: .subtitle2)
               .hCenter()
               .padding(.vertical, UIScreen.getHeight(10))
           }
@@ -166,7 +166,7 @@ extension AlertPopup {
         if let submitText = alertViewModel.submitText {
           Text(submitText)
             .foregroundStyle(Color.Info)
-            .fontSystem(fontDesignSystem: .subtitle2_KO)
+            .fontSystem(fontDesignSystem: .subtitle2)
             .hCenter()
             .padding(.vertical, UIScreen.getHeight(10))
         }

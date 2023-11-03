@@ -109,7 +109,7 @@ extension VolumeSliderSheetView {
   func subtitleText(text: LocalizedStringKey) -> some View {
     HStack {
       Text(text)
-        .fontSystem(fontDesignSystem: .subtitle2_KO)
+        .fontSystem(fontDesignSystem: .subtitle2)
         .foregroundStyle(Color.LabelColor_Primary_Dark)
       Spacer()
     }
@@ -118,7 +118,7 @@ extension VolumeSliderSheetView {
   @ViewBuilder
   func completeButton() -> some View {
     Text(VideoEditorWords().setVolume)
-      .fontSystem(fontDesignSystem: .subtitle2_KO)
+      .fontSystem(fontDesignSystem: .subtitle2)
       .foregroundStyle(Color.white)
       .frame(width: UIScreen.getWidth(361), height: UIScreen.getHeight(48))
       .background(Capsule().fill(Color.Blue_Default))
