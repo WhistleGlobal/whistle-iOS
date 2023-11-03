@@ -12,7 +12,6 @@ import SwiftUI
 
 struct NotificationListView: View {
 
-
   @State var isFollow = false
   let seprator = SeprateNickAndContent()
 
@@ -39,7 +38,7 @@ struct NotificationListView: View {
     }
     .navigationTitle(CommonWords().notification)
     .onAppear {
-      let dateString = "2023-10-18T05:19:19.000Z"
+      let dateString = "2022-09-02T05:19:19.000Z"
       let dateFormatter = DateFormatter()
       dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"
       dateFormatter.timeZone = TimeZone(abbreviation: "UTC") // 시간대를 UTC로 설정
@@ -68,29 +67,38 @@ extension NotificationListView {
   @ViewBuilder
   func contentWhistleNotiRow() -> some View {
     HStack(spacing: 0) {
-      profileImageView(url: "https://picsum.photos/id/237/200/300", size: 48)
-        .padding(.trailing, 10)
       Group {
-        Text("Whistle")
-          .font(.system(size: 14, weight: .semibold)) +
-          Text("님이 회원님의 게시물에 휘슬을 보냈습니다.  ")
-          .font(.system(size: 14)) +
-          Text("3개월 전")
-          .font(.caption)
-          .foregroundColor(Color.Disable_Placeholder_Dark)
-      }
-      .lineSpacing(6)
-      .padding(.vertical, 3)
-      .foregroundColor(.LabelColor_Primary)
-      Spacer()
-      KFImage.url(URL(string: "https://picsum.photos/id/237/200/300"))
-        .placeholder { // 플레이스 홀더 설정
-          Color.black
+        profileImageView(url: "https://picsum.photos/id/237/200/300", size: 48)
+          .padding(.trailing, 10)
+        Group {
+          Text("Whistle")
+            .font(.system(size: 14, weight: .semibold)) +
+            Text("님이 회원님의 게시물에 휘슬을 보냈습니다.  ")
+            .font(.system(size: 14)) +
+            Text("3개월 전")
+            .font(.caption)
+            .foregroundColor(Color.Disable_Placeholder_Dark)
         }
-        .resizable()
-        .frame(width: 55, height: 55)
-        .scaledToFit()
-        .cornerRadius(8)
+        .lineSpacing(6)
+        .padding(.vertical, 3)
+        .foregroundColor(.LabelColor_Primary)
+        Spacer()
+        KFImage.url(URL(string: "https://picsum.photos/id/237/200/300"))
+          .placeholder { // 플레이스 홀더 설정
+            Color.black
+          }
+          .resizable()
+          .frame(width: 55, height: 55)
+          .scaledToFit()
+          .cornerRadius(8)
+      }
+      .onTapGesture {
+        print("tap")
+        guard let url = URL(string: "https://readywhistle.com/profile_uni?id=7") else { return }
+        if UIApplication.shared.canOpenURL(url) {
+          UIApplication.shared.open(url)
+        }
+      }
     }
     .frame(height: 72)
     .padding(.horizontal, 16)
@@ -172,7 +180,6 @@ extension Date {
     let calendar = Calendar.current
     let now = Date()
 
-    // 시간 차이 계산
     let components = calendar.dateComponents([.year, .month, .weekOfYear, .day, .hour], from: date, to: now)
 
     if let year = components.year, year > 0 {
@@ -194,7 +201,6 @@ extension Date {
     if let hour = components.hour, hour > 0 {
       return "\(hour)시간 전"
     }
-
     return "방금 전"
   }
 }
