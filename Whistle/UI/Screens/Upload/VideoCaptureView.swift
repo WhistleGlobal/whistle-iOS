@@ -304,7 +304,7 @@ struct VideoCaptureView: View {
               uploadBottomSheetPosition = .hidden
             } label: {
               Text(CommonWords().cancel)
-                .fontSystem(fontDesignSystem: .subtitle2_KO)
+                .fontSystem(fontDesignSystem: .subtitle2)
                 .foregroundColor(.white)
                 .padding(.horizontal, 16)
             }
