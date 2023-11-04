@@ -78,7 +78,7 @@ struct RootTabView: View {
       case .profile:
         if isAccess {
           NavigationStack {
-            MyProfileView(isFirstProfileLoaded: $isFirstProfileLoaded)
+            MyProfileView(isFirstProfileLoaded: $isFirstProfileLoaded, userId: 0)
           }
           .tint(.black)
         } else {
@@ -439,21 +439,21 @@ extension RootTabView {
         isFirstProfileLoaded = false
       } else {
         switchTab(to: .profile)
-        if isFirstProfileLoaded {
-          Task {
-            await apiViewModel.requestMyFollow()
-          }
-          Task {
-            await apiViewModel.requestMyWhistlesCount()
-          }
-          Task {
-            await apiViewModel.requestMyBookmark()
-          }
-          Task {
-            await apiViewModel.requestMyPostFeed()
-          }
-          isFirstProfileLoaded = false
-        }
+//        if isFirstProfileLoaded {
+//          Task {
+//            await apiViewModel.requestMyFollow()
+//          }
+//          Task {
+//            await apiViewModel.requestMyWhistlesCount()
+//          }
+//          Task {
+//            await apiViewModel.requestMyBookmark()
+//          }
+//          Task {
+//            await apiViewModel.requestMyPostFeed()
+//          }
+//          isFirstProfileLoaded = false
+//        }
       }
     }
   }

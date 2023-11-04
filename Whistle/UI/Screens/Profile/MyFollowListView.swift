@@ -174,9 +174,14 @@ extension MyFollowListView {
     ScrollView {
       ForEach(filteredFollower, id: \.userName) { follower in
         NavigationLink {
-          MemberProfileView(userId: follower.followerId)
+          MyProfileView(
+            profileType: .member,
+            isFirstProfileLoaded: .constant(true),
+            userId: follower.followerId)
             .environmentObject(apiViewModel)
-            .id(UUID())
+//          MemberProfileView(userId: follower.followerId)
+//            .environmentObject(apiViewModel)
+//            .id(UUID())
         } label: {
           personRow(
             isFollowed: Binding(get: {
@@ -201,9 +206,14 @@ extension MyFollowListView {
     ScrollView {
       ForEach(filteredFollowing, id: \.userName) { following in
         NavigationLink {
-          MemberProfileView(userId: following.followingId)
+          MyProfileView(
+            profileType: .member,
+            isFirstProfileLoaded: .constant(true),
+            userId: following.followingId)
             .environmentObject(apiViewModel)
-            .id(UUID())
+//          MemberProfileView(userId: following.followingId)
+//            .environmentObject(apiViewModel)
+//            .id(UUID())
         } label: {
           personRow(
             isFollowed: Binding(get: {

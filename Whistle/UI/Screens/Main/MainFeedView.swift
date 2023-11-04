@@ -131,14 +131,21 @@ struct MainFeedView: View {
     .navigationDestination(isPresented: $feedMoreModel.isRootStacked) {
       if universalRoutingModel.isUniversalProfile {
         if !apiViewModel.mainFeed.isEmpty {
-          MemberProfileView(userId: universalRoutingModel.userId)
+          MyProfileView(profileType: .member, isFirstProfileLoaded: .constant(true), userId: universalRoutingModel.userId)
             .onDisappear {
               universalRoutingModel.isUniversalProfile = false
             }
+//          MemberProfileView(userId: universalRoutingModel.userId)
+//            .onDisappear {
+//              universalRoutingModel.isUniversalProfile = false
+//            }
         }
       } else {
         if !apiViewModel.mainFeed.isEmpty {
-          MemberProfileView(userId: apiViewModel.mainFeed[feedPlayersViewModel.currentVideoIndex].userId ?? 0)
+          MyProfileView(
+            profileType: .member,
+            isFirstProfileLoaded: .constant(true),
+            userId: apiViewModel.mainFeed[feedPlayersViewModel.currentVideoIndex].userId ?? 0)
         }
       }
     }

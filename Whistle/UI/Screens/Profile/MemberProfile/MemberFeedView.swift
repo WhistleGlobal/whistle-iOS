@@ -120,7 +120,10 @@ struct MemberFeedView: View {
     }
     .navigationDestination(isPresented: $feedMoreModel.isRootStacked) {
       if !apiViewModel.memberFeed.isEmpty {
-        MemberProfileView(userId: apiViewModel.memberFeed[feedPlayersViewModel.currentVideoIndex].userId ?? 0)
+        MyProfileView(
+          profileType: .member,
+          isFirstProfileLoaded: .constant(true),
+          userId: apiViewModel.memberFeed[feedPlayersViewModel.currentVideoIndex].userId ?? 0)
       }
     }
     .fullScreenCover(isPresented: $feedMoreModel.showReport, onDismiss: {
