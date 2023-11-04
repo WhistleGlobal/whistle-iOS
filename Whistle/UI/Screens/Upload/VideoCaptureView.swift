@@ -142,7 +142,7 @@ struct VideoCaptureView: View {
                 }
               } else {
                 guestUploadModel.isMusicEdit = true
-                uploadBottomSheetPosition = .relative(1)
+                uploadBottomSheetPosition = .dynamic
               }
             } onDelete: {
               withAnimation(.easeInOut) {
@@ -294,22 +294,23 @@ struct VideoCaptureView: View {
       .ignoresSafeArea(.keyboard)
       .bottomSheet(
         bottomSheetPosition: $uploadBottomSheetPosition,
-        switchablePositions: [.hidden, .absolute(UIScreen.height - 68)])
+        switchablePositions: [.hidden, .dynamic])
       {
         VStack(spacing: 0) {
           HStack {
+            Spacer()
             Button {
+              tabbarModel.tabbarOpacity = 1.0
               uploadBottomSheetPosition = .hidden
             } label: {
-              Image(systemName: "xmark")
+              Text(CommonWords().cancel)
+                .fontSystem(fontDesignSystem: .subtitle2_KO)
                 .foregroundColor(.white)
-                .frame(width: 18, height: 18)
                 .padding(.horizontal, 16)
             }
-            Spacer()
           }
           .frame(height: 52)
-          .padding(.bottom, 56)
+          .padding(.bottom, 36)
           Group {
             Text("Whistle")
               .font(.system(size: 24, weight: .semibold)) +
@@ -321,7 +322,6 @@ struct VideoCaptureView: View {
           .padding(.vertical, 4)
           .padding(.bottom, 12)
           .foregroundColor(.LabelColor_Primary_Dark)
-
           Text("더 많은 스포츠 콘텐츠를 즐겨보세요")
             .fontSystem(fontDesignSystem: .body1)
             .foregroundColor(.LabelColor_Secondary_Dark)
@@ -404,7 +404,7 @@ struct VideoCaptureView: View {
           .foregroundColor(.LabelColor_Primary_Dark)
           .padding(.bottom, 64)
         }
-        .frame(height: UIScreen.height - 68)
+        .frame(height: UIScreen.height * 0.7)
       }
       .enableSwipeToDismiss(true)
       .enableTapToDismiss(true)
@@ -960,7 +960,7 @@ extension VideoCaptureView {
               if guestUploadModel.istempAccess {
                 isImagePickerClosed.send(true)
               } else {
-                uploadBottomSheetPosition = .relative(1)
+                uploadBottomSheetPosition = .dynamic
               }
             }
           } else {
@@ -1298,7 +1298,7 @@ extension VideoCaptureView {
             if guestUploadModel.istempAccess {
               guestUploadModel.goDescriptionTagView = true
             } else {
-              uploadBottomSheetPosition = .relative(1)
+              uploadBottomSheetPosition = .dynamic
             }
           } label: {
             Text(CommonWords().next)
