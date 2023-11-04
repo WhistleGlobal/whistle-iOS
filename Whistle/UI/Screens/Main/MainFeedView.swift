@@ -131,7 +131,11 @@ struct MainFeedView: View {
     .navigationDestination(isPresented: $feedMoreModel.isRootStacked) {
       if universalRoutingModel.isUniversalProfile {
         if !apiViewModel.mainFeed.isEmpty {
-          MyProfileView(profileType: .member, isFirstProfileLoaded: .constant(true), userId: universalRoutingModel.userId)
+          MyProfileView(
+            profileType:
+            universalRoutingModel.userId == apiViewModel.myProfile.userId ? .my : .member,
+            isFirstProfileLoaded: .constant(true),
+            userId: universalRoutingModel.userId)
             .onDisappear {
               universalRoutingModel.isUniversalProfile = false
             }
@@ -143,7 +147,10 @@ struct MainFeedView: View {
       } else {
         if !apiViewModel.mainFeed.isEmpty {
           MyProfileView(
-            profileType: .member,
+            profileType:
+            apiViewModel.mainFeed[feedPlayersViewModel.currentVideoIndex].userId ?? 0 == apiViewModel.myProfile.userId
+              ? .my
+              : .member,
             isFirstProfileLoaded: .constant(true),
             userId: apiViewModel.mainFeed[feedPlayersViewModel.currentVideoIndex].userId ?? 0)
         }

@@ -175,13 +175,13 @@ extension MyFollowListView {
       ForEach(filteredFollower, id: \.userName) { follower in
         NavigationLink {
           MyProfileView(
-            profileType: .member,
+            profileType:
+            follower.followerId == apiViewModel.myProfile.userId
+              ? .my
+              : .member,
             isFirstProfileLoaded: .constant(true),
             userId: follower.followerId)
             .environmentObject(apiViewModel)
-//          MemberProfileView(userId: follower.followerId)
-//            .environmentObject(apiViewModel)
-//            .id(UUID())
         } label: {
           personRow(
             isFollowed: Binding(get: {
@@ -207,13 +207,13 @@ extension MyFollowListView {
       ForEach(filteredFollowing, id: \.userName) { following in
         NavigationLink {
           MyProfileView(
-            profileType: .member,
+            profileType:
+            following.followingId == apiViewModel.myProfile.userId
+              ? .my
+              : .member,
             isFirstProfileLoaded: .constant(true),
             userId: following.followingId)
             .environmentObject(apiViewModel)
-//          MemberProfileView(userId: following.followingId)
-//            .environmentObject(apiViewModel)
-//            .id(UUID())
         } label: {
           personRow(
             isFollowed: Binding(get: {
