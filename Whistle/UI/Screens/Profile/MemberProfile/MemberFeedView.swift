@@ -120,7 +120,7 @@ struct MemberFeedView: View {
     }
     .navigationDestination(isPresented: $feedMoreModel.isRootStacked) {
       if !apiViewModel.memberFeed.isEmpty {
-        MyProfileView(
+        ProfileView(
           profileType:
           apiViewModel.memberFeed[feedPlayersViewModel.currentVideoIndex].userId ?? 0 == apiViewModel.myProfile.userId
             ? .my

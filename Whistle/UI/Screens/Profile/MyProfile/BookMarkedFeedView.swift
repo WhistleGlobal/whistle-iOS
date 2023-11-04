@@ -107,7 +107,7 @@ struct BookMarkedFeedView: View {
     }
     .navigationDestination(isPresented: $feedMoreModel.isRootStacked) {
       if !apiViewModel.bookmark.isEmpty {
-        MyProfileView(
+        ProfileView(
           profileType:
           apiViewModel.bookmark[feedPlayersViewModel.currentVideoIndex].userId == apiViewModel.myProfile.userId
             ? .my

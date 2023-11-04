@@ -174,7 +174,7 @@ extension MyFollowListView {
     ScrollView {
       ForEach(filteredFollower, id: \.userName) { follower in
         NavigationLink {
-          MyProfileView(
+          ProfileView(
             profileType:
             follower.followerId == apiViewModel.myProfile.userId
               ? .my
@@ -206,7 +206,7 @@ extension MyFollowListView {
     ScrollView {
       ForEach(filteredFollowing, id: \.userName) { following in
         NavigationLink {
-          MyProfileView(
+          ProfileView(
             profileType:
             following.followingId == apiViewModel.myProfile.userId
               ? .my

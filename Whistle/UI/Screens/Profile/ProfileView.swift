@@ -1,5 +1,5 @@
 //
-//  MyProfileView.swift
+//  ProfileView.swift
 //  Whistle
 //
 //  Created by ChoiYujin on 8/29/23.
@@ -19,9 +19,9 @@ public enum profileTabCase: String {
   case bookmark
 }
 
-// MARK: - MyProfileView
+// MARK: - ProfileView
 
-struct MyProfileView: View {
+struct ProfileView: View {
   @Environment(\.dismiss) var dismiss
   @StateObject var userAuth = UserAuth.shared
   @StateObject var apiViewModel = APIViewModel.shared
@@ -33,8 +33,6 @@ struct MyProfileView: View {
   @State var bottomSheetPosition: BottomSheetPosition = .hidden
   @State var showProfileEditView = false
   @State var goNotiSetting = false
-  @State var isShowingBottomSheet = false
-  @State var tabbarDirection: CGFloat = -1.0
   @State var tabSelection: profileTabCase = .myVideo
   @State var profileType: ProfileType = .my
   @State var offsetY: CGFloat = 0
@@ -80,7 +78,7 @@ struct MyProfileView: View {
               Spacer().frame(height: topSpacerHeight)
             }
           }
-          profileInfo()
+          profileCardLayer()
             .background {
               glassProfile(
                 cornerRadius: profileCornerRadius)
@@ -434,9 +432,9 @@ struct MyProfileView: View {
   }
 }
 
-extension MyProfileView {
+extension ProfileView {
   @ViewBuilder
-  func profileInfo() -> some View {
+  func profileCardLayer() -> some View {
     VStack(spacing: 0) {
       // TopSpacing
       if UIDevice.current.userInterfaceIdiom == .phone {
@@ -678,7 +676,7 @@ extension MyProfileView {
 
 // MARK: - Sticky Header Computed Properties
 
-extension MyProfileView {
+extension ProfileView {
   var progress: CGFloat {
     -(offsetY / 177) > 1 ? -1 : (offsetY > 0 ? 0 : (offsetY / 177))
   }
@@ -881,7 +879,7 @@ enum ProfileType {
   case member
 }
 
-extension MyProfileView {
+extension ProfileView {
 
   @ViewBuilder
   var unblockButton: some View {
