@@ -38,6 +38,7 @@ struct ProfileView: View {
   @State var offsetY: CGFloat = 0
   @State var isProfileLoaded = false
   @State var isFirstStack = false
+  @State var goReport = false
   @Binding var isFirstProfileLoaded: Bool
   let processor = BlurImageProcessor(blurRadius: 10)
   let center = UNUserNotificationCenter.current()
@@ -45,7 +46,11 @@ struct ProfileView: View {
 
   var body: some View {
     ZStack {
-      if bottomSheetPosition == .absolute(420) {
+      NavigationLink(destination: NotificationSettingView(), isActive: $goNotiSetting) {
+        EmptyView()
+      }
+      .id(UUID())
+      if bottomSheetPosition != .hidden {
         DimsThick().zIndex(1000)
       }
       Color.clear.overlay {
@@ -252,6 +257,10 @@ struct ProfileView: View {
       .ignoresSafeArea()
     }
     .navigationBarBackButtonHidden()
+    .fullScreenCover(isPresented: $goReport) {
+      ProfileReportTypeSelectionView(goReport: $goReport, userId: userId)
+        .environmentObject(apiViewModel)
+    }
     .task {
       if profileType == .my {
         if isFirstProfileLoaded {
@@ -282,135 +291,235 @@ struct ProfileView: View {
         tabbarModel.tabbarOpacity = 0.0
       }
     }
-    .navigationDestination(isPresented: $goNotiSetting) {
-      NotificationSettingView()
-    }
     .bottomSheet(
       bottomSheetPosition: $bottomSheetPosition,
-      switchablePositions: [.hidden, .absolute(420)])
+      switchablePositions: [.hidden, .dynamic])
     {
-      VStack(spacing: 0) {
-        HStack {
-          Color.clear.frame(width: 28)
+      if profileType == .my {
+        VStack(spacing: 0) {
+          HStack {
+            Color.clear.frame(width: 28)
+            Spacer()
+            Text(CommonWords().settings)
+              .fontSystem(fontDesignSystem: .subtitle1)
+              .foregroundColor(.white)
+            Spacer()
+            Button {
+              bottomSheetPosition = .hidden
+            } label: {
+              Text(CommonWords().cancel)
+                .fontSystem(fontDesignSystem: .subtitle2)
+                .foregroundColor(.white)
+            }
+          }
+          .frame(height: 24)
+          .padding(.vertical, 12)
+          .padding(.horizontal, 16)
+          Rectangle().frame(width: UIScreen.width, height: 1).foregroundColor(Color.Border_Default_Dark)
+          Button {
+            center.requestAuthorization(options: [.sound, .alert, .badge]) { granted, error in
+              if let error {
+                WhistleLogger.logger.error("\(error)")
+                return
+              }
+              if !granted {
+                alertViewModel.linearAlert(
+                  isRed: false,
+                  title: AlertTitles().setNotification,
+                  cancelText: CommonWords().cancel,
+                  destructiveText: AlertButtons().goSettings, cancelAction: { })
+                {
+                  guard let url = URL(string: UIApplication.openSettingsURLString) else { return }
+                  if UIApplication.shared.canOpenURL(url) {
+                    UIApplication.shared.open(url)
+                  }
+                }
+              } else {
+                goNotiSetting = true
+              }
+            }
+          } label: {
+            bottomSheetRowWithIcon(systemName: "bell", text: CommonWords().notification)
+          }
+          .id(UUID())
+          Rectangle().frame(height: 0.5).padding(.leading, 52).foregroundColor(Color.Border_Default_Dark)
+          NavigationLink {
+            LegalInfoView()
+              .id(UUID())
+          } label: {
+            bottomSheetRowWithIcon(systemName: "info.circle", text: CommonWords().about)
+          }
+          .id(UUID())
+          Rectangle().frame(height: 0.5).padding(.leading, 52).foregroundColor(Color.Border_Default_Dark)
+          Button {
+            withAnimation {
+              bottomSheetPosition = .hidden
+            }
+            let shareURL = URL(
+              string: "https://readywhistle.com/profile_uni?id=\(apiViewModel.myProfile.userId)")!
+            let activityViewController = UIActivityViewController(activityItems: [shareURL], applicationActivities: nil)
+            UIApplication.shared.windows.first?.rootViewController?.present(
+              activityViewController,
+              animated: true,
+              completion: nil)
+          } label: {
+            bottomSheetRowWithIcon(systemName: "square.and.arrow.up", text: CommonWords().shareProfile)
+          }
+          Rectangle().frame(height: 0.5).padding(.leading, 52).foregroundColor(Color.Border_Default_Dark)
+          NavigationLink {
+            GuideStatusView()
+              .id(UUID())
+          } label: {
+            bottomSheetRowWithIcon(systemName: "exclamationmark.triangle.fill", text: CommonWords().guideStatus)
+          }
+          .id(UUID())
+
+          Group {
+            Rectangle().frame(width: UIScreen.width, height: 1).foregroundColor(Color.Border_Default_Dark)
+            Button {
+              withAnimation {
+                bottomSheetPosition = .hidden
+              }
+              alertViewModel.linearAlert(
+                title: AlertTitles().logout,
+                cancelText: CommonWords().cancel,
+                destructiveText: CommonWords().logout)
+              {
+                NavigationUtil.popToRootView()
+                isFirstProfileLoaded = true
+                feedPlayersViewModel.resetPlayer()
+                GIDSignIn.sharedInstance.signOut()
+                userAuth.appleSignout()
+                tabbarModel.tabSelectionNoAnimation = .main
+                tabbarModel.tabSelection = .main
+              }
+            } label: {
+              bottomSheetRow(text: CommonWords().logout, color: Color.Info)
+            }
+            Button {
+              withAnimation {
+                bottomSheetPosition = .hidden
+              }
+              alertViewModel.linearAlert(
+                isRed: true,
+                title: AlertTitles().removeAccount,
+                content: AlertContents().removeAccount,
+                cancelText: CommonWords().cancel,
+                destructiveText: CommonWords().delete)
+              {
+                Task {
+                  apiViewModel.reset()
+                  apiViewModel.publisherSend()
+                  await apiViewModel.rebokeAppleToken()
+                  GIDSignIn.sharedInstance.signOut()
+                  userAuth.appleSignout()
+                  isFirstProfileLoaded = true
+                }
+              }
+            } label: {
+              bottomSheetRow(text: CommonWords().deleteAccount, color: Color.Danger)
+            }
+          }
           Spacer()
-          Text(CommonWords().settings)
-            .fontSystem(fontDesignSystem: .subtitle1)
-            .foregroundColor(.white)
-          Spacer()
+        }
+        .frame(height: 420)
+      } else {
+        VStack(spacing: 0) {
+          HStack {
+            Color.clear.frame(width: 28)
+            Spacer()
+            Text(CommonWords().more)
+              .fontSystem(fontDesignSystem: .subtitle1)
+              .foregroundColor(.white)
+            Spacer()
+            Button {
+              bottomSheetPosition = .hidden
+            } label: {
+              Text(CommonWords().cancel)
+                .fontSystem(fontDesignSystem: .subtitle2)
+                .foregroundColor(.white)
+            }
+          }
+          .frame(height: 24)
+          .padding(.vertical, 12)
+          .padding(.horizontal, 16)
+          Rectangle().frame(width: UIScreen.width, height: 1).foregroundColor(Color.Border_Default_Dark)
           Button {
             bottomSheetPosition = .hidden
-          } label: {
-            Text(CommonWords().cancel)
-              .fontSystem(fontDesignSystem: .subtitle2)
-              .foregroundColor(.white)
-          }
-        }
-        .frame(height: 24)
-        .padding(.vertical, 12)
-        .padding(.horizontal, 16)
-        Rectangle().frame(width: UIScreen.width, height: 1).foregroundColor(Color.Border_Default_Dark)
-        Button {
-          center.requestAuthorization(options: [.sound, .alert, .badge]) { granted, error in
-            if let error {
-              WhistleLogger.logger.error("\(error)")
-              return
-            }
-            if !granted {
+            if apiViewModel.memberProfile.isBlocked {
               alertViewModel.linearAlert(
-                isRed: false,
-                title: AlertTitles().setNotification,
-                cancelText: CommonWords().cancel,
-                destructiveText: AlertButtons().goSettings, cancelAction: { })
+                isRed: true,
+                title: "\(apiViewModel.memberProfile.userName) 님을 차단 해제하시겠어요?",
+                content: AlertContents().unblock,
+                destructiveText: CommonWords().unblock)
               {
-                guard let url = URL(string: UIApplication.openSettingsURLString) else { return }
-                if UIApplication.shared.canOpenURL(url) {
-                  UIApplication.shared.open(url)
+                toastViewModel.toastInit(message: "\(apiViewModel.memberProfile.userName)님이 차단 해제되었습니다")
+                Task {
+                  await apiViewModel.blockAction(userID: userId, method: .delete)
+                  BlockList.shared.userIds.append(userId)
+                  BlockList.shared.userIds = BlockList.shared.userIds.filter { $0 != userId }
+                  Task {
+                    await apiViewModel.requestMemberProfile(userID: userId)
+                    await apiViewModel.requestMemberPostFeed(userID: userId)
+                  }
+                  Task {
+                    await apiViewModel.requestMemberFollow(userID: userId)
+                    await apiViewModel.requestMemberWhistlesCount(userID: userId)
+                  }
                 }
               }
             } else {
-              goNotiSetting = true
-            }
-          }
-        } label: {
-          bottomSheetRowWithIcon(systemName: "bell", text: CommonWords().notification)
-        }
-        Rectangle().frame(height: 0.5).padding(.leading, 52).foregroundColor(Color.Border_Default_Dark)
-        NavigationLink {
-          LegalInfoView()
-        } label: {
-          bottomSheetRowWithIcon(systemName: "info.circle", text: CommonWords().about)
-        }
-        Rectangle().frame(height: 0.5).padding(.leading, 52).foregroundColor(Color.Border_Default_Dark)
-        Button {
-          withAnimation {
-            bottomSheetPosition = .hidden
-          }
-          let shareURL = URL(
-            string: "https://readywhistle.com/profile_uni?id=\(apiViewModel.myProfile.userId)")!
-          let activityViewController = UIActivityViewController(activityItems: [shareURL], applicationActivities: nil)
-          UIApplication.shared.windows.first?.rootViewController?.present(
-            activityViewController,
-            animated: true,
-            completion: nil)
-        } label: {
-          bottomSheetRowWithIcon(systemName: "square.and.arrow.up", text: CommonWords().shareProfile)
-        }
-        Rectangle().frame(height: 0.5).padding(.leading, 52).foregroundColor(Color.Border_Default_Dark)
-        NavigationLink {
-          GuideStatusView()
-        } label: {
-          bottomSheetRowWithIcon(systemName: "exclamationmark.triangle.fill", text: CommonWords().guideStatus)
-        }
-
-        Group {
-          Rectangle().frame(width: UIScreen.width, height: 1).foregroundColor(Color.Border_Default_Dark)
-          Button {
-            withAnimation {
-              bottomSheetPosition = .hidden
-            }
-            alertViewModel.linearAlert(
-              title: AlertTitles().logout,
-              cancelText: CommonWords().cancel,
-              destructiveText: CommonWords().logout)
-            {
-              NavigationUtil.popToRootView()
-              isFirstProfileLoaded = true
-              feedPlayersViewModel.resetPlayer()
-              GIDSignIn.sharedInstance.signOut()
-              userAuth.appleSignout()
-              tabbarModel.tabSelectionNoAnimation = .main
-              tabbarModel.tabSelection = .main
-            }
-          } label: {
-            bottomSheetRow(text: CommonWords().logout, color: Color.Info)
-          }
-          Button {
-            withAnimation {
-              bottomSheetPosition = .hidden
-            }
-            alertViewModel.linearAlert(
-              isRed: true,
-              title: AlertTitles().removeAccount,
-              content: AlertContents().removeAccount,
-              cancelText: CommonWords().cancel,
-              destructiveText: CommonWords().delete)
-            {
-              Task {
-                apiViewModel.reset()
-                apiViewModel.publisherSend()
-                await apiViewModel.rebokeAppleToken()
-                GIDSignIn.sharedInstance.signOut()
-                userAuth.appleSignout()
-                isFirstProfileLoaded = true
+              alertViewModel.linearAlert(
+                isRed: true,
+                title: "\(apiViewModel.memberProfile.userName) 님을 차단하시겠어요?",
+                content: AlertContents().block,
+                cancelText: CommonWords().cancel,
+                destructiveText: CommonWords().block)
+              {
+                toastViewModel.toastInit(message: "\(apiViewModel.memberProfile.userName)님이 차단되었습니다")
+                Task {
+                  await apiViewModel.blockAction(userID: userId, method: .post)
+                  BlockList.shared.userIds.append(userId)
+                  Task {
+                    await apiViewModel.requestMemberProfile(userID: userId)
+                    await apiViewModel.requestMemberPostFeed(userID: userId)
+                  }
+                  Task {
+                    await apiViewModel.requestMemberFollow(userID: userId)
+                    await apiViewModel.requestMemberWhistlesCount(userID: userId)
+                  }
+                }
               }
             }
           } label: {
-            bottomSheetRow(text: CommonWords().deleteAccount, color: Color.Danger)
+            bottomSheetRowWithIcon(
+              systemName: "nosign",
+              text: apiViewModel.memberProfile.isBlocked ? CommonWords().unblockAction : CommonWords().blockAction)
           }
+          Rectangle().frame(height: 0.5).padding(.leading, 52).foregroundColor(Color.Border_Default_Dark)
+          Button {
+            bottomSheetPosition = .hidden
+            goReport = true
+          } label: {
+            bottomSheetRowWithIcon(systemName: "exclamationmark.triangle.fill", text: CommonWords().reportAction)
+          }
+          Rectangle().frame(height: 0.5).padding(.leading, 52).foregroundColor(Color.Border_Default_Dark)
+          Button {
+            bottomSheetPosition = .hidden
+            let shareURL = URL(
+              string: "https://readywhistle.com/profile_uni?id=\(userId)")!
+            let activityViewController = UIActivityViewController(activityItems: [shareURL], applicationActivities: nil)
+            UIApplication.shared.windows.first?.rootViewController?.present(
+              activityViewController,
+              animated: true,
+              completion: nil)
+          } label: {
+            bottomSheetRowWithIcon(systemName: "square.and.arrow.up", text: CommonWords().shareProfile)
+          }
+          Spacer()
         }
-        Spacer()
+        .frame(height: 298)
       }
-      .frame(height: 420)
     }
     .enableSwipeToDismiss(true)
     .enableTapToDismiss(true)
@@ -578,7 +687,7 @@ extension ProfileView {
           Spacer()
           Button {
             withAnimation {
-              bottomSheetPosition = .absolute(420)
+              bottomSheetPosition = .dynamic
             }
           } label: {
             Circle()
