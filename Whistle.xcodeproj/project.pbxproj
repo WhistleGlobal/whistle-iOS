@@ -528,6 +528,8 @@
 		78730CED2ACE86C9008B9981 /* PhotoAsset.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78730CEC2ACE86C9008B9981 /* PhotoAsset.swift */; };
 		78730CEF2ACE86EA008B9981 /* CachedImageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78730CEE2ACE86EA008B9981 /* CachedImageManager.swift */; };
 		78730CF12ACE8F23008B9981 /* PhotoLibrary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78730CF02ACE8F23008B9981 /* PhotoLibrary.swift */; };
+		787347F92AF62A6300551A84 /* Extension+ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 787347F82AF62A6300551A84 /* Extension+ProfileView.swift */; };
+		787347FA2AF62ABD00551A84 /* Extension+ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 787347F82AF62A6300551A84 /* Extension+ProfileView.swift */; };
 		7874CB882AA0842D0081DE54 /* FontSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7874CB872AA0842D0081DE54 /* FontSystem.swift */; };
 		7874CB902AA0B5350081DE54 /* NotificationSettingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7874CB8F2AA0B5350081DE54 /* NotificationSettingView.swift */; };
 		7874CB922AA0B53A0081DE54 /* LegalInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7874CB912AA0B53A0081DE54 /* LegalInfoView.swift */; };
@@ -981,6 +983,7 @@
 		78730CEC2ACE86C9008B9981 /* PhotoAsset.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoAsset.swift; sourceTree = "<group>"; };
 		78730CEE2ACE86EA008B9981 /* CachedImageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CachedImageManager.swift; sourceTree = "<group>"; };
 		78730CF02ACE8F23008B9981 /* PhotoLibrary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoLibrary.swift; sourceTree = "<group>"; };
+		787347F82AF62A6300551A84 /* Extension+ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Extension+ProfileView.swift"; sourceTree = "<group>"; };
 		7874CB872AA0842D0081DE54 /* FontSystem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FontSystem.swift; sourceTree = "<group>"; };
 		7874CB8F2AA0B5350081DE54 /* NotificationSettingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationSettingView.swift; sourceTree = "<group>"; };
 		7874CB912AA0B53A0081DE54 /* LegalInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LegalInfoView.swift; sourceTree = "<group>"; };
@@ -1434,6 +1437,7 @@
 		1B3955512A9507CC00BCB4DF /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
+				787347F72AF6298600551A84 /* ScreenExtension */,
 				1BD4E7D12ABA690400ADB783 /* Extension+UITableViewCell.swift */,
 				1B38956D2AB9CBFC00B4C8DD /* Extension+AVAssets.swift */,
 				1B3895682AB9CBFB00B4C8DD /* Extension+AVAudioSession.swift */,
@@ -2317,6 +2321,14 @@
 			path = ProfilePhoto;
 			sourceTree = "<group>";
 		};
+		787347F72AF6298600551A84 /* ScreenExtension */ = {
+			isa = PBXGroup;
+			children = (
+				787347F82AF62A6300551A84 /* Extension+ProfileView.swift */,
+			);
+			path = ScreenExtension;
+			sourceTree = "<group>";
+		};
 		787AF55E2AA85CA800C190E6 /* Profile */ = {
 			isa = PBXGroup;
 			children = (
@@ -2939,6 +2951,7 @@
 				78D148E02A9E0D1B00DDCE48 /* AppleSDGothic.swift in Sources */,
 				1B08DCC32AA1872200CA1DE1 /* MusicTrimView.swift in Sources */,
 				1B38957A2AB9CC2C00B4C8DD /* VideoFilterHelpers.swift in Sources */,
+				787347F92AF62A6300551A84 /* Extension+ProfileView.swift in Sources */,
 				78BCA95A2AF085B20084E92F /* MemberFeedPageView.swift in Sources */,
 				782A6DD52AF1EAFC004D0A60 /* GuestMainFeedView.swift in Sources */,
 				787AF5792AA8930700C190E6 /* NotiSetting.swift in Sources */,
@@ -3145,6 +3158,7 @@
 				1B9936E02AF3699E00F5C619 /* MyFollow.swift in Sources */,
 				1B9936E12AF3699E00F5C619 /* PhotoLibrary.swift in Sources */,
 				1B9936E22AF3699E00F5C619 /* PickerConfigViewController.swift in Sources */,
+				787347FA2AF62ABD00551A84 /* Extension+ProfileView.swift in Sources */,
 				1B9936E32AF3699E00F5C619 /* MainContentPlayerView.swift in Sources */,
 				1B9936E42AF3699E00F5C619 /* BlockList.swift in Sources */,
 				1B9936E52AF3699E00F5C619 /* FollowTabItemButtonStyle.swift in Sources */,
