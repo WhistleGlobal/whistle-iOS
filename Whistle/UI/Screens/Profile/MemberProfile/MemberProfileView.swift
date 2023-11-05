@@ -330,7 +330,6 @@ extension MemberProfileView {
         .padding(.bottom, UIScreen.getHeight(24))
       } else {
         Capsule()
-          .frame(width: UIScreen.getWidth(112), height: UIScreen.getHeight(36))
           .foregroundColor(isProfileLoaded ? .clear : .Gray_Default)
           .overlay {
             Button("") {

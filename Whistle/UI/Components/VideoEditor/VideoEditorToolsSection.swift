@@ -71,7 +71,6 @@ extension VideoEditorToolsSection {
         MusicListView(
           musicVM: MusicViewModel(),
           editorVM: editorVM,
-          videoPlayer: videoPlayer,
           bottomSheetPosition: .constant(.hidden), showMusicTrimView: .constant(false)) { }
       case .audio:
         VolumeSliderSheetView(videoPlayer: videoPlayer, editorVM: editorVM, musicVM: MusicViewModel()) { }

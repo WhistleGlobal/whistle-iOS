@@ -144,7 +144,6 @@ extension MyFollowListView {
           }
           .buttonStyle(FollowButtonStyle(isFollowed: isFollowed))
         }
-        Spacer()
       }
       .padding(.horizontal, 16)
       .frame(height: 72)

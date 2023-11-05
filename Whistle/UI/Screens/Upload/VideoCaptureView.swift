@@ -155,7 +155,7 @@ struct VideoCaptureView: View {
           if buttonState != .completed {
             Text("\(timerSec.0)초")
               .fontSystem(fontDesignSystem: .subtitle3)
-              .foregroundColor(.LabelColor_Primary)
+              .foregroundColor(.Gray60_Dark)
               .padding(.vertical, 4)
               .padding(.horizontal, 16)
               .background {
@@ -270,7 +270,6 @@ struct VideoCaptureView: View {
           MusicListView(
             musicVM: musicVM,
             editorVM: editorVM,
-            videoPlayer: videoPlayer,
             bottomSheetPosition: $musicBottomSheetPosition,
             showMusicTrimView: $showMusicTrimView)
           {
@@ -1050,6 +1049,23 @@ extension VideoCaptureView {
       }
       .onTapGesture {
         videoPlayer.playLoop(video)
+      }
+      .onChange(of: videoPlayer.isPlaying) { value in
+        switch value {
+        case true:
+          if
+            let startTime = musicVM.startTime,
+            let duration = editorVM.currentVideo?.rangeDuration
+          {
+            let minTime = duration.lowerBound
+            let videoCurrentTime = videoPlayer.currentTime
+            let timeOffset = duration.upperBound <= videoCurrentTime ? 0 : videoCurrentTime - minTime
+            musicVM
+              .playTrimmedAudio(startTime: timeOffset)
+          }
+        case false:
+          musicVM.stopAudio()
+        }
       }
   }
 }

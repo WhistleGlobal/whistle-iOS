@@ -438,17 +438,14 @@ extension MyProfileView {
               bottomSheetPosition = .absolute(420)
             }
           } label: {
-            Circle()
-              .foregroundColor(.Gray_Default)
+            Image(systemName: "ellipsis")
+              .foregroundColor(.white)
+              .fontWeight(.semibold)
               .frame(width: 48, height: 48)
-              .overlay {
-                Image(systemName: "ellipsis")
-                  .resizable()
-                  .scaledToFit()
-                  .foregroundColor(Color.white)
-                  .fontWeight(.semibold)
-                  .frame(width: 20, height: 20)
-              }
+              .background(
+                Circle()
+                  .foregroundColor(.Gray_Default)
+                  .frame(width: 48, height: 48))
           }
           .offset(
             y: UIScreen.main.nativeBounds.height == 1334

@@ -112,15 +112,6 @@ struct VideoEditorView: View {
       .ignoresSafeArea()
       .navigationBarHidden(true)
       .navigationBarBackButtonHidden(true)
-//      .toolbar {
-//        ToolbarItem(placement: .cancellationAction) {
-//          Button {
-//            dismiss()
-//          } label: {
-//            Image(systemName: "chevron.left")
-//          }
-//        }
-//      }
       .fullScreenCover(isPresented: $showMusicTrimView) {
         MusicTrimView(
           musicVM: musicVM,
@@ -153,7 +144,7 @@ struct VideoEditorView: View {
         //      case .filters: print("filters")
         //      case .corrections: print("corrections")
         //      case .frames: print("frames")
-        case nil: print("nil")
+        case nil: WhistleLogger.logger.debug("nil")
         }
       }
       .bottomSheet(
@@ -211,7 +202,6 @@ struct VideoEditorView: View {
           MusicListView(
             musicVM: musicVM,
             editorVM: editorVM,
-            videoPlayer: videoPlayer,
             bottomSheetPosition: $bottomSheetPosition,
             showMusicTrimView: $showMusicTrimView)
           {
@@ -247,14 +237,6 @@ struct VideoEditorView: View {
 extension VideoEditorView {
   private var headerView: some View {
     HStack {
-//      Button {
-//        editorVM.updateProject()
-//        dismiss()
-//      } label: {
-//        Image(systemName: "folder.fill")
-//      }
-//
-//      Spacer()
       Button {
         editorVM.selectedTools = nil
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
@@ -298,70 +280,6 @@ extension VideoEditorView {
           mainFilter: CIFilter(name: project.filterName ?? ""),
           colorCorrection: editorVM.currentVideo?.colorCorrection)
       }
-    }
-  }
-}
-
-// MARK: - MusicInfo
-
-struct MusicInfo: View {
-  @ObservedObject var musicVM: MusicViewModel
-  @Binding var showMusicTrimView: Bool
-
-  let onClick: () -> Void
-  let onDelete: () -> Void
-
-  var body: some View {
-    if musicVM.isTrimmed {
-      if let music = musicVM.musicInfo {
-        HStack(spacing: 12) {
-          Image(systemName: "music.note")
-          Text(music.musicTitle)
-            .frame(maxWidth: UIScreen.getWidth(90))
-            .lineLimit(1)
-            .truncationMode(.tail)
-            .fontSystem(fontDesignSystem: .body1)
-            .contentShape(Rectangle())
-            .onTapGesture {
-              showMusicTrimView = true
-            }
-          Divider()
-            .overlay { Color.white }
-          Button {
-            onDelete()
-          } label: {
-            Image(systemName: "xmark")
-              .contentShape(Rectangle())
-              .padding(.vertical, 8)
-              .padding(.trailing, 16)
-          }
-        }
-        .foregroundStyle(.white)
-        .fixedSize()
-        .padding(.vertical, 6)
-        .padding(.leading, 16)
-        .background(glassMorphicView(cornerRadius: 8))
-        .padding(.top, 8)
-      }
-    } else {
-      HStack {
-        Image(systemName: "music.note")
-        Text(VideoEditorWords().addMusic)
-          .frame(maxWidth: UIScreen.getWidth(90))
-          .lineLimit(1)
-          .truncationMode(.tail)
-          .fontSystem(fontDesignSystem: .body1)
-          .contentShape(Rectangle())
-      }
-      .foregroundStyle(.white)
-      .fixedSize()
-      .padding(.horizontal, 16)
-      .padding(.vertical, 6)
-      .background(glassMorphicView(cornerRadius: 8))
-      .onTapGesture {
-        onClick()
-      }
-      .padding(.top, 8)
     }
   }
 }

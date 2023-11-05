@@ -73,14 +73,14 @@ struct MainContentLayer: View {
                 }
               } label: {
                 Text(currentVideoInfo.isFollowed ? CommonWords().following : CommonWords().follow)
+                  .padding(.horizontal, 12)
+                  .padding(.vertical, 4)
                   .fontSystem(fontDesignSystem: .caption_SemiBold)
-                  .foregroundColor(.Gray10)
+                  .foregroundColor(Color.LabelColor_Primary_Dark)
                   .background {
                     Capsule()
-                      .stroke(Color.Gray10, lineWidth: 1)
-                      .frame(width: 58, height: 26)
+                      .stroke(Color.LabelColor_Primary_Dark, lineWidth: 1)
                   }
-                  .frame(width: 58, height: 26)
               }
             }
           }
