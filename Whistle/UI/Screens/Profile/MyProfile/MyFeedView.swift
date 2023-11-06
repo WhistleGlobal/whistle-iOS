@@ -77,7 +77,7 @@ struct MyFeedView: View {
         Rectangle().frame(width: UIScreen.width, height: 1).foregroundColor(Color.Border_Default_Dark)
         Button {
           feedMoreModel.bottomSheetPosition = .hidden
-          toastViewModel.cancelToastInit(message: "삭제되었습니다") {
+          toastViewModel.cancelToastInit(message: ToastMessages().contentDeleted) {
             Task {
               let currentContent = apiViewModel.myFeed[feedPlayersViewModel.currentVideoIndex]
               await apiViewModel.deleteContent(contentID: currentContent.contentId ?? 0)

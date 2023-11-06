@@ -84,6 +84,10 @@ struct AlertPopup: View {
             .stroke(LinearGradient.Border_Glass)
         }
       }
+      .transition(.asymmetric(
+        insertion: .scale(scale: 1.1).animation(.smooth(duration: 0.25))
+          .combined(with: .opacity.animation(.smooth(duration: 0.5))),
+        removal: .opacity.animation(.smooth(duration: 0.3))))
       .ignoresSafeArea()
     }
   }

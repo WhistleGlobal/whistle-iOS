@@ -106,7 +106,7 @@ class FollowingData: Decodable {
 class FollowerData: Decodable {
   // MARK: Lifecycle
 
-  init(followerId: Int, userName: String, profileImg: String?, isFollowed: Bool) {
+  init(followerId: Int, userName: String, profileImg: String, isFollowed: Bool) {
     self.followerId = followerId
     self.userName = userName
     self.profileImg = profileImg
@@ -124,14 +124,14 @@ class FollowerData: Decodable {
 
   var followerId: Int
   var userName: String
-  var profileImg: String?
+  var profileImg: String
   var isFollowed: Bool
 
   required init(from decoder: Decoder) throws {
     let container = try decoder.container(keyedBy: CodingKeys.self)
     followerId = try container.decode(Int.self, forKey: .followerId)
     userName = try container.decode(String.self, forKey: .userName)
-    profileImg = try container.decodeIfPresent(String.self, forKey: .profileImg)
+    profileImg = try container.decodeIfPresent(String.self, forKey: .profileImg) ?? ""
     isFollowed = try container.decode(Int.self, forKey: .isFollowed) == 1 ? true : false
   }
 }
@@ -139,7 +139,7 @@ class FollowerData: Decodable {
 // MARK: - MemberFollowingData
 
 class MemberFollowingData: Decodable {
-  init(followingId: Int, userName: String, profileImg: String?, isFollowed: Bool) {
+  init(followingId: Int, userName: String, profileImg: String, isFollowed: Bool) {
     self.followingId = followingId
     self.userName = userName
     self.profileImg = profileImg
@@ -153,16 +153,16 @@ class MemberFollowingData: Decodable {
     case isFollowed = "is_followed"
   }
 
+  var followingId: Int
+  var userName: String
+  var profileImg: String
+  var isFollowed: Bool
+
   required init(from decoder: Decoder) throws {
     let container = try decoder.container(keyedBy: CodingKeys.self)
     followingId = try container.decode(Int.self, forKey: .followingId)
     userName = try container.decode(String.self, forKey: .userName)
-    profileImg = try container.decodeIfPresent(String.self, forKey: .profileImg)
+    profileImg = try container.decodeIfPresent(String.self, forKey: .profileImg) ?? ""
     isFollowed = try container.decode(Int.self, forKey: .isFollowed) == 1 ? true : false
   }
-
-  var followingId: Int
-  var userName: String
-  var profileImg: String?
-  var isFollowed: Bool
 }

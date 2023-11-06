@@ -68,7 +68,7 @@ extension View {
     HStack(spacing: 0) {
       Spacer().frame(minWidth: 0)
       ZStack(alignment: .bottomTrailing) { // alignment 변경
-        RoundedRectangle(cornerRadius: 32, style: .continuous)
+        Capsule()
           .fill(Color.black.opacity(0.3))
         CustomBlurEffect(effect: .systemUltraThinMaterialLight) { view in
           view.saturationAmount = 2.2

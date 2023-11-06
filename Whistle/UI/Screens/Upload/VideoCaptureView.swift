@@ -18,6 +18,7 @@ import SwiftUI
 
 struct VideoCaptureView: View {
   // MARK: - Objects
+
   @AppStorage("isAccess") var isAccess = false
   @Environment(\.dismiss) var dismiss
   @Environment(\.scenePhase) var scenePhase
@@ -209,6 +210,11 @@ struct VideoCaptureView: View {
           viewModel.preview = nil
           guestUploadModel.isNotAccessRecord = false
         } catch { }
+        if videoPlayer.isPlaying {
+          if let video = editorVM.currentVideo {
+            videoPlayer.action(video)
+          }
+        }
       }
       .onAppear {
         guestUploadModel.isNotAccessRecord = !isAccess
@@ -913,10 +919,10 @@ extension VideoCaptureView {
         Button {
           alertViewModel.linearAlert(
             isRed: true,
-            title: "영상을 삭제하시겠어요?",
-            content: "지금 돌아가면 변경 사항이 모두 삭제됩니다.",
-            cancelText: "계속 수정",
-            destructiveText: CommonWords().delete)
+            title: AlertTitles().discardMedia,
+            content: AlertContents().discardMedia,
+            cancelText: AlertButtons().continueEditing,
+            destructiveText: AlertButtons().discardMedia)
           {
             recordingDuration = 0
             withAnimation(.easeInOut) {

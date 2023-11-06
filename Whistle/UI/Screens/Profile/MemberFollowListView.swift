@@ -43,13 +43,14 @@ struct MemberFollowListView: View {
             tab: profileTabStatus.following.rawValue,
             selectedTab: $tabStatus))
       }
+      .padding(.horizontal, 16)
       .frame(height: 48)
       if tabStatus == .follower {
         if apiViewModel.memberFollow.followerCount == 0 {
           Spacer()
-          followEmptyView()
+          NoFollowerLabel(tabStatus: $tabStatus, profileType: .member)
         } else {
-          memberFollowerList()
+          FollowerList(filteredFollower: filteredFollower)
             .onReceive(apiViewModel.publisher) { id in
               newId = id
             }
@@ -58,9 +59,9 @@ struct MemberFollowListView: View {
       } else {
         if apiViewModel.memberFollow.followingCount == 0 {
           Spacer()
-          followEmptyView()
+          NoFollowerLabel(tabStatus: $tabStatus, profileType: .member)
         } else {
-          memberFollowingList()
+          MemberFollowingList(filteredFollowing: filteredFollowing)
             .onReceive(apiViewModel.publisher) { id in
               newId = id
             }
@@ -69,7 +70,6 @@ struct MemberFollowListView: View {
       }
       Spacer()
     }
-    .padding(.horizontal, 16)
     .navigationBarBackButtonHidden()
     .toolbar {
       ToolbarItem(placement: .cancellationAction) {
@@ -90,138 +90,6 @@ struct MemberFollowListView: View {
       memberFollower = apiViewModel.memberFollow.followerList
       memberFollowing = apiViewModel.memberFollow.followingList
     }
-  }
-}
-
-extension MemberFollowListView {
-  @ViewBuilder
-  func personRow(
-    isFollowed: Binding<Bool>,
-    userName: String,
-    description _: String,
-    profileImage: String,
-    userId: Int)
-    -> some View
-  {
-    HStack(spacing: 0) {
-      profileImageView(url: profileImage, size: 48)
-      VStack(spacing: 0) {
-        Text(userName)
-          .fontSystem(fontDesignSystem: .subtitle2)
-          .foregroundColor(.LabelColor_Primary)
-          .frame(maxWidth: .infinity, alignment: .leading)
-      }
-      .padding(.leading, 16)
-      if userName != apiViewModel.myProfile.userName {
-        Button("") {
-          Task {
-            if isFollowed.wrappedValue {
-              await apiViewModel.followAction(userID: userId, method: .delete)
-              apiViewModel.mainFeed = apiViewModel.mainFeed.map { content in
-                let updatedContent = content
-                if content.userId == userId {
-                  updatedContent.isFollowed.toggle()
-                }
-                return updatedContent
-              }
-            } else {
-              await apiViewModel.followAction(userID: userId, method: .post)
-              apiViewModel.mainFeed = apiViewModel.mainFeed.map { content in
-                let updatedContent = content
-                if content.userId == userId {
-                  updatedContent.isFollowed.toggle()
-                }
-                return updatedContent
-              }
-            }
-            isFollowed.wrappedValue.toggle()
-            apiViewModel.publisherSend()
-          }
-        }
-        .buttonStyle(FollowButtonStyle(isFollowed: isFollowed))
-      }
-    }
-    .frame(height: 72)
-    .frame(maxWidth: .infinity)
-  }
-
-  @ViewBuilder
-  func followEmptyView() -> some View {
-    Image(systemName: "person.fill")
-      .resizable()
-      .scaledToFit()
-      .frame(width: 48, height: 48)
-      .foregroundColor(.LabelColor_Primary)
-      .padding(.bottom, 32)
-    Text(
-      tabStatus == .follower ? "아직 회원님을 팔로우하는 사람이 없습니다" : "아직 회원님이 팔로우하는 사람이 없습니다")
-      .fontSystem(fontDesignSystem: .body1)
-      .foregroundColor(.LabelColor_Secondary)
-      .padding(.bottom, 64)
-  }
-
-  @ViewBuilder
-  func memberFollowerList() -> some View {
-    ScrollView {
-      ForEach(filteredFollower, id: \.userName) { follower in
-        NavigationLink {
-          ProfileView(
-            profileType:
-            follower.followerId == apiViewModel.myProfile.userId
-              ? .my
-              : .member,
-            isFirstProfileLoaded: .constant(true),
-            userId: follower.followerId)
-            .environmentObject(apiViewModel)
-        } label: {
-          personRow(
-            isFollowed: Binding(get: {
-              follower.isFollowed
-            }, set: { newValue in
-              follower.isFollowed = newValue
-            }),
-            userName: follower.userName,
-            description: follower.userName,
-            profileImage: follower.profileImg ?? "",
-            userId: follower.followerId)
-        }
-        .id(UUID())
-      }
-      Spacer().frame(height: 150)
-    }
-    .scrollIndicators(.hidden)
-  }
-
-  @ViewBuilder
-  func memberFollowingList() -> some View {
-    ScrollView {
-      ForEach(filteredFollowing, id: \.userName) { following in
-        NavigationLink {
-          ProfileView(
-            profileType:
-            following.followingId == apiViewModel.myProfile.userId
-              ? .my
-              : .member,
-            isFirstProfileLoaded: .constant(true),
-            userId: following.followingId)
-            .environmentObject(apiViewModel)
-        } label: {
-          personRow(
-            isFollowed: Binding(get: {
-              following.isFollowed
-            }, set: { newValue in
-              following.isFollowed = newValue
-            }),
-            userName: following.userName,
-            description: following.userName,
-            profileImage: following.profileImg ?? "",
-            userId: following.followingId)
-        }
-        .id(UUID())
-      }
-      Spacer().frame(height: 150)
-    }
-    .scrollIndicators(.hidden)
   }
 }
 

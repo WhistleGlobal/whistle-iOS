@@ -37,8 +37,8 @@ struct ToastMessageView: View {
         }
         .frame(height: 56)
         .frame(maxWidth: .infinity)
-        .background(Color.Gray70_Dark)
-        .cornerRadius(8)
+//        .background(Color.Gray70_Dark)
+        .background(disabledGlass(cornerRadius: 8))
         .overlay {
           RoundedRectangle(cornerRadius: 8)
             .stroke(lineWidth: 1)
@@ -47,9 +47,7 @@ struct ToastMessageView: View {
       }
       .padding(.horizontal, 16)
       .padding(.bottom, toastViewModel.padding)
-//      .transition(.move(edge: .bottom))
-//      .animation(.easeIn.speed(1.0))
-      .animation(.easeIn, value: toastViewModel.showToast)
+      .transition(.move(edge: .bottom).animation(.smooth(duration: 1)).combined(with: .opacity.animation(.smooth(duration: 0.5))))
       .onReceive(toastViewModel.$message, perform: { _ in
         if toastViewModel.showToast {
           timer?.invalidate()
