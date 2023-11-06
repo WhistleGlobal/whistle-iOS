@@ -36,6 +36,7 @@ class APIViewModel: ObservableObject {
   @Published var reportedContent: [ReportedContent] = []
   @Published var userCreatedDate = ""
   @Published var versionCheck = VersionCheck()
+  @Published var notiList: [NotificationModel] = []
 
   let decoder = JSONDecoder()
 
@@ -54,6 +55,7 @@ class APIViewModel: ObservableObject {
     guestFeed = []
     reportedContent = []
     userCreatedDate = ""
+    notiList = []
   }
 }
 

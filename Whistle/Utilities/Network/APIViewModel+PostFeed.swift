@@ -335,7 +335,7 @@ extension APIViewModel: PostFeedProtocol {
 
   func requestUniversalFeed(contentID: Int, completion: @escaping () -> Void) {
     AF.request(
-      "\(domainURL)/content/\(contentID)",
+      "\(domainURL)/content/universal/\(contentID)",
       method: .get,
       headers: contentTypeJson)
       .validate(statusCode: 200 ... 300)

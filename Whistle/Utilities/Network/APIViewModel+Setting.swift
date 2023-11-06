@@ -218,6 +218,23 @@ extension APIViewModel: SettingProtocol {
       return currentVersionArray[1] < appStoreVersionArray[1] ? true : false
     }
   }
+
+  func requestNotiList() {
+    AF.request(
+      "\(domainURL)/user/notification-list",
+      method: .get,
+      headers: contentTypeJson)
+      .validate(statusCode: 200...300)
+      .responseDecodable(of: [NotificationModel].self) { response in
+        switch response.result {
+        case .success(let data):
+          WhistleLogger.logger.debug("requestNotiList() success")
+          self.notiList = data
+        case .failure(let error):
+          WhistleLogger.logger.error("requestNotiList(): \(error)")
+        }
+      }
+  }
 }
 
 extension Bundle {

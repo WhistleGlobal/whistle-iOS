@@ -535,6 +535,7 @@
 		78730CF12ACE8F23008B9981 /* PhotoLibrary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78730CF02ACE8F23008B9981 /* PhotoLibrary.swift */; };
 		787347F92AF62A6300551A84 /* Extension+ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 787347F82AF62A6300551A84 /* Extension+ProfileView.swift */; };
 		787347FA2AF62ABD00551A84 /* Extension+ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 787347F82AF62A6300551A84 /* Extension+ProfileView.swift */; };
+		787347FB2AF87F9D00551A84 /* NotificationModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 780CF0AA2AF3BB480010E773 /* NotificationModel.swift */; };
 		7874CB882AA0842D0081DE54 /* FontSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7874CB872AA0842D0081DE54 /* FontSystem.swift */; };
 		7874CB902AA0B5350081DE54 /* NotificationSettingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7874CB8F2AA0B5350081DE54 /* NotificationSettingView.swift */; };
 		7874CB922AA0B53A0081DE54 /* LegalInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7874CB912AA0B53A0081DE54 /* LegalInfoView.swift */; };
@@ -3093,6 +3094,7 @@
 				1B9936942AF3699E00F5C619 /* StringsAndWords.swift in Sources */,
 				1B9936952AF3699E00F5C619 /* MemberContent.swift in Sources */,
 				1B9936962AF3699E00F5C619 /* EditablePlayer.swift in Sources */,
+				787347FB2AF87F9D00551A84 /* NotificationModel.swift in Sources */,
 				1B9936972AF3699E00F5C619 /* SettingProtocol.swift in Sources */,
 				1B9936982AF3699E00F5C619 /* GuestContentLayer.swift in Sources */,
 				1B9936992AF3699E00F5C619 /* NavigationModel.swift in Sources */,

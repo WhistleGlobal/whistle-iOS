@@ -11,42 +11,37 @@ import SwiftUI
 // MARK: - NotificationListView
 
 struct NotificationListView: View {
-
-  @State var isFollow = false
+  @StateObject var apiViewModel = APIViewModel.shared
+  @State var newId = UUID()
   let seprator = SeprateNickAndContent()
 
   var body: some View {
     ScrollView {
       VStack(spacing: 0) {
         Divider().foregroundColor(.Disable_Placeholder)
-        contentWhistleNotiRow()
-        Divider()
-          .frame(height: 0.5)
-          .padding(.leading, 74)
-          .foregroundColor(.Disable_Placeholder)
-        NavigationLink {
-          ProfileView(
-            profileType: .member,
-            isFirstProfileLoaded: .constant(true),
-            userId: 3)
-        } label: {
-          contentFollowNotiRow()
+
+        ForEach(Array(apiViewModel.notiList.enumerated()), id: \.element) { _, noti in
+          if noti.contentID == nil {
+            contentFollowNotiRow(noti)
+          } else {
+            contentWhistleNotiRow(noti)
+          }
+          Divider()
+            .frame(height: 0.5)
+            .padding(.leading, 74)
+            .foregroundColor(.Disable_Placeholder)
         }
-        Divider()
-          .frame(height: 0.5)
-          .padding(.leading, 74)
-          .foregroundColor(.Disable_Placeholder)
-        contentWhistleNotiRow()
-        Divider()
-          .frame(height: 0.5)
-          .padding(.leading, 74)
-          .foregroundColor(.Disable_Placeholder)
+        .onReceive(apiViewModel.publisher) { id in
+          newId = id
+        }
+        .id(newId)
       }
     }
     .navigationTitle(CommonWords().notification)
     .navigationBarTitleDisplayMode(.large)
     .toolbarRole(.editor)
     .onAppear {
+      apiViewModel.requestNotiList()
       let dateString = "2022-09-02T05:19:19.000Z"
       let dateFormatter = DateFormatter()
       dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"
@@ -74,17 +69,17 @@ struct NotificationListView: View {
 
 extension NotificationListView {
   @ViewBuilder
-  func contentWhistleNotiRow() -> some View {
+  func contentWhistleNotiRow(_ notification: NotificationModel) -> some View {
     HStack(spacing: 0) {
       Group {
-        profileImageView(url: "https://picsum.photos/id/237/200/300", size: 48)
+        profileImageView(url: notification.profileImageURL, size: 48)
           .padding(.trailing, 10)
         Group {
-          Text("Whistle")
+          Text(notification.userName)
             .font(.system(size: 14, weight: .semibold)) +
             Text("님이 회원님의 게시물에 휘슬을 보냈습니다.  ")
             .font(.system(size: 14)) +
-            Text("3개월 전")
+            Text(Date.timeAgoSinceDate(notification.notificationTime))
             .font(.caption)
             .foregroundColor(Color.Disable_Placeholder_Dark)
         }
@@ -92,7 +87,7 @@ extension NotificationListView {
         .padding(.vertical, 3)
         .foregroundColor(.LabelColor_Primary)
         Spacer()
-        KFImage.url(URL(string: "https://picsum.photos/id/237/200/300"))
+        KFImage.url(URL(string: notification.thumbnailURL ?? ""))
           .placeholder { // 플레이스 홀더 설정
             Color.black
           }
@@ -114,16 +109,16 @@ extension NotificationListView {
   }
 
   @ViewBuilder
-  func contentFollowNotiRow() -> some View {
+  func contentFollowNotiRow(_ notification: NotificationModel) -> some View {
     HStack(spacing: 0) {
-      profileImageView(url: "https://picsum.photos/id/237/200/300", size: 48)
+      profileImageView(url: notification.profileImageURL, size: 48)
         .padding(.trailing, 10)
       Group {
-        Text("Whistle")
+        Text(notification.userName)
           .font(.system(size: 14, weight: .semibold)) +
           Text("님이 회원님을 팔로우하기 시작했습니다.  ")
           .font(.system(size: 14)) +
-          Text("3개월 전")
+          Text(Date.timeAgoSinceDate(notification.notificationTime))
           .font(.caption)
           .foregroundColor(Color.Disable_Placeholder_Dark)
       }
@@ -131,31 +126,57 @@ extension NotificationListView {
       .padding(.vertical, 3)
       .foregroundColor(.LabelColor_Primary)
       Spacer()
-      followButton(isFollow: isFollow)
+      followButton(
+        isFollowed:
+        Binding {
+          notification.isFollowed
+        } set: { newValue in
+          notification.isFollowed = newValue
+        }, userID: notification.senderID)
     }
     .frame(height: 72)
     .padding(.horizontal, 16)
   }
 
   @ViewBuilder
-  func followButton(isFollow: Bool) -> some View {
+  func followButton(isFollowed: Binding<Bool>, userID: Int) -> some View {
     Button {
-      print("Nickname: \(seprator.nickname)")
-      print("Content: \(seprator.content)")
-      self.isFollow.toggle()
+      Task {
+        if isFollowed.wrappedValue {
+          await apiViewModel.followAction(userID: userID, method: .delete)
+        } else {
+          await apiViewModel.followAction(userID: userID, method: .post)
+        }
+        apiViewModel.mainFeed = apiViewModel.mainFeed.map { content in
+          let updatedContent = content
+          if content.userId == userID {
+            updatedContent.isFollowed.toggle()
+          }
+          return updatedContent
+        }
+        apiViewModel.notiList = apiViewModel.notiList.map { content in
+          let updatedContent = content
+          if content.senderID == userID {
+            updatedContent.isFollowed.toggle()
+          }
+          return updatedContent
+        }
+        apiViewModel.publisherSend()
+      }
     } label: {
-      Text(isFollow ? CommonWords().following : CommonWords().follow)
+      Text(isFollowed.wrappedValue ? CommonWords().following : CommonWords().follow)
         .fontSystem(fontDesignSystem: .caption_SemiBold)
         .foregroundColor(
-          isFollow
+          isFollowed.wrappedValue
             ? .LabelColor_DisablePlaceholder
             : .LabelColor_Primary_Dark)
-          .frame(width: 58, height: 26)
+          .padding(.vertical, 4)
+          .padding(.horizontal, 12)
           .background {
             Capsule()
-              .foregroundColor(isFollow ? .white : .Primary_Default)
+              .foregroundColor(isFollowed.wrappedValue ? .white : .Primary_Default)
               .overlay {
-                if isFollow {
+                if isFollowed.wrappedValue {
                   Capsule()
                     .stroke(lineWidth: 1)
                     .foregroundColor(.LabelColor_DisablePlaceholder)
@@ -182,7 +203,6 @@ class SeprateNickAndContent {
     }
   }
 }
-
 
 extension Date {
   static func timeAgoSinceDate(_ date: Date) -> String {
