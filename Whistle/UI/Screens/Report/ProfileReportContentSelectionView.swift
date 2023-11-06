@@ -34,8 +34,16 @@ struct ProfileReportContentSelectionView: View {
             if let url = content.thumbnailUrl {
               videoThumbnail(url: url, index: index)
                 .onTapGesture {
-                  selectedIndex = index
-                  selectedContentId = apiViewModel.memberFeed[index].contentId ?? 0
+                  if reportCategory == .user {
+                    selectedIndex = selectedIndex == index ? -1 : index
+                  } else {
+                    selectedIndex = index
+                  }
+                  if selectedIndex < 0 {
+                    selectedContentId = -1
+                  } else {
+                    selectedContentId = apiViewModel.memberFeed[index].contentId ?? 0
+                  }
                 }
             }
           }
@@ -84,6 +92,7 @@ struct ProfileReportContentSelectionView: View {
       }
     }
     .task {
+      selectedIndex = reportCategory == .user ? -1 : 0
       await apiViewModel.requestMemberPostFeed(userID: userId)
     }
   }
