@@ -163,31 +163,33 @@ extension MemberFollowListView {
   @ViewBuilder
   func memberFollowerList() -> some View {
     ScrollView {
-      ForEach(filteredFollower, id: \.userName) { follower in
-        NavigationLink {
-          ProfileView(
-            profileType:
-            follower.followerId == apiViewModel.myProfile.userId
+      VStack(spacing: 0) {
+        ForEach(filteredFollower, id: \.userName) { follower in
+          NavigationLink {
+            ProfileView(
+              profileType:
+                follower.followerId == apiViewModel.myProfile.userId
               ? .my
               : .member,
-            isFirstProfileLoaded: .constant(true),
-            userId: follower.followerId)
+              isFirstProfileLoaded: .constant(true),
+              userId: follower.followerId)
             .environmentObject(apiViewModel)
-        } label: {
-          personRow(
-            isFollowed: Binding(get: {
-              follower.isFollowed
-            }, set: { newValue in
-              follower.isFollowed = newValue
-            }),
-            userName: follower.userName,
-            description: follower.userName,
-            profileImage: follower.profileImg ?? "",
-            userId: follower.followerId)
+          } label: {
+            personRow(
+              isFollowed: Binding(get: {
+                follower.isFollowed
+              }, set: { newValue in
+                follower.isFollowed = newValue
+              }),
+              userName: follower.userName,
+              description: follower.userName,
+              profileImage: follower.profileImg ?? "",
+              userId: follower.followerId)
+          }
+          .id(UUID())
         }
-        .id(UUID())
+        Spacer().frame(height: 150)
       }
-      Spacer().frame(height: 150)
     }
     .scrollIndicators(.hidden)
   }
@@ -195,31 +197,33 @@ extension MemberFollowListView {
   @ViewBuilder
   func memberFollowingList() -> some View {
     ScrollView {
-      ForEach(filteredFollowing, id: \.userName) { following in
-        NavigationLink {
-          ProfileView(
-            profileType:
-            following.followingId == apiViewModel.myProfile.userId
+      VStack(spacing: 0) {
+        ForEach(filteredFollowing, id: \.userName) { following in
+          NavigationLink {
+            ProfileView(
+              profileType:
+                following.followingId == apiViewModel.myProfile.userId
               ? .my
               : .member,
-            isFirstProfileLoaded: .constant(true),
-            userId: following.followingId)
+              isFirstProfileLoaded: .constant(true),
+              userId: following.followingId)
             .environmentObject(apiViewModel)
-        } label: {
-          personRow(
-            isFollowed: Binding(get: {
-              following.isFollowed
-            }, set: { newValue in
-              following.isFollowed = newValue
-            }),
-            userName: following.userName,
-            description: following.userName,
-            profileImage: following.profileImg ?? "",
-            userId: following.followingId)
+          } label: {
+            personRow(
+              isFollowed: Binding(get: {
+                following.isFollowed
+              }, set: { newValue in
+                following.isFollowed = newValue
+              }),
+              userName: following.userName,
+              description: following.userName,
+              profileImage: following.profileImg ?? "",
+              userId: following.followingId)
+          }
+          .id(UUID())
         }
-        .id(UUID())
+        Spacer().frame(height: 150)
       }
-      Spacer().frame(height: 150)
     }
     .scrollIndicators(.hidden)
   }
