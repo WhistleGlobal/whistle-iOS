@@ -22,7 +22,7 @@ struct MyContentPlayerView: View {
   @StateObject private var toastViewModel = ToastViewModel.shared
   @StateObject var feedMoreModel = MyFeedMoreModel.shared
   @StateObject private var tabbarModel = TabbarModel.shared
-
+  @StateObject var bartintModel = BarTintModel.shared
   @State var newId = UUID()
   @State var timer: Timer? = nil
   @State var viewTimer: Timer? = nil
@@ -108,8 +108,7 @@ struct MyContentPlayerView: View {
                       currentVideoInfo: content,
                       whistleAction: {
                         whistleToggle(content: content, index)
-                      },
-                      dismissAction: dismissAction)
+                      })
                       .padding(.bottom, UIScreen.main.nativeBounds.height == 1334 ? 24 : 0)
                   }
                   if feedMoreModel.bottomSheetPosition != .hidden {
@@ -184,8 +183,9 @@ struct MyContentPlayerView: View {
         .id(newId)
       }
     }
-    .navigationBarBackButtonHidden()
+    .toolbarRole(.editor)
     .onAppear {
+      bartintModel.tintColor = .white
       if index == 0 {
         WhistleLogger.logger.debug("onAppear index == 0")
         lifecycleDelegate?.onAppear()
@@ -197,6 +197,7 @@ struct MyContentPlayerView: View {
       }
     }
     .onDisappear {
+      bartintModel.tintColor = .LabelColor_Primary
       lifecycleDelegate?.onDisappear()
     }
     .ignoresSafeArea()

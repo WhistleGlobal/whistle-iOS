@@ -44,6 +44,7 @@ struct RootTabView: View {
   @StateObject var alertViewModel = AlertViewModel.shared
   @StateObject var toastViewModel = ToastViewModel.shared
   @StateObject var userAuth = UserAuth.shared
+  @StateObject var bartintModel = BarTintModel.shared
   @EnvironmentObject var universalRoutingModel: UniversalRoutingModel
   @StateObject var appleSignInViewModel = AppleSignInViewModel()
 
@@ -71,10 +72,11 @@ struct RootTabView: View {
 
       case .profile:
         if isAccess {
+          // MARK: - profile
           NavigationStack {
             ProfileView(isFirstStack: true, isFirstProfileLoaded: $isFirstProfileLoaded, userId: 0)
           }
-          .tint(.LabelColor_Primary)
+          .tint(bartintModel.tintColor)
         } else {
           GuestProfileView()
         }
