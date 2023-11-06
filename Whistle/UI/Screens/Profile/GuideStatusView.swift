@@ -47,22 +47,12 @@ struct GuideStatusView: View {
         .listStyle(.plain)
       }
     }
-    .navigationBarBackButtonHidden()
+    .toolbarRole(.editor)
     .navigationBarTitleDisplayMode(.inline)
     .navigationTitle(CommonWords().guideStatus)
     .task {
       if apiViewModel.reportedContent.isEmpty {
 //        await apiViewModel.requestReportedFeed()
-      }
-    }
-    .toolbar {
-      ToolbarItem(placement: .cancellationAction) {
-        Button {
-          dismiss()
-        } label: {
-          Image(systemName: "chevron.backward")
-            .foregroundColor(.LabelColor_Primary)
-        }
       }
     }
   }

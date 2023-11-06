@@ -46,7 +46,10 @@ struct ProfileView: View {
 
   var body: some View {
     ZStack {
-      NavigationLink(destination: NotificationSettingView(), isActive: $goNotiSetting) {
+      NavigationLink(
+        destination: NotificationSettingView().tint(Color.LabelColor_Primary),
+        isActive: $goNotiSetting)
+      {
         EmptyView()
       }
       .id(UUID())

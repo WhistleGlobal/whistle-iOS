@@ -57,7 +57,7 @@ struct RootTabView: View {
           MainFeedView()
             .environmentObject(universalRoutingModel)
         }
-        .tint(.black)
+        .tint(Color.LabelColor_Primary)
       } else {
         GuestMainFeedView()
           .onChange(of: tabbarModel.tabSelectionNoAnimation) { newValue in
@@ -74,7 +74,7 @@ struct RootTabView: View {
           NavigationStack {
             ProfileView(isFirstStack: true, isFirstProfileLoaded: $isFirstProfileLoaded, userId: 0)
           }
-          .tint(.black)
+          .tint(.LabelColor_Primary)
         } else {
           GuestProfileView()
         }

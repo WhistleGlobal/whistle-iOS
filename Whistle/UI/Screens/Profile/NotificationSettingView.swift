@@ -40,25 +40,13 @@ struct NotificationSettingView: View {
       Spacer()
     }
     .fontSystem(fontDesignSystem: .subtitle2)
-    .scrollDisabled(true)
     .foregroundColor(.LabelColor_Primary)
     .tint(.Primary_Default)
-    .listStyle(.plain)
-    .navigationBarBackButtonHidden()
     .navigationBarTitleDisplayMode(.inline)
     .navigationTitle("알림")
+    .toolbarRole(.editor)
     .task {
       await apiViewModel.requestNotiSetting()
-    }
-    .toolbar {
-      ToolbarItem(placement: .cancellationAction) {
-        Button {
-          dismiss()
-        } label: {
-          Image(systemName: "chevron.backward")
-            .foregroundColor(.LabelColor_Primary)
-        }
-      }
     }
     .onChange(of: isAllOff) { newValue in
       if newValue {
@@ -106,4 +94,3 @@ struct NotificationSettingView: View {
   }
 }
 
-extension NotificationSettingView { }

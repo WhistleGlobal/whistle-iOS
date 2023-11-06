@@ -65,21 +65,13 @@ struct ProfileReportCommentView: View {
     }
     .padding(.horizontal, 16)
     .background(Color.reactiveBackground)
-    .navigationBarBackButtonHidden()
+    .toolbarRole(.editor)
     .navigationTitle(CommonWords().report)
     .navigationBarTitleDisplayMode(.inline)
     .navigationDestination(isPresented: $goComplete) {
       ReportCompleteView(goReport: $goReport)
     }
     .toolbar {
-      ToolbarItem(placement: .cancellationAction) {
-        Button {
-          dismiss()
-        } label: {
-          Image(systemName: "chevron.backward")
-            .foregroundColor(.LabelColor_Primary)
-        }
-      }
       ToolbarItem(placement: .confirmationAction) {
         Button {
           isFocused = false

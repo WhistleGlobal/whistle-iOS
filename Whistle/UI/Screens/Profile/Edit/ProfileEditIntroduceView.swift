@@ -39,21 +39,10 @@ struct ProfileEditIntroduceView: View {
       Spacer()
     }
     .padding(.horizontal, 16)
-    .navigationBarBackButtonHidden()
+    .toolbarRole(.editor)
     .navigationTitle(ProfileEditWords().intro)
     .navigationBarTitleDisplayMode(.inline)
     .toolbar {
-      ToolbarItem(placement: .cancellationAction) {
-        Button {
-          Task {
-            await apiViewModel.requestMyProfile()
-            dismiss()
-          }
-        } label: {
-          Image(systemName: "chevron.backward")
-            .foregroundColor(.LabelColor_Primary)
-        }
-      }
       ToolbarItem(placement: .confirmationAction) {
         Button {
           Task {
