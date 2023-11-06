@@ -7,26 +7,39 @@
 
 import SwiftUI
 
+// MARK: - NotificationSettingView
+
 struct NotificationSettingView: View {
   @AppStorage("isAllOff") var isAllOff = false
   @Environment(\.dismiss) var dismiss
   @StateObject var apiViewModel = APIViewModel.shared
 
   var body: some View {
-    List {
+    VStack(spacing: 0) {
+      Divider().frame(height: 1)
       Toggle("모두 일시 중단", isOn: $isAllOff)
-        .listRowSeparator(.hidden)
+        .frame(height: 64)
+        .padding(.horizontal, 16)
+      Divider().frame(height: 0.5).padding(.leading, 16)
       Toggle("게시글 휘슬 알림", isOn: $apiViewModel.notiSetting.whistleEnabled)
-        .listRowSeparator(.hidden)
+        .frame(height: 64)
+        .padding(.horizontal, 16)
+      Divider().frame(height: 0.5).padding(.leading, 16).foregroundColor(.Disable_Placeholder)
       Toggle("팔로워 알림", isOn: $apiViewModel.notiSetting.followEnabled)
-        .listRowSeparator(.hidden)
+        .frame(height: 64)
+        .padding(.horizontal, 16)
+      Divider().frame(height: 0.5).padding(.leading, 16).foregroundColor(.Disable_Placeholder)
       Toggle("Whistle에서 보내는 알림", isOn: $apiViewModel.notiSetting.infoEnabled)
-        .listRowSeparator(.hidden)
+        .frame(height: 64)
+        .padding(.horizontal, 16)
+      Divider().frame(height: 0.5).padding(.leading, 16).foregroundColor(.Disable_Placeholder)
       Toggle("광고 알림", isOn: $apiViewModel.notiSetting.adEnabled)
-        .listRowSeparator(.hidden)
+        .frame(height: 64)
+        .padding(.horizontal, 16)
+      Divider().frame(height: 0.5).padding(.leading, 16).foregroundColor(.Disable_Placeholder)
+      Spacer()
     }
     .fontSystem(fontDesignSystem: .subtitle2)
-    .listRowSpacing(16)
     .scrollDisabled(true)
     .foregroundColor(.LabelColor_Primary)
     .tint(.Primary_Default)
@@ -92,3 +105,5 @@ struct NotificationSettingView: View {
     }
   }
 }
+
+extension NotificationSettingView { }
