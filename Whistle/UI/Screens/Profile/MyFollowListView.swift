@@ -75,16 +75,8 @@ struct MyFollowListView: View {
       }
       Spacer()
     }
-    .navigationBarBackButtonHidden()
+    .toolbarRole(.editor)
     .toolbar {
-      ToolbarItem(placement: .cancellationAction) {
-        Button {
-          dismiss()
-        } label: {
-          Image(systemName: "chevron.backward")
-            .foregroundColor(.LabelColor_Primary)
-        }
-      }
       ToolbarItem(placement: .principal) {
         Text("\(apiViewModel.myProfile.userName)")
           .fontSystem(fontDesignSystem: .subtitle2)

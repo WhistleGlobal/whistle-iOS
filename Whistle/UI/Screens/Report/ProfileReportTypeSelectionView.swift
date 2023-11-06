@@ -49,8 +49,9 @@ struct ProfileReportTypeSelectionView: View {
             reportCategory: .post,
             reportReason: 0)
         } label: {
-          reportRow(text: "특정 콘텐츠")
+          reportRow(text: "특정 콘텐츠", isContentReport: true)
         }
+        .disabled(apiViewModel.memberFeed.isEmpty)
         .padding(.horizontal, 16)
         Divider().frame(height: 0.5).padding(.leading, 16).foregroundColor(.Disable_Placeholder)
         NavigationLink {
@@ -61,7 +62,7 @@ struct ProfileReportTypeSelectionView: View {
             reportCategory: .user)
 
         } label: {
-          reportRow(text: "이 계정에 관한 문제")
+          reportRow(text: "이 계정에 관한 문제", isContentReport: false)
         }
         .padding(.horizontal, 16)
         Divider().frame(height: 0.5).padding(.leading, 16).foregroundColor(.Disable_Placeholder)
@@ -70,13 +71,6 @@ struct ProfileReportTypeSelectionView: View {
       .background(Color.reactiveBackground)
       .navigationTitle(CommonWords().report)
       .navigationBarTitleDisplayMode(.inline)
-      .navigationDestination(isPresented: .constant(apiViewModel.memberFeed.isEmpty)) {
-        ProfileReportReasonSelectionView(
-          goReport: $goReport,
-          selectedContentId: $selectedContentId,
-          userId: userId,
-          reportCategory: .user)
-      }
       .toolbar {
         ToolbarItem(placement: .cancellationAction) {
           Button {
@@ -93,16 +87,14 @@ struct ProfileReportTypeSelectionView: View {
 
 extension ProfileReportTypeSelectionView {
   @ViewBuilder
-  func reportRow(text: String) -> some View {
+  func reportRow(text: String, isContentReport: Bool) -> some View {
     HStack {
       Text(text)
         .fontSystem(fontDesignSystem: .subtitle2)
-        .foregroundColor(.LabelColor_Primary)
+        .foregroundColor(apiViewModel.memberFeed.isEmpty && isContentReport ? .Disable_Placeholder : .LabelColor_Primary)
         .frame(maxWidth: .infinity, alignment: .leading)
         .listRowSeparator(.hidden)
       Spacer()
-      Image(systemName: "chevron.forward")
-        .foregroundColor(.Disable_Placeholder)
     }
     .frame(height: 56)
   }

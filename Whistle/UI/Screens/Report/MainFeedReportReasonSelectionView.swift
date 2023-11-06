@@ -83,8 +83,6 @@ extension MainFeedReportReasonSelectionView {
         .frame(maxWidth: .infinity, alignment: .leading)
         .listRowSeparator(.hidden)
       Spacer()
-      Image(systemName: "chevron.forward")
-        .foregroundColor(.Disable_Placeholder)
     }
     .frame(height: 56)
     .padding(.horizontal, 16)
