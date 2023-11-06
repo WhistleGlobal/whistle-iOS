@@ -57,7 +57,7 @@ struct ProfileEditIntroduceView: View {
       ToolbarItem(placement: .confirmationAction) {
         Button {
           Task {
-            apiViewModel.myProfile.introduce = introduce
+            apiViewModel.myProfile.introduce = introduce.replacingOccurrences(of: "\n", with: "")
             _ = await apiViewModel.updateMyProfile()
             dismiss()
             toastViewModel.toastInit(message: ToastMessages().bioUpdated, padding: 32)
