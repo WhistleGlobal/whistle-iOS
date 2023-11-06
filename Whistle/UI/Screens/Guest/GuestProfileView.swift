@@ -37,8 +37,7 @@ struct GuestProfileView: View {
       VStack(spacing: 0) {
         Spacer().frame(height: 64)
         glassProfile(
-          cornerRadius: 32,
-          overlayed: overlayedView())
+          cornerRadius: 32)
           .frame(height: 340)
           .padding(.horizontal, 16)
           .padding(.bottom, 12)

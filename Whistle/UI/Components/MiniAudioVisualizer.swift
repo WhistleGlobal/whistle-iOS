@@ -11,8 +11,8 @@ import SwiftUI
 
 struct MiniAudioVisualizer: View {
   var body: some View {
-    HStack(spacing: 2) {
-      ForEach(0 ..< 4, id: \.self) { _ in
+    HStack(spacing: 6) {
+      ForEach(0 ..< 3, id: \.self) { _ in
         VisualizingRectangle()
       }
     }
@@ -29,9 +29,8 @@ struct VisualizingRectangle: View {
     GeometryReader { geo in
       VStack(spacing: 0) {
         Rectangle().fill(.clear)
-        Rectangle()
+        Capsule()
           .fill(.white)
-          .cornerRadius(8, corners: [.topLeft, .topRight])
           .frame(height: geo.size.height * heightValue)
       }
       .animation(.easeInOut, value: heightValue)

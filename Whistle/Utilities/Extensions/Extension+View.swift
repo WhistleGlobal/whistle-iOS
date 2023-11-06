@@ -117,14 +117,13 @@ extension View {
   }
 
   @ViewBuilder
-  func glassProfile(cornerRadius: CGFloat, overlayed: some View) -> some View {
+  func glassProfile(cornerRadius: CGFloat) -> some View {
     glassMorphicView(cornerRadius: cornerRadius)
       .overlay {
         RoundedRectangle(cornerRadius: cornerRadius)
           .stroke(lineWidth: 1)
           .foregroundStyle(
             LinearGradient.Border_Glass)
-        overlayed
       }
   }
 

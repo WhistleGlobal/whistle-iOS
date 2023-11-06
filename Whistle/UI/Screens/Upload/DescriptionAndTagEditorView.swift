@@ -35,7 +35,7 @@ struct DescriptionAndTagEditorView: View {
   let video: EditableVideo
   let videoScale: CGFloat = 16 / 9
   let videoWidth: CGFloat = 203
-  let textLimit = 40
+  let textLimit = 100
 
   init(
     video: EditableVideo,
@@ -119,7 +119,7 @@ struct DescriptionAndTagEditorView: View {
           TextField(
             "",
             text: $content,
-            prompt: Text("내용을 입력해 주세요. (40자 내)")
+            prompt: Text("내용을 입력해 주세요. (\(textLimit)자 내)")
               .foregroundColor(Color.Disable_Placeholder_Light)
               .font(.custom("AppleSDGothicNeo-Regular", size: 16)),
             axis: .vertical)
@@ -138,7 +138,7 @@ struct DescriptionAndTagEditorView: View {
               RoundedRectangle(cornerRadius: 8)
                 .strokeBorder(Color.Border_Default_Dark))
             .overlay(alignment: .bottomTrailing) {
-              Text("\(content.count)자 / 40자")
+              Text("\(content.count)자 \(textLimit)자")
                 .padding()
                 .foregroundStyle(Color.Disable_Placeholder_Light)
                 .fontSystem(fontDesignSystem: .body2)

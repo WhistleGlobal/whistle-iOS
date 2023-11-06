@@ -107,7 +107,13 @@ struct BookMarkedFeedView: View {
     }
     .navigationDestination(isPresented: $feedMoreModel.isRootStacked) {
       if !apiViewModel.bookmark.isEmpty {
-        MemberProfileView(userId: apiViewModel.bookmark[feedPlayersViewModel.currentVideoIndex].userId)
+        ProfileView(
+          profileType:
+          apiViewModel.bookmark[feedPlayersViewModel.currentVideoIndex].userId == apiViewModel.myProfile.userId
+            ? .my
+            : .member,
+          isFirstProfileLoaded: .constant(true),
+          userId: apiViewModel.bookmark[feedPlayersViewModel.currentVideoIndex].userId)
       }
     }
     .fullScreenCover(isPresented: $feedMoreModel.showReport, onDismiss: {
