@@ -105,6 +105,8 @@ struct AlertTitles {
   let logout: LocalizedStringKey = "정말 로그아웃하시겠어요?"
   let removeAccount: LocalizedStringKey = "정말 삭제하시겠어요?"
   let setNotification: LocalizedStringKey = "휘슬 앱 알림이 허용되지 않았습니다.설정에서 알림을 켜시겠습니까?"
+  let discardMedia: LocalizedStringKey = "영상을 삭제하시겠어요?"
+  let stopEditing: LocalizedStringKey = "처음부터 시작하시겠어요?"
 }
 
 // MARK: - AlertContents
@@ -113,13 +115,17 @@ struct AlertContents {
   let unblock: LocalizedStringKey = "이제 상대방이 회원님의 게시물을 보거나 팔로우할 수 있습니다. 상대방에게 회원님이 차단을 해제했다는 정보를 알리지 않습니다."
   let block: LocalizedStringKey = "차단된 사람은 회원님의 프로필 또는 콘텐츠를 찾을 수 없게 되며, 상대방에게 차단되었다는 알림이 전송되지 않습니다."
   let removeAccount: LocalizedStringKey = "삭제하시면 회원님의 모든 정보와 활동 기록이 삭제됩니다. 삭제된 정보는 복구할 수 없으니 신중하게 결정해주세요."
+  let discardMedia: LocalizedStringKey = "지금 돌아가면 변경 사항이 모두 삭제됩니다."
+  let stopEditing: LocalizedStringKey = "지금 돌아가면 해당 작업물이 삭제됩니다."
 }
 
 // MARK: - AlertButtons
 
 struct AlertButtons {
   let goSettings: LocalizedStringKey = "설정으로 가기"
-
+  let continueEditing: LocalizedStringKey = "계속 수정"
+  let stopEditing: LocalizedStringKey = "처음부터 시작"
+  let discardMedia: LocalizedStringKey = "영상 삭제"
 }
 
 // MARK: - ToastMessages

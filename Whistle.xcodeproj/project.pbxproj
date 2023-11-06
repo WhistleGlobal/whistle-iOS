@@ -61,6 +61,16 @@
 		1B3955532A9507E300BCB4DF /* Extension+UIScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B3955522A9507E300BCB4DF /* Extension+UIScreen.swift */; };
 		1B39555B2A95095500BCB4DF /* ColorManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B39555A2A95095500BCB4DF /* ColorManager.swift */; };
 		1B39555D2A95098100BCB4DF /* VideoModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B39555C2A95098100BCB4DF /* VideoModel.swift */; };
+		1B5448012AF8768800A73A27 /* PersonRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B5448002AF8768800A73A27 /* PersonRow.swift */; };
+		1B5448022AF8768800A73A27 /* PersonRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B5448002AF8768800A73A27 /* PersonRow.swift */; };
+		1B5448052AF882C800A73A27 /* MemberFollowingList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B5448042AF882C800A73A27 /* MemberFollowingList.swift */; };
+		1B5448062AF882C800A73A27 /* MemberFollowingList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B5448042AF882C800A73A27 /* MemberFollowingList.swift */; };
+		1B5448082AF882E300A73A27 /* MyFollowingList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B5448072AF882E300A73A27 /* MyFollowingList.swift */; };
+		1B5448092AF882E300A73A27 /* MyFollowingList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B5448072AF882E300A73A27 /* MyFollowingList.swift */; };
+		1B54480B2AF882F600A73A27 /* FollowerList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B54480A2AF882F600A73A27 /* FollowerList.swift */; };
+		1B54480C2AF882F600A73A27 /* FollowerList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B54480A2AF882F600A73A27 /* FollowerList.swift */; };
+		1B54480E2AF8835900A73A27 /* NoFollowerLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B54480D2AF8835900A73A27 /* NoFollowerLabel.swift */; };
+		1B54480F2AF8835900A73A27 /* NoFollowerLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B54480D2AF8835900A73A27 /* NoFollowerLabel.swift */; };
 		1B547D592AEA864300EDE344 /* AlertViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B547D582AEA864300EDE344 /* AlertViewModel.swift */; };
 		1B57077D2AE6DD49009A7025 /* EditorVideoResource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B57077C2AE6DD49009A7025 /* EditorVideoResource.swift */; };
 		1B5FB4B72AC6777A0049E4EE /* ImagePickerController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BD4E6442ABA2F8600ADB783 /* ImagePickerController.swift */; };
@@ -742,6 +752,11 @@
 		1B3955522A9507E300BCB4DF /* Extension+UIScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Extension+UIScreen.swift"; sourceTree = "<group>"; };
 		1B39555A2A95095500BCB4DF /* ColorManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorManager.swift; sourceTree = "<group>"; };
 		1B39555C2A95098100BCB4DF /* VideoModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoModel.swift; sourceTree = "<group>"; };
+		1B5448002AF8768800A73A27 /* PersonRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonRow.swift; sourceTree = "<group>"; };
+		1B5448042AF882C800A73A27 /* MemberFollowingList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemberFollowingList.swift; sourceTree = "<group>"; };
+		1B5448072AF882E300A73A27 /* MyFollowingList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyFollowingList.swift; sourceTree = "<group>"; };
+		1B54480A2AF882F600A73A27 /* FollowerList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FollowerList.swift; sourceTree = "<group>"; };
+		1B54480D2AF8835900A73A27 /* NoFollowerLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoFollowerLabel.swift; sourceTree = "<group>"; };
 		1B547D582AEA864300EDE344 /* AlertViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertViewModel.swift; sourceTree = "<group>"; };
 		1B57077C2AE6DD49009A7025 /* EditorVideoResource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorVideoResource.swift; sourceTree = "<group>"; };
 		1B7D801C2AC881490030CAC3 /* CustomNavigationBarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomNavigationBarViewController.swift; sourceTree = "<group>"; };
@@ -1177,8 +1192,11 @@
 		1B38951E2AB9CB6000B4C8DD /* Buttons */ = {
 			isa = PBXGroup;
 			children = (
+				1BE6529C2AF7E25E00CE8858 /* MiniAudioVisualizer.swift */,
+				1BE6529F2AF7E49800CE8858 /* MusicInfo.swift */,
 				1B9E6ACC2AF1F21A00E94A9E /* ContentLayerButton.swift */,
 				1B38951F2AB9CB6000B4C8DD /* EditorToolButton.swift */,
+				1B5448002AF8768800A73A27 /* PersonRow.swift */,
 			);
 			path = Buttons;
 			sourceTree = "<group>";
@@ -1482,6 +1500,7 @@
 		1B3955552A95081400BCB4DF /* Components */ = {
 			isa = PBXGroup;
 			children = (
+				1B5448032AF882B500A73A27 /* Lists */,
 				1BDE48DE2AF49F8400E33585 /* Layers */,
 				78FDA5382AEF72E1001C3DA4 /* Content */,
 				1B8132DA2AE624E100000C32 /* VideoEditor */,
@@ -1495,8 +1514,7 @@
 				1B3895182AB9CB6000B4C8DD /* Sliders */,
 				1B33AA602AE610A3003F8099 /* ButtonStyles */,
 				1B8132D82AE618DE00000C32 /* RepresentableViews */,
-				1BE6529C2AF7E25E00CE8858 /* MiniAudioVisualizer.swift */,
-				1BE6529F2AF7E49800CE8858 /* MusicInfo.swift */,
+				1B5448102AF8836800A73A27 /* Labels */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -1518,6 +1536,24 @@
 				1B39555A2A95095500BCB4DF /* ColorManager.swift */,
 			);
 			path = Colors;
+			sourceTree = "<group>";
+		};
+		1B5448032AF882B500A73A27 /* Lists */ = {
+			isa = PBXGroup;
+			children = (
+				1B5448042AF882C800A73A27 /* MemberFollowingList.swift */,
+				1B54480A2AF882F600A73A27 /* FollowerList.swift */,
+				1B5448072AF882E300A73A27 /* MyFollowingList.swift */,
+			);
+			path = Lists;
+			sourceTree = "<group>";
+		};
+		1B5448102AF8836800A73A27 /* Labels */ = {
+			isa = PBXGroup;
+			children = (
+				1B54480D2AF8835900A73A27 /* NoFollowerLabel.swift */,
+			);
+			path = Labels;
 			sourceTree = "<group>";
 		};
 		1B8132D62AE617C100000C32 /* Notifications */ = {
@@ -2783,6 +2819,7 @@
 				78DA58D52AA445E400F8D2F1 /* ProfileEditView.swift in Sources */,
 				78730CED2ACE86C9008B9981 /* PhotoAsset.swift in Sources */,
 				78FDA5422AEFC65B001C3DA4 /* MyFeedPlayersViewModel.swift in Sources */,
+				1B54480B2AF882F600A73A27 /* FollowerList.swift in Sources */,
 				78E1755B2ABA802000731259 /* PrivacyPolicyView.swift in Sources */,
 				787AF5712AA887E600C190E6 /* MyContent.swift in Sources */,
 				787AF5602AA85CBC00C190E6 /* MyProfile.swift in Sources */,
@@ -2819,6 +2856,7 @@
 				78D148E52A9E135F00DDCE48 /* Extension+UIView.swift in Sources */,
 				1BE8EA122AB0F7E800EB0A55 /* CircularProgressBar.swift in Sources */,
 				1B3895702AB9CBFC00B4C8DD /* Extension+AVAudioSession.swift in Sources */,
+				1B5448082AF882E300A73A27 /* MyFollowingList.swift in Sources */,
 				1B38956F2AB9CBFC00B4C8DD /* Extension+Int.swift in Sources */,
 				78B6FD2E2AA719190043E461 /* AlbumModel.swift in Sources */,
 				7847A3172AE1311200C4FF61 /* AlbumAccessView.swift in Sources */,
@@ -2893,12 +2931,14 @@
 				1B8132DD2AE6285E00000C32 /* NavigationModel.swift in Sources */,
 				1BA24B542ADC336200DB0992 /* AlertPopup.swift in Sources */,
 				78D148E32A9E134700DDCE48 /* Extension+NSObject.swift in Sources */,
+				1B5448052AF882C800A73A27 /* MemberFollowingList.swift in Sources */,
 				1B0A29AA2AA64ADC009077A1 /* MusicService.swift in Sources */,
 				78370B8B2AB87C7D00090522 /* Enums.swift in Sources */,
 				782A6DD72AF1EB0D004D0A60 /* GuestMainFeedPageView.swift in Sources */,
 				1BAC07F32AD559A70087D8CD /* TagsContent.swift in Sources */,
 				78D85E542AB2DF1000B3AD6E /* ProfileReportContentSelectionView.swift in Sources */,
 				78BECCE12AAAE539003FA7B5 /* APIViewModel+PostFeed.swift in Sources */,
+				1B5448012AF8768800A73A27 /* PersonRow.swift in Sources */,
 				78BCA9562AEFFAEE0084E92F /* BookmarkedContentLayer.swift in Sources */,
 				1B3895742AB9CBFC00B4C8DD /* Extension+TimeInterval.swift in Sources */,
 				7874CB922AA0B53A0081DE54 /* LegalInfoView.swift in Sources */,
@@ -2906,6 +2946,7 @@
 				1BE6529D2AF7E25E00CE8858 /* MiniAudioVisualizer.swift in Sources */,
 				788E68652AD6B6710056C18B /* VideoFile.swift in Sources */,
 				1B3895562AB9CB8C00B4C8DD /* VideoEditorViewModel.swift in Sources */,
+				1B54480E2AF8835900A73A27 /* NoFollowerLabel.swift in Sources */,
 				78BECCDD2AAAE204003FA7B5 /* UploadProtocol.swift in Sources */,
 				1BE8EA032AAE321200EB0A55 /* MusicProtocol.swift in Sources */,
 				1BDE48D62AF3CE7000E33585 /* DimsDefault.swift in Sources */,
@@ -3022,6 +3063,7 @@
 				1B99364E2AF3699E00F5C619 /* AppleSignInViewModel.swift in Sources */,
 				1B99364F2AF3699E00F5C619 /* Extension+FileManager.swift in Sources */,
 				1B9936502AF3699E00F5C619 /* Extension+UIView.swift in Sources */,
+				1B5448022AF8768800A73A27 /* PersonRow.swift in Sources */,
 				1B9936512AF3699E00F5C619 /* CircularProgressBar.swift in Sources */,
 				1B9936522AF3699E00F5C619 /* Extension+AVAudioSession.swift in Sources */,
 				1B9936532AF3699E00F5C619 /* Extension+Int.swift in Sources */,
@@ -3031,6 +3073,7 @@
 				1B9936572AF3699E00F5C619 /* TermsOfServiceView.swift in Sources */,
 				1B9936582AF3699E00F5C619 /* FontSystem.swift in Sources */,
 				1B9936592AF3699E00F5C619 /* ProfileReportTypeSelectionView.swift in Sources */,
+				1B54480F2AF8835900A73A27 /* NoFollowerLabel.swift in Sources */,
 				1B99365A2AF3699E00F5C619 /* VideoSpeedSlider.swift in Sources */,
 				1B99365B2AF3699E00F5C619 /* CorrectionsToolView.swift in Sources */,
 				1B99365C2AF3699E00F5C619 /* GuideStatusView.swift in Sources */,
@@ -3051,6 +3094,7 @@
 				1B99366B2AF3699E00F5C619 /* ProfileReportReasonSelectionView.swift in Sources */,
 				1B99366C2AF3699E00F5C619 /* MusicListView.swift in Sources */,
 				1B99366D2AF3699E00F5C619 /* MemberFollowListView.swift in Sources */,
+				1B5448092AF882E300A73A27 /* MyFollowingList.swift in Sources */,
 				1B99366E2AF3699E00F5C619 /* RecordAccessView.swift in Sources */,
 				1B99366F2AF3699E00F5C619 /* MainFeedReportReasonSelectionView.swift in Sources */,
 				1B9936702AF3699E00F5C619 /* VideoModel.swift in Sources */,
@@ -3093,6 +3137,7 @@
 				1B9936942AF3699E00F5C619 /* StringsAndWords.swift in Sources */,
 				1B9936952AF3699E00F5C619 /* MemberContent.swift in Sources */,
 				1B9936962AF3699E00F5C619 /* EditablePlayer.swift in Sources */,
+				1B54480C2AF882F600A73A27 /* FollowerList.swift in Sources */,
 				1B9936972AF3699E00F5C619 /* SettingProtocol.swift in Sources */,
 				1B9936982AF3699E00F5C619 /* GuestContentLayer.swift in Sources */,
 				1B9936992AF3699E00F5C619 /* NavigationModel.swift in Sources */,
@@ -3178,6 +3223,7 @@
 				1B9936E42AF3699E00F5C619 /* BlockList.swift in Sources */,
 				1B9936E52AF3699E00F5C619 /* FollowTabItemButtonStyle.swift in Sources */,
 				1BE652A12AF7E49800CE8858 /* MusicInfo.swift in Sources */,
+				1B5448062AF882C800A73A27 /* MemberFollowingList.swift in Sources */,
 				1B9936E62AF3699E00F5C619 /* MemberContentLayer.swift in Sources */,
 				1B9936E72AF3699E00F5C619 /* ThumbnailsSliderView.swift in Sources */,
 				1B9936E82AF3699E00F5C619 /* BookmarkedContentPlayerview.swift in Sources */,

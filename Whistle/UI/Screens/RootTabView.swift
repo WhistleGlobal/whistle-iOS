@@ -51,12 +51,6 @@ struct RootTabView: View {
 
   var body: some View {
     ZStack {
-      if !toastViewModel.onFullScreenCover {
-        ToastMessageView().zIndex(1000)
-      }
-      if !alertViewModel.onFullScreenCover {
-        AlertPopup().zIndex(1000)
-      }
       guideView
       if isAccess {
         NavigationStack {
@@ -85,9 +79,11 @@ struct RootTabView: View {
           GuestProfileView()
         }
       }
-
+      if !toastViewModel.onFullScreenCover {
+        ToastMessageView()
+          .zIndex(9)
+      }
       // MARK: - Tabbar
-
       VStack {
         Spacer()
         glassMorphicTab(width: tabbarModel.tabWidth)
@@ -130,6 +126,7 @@ struct RootTabView: View {
                 }
               })
       }
+      .zIndex(10)
       .padding(.bottom, 24)
       .ignoresSafeArea()
       .padding(.horizontal, 16)
@@ -146,6 +143,14 @@ struct RootTabView: View {
 //          }
 //        }
       })
+    }
+    .overlay {
+//      if !toastViewModel.onFullScreenCover {
+//        ToastMessageView()
+//      }
+      if !alertViewModel.onFullScreenCover {
+        AlertPopup()
+      }
     }
     .fullScreenCover(isPresented: $showVideoCaptureView) {
       CameraOrAccessView(

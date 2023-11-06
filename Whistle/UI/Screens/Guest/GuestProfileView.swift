@@ -41,6 +41,9 @@ struct GuestProfileView: View {
           .frame(height: 340)
           .padding(.horizontal, 16)
           .padding(.bottom, 12)
+          .overlay {
+            overlayedView()
+          }
         Spacer()
       }
     }
