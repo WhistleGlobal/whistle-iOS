@@ -40,10 +40,10 @@ struct VideoEditorView: View {
           CustomNavigationBarViewController(title: "새 게시물") {
             alertViewModel.stackAlert(
               isImmediateDismiss: true,
-              title: "처음부터 시작하시겠어요?",
-              content: "지금 돌아가면 해당 작업물이 삭제됩니다.",
-              cancelText: "계속 수정",
-              destructiveText: "처음부터 시작")
+              title: AlertTitles().stopEditing,
+              content: AlertContents().stopEditing,
+              cancelText: AlertButtons().continueEditing,
+              destructiveText: AlertButtons().stopEditing)
             {
               dismiss()
             }

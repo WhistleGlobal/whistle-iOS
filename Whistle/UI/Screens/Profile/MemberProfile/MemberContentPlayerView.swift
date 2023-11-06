@@ -76,7 +76,8 @@ struct MemberContentPlayerView: View {
                       .fontSystem(fontDesignSystem: .subtitle1)
                       .foregroundColor(.LabelColor_Primary_Dark)
                       .padding(.bottom, 12)
-                    Text("관심없음 설정한 모든 콘텐츠는 \n회원님의 피드에 노출되지 않습니다.")
+                    Text("관심없음 설정한 모든 콘텐츠는\n회원님의 피드에 노출되지 않습니다.")
+                      .multilineTextAlignment(.center)
                       .fontSystem(fontDesignSystem: .body2)
                       .foregroundColor(.LabelColor_Secondary_Dark)
                     Spacer()
@@ -169,6 +170,7 @@ struct MemberContentPlayerView: View {
                         .foregroundColor(.LabelColor_Primary_Dark)
                         .padding(.bottom, 12)
                       Text("차단된 계정의 모든 콘텐츠는 \n회원님의 피드에 노출되지 않습니다.")
+                        .multilineTextAlignment(.center)
                         .fontSystem(fontDesignSystem: .body2)
                         .foregroundColor(.LabelColor_Secondary_Dark)
                     }

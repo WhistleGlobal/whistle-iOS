@@ -87,14 +87,21 @@
 "%@ 님을 차단하시겠어요?" = "Block %@?";
 "%@ 님을 차단 해제하시겠어요?" = "Unblock %@?";
 "휘슬 앱 알림이 허용되지 않았습니다.설정에서 알림을 켜시겠습니까?" = "Turn on notification from your device settings to see updates on your lock screen.";
+"영상을 삭제하시겠어요?" = "Discard media?";
+"처음부터 시작하시겠어요?" = "Stop editing?";
 
 // MARK: - Alert Content
 "이제 상대방이 회원님의 게시물을 보거나 팔로우할 수 있습니다. 상대방에게 회원님이 차단을 해제했다는 정보를 알리지 않습니다." = "Now they will be able to see your posts and follow you on Whistle. They won't be notified that you unblocked them.";
 "차단된 사람은 회원님의 프로필 또는 콘텐츠를 찾을 수 없게 되며, 상대방에게 차단되었다는 알림이 전송되지 않습니다." = "They won't be able to find your profile or content on Whistle. They won't be notified that you blocked them.";
 "삭제하시면 회원님의 모든 정보와 활동 기록이 삭제됩니다. 삭제된 정보는 복구할 수 없으니 신중하게 결정해주세요." = "If you delete it, all your information and activity history will be permanently removed. Deleted information cannot be recovered, so please decide carefully.";
+"지금 돌아가면 변경 사항이 모두 삭제됩니다." = "If you go back now, you will lose any changes you've made.";
+"지금 돌아가면 해당 작업물이 삭제됩니다." = "If you go back now, you will lose any changes you've made.";
 
 // MARK: - Alert Buttons
 "설정으로 가기" = "Go to device settings";
+"계속 수정" = "Cancel";
+"처음부터 시작" = "Restart";
+"영상 삭제" = "Discard";
 
 // MARK: - 토스트 문구
 "실행 취소" = "Undo";

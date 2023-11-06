@@ -39,9 +39,7 @@ class AlertViewModel: ObservableObject {
     cancelAction: (() -> Void)? = nil,
     destructiveAction: @escaping () -> Void)
   {
-//    withAnimation {
     self.showAlert = showAlert
-//    }
     self.alertStyle = alertStyle
     self.title = title
     self.isRed = isRed
@@ -60,9 +58,7 @@ class AlertViewModel: ObservableObject {
     submitText: LocalizedStringKey? = CommonWords().done,
     submitAction: (() -> Void)? = nil)
   {
-//    withAnimation {
     self.showAlert = showAlert
-//    }
     self.alertStyle = alertStyle
     self.title = title
     self.content = content
@@ -81,9 +77,7 @@ class AlertViewModel: ObservableObject {
     cancelAction: (() -> Void)? = nil,
     destructiveAction: @escaping () -> Void)
   {
-//    withAnimation {
     self.showAlert = showAlert
-//    }
     self.alertStyle = alertStyle
     self.isImmediateDismiss = isImmediateDismiss
     self.title = title
@@ -95,9 +89,7 @@ class AlertViewModel: ObservableObject {
   }
 
   func dismissAlert() {
-//    withAnimation {
     showAlert = false
-//    }
   }
 
   func immediateDismissAlert() {
