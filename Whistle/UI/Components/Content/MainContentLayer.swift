@@ -14,7 +14,7 @@ import UIKit
 
 struct MainContentLayer: View {
 
-  @StateObject var currentVideoInfo: MainContent = .init()
+  @ObservedObject var currentVideoInfo: MainContent = .init()
   @StateObject var apiViewModel = APIViewModel.shared
   @StateObject var toastViewModel = ToastViewModel.shared
   @StateObject private var feedMoreModel = MainFeedMoreModel.shared
@@ -115,19 +115,18 @@ struct MainContentLayer: View {
           }
           Button {
             Task {
-              let currentContent = apiViewModel.mainFeed[feedPlayersViewModel.currentVideoIndex]
-              if currentContent.isBookmarked {
+              if currentVideoInfo.isBookmarked {
                 _ = await apiViewModel.bookmarkAction(
-                  contentID: currentContent.contentId ?? 0,
+                  contentID: currentVideoInfo.contentId ?? 0,
                   method: .delete)
                 toastViewModel.toastInit(message: ToastMessages().bookmarkDeleted)
-                currentContent.isBookmarked = false
+                currentVideoInfo.isBookmarked = false
               } else {
                 _ = await apiViewModel.bookmarkAction(
-                  contentID: currentContent.contentId ?? 0,
+                  contentID: currentVideoInfo.contentId ?? 0,
                   method: .post)
                 toastViewModel.toastInit(message: ToastMessages().bookmark)
-                currentContent.isBookmarked = true
+                currentVideoInfo.isBookmarked = true
               }
             }
           } label: {

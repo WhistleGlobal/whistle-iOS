@@ -395,6 +395,54 @@ extension APIViewModel: PostFeedProtocol {
       }
   }
 
+  func requestSingleContent(contentID: Int) async {
+    await withCheckedContinuation { continuation in
+      AF.request(
+        "\(domainURL)/content/\(contentID)",
+        method: .get,
+        headers: contentTypeJson)
+        .validate(statusCode: 200 ... 300)
+        .response { response in
+          switch response.result {
+          case .success(let data):
+            do {
+              guard let data else {
+                continuation.resume()
+                return
+              }
+              let jsonData = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any]
+              guard let singleContentJson = jsonData?["singleContent"] as? [String: Any] else { return }
+              let singleContent: MainContent = .init()
+              singleContent.contentId = singleContentJson["content_id"] as? Int
+              singleContent.userId = singleContentJson["user_id"] as? Int
+              singleContent.userName = singleContentJson["user_name"] as? String
+              singleContent.profileImg = singleContentJson["profile_img"] as? String
+              singleContent.caption = singleContentJson["caption"] as? String
+              singleContent.videoUrl = singleContentJson["video_url"] as? String
+              singleContent.thumbnailUrl = singleContentJson["thumbnail_url"] as? String
+              singleContent.musicArtist = singleContentJson["music_artist"] as? String
+              singleContent.musicTitle = singleContentJson["music_title"] as? String
+              singleContent.hashtags = singleContentJson["hashtags"] as? [String]
+              singleContent.whistleCount = singleContentJson["content_whistle_count"] as? Int ?? 0
+              singleContent.isWhistled = (singleContentJson["is_whistled"] as? Int) == 0 ? false : true
+              singleContent.isFollowed = (singleContentJson["is_followed"] as? Int) == 0 ? false : true
+              singleContent.isBookmarked = (singleContentJson["is_bookmarked"] as? Int) == 0 ? false : true
+              self.singleContent = singleContent
+              WhistleLogger.logger.debug("singleContent: \(self.singleContent.videoUrl ?? "")")
+              WhistleLogger.logger.debug("singleContent: \(self.singleContent.contentId ?? 0)")
+              continuation.resume()
+            } catch {
+              WhistleLogger.logger.error("Error parsing JSON: \(error)")
+              continuation.resume()
+            }
+          case .failure(let error):
+            WhistleLogger.logger.error("Failure: \(error)")
+            continuation.resume()
+          }
+        }
+    }
+  }
+
   func publisherSend() {
     publisher.send(UUID())
   }

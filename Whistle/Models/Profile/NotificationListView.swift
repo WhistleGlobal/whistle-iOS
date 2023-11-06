@@ -8,6 +8,9 @@
 import Kingfisher
 import SwiftUI
 
+import AVFoundation
+import BottomSheet
+
 // MARK: - NotificationListView
 
 struct NotificationListView: View {
@@ -34,7 +37,11 @@ struct NotificationListView: View {
             }
             .id(UUID())
           } else {
-            contentWhistleNotiRow(noti)
+            NavigationLink {
+              SingleContentView(contentID: noti.contentID ?? 0)
+            } label: {
+              contentWhistleNotiRow(noti)
+            }
           }
           Divider()
             .frame(height: 0.5)
@@ -91,13 +98,6 @@ extension NotificationListView {
           .frame(width: 55, height: 55)
           .scaledToFit()
           .cornerRadius(8)
-      }
-      .onTapGesture {
-        print("tap")
-        guard let url = URL(string: "https://readywhistle.com/profile_uni?id=7") else { return }
-        if UIApplication.shared.canOpenURL(url) {
-          UIApplication.shared.open(url)
-        }
       }
     }
     .frame(height: 72)

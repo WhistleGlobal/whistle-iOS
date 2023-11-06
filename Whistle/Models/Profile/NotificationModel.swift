@@ -9,7 +9,7 @@ import Foundation
 
 // MARK: - NotificationModel
 
-class NotificationModel: Decodable, Hashable {
+class NotificationModel: Decodable, Hashable, ObservableObject {
   var uuid = UUID()
   var notificationID: Int
   var senderID: Int
