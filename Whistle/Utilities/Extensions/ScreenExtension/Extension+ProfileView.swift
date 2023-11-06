@@ -42,9 +42,9 @@ extension ProfileView {
         .offset(y: usernameOffset)
         .padding(.bottom, UIScreen.getHeight(4))
       // intruduce
-      if profileType == .my, !(apiViewModel.myProfile.introduce ?? "").isEmpty {
+      if profileType == .my {
         introduceText(text: apiViewModel.myProfile.introduce ?? "")
-      } else if profileType == .member, !(apiViewModel.memberProfile.introduce ?? "").isEmpty {
+      } else if profileType == .member {
         introduceText(text: apiViewModel.memberProfile.introduce ?? "")
       }
       // Edit button or Follow Button
@@ -53,7 +53,7 @@ extension ProfileView {
           showProfileEditView = true
         } label: {
           Text(ProfileEditWords().edit)
-            .fontSystem(fontDesignSystem: .subtitle2)
+            .font(.system(size: 16, weight: .semibold)) // subtitle 2
             .foregroundColor(Color.LabelColor_Primary_Dark)
             .scaleEffect(profileEditButtonScale)
             .frame(
@@ -269,19 +269,19 @@ extension ProfileView {
 
   @ViewBuilder
   func introduceText(text: String) -> some View {
-    Color.clear.overlay {
-      Text(text)
-        .foregroundColor(Color.LabelColor_Secondary_Dark)
-        .fontSystem(fontDesignSystem: .body2)
-        .lineLimit(2)
-        .truncationMode(.tail)
-        .multilineTextAlignment(.center)
-        .fixedSize(horizontal: false, vertical: true)
-        .scaleEffect(introduceScale)
-    }
-    .frame(height: UIScreen.getHeight(introduceHeight))
-    .padding(.bottom, UIScreen.getHeight(16))
-    .padding(.horizontal, UIScreen.getWidth(48))
+    Text(text)
+      .foregroundColor(Color.LabelColor_Secondary_Dark)
+      .fontSystem(fontDesignSystem: .body2)
+      .lineLimit(2)
+      .truncationMode(.tail)
+      .multilineTextAlignment(.center)
+      .fixedSize(horizontal: false, vertical: true)
+      .scaleEffect(introduceScale)
+      .frame(height: UIScreen.getHeight(introduceHeight))
+      .padding(.top, text.isEmpty ? 0 : UIScreen.getHeight(16))
+      .padding(.bottom, UIScreen.getHeight(16))
+      .padding(.bottom, UIScreen.getHeight(8))
+      .padding(.horizontal, UIScreen.getWidth(48))
   }
 
   @ViewBuilder
@@ -326,11 +326,11 @@ extension ProfileView {
         }
       }
       .buttonStyle(FollowButtonStyle(isFollowed: $apiViewModel.memberProfile.isFollowed))
+      .frame(width: UIScreen.getWidth(profileEditButtonWidth), height: UIScreen.getHeight(profileEditButtonHeight))
       .scaleEffect(profileEditButtonScale)
       .opacity(isProfileLoaded ? 1 : 0)
       .disabled(userId == apiViewModel.myProfile.userId)
       .padding(.bottom, UIScreen.getHeight(24))
-      .scaleEffect(profileEditButtonScale)
     }
   }
 
