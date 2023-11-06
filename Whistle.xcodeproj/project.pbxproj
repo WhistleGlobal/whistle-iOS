@@ -560,6 +560,9 @@
 		7880108A2ABC82FC00116FD5 /* MainFeedReportReasonSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 788010892ABC82FC00116FD5 /* MainFeedReportReasonSelectionView.swift */; };
 		7880108C2ABC837A00116FD5 /* MainFeedReportCommentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7880108B2ABC837A00116FD5 /* MainFeedReportCommentView.swift */; };
 		78895EEB2AF8B57000C8DF8F /* SingleContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78895EEA2AF8B57000C8DF8F /* SingleContentView.swift */; };
+		78895EED2AF8B64D00C8DF8F /* SingleContentLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78895EEC2AF8B64D00C8DF8F /* SingleContentLayer.swift */; };
+		78895EEE2AF8B7E600C8DF8F /* SingleContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78895EEA2AF8B57000C8DF8F /* SingleContentView.swift */; };
+		78895EEF2AF8B81C00C8DF8F /* SingleContentLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78895EEC2AF8B64D00C8DF8F /* SingleContentLayer.swift */; };
 		788E68652AD6B6710056C18B /* VideoFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 788E685D2AD6B6710056C18B /* VideoFile.swift */; };
 		788E68662AD6B6710056C18B /* PhotoAssetModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 788E685E2AD6B6710056C18B /* PhotoAssetModel.swift */; };
 		788E68672AD6B6710056C18B /* VideoCaptureView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 788E685F2AD6B6710056C18B /* VideoCaptureView.swift */; };
@@ -1017,6 +1020,7 @@
 		788010892ABC82FC00116FD5 /* MainFeedReportReasonSelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainFeedReportReasonSelectionView.swift; sourceTree = "<group>"; };
 		7880108B2ABC837A00116FD5 /* MainFeedReportCommentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainFeedReportCommentView.swift; sourceTree = "<group>"; };
 		78895EEA2AF8B57000C8DF8F /* SingleContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SingleContentView.swift; sourceTree = "<group>"; };
+		78895EEC2AF8B64D00C8DF8F /* SingleContentLayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SingleContentLayer.swift; sourceTree = "<group>"; };
 		788E685D2AD6B6710056C18B /* VideoFile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoFile.swift; sourceTree = "<group>"; };
 		788E685E2AD6B6710056C18B /* PhotoAssetModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhotoAssetModel.swift; sourceTree = "<group>"; };
 		788E685F2AD6B6710056C18B /* VideoCaptureView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoCaptureView.swift; sourceTree = "<group>"; };
@@ -2434,6 +2438,7 @@
 				78BCA9552AEFFAEE0084E92F /* BookmarkedContentLayer.swift */,
 				78BCA95F2AF08A010084E92F /* MemberContentLayer.swift */,
 				782A6DDA2AF1EB50004D0A60 /* GuestContentLayer.swift */,
+				78895EEC2AF8B64D00C8DF8F /* SingleContentLayer.swift */,
 			);
 			path = Content;
 			sourceTree = "<group>";
@@ -2853,6 +2858,7 @@
 				788010872ABC7EF800116FD5 /* MemberFollowListView.swift in Sources */,
 				788E68702AD6C9DB0056C18B /* RecordAccessView.swift in Sources */,
 				7880108A2ABC82FC00116FD5 /* MainFeedReportReasonSelectionView.swift in Sources */,
+				78895EED2AF8B64D00C8DF8F /* SingleContentLayer.swift in Sources */,
 				1B39555D2A95098100BCB4DF /* VideoModel.swift in Sources */,
 				1B3895732AB9CBFC00B4C8DD /* Extension+Double.swift in Sources */,
 				1B3895222AB9CB6000B4C8DD /* UniSlider.swift in Sources */,
@@ -3059,6 +3065,7 @@
 				1B99366E2AF3699E00F5C619 /* RecordAccessView.swift in Sources */,
 				1B99366F2AF3699E00F5C619 /* MainFeedReportReasonSelectionView.swift in Sources */,
 				1B9936702AF3699E00F5C619 /* VideoModel.swift in Sources */,
+				78895EEF2AF8B81C00C8DF8F /* SingleContentLayer.swift in Sources */,
 				1B9936712AF3699E00F5C619 /* Extension+Double.swift in Sources */,
 				1B9936722AF3699E00F5C619 /* UniSlider.swift in Sources */,
 				1B9936732AF3699E00F5C619 /* MainFeedView.swift in Sources */,
@@ -3108,6 +3115,7 @@
 				1B99369D2AF3699E00F5C619 /* Enums.swift in Sources */,
 				1B99369E2AF3699E00F5C619 /* GuestMainFeedPageView.swift in Sources */,
 				1B99369F2AF3699E00F5C619 /* TagsContent.swift in Sources */,
+				78895EEE2AF8B7E600C8DF8F /* SingleContentView.swift in Sources */,
 				1B9936A02AF3699E00F5C619 /* ProfileReportContentSelectionView.swift in Sources */,
 				1B9936A12AF3699E00F5C619 /* APIViewModel+PostFeed.swift in Sources */,
 				1B9936A22AF3699E00F5C619 /* BookmarkedContentLayer.swift in Sources */,

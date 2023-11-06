@@ -38,7 +38,8 @@ struct NotificationListView: View {
             .id(UUID())
           } else {
             NavigationLink {
-              SingleContentView(contentID: noti.contentID ?? 0)
+              SingleContentView(
+                contentID: noti.contentID ?? 0)
             } label: {
               contentWhistleNotiRow(noti)
             }
@@ -48,11 +49,11 @@ struct NotificationListView: View {
             .padding(.leading, 74)
             .foregroundColor(.Disable_Placeholder)
         }
-
         .onReceive(apiViewModel.publisher) { id in
           newId = id
         }
         .id(newId)
+        Spacer().frame(height: 200)
       }
     }
     .navigationTitle(CommonWords().notification)
@@ -74,53 +75,60 @@ extension NotificationListView {
   @ViewBuilder
   func contentWhistleNotiRow(_ notification: NotificationModel) -> some View {
     HStack(spacing: 0) {
-      Group {
-        profileImageView(url: notification.profileImageURL, size: 48)
-          .padding(.trailing, 10)
+      profileImageView(url: notification.profileImageURL, size: 48)
+        .padding(.trailing, 10)
+      VStack(alignment: .center, spacing: 0) {
         Group {
           Text(notification.userName)
             .font(.system(size: 14, weight: .semibold)) +
-            Text("님이 회원님의 게시물에 휘슬을 보냈습니다.  ")
+            Text("님이 회원님의 게시물에 휘슬을 보냈습니다. ")
             .font(.system(size: 14)) +
             Text(Date.timeAgoSinceDate(notification.notificationTime))
             .font(.caption)
             .foregroundColor(Color.Disable_Placeholder_Dark)
         }
+        .fixedSize(horizontal: false, vertical: true)
+        .multilineTextAlignment(.leading)
         .lineSpacing(6)
         .padding(.vertical, 3)
         .foregroundColor(.LabelColor_Primary)
-        Spacer()
-        KFImage.url(URL(string: notification.thumbnailURL ?? ""))
-          .placeholder { // 플레이스 홀더 설정
-            Color.black
-          }
-          .resizable()
-          .frame(width: 55, height: 55)
-          .scaledToFit()
-          .cornerRadius(8)
       }
+      Spacer()
+      KFImage.url(URL(string: notification.thumbnailURL ?? ""))
+        .placeholder { // 플레이스 홀더 설정
+          Color.black
+        }
+        .resizable()
+        .frame(width: 55, height: 55)
+        .scaledToFit()
+        .cornerRadius(8)
     }
     .frame(height: 72)
     .padding(.horizontal, 16)
   }
+
 
   @ViewBuilder
   func contentFollowNotiRow(_ notification: NotificationModel) -> some View {
     HStack(spacing: 0) {
       profileImageView(url: notification.profileImageURL, size: 48)
         .padding(.trailing, 10)
-      Group {
-        Text(notification.userName)
-          .font(.system(size: 14, weight: .semibold)) +
-          Text("님이 회원님을 팔로우하기 시작했습니다.  ")
-          .font(.system(size: 14)) +
-          Text(Date.timeAgoSinceDate(notification.notificationTime))
-          .font(.caption)
-          .foregroundColor(Color.Disable_Placeholder_Dark)
+      VStack(alignment: .center, spacing: 0) {
+        Group {
+          Text(notification.userName)
+            .font(.system(size: 14, weight: .semibold)) +
+            Text("님이 회원님을 팔로우하기 시작했습니다. ")
+            .font(.system(size: 14)) +
+            Text(Date.timeAgoSinceDate(notification.notificationTime))
+            .font(.caption)
+            .foregroundColor(Color.Disable_Placeholder_Dark)
+        }
+        .fixedSize(horizontal: false, vertical: true)
+        .multilineTextAlignment(.leading)
+        .lineSpacing(6)
+        .padding(.vertical, 3)
+        .foregroundColor(.LabelColor_Primary)
       }
-      .lineSpacing(6)
-      .padding(.vertical, 3)
-      .foregroundColor(.LabelColor_Primary)
       Spacer()
       followButton(
         isFollowed:
@@ -180,35 +188,5 @@ extension NotificationListView {
               }
           }
     }
-  }
-}
-
-extension Date {
-  static func timeAgoSinceDate(_ date: Date) -> String {
-    let calendar = Calendar.current
-    let now = Date()
-
-    let components = calendar.dateComponents([.year, .month, .weekOfYear, .day, .hour], from: date, to: now)
-
-    if let year = components.year, year > 0 {
-      return "\(year)년 전"
-    }
-
-    if let month = components.month, month > 0 {
-      return "\(month)달 전"
-    }
-
-    if let week = components.weekOfYear, week > 0 {
-      return "\(week)주 전"
-    }
-
-    if let day = components.day, day > 0 {
-      return "\(day)일 전"
-    }
-
-    if let hour = components.hour, hour > 0 {
-      return "\(hour)시간 전"
-    }
-    return "방금 전"
   }
 }

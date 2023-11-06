@@ -19,6 +19,7 @@ struct SingleContentView: View {
   @StateObject private var toastViewModel = ToastViewModel.shared
   @State var showPlayButton = false
   @State var bottomSheetPosition: BottomSheetPosition = .hidden
+  @State var timer: Timer? = nil
   @State var player: AVPlayer?
   let contentID: Int
 
@@ -39,7 +40,7 @@ struct SingleContentView: View {
           ContentPlayer(player: player)
             .frame(width: UIScreen.width, height: UIScreen.height)
             .onTapGesture(count: 2) {
-              //                    whistleToggle(content: content, index)
+              whistleToggle(content: apiViewModel.singleContent)
             }
             .onTapGesture {
               if player.rate == 0.0 {
@@ -68,11 +69,9 @@ struct SingleContentView: View {
               ContentGradientLayer()
                 .allowsHitTesting(false)
               if tabbarModel.tabWidth != 56 {
-                MainContentLayer(
+                SingleContentLayer(
                   currentVideoInfo: apiViewModel.singleContent,
-                  whistleAction: {
-                    //                          whistleToggle(content: content, index)
-                  })
+                  bottomSheetPosition: $bottomSheetPosition)
                   .padding(.bottom, UIScreen.main.nativeBounds.height == 1334 ? 24 : 0)
               }
               if bottomSheetPosition != .hidden {
@@ -204,5 +203,28 @@ struct SingleContentView: View {
         tabbarModel.tabbarOpacity = 0.0
       }
     }
+  }
+}
+
+extension SingleContentView {
+  func whistleToggle(content: MainContent) {
+    HapticManager.instance.impact(style: .medium)
+    timer?.invalidate()
+    if apiViewModel.singleContent.isWhistled {
+      timer = Timer.scheduledTimer(withTimeInterval: 2, repeats: false) { _ in
+        Task {
+          await apiViewModel.whistleAction(contentID: content.contentId ?? 0, method: .delete)
+        }
+      }
+      apiViewModel.singleContent.whistleCount -= 1
+    } else {
+      timer = Timer.scheduledTimer(withTimeInterval: 2, repeats: false) { _ in
+        Task {
+          await apiViewModel.whistleAction(contentID: content.contentId ?? 0, method: .post)
+        }
+      }
+      apiViewModel.singleContent.whistleCount += 1
+    }
+    apiViewModel.singleContent.isWhistled.toggle()
   }
 }
