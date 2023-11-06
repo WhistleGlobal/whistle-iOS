@@ -1285,20 +1285,24 @@ extension VideoCaptureView {
               alertViewModel.onFullScreenCover = false
             }
             Task {
-              if let video = editorVM.currentVideo {
-                let exporterVM = VideoExporterViewModel(video: video, musicVolume: musicVM.musicVolume)
-                await exporterVM.action(.save, start: video.rangeDuration.lowerBound)
-                if let thumbnail = exporterVM.thumbnailImage {
-                  UploadProgressViewModel.shared.thumbnail = Image(uiImage: thumbnail)
+              if isAccess {
+                if let video = editorVM.currentVideo {
+                  let exporterVM = VideoExporterViewModel(video: video, musicVolume: musicVM.musicVolume)
+                  await exporterVM.action(.save, start: video.rangeDuration.lowerBound)
+                  if let thumbnail = exporterVM.thumbnailImage {
+                    UploadProgressViewModel.shared.thumbnail = Image(uiImage: thumbnail)
+                  }
+                  dismiss()
+                  apiViewModel.uploadContent(
+                    video: exporterVM.videoData,
+                    thumbnail: exporterVM.thumbnailData,
+                    caption: "",
+                    musicID: musicVM.musicInfo?.musicID ?? 0,
+                    videoLength: video.totalDuration,
+                    hashtags: [""])
                 }
-                dismiss()
-                apiViewModel.uploadContent(
-                  video: exporterVM.videoData,
-                  thumbnail: exporterVM.thumbnailData,
-                  caption: "",
-                  musicID: musicVM.musicInfo?.musicID ?? 0,
-                  videoLength: video.totalDuration,
-                  hashtags: [""])
+              } else {
+                uploadBottomSheetPosition = .dynamic
               }
             }
           } label: {
@@ -1317,7 +1321,7 @@ extension VideoCaptureView {
           .disabled(disableUploadButton)
           // MARK: - 다음
           Button {
-            if guestUploadModel.istempAccess {
+            if isAccess {
               guestUploadModel.goDescriptionTagView = true
             } else {
               uploadBottomSheetPosition = .dynamic

@@ -31,7 +31,7 @@ extension ProfileView {
           ? apiViewModel.myProfile.profileImage
           : apiViewModel.memberProfile.profileImg,
         size: UIScreen.getHeight(profileImageSize))
-        .padding(.bottom, 16)
+        .padding(.bottom, UIScreen.getHeight(16))
       // userName
       Text(
         profileType == .my
