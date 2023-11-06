@@ -43,51 +43,36 @@ struct MusicTrimView: View {
   // MARK: Internal
 
   var body: some View {
-    ZStack {
-      Color.black
+    ZStack(alignment: .center) {
+      EditablePlayer(player: videoPlayer.videoPlayer)
         .ignoresSafeArea()
-      ZStack(alignment: .center) {
-        VStack {
-          EditablePlayer(player: videoPlayer.videoPlayer)
-            .frame(height: UIScreen.getHeight(700))
-            .overlay {
-              VStack {
-                LinearGradient(
-                  colors: [.Gray50_Dark.opacity(0.8), .Gray50_Dark.opacity(0)],
-                  startPoint: .top,
-                  endPoint: .bottom)
-                  .frame(height: UIScreen.getHeight(150))
-                Spacer()
-                LinearGradient(
-                  colors: [.Gray50_Dark.opacity(0), .Gray50_Dark.opacity(0.36)],
-                  startPoint: .top,
-                  endPoint: .bottom)
-                  .frame(height: UIScreen.getHeight(350))
-              }
-            }
-          Spacer()
+        .overlay {
+          DimsDefault()
         }
-        VStack(spacing: 0) {
-          customNavigationBar()
-          Spacer()
+      VStack(spacing: 0) {
+        customNavigationBar()
+          .padding(.bottom, 8)
+        MusicInfo(musicVM: musicVM, showMusicTrimView: $showMusicTrimView) { } onDelete: { }
 
-          // MARK: - Audio Timeline Minimap
+        Spacer()
 
-          ZStack(alignment: .leading) {
-            // MARK: - Timeline minimap
+        // MARK: - Audio Timeline Minimap
 
-            RoundedRectangle(cornerRadius: 20)
-              .fill(.white)
-              .frame(width: UIScreen.getWidth(273), height: UIScreen.getHeight(2))
+        ZStack(alignment: .leading) {
+          // MARK: - Timeline minimap
 
-            // MARK: - currentTime Indicator
+          RoundedRectangle(cornerRadius: 20)
+            .fill(.white)
+            .frame(width: UIScreen.getWidth(273), height: UIScreen.getHeight(2))
 
-            RoundedRectangle(cornerRadius: 6)
-              .fill(Color.Secondary_Default_Dark)
-              .frame(
-                width: UIScreen.getWidth(max(CGFloat(273 / musicDuration * musicVM.trimDuration), 12)),
-                height: UIScreen.getHeight(8))
-              .offset(x: UIScreen.getWidth(indicatorOffset))
+          // MARK: - currentTime Indicator
+
+          RoundedRectangle(cornerRadius: 6)
+            .fill(Color.Secondary_Default_Dark)
+            .frame(
+              width: UIScreen.getWidth(max(CGFloat(273 / musicDuration * musicVM.trimDuration), 12)),
+              height: UIScreen.getHeight(8))
+            .offset(x: UIScreen.getWidth(indicatorOffset))
 //              .gesture(
 //                DragGesture()
 //                  .onChanged { value in
@@ -96,75 +81,71 @@ struct MusicTrimView: View {
 //                  .onEnded { value in
 //                    accumulatedOffset += value.translation.width
 //                  })
-          }
-          .padding(.bottom, UIScreen.getHeight(40))
+        }
+        .padding(.bottom, UIScreen.getHeight(40))
 
-          // MARK: - Audio Timeline
+        // MARK: - Audio Timeline
 
-          ZStack(alignment: .center) {
-            // MARK: - Audio Play ProgressBox
+        ZStack(alignment: .center) {
+          // MARK: - Audio Play ProgressBox
 
-            RoundedRectangle(cornerRadius: 8)
-              .fill(LinearGradient.primaryGradient)
-              .frame(width: UIScreen.getWidth(175), height: UIScreen.getHeight(84))
-              .mask(alignment: .leading) {
-                Rectangle()
-                  .frame(
-                    width: isAnimated
-                      ? max(
-                        0.1,
-                        UIScreen.getWidth(175 - (audioTimer / musicVM.trimDuration) * 175))
-                      : 0)
-              }
+          RoundedRectangle(cornerRadius: 8)
+            .fill(LinearGradient.primaryGradient)
+            .frame(width: UIScreen.getWidth(175), height: UIScreen.getHeight(84))
+            .mask(alignment: .leading) {
+              Rectangle()
+                .frame(
+                  width: isAnimated
+                    ? max(
+                      0.1,
+                      UIScreen.getWidth(175 - (audioTimer / musicVM.trimDuration) * 175))
+                    : 0)
+            }
 
-            // MARK: - Audio Waveform
+          // MARK: - Audio Waveform
 
-            waveform()
-          }
-          .frame(height: UIScreen.getHeight(84))
+          waveform()
         }
-        .padding(.bottom, UIScreen.getHeight(130))
-        VStack {
-          Spacer()
-          Text("드래그하여 영상에 추가할 부분을 선택하세요.")
-            .fontSystem(fontDesignSystem: .body2)
-            .foregroundColor(.white)
-            .padding(.bottom, UIScreen.getHeight(32))
-        }
+        .frame(height: UIScreen.getHeight(84))
+        .padding(.bottom, 52)
+        Text("드래그하여 영상에 추가할 부분을 선택하세요.")
+          .fontSystem(fontDesignSystem: .body2)
+          .foregroundColor(.white)
+          .padding(.bottom, UIScreen.getHeight(32))
       }
-      .onAppear {
-        initialStart()
-      }
-      // 가만히 있는 상태에서 비디오가 멈췄을 때
-      .onChange(of: videoPlayer.isPlaying) { value in
-        if !value, !isScrolling {
-          if let video = editorVM.currentVideo {
-            videoPlayer.action(video)
-          }
-          audioTimer = musicVM.trimDuration
-          musicVM.stopAudio()
+    }
+    .onAppear {
+      initialStart()
+    }
+    // 가만히 있는 상태에서 비디오가 멈췄을 때
+    .onChange(of: videoPlayer.isPlaying) { value in
+      if !value, !isScrolling {
+        if let video = editorVM.currentVideo {
+          videoPlayer.action(video)
         }
-        if value {
-          musicVM.playAudio(startTime: (offset / 16.0) * (musicVM.trimDuration / 10))
-        }
+        audioTimer = musicVM.trimDuration
+        musicVM.stopAudio()
       }
-      // 스크롤중 / 스크롤 끝
-      .onChange(of: isScrolling) { value in
-        switch value {
-        case true:
-          stopPlaying()
-        case false:
-          startPlaying()
-        }
+      if value {
+        musicVM.playAudio(startTime: (offset / 16.0) * (musicVM.trimDuration / 10))
       }
-      .onReceive(timer) { _ in
-        withAnimation(.linear(duration: 0.1)) {
-          audioTimer = max(0, audioTimer - 0.1)
-        }
-      }
-      .onDisappear {
+    }
+    // 스크롤중 / 스크롤 끝
+    .onChange(of: isScrolling) { value in
+      switch value {
+      case true:
         stopPlaying()
+      case false:
+        startPlaying()
       }
+    }
+    .onReceive(timer) { _ in
+      withAnimation(.linear(duration: 0.1)) {
+        audioTimer = max(0, audioTimer - 0.1)
+      }
+    }
+    .onDisappear {
+      stopPlaying()
     }
   }
 }
@@ -274,14 +255,8 @@ extension MusicTrimView {
 
 extension MusicTrimView {
   func initialStart() {
-//    musicVM.startTime = nil
     loadAudioFile()
-//    print("starTtime:", musicVM.startTime)
-//    if let starttime = musicVM.startTime {
-//      offset = starttime * 16 * 10 / musicVM.trimDuration
-//    } else {
     offset = 0
-//    }
     if let url = musicVM.originalAudioURL {
       musicDuration = audioDuration(url)
     }
@@ -366,7 +341,7 @@ extension MusicTrimView {
     exportSession?.exportAsynchronously(completionHandler: {
       DispatchQueue.main.async {
         trimmedAudioURL = outputPath
-        musicVM.originalAudioURL = trimmedAudioURL
+        musicVM.trimmedAudioURL = trimmedAudioURL
         editorVM.setAudio(Audio(url: trimmedAudioURL!, duration: musicVM.trimDuration))
       }
     })

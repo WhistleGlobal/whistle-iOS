@@ -83,7 +83,7 @@ extension PlayerHolderView {
               let videoCurrentTime = videoPlayer.currentTime
               let timeOffset = duration.upperBound <= videoCurrentTime ? 0 : videoCurrentTime - minTime
               musicVM
-                .playAudio(startTime: timeOffset)
+                .playTrimmedAudio(startTime: timeOffset)
             }
           case false:
             musicVM.stopAudio()

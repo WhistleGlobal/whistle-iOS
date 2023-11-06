@@ -102,6 +102,21 @@ extension View {
   }
 
   @ViewBuilder
+  func disabledGlass(cornerRadius: CGFloat) -> some View {
+    ZStack {
+      Rectangle()
+        .fill(.gray50Dark)
+        .opacity(0.48)
+        .cornerRadius(cornerRadius, corners: .allCorners)
+      CustomBlurEffect(effect: .systemUltraThinMaterialDark) { view in
+        view.saturationAmount = 2.2
+        view.gaussianBlurRadius = 32
+      }
+      .clipShape(RoundedRectangle(cornerRadius: cornerRadius, style: .continuous))
+    }
+  }
+
+  @ViewBuilder
   func glassProfile(cornerRadius: CGFloat) -> some View {
     glassMorphicView(cornerRadius: cornerRadius)
       .overlay {

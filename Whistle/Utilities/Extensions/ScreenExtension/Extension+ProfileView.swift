@@ -295,7 +295,6 @@ extension ProfileView {
           cancelText: CommonWords().cancel,
           destructiveText: CommonWords().unblock)
         {
-          toastViewModel.toastInit(message: "\(apiViewModel.memberProfile.userName)님이 차단 해제되었습니다")
           Task {
             await apiViewModel.blockAction(userID: userId, method: .delete)
             BlockList.shared.userIds.append(userId)
@@ -315,31 +314,25 @@ extension ProfileView {
       }
       .padding(.bottom, UIScreen.getHeight(24))
     } else {
-      Capsule()
-        .frame(width: UIScreen.getWidth(112), height: UIScreen.getHeight(36))
-        .foregroundColor(isProfileLoaded ? .clear : .Gray_Default)
-        .overlay {
-          Button("") {
-            Task {
-              if apiViewModel.memberProfile.isFollowed {
-                apiViewModel.memberProfile.isFollowed.toggle()
-                await apiViewModel.followAction(userID: userId, method: .delete)
-              } else {
-                apiViewModel.memberProfile.isFollowed.toggle()
-                await apiViewModel.followAction(userID: userId, method: .post)
-              }
-            }
+      Button("") {
+        Task {
+          if apiViewModel.memberProfile.isFollowed {
+            apiViewModel.memberProfile.isFollowed.toggle()
+            await apiViewModel.followAction(userID: userId, method: .delete)
+          } else {
+            apiViewModel.memberProfile.isFollowed.toggle()
+            await apiViewModel.followAction(userID: userId, method: .post)
           }
-          .buttonStyle(FollowButtonStyle(isFollowed: $apiViewModel.memberProfile.isFollowed))
-          .scaleEffect(profileEditButtonScale)
-          .opacity(isProfileLoaded ? 1 : 0)
-          .disabled(userId == apiViewModel.myProfile.userId)
         }
-        .padding(.bottom, UIScreen.getHeight(24))
-        .scaleEffect(profileEditButtonScale)
+      }
+      .buttonStyle(FollowButtonStyle(isFollowed: $apiViewModel.memberProfile.isFollowed))
+      .scaleEffect(profileEditButtonScale)
+      .opacity(isProfileLoaded ? 1 : 0)
+      .disabled(userId == apiViewModel.myProfile.userId)
+      .padding(.bottom, UIScreen.getHeight(24))
+      .scaleEffect(profileEditButtonScale)
     }
   }
-
 
   @ViewBuilder
   func memberBottomSheet() -> some View {
@@ -372,7 +365,6 @@ extension ProfileView {
             content: AlertContents().unblock,
             destructiveText: CommonWords().unblock)
           {
-            toastViewModel.toastInit(message: "\(apiViewModel.memberProfile.userName)님이 차단 해제되었습니다")
             Task {
               await apiViewModel.blockAction(userID: userId, method: .delete)
               BlockList.shared.userIds.append(userId)
@@ -395,7 +387,6 @@ extension ProfileView {
             cancelText: CommonWords().cancel,
             destructiveText: CommonWords().block)
           {
-            toastViewModel.toastInit(message: "\(apiViewModel.memberProfile.userName)님이 차단되었습니다")
             Task {
               await apiViewModel.blockAction(userID: userId, method: .post)
               BlockList.shared.userIds.append(userId)
@@ -771,7 +762,6 @@ extension ProfileView {
 }
 
 extension ProfileView {
-
   var filteredFollower: [FollowerData] {
     if profileType == .my {
       apiViewModel.myFollow.followerList.filter { !BlockList.shared.userIds.contains($0.followerId) }

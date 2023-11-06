@@ -44,7 +44,6 @@ extension Color {
   static let Dim_Default = Color("Gray80").opacity(0.56)
   static let Dim_Default_Light = Color("Gray80_Light").opacity(0.56)
   static let Dim_Thin = Color("Gray80").opacity(0.36)
-  static let Dim_UltraThin = Color.gray80Light.opacity(0.16)
 
   static let LabelColor_Primary_Dark: Color = .white
   static let LabelColor_Primary_Light: Color = .init("Gray10_Light")
@@ -69,7 +68,7 @@ extension Color {
 
   static let Blue_Default = Color("Primary_Default")
   static let Blue_Pressed = Color("Primary_Lighten")
-  static let Blue_Disabled = Color("Gray40")
+  static let Blue_Disabled = Color("Gray30_Light")
 
   // MARK: - Button Gray Color
 

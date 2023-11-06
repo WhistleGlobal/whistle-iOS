@@ -67,7 +67,6 @@ struct MemberFollowListView: View {
             .id(newId)
         }
       }
-
       Spacer()
     }
     .padding(.horizontal, 16)
@@ -141,7 +140,6 @@ extension MemberFollowListView {
         }
         .buttonStyle(FollowButtonStyle(isFollowed: isFollowed))
       }
-      Spacer()
     }
     .frame(height: 72)
     .frame(maxWidth: .infinity)

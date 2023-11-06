@@ -470,6 +470,12 @@
 		1BDE48DA2AF3D2F900E33585 /* DimsUltraThin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BDE48D82AF3D2F900E33585 /* DimsUltraThin.swift */; };
 		1BDE48DC2AF49EA300E33585 /* ContentGradientLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BDE48DB2AF49EA300E33585 /* ContentGradientLayer.swift */; };
 		1BDE48DD2AF49EA300E33585 /* ContentGradientLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BDE48DB2AF49EA300E33585 /* ContentGradientLayer.swift */; };
+		1BE6529A2AF7D2BC00CE8858 /* Extension+UIApplication.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BE652992AF7D2BC00CE8858 /* Extension+UIApplication.swift */; };
+		1BE6529B2AF7D2BC00CE8858 /* Extension+UIApplication.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BE652992AF7D2BC00CE8858 /* Extension+UIApplication.swift */; };
+		1BE6529D2AF7E25E00CE8858 /* MiniAudioVisualizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BE6529C2AF7E25E00CE8858 /* MiniAudioVisualizer.swift */; };
+		1BE6529E2AF7E25E00CE8858 /* MiniAudioVisualizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BE6529C2AF7E25E00CE8858 /* MiniAudioVisualizer.swift */; };
+		1BE652A02AF7E49800CE8858 /* MusicInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BE6529F2AF7E49800CE8858 /* MusicInfo.swift */; };
+		1BE652A12AF7E49800CE8858 /* MusicInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BE6529F2AF7E49800CE8858 /* MusicInfo.swift */; };
 		1BE8E9FF2AAE2DFB00EB0A55 /* MusicServiceProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BE8E9FE2AAE2DFB00EB0A55 /* MusicServiceProtocol.swift */; };
 		1BE8EA012AAE315200EB0A55 /* APIViewModel+Music.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BE8EA002AAE315200EB0A55 /* APIViewModel+Music.swift */; };
 		1BE8EA032AAE321200EB0A55 /* MusicProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BE8EA022AAE321200EB0A55 /* MusicProtocol.swift */; };
@@ -500,7 +506,6 @@
 		7835BEFD2AF2A701003DA275 /* Extension+UIVisualEffectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78D148E62A9E137100DDCE48 /* Extension+UIVisualEffectView.swift */; };
 		7835BEFE2AF2A728003DA275 /* Extension+UIScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B3955522A9507E300BCB4DF /* Extension+UIScreen.swift */; };
 		7835BEFF2AF2A736003DA275 /* ColorManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B39555A2A95095500BCB4DF /* ColorManager.swift */; };
-		7835BF002AF2A740003DA275 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1B3955432A95069D00BCB4DF /* Assets.xcassets */; };
 		7835BF012AF2A7C7003DA275 /* Extension+UIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78D148E42A9E135F00DDCE48 /* Extension+UIView.swift */; };
 		7835BF022AF2A7D2003DA275 /* Extension+NSObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78D148E22A9E134700DDCE48 /* Extension+NSObject.swift */; };
 		78370B8B2AB87C7D00090522 /* Enums.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78370B8A2AB87C7D00090522 /* Enums.swift */; };
@@ -935,6 +940,9 @@
 		1BDE48D52AF3CE7000E33585 /* DimsDefault.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DimsDefault.swift; sourceTree = "<group>"; };
 		1BDE48D82AF3D2F900E33585 /* DimsUltraThin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DimsUltraThin.swift; sourceTree = "<group>"; };
 		1BDE48DB2AF49EA300E33585 /* ContentGradientLayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentGradientLayer.swift; sourceTree = "<group>"; };
+		1BE652992AF7D2BC00CE8858 /* Extension+UIApplication.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Extension+UIApplication.swift"; sourceTree = "<group>"; };
+		1BE6529C2AF7E25E00CE8858 /* MiniAudioVisualizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MiniAudioVisualizer.swift; sourceTree = "<group>"; };
+		1BE6529F2AF7E49800CE8858 /* MusicInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MusicInfo.swift; sourceTree = "<group>"; };
 		1BE8E9FE2AAE2DFB00EB0A55 /* MusicServiceProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MusicServiceProtocol.swift; sourceTree = "<group>"; };
 		1BE8EA002AAE315200EB0A55 /* APIViewModel+Music.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "APIViewModel+Music.swift"; sourceTree = "<group>"; };
 		1BE8EA022AAE321200EB0A55 /* MusicProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MusicProtocol.swift; sourceTree = "<group>"; };
@@ -1456,6 +1464,7 @@
 				1B0A29A52AA64A67009077A1 /* Extension+Array.swift */,
 				1BCB902E2AEEB0740088B2F2 /* Extension+String.swift */,
 				1BCB90302AEEB0890088B2F2 /* Extension+Date.swift */,
+				1BE652992AF7D2BC00CE8858 /* Extension+UIApplication.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -1486,6 +1495,8 @@
 				1B3895182AB9CB6000B4C8DD /* Sliders */,
 				1B33AA602AE610A3003F8099 /* ButtonStyles */,
 				1B8132D82AE618DE00000C32 /* RepresentableViews */,
+				1BE6529C2AF7E25E00CE8858 /* MiniAudioVisualizer.swift */,
+				1BE6529F2AF7E49800CE8858 /* MusicInfo.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -2671,7 +2682,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7835BF002AF2A740003DA275 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2893,6 +2903,7 @@
 				1B3895742AB9CBFC00B4C8DD /* Extension+TimeInterval.swift in Sources */,
 				7874CB922AA0B53A0081DE54 /* LegalInfoView.swift in Sources */,
 				1BDE48D92AF3D2F900E33585 /* DimsUltraThin.swift in Sources */,
+				1BE6529D2AF7E25E00CE8858 /* MiniAudioVisualizer.swift in Sources */,
 				788E68652AD6B6710056C18B /* VideoFile.swift in Sources */,
 				1B3895562AB9CB8C00B4C8DD /* VideoEditorViewModel.swift in Sources */,
 				78BECCDD2AAAE204003FA7B5 /* UploadProtocol.swift in Sources */,
@@ -2945,6 +2956,7 @@
 				782A6DDD2AF1EBCB004D0A60 /* GuestPlayersViewModel.swift in Sources */,
 				1B38954C2AB9CB7500B4C8DD /* FramesToolView.swift in Sources */,
 				1B2CFECB2AD412D000F34AA3 /* DescriptionAndTagEditorView.swift in Sources */,
+				1BE6529A2AF7D2BC00CE8858 /* Extension+UIApplication.swift in Sources */,
 				78F493E32AEA559000A08FC1 /* MainFeedPageView.swift in Sources */,
 				1B3895262AB9CB6000B4C8DD /* DualSlider.swift in Sources */,
 				1BAC07F72AD559E60087D8CD /* TagsDataModel.swift in Sources */,
@@ -2961,6 +2973,7 @@
 				78F493E52AEA55A000A08FC1 /* MainContentPlayerView.swift in Sources */,
 				78D368CD2ADFED080054929F /* BlockList.swift in Sources */,
 				782DD4772AA30C5C006183D3 /* FollowTabItemButtonStyle.swift in Sources */,
+				1BE652A02AF7E49800CE8858 /* MusicInfo.swift in Sources */,
 				78BCA9602AF08A010084E92F /* MemberContentLayer.swift in Sources */,
 				1B3895492AB9CB7500B4C8DD /* ThumbnailsSliderView.swift in Sources */,
 				78433E4C2AEFEBA50054035C /* BookmarkedContentPlayerview.swift in Sources */,
@@ -3095,6 +3108,7 @@
 				1B9936A32AF3699E00F5C619 /* Extension+TimeInterval.swift in Sources */,
 				1B9936A42AF3699E00F5C619 /* LegalInfoView.swift in Sources */,
 				1BDE48DA2AF3D2F900E33585 /* DimsUltraThin.swift in Sources */,
+				1BE6529E2AF7E25E00CE8858 /* MiniAudioVisualizer.swift in Sources */,
 				1B9936A52AF3699E00F5C619 /* VideoFile.swift in Sources */,
 				1B9936A62AF3699E00F5C619 /* VideoEditorViewModel.swift in Sources */,
 				1B9936A72AF3699E00F5C619 /* UploadProtocol.swift in Sources */,
@@ -3146,6 +3160,7 @@
 				1B9936D42AF3699E00F5C619 /* GuestPlayersViewModel.swift in Sources */,
 				1B9936D52AF3699E00F5C619 /* FramesToolView.swift in Sources */,
 				1B9936D62AF3699E00F5C619 /* DescriptionAndTagEditorView.swift in Sources */,
+				1BE6529B2AF7D2BC00CE8858 /* Extension+UIApplication.swift in Sources */,
 				1B9936D72AF3699E00F5C619 /* MainFeedPageView.swift in Sources */,
 				1B9936D82AF3699E00F5C619 /* DualSlider.swift in Sources */,
 				1B9936D92AF3699E00F5C619 /* TagsDataModel.swift in Sources */,
@@ -3162,6 +3177,7 @@
 				1B9936E32AF3699E00F5C619 /* MainContentPlayerView.swift in Sources */,
 				1B9936E42AF3699E00F5C619 /* BlockList.swift in Sources */,
 				1B9936E52AF3699E00F5C619 /* FollowTabItemButtonStyle.swift in Sources */,
+				1BE652A12AF7E49800CE8858 /* MusicInfo.swift in Sources */,
 				1B9936E62AF3699E00F5C619 /* MemberContentLayer.swift in Sources */,
 				1B9936E72AF3699E00F5C619 /* ThumbnailsSliderView.swift in Sources */,
 				1B9936E82AF3699E00F5C619 /* BookmarkedContentPlayerview.swift in Sources */,
