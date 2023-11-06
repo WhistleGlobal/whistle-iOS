@@ -115,8 +115,8 @@ extension ProfileView {
       VStack(spacing: 0) {
         HStack {
           if profileType == .my, isFirstStack {
-            Button {
-              // 알림창 넘어가는 로직
+            NavigationLink {
+              NotificationListView()
             } label: {
               Circle()
                 .foregroundColor(.Gray_Default)
@@ -130,6 +130,7 @@ extension ProfileView {
                     .frame(width: 20, height: 20)
                 }
             }
+            .id(UUID())
             .offset(
               y: UIScreen.main.nativeBounds.height == 1334
                 ? UIScreen.getHeight(20 - topSpacerHeightSE)

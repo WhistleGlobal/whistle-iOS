@@ -24,7 +24,14 @@ struct NotificationListView: View {
           .frame(height: 0.5)
           .padding(.leading, 74)
           .foregroundColor(.Disable_Placeholder)
-        contentFollowNotiRow()
+        NavigationLink {
+          ProfileView(
+            profileType: .member,
+            isFirstProfileLoaded: .constant(true),
+            userId: 3)
+        } label: {
+          contentFollowNotiRow()
+        }
         Divider()
           .frame(height: 0.5)
           .padding(.leading, 74)
@@ -37,6 +44,8 @@ struct NotificationListView: View {
       }
     }
     .navigationTitle(CommonWords().notification)
+    .navigationBarTitleDisplayMode(.large)
+    .toolbarRole(.editor)
     .onAppear {
       let dateString = "2022-09-02T05:19:19.000Z"
       let dateFormatter = DateFormatter()
