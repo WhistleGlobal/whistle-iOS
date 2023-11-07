@@ -216,6 +216,7 @@ struct MemberContentPlayerView: View {
         .id(newId)
       }
     }
+    .toolbarRole(.editor)
     .onAppear {
       bartintModel.tintColor = .white
       if index == 0 {
