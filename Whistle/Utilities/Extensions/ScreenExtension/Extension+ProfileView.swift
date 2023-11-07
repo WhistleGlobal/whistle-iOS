@@ -84,7 +84,7 @@ extension ProfileView {
           if profileType == .my {
             MyFollowListView()
           } else {
-            MemberFollowListView(userId: userId)
+            MemberFollowListView(userName: apiViewModel.memberProfile.userName, userId: userId)
           }
         } label: {
           VStack(spacing: 4) {
