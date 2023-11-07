@@ -188,9 +188,12 @@ extension InteractivePreview {
   }
 
   public func resetZoom() {
+    ZoomFactorCombineViewModel.shared.zoomScale = 1.0
+    currentZoomFactor = 1.0
     previousZoomFactor = 1.0
     session.zoom(factor: 1.0)
   }
+
 
   private func resetFocusMode() {
     guard session.isRunning else { return }
