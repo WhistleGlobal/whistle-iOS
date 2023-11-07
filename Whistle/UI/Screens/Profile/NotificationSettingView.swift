@@ -33,7 +33,7 @@ struct NotificationSettingView: View {
         .frame(height: 64)
         .padding(.horizontal, 16)
       Divider().frame(height: 0.5).padding(.leading, 16).foregroundColor(.Disable_Placeholder)
-      Toggle("광고 알림", isOn: $apiViewModel.notiSetting.adEnabled)
+      Toggle("광고성 정보 수신 동의에 의한 알림", isOn: $apiViewModel.notiSetting.adEnabled)
         .frame(height: 64)
         .padding(.horizontal, 16)
       Divider().frame(height: 0.5).padding(.leading, 16).foregroundColor(.Disable_Placeholder)
@@ -43,7 +43,7 @@ struct NotificationSettingView: View {
     .foregroundColor(.LabelColor_Primary)
     .tint(.Primary_Default)
     .navigationBarTitleDisplayMode(.inline)
-    .navigationTitle("알림")
+    .navigationTitle("알림 설정")
     .toolbarRole(.editor)
     .task {
       await apiViewModel.requestNotiSetting()
