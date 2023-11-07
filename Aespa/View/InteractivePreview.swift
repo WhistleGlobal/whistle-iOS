@@ -167,8 +167,6 @@ extension InteractivePreview {
     guard session.isRunning, option.enableZoom else {
       return MagnificationGesture().onChanged { _ in }.onEnded { _ in }
     }
-
-    let maxZoomFactor = session.maxZoomFactor ?? 1.0
     return MagnificationGesture()
       .onChanged { scale in
         if scale * previousZoomFactor > 5.0 {
