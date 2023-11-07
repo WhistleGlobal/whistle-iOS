@@ -831,7 +831,6 @@ extension VideoCaptureView {
           }
         }
         Button {
-          ZoomFactorCombineViewModel.shared.zoomSubject = CurrentValueSubject<CGFloat, Never>(1.0)
           currentZoomScale = 1.0
           viewModel.preview?.resetZoom()
         } label: {
@@ -888,7 +887,6 @@ extension VideoCaptureView {
       .hCenter()
       .overlay(alignment: .leading) {
         Button {
-          ZoomFactorCombineViewModel.shared.zoomSubject = CurrentValueSubject<CGFloat, Never>(1.0)
           currentZoomScale = 1.0
           viewModel.preview?.resetZoom()
           if guestUploadModel.istempAccess {

@@ -56,6 +56,7 @@ public struct InteractivePreview: View {
   // Zoom
   @State private var previousZoomFactor: CGFloat = 1.0
   @State public var currentZoomFactor: CGFloat = 1.0
+  @GestureState var scaledZoom: CGFloat = 1.0
 
   // Foocus
   @State private var preferredFocusMode: AVCaptureDevice.FocusMode = .continuousAutoFocus
@@ -184,16 +185,18 @@ extension InteractivePreview {
         let videoZoomFactor = max(1.0, min(scale * previousZoomFactor, 5.0))
         previousZoomFactor = videoZoomFactor >= 1 ? videoZoomFactor : 1
         ZoomFactorCombineViewModel.shared.zoomScale = previousZoomFactor
+        session.zoom(factor: previousZoomFactor)
       }
   }
 
   public func resetZoom() {
-    ZoomFactorCombineViewModel.shared.zoomScale = 1.0
-    currentZoomFactor = 1.0
-    previousZoomFactor = 1.0
-    session.zoom(factor: 1.0)
+//    session.zoom(factor: 1.0)
+    session.zoom(factor: 1.0) { _ in
+      ZoomFactorCombineViewModel.shared.zoomScale = 1.0
+      currentZoomFactor = 1.0
+      previousZoomFactor = 1.0
+    }
   }
-
 
   private func resetFocusMode() {
     guard session.isRunning else { return }
