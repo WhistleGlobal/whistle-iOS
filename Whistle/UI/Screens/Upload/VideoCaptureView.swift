@@ -153,7 +153,7 @@ struct VideoCaptureView: View {
             }
           }
           Spacer()
-          if buttonState != .completed {
+          if buttonState == .idle {
             Text("\(timerSec.0)초")
               .fontSystem(fontDesignSystem: .subtitle3)
               .foregroundColor(.Gray60_Dark)
