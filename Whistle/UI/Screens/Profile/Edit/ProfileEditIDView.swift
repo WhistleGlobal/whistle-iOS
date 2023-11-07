@@ -91,8 +91,8 @@ struct ProfileEditIDView: View {
         Button {
           isFocused = false
           alertViewModel.linearAlert(
-            title: "정말 사용자 ID를\n 변경하시겠습니까?",
-            content: "14일마다 한 번씩 사용자 ID를\n 변경할 수 있습니다.",
+            title: "정말 사용자 ID를\n변경하시겠습니까?",
+            content: "14일마다 한 번씩 사용자 ID를\n변경할 수 있습니다.",
             cancelText: CommonWords().cancel,
             destructiveText: "변경")
           {
