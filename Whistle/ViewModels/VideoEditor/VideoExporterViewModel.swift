@@ -27,7 +27,7 @@ class VideoExporterViewModel: ObservableObject {
   var videoData = Data()
   var thumbnailImage = UIImage(named: "noVideo")
   var thumbnailData = Data()
-
+  var aspectRatio = 0.0
   init(video: EditableVideo, musicVolume: Float) {
     self.video = video
     self.musicVolume = musicVolume
@@ -59,6 +59,7 @@ class VideoExporterViewModel: ObservableObject {
       let asset = AVAsset(url: url)
 //      video.asset.getImage(second: start)
       thumbnailImage = asset.getImage(second: 0, compressionQuality: 0.5)
+      aspectRatio = Double((thumbnailImage?.size.height ?? 0.0) / (thumbnailImage?.size.width ?? 1.0))
       renderState = .loaded(url)
     } catch {
       renderState = .failed(error)

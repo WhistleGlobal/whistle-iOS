@@ -12,6 +12,7 @@ import SwiftUI
 
 // 일반적인 단어
 struct CommonWords {
+  let confirm: LocalizedStringKey = "확인"
   let cancel: LocalizedStringKey = "취소"
   let next: LocalizedStringKey = "다음"
   let music: LocalizedStringKey = "음악"
@@ -142,4 +143,11 @@ struct ToastMessages {
   let tagLimit: LocalizedStringKey = "해시태그는 최대 5개까지만 가능합니다"
   let tagLengthLimit: LocalizedStringKey = "해시태그는 최대 16글자까지 가능합니다"
   let postHidden: LocalizedStringKey = "해당 콘텐츠를 숨겼습니다"
+}
+
+// MARK: - NotificationWords
+
+struct NotificationWords {
+  let agreedTitle: LocalizedStringKey = "광고성 정보 알림 수신동의 안내"
+  let disagreedTitle: LocalizedStringKey = "광고성 정보 알림 수신거부 안내"
 }

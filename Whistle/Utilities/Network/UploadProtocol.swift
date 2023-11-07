@@ -16,5 +16,6 @@ protocol UploadProtocol {
     caption: String,
     musicID: Int,
     videoLength: Double,
+    aspectRatio: Double,
     hashtags: [String])
 }

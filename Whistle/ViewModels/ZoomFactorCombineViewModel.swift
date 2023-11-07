@@ -12,7 +12,7 @@ import Foundation
 
 open class ZoomFactorCombineViewModel: ObservableObject {
   static public let shared = ZoomFactorCombineViewModel()
-  public let zoomSubject = CurrentValueSubject<CGFloat, Never>(1.0)
+  public var zoomSubject = CurrentValueSubject<CGFloat, Never>(1.0)
 
   private init() { }
 

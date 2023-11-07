@@ -45,13 +45,16 @@ extension APIViewModel: UploadProtocol {
     caption: String,
     musicID: Int,
     videoLength: Double,
+    aspectRatio: Double = 0.0,
     hashtags: [String])
   {
     let params: [String: Any] = [
       "caption": caption,
       "music_id": musicID,
       "video_length": videoLength,
+      "aspect_ratio": aspectRatio,
     ]
+    WhistleLogger.logger.debug("\(params)")
     AF.upload(
       multipartFormData: { multipartFormData in
         multipartFormData.append(video, withName: "video", fileName: "video.mp4", mimeType: "video/mp4")
@@ -75,6 +78,7 @@ extension APIViewModel: UploadProtocol {
       .response { response in
         switch response.result {
         case .success(let data):
+          WhistleLogger.logger.debug("upload success")
           UploadProgressViewModel.shared.uploadEnded()
           guard data != nil else {
             return

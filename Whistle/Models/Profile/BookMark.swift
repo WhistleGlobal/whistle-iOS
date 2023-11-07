@@ -24,6 +24,7 @@ class Bookmark: ObservableObject, Codable, Hashable {
     case isWhistled = "is_whistled"
     case isFollowed = "is_followed"
     case isBookmarked = "is_bookmarked"
+    case aspectRatio = "aspect_ratio"
   }
 
   var contentId = 0
@@ -41,6 +42,7 @@ class Bookmark: ObservableObject, Codable, Hashable {
   var isWhistled = false
   var isFollowed = false
   var isBookmarked = false
+  var aspectRatio: Double?
 
   init() { }
 
@@ -61,6 +63,7 @@ class Bookmark: ObservableObject, Codable, Hashable {
     isWhistled = try container.decode(Int.self, forKey: .isWhistled) == 1 ? true : false
     isFollowed = try container.decode(Int.self, forKey: .isFollowed) == 1 ? true : false
     isBookmarked = try container.decode(Int.self, forKey: .isBookmarked) == 1 ? true : false
+    aspectRatio = try container.decode(Double?.self, forKey: .aspectRatio)
   }
 
   static func == (lhs: Bookmark, rhs: Bookmark) -> Bool {
