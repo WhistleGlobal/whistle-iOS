@@ -364,6 +364,7 @@ extension APIViewModel: PostFeedProtocol {
             singleContent.isWhistled = (singleContentJson["is_whistled"] as? Int) == 0 ? false : true
             singleContent.isFollowed = (singleContentJson["is_followed"] as? Int) == 0 ? false : true
             singleContent.isBookmarked = (singleContentJson["is_bookmarked"] as? Int) == 0 ? false : true
+            singleContent.aspectRatio = singleContentJson["aspect_ratio"] as? Double ?? 0.0
             self.mainFeed.append(singleContent)
 
             guard let allContentsJson = jsonData?["finalAllContentRows"] as? [[String: Any]] else { return }
@@ -383,6 +384,7 @@ extension APIViewModel: PostFeedProtocol {
               tempContent.isWhistled = (jsonObject["is_whistled"] as? Int) == 0 ? false : true
               tempContent.isFollowed = (jsonObject["is_followed"] as? Int) == 0 ? false : true
               tempContent.isBookmarked = (jsonObject["is_bookmarked"] as? Int) == 0 ? false : true
+              tempContent.aspectRatio = jsonObject["aspect_ratio"] as? Double ?? 0.0
               self.mainFeed.append(tempContent)
             }
             completion()
@@ -427,6 +429,7 @@ extension APIViewModel: PostFeedProtocol {
               singleContent.isWhistled = (singleContentJson["is_whistled"] as? Int) == 0 ? false : true
               singleContent.isFollowed = (singleContentJson["is_followed"] as? Int) == 0 ? false : true
               singleContent.isBookmarked = (singleContentJson["is_bookmarked"] as? Int) == 0 ? false : true
+              singleContent.aspectRatio = singleContentJson["aspect_ratio"] as? Double ?? 0.0
               self.singleContent = singleContent
               WhistleLogger.logger.debug("singleContent: \(self.singleContent.videoUrl ?? "")")
               WhistleLogger.logger.debug("singleContent: \(self.singleContent.contentId ?? 0)")

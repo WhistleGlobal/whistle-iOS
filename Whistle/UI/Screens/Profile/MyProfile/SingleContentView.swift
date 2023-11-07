@@ -35,10 +35,11 @@ struct SingleContentView: View {
                   .frame(maxWidth: .infinity, maxHeight: .infinity)
               }
               .resizable()
-              .scaledToFit()
+              .aspectRatio(
+                contentMode: apiViewModel.singleContent.aspectRatio ?? 1.0 > Double(15.0 / 9.0) ? .fill : .fit)
               .frame(maxWidth: .infinity, maxHeight: .infinity)
           }
-          ContentPlayer(player: player)
+          ContentPlayer(player: player, aspectRatio: apiViewModel.singleContent.aspectRatio)
             .frame(width: UIScreen.width, height: UIScreen.height)
             .onTapGesture(count: 2) {
               whistleToggle(content: apiViewModel.singleContent)

@@ -25,6 +25,7 @@ class MainContent: Hashable, ObservableObject, Decodable {
     case isWhistled = "is_whistled"
     case isFollowed = "is_followed"
     case isBookmarked = "is_bookmarked"
+    case aspectRatio = "aspect_ratio"
   }
 
   // MARK: Lifecycle
@@ -80,6 +81,7 @@ class MainContent: Hashable, ObservableObject, Decodable {
   @Published var isWhistled: Bool
   @Published var isFollowed = false
   @Published var isBookmarked = false
+  @Published var aspectRatio: Double?
 
   required init(from decoder: Decoder) throws {
     let container = try decoder.container(keyedBy: CodingKeys.self)
@@ -97,6 +99,7 @@ class MainContent: Hashable, ObservableObject, Decodable {
     isWhistled = try container.decode(Int.self, forKey: .isWhistled) == 1
     isFollowed = try container.decode(Int.self, forKey: .isFollowed) == 1
     isBookmarked = try container.decode(Int.self, forKey: .isBookmarked) == 1
+    aspectRatio = try container.decode(Double?.self, forKey: .aspectRatio)
   }
 
   // Equatable conformance for completeness (optional but recommended)

@@ -23,6 +23,7 @@ class MyContent: ObservableObject, Decodable, Hashable {
     case viewCount = "content_view_count"
     case isWhistled = "is_whistled"
     case isBookmarked = "is_bookmarked"
+    case aspectRatio = "aspect_ratio"
   }
 
   @Published var contentId: Int?
@@ -39,6 +40,7 @@ class MyContent: ObservableObject, Decodable, Hashable {
   @Published var viewCount: Int?
   @Published var isWhistled = false
   @Published var isBookmarked = false
+  @Published var aspectRatio: Double?
 
   init() { }
 
@@ -58,6 +60,7 @@ class MyContent: ObservableObject, Decodable, Hashable {
     viewCount = try container.decode(Int?.self, forKey: .viewCount)
     isWhistled = try container.decode(Int.self, forKey: .isWhistled) == 1
     isBookmarked = try container.decode(Int?.self, forKey: .isBookmarked) == 1
+    aspectRatio = try container.decode(Double?.self, forKey: .aspectRatio)
   }
 
   static func == (lhs: MyContent, rhs: MyContent) -> Bool {
