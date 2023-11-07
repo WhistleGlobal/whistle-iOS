@@ -146,34 +146,6 @@ struct MyContentPlayerView: View {
                 }
             }
           }
-          .overlay(alignment: .topLeading) {
-            if isUploading {
-              uploadingThumbnail
-                .resizable()
-                .frame(width: 64, height: 64)
-                .clipShape(RoundedRectangle(cornerRadius: 8))
-                .overlay {
-                  ZStack {
-                    RoundedRectangle(cornerRadius: 8)
-                      .fill(.black.opacity(0.48))
-                    RoundedRectangle(cornerRadius: 8)
-                      .strokeBorder(Color.Border_Default_Dark)
-                    CircularProgressBar(progress: UploadProgressViewModel.shared.progress, width: 2)
-                      .padding(8)
-                    Text("\(Int(uploadProgress * 100))%")
-                      .foregroundStyle(Color.white)
-                      .fontSystem(fontDesignSystem: .body2)
-                  }
-                }
-                .padding(.top, 70)
-                .padding(.leading, 16)
-                .onDisappear {
-                  DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.2) {
-                    toastViewModel.toastInit(message: ToastMessages().contentUploaded)
-                  }
-                }
-            }
-          }
           .ignoresSafeArea()
         }
         .frame(width: UIScreen.width, height: UIScreen.height)

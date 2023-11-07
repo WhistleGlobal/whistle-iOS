@@ -28,6 +28,9 @@ struct GuestProfileView: View {
 
   var body: some View {
     ZStack {
+      if bottomSheetPosition == .dynamic {
+        DimsThick().zIndex(1000)
+      }
       Color.clear.overlay {
         Image("BlurredDefaultBG")
           .resizable()
