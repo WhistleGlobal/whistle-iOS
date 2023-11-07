@@ -137,7 +137,7 @@ struct MainContentPlayerView: View {
                       .fontSystem(fontDesignSystem: .subtitle1)
                       .foregroundColor(.LabelColor_Primary_Dark)
                       .padding(.bottom, 12)
-                    Text("차단된 계정의 모든 콘텐츠는 \n회원님의 피드에 노출되지 않습니다.")
+                    Text("차단된 계정의 모든 콘텐츠는\n회원님의 피드에 노출되지 않습니다.")
                       .multilineTextAlignment(.center)
                       .fontSystem(fontDesignSystem: .body2)
                       .foregroundColor(.LabelColor_Secondary_Dark)
@@ -166,8 +166,8 @@ struct MainContentPlayerView: View {
                 }
                 .padding(.top, 70)
                 .padding(.leading, 16)
-                .onDisappear {
-                  DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.2) {
+                .onChange(of: isUploading) { _ in
+                  DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
                     toastViewModel.toastInit(message: ToastMessages().contentUploaded)
                   }
                 }

@@ -16,7 +16,7 @@ struct GuideStatusView: View {
     VStack(spacing: 0) {
 //      if apiViewModel.reportedContent.isEmpty {
       if true {
-        Text("회원님의 콘텐츠는\n 현재 영향을 받지 않습니다.")
+        Text("회원님의 콘텐츠는\n현재 영향을 받지 않습니다.")
           .fontSystem(fontDesignSystem: .subtitle1)
           .foregroundColor(.LabelColor_Primary)
           .multilineTextAlignment(.center)
