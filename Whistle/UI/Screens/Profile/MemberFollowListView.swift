@@ -21,6 +21,7 @@ struct MemberFollowListView: View {
   @State var showUserProfile = false
   @State var memberFollowing: [MemberFollowingData] = []
   @State var memberFollower: [FollowerData] = []
+  let userName: String
   let userId: Int
 
   var body: some View {
@@ -73,7 +74,7 @@ struct MemberFollowListView: View {
     .toolbarRole(.editor)
     .toolbar {
       ToolbarItem(placement: .principal) {
-        Text("\(apiViewModel.memberProfile.userName)")
+        Text("\(userName)")
           .fontSystem(fontDesignSystem: .subtitle2)
       }
     }
