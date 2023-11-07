@@ -806,11 +806,10 @@ extension VideoCaptureView {
         Button {
           musicBottomSheetPosition = .absolute(UIScreen.getHeight(514))
         } label: {
-          HStack {
+          HStack(spacing: 0) {
             Image(systemName: "clock")
-              .font(.system(size: 16))
+              .font(.system(size: 14))
               .foregroundColor(.white)
-              .contentShape(Circle())
             if selectedSec.1 {
               Text("\(selectedSec.0 == .sec3 ? 3 : 10)초")
                 .fontSystem(fontDesignSystem: .subtitle3)
@@ -818,7 +817,7 @@ extension VideoCaptureView {
             }
           }
           .frame(height: 36)
-          .padding(.horizontal, 20)
+          .padding(.horizontal, 10)
           .background {
             if selectedSec.1 {
               Capsule()
@@ -832,6 +831,7 @@ extension VideoCaptureView {
           }
         }
         Button {
+          ZoomFactorCombineViewModel.shared.zoomSubject = CurrentValueSubject<CGFloat, Never>(1.0)
           currentZoomScale = 1.0
           viewModel.preview?.resetZoom()
         } label: {
@@ -861,7 +861,7 @@ extension VideoCaptureView {
         } label: {
           Image(systemName: isFlashOn ? "bolt" : "bolt.slash.fill")
             .frame(width: UIScreen.getWidth(36), height: UIScreen.getHeight(36))
-            .font(.system(size: 16))
+            .font(.system(size: 14))
             .foregroundColor(.white)
             .contentShape(Circle())
             .background {
@@ -888,6 +888,9 @@ extension VideoCaptureView {
       .hCenter()
       .overlay(alignment: .leading) {
         Button {
+          ZoomFactorCombineViewModel.shared.zoomSubject = CurrentValueSubject<CGFloat, Never>(1.0)
+          currentZoomScale = 1.0
+          viewModel.preview?.resetZoom()
           if guestUploadModel.istempAccess {
             isAccess = true
           }
