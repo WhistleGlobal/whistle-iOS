@@ -16,7 +16,7 @@ struct GuideStatusView: View {
     VStack(spacing: 0) {
 //      if apiViewModel.reportedContent.isEmpty {
       if true {
-        Text("회원님의 콘텐츠는\n 현재 영향을 받지 않습니다.")
+        Text("회원님의 콘텐츠는\n현재 영향을 받지 않습니다.")
           .fontSystem(fontDesignSystem: .subtitle1)
           .foregroundColor(.LabelColor_Primary)
           .multilineTextAlignment(.center)
@@ -47,22 +47,12 @@ struct GuideStatusView: View {
         .listStyle(.plain)
       }
     }
-    .navigationBarBackButtonHidden()
+    .toolbarRole(.editor)
     .navigationBarTitleDisplayMode(.inline)
     .navigationTitle(CommonWords().guideStatus)
     .task {
       if apiViewModel.reportedContent.isEmpty {
 //        await apiViewModel.requestReportedFeed()
-      }
-    }
-    .toolbar {
-      ToolbarItem(placement: .cancellationAction) {
-        Button {
-          dismiss()
-        } label: {
-          Image(systemName: "chevron.backward")
-            .foregroundColor(.LabelColor_Primary)
-        }
       }
     }
   }

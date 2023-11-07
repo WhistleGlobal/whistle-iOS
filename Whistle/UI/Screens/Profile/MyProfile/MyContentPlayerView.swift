@@ -22,7 +22,7 @@ struct MyContentPlayerView: View {
   @StateObject private var toastViewModel = ToastViewModel.shared
   @StateObject var feedMoreModel = MyFeedMoreModel.shared
   @StateObject private var tabbarModel = TabbarModel.shared
-
+  @StateObject var bartintModel = BarTintModel.shared
   @State var newId = UUID()
   @State var timer: Timer? = nil
   @State var viewTimer: Timer? = nil
@@ -108,8 +108,7 @@ struct MyContentPlayerView: View {
                       currentVideoInfo: content,
                       whistleAction: {
                         whistleToggle(content: content, index)
-                      },
-                      dismissAction: dismissAction)
+                      })
                       .padding(.bottom, UIScreen.main.nativeBounds.height == 1334 ? 24 : 0)
                   }
                   if feedMoreModel.bottomSheetPosition != .hidden {
@@ -146,34 +145,6 @@ struct MyContentPlayerView: View {
                 }
             }
           }
-          .overlay(alignment: .topLeading) {
-            if isUploading {
-              uploadingThumbnail
-                .resizable()
-                .frame(width: 64, height: 64)
-                .clipShape(RoundedRectangle(cornerRadius: 8))
-                .overlay {
-                  ZStack {
-                    RoundedRectangle(cornerRadius: 8)
-                      .fill(.black.opacity(0.48))
-                    RoundedRectangle(cornerRadius: 8)
-                      .strokeBorder(Color.Border_Default_Dark)
-                    CircularProgressBar(progress: UploadProgressViewModel.shared.progress, width: 2)
-                      .padding(8)
-                    Text("\(Int(uploadProgress * 100))%")
-                      .foregroundStyle(Color.white)
-                      .fontSystem(fontDesignSystem: .body2)
-                  }
-                }
-                .padding(.top, 70)
-                .padding(.leading, 16)
-                .onDisappear {
-                  DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.2) {
-                    toastViewModel.toastInit(message: ToastMessages().contentUploaded)
-                  }
-                }
-            }
-          }
           .ignoresSafeArea()
         }
         .frame(width: UIScreen.width, height: UIScreen.height)
@@ -184,8 +155,9 @@ struct MyContentPlayerView: View {
         .id(newId)
       }
     }
-    .navigationBarBackButtonHidden()
+    .toolbarRole(.editor)
     .onAppear {
+      bartintModel.tintColor = .white
       if index == 0 {
         WhistleLogger.logger.debug("onAppear index == 0")
         lifecycleDelegate?.onAppear()
@@ -197,6 +169,7 @@ struct MyContentPlayerView: View {
       }
     }
     .onDisappear {
+      bartintModel.tintColor = .LabelColor_Primary
       lifecycleDelegate?.onDisappear()
     }
     .ignoresSafeArea()

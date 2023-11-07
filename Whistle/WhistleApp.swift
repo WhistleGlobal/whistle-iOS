@@ -148,3 +148,11 @@ class GuestUploadModel: ObservableObject {
   @Published var isMusicEdit = false
   @Published var isPhotoLibraryAccess = false
 }
+
+// MARK: - BarTintModel
+
+class BarTintModel: ObservableObject {
+  static let shared = BarTintModel()
+  private init() { }
+  @Published var tintColor: Color = .LabelColor_Primary
+}

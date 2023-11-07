@@ -1321,7 +1321,7 @@ extension VideoCaptureView {
           .disabled(disableUploadButton)
           // MARK: - 다음
           Button {
-            if isAccess {
+            if isAccess || musicVM.musicInfo != nil {
               guestUploadModel.goDescriptionTagView = true
             } else {
               uploadBottomSheetPosition = .dynamic

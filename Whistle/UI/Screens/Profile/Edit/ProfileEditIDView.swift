@@ -72,27 +72,16 @@ struct ProfileEditIDView: View {
       Spacer()
     }
     .padding(.horizontal, 16)
-    .navigationBarBackButtonHidden()
+    .toolbarRole(.editor)
     .navigationTitle("사용자 ID")
     .navigationBarTitleDisplayMode(.inline)
     .toolbar {
-      ToolbarItem(placement: .cancellationAction) {
-        Button {
-          Task {
-            await apiViewModel.requestMyProfile()
-            dismiss()
-          }
-        } label: {
-          Image(systemName: "chevron.backward")
-            .foregroundColor(.LabelColor_Primary)
-        }
-      }
       ToolbarItem(placement: .confirmationAction) {
         Button {
           isFocused = false
           alertViewModel.linearAlert(
-            title: "정말 사용자 ID를\n 변경하시겠습니까?",
-            content: "14일마다 한 번씩 사용자 ID를\n 변경할 수 있습니다.",
+            title: "정말 사용자 ID를\n변경하시겠습니까?",
+            content: "14일마다 한 번씩 사용자 ID를\n변경할 수 있습니다.",
             cancelText: CommonWords().cancel,
             destructiveText: "변경")
           {

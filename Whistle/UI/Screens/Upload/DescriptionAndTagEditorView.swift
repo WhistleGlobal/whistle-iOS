@@ -138,7 +138,7 @@ struct DescriptionAndTagEditorView: View {
               RoundedRectangle(cornerRadius: 8)
                 .strokeBorder(Color.Border_Default_Dark))
             .overlay(alignment: .bottomTrailing) {
-              Text("\(content.count)자 \(textLimit)자")
+              Text("\(content.count)자 / \(textLimit)자")
                 .padding()
                 .foregroundStyle(Color.Disable_Placeholder_Light)
                 .fontSystem(fontDesignSystem: .body2)

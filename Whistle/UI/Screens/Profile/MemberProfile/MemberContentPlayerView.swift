@@ -21,6 +21,7 @@ struct MemberContentPlayerView: View {
   @StateObject private var toastViewModel = ToastViewModel.shared
   @StateObject private var feedMoreModel = MemberFeedMoreModel.shared
   @StateObject private var tabbarModel = TabbarModel.shared
+  @StateObject var bartintModel = BarTintModel.shared
 
   @State var newId = UUID()
   @State var timer: Timer? = nil
@@ -139,8 +140,7 @@ struct MemberContentPlayerView: View {
                     if tabbarModel.tabWidth != 56 {
                       MemberContentLayer(
                         currentVideoInfo: content,
-                        whistleAction: whistleToggle,
-                        dismissAction: dismissAction)
+                        whistleAction: whistleToggle)
                         .padding(.bottom, UIScreen.main.nativeBounds.height == 1334 ? 24 : 0)
                     }
                     if feedMoreModel.bottomSheetPosition != .hidden {
@@ -169,7 +169,7 @@ struct MemberContentPlayerView: View {
                         .fontSystem(fontDesignSystem: .subtitle1)
                         .foregroundColor(.LabelColor_Primary_Dark)
                         .padding(.bottom, 12)
-                      Text("차단된 계정의 모든 콘텐츠는 \n회원님의 피드에 노출되지 않습니다.")
+                      Text("차단된 계정의 모든 콘텐츠는\n회원님의 피드에 노출되지 않습니다.")
                         .multilineTextAlignment(.center)
                         .fontSystem(fontDesignSystem: .body2)
                         .foregroundColor(.LabelColor_Secondary_Dark)
@@ -177,34 +177,6 @@ struct MemberContentPlayerView: View {
                   }
               }
             } else { }
-          }
-          .overlay(alignment: .topLeading) {
-            if isUploading {
-              uploadingThumbnail
-                .resizable()
-                .frame(width: 64, height: 64)
-                .clipShape(RoundedRectangle(cornerRadius: 8))
-                .overlay {
-                  ZStack {
-                    RoundedRectangle(cornerRadius: 8)
-                      .fill(.black.opacity(0.48))
-                    RoundedRectangle(cornerRadius: 8)
-                      .strokeBorder(Color.Border_Default_Dark)
-                    CircularProgressBar(progress: UploadProgressViewModel.shared.progress, width: 2)
-                      .padding(8)
-                    Text("\(Int(uploadProgress * 100))%")
-                      .foregroundStyle(Color.white)
-                      .fontSystem(fontDesignSystem: .body2)
-                  }
-                }
-                .padding(.top, 70)
-                .padding(.leading, 16)
-                .onDisappear {
-                  DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.2) {
-                    toastViewModel.toastInit(message: ToastMessages().contentUploaded)
-                  }
-                }
-            }
           }
           .ignoresSafeArea()
         }
@@ -216,8 +188,9 @@ struct MemberContentPlayerView: View {
         .id(newId)
       }
     }
-    .navigationBarBackButtonHidden()
+    .toolbarRole(.editor)
     .onAppear {
+      bartintModel.tintColor = .white
       if index == 0 {
         lifecycleDelegate?.onAppear()
       } else {
@@ -227,6 +200,7 @@ struct MemberContentPlayerView: View {
       }
     }
     .onDisappear {
+      bartintModel.tintColor = .LabelColor_Primary
       lifecycleDelegate?.onDisappear()
     }
     .ignoresSafeArea()

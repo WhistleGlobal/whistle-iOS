@@ -27,6 +27,7 @@ struct CameraOrAccessView: View {
         }
       }
     }
+    .tint(Color.LabelColor_Primary)
     .onAppear {
       getCameraPermission()
       getMicrophonePermission()
