@@ -35,7 +35,6 @@ struct RootTabView: View {
   @State var isNavigationActive = true
   @State var showTermsOfService = false
   @State var showPrivacyPolicy = false
-  @State var showVideoCaptureView = false
 
   @State private var uploadBottomSheetPosition: BottomSheetPosition = .hidden
   @State private var pickerOptions = PickerOptionsInfo()
@@ -73,6 +72,7 @@ struct RootTabView: View {
       case .profile:
         if isAccess {
           // MARK: - profile
+
           NavigationStack {
             ProfileView(isFirstStack: true, isFirstProfileLoaded: $isFirstProfileLoaded, userId: 0)
           }
@@ -85,7 +85,9 @@ struct RootTabView: View {
         ToastMessageView()
           .zIndex(9)
       }
+
       // MARK: - Tabbar
+
       VStack {
         Spacer()
         glassMorphicTab(width: tabbarModel.tabWidth)
@@ -137,7 +139,7 @@ struct RootTabView: View {
         if UploadProgressViewModel.shared.isUploading {
           tabbarModel.tabSelection = .main
           tabbarModel.tabSelectionNoAnimation = .main
-          showVideoCaptureView = false
+          tabbarModel.showVideoCaptureView = false
         }
 //        else {
 //            tabbarModel.tabSelection = tabbarModel.prevTabSelection ?? .main
@@ -147,14 +149,11 @@ struct RootTabView: View {
       })
     }
     .overlay {
-//      if !toastViewModel.onFullScreenCover {
-//        ToastMessageView()
-//      }
       if !alertViewModel.onFullScreenCover {
         AlertPopup()
       }
     }
-    .fullScreenCover(isPresented: $showVideoCaptureView) {
+    .fullScreenCover(isPresented: $tabbarModel.showVideoCaptureView) {
       CameraOrAccessView(
         isCam: $isCameraAuthorized,
         isMic: $isMicrophoneAuthorized,
@@ -350,7 +349,7 @@ extension RootTabView {
         getCameraPermission()
         getMicrophonePermission()
         checkAllPermissions()
-        showVideoCaptureView = true
+        tabbarModel.showVideoCaptureView = true
       } label: {
         Capsule()
           .fill(Color.Dim_Thin)

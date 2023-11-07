@@ -81,7 +81,7 @@ final class VideoPlayerManager: ObservableObject {
   func playLoop(_ video: EditableVideo) {
     NotificationCenter.default
       .addObserver(forName: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: nil, queue: nil) { [weak self] _ in
-        self!.action(video)
+        self?.action(video)
       }
 
     action(video)

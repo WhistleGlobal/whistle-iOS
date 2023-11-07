@@ -229,10 +229,7 @@ extension ProfileView {
     Text(ContentWords().noUploadedContent).fontSystem(fontDesignSystem: .body1)
       .foregroundColor(.LabelColor_Primary_Dark)
     Button {
-      tabbarModel.tabSelectionNoAnimation = .upload
-      withAnimation {
-        tabbarModel.tabSelection = .upload
-      }
+      tabbarModel.showVideoCaptureView = true
     } label: {
       Text(ContentWords().goUpload)
         .fontSystem(fontDesignSystem: .subtitle2)

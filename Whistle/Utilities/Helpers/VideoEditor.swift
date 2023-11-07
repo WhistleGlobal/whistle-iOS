@@ -396,7 +396,7 @@ extension VideoEditor {
   }
 
   private func createTempPath() -> URL {
-    let tempPath = "\(NSTemporaryDirectory())temp_video.mp4"
+    let tempPath = "\(NSTemporaryDirectory())_\(Date.now.formatted(date: .abbreviated, time: .complete)).mp4"
     let tempURL = URL(fileURLWithPath: tempPath)
     FileManager.default.removefileExists(for: tempURL)
     return tempURL

@@ -166,11 +166,6 @@ struct MainContentPlayerView: View {
                 }
                 .padding(.top, 70)
                 .padding(.leading, 16)
-                .onChange(of: isUploading) { _ in
-                  DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
-                    toastViewModel.toastInit(message: ToastMessages().contentUploaded)
-                  }
-                }
             }
           }
           .ignoresSafeArea()
@@ -226,6 +221,13 @@ struct MainContentPlayerView: View {
         }
       default:
         break
+      }
+    }
+    .onChange(of: isUploading) { value in
+      if !value {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+          toastViewModel.toastInit(message: ToastMessages().contentUploaded)
+        }
       }
     }
     .onReceive(UploadProgressViewModel.shared.isUploadingSubject) { value in

@@ -6,6 +6,7 @@
 //  Copyright © 2022 AnyImageKit.org. All rights reserved.
 //
 
+import Lottie
 import UIKit
 
 // MARK: - LoadingView
@@ -19,32 +20,29 @@ public final class LoadingView: UIControl {
     return view
   }()
 
-  private lazy var indicator: UIActivityIndicatorView = {
-    let view: UIActivityIndicatorView
-    if #available(iOS 13, *) {
-      view = UIActivityIndicatorView(style: .large)
-    } else {
-      view = UIActivityIndicatorView(style: .whiteLarge)
-    }
-    view.color = .white
-    view.startAnimating()
-    return view
-  }()
+  private lazy var indicator: UIStackView = {
+    let view = UIStackView()
+    let animationView = LottieAnimationView()
+    let animation = LottieAnimation.named("ProgressLottie")
+    animationView.animation = animation
+    animationView.contentMode = .scaleAspectFit
+    animationView.loopMode = .loop
+    animationView.play()
+    animationView.backgroundBehavior = .pauseAndRestore
 
-  private lazy var titleLabel: UILabel = {
-    let view = UILabel(frame: .zero)
-    view.isHidden = text.isEmpty
-    view.text = text
-    view.textColor = .white
-    view.textAlignment = .center
-    view.font = .systemFont(ofSize: 14)
-    view.setContentHuggingPriority(.defaultHigh, for: .horizontal)
-    view.setContentCompressionResistancePriority(.defaultHigh, for: .horizontal)
+    animationView.translatesAutoresizingMaskIntoConstraints = false
+    view.addSubview(animationView)
+
+    NSLayoutConstraint.activate([
+      animationView.heightAnchor.constraint(equalTo: view.heightAnchor),
+      animationView.widthAnchor.constraint(equalTo: view.widthAnchor),
+    ])
+
     return view
   }()
 
   private lazy var stackView: UIStackView = {
-    let view = UIStackView(arrangedSubviews: [indicator, titleLabel])
+    let view = UIStackView(arrangedSubviews: [indicator])
     view.axis = .vertical
     view.distribution = .fill
     view.alignment = .center
@@ -54,8 +52,9 @@ public final class LoadingView: UIControl {
 
   private let text: String
 
-  public init(frame: CGRect, text: String = "") {
+  public init( /* frame: CGRect, */ text: String = "") {
     self.text = text
+    let frame = CGRect(x: 0, y: 0, width: 140, height: 140)
     super.init(frame: frame)
     setupView()
   }
@@ -86,9 +85,6 @@ extension LoadingView {
     }
     stackView.snp.makeConstraints { make in
       make.center.equalToSuperview()
-    }
-    titleLabel.snp.makeConstraints { make in
-      make.height.equalTo(20)
     }
   }
 

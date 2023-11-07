@@ -45,9 +45,15 @@ struct AlertPopup: View {
   @ObservedObject var alertViewModel = AlertViewModel.shared
 
   var body: some View {
-    if alertViewModel.showAlert {
-      ZStack {
+    ZStack {
+      if alertViewModel.showAlert {
         DimsThick()
+          .ignoresSafeArea()
+          .transition(.asymmetric(
+            insertion: .opacity.animation(.smooth(duration: 0.5)),
+            removal: .opacity.animation(.spring(blendDuration: 0.3))))
+      }
+      if alertViewModel.showAlert {
         VStack(spacing: 0) {
           if let title = alertViewModel.title {
             Text(title)
@@ -83,13 +89,14 @@ struct AlertPopup: View {
           RoundedRectangle(cornerRadius: 14)
             .stroke(LinearGradient.Border_Glass)
         }
+        .transition(.asymmetric(
+          insertion: .scale(scale: 1.1).animation(.smooth(duration: 0.25))
+            .combined(with: .opacity.animation(.smooth(duration: 0.5))),
+          removal: .opacity.animation(.spring(blendDuration: 0.3))))
+        .ignoresSafeArea()
       }
-      .transition(.asymmetric(
-        insertion: .scale(scale: 1.1).animation(.smooth(duration: 0.25))
-          .combined(with: .opacity.animation(.smooth(duration: 0.5))),
-        removal: .opacity.animation(.smooth(duration: 0.3))))
-      .ignoresSafeArea()
     }
+    .ignoresSafeArea()
   }
 }
 
