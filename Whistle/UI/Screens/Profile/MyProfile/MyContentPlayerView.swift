@@ -29,9 +29,6 @@ struct MyContentPlayerView: View {
   @State var showPlayButton = false
   @State var viewCount: ViewCount = .init()
   @State var processedContentId: Set<Int> = []
-  @State var uploadingThumbnail = Image("noVideo")
-  @State var uploadProgress = 0.0
-  @State var isUploading = false
   @Binding var currentContentInfo: MyContent?
   @Binding var index: Int
   let lifecycleDelegate: ViewLifecycleDelegate?
@@ -203,26 +200,7 @@ struct MyContentPlayerView: View {
         break
       }
     }
-    .onReceive(UploadProgressViewModel.shared.isUploadingSubject) { value in
-      switch value {
-      case true:
-        withAnimation {
-          isUploading = value
-        }
-      case false:
-        withAnimation {
-          isUploading = value
-        }
-      }
-    }
-    .onReceive(UploadProgressViewModel.shared.thumbnailSubject) { value in
-      uploadingThumbnail = value
-    }
-    .onReceive(UploadProgressViewModel.shared.progressSubject) { value in
-      uploadProgress = value
-    }
   }
-
 }
 
 extension MyContentPlayerView {

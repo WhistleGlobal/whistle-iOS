@@ -21,7 +21,7 @@ struct PlayerHolderView: View {
     VStack(spacing: 0) {
       switch videoPlayer.loadState {
       case .loading:
-        ProgressView()
+        LottieProgress()
       case .unknown:
         Text("Add new video")
       case .failed:

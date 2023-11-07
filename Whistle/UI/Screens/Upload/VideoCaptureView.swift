@@ -892,7 +892,8 @@ extension VideoCaptureView {
           if guestUploadModel.istempAccess {
             isAccess = true
           }
-          dismiss()
+//          dismiss()
+          tabbarModel.showVideoCaptureView = false
           alertViewModel.onFullScreenCover = false
           if let video = editorVM.currentVideo {
             if videoPlayer.isPlaying {
@@ -1050,7 +1051,7 @@ extension VideoCaptureView {
 
   @ViewBuilder
   func recordedVideoPreview(video: EditableVideo) -> some View {
-    EditablePlayer(player: videoPlayer.videoPlayer)
+    EditablePlayer(player: videoPlayer.videoPlayer, isFullScreen: true)
       .onAppear {
         videoPlayer.playLoop(video)
       }
@@ -1274,6 +1275,7 @@ extension VideoCaptureView {
 
         HStack(spacing: 8) {
           // MARK: - 바로 업로드
+
           Button {
             disableUploadButton = true
             if musicVM.isTrimmed {
@@ -1294,14 +1296,41 @@ extension VideoCaptureView {
                     UploadProgressViewModel.shared.thumbnail = Image(uiImage: thumbnail)
                   }
                   dismiss()
-                  apiViewModel.uploadContent(
-                    video: exporterVM.videoData,
-                    thumbnail: exporterVM.thumbnailData,
-                    caption: "",
-                    musicID: musicVM.musicInfo?.musicID ?? 0,
-                    videoLength: video.totalDuration,
-                    aspectRatio: exporterVM.aspectRatio,
-                    hashtags: [""])
+                  if let url = exporterVM.renderedVideoURL {
+                    VideoCompression
+                      .compressh264Video(from: url, cache: .forceDelete, preferred: .quantity(ratio: 1.0)) { item, error in
+                        if let error {
+                          apiViewModel.uploadContent(
+                            video: exporterVM.videoData,
+                            thumbnail: exporterVM.thumbnailData,
+                            caption: "",
+                            musicID: musicVM.musicInfo?.musicID ?? 0,
+                            videoLength: video.totalDuration,
+                            aspectRatio: exporterVM.aspectRatio,
+                            hashtags: [""])
+                        } else {
+                          if let item {
+                            var data = Data()
+                            if let videoData = try? Data(contentsOf: item) {
+                              data = videoData
+                            }
+                            apiViewModel.uploadContent(
+                              video: data,
+                              thumbnail: exporterVM.thumbnailData,
+                              caption: "",
+                              musicID: musicVM.musicInfo?.musicID ?? 0,
+                              videoLength: video.totalDuration,
+                              aspectRatio: exporterVM.aspectRatio,
+                              hashtags: [""])
+                          }
+                        }
+                      }
+                  }
+                  if let renderedVideoURL = exporterVM.renderedVideoURL {
+                    FileManager.default.removefileExists(for: renderedVideoURL)
+                  }
+                  exporterVM.renderedVideoURL = nil
+                  exporterVM.renderedVideoURL = nil
                 }
               } else {
                 uploadBottomSheetPosition = .dynamic
@@ -1321,7 +1350,9 @@ extension VideoCaptureView {
               }
           }
           .disabled(disableUploadButton)
+
           // MARK: - 다음
+
           Button {
             if isAccess || musicVM.musicInfo != nil {
               guestUploadModel.goDescriptionTagView = true

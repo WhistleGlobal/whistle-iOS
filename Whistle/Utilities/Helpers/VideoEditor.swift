@@ -91,9 +91,6 @@ class VideoEditor {
     videoComposition.frameDuration = CMTimeMake(value: 1, timescale: 30)
 
     audioMix.inputParameters = mixParameters
-//    let videoAudioMixInputParams = AVMutableAudioMixInputParameters(track: asset.tracks(withMediaType: .video).first)
-//    videoAudioMixInputParams.setVolume(video.volume, at: CMTime.zero)
-//    audioMix.inputParameters.append(videoAudioMixInputParams)
 
     /// Create background layer color and scale video
     createLayers(video.videoFrames, video: video, size: outputSize, videoComposition: videoComposition)
@@ -184,13 +181,14 @@ extension VideoEditor {
     guard
       let export = AVAssetExportSession(
         asset: composition,
-        presetName: isSimulator ? AVAssetExportPresetPassthrough : AVAssetExportPresetHighestQuality)
+        presetName: AVAssetExportPresetHighestQuality)
     else {
       WhistleLogger.logger.debug("Cannot create export session.")
       throw ExporterError.cannotCreateExportSession
     }
     export.audioMix = audioMix
     export.videoComposition = videoComposition
+    export.shouldOptimizeForNetworkUse = true
     export.outputFileType = .mp4
     export.outputURL = outputURL
     export.timeRange = timeRange
@@ -398,7 +396,7 @@ extension VideoEditor {
   }
 
   private func createTempPath() -> URL {
-    let tempPath = "\(NSTemporaryDirectory())temp_video.mp4"
+    let tempPath = "\(NSTemporaryDirectory())_\(Date.now.formatted(date: .abbreviated, time: .complete)).mp4"
     let tempURL = URL(fileURLWithPath: tempPath)
     FileManager.default.removefileExists(for: tempURL)
     return tempURL

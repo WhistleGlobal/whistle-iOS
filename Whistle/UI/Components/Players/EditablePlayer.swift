@@ -10,14 +10,18 @@ import SwiftUI
 
 struct EditablePlayer: UIViewControllerRepresentable {
   var player: AVPlayer
-  let scale = 16 / 9
+  var isFullScreen = false
   typealias UIViewControllerType = AVPlayerViewController
 
   func makeUIViewController(context _: Context) -> AVPlayerViewController {
     let view = AVPlayerViewController()
     view.player = player
     view.showsPlaybackControls = false
-    view.videoGravity = .resizeAspect
+    if isFullScreen {
+      view.videoGravity = .resizeAspectFill
+    } else {
+      view.videoGravity = .resizeAspect
+    }
     view.contentOverlayView?.layer.cornerRadius = 12
     view.contentOverlayView?.layer.masksToBounds = true
     view.allowsVideoFrameAnalysis = false

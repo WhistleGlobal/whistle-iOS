@@ -44,7 +44,7 @@ struct MusicTrimView: View {
 
   var body: some View {
     ZStack(alignment: .center) {
-      EditablePlayer(player: videoPlayer.videoPlayer)
+      EditablePlayer(player: videoPlayer.videoPlayer, isFullScreen: true)
         .ignoresSafeArea()
         .overlay {
           DimsDefault()
@@ -199,7 +199,7 @@ extension MusicTrimView {
       ScrollView(.horizontal, showsIndicators: false) {
         HStack(spacing: 0) {
           if musicVM.soundSamples.isEmpty {
-            ProgressView()
+            LottieProgress()
           } else {
             ForEach(musicVM.soundSamples, id: \.self) { model in
               BarView(value: normalizeSoundLevel(level: model.magnitude))

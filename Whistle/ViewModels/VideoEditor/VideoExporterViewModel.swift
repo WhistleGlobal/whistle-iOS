@@ -23,6 +23,7 @@ class VideoExporterViewModel: ObservableObject {
   private var action: ActionEnum = .save
   private let editorHelper = VideoEditor()
   private var timer: Timer?
+  var renderedVideoURL: URL? = nil
   var videoData = Data()
   var thumbnailImage = UIImage(named: "noVideo")
   var thumbnailData = Data()
@@ -51,6 +52,7 @@ class VideoExporterViewModel: ObservableObject {
         videoQuality: selectedQuality,
         start: start,
         musicVolume: musicVolume)
+      renderedVideoURL = url
       if let videoData = try? Data(contentsOf: url) {
         self.videoData = videoData
       }

@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		1B08DCC32AA1872200CA1DE1 /* MusicTrimView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B08DCC22AA1872200CA1DE1 /* MusicTrimView.swift */; };
+		1B09FEC32AFA61470031BAC6 /* ProgressLottie.json in Resources */ = {isa = PBXBuildFile; fileRef = 1B395D972AFA53F700E28180 /* ProgressLottie.json */; };
 		1B0A29A62AA64A67009077A1 /* Extension+Array.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B0A29A52AA64A67009077A1 /* Extension+Array.swift */; };
 		1B0A29A82AA64AA2009077A1 /* MusicViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B0A29A72AA64AA2009077A1 /* MusicViewModel.swift */; };
 		1B0A29AA2AA64ADC009077A1 /* MusicService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B0A29A92AA64ADC009077A1 /* MusicService.swift */; };
@@ -61,6 +62,13 @@
 		1B3955532A9507E300BCB4DF /* Extension+UIScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B3955522A9507E300BCB4DF /* Extension+UIScreen.swift */; };
 		1B39555B2A95095500BCB4DF /* ColorManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B39555A2A95095500BCB4DF /* ColorManager.swift */; };
 		1B39555D2A95098100BCB4DF /* VideoModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B39555C2A95098100BCB4DF /* VideoModel.swift */; };
+		1B395D902AF9FB0400E28180 /* VideoCompression.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B395D8F2AF9FB0400E28180 /* VideoCompression.swift */; };
+		1B395D912AF9FB0400E28180 /* VideoCompression.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B395D8F2AF9FB0400E28180 /* VideoCompression.swift */; };
+		1B395D932AFA531E00E28180 /* LottieProgress.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B395D922AFA531E00E28180 /* LottieProgress.swift */; };
+		1B395D942AFA531E00E28180 /* LottieProgress.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B395D922AFA531E00E28180 /* LottieProgress.swift */; };
+		1B395D962AFA533B00E28180 /* Lottie in Frameworks */ = {isa = PBXBuildFile; productRef = 1B395D952AFA533B00E28180 /* Lottie */; };
+		1B395D982AFA53F700E28180 /* ProgressLottie.json in Resources */ = {isa = PBXBuildFile; fileRef = 1B395D972AFA53F700E28180 /* ProgressLottie.json */; };
+		1B395D992AFA53F700E28180 /* ProgressLottie.json in Resources */ = {isa = PBXBuildFile; fileRef = 1B395D972AFA53F700E28180 /* ProgressLottie.json */; };
 		1B5448012AF8768800A73A27 /* PersonRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B5448002AF8768800A73A27 /* PersonRow.swift */; };
 		1B5448022AF8768800A73A27 /* PersonRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B5448002AF8768800A73A27 /* PersonRow.swift */; };
 		1B5448052AF882C800A73A27 /* MemberFollowingList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B5448042AF882C800A73A27 /* MemberFollowingList.swift */; };
@@ -361,6 +369,7 @@
 		1BAC07F32AD559A70087D8CD /* TagsContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BAC07F22AD559A70087D8CD /* TagsContent.swift */; };
 		1BAC07F52AD559CE0087D8CD /* TagsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BAC07F42AD559CE0087D8CD /* TagsViewModel.swift */; };
 		1BAC07F72AD559E60087D8CD /* TagsDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BAC07F62AD559E60087D8CD /* TagsDataModel.swift */; };
+		1BB2857C2AFA63BB007264C5 /* Lottie in Frameworks */ = {isa = PBXBuildFile; productRef = 1BB2857B2AFA63BB007264C5 /* Lottie */; };
 		1BB7A06A2A9514B4002DD86F /* .swiftlint.yml in Resources */ = {isa = PBXBuildFile; fileRef = 1BB7A0692A9514B4002DD86F /* .swiftlint.yml */; };
 		1BCB902F2AEEB0740088B2F2 /* Extension+String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BCB902E2AEEB0740088B2F2 /* Extension+String.swift */; };
 		1BCB90312AEEB0890088B2F2 /* Extension+Date.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BCB90302AEEB0890088B2F2 /* Extension+Date.swift */; };
@@ -759,6 +768,9 @@
 		1B3955522A9507E300BCB4DF /* Extension+UIScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Extension+UIScreen.swift"; sourceTree = "<group>"; };
 		1B39555A2A95095500BCB4DF /* ColorManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorManager.swift; sourceTree = "<group>"; };
 		1B39555C2A95098100BCB4DF /* VideoModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoModel.swift; sourceTree = "<group>"; };
+		1B395D8F2AF9FB0400E28180 /* VideoCompression.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoCompression.swift; sourceTree = "<group>"; };
+		1B395D922AFA531E00E28180 /* LottieProgress.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LottieProgress.swift; sourceTree = "<group>"; };
+		1B395D972AFA53F700E28180 /* ProgressLottie.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = ProgressLottie.json; sourceTree = "<group>"; };
 		1B5448002AF8768800A73A27 /* PersonRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonRow.swift; sourceTree = "<group>"; };
 		1B5448042AF882C800A73A27 /* MemberFollowingList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemberFollowingList.swift; sourceTree = "<group>"; };
 		1B5448072AF882E300A73A27 /* MyFollowingList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyFollowingList.swift; sourceTree = "<group>"; };
@@ -1137,6 +1149,7 @@
 				1B9936F32AF3699E00F5C619 /* Aespa.framework in Frameworks */,
 				1B9936F42AF3699E00F5C619 /* KeychainSwift in Frameworks */,
 				1B9936F52AF3699E00F5C619 /* Alamofire in Frameworks */,
+				1B395D962AFA533B00E28180 /* Lottie in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1153,6 +1166,7 @@
 			files = (
 				1B6C04322AC2B93A00DF4045 /* Kingfisher in Frameworks */,
 				1B6C04302AC2B93400DF4045 /* SnapKit in Frameworks */,
+				1BB2857C2AFA63BB007264C5 /* Lottie in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1299,6 +1313,7 @@
 		1B3895772AB9CC2C00B4C8DD /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
+				1B395D8F2AF9FB0400E28180 /* VideoCompression.swift */,
 				1B38958C2AB9CCCF00B4C8DD /* Color.swift */,
 				1B3895782AB9CC2C00B4C8DD /* VideoFilterHelpers.swift */,
 				1B3895792AB9CC2C00B4C8DD /* VideoEditor.swift */,
@@ -1532,6 +1547,7 @@
 		1B3955582A95094200BCB4DF /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				1B395D972AFA53F700E28180 /* ProgressLottie.json */,
 				78D148D12A9E0A2600DDCE48 /* Fonts */,
 				1B3955592A95094900BCB4DF /* Colors */,
 				78E175652ABBF0D300731259 /* whistleSignInBackground.mp4 */,
@@ -1579,6 +1595,7 @@
 			isa = PBXGroup;
 			children = (
 				1BE8EA112AB0F7E800EB0A55 /* CircularProgressBar.swift */,
+				1B395D922AFA531E00E28180 /* LottieProgress.swift */,
 			);
 			path = ProgressBars;
 			sourceTree = "<group>";
@@ -2590,6 +2607,7 @@
 				1B9936222AF3699E00F5C619 /* BottomSheet */,
 				1B9936242AF3699E00F5C619 /* SnapKit */,
 				1B9936262AF3699E00F5C619 /* ReverseMask */,
+				1B395D952AFA533B00E28180 /* Lottie */,
 			);
 			productName = Whistle;
 			productReference = 1B9937082AF3699E00F5C619 /* WhistleDev.app */;
@@ -2630,6 +2648,7 @@
 			packageProductDependencies = (
 				1B6C042F2AC2B93400DF4045 /* SnapKit */,
 				1B6C04312AC2B93A00DF4045 /* Kingfisher */,
+				1BB2857B2AFA63BB007264C5 /* Lottie */,
 			);
 			productName = VideoPicker;
 			productReference = 1BD4E5B32ABA2F5600ADB783 /* VideoPicker.framework */;
@@ -2676,6 +2695,7 @@
 				1B38958E2AB9E16E00B4C8DD /* XCRemoteSwiftPackageReference "BottomSheet" */,
 				1BD4E5692ABA275200ADB783 /* XCRemoteSwiftPackageReference "SnapKit" */,
 				78A58E042AD1C287007F6A69 /* XCRemoteSwiftPackageReference "ReverseMask" */,
+				1B395D8E2AF9B88D00E28180 /* XCRemoteSwiftPackageReference "lottie-ios" */,
 			);
 			productRefGroup = 1B39553D2A95069C00BCB4DF /* Products */;
 			projectDirPath = "";
@@ -2694,6 +2714,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1B395D982AFA53F700E28180 /* ProgressLottie.json in Resources */,
 				780CF0A92AF3A2E50010E773 /* Dev-Info.plist in Resources */,
 				1B21C9ED2AA0AB8A0036158F /* .swiftformat in Resources */,
 				78D148D82A9E0A3600DDCE48 /* SF-Pro-Display-Semibold.otf in Resources */,
@@ -2722,6 +2743,7 @@
 				1B9936FC2AF3699E00F5C619 /* SF-Pro.ttf in Resources */,
 				1B9936FD2AF3699E00F5C619 /* Preview Assets.xcassets in Resources */,
 				1B9936FF2AF3699E00F5C619 /* Roboto-Medium.ttf in Resources */,
+				1B395D992AFA53F700E28180 /* ProgressLottie.json in Resources */,
 				1B9937002AF3699E00F5C619 /* whistleSignInBackground.mp4 in Resources */,
 				1B9937012AF3699E00F5C619 /* SF-Pro-Text-Semibold.otf in Resources */,
 			);
@@ -2738,6 +2760,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1B09FEC32AFA61470031BAC6 /* ProgressLottie.json in Resources */,
 				1BD4E7702ABA2F8600ADB783 /* Picker.xcassets in Resources */,
 				1BD4E7722ABA2F8600ADB783 /* Editor.xcassets in Resources */,
 			);
@@ -2886,6 +2909,7 @@
 				1BAC07F12AD559880087D8CD /* Tags.swift in Sources */,
 				7861E68E2ACD266B00612E2F /* ViewCount.swift in Sources */,
 				1B3895652AB9CBD300B4C8DD /* EditableVideo.swift in Sources */,
+				1B395D902AF9FB0400E28180 /* VideoCompression.swift in Sources */,
 				1B3895872AB9CC4300B4C8DD /* ProjectEntity+Ext.swift in Sources */,
 				7822B23A2ADD509C000B15AB /* Notion.swift in Sources */,
 				1B38954B2AB9CB7500B4C8DD /* CropView.swift in Sources */,
@@ -3009,6 +3033,7 @@
 				782F1B252AA1C566006831C8 /* MyFeedTabItemButtonStyle.swift in Sources */,
 				1B0A29AC2AA64AF3009077A1 /* MusicNote.swift in Sources */,
 				1B547D592AEA864300EDE344 /* AlertViewModel.swift in Sources */,
+				1B395D932AFA531E00E28180 /* LottieProgress.swift in Sources */,
 				1B3895862AB9CC4300B4C8DD /* CoreDataManager.swift in Sources */,
 				782A6DDD2AF1EBCB004D0A60 /* GuestPlayersViewModel.swift in Sources */,
 				1B38954C2AB9CB7500B4C8DD /* FramesToolView.swift in Sources */,
@@ -3099,6 +3124,7 @@
 				1B9936602AF3699E00F5C619 /* ViewCount.swift in Sources */,
 				1B9936612AF3699E00F5C619 /* EditableVideo.swift in Sources */,
 				1B9936622AF3699E00F5C619 /* ProjectEntity+Ext.swift in Sources */,
+				1B395D912AF9FB0400E28180 /* VideoCompression.swift in Sources */,
 				1B9936632AF3699E00F5C619 /* Notion.swift in Sources */,
 				1B9936642AF3699E00F5C619 /* CropView.swift in Sources */,
 				1B9936652AF3699E00F5C619 /* UserAuth.swift in Sources */,
@@ -3222,6 +3248,7 @@
 				1B9936D12AF3699E00F5C619 /* MusicNote.swift in Sources */,
 				1B9936D22AF3699E00F5C619 /* AlertViewModel.swift in Sources */,
 				1B9936D32AF3699E00F5C619 /* CoreDataManager.swift in Sources */,
+				1B395D942AFA531E00E28180 /* LottieProgress.swift in Sources */,
 				1B9936D42AF3699E00F5C619 /* GuestPlayersViewModel.swift in Sources */,
 				1B9936D52AF3699E00F5C619 /* FramesToolView.swift in Sources */,
 				1B9936D62AF3699E00F5C619 /* DescriptionAndTagEditorView.swift in Sources */,
@@ -3996,6 +4023,14 @@
 				minimumVersion = 3.0.0;
 			};
 		};
+		1B395D8E2AF9B88D00E28180 /* XCRemoteSwiftPackageReference "lottie-ios" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/airbnb/lottie-ios";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 4.3.3;
+			};
+		};
 		1B9936182AF3699E00F5C619 /* XCRemoteSwiftPackageReference "Alamofire" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/Alamofire/Alamofire.git";
@@ -4124,6 +4159,11 @@
 			package = 1B38958E2AB9E16E00B4C8DD /* XCRemoteSwiftPackageReference "BottomSheet" */;
 			productName = BottomSheet;
 		};
+		1B395D952AFA533B00E28180 /* Lottie */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 1B395D8E2AF9B88D00E28180 /* XCRemoteSwiftPackageReference "lottie-ios" */;
+			productName = Lottie;
+		};
 		1B6C042F2AC2B93400DF4045 /* SnapKit */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 1BD4E5692ABA275200ADB783 /* XCRemoteSwiftPackageReference "SnapKit" */;
@@ -4178,6 +4218,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 1B9936272AF3699E00F5C619 /* XCRemoteSwiftPackageReference "ReverseMask" */;
 			productName = ReverseMask;
+		};
+		1BB2857B2AFA63BB007264C5 /* Lottie */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 1B395D8E2AF9B88D00E28180 /* XCRemoteSwiftPackageReference "lottie-ios" */;
+			productName = Lottie;
 		};
 		1BD4E56A2ABA275200ADB783 /* SnapKit */ = {
 			isa = XCSwiftPackageProductDependency;

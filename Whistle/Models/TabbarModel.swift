@@ -20,4 +20,5 @@ class TabbarModel: ObservableObject {
   @Published var prevTabSelection: TabSelection?
   @Published var tabbarOpacity = 1.0
   @Published var tabWidth = UIScreen.width - 32
+  @Published var showVideoCaptureView = false
 }

@@ -77,14 +77,40 @@ struct DescriptionAndTagEditorView: View {
               UploadProgressViewModel.shared.thumbnail = Image(uiImage: thumbnail)
             }
             NavigationModel.shared.navigate.toggle()
-            apiViewModel.uploadContent(
-              video: exporterVM.videoData,
-              thumbnail: exporterVM.thumbnailData,
-              caption: content,
-              musicID: musicVM.musicInfo?.musicID ?? 0,
-              videoLength: video.totalDuration,
-              aspectRatio: exporterVM.aspectRatio,
-              hashtags: tagsViewModel.getTags())
+            if let url = exporterVM.renderedVideoURL {
+              VideoCompression
+                .compressh264Video(from: url, cache: .forceDelete, preferred: .quantity(ratio: 1.0)) { item, error in
+                  if let error {
+                    apiViewModel.uploadContent(
+                      video: exporterVM.videoData,
+                      thumbnail: exporterVM.thumbnailData,
+                      caption: content,
+                      musicID: musicVM.musicInfo?.musicID ?? 0,
+                      videoLength: video.totalDuration,
+                      aspectRatio: exporterVM.aspectRatio,
+                      hashtags: tagsViewModel.getTags())
+                  } else {
+                    if let item {
+                      var data = Data()
+                      if let videoData = try? Data(contentsOf: item) {
+                        data = videoData
+                      }
+                      apiViewModel.uploadContent(
+                        video: data,
+                        thumbnail: exporterVM.thumbnailData,
+                        caption: content,
+                        musicID: musicVM.musicInfo?.musicID ?? 0,
+                        videoLength: video.totalDuration,
+                        aspectRatio: exporterVM.aspectRatio,
+                        hashtags: tagsViewModel.getTags())
+                    }
+                  }
+                }
+            }
+            if let renderedVideoURL = exporterVM.renderedVideoURL {
+              FileManager.default.removefileExists(for: renderedVideoURL)
+            }
+            exporterVM.renderedVideoURL = nil
           }
         }
       }

@@ -43,7 +43,7 @@ extension HUDUtilWrapper where Base: UIView {
 
   func show(text: String? = nil, isEnabled: Bool = false) {
     hide()
-    let loadingView = LoadingView(frame: base.bounds, text: text ?? "")
+    let loadingView = LoadingView( /* frame: base.bounds, */ text: text ?? "")
     base.addSubview(loadingView)
     loadingView.isUserInteractionEnabled = !isEnabled
     loadingView.snp.makeConstraints { make in
