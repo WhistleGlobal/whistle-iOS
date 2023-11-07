@@ -1299,6 +1299,7 @@ extension VideoCaptureView {
                     caption: "",
                     musicID: musicVM.musicInfo?.musicID ?? 0,
                     videoLength: video.totalDuration,
+                    aspectRatio: exporterVM.aspectRatio,
                     hashtags: [""])
                 }
               } else {

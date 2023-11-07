@@ -14,6 +14,7 @@ import SwiftUI
 
 struct ContentPlayer: UIViewControllerRepresentable {
   var player: AVPlayer
+  var aspectRatio: Double?
 
   func makeUIViewController(context _: Context) -> AVPlayerViewController {
     let view = AVPlayerViewController()
@@ -29,7 +30,11 @@ struct ContentPlayer: UIViewControllerRepresentable {
       view.allowsVideoFrameAnalysis = false
     }
     view.showsPlaybackControls = false
-    view.videoGravity = .resizeAspect
+    if aspectRatio ?? 1.0 > Double(15.0 / 9.0) {
+      view.videoGravity = .resizeAspectFill
+    } else {
+      view.videoGravity = .resizeAspect
+    }
     view.view.isUserInteractionEnabled = false
     view.view.backgroundColor = .clear
 

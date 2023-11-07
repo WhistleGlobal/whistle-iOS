@@ -48,46 +48,49 @@ struct MemberContentPlayerView: View {
                   .frame(maxWidth: .infinity, maxHeight: .infinity)
               }
               .resizable()
-              .scaledToFit()
-              .frame(maxWidth: .infinity, maxHeight: .infinity)
-              .blur(radius: content.isHated ? 30 : 0)
-              .overlay {
-                if content.isHated {
-                  VStack {
-                    HStack(spacing: 0) {
-                      Button {
-                        dismissAction()
-                      } label: {
-                        Image(systemName: "chevron.backward")
-                          .font(.system(size: 20))
-                          .foregroundColor(.white)
-                          .padding(.vertical, 16)
-                          .padding(.trailing, 16)
+              .aspectRatio(
+                contentMode: content.aspectRatio ?? 1.0 > Double(15.0 / 9.0)
+                  ? .fill
+                  : .fit)
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .blur(radius: content.isHated ? 30 : 0)
+                .overlay {
+                  if content.isHated {
+                    VStack {
+                      HStack(spacing: 0) {
+                        Button {
+                          dismissAction()
+                        } label: {
+                          Image(systemName: "chevron.backward")
+                            .font(.system(size: 20))
+                            .foregroundColor(.white)
+                            .padding(.vertical, 16)
+                            .padding(.trailing, 16)
+                        }
+                        Spacer()
                       }
+                      .padding(.top, 38)
+                      .padding(.horizontal, UIScreen.getWidth(16))
+                      Spacer()
+                      Image(systemName: "eye.slash.fill")
+                        .font(.system(size: 44))
+                        .foregroundColor(.Gray10)
+                        .padding(.bottom, 26)
+                      Text("관심없음 설정한 콘텐츠입니다.")
+                        .fontSystem(fontDesignSystem: .subtitle1)
+                        .foregroundColor(.LabelColor_Primary_Dark)
+                        .padding(.bottom, 12)
+                      Text("관심없음 설정한 모든 콘텐츠는\n회원님의 피드에 노출되지 않습니다.")
+                        .multilineTextAlignment(.center)
+                        .fontSystem(fontDesignSystem: .body2)
+                        .foregroundColor(.LabelColor_Secondary_Dark)
                       Spacer()
                     }
-                    .padding(.top, 38)
-                    .padding(.horizontal, UIScreen.getWidth(16))
-                    Spacer()
-                    Image(systemName: "eye.slash.fill")
-                      .font(.system(size: 44))
-                      .foregroundColor(.Gray10)
-                      .padding(.bottom, 26)
-                    Text("관심없음 설정한 콘텐츠입니다.")
-                      .fontSystem(fontDesignSystem: .subtitle1)
-                      .foregroundColor(.LabelColor_Primary_Dark)
-                      .padding(.bottom, 12)
-                    Text("관심없음 설정한 모든 콘텐츠는\n회원님의 피드에 노출되지 않습니다.")
-                      .multilineTextAlignment(.center)
-                      .fontSystem(fontDesignSystem: .body2)
-                      .foregroundColor(.LabelColor_Secondary_Dark)
-                    Spacer()
                   }
                 }
-              }
             if !content.isHated {
               if let player = feedPlayersViewModel.currentPlayer, index == feedPlayersViewModel.currentVideoIndex {
-                ContentPlayer(player: player)
+                ContentPlayer(player: player, aspectRatio: content.aspectRatio)
                   .frame(width: UIScreen.width, height: UIScreen.height)
                   .onTapGesture(count: 2) {
                     whistleToggle()

@@ -22,6 +22,7 @@ class GuestContent: Hashable, ObservableObject, Codable {
     case musicTitle = "music_title"
     case hashtags = "content_hashtags"
     case whistleCount = "content_whistle_count"
+    case aspectRatio = "aspect_ratio"
   }
 
   init(
@@ -66,6 +67,7 @@ class GuestContent: Hashable, ObservableObject, Codable {
   var musicTitle: String?
   var hashtags: [String]?
   var whistleCount: Int?
+  var aspectRatio: Double?
 
   required init(from decoder: Decoder) throws {
     let container = try decoder.container(keyedBy: CodingKeys.self)
@@ -80,6 +82,7 @@ class GuestContent: Hashable, ObservableObject, Codable {
     musicTitle = try container.decode(String?.self, forKey: .musicTitle)
     hashtags = try container.decode([String]?.self, forKey: .hashtags)
     whistleCount = try container.decode(Int?.self, forKey: .whistleCount)
+    aspectRatio = try container.decode(Double?.self, forKey: .aspectRatio)
   }
 
   // Equatable conformance for completeness (optional but recommended)

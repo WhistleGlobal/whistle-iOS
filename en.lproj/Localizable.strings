@@ -7,6 +7,7 @@
 */
 
 // 일반적인 단어
+"확인" = "Confirm";
 "취소" = "Cancel";
 "다음" = "Next";
 "음악" = "Music";
@@ -126,7 +127,7 @@
 "소개가 수정되었습니다." = "Bio updated";
 "사용자 ID가 수정되었습니다." = "Username updated";
 
-// 알림 리스트 관련
+// 알림 관련
 "%d년" = "%dyears";
 "%d달" = "%dmonths";
 "%d주" = "%dweeks";
@@ -135,3 +136,5 @@
 "방금 전" = "Just now";
 "님이 회원님의 게시물에 휘슬을 보냈습니다. " = " whistled your post. ";
 "님이 회원님을 팔로우하기 시작했습니다. " = " started following you. ";
+"광고성 정보 알림 수신동의 안내" = "Advertising Information Notification Consent Guide";
+"광고성 정보 알림 수신거부 안내" = "Advertising Information Notification Opt-out Guide";

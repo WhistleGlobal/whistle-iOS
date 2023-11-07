@@ -25,6 +25,7 @@ class MemberContent: ObservableObject, Codable, Hashable {
     case isFollowed = "is_followed"
     case isBookmarked = "is_bookmarked"
     case isHated = "is_hated"
+    case aspectRatio = "aspect_ratio"
   }
 
   var contentId: Int?
@@ -43,6 +44,7 @@ class MemberContent: ObservableObject, Codable, Hashable {
   var isFollowed = false
   var isBookmarked = false
   var isHated = false
+  var aspectRatio: Double?
 
   init() { }
 
@@ -64,6 +66,7 @@ class MemberContent: ObservableObject, Codable, Hashable {
     isFollowed = try container.decode(Int.self, forKey: .isFollowed) == 1 ? true : false
     isBookmarked = try container.decode(Int.self, forKey: .isBookmarked) == 1 ? true : false
     isHated = try container.decode(Int.self, forKey: .isHated) == 1 ? true : false
+    aspectRatio = try container.decode(Double?.self, forKey: .aspectRatio)
   }
 
   static func == (lhs: MemberContent, rhs: MemberContent) -> Bool {

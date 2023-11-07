@@ -49,11 +49,14 @@ struct MainContentPlayerView: View {
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
                 }
                 .resizable()
-                .scaledToFit()
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .aspectRatio(
+                  contentMode: content.aspectRatio ?? 1.0 > Double(15.0 / 9.0)
+                    ? .fill
+                    : .fit)
+                  .frame(maxWidth: .infinity, maxHeight: .infinity)
             }
             if let player = feedPlayersViewModel.currentPlayer, index == feedPlayersViewModel.currentVideoIndex {
-              ContentPlayer(player: player)
+              ContentPlayer(player: player, aspectRatio: content.aspectRatio)
                 .frame(width: UIScreen.width, height: UIScreen.height)
                 .onTapGesture(count: 2) {
                   whistleToggle(content: content, index)

@@ -83,6 +83,7 @@ struct DescriptionAndTagEditorView: View {
               caption: content,
               musicID: musicVM.musicInfo?.musicID ?? 0,
               videoLength: video.totalDuration,
+              aspectRatio: exporterVM.aspectRatio,
               hashtags: tagsViewModel.getTags())
           }
         }
