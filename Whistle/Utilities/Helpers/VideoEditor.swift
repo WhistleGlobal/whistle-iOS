@@ -91,9 +91,6 @@ class VideoEditor {
     videoComposition.frameDuration = CMTimeMake(value: 1, timescale: 30)
 
     audioMix.inputParameters = mixParameters
-//    let videoAudioMixInputParams = AVMutableAudioMixInputParameters(track: asset.tracks(withMediaType: .video).first)
-//    videoAudioMixInputParams.setVolume(video.volume, at: CMTime.zero)
-//    audioMix.inputParameters.append(videoAudioMixInputParams)
 
     /// Create background layer color and scale video
     createLayers(video.videoFrames, video: video, size: outputSize, videoComposition: videoComposition)
@@ -184,13 +181,14 @@ extension VideoEditor {
     guard
       let export = AVAssetExportSession(
         asset: composition,
-        presetName: isSimulator ? AVAssetExportPresetPassthrough : AVAssetExportPresetHighestQuality)
+        presetName: AVAssetExportPresetHighestQuality)
     else {
       WhistleLogger.logger.debug("Cannot create export session.")
       throw ExporterError.cannotCreateExportSession
     }
     export.audioMix = audioMix
     export.videoComposition = videoComposition
+    export.shouldOptimizeForNetworkUse = true
     export.outputFileType = .mp4
     export.outputURL = outputURL
     export.timeRange = timeRange

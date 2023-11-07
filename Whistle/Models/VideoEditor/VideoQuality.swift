@@ -14,7 +14,8 @@ enum VideoQuality: Int, CaseIterable {
   var exportPresetName: String {
     switch self {
     case .low:
-      AVAssetExportPresetMediumQuality
+      AVAssetExportPresetLowQuality
+//      AVAssetExportPresetMediumQuality
     case .high, .medium:
       AVAssetExportPresetHighestQuality
     }
