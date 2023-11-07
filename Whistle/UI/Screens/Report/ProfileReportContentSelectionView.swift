@@ -53,18 +53,10 @@ struct ProfileReportContentSelectionView: View {
     }
     .padding(.horizontal, 16)
     .background(Color.reactiveBackground)
-    .navigationBarBackButtonHidden()
+    .toolbarRole(.editor)
     .navigationTitle("콘텐츠 선택")
     .navigationBarTitleDisplayMode(.inline)
     .toolbar {
-      ToolbarItem(placement: .cancellationAction) {
-        Button {
-          dismiss()
-        } label: {
-          Image(systemName: "chevron.backward")
-            .foregroundColor(.LabelColor_Primary)
-        }
-      }
       ToolbarItem(placement: .confirmationAction) {
         NavigationLink {
           switch reportCategory {

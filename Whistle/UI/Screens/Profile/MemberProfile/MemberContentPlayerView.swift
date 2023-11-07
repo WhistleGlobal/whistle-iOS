@@ -21,6 +21,7 @@ struct MemberContentPlayerView: View {
   @StateObject private var toastViewModel = ToastViewModel.shared
   @StateObject private var feedMoreModel = MemberFeedMoreModel.shared
   @StateObject private var tabbarModel = TabbarModel.shared
+  @StateObject var bartintModel = BarTintModel.shared
 
   @State var newId = UUID()
   @State var timer: Timer? = nil
@@ -139,8 +140,7 @@ struct MemberContentPlayerView: View {
                     if tabbarModel.tabWidth != 56 {
                       MemberContentLayer(
                         currentVideoInfo: content,
-                        whistleAction: whistleToggle,
-                        dismissAction: dismissAction)
+                        whistleAction: whistleToggle)
                         .padding(.bottom, UIScreen.main.nativeBounds.height == 1334 ? 24 : 0)
                     }
                     if feedMoreModel.bottomSheetPosition != .hidden {
@@ -188,8 +188,9 @@ struct MemberContentPlayerView: View {
         .id(newId)
       }
     }
-    .navigationBarBackButtonHidden()
+    .toolbarRole(.editor)
     .onAppear {
+      bartintModel.tintColor = .white
       if index == 0 {
         lifecycleDelegate?.onAppear()
       } else {
@@ -199,6 +200,7 @@ struct MemberContentPlayerView: View {
       }
     }
     .onDisappear {
+      bartintModel.tintColor = .LabelColor_Primary
       lifecycleDelegate?.onDisappear()
     }
     .ignoresSafeArea()

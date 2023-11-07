@@ -17,6 +17,7 @@ struct SingleContentView: View {
   @StateObject var apiViewModel = APIViewModel.shared
   @StateObject var tabbarModel = TabbarModel.shared
   @StateObject private var toastViewModel = ToastViewModel.shared
+  @StateObject var bartintModel = BarTintModel.shared
   @State var showPlayButton = false
   @State var bottomSheetPosition: BottomSheetPosition = .hidden
   @State var timer: Timer? = nil
@@ -136,7 +137,12 @@ struct SingleContentView: View {
       await player?.seek(to: .zero)
       player?.play()
     }
+    .toolbarRole(.editor)
+    .onAppear {
+      bartintModel.tintColor = .white
+    }
     .onDisappear {
+      bartintModel.tintColor = .LabelColor_Primary
       player?.pause()
     }
     .bottomSheet(

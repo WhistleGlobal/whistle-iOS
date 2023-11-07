@@ -72,21 +72,10 @@ struct ProfileEditIDView: View {
       Spacer()
     }
     .padding(.horizontal, 16)
-    .navigationBarBackButtonHidden()
+    .toolbarRole(.editor)
     .navigationTitle("사용자 ID")
     .navigationBarTitleDisplayMode(.inline)
     .toolbar {
-      ToolbarItem(placement: .cancellationAction) {
-        Button {
-          Task {
-            await apiViewModel.requestMyProfile()
-            dismiss()
-          }
-        } label: {
-          Image(systemName: "chevron.backward")
-            .foregroundColor(.LabelColor_Primary)
-        }
-      }
       ToolbarItem(placement: .confirmationAction) {
         Button {
           isFocused = false

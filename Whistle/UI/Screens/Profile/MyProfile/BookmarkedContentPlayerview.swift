@@ -21,6 +21,7 @@ struct BookmarkedContentPlayerview: View {
   @StateObject private var toastViewModel = ToastViewModel.shared
   @StateObject private var feedMoreModel = BookmarkedFeedMoreModel.shared
   @StateObject private var tabbarModel = TabbarModel.shared
+  @StateObject var bartintModel = BarTintModel.shared
 
   @State var newId = UUID()
   @State var timer: Timer? = nil
@@ -106,8 +107,7 @@ struct BookmarkedContentPlayerview: View {
                       index: $index,
                       whistleAction: {
                         whistleToggle(content: content, index)
-                      },
-                      dismissAction: dismissAction)
+                      })
                       .padding(.bottom, UIScreen.main.nativeBounds.height == 1334 ? 24 : 0)
                   }
                   if feedMoreModel.bottomSheetPosition != .hidden {
@@ -154,8 +154,9 @@ struct BookmarkedContentPlayerview: View {
         .id(newId)
       }
     }
-    .navigationBarBackButtonHidden()
+    .toolbarRole(.editor)
     .onAppear {
+      bartintModel.tintColor = .white
       if index == 0 {
         lifecycleDelegate?.onAppear()
       } else {
@@ -165,6 +166,7 @@ struct BookmarkedContentPlayerview: View {
       }
     }
     .onDisappear {
+      bartintModel.tintColor = .LabelColor_Primary
       lifecycleDelegate?.onDisappear()
     }
     .ignoresSafeArea()

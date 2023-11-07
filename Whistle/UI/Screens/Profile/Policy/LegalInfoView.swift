@@ -76,21 +76,11 @@ struct LegalInfoView: View {
       }
       Spacer()
     }
-    .navigationBarBackButtonHidden()
+    .toolbarRole(.editor)
     .navigationBarTitleDisplayMode(.inline)
     .navigationTitle(CommonWords().about)
     .task {
       apiViewModel.requestUserCreateDate()
-    }
-    .toolbar {
-      ToolbarItem(placement: .cancellationAction) {
-        Button {
-          dismiss()
-        } label: {
-          Image(systemName: "chevron.backward")
-            .foregroundColor(.LabelColor_Primary)
-        }
-      }
     }
   }
 }

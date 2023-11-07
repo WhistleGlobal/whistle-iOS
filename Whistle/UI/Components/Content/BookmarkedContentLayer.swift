@@ -21,7 +21,6 @@ struct BookmarkedContentLayer: View {
   @State var isExpanded = false
   @Binding var index: Int
   var whistleAction: () -> Void
-  let dismissAction: DismissAction
 
   var body: some View {
     ZStack {
@@ -34,20 +33,6 @@ struct BookmarkedContentLayer: View {
           }
       }
       VStack(spacing: 0) {
-        HStack(spacing: 0) {
-          Button {
-            dismissAction()
-          } label: {
-            Image(systemName: "chevron.backward")
-              .font(.system(size: 20))
-              .foregroundColor(.white)
-              .padding(.vertical, 16)
-              .padding(.trailing, 16)
-          }
-          Spacer()
-        }
-        .padding(.top, 38)
-        Spacer()
         Spacer()
         HStack(spacing: 0) {
           VStack(alignment: .leading, spacing: 12) {

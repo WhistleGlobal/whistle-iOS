@@ -77,21 +77,11 @@ struct ProfileReportReasonSelectionView: View {
       Spacer()
     }
     .background(Color.reactiveBackground)
-    .navigationBarBackButtonHidden()
     .navigationTitle(CommonWords().report)
     .navigationBarTitleDisplayMode(.inline)
+    .toolbarRole(.editor)
     .navigationDestination(isPresented: $goComplete) {
       ReportCompleteView(goReport: $goReport)
-    }
-    .toolbar {
-      ToolbarItem(placement: .cancellationAction) {
-        Button {
-          dismiss()
-        } label: {
-          Image(systemName: "chevron.backward")
-            .foregroundColor(.LabelColor_Primary)
-        }
-      }
     }
   }
 }
