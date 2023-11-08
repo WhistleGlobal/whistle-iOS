@@ -89,7 +89,6 @@ struct MainFeedPageView: UIViewRepresentable {
 
     func onAppear() {
       if !parent.apiViewModel.mainFeed.isEmpty {
-        WhistleLogger.logger.debug("onAppear()")
         if index == 0 {
           parent.feedPlayersViewModel.initialPlayers()
         }
@@ -102,7 +101,6 @@ struct MainFeedPageView: UIViewRepresentable {
     }
 
     func onDisappear() {
-      WhistleLogger.logger.debug("onDisappear()")
       parent.feedPlayersViewModel.stopPlayer()
     }
 
@@ -137,11 +135,7 @@ struct MainFeedPageView: UIViewRepresentable {
     }
 
     func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate _: Bool) {
-      WhistleLogger.logger.debug("scrollViewDidEndDragging()")
-      WhistleLogger.logger.debug("scrollView.contentOffset.y: \(scrollView.contentOffset.y)")
-      WhistleLogger.logger.debug("-scrollView.contentInset.top: \(-scrollView.contentInset.top)")
       if scrollView.contentOffset.y < -scrollView.contentInset.top {
-        WhistleLogger.logger.debug("refresh()")
         refresh()
       }
     }

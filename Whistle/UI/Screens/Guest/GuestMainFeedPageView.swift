@@ -72,7 +72,6 @@ struct GuestMainFeedPageView: UIViewRepresentable {
 
     func onAppear() {
       if !parent.apiViewModel.guestFeed.isEmpty {
-        WhistleLogger.logger.debug("onAppear()")
         if index == 0 {
           parent.feedPlayersViewModel.initialPlayers()
         }
@@ -85,7 +84,6 @@ struct GuestMainFeedPageView: UIViewRepresentable {
     }
 
     func onDisappear() {
-      WhistleLogger.logger.debug("onDisappear()")
       parent.feedPlayersViewModel.stopPlayer()
     }
 
