@@ -38,7 +38,7 @@ struct BookmarkedContentLayer: View {
           VStack(alignment: .leading, spacing: 12) {
             Spacer()
             HStack(spacing: 0) {
-              if currentVideoInfo.userName != apiViewModel.myProfile.userName {
+              if currentVideoInfo.userName != apiViewModel.myProfile.userName, !apiViewModel.bookmark.isEmpty {
                 NavigationLink {
                   ProfileView(
                     profileType:
@@ -168,6 +168,14 @@ struct BookmarkedContentLayer: View {
                         return mutableItem
                       }
                     }
+                    apiViewModel.mainFeed = apiViewModel.mainFeed.map { item in
+                      let mutableItem = item
+                      if mutableItem.contentId == currentContent.contentId {
+                        mutableItem.isBookmarked = currentContent.isBookmarked
+                      }
+                      return mutableItem
+                    }
+                    apiViewModel.publisherSend()
                   }
                 }
             } label: {

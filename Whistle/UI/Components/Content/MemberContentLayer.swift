@@ -164,6 +164,7 @@ struct MemberContentLayer: View {
                   }
                   return mutableItem
                 }
+                apiViewModel.publisherSend()
               }
             } label: {
               ContentLayerButton(

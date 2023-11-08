@@ -113,6 +113,14 @@ struct SingleContentLayer: View {
                   toastViewModel.toastInit(message: ToastMessages().bookmark)
                 }
                 await apiViewModel.requestMyBookmark()
+                apiViewModel.mainFeed = apiViewModel.mainFeed.map { item in
+                  let mutableItem = item
+                  if mutableItem.contentId == currentVideoInfo.contentId {
+                    mutableItem.isBookmarked = currentVideoInfo.isBookmarked
+                  }
+                  return mutableItem
+                }
+                apiViewModel.publisherSend()
               }
             } label: {
               ContentLayerButton(
