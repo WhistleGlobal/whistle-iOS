@@ -45,10 +45,9 @@ struct GuestContentPlayerView: View {
                 }
                 .resizable()
                 .aspectRatio(
-                  contentMode: content.aspectRatio != nil || content.aspectRatio ?? 1.0 > Double(15.0 / 9.0)
+                  contentMode: content.aspectRatio ?? 1.0 > Double(15.0 / 9.0)
                     ? .fill
                     : .fit)
-                  .scaledToFill()
                   .frame(maxWidth: .infinity, maxHeight: .infinity)
             }
             if let player = feedPlayersViewModel.currentPlayer, index == feedPlayersViewModel.currentVideoIndex {
