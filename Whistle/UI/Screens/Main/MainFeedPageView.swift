@@ -41,12 +41,13 @@ struct MainFeedPageView: UIViewRepresentable {
     view.delegate = context.coordinator
     let customRefreshView = UIHostingController(rootView: CustomRefresh())
     let refreshControl = UIRefreshControl()
+    refreshControl.tintColor = .clear
     customRefreshView.view.frame = CGRect(
       x: (UIScreen.main.bounds.width - customRefreshView.view.frame.width) / 2,
       y: 100,
       width: customRefreshView.view.frame.width,
       height: customRefreshView.view.frame.height)
-    refreshControl.addTarget(context.coordinator, action: #selector(context.coordinator.refresh), for: .valueChanged)
+//    refreshControl.addTarget(context.coordinator, action: #selector(context.coordinator.refresh), for: .valueChanged)
     refreshControl.addSubview(customRefreshView.view)
     view.refreshControl = refreshControl
     view.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 100, right: 0)
@@ -132,6 +133,16 @@ struct MainFeedPageView: UIViewRepresentable {
           return
         }
         parent.feedPlayersViewModel.currentPlayer?.play()
+      }
+    }
+
+    func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate _: Bool) {
+      WhistleLogger.logger.debug("scrollViewDidEndDragging()")
+      WhistleLogger.logger.debug("scrollView.contentOffset.y: \(scrollView.contentOffset.y)")
+      WhistleLogger.logger.debug("-scrollView.contentInset.top: \(-scrollView.contentInset.top)")
+      if scrollView.contentOffset.y < -scrollView.contentInset.top {
+        WhistleLogger.logger.debug("refresh()")
+        refresh()
       }
     }
 
