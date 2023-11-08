@@ -100,18 +100,19 @@ struct SingleContentLayer: View {
             Button {
               Task {
                 if currentVideoInfo.isBookmarked {
+                  currentVideoInfo.isBookmarked.toggle()
                   _ = await apiViewModel.bookmarkAction(
                     contentID: currentVideoInfo.contentId ?? 0,
                     method: .delete)
                   toastViewModel.toastInit(message: ToastMessages().bookmarkDeleted)
-                  currentVideoInfo.isBookmarked = false
                 } else {
+                  currentVideoInfo.isBookmarked.toggle()
                   _ = await apiViewModel.bookmarkAction(
                     contentID: currentVideoInfo.contentId ?? 0,
                     method: .post)
                   toastViewModel.toastInit(message: ToastMessages().bookmark)
-                  currentVideoInfo.isBookmarked = true
                 }
+                await apiViewModel.requestMyBookmark()
               }
             } label: {
               ContentLayerButton(

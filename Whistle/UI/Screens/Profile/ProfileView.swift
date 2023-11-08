@@ -277,6 +277,7 @@ struct ProfileView: View {
           isProfileLoaded = true
           await apiViewModel.requestMyFollow()
           await apiViewModel.requestMyWhistlesCount()
+          await apiViewModel.requestMyBookmark()
           isFirstProfileLoaded = false
         }
       } else {

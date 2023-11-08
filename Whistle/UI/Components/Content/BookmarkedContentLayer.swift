@@ -39,8 +39,15 @@ struct BookmarkedContentLayer: View {
             Spacer()
             HStack(spacing: 0) {
               if currentVideoInfo.userName != apiViewModel.myProfile.userName {
-                Button {
-                  feedMoreModel.isRootStacked = true
+                NavigationLink {
+                  ProfileView(
+                    profileType:
+                    apiViewModel.bookmark[feedPlayersViewModel.currentVideoIndex].userId == apiViewModel.myProfile.userId
+                      ? .my
+                      : .member,
+                    isFirstProfileLoaded: .constant(true),
+                    userId: apiViewModel.bookmark[feedPlayersViewModel.currentVideoIndex].userId)
+                    .id(UUID())
                 } label: {
                   Group {
                     profileImageView(url: currentVideoInfo.profileImg, size: 36)
@@ -51,6 +58,7 @@ struct BookmarkedContentLayer: View {
                       .padding(.trailing, 16)
                   }
                 }
+                .id(UUID())
               } else {
                 Group {
                   profileImageView(url: currentVideoInfo.profileImg, size: 36)
@@ -139,22 +147,29 @@ struct BookmarkedContentLayer: View {
                 label: "\(currentVideoInfo.whistleCount)")
             }
             Button {
-              toastViewModel.cancelToastInit(message: ToastMessages().bookmarkDeleted) {
-                Task {
-                  let currentContent = apiViewModel.bookmark[feedPlayersViewModel.currentVideoIndex]
-                  _ = await apiViewModel.bookmarkAction(contentID: currentContent.contentId, method: .delete)
-                  feedPlayersViewModel.removePlayer {
-                    index -= 1
-                    apiViewModel.mainFeed = apiViewModel.mainFeed.map { item in
-                      let mutableItem = item
-                      if mutableItem.contentId == currentContent.contentId {
-                        mutableItem.isBookmarked = false
+              currentVideoInfo.isBookmarked.toggle()
+              toastViewModel.cancelToastInit(
+                message: ToastMessages().bookmarkDeleted,
+                undoAction: {
+                  feedPlayersViewModel.currentPlayer?.seek(to: .zero)
+                  feedPlayersViewModel.currentPlayer?.play()
+                  currentVideoInfo.isBookmarked.toggle()
+                }) {
+                  Task {
+                    let currentContent = apiViewModel.bookmark[feedPlayersViewModel.currentVideoIndex]
+                    _ = await apiViewModel.bookmarkAction(contentID: currentContent.contentId, method: .delete)
+                    feedPlayersViewModel.removePlayer {
+                      index -= 1
+                      apiViewModel.mainFeed = apiViewModel.mainFeed.map { item in
+                        let mutableItem = item
+                        if mutableItem.contentId == currentContent.contentId {
+                          mutableItem.isBookmarked = false
+                        }
+                        return mutableItem
                       }
-                      return mutableItem
                     }
                   }
                 }
-              }
             } label: {
               ContentLayerButton(
                 isFilled: $currentVideoInfo.isBookmarked,

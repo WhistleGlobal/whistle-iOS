@@ -20,6 +20,7 @@ class ToastViewModel: ObservableObject {
   @Published var isCancellable = false
   @Published var onFullScreenCover = false
 
+  var undoAction: (() -> Void)? = { }
   var cancellableAction: (() -> Void)? = { }
 
   func toastInit(
@@ -41,6 +42,7 @@ class ToastViewModel: ObservableObject {
     message: LocalizedStringKey,
     isCancelled _: Bool = false,
     padding: CGFloat = 58,
+    undoAction: @escaping () -> Void = { },
     cancelAction: @escaping () -> Void)
   {
     withAnimation {
@@ -50,6 +52,7 @@ class ToastViewModel: ObservableObject {
     isCancelled = false
     self.message = message
     self.padding = padding
+    self.undoAction = undoAction
     cancellableAction = cancelAction
   }
 
