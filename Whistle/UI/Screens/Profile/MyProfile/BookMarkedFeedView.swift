@@ -29,8 +29,11 @@ struct BookMarkedFeedView: View {
       } else {
         VStack {
           Spacer()
+          Image(systemName: "photo.fill")
+            .font(.system(size: 44, weight: .light))
+            .foregroundColor(.LabelColor_Primary_Dark)
           Text(ContentWords().noBookmarkedContent)
-            .fontSystem(fontDesignSystem: .body1)
+            .fontSystem(fontDesignSystem: .subtitle1)
             .foregroundColor(.LabelColor_Primary_Dark)
           Spacer()
         }
