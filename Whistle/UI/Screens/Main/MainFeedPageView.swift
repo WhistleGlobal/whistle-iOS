@@ -39,10 +39,17 @@ struct MainFeedPageView: UIViewRepresentable {
     view.contentInsetAdjustmentBehavior = .never
     view.isPagingEnabled = true
     view.delegate = context.coordinator
-    let refreshControl = UIRefreshControl()
-    refreshControl.addTarget(context.coordinator, action: #selector(context.coordinator.refresh), for: .valueChanged)
-    view.refreshControl = refreshControl
-
+      let customRefreshView = UIHostingController(rootView: CustomRefresh())
+          let refreshControl = UIRefreshControl()
+          customRefreshView.view.frame = CGRect(
+            x: (UIScreen.main.bounds.width - customRefreshView.view.frame.width) / 2,
+            y: 100,
+            width: customRefreshView.view.frame.width,
+            height: customRefreshView.view.frame.height)
+      refreshControl.addTarget(context.coordinator, action: #selector(context.coordinator.refresh), for: .valueChanged)
+      refreshControl.addSubview(customRefreshView.view)
+      view.refreshControl = refreshControl
+      view.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 100, right: 0)
     return view
   }
 
