@@ -39,6 +39,7 @@ struct ProfileView: View {
   @State var isProfileLoaded = false
   @State var isFirstStack = false
   @State var goReport = false
+  @GestureState private var dragOffset = CGSize.zero
   @Binding var isFirstProfileLoaded: Bool
   let processor = BlurImageProcessor(blurRadius: 10)
   let center = UNUserNotificationCenter.current()
@@ -260,6 +261,11 @@ struct ProfileView: View {
       .ignoresSafeArea()
     }
     .navigationBarBackButtonHidden()
+    .gesture(DragGesture().updating($dragOffset) { value, _, _ in
+      if value.startLocation.x < 30, value.translation.width > 100 {
+        dismiss()
+      }
+    })
     .fullScreenCover(isPresented: $goReport) {
       ProfileReportTypeSelectionView(goReport: $goReport, userId: userId)
         .environmentObject(apiViewModel)
