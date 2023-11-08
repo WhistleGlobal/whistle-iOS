@@ -75,7 +75,7 @@ struct MemberFeedView: View {
             }
           }
         } label: {
-          bottomSheetRowWithIcon(systemName: "eye.fill", text: CommonWords().hide)
+          bottomSheetRowWithIcon(systemName: "eye.slash.fill", text: CommonWords().hide)
         }
         Rectangle().frame(height: 0.5).padding(.leading, 52).foregroundColor(Color.Border_Default_Dark)
         Button {
