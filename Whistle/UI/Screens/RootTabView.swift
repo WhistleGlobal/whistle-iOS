@@ -320,9 +320,8 @@ extension RootTabView {
       Button {
         if tabbarModel.tabSelectionNoAnimation == .main {
           if isAccess {
-            if isRootStacked {
-              NavigationUtil.popToRootView()
-            }
+            HapticManager.instance.impact(style: .medium)
+            NavigationUtil.popToRootView()
           }
         } else {
           switchTab(to: .main)
