@@ -14,6 +14,10 @@ struct MyTeamSelectView: View {
   @State private var currentIndex = 0
   @State private var isDragging = false
   @State var aniBool = false
+<<<<<<< develop
+=======
+  @State private var colorlist: [Color] = [.pink, .cyan, .purple]
+>>>>>>> [FEAT] #219 마이팀 선택 기초 로직 완성
   var myTeamSelection: MyTeamType {
     MyTeamType.teamTypeList()[currentIndex]
   }
@@ -21,12 +25,22 @@ struct MyTeamSelectView: View {
   var body: some View {
     ZStack {
       MyTeamType.teamGradient(myTeamSelection).ignoresSafeArea()
+<<<<<<< develop
       VStack(spacing: 0) {
+=======
+      VStack {
+>>>>>>> [FEAT] #219 마이팀 선택 기초 로직 완성
         Image("\(myTeamSelection.rawValue)Card")
           .resizable()
           .scaledToFit()
           .frame(width: UIScreen.getWidth(334), height: UIScreen.getHeight(444))
+<<<<<<< develop
           .padding(.bottom, UIScreen.getHeight(24))
+=======
+          .padding(.top, UIScreen.getHeight(14))
+          .padding(.bottom, UIScreen.getHeight(24))
+
+>>>>>>> [FEAT] #219 마이팀 선택 기초 로직 완성
         Carousel(
           pageCount: 10,
           visibleEdgeSpace: 85,
@@ -54,7 +68,11 @@ struct MyTeamSelectView: View {
               .foregroundColor(.white)
           }
         }
+<<<<<<< develop
         .frame(height: UIScreen.getHeight(150))
+=======
+        .frame(height: 150)
+>>>>>>> [FEAT] #219 마이팀 선택 기초 로직 완성
         .overlay {
           HStack(spacing: UIScreen.getWidth(164)) {
             Spacer()
@@ -87,6 +105,7 @@ struct MyTeamSelectView: View {
           .foregroundColor(.white)
           .padding(.bottom, UIScreen.getHeight(30))
         }
+<<<<<<< develop
         .padding(.bottom, UIScreen.getHeight(14))
 
         Button {
@@ -140,6 +159,11 @@ struct MyTeamSelectView: View {
         .foregroundColor(.LabelColor_DisablePlaceholder)
       }
     }
+=======
+        Spacer()
+      }
+    }
+>>>>>>> [FEAT] #219 마이팀 선택 기초 로직 완성
   }
 }
 
