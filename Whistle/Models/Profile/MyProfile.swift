@@ -16,7 +16,7 @@ class MyProfile: ObservableObject, Decodable {
     case email
     case profileImage = "profile_img"
     case introduce
-    case status
+    case status = "user_status"
   }
 
   var userId = 0
