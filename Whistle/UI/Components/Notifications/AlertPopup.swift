@@ -49,9 +49,14 @@ struct AlertPopup: View {
       if alertViewModel.showAlert {
         DimsThick()
           .ignoresSafeArea()
-          .transition(.asymmetric(
-            insertion: .opacity.animation(.smooth(duration: 0.5)),
-            removal: .opacity.animation(.spring(blendDuration: 0.3))))
+          .transition(
+            !alertViewModel.isImmediateDismiss
+              ? .asymmetric(
+                insertion: .opacity.animation(.smooth(duration: 0.5)),
+                removal: .opacity.animation(.spring(blendDuration: 0.3)))
+              : .asymmetric(
+                insertion: .opacity.animation(.smooth(duration: 0.5)),
+                removal: .opacity))
       }
       if alertViewModel.showAlert {
         VStack(spacing: 0) {
@@ -89,10 +94,16 @@ struct AlertPopup: View {
           RoundedRectangle(cornerRadius: 14)
             .stroke(LinearGradient.Border_Glass)
         }
-        .transition(.asymmetric(
-          insertion: .scale(scale: 1.1).animation(.smooth(duration: 0.25))
-            .combined(with: .opacity.animation(.smooth(duration: 0.5))),
-          removal: .opacity.animation(.spring(blendDuration: 0.3))))
+        .transition(
+          !alertViewModel.isImmediateDismiss
+            ? .asymmetric(
+              insertion: .scale(scale: 1.1).animation(.smooth(duration: 0.25))
+                .combined(with: .opacity.animation(.smooth(duration: 0.5))),
+              removal: .opacity.animation(.spring(blendDuration: 0.3)))
+            : .asymmetric(
+              insertion: .scale(scale: 1.1).animation(.smooth(duration: 0.25))
+                .combined(with: .opacity.animation(.smooth(duration: 0.5))),
+              removal: .opacity))
         .ignoresSafeArea()
       }
     }
@@ -108,11 +119,7 @@ extension AlertPopup {
       VStack(spacing: 0) {
         Button {
           alertViewModel.destructiveAction?()
-          if alertViewModel.isImmediateDismiss {
-            alertViewModel.immediateDismissAlert()
-          } else {
-            alertViewModel.dismissAlert()
-          }
+          alertViewModel.dismissAlert()
         } label: {
           if let destructiveText = alertViewModel.destructiveText {
             Text(destructiveText)

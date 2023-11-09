@@ -60,6 +60,13 @@ extension View {
   }
 }
 
+extension View {
+  func disableSwipeBack() -> some View {
+    background(
+      DisableSwipeBackView())
+  }
+}
+
 // MARK: - GlassMorphism 관련 코드
 
 extension View {

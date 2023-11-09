@@ -31,6 +31,7 @@ class AlertViewModel: ObservableObject {
   func linearAlert(
     showAlert: Bool = true,
     alertStyle: AlertStyle = .linear,
+    isImmediateDismiss: Bool = false,
     isRed: Bool = false,
     title: LocalizedStringKey? = nil,
     content: LocalizedStringKey? = nil,
@@ -41,6 +42,7 @@ class AlertViewModel: ObservableObject {
   {
     self.showAlert = showAlert
     self.alertStyle = alertStyle
+    self.isImmediateDismiss = isImmediateDismiss
     self.title = title
     self.isRed = isRed
     self.content = content
@@ -53,6 +55,7 @@ class AlertViewModel: ObservableObject {
   func submitAlert(
     showAlert: Bool = true,
     alertStyle: AlertStyle = .submit,
+    isImmediateDismiss: Bool = false,
     title: LocalizedStringKey? = nil,
     content: LocalizedStringKey? = nil,
     submitText: LocalizedStringKey? = CommonWords().done,
@@ -60,6 +63,7 @@ class AlertViewModel: ObservableObject {
   {
     self.showAlert = showAlert
     self.alertStyle = alertStyle
+    self.isImmediateDismiss = isImmediateDismiss
     self.title = title
     self.content = content
     self.submitText = submitText
