@@ -22,14 +22,12 @@ struct MyTeamSelectView: View {
   var body: some View {
     ZStack {
       MyTeamType.teamGradient(myTeamSelection).ignoresSafeArea()
-      VStack {
+      VStack(spacing: 0) {
         Image("\(myTeamSelection.rawValue)Card")
           .resizable()
           .scaledToFit()
           .frame(width: UIScreen.getWidth(334), height: UIScreen.getHeight(444))
-          .padding(.top, UIScreen.getHeight(14))
           .padding(.bottom, UIScreen.getHeight(24))
-
         Carousel(
           pageCount: 10,
           visibleEdgeSpace: 85,
@@ -57,7 +55,7 @@ struct MyTeamSelectView: View {
               .foregroundColor(.white)
           }
         }
-        .frame(height: 150)
+        .frame(height: UIScreen.getHeight(150))
         .overlay {
           HStack(spacing: UIScreen.getWidth(164)) {
             Spacer()
@@ -90,7 +88,40 @@ struct MyTeamSelectView: View {
           .foregroundColor(.white)
           .padding(.bottom, UIScreen.getHeight(30))
         }
+        .padding(.bottom, UIScreen.getHeight(14))
+
+        Button {
+          // 완료 액션
+        } label: {
+          Text(CommonWords().done)
+            .font(.system(size: 16, weight: .semibold))
+            .foregroundColor(.gray10)
+            .frame(height: UIScreen.getHeight(56))
+            .frame(maxWidth: .infinity)
+            .background {
+              glassProfile(cornerRadius: 14)
+            }
+        }
+        .padding(.horizontal, 16)
+        .padding(.bottom, UIScreen.getHeight(14))
+        Text("마이팀은 선택 후 프로필 탭에서 언제든 변경할 수 있습니다.")
+          .fontSystem(fontDesignSystem: .caption_Regular)
+          .foregroundColor(.LabelColor_DisablePlaceholder)
         Spacer()
+      }
+    }
+    .toolbar {
+      ToolbarItem(placement: .principal) {
+        Text("마이팀을 선택해주세요")
+          .font(.system(size: 17, weight: .semibold))
+          .foregroundColor(.white)
+      }
+      ToolbarItem(placement: .confirmationAction) {
+        Button("건너뛰기") {
+          // 건너뛰기 액션
+        }
+        .fontSystem(fontDesignSystem: .body2)
+        .foregroundColor(.LabelColor_DisablePlaceholder)
       }
     }
   }
