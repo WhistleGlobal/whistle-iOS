@@ -93,18 +93,19 @@ struct MyContentLayer: View {
               Task {
                 let currentContent = apiViewModel.myFeed[feedPlayersViewModel.currentVideoIndex]
                 if currentContent.isBookmarked {
+                  currentContent.isBookmarked.toggle()
                   _ = await apiViewModel.bookmarkAction(
                     contentID: currentContent.contentId ?? 0,
                     method: .delete)
                   toastViewModel.toastInit(message: ToastMessages().bookmarkDeleted)
-                  currentContent.isBookmarked = false
                 } else {
+                  currentContent.isBookmarked.toggle()
                   _ = await apiViewModel.bookmarkAction(
                     contentID: currentContent.contentId ?? 0,
                     method: .post)
                   toastViewModel.toastInit(message: ToastMessages().bookmark)
-                  currentContent.isBookmarked = true
                 }
+                await apiViewModel.requestMyBookmark()
                 apiViewModel.mainFeed = apiViewModel.mainFeed.map { item in
                   let mutableItem = item
                   if mutableItem.contentId == currentContent.contentId {
@@ -112,6 +113,7 @@ struct MyContentLayer: View {
                   }
                   return mutableItem
                 }
+                apiViewModel.publisherSend()
               }
             } label: {
               ContentLayerButton(
@@ -120,6 +122,7 @@ struct MyContentLayer: View {
                 filledImage: "bookmark.fill",
                 label: CommonWords().bookmark)
             }
+
             Button {
               let shareURL = URL(string: "https://readywhistle.com/content_uni?contentId=\(currentVideoInfo.contentId ?? 0)")!
               let activityViewController = UIActivityViewController(activityItems: [shareURL], applicationActivities: nil)

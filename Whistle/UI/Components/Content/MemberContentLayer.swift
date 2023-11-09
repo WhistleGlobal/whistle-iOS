@@ -19,6 +19,7 @@ struct MemberContentLayer: View {
   @StateObject var feedPlayersViewModel = MemeberPlayersViewModel.shared
   @State var isExpanded = false
   var whistleAction: () -> Void
+  var dismissAction: DismissAction
 
   var body: some View {
     ZStack {
@@ -38,7 +39,8 @@ struct MemberContentLayer: View {
             HStack(spacing: 0) {
               if currentVideoInfo.userName ?? "" != apiViewModel.myProfile.userName {
                 Button {
-                  feedMoreModel.isRootStacked = true
+                  feedPlayersViewModel.stopPlayer()
+                  dismissAction()
                 } label: {
                   Group {
                     profileImageView(url: currentVideoInfo.profileImg, size: 36)
@@ -142,18 +144,19 @@ struct MemberContentLayer: View {
               Task {
                 let currentContent = apiViewModel.memberFeed[feedPlayersViewModel.currentVideoIndex]
                 if currentContent.isBookmarked {
+                  currentContent.isBookmarked.toggle()
                   _ = await apiViewModel.bookmarkAction(
                     contentID: currentContent.contentId ?? 0,
                     method: .delete)
                   toastViewModel.toastInit(message: ToastMessages().bookmarkDeleted)
-                  currentContent.isBookmarked = false
                 } else {
+                  currentContent.isBookmarked.toggle()
                   _ = await apiViewModel.bookmarkAction(
                     contentID: currentContent.contentId ?? 0,
                     method: .post)
                   toastViewModel.toastInit(message: ToastMessages().bookmark)
-                  currentContent.isBookmarked = true
                 }
+                await apiViewModel.requestMyBookmark()
                 apiViewModel.mainFeed = apiViewModel.mainFeed.map { item in
                   let mutableItem = item
                   if mutableItem.contentId == currentContent.contentId {
@@ -161,6 +164,7 @@ struct MemberContentLayer: View {
                   }
                   return mutableItem
                 }
+                apiViewModel.publisherSend()
               }
             } label: {
               ContentLayerButton(

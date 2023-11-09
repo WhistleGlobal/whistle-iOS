@@ -59,6 +59,8 @@ struct ToastMessageView: View {
           }
           if toastViewModel.isCancellable, !toastViewModel.isCancelled {
             toastViewModel.cancellableAction?()
+          } else {
+            toastViewModel.undoAction?()
           }
           timer?.invalidate()
           timer = nil

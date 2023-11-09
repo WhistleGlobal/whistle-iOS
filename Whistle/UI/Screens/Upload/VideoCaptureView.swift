@@ -425,6 +425,7 @@ struct VideoCaptureView: View {
                 LinearGradient.Border_Glass)
           })
       .onDismiss {
+        uploadBottomSheetPosition = .hidden
         tabbarModel.tabbarOpacity = 1.0
       }
       .onChange(of: uploadBottomSheetPosition) { newValue in
@@ -943,7 +944,7 @@ extension VideoCaptureView {
             }
           }
         } label: {
-          Image(systemName: "xmark")
+          Image(systemName: "chevron.backward")
             .font(.system(size: 20))
             .foregroundColor(.white)
             .padding(16)
@@ -1277,11 +1278,16 @@ extension VideoCaptureView {
           // MARK: - 바로 업로드
 
           Button {
-            disableUploadButton = true
-            if musicVM.isTrimmed {
-              editorVM.currentVideo?.setVolume(0)
+            if isAccess {
+              disableUploadButton = true
+              if musicVM.isTrimmed {
+                editorVM.currentVideo?.setVolume(0)
+              }
             }
             Task {
+              if !isAccess {
+                return
+              }
               UploadProgressViewModel.shared.uploadStarted()
               tabbarModel.tabSelectionNoAnimation = .main
               tabbarModel.tabSelection = .main
