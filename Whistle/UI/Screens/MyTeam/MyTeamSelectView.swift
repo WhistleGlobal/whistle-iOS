@@ -15,9 +15,12 @@ struct MyTeamSelectView: View {
   @State private var isDragging = false
   @State var aniBool = false
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
   @State private var colorlist: [Color] = [.pink, .cyan, .purple]
 >>>>>>> 92e9266 ([FEAT] #219 마이팀 선택 기초 로직 완성)
+=======
+>>>>>>> e53bba7 ([FEAT] #219 테스트용 코드 삭제)
   var myTeamSelection: MyTeamType {
     MyTeamType.teamTypeList()[currentIndex]
   }
