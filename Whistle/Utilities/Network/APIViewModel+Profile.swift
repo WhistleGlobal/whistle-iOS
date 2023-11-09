@@ -256,7 +256,7 @@ extension APIViewModel: ProfileProtocol {
 
   func requestUserCreateDate() {
     AF.request(
-      "\(domainURL)/user/created-at",
+      "\(domainURL)/user/signup-date",
       method: .get,
       headers: contentTypeXwwwForm)
       .validate(statusCode: 200 ... 300)
@@ -264,7 +264,7 @@ extension APIViewModel: ProfileProtocol {
         switch response.result {
         case .success(let data):
           let json = JSON(data)
-          let dateString = json["created_at"]
+          let dateString = json["signup_date"]
           let inputDateString = dateString.string
           let inputDateFormatter = DateFormatter()
           inputDateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
