@@ -118,7 +118,6 @@ public struct InteractivePreview: View {
       }
     }
     .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
-//    .padding(.bottom, 68)
   }
 }
 
