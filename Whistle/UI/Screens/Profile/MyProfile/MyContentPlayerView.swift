@@ -157,10 +157,8 @@ struct MyContentPlayerView: View {
     .onAppear {
       bartintModel.tintColor = .white
       if index == 0 {
-        WhistleLogger.logger.debug("onAppear index == 0")
         lifecycleDelegate?.onAppear()
       } else {
-        WhistleLogger.logger.debug("onAppear index == \(index)")
         lifecycleDelegate?.onAppear()
         feedPlayersViewModel.currentPlayer?.seek(to: .zero)
         feedPlayersViewModel.currentPlayer?.play()

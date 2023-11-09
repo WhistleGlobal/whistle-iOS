@@ -16,6 +16,7 @@ import SwiftUI
 struct MemberContentPlayerView: View {
   @AppStorage("showGuide") var showGuide = true
   @Environment(\.scenePhase) var scenePhase
+  @Environment(\.dismiss) var dismiss
   @StateObject var apiViewModel = APIViewModel.shared
   @StateObject var feedPlayersViewModel = MemeberPlayersViewModel.shared
   @StateObject private var toastViewModel = ToastViewModel.shared
@@ -140,7 +141,8 @@ struct MemberContentPlayerView: View {
                     if tabbarModel.tabWidth != 56 {
                       MemberContentLayer(
                         currentVideoInfo: content,
-                        whistleAction: whistleToggle)
+                        whistleAction: whistleToggle,
+                        dismissAction: dismissAction)
                         .padding(.bottom, UIScreen.main.nativeBounds.height == 1334 ? 24 : 0)
                     }
                     if feedMoreModel.bottomSheetPosition != .hidden {

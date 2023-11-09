@@ -140,6 +140,11 @@ extension Color {
   static var LabelColor_DisablePlaceholder: Color {
     Color.lightAndDarkColor(light: "Gray40", dark: "Gray30")
   }
+
+  // MARK: - Noti section
+  static var NotiSectionColor: Color {
+    Color.lightAndDarkColor(light: "Gray20", dark: "Gray60_Dark")
+  }
 }
 
 extension LinearGradient {

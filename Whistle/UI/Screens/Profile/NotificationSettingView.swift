@@ -35,7 +35,7 @@ struct NotificationSettingView: View {
         .frame(height: 64)
         .padding(.horizontal, 16)
       Divider().frame(height: 1)
-      Color("Gray20").frame(height: 16)
+      Color.NotiSectionColor.frame(height: 16)
       Divider().frame(height: 1)
       Toggle("광고성 정보 알림", isOn: $apiViewModel.notiSetting.adEnabled)
         .frame(height: 64)

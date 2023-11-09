@@ -29,8 +29,11 @@ struct BookMarkedFeedView: View {
       } else {
         VStack {
           Spacer()
+          Image(systemName: "photo.fill")
+            .font(.system(size: 44, weight: .light))
+            .foregroundColor(.LabelColor_Primary_Dark)
           Text(ContentWords().noBookmarkedContent)
-            .fontSystem(fontDesignSystem: .body1)
+            .fontSystem(fontDesignSystem: .subtitle1)
             .foregroundColor(.LabelColor_Primary_Dark)
           Spacer()
         }
@@ -105,17 +108,6 @@ struct BookMarkedFeedView: View {
         await apiViewModel.requestMyBookmark()
       }
     }
-    .navigationDestination(isPresented: $feedMoreModel.isRootStacked) {
-      if !apiViewModel.bookmark.isEmpty {
-        ProfileView(
-          profileType:
-          apiViewModel.bookmark[feedPlayersViewModel.currentVideoIndex].userId == apiViewModel.myProfile.userId
-            ? .my
-            : .member,
-          isFirstProfileLoaded: .constant(true),
-          userId: apiViewModel.bookmark[feedPlayersViewModel.currentVideoIndex].userId)
-      }
-    }
     .fullScreenCover(isPresented: $feedMoreModel.showReport, onDismiss: {
       feedPlayersViewModel.currentPlayer?.play()
     }) {
@@ -133,6 +125,6 @@ class BookmarkedFeedMoreModel: ObservableObject {
   static let shared = BookmarkedFeedMoreModel()
   private init() { }
   @Published var showReport = false
-  @Published var isRootStacked = false
+  @Published var goProfile = false
   @Published var bottomSheetPosition: BottomSheetPosition = .hidden
 }
