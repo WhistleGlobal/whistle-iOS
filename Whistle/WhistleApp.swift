@@ -44,52 +44,6 @@ struct WhistleApp: App {
 
   var body: some Scene {
     WindowGroup {
-<<<<<<< develop
-     if isAccess {
-       RootTabView()
-         .environmentObject(universalRoutingModel)
-         .task {
-           if isAccess {
-             let updateAvailable = await apiViewModel.checkUpdateAvailable()
-             if updateAvailable {
-               await apiViewModel.requestVersionCheck()
-             }
-             appleSignInViewModel.userAuth.loadData { }
-           }
-         }
-         .onOpenURL { url in
-           var urlString = url.absoluteString
-           urlString = urlString.replacingOccurrences(of: "\(domainURL)", with: "")
-           if urlString.contains("/profile_uni?") {
-             urlString = urlString.replacingOccurrences(of: "/profile_uni?id=", with: "")
-             guard let userId = Int(urlString) else {
-               return
-             }
-             universalRoutingModel.userId = userId
-             universalRoutingModel.isUniversalProfile = true
-           } else if urlString.contains("/content_uni?") {
-             urlString = urlString.replacingOccurrences(of: "/content_uni?contentId=", with: "")
-             guard let contentId = Int(urlString) else {
-               return
-             }
-             universalRoutingModel.contentId = contentId
-             universalRoutingModel.isUniversalContent = true
-           }
-         }
-     } else {
-       NavigationStack {
-         SignInView()
-           .environmentObject(universalRoutingModel)
-           .task {
-             let updateAvailable = await apiViewModel.checkUpdateAvailable()
-             if updateAvailable {
-               await apiViewModel.requestVersionCheck()
-             }
-           }
-       }
-       .tint(.black)
-     }
-=======
       if isAccess {
         RootTabView()
           .environmentObject(universalRoutingModel)
@@ -134,7 +88,6 @@ struct WhistleApp: App {
         }
         .tint(.black)
       }
->>>>>>> [FEAT] #219 테스트용 코드 삭제
     }
   }
 }
