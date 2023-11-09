@@ -12,10 +12,35 @@ import UIKit
 // MARK: - LoadingView
 
 public final class LoadingView: UIControl {
-  private lazy var blackView: UIView = {
-    let view = UIView(frame: .zero)
-    view.backgroundColor = UIColor.black.withAlphaComponent(0.8)
-    view.layer.cornerRadius = 8
+  private var text = "Loading..."
+  var timer: Timer?
+  private var dotsCount = 0
+  private let maxDots = 3
+
+  public init(text: String = "Loading") {
+    self.text = text
+    let frame = CGRect(x: 0, y: 0, width: 0, height: 0)
+    super.init(frame: frame)
+    setupView()
+  }
+
+  required init?(coder: NSCoder) {
+    text = "Loading"
+    super.init(coder: coder)
+    setupView()
+  }
+
+  public override func removeFromSuperview() {
+    timer?.invalidate()
+  }
+
+  deinit {
+    timer?.invalidate()
+  }
+
+  lazy var backgroundGlassView: UIVisualEffectView = {
+    let view = UIVisualEffectView.glassView()
+    view.layer.cornerRadius = 12
     view.clipsToBounds = true
     return view
   }()
@@ -41,51 +66,62 @@ public final class LoadingView: UIControl {
     return view
   }()
 
-  private lazy var stackView: UIStackView = {
-    let view = UIStackView(arrangedSubviews: [indicator])
-    view.axis = .vertical
-    view.distribution = .fill
-    view.alignment = .center
-    view.spacing = 10
+  private lazy var titleLabel: UILabel = {
+    timer = Timer.scheduledTimer(timeInterval: 0.5, target: self, selector: #selector(updateDots), userInfo: nil, repeats: true)
+    let view = UILabel()
+    view.textAlignment = .left
+    view.text = text
+    view.textColor = .white
+    view.numberOfLines = 1
+    view.lineBreakMode = .byTruncatingTail
+    view.font = .systemFont(ofSize: 16)
+    view.setContentHuggingPriority(.defaultHigh, for: .horizontal)
+    view.setContentCompressionResistancePriority(.defaultHigh, for: .horizontal)
+
     return view
   }()
-
-  private let text: String
-
-  public init( /* frame: CGRect, */ text: String = "") {
-    self.text = text
-    let frame = CGRect(x: 0, y: 0, width: 140, height: 140)
-    super.init(frame: frame)
-    setupView()
-  }
-
-  required init?(coder: NSCoder) {
-    text = ""
-    super.init(coder: coder)
-    setupView()
-  }
 }
 
 extension LoadingView {
+  @objc
+  public func updateDots() {
+    if dotsCount < maxDots {
+      dotsCount += 1
+    } else {
+      dotsCount = 0
+    }
+    let dots = String(repeating: ".", count: dotsCount)
+    titleLabel.text = "Loading\(dots)"
+  }
+
   private func setupView() {
-    addSubview(blackView)
-    addSubview(stackView)
+    addSubview(backgroundGlassView)
+    addSubview(indicator)
+    addSubview(titleLabel)
 
     let tap = UITapGestureRecognizer(target: self, action: #selector(tapLoadingView))
     addGestureRecognizer(tap)
 
-    blackView.snp.makeConstraints { make in
+    backgroundGlassView.snp.makeConstraints { make in
       make.center.equalToSuperview()
-      if text.isEmpty {
-        make.edges.equalTo(stackView).inset(-20)
-      } else {
-        make.top.bottom.equalTo(stackView).inset(-15)
-        make.left.right.equalTo(stackView).inset(-15)
-      }
+      make.width.equalTo(140)
+      make.height.equalTo(140)
     }
-    stackView.snp.makeConstraints { make in
-      make.center.equalToSuperview()
+
+    indicator.snp.makeConstraints { make in
+      make.top.equalTo(backgroundGlassView.snp.top).offset(20)
+      make.centerX.equalTo(backgroundGlassView)
+      make.width.equalTo(70)
+      make.height.equalTo(70)
     }
+
+    titleLabel.snp.makeConstraints { make in
+      make.top.equalTo(indicator.snp.bottom).offset(10)
+      make.leading.equalTo(backgroundGlassView.snp.leading).offset(38)
+      make.height.equalTo(20)
+    }
+
+    setNeedsLayout()
   }
 
   @objc

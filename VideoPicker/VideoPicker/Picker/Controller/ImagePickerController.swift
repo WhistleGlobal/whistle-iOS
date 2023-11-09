@@ -204,7 +204,6 @@ extension ImagePickerController {
   /// 이미지 데이터를 확인하고 필요한 경우 이미지를 리사이징하는 메서드입니다.
   /// 이미지의 준비 여부와 원본 이미지 사용 여부를 확인하여 이미지를 조정합니다.
   private func checkData() {
-    view.hud.show()
     workQueue.async { [weak self] in
       guard let self else { return }
       let assets = manager.selectedAssets
@@ -287,6 +286,7 @@ extension ImagePickerController: AssetPickerViewControllerDelegate {
   func assetPickerDidFinishPicking(_: AssetPickerViewController) {
     didFinishSelect = true
     manager.resynchronizeAsset()
+    view.hud.show()
     checkData()
   }
 }
@@ -314,6 +314,7 @@ extension ImagePickerController {
           self.didFinishSelect = false
           self.view.hud.hide()
           Toast.show(message: message)
+          WhistleLogger.logger.debug("message: \(message)")
         } else {
           self.checkData()
         }
