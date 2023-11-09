@@ -44,7 +44,9 @@ struct WhistleApp: App {
 
   var body: some Scene {
     WindowGroup {
-      MyTeamSelectView()
+      NavigationStack {
+        MyTeamSelectView()
+      }
 //      if isAccess {
 //        RootTabView()
 //          .environmentObject(universalRoutingModel)
