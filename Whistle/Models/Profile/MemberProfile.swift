@@ -13,7 +13,7 @@ class MemberProfile: ObservableObject, Codable {
     case userName = "user_name"
     case profileImg = "profile_img"
     case introduce
-    case status
+    case status = "user_status"
     case isFollowed = "is_followed"
     case isBlocked = "is_blocked"
   }
