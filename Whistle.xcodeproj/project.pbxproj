@@ -644,6 +644,10 @@
 		78F493E72AEA7BB200A08FC1 /* MainFeedPlayersViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78F493E62AEA7BB200A08FC1 /* MainFeedPlayersViewModel.swift */; };
 		78F780052AB34876005623CD /* GoogleSignIn in Frameworks */ = {isa = PBXBuildFile; productRef = 78F780042AB34876005623CD /* GoogleSignIn */; };
 		78F780072AB34876005623CD /* GoogleSignInSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 78F780062AB34876005623CD /* GoogleSignInSwift */; };
+		78F7C0382AFC7007009AA23E /* MyTeamSelectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78F7C0372AFC7007009AA23E /* MyTeamSelectView.swift */; };
+		78F7C03B2AFC7045009AA23E /* Carousel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78F7C03A2AFC7045009AA23E /* Carousel.swift */; };
+		78F7C03C2AFC7045009AA23E /* Carousel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78F7C03A2AFC7045009AA23E /* Carousel.swift */; };
+		78F7C03D2AFC7049009AA23E /* MyTeamSelectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78F7C0372AFC7007009AA23E /* MyTeamSelectView.swift */; };
 		78F980812A9F32C800AD542A /* RootTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78F980802A9F32C800AD542A /* RootTabView.swift */; };
 		78F980892A9F5B2500AD542A /* RoundedCorners.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78F980882A9F5B2500AD542A /* RoundedCorners.swift */; };
 		78FDA53A2AEF7319001C3DA4 /* MainContentLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78FDA5392AEF7319001C3DA4 /* MainContentLayer.swift */; };
@@ -1108,6 +1112,8 @@
 		78F493E22AEA559000A08FC1 /* MainFeedPageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainFeedPageView.swift; sourceTree = "<group>"; };
 		78F493E42AEA55A000A08FC1 /* MainContentPlayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainContentPlayerView.swift; sourceTree = "<group>"; };
 		78F493E62AEA7BB200A08FC1 /* MainFeedPlayersViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainFeedPlayersViewModel.swift; sourceTree = "<group>"; };
+		78F7C0372AFC7007009AA23E /* MyTeamSelectView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyTeamSelectView.swift; sourceTree = "<group>"; };
+		78F7C03A2AFC7045009AA23E /* Carousel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Carousel.swift; sourceTree = "<group>"; };
 		78F980802A9F32C800AD542A /* RootTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootTabView.swift; sourceTree = "<group>"; };
 		78F980882A9F5B2500AD542A /* RoundedCorners.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoundedCorners.swift; sourceTree = "<group>"; };
 		78FDA5392AEF7319001C3DA4 /* MainContentLayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainContentLayer.swift; sourceTree = "<group>"; };
@@ -1410,6 +1416,7 @@
 			isa = PBXGroup;
 			children = (
 				78F980802A9F32C800AD542A /* RootTabView.swift */,
+				78F7C0362AFC6FF4009AA23E /* MyTeam */,
 				78D85E502AB2D9AA00B3AD6E /* Report */,
 				1B8132D92AE6220B00000C32 /* Access */,
 				1B2CFEC92AD412A400F34AA3 /* Upload */,
@@ -1528,6 +1535,7 @@
 		1B3955552A95081400BCB4DF /* Components */ = {
 			isa = PBXGroup;
 			children = (
+				78F7C0392AFC7036009AA23E /* MyTeam */,
 				1B5448032AF882B500A73A27 /* Lists */,
 				1BDE48DE2AF49F8400E33585 /* Layers */,
 				78FDA5382AEF72E1001C3DA4 /* Content */,
@@ -2490,6 +2498,22 @@
 			path = Report;
 			sourceTree = "<group>";
 		};
+		78F7C0362AFC6FF4009AA23E /* MyTeam */ = {
+			isa = PBXGroup;
+			children = (
+				78F7C0372AFC7007009AA23E /* MyTeamSelectView.swift */,
+			);
+			path = MyTeam;
+			sourceTree = "<group>";
+		};
+		78F7C0392AFC7036009AA23E /* MyTeam */ = {
+			isa = PBXGroup;
+			children = (
+				78F7C03A2AFC7045009AA23E /* Carousel.swift */,
+			);
+			path = MyTeam;
+			sourceTree = "<group>";
+		};
 		78FDA5382AEF72E1001C3DA4 /* Content */ = {
 			isa = PBXGroup;
 			children = (
@@ -2909,6 +2933,7 @@
 				1B38954F2AB9CB7500B4C8DD /* CorrectionsToolView.swift in Sources */,
 				7874CB942AA0B5430081DE54 /* GuideStatusView.swift in Sources */,
 				1B38958A2AB9CC4300B4C8DD /* PersistenceController.swift in Sources */,
+				78F7C03B2AFC7045009AA23E /* Carousel.swift in Sources */,
 				788E686B2AD6B6710056C18B /* PhotoFile.swift in Sources */,
 				1BAC07F12AD559880087D8CD /* Tags.swift in Sources */,
 				7861E68E2ACD266B00612E2F /* ViewCount.swift in Sources */,
@@ -3011,6 +3036,7 @@
 				1BE8E9FF2AAE2DFB00EB0A55 /* MusicServiceProtocol.swift in Sources */,
 				1BCB90332AEEBCE60088B2F2 /* DimsThick.swift in Sources */,
 				78730CE72ACE8660008B9981 /* PhotoCollection.swift in Sources */,
+				78F7C0382AFC7007009AA23E /* MyTeamSelectView.swift in Sources */,
 				1B9E6ACD2AF1F21A00E94A9E /* ContentLayerButton.swift in Sources */,
 				782A6DD92AF1EB3E004D0A60 /* GuestContentPlayerView.swift in Sources */,
 				1B3895612AB9CBD300B4C8DD /* FilteredImage.swift in Sources */,
@@ -3195,6 +3221,7 @@
 				1B99369B2AF3699E00F5C619 /* Extension+NSObject.swift in Sources */,
 				1B99369C2AF3699E00F5C619 /* MusicService.swift in Sources */,
 				1B99369D2AF3699E00F5C619 /* Enums.swift in Sources */,
+				78F7C03C2AFC7045009AA23E /* Carousel.swift in Sources */,
 				1B99369E2AF3699E00F5C619 /* GuestMainFeedPageView.swift in Sources */,
 				1B99369F2AF3699E00F5C619 /* TagsContent.swift in Sources */,
 				78895EEE2AF8B7E600C8DF8F /* SingleContentView.swift in Sources */,
@@ -3255,6 +3282,7 @@
 				1B9936D22AF3699E00F5C619 /* AlertViewModel.swift in Sources */,
 				1B9936D32AF3699E00F5C619 /* CoreDataManager.swift in Sources */,
 				1B395D942AFA531E00E28180 /* LottieProgress.swift in Sources */,
+				78F7C03D2AFC7049009AA23E /* MyTeamSelectView.swift in Sources */,
 				1B9936D42AF3699E00F5C619 /* GuestPlayersViewModel.swift in Sources */,
 				1B9936D52AF3699E00F5C619 /* FramesToolView.swift in Sources */,
 				1B9936D62AF3699E00F5C619 /* DescriptionAndTagEditorView.swift in Sources */,
