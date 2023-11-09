@@ -20,6 +20,7 @@ struct DescriptionAndTagEditorView: View {
   @StateObject var exporterVM: VideoExporterViewModel
   @StateObject var guestUploadModel = GuestUploadModel.shared
   @StateObject private var tabbarModel = TabbarModel.shared
+  @StateObject private var toastViewModel = ToastViewModel.shared
   @ObservedObject var editorVM: VideoEditorViewModel
   @ObservedObject var videoPlayer: VideoPlayerManager
   @ObservedObject var musicVM: MusicViewModel
@@ -62,7 +63,9 @@ struct DescriptionAndTagEditorView: View {
       CustomNavigationBarViewController(title: "새 게시물", nextText: "게시", backgroundColor: .white) {
         isInitial = false
         dismiss()
+        toastViewModel.onFullScreenCover = false
       } nextButtonAction: {
+        toastViewModel.onFullScreenCover = false
         Task {
           if guestUploadModel.istempAccess {
             isAccess = true
@@ -195,6 +198,9 @@ struct DescriptionAndTagEditorView: View {
       .animation(.easeInOut)
       .ignoresSafeArea(edges: .bottom)
     }
+    .onAppear {
+      toastViewModel.onFullScreenCover = true
+    }
     .bottomSheet(bottomSheetPosition: $sheetPosition, switchablePositions: [.hidden, .dynamicTop], headerContent: {
       ZStack(alignment: .center) {
         HStack {
@@ -240,6 +246,11 @@ struct DescriptionAndTagEditorView: View {
           showTagTextCountMax: $showTagTextCountMax)
         {
           Text("")
+        }
+      }
+      .overlay {
+        if toastViewModel.onFullScreenCover {
+          ToastMessageView()
         }
       }
     })

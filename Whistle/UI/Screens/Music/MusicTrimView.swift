@@ -199,7 +199,8 @@ extension MusicTrimView {
       ScrollView(.horizontal, showsIndicators: false) {
         HStack(spacing: 0) {
           if musicVM.soundSamples.isEmpty {
-            LottieProgress()
+            ProgressView()
+              .frame(width: 140, height: 140)
           } else {
             ForEach(musicVM.soundSamples, id: \.self) { model in
               BarView(value: normalizeSoundLevel(level: model.magnitude))

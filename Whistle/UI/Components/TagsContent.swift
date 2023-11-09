@@ -188,10 +188,6 @@ struct TagsContent<Overlay>: View where Overlay: View {
   }
 }
 
-// #Preview {
-//  TagsContent(viewModel: TagsViewModel(), overlayContent: { Text("") })
-// }
-
 extension TagsContent {
   // Function to keep text length in limits
   func limitText(_ upper: Int) {

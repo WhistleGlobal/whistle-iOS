@@ -37,13 +37,13 @@ extension HUDUtilCompatible {
 extension UIView: HUDUtilCompatible { }
 
 extension HUDUtilWrapper where Base: UIView {
-  func show(text: String?) {
-    show(text: text ?? "", isEnabled: false)
+  func show(text _: String?) {
+    show()
   }
 
-  func show(text: String? = nil, isEnabled: Bool = false) {
+  func show(isEnabled: Bool = false) {
     hide()
-    let loadingView = LoadingView( /* frame: base.bounds, */ text: text ?? "")
+    let loadingView = LoadingView()
     base.addSubview(loadingView)
     loadingView.isUserInteractionEnabled = !isEnabled
     loadingView.snp.makeConstraints { make in

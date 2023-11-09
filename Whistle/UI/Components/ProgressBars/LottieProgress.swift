@@ -5,52 +5,139 @@
 //  Created by 박상원 on 11/7/23.
 //
 
-import Foundation
 import Lottie
 import SwiftUI
-
-// SwiftUI에서 사용하기 위헤 UIKit을 import해주세요
 import UIKit
 
-// 로티 애니메이션 뷰
-struct LottieProgress: UIViewRepresentable {
-  var name: String
-  var loopMode: LottieLoopMode
+// MARK: - LottieProgress
 
-  // 간단하게 View로 JSON 파일 이름으로 애니메이션을 실행합니다.
-  init(jsonName: String = "ProgressLottie", loopMode: LottieLoopMode = .loop) {
-    name = jsonName
-    self.loopMode = loopMode
+struct LottieProgress: UIViewRepresentable {
+  func makeUIView(context _: Context) -> LoadingView {
+    let view = LoadingView()
+
+    return view
   }
 
-  func makeUIView(context _: UIViewRepresentableContext<LottieProgress>) -> UIView {
-    let view = UIView(frame: .zero)
+  func updateUIView(_: UIViewType, context _: Context) { }
+}
 
+// MARK: - LoadingView
+
+public final class LoadingView: UIControl {
+  private var text = "Loading..."
+  var timer: Timer?
+  private var dotsCount = 0
+  private let maxDots = 3
+
+  public init(text: String = "Loading") {
+    self.text = text
+    let frame = CGRect(x: 0, y: 0, width: 0, height: 0)
+    super.init(frame: frame)
+    setupView()
+  }
+
+  required init?(coder: NSCoder) {
+    text = "Loading"
+    super.init(coder: coder)
+    setupView()
+  }
+
+  public override func removeFromSuperview() {
+    timer?.invalidate()
+  }
+
+  deinit {
+    timer?.invalidate()
+  }
+
+  lazy var backgroundGlassView: UIVisualEffectView = {
+    let view = UIVisualEffectView.glassView()
+    view.layer.cornerRadius = 12
+    view.clipsToBounds = true
+    return view
+  }()
+
+  private lazy var indicator: UIStackView = {
+    let view = UIStackView()
     let animationView = LottieAnimationView()
-    let animation = LottieAnimation.named(name)
+    let animation = LottieAnimation.named("ProgressLottie")
     animationView.animation = animation
-    // AspectFit으로 적절한 크기의 에니매이션을 불러옵니다.
     animationView.contentMode = .scaleAspectFit
-    // 애니메이션은 기본으로 Loop합니다.
-    animationView.loopMode = loopMode
-    // 애니메이션을 재생합니다
+    animationView.loopMode = .loop
     animationView.play()
-    // 백그라운드에서 재생이 멈추는 오류를 잡습니다
     animationView.backgroundBehavior = .pauseAndRestore
 
-    // 컨테이너의 너비와 높이를 자동으로 지정할 수 있도록합니다. 로티는 컨테이너 위에 작성됩니다.
-
     animationView.translatesAutoresizingMaskIntoConstraints = false
-
     view.addSubview(animationView)
-    // 레이아웃의 높이와 넓이의 제약
+
     NSLayoutConstraint.activate([
       animationView.heightAnchor.constraint(equalTo: view.heightAnchor),
       animationView.widthAnchor.constraint(equalTo: view.widthAnchor),
     ])
 
     return view
+  }()
+
+  private lazy var titleLabel: UILabel = {
+    timer = Timer.scheduledTimer(timeInterval: 0.5, target: self, selector: #selector(updateDots), userInfo: nil, repeats: true)
+    let view = UILabel()
+    view.textAlignment = .left
+    view.text = text
+    view.textColor = .white
+    view.numberOfLines = 1
+    view.lineBreakMode = .byTruncatingTail
+    view.font = .systemFont(ofSize: 16)
+    view.setContentHuggingPriority(.defaultHigh, for: .horizontal)
+    view.setContentCompressionResistancePriority(.defaultHigh, for: .horizontal)
+
+    return view
+  }()
+}
+
+extension LoadingView {
+  @objc
+  public func updateDots() {
+    if dotsCount < maxDots {
+      dotsCount += 1
+    } else {
+      dotsCount = 0
+    }
+    let dots = String(repeating: ".", count: dotsCount)
+    titleLabel.text = "Loading\(dots)"
   }
 
-  func updateUIView(_: UIViewType, context _: Context) { }
+  private func setupView() {
+    addSubview(backgroundGlassView)
+    addSubview(indicator)
+    addSubview(titleLabel)
+
+    let tap = UITapGestureRecognizer(target: self, action: #selector(tapLoadingView))
+    addGestureRecognizer(tap)
+
+    backgroundGlassView.snp.makeConstraints { make in
+      make.center.equalToSuperview()
+      make.width.equalTo(140)
+      make.height.equalTo(140)
+    }
+
+    indicator.snp.makeConstraints { make in
+      make.top.equalTo(backgroundGlassView.snp.top).offset(20)
+      make.centerX.equalTo(backgroundGlassView)
+      make.width.equalTo(70)
+      make.height.equalTo(70)
+    }
+
+    titleLabel.snp.makeConstraints { make in
+      make.top.equalTo(indicator.snp.bottom).offset(10)
+      make.leading.equalTo(backgroundGlassView.snp.leading).offset(38)
+      make.height.equalTo(20)
+    }
+
+    setNeedsLayout()
+  }
+
+  @objc
+  private func tapLoadingView() {
+    debugPrint(#function)
+  }
 }

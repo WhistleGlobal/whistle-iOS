@@ -75,7 +75,7 @@ struct MusicListView: View {
         })
 
       if musicList.isEmpty {
-        LottieProgress()
+        ProgressView()
           .scaleEffect(2.0)
           .hCenter()
           .padding(.top, 40)

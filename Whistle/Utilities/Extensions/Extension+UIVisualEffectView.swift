@@ -39,3 +39,20 @@ extension UIVisualEffectView {
     }
   }
 }
+
+extension UIVisualEffectView {
+  static func glassView(
+    cornerRadius: CGFloat = 0,
+    masksToBounds: Bool = false,
+    boundArray _: [UIView.AutoresizingMask] = [.flexibleWidth, .flexibleHeight])
+    -> UIVisualEffectView
+  {
+    let view = UIVisualEffectView(effect: UIBlurEffect(style: .systemUltraThinMaterialLight))
+    view.saturationAmount = 2.2
+    view.gaussianBlurRadius = 36
+    view.layer.cornerRadius = cornerRadius
+    view.layer.masksToBounds = masksToBounds
+    view.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+    return view
+  }
+}
