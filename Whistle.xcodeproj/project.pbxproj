@@ -536,6 +536,10 @@
 		78433E4A2AEFEB970054035C /* BookmarkedPageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78433E492AEFEB970054035C /* BookmarkedPageView.swift */; };
 		78433E4C2AEFEBA50054035C /* BookmarkedContentPlayerview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78433E4B2AEFEBA50054035C /* BookmarkedContentPlayerview.swift */; };
 		7847A3172AE1311200C4FF61 /* AlbumAccessView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7847A3162AE1311200C4FF61 /* AlbumAccessView.swift */; };
+		784D276F2AFCC0070001EEDC /* MainSearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 784D276E2AFCC0070001EEDC /* MainSearchView.swift */; };
+		784D27702AFCC0070001EEDC /* MainSearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 784D276E2AFCC0070001EEDC /* MainSearchView.swift */; };
+		784D27722AFCC0180001EEDC /* SearchResultView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 784D27712AFCC0180001EEDC /* SearchResultView.swift */; };
+		784D27732AFCC0180001EEDC /* SearchResultView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 784D27712AFCC0180001EEDC /* SearchResultView.swift */; };
 		785258572ACC6D680024E466 /* GuestProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 785258562ACC6D680024E466 /* GuestProfileView.swift */; };
 		785E82722AAC8FDD00EF3576 /* MainContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 785E82712AAC8FDD00EF3576 /* MainContent.swift */; };
 		7860FC232AB04A2F007C5C79 /* OffsetKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7860FC222AB04A2F007C5C79 /* OffsetKey.swift */; };
@@ -1015,6 +1019,8 @@
 		78433E492AEFEB970054035C /* BookmarkedPageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarkedPageView.swift; sourceTree = "<group>"; };
 		78433E4B2AEFEBA50054035C /* BookmarkedContentPlayerview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarkedContentPlayerview.swift; sourceTree = "<group>"; };
 		7847A3162AE1311200C4FF61 /* AlbumAccessView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlbumAccessView.swift; sourceTree = "<group>"; };
+		784D276E2AFCC0070001EEDC /* MainSearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainSearchView.swift; sourceTree = "<group>"; };
+		784D27712AFCC0180001EEDC /* SearchResultView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchResultView.swift; sourceTree = "<group>"; };
 		785258562ACC6D680024E466 /* GuestProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GuestProfileView.swift; sourceTree = "<group>"; };
 		785E82712AAC8FDD00EF3576 /* MainContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainContent.swift; sourceTree = "<group>"; };
 		7860FC222AB04A2F007C5C79 /* OffsetKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OffsetKey.swift; sourceTree = "<group>"; };
@@ -1416,6 +1422,7 @@
 			isa = PBXGroup;
 			children = (
 				78F980802A9F32C800AD542A /* RootTabView.swift */,
+				784D276D2AFCBFD90001EEDC /* Search */,
 				78F7C0362AFC6FF4009AA23E /* MyTeam */,
 				78D85E502AB2D9AA00B3AD6E /* Report */,
 				1B8132D92AE6220B00000C32 /* Access */,
@@ -2384,6 +2391,15 @@
 			path = SignIn;
 			sourceTree = "<group>";
 		};
+		784D276D2AFCBFD90001EEDC /* Search */ = {
+			isa = PBXGroup;
+			children = (
+				784D276E2AFCC0070001EEDC /* MainSearchView.swift */,
+				784D27712AFCC0180001EEDC /* SearchResultView.swift */,
+			);
+			path = Search;
+			sourceTree = "<group>";
+		};
 		785258552ACC6C440024E466 /* Guest */ = {
 			isa = PBXGroup;
 			children = (
@@ -2950,6 +2966,7 @@
 				1B0A29A82AA64AA2009077A1 /* MusicViewModel.swift in Sources */,
 				78D85E522AB2D9F800B3AD6E /* ProfileReportReasonSelectionView.swift in Sources */,
 				1BE8EA082AAE595000EB0A55 /* MusicListView.swift in Sources */,
+				784D27722AFCC0180001EEDC /* SearchResultView.swift in Sources */,
 				788010872ABC7EF800116FD5 /* MemberFollowListView.swift in Sources */,
 				788E68702AD6C9DB0056C18B /* RecordAccessView.swift in Sources */,
 				7880108A2ABC82FC00116FD5 /* MainFeedReportReasonSelectionView.swift in Sources */,
@@ -2977,6 +2994,7 @@
 				1B3895762AB9CBFC00B4C8DD /* Extension+UIImage.swift in Sources */,
 				1B5448162AF9108F00A73A27 /* DimsThin.swift in Sources */,
 				78BCA95C2AF085C10084E92F /* MemberContentPlayerView.swift in Sources */,
+				784D276F2AFCC0070001EEDC /* MainSearchView.swift in Sources */,
 				1B3895632AB9CBD300B4C8DD /* VideoItem.swift in Sources */,
 				78D148E72A9E137100DDCE48 /* Extension+UIVisualEffectView.swift in Sources */,
 				786385742AA45ED4004F8EF4 /* ProfileEditIntroduceView.swift in Sources */,
@@ -3168,6 +3186,7 @@
 				1B99366C2AF3699E00F5C619 /* MusicListView.swift in Sources */,
 				1B99366D2AF3699E00F5C619 /* MemberFollowListView.swift in Sources */,
 				1B5448092AF882E300A73A27 /* MyFollowingList.swift in Sources */,
+				784D27732AFCC0180001EEDC /* SearchResultView.swift in Sources */,
 				1B99366E2AF3699E00F5C619 /* RecordAccessView.swift in Sources */,
 				1B99366F2AF3699E00F5C619 /* MainFeedReportReasonSelectionView.swift in Sources */,
 				1B9936702AF3699E00F5C619 /* VideoModel.swift in Sources */,
@@ -3195,6 +3214,7 @@
 				1B5448172AF910BE00A73A27 /* DimsThin.swift in Sources */,
 				1B9936842AF3699E00F5C619 /* Extension+UIImage.swift in Sources */,
 				1B9936852AF3699E00F5C619 /* MemberContentPlayerView.swift in Sources */,
+				784D27702AFCC0070001EEDC /* MainSearchView.swift in Sources */,
 				1B9936862AF3699E00F5C619 /* VideoItem.swift in Sources */,
 				1B9936872AF3699E00F5C619 /* Extension+UIVisualEffectView.swift in Sources */,
 				1B9936882AF3699E00F5C619 /* ProfileEditIntroduceView.swift in Sources */,
