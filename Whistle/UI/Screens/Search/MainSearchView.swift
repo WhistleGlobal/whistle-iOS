@@ -21,7 +21,7 @@ struct MainSearchView: View {
 
   var body: some View {
     VStack(spacing: 0) {
-      Spacer().frame(height: 15)
+      Spacer().frame(height: 106)
       Divider()
       HStack {
         Text("최근 검색")
@@ -38,44 +38,33 @@ struct MainSearchView: View {
       }
       .padding(.horizontal, 16)
       .frame(height: 50)
-      List {
-        NavigationLink {
-          SearchResultView()
-        } label: {
-          HStack(spacing: 0) {
-            Image(systemName: "magnifyingglass")
-              .font(.system(size: 28))
-              .frame(width: 48, height: 48)
-              .padding(.trailing, 10)
-            Text("뽀삐뽀삐뽀뽀삐뽀")
-              .fontSystem(fontDesignSystem: .body2)
-              .foregroundColor(.LabelColor_Primary)
-            Spacer()
-            Image(systemName: "xmark")
-              .font(.system(size: 16))
-              .frame(width: 16, height: 16)
-              .foregroundColor(.LabelColor_Primary)
-              .onTapGesture {
-                WhistleLogger.logger.debug("x remove")
-              }
-          }
-          .frame(height: 74)
+      // 검색 목록 넣을 것
+      NavigationLink {
+        SearchResultView()
+      } label: {
+        HStack(spacing: 0) {
+          Image(systemName: "magnifyingglass")
+            .font(.system(size: 28))
+            .frame(width: 48, height: 48)
+            .padding(.trailing, 10)
+          Text("뽀삐뽀삐뽀뽀삐뽀")
+            .fontSystem(fontDesignSystem: .body2)
+            .foregroundColor(.LabelColor_Primary)
+          Spacer()
+          Image(systemName: "xmark")
+            .font(.system(size: 16))
+            .frame(width: 16, height: 16)
+            .foregroundColor(.LabelColor_Primary)
+            .onTapGesture {
+              WhistleLogger.logger.debug("x remove")
+            }
         }
+        .frame(height: 74)
       }
-      .listStyle(.plain)
+      .padding(.horizontal, 16)
+      Spacer()
     }
-    .toolbarRole(.editor)
-    .toolbar {
-      ToolbarItem(placement: .topBarLeading) {
-        FeedSearchBar(
-          searchText: $searchQueryString,
-          isSearching: $isSearching)
-          .simultaneousGesture(TapGesture().onEnded {
-//                      tapSearchBar?()
-          })
-          .frame(width: UIScreen.width - 32)
-      }
-    }
+    .background()
   }
 }
 
@@ -150,23 +139,27 @@ struct FeedSearchBar: View {
         }
       }
     }
-    .padding(.horizontal, 16)
-    .padding(.top, 16)
-    .padding(.bottom, 8)
+    .frame(width: searchBarWidth())
+//    .padding(.horizontal, 16)
+//    .padding(.top, 16)
+//    .padding(.bottom, 8)
     .onDisappear {
       UIApplication.shared.endEditing()
     }
   }
 
   func searchBarWidth() -> CGFloat {
-    if isNeedBackButton {
-      if isSearching {
-        return UIScreen.width - 32 - 24
-      } else { }
-    } else {
-      return UIScreen.width - 32
+    withAnimation {
+      if isNeedBackButton {
+        if isSearching {
+          return UIScreen.width - 32
+        } else {
+          return UIScreen.width - 32 - 24
+        }
+      } else {
+        return UIScreen.width - 32
+      }
     }
-    return 0.0
   }
 }
 
