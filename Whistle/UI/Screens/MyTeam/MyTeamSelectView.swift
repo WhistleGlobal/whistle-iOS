@@ -14,17 +14,6 @@ struct MyTeamSelectView: View {
   @State private var currentIndex = 0
   @State private var isDragging = false
   @State var aniBool = false
-<<<<<<< develop
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-  @State private var colorlist: [Color] = [.pink, .cyan, .purple]
->>>>>>> 92e9266 ([FEAT] #219 마이팀 선택 기초 로직 완성)
-=======
->>>>>>> e53bba7 ([FEAT] #219 테스트용 코드 삭제)
-=======
-  @State private var colorlist: [Color] = [.pink, .cyan, .purple]
->>>>>>> [REFACTOR] conflit해결
   var myTeamSelection: MyTeamType {
     MyTeamType.teamTypeList()[currentIndex]
   }
@@ -32,38 +21,12 @@ struct MyTeamSelectView: View {
   var body: some View {
     ZStack {
       MyTeamType.teamGradient(myTeamSelection).ignoresSafeArea()
-<<<<<<< develop
-<<<<<<< HEAD
-<<<<<<< HEAD
       VStack(spacing: 0) {
-=======
-      VStack {
->>>>>>> 92e9266 ([FEAT] #219 마이팀 선택 기초 로직 완성)
-=======
-      VStack(spacing: 0) {
->>>>>>> 803b0a5 ([FEAT] #219 마이팀 뷰 UI 완성)
-=======
-      VStack(spacing: 0) {
->>>>>>> [REFACTOR] conflit해결
         Image("\(myTeamSelection.rawValue)Card")
           .resizable()
           .scaledToFit()
           .frame(width: UIScreen.getWidth(334), height: UIScreen.getHeight(444))
-<<<<<<< develop
-<<<<<<< HEAD
-<<<<<<< HEAD
           .padding(.bottom, UIScreen.getHeight(24))
-=======
-          .padding(.top, UIScreen.getHeight(14))
-          .padding(.bottom, UIScreen.getHeight(24))
-
->>>>>>> 92e9266 ([FEAT] #219 마이팀 선택 기초 로직 완성)
-=======
-          .padding(.bottom, UIScreen.getHeight(24))
->>>>>>> 803b0a5 ([FEAT] #219 마이팀 뷰 UI 완성)
-=======
-          .padding(.bottom, UIScreen.getHeight(24))
->>>>>>> [REFACTOR] conflit해결
         Carousel(
           pageCount: 10,
           visibleEdgeSpace: 85,
@@ -91,19 +54,7 @@ struct MyTeamSelectView: View {
               .foregroundColor(.white)
           }
         }
-<<<<<<< develop
-<<<<<<< HEAD
-<<<<<<< HEAD
         .frame(height: UIScreen.getHeight(150))
-=======
-        .frame(height: 150)
->>>>>>> 92e9266 ([FEAT] #219 마이팀 선택 기초 로직 완성)
-=======
-        .frame(height: UIScreen.getHeight(150))
->>>>>>> 803b0a5 ([FEAT] #219 마이팀 뷰 UI 완성)
-=======
-        .frame(height: UIScreen.getHeight(150))
->>>>>>> [REFACTOR] conflit해결
         .overlay {
           HStack(spacing: UIScreen.getWidth(164)) {
             Spacer()
@@ -136,13 +87,6 @@ struct MyTeamSelectView: View {
           .foregroundColor(.white)
           .padding(.bottom, UIScreen.getHeight(30))
         }
-<<<<<<< develop
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> 803b0a5 ([FEAT] #219 마이팀 뷰 UI 완성)
-=======
->>>>>>> [REFACTOR] conflit해결
         .padding(.bottom, UIScreen.getHeight(14))
         Button {
           // 완료 액션
@@ -178,20 +122,7 @@ struct MyTeamSelectView: View {
         .foregroundColor(.LabelColor_DisablePlaceholder)
       }
     }
-<<<<<<< develop
-<<<<<<< HEAD
-=======
-        Spacer()
-      }
-    }
->>>>>>> 92e9266 ([FEAT] #219 마이팀 선택 기초 로직 완성)
-=======
->>>>>>> 803b0a5 ([FEAT] #219 마이팀 뷰 UI 완성)
-=======
-        Spacer()
-      }
-    }
->>>>>>> [REFACTOR] conflit해결
+    Spacer()
   }
 }
 
