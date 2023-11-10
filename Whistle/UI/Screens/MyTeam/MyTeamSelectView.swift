@@ -124,9 +124,7 @@ struct MyTeamSelectView: View {
         .foregroundColor(.LabelColor_DisablePlaceholder)
       }
     }
-        Spacer()
-      }
-    }
+    Spacer()
   }
 }
 
