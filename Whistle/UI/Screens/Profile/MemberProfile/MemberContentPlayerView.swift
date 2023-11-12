@@ -55,20 +55,6 @@ struct MemberContentPlayerView: View {
                 .overlay {
                   if content.isHated {
                     VStack {
-                      HStack(spacing: 0) {
-                        Button {
-                          dismissAction()
-                        } label: {
-                          Image(systemName: "chevron.backward")
-                            .font(.system(size: 20))
-                            .foregroundColor(.white)
-                            .padding(.vertical, 16)
-                            .padding(.trailing, 16)
-                        }
-                        Spacer()
-                      }
-                      .padding(.top, 38)
-                      .padding(.horizontal, UIScreen.getWidth(16))
                       Spacer()
                       Image(systemName: "eye.slash.fill")
                         .font(.system(size: 44))
