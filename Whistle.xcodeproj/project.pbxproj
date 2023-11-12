@@ -99,8 +99,6 @@
 		1B89314A2AE6903100F8579B /* TabbarModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B8931492AE6903100F8579B /* TabbarModel.swift */; };
 		1B8F135A2AFF5DBB004FC791 /* ContentLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B8F13592AFF5DBB004FC791 /* ContentLayer.swift */; };
 		1B8F135B2AFF5DBB004FC791 /* ContentLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B8F13592AFF5DBB004FC791 /* ContentLayer.swift */; };
-		1B8F135D2AFF6B7F004FC791 /* ContentPlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B8F135C2AFF6B7F004FC791 /* ContentPlayerView.swift */; };
-		1B8F135E2AFF6B7F004FC791 /* ContentPlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B8F135C2AFF6B7F004FC791 /* ContentPlayerView.swift */; };
 		1B9398462AEFF0A70050089D /* StringsAndWords.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B9398452AEFF0A70050089D /* StringsAndWords.swift */; };
 		1B9398492AEFF1290050089D /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 1B93984B2AEFF1290050089D /* Localizable.strings */; };
 		1B99362B2AF3699E00F5C619 /* ProfileEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78DA58D42AA445E400F8D2F1 /* ProfileEditView.swift */; };
@@ -802,8 +800,7 @@
 		1B7D801C2AC881490030CAC3 /* CustomNavigationBarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomNavigationBarViewController.swift; sourceTree = "<group>"; };
 		1B8132DC2AE6285E00000C32 /* NavigationModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationModel.swift; sourceTree = "<group>"; };
 		1B8931492AE6903100F8579B /* TabbarModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabbarModel.swift; sourceTree = "<group>"; };
-		1B8F13592AFF5DBB004FC791 /* ContentLayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ContentLayer.swift; path = Whistle/UI/Components/Layers/ContentLayer.swift; sourceTree = "<group>"; };
-		1B8F135C2AFF6B7F004FC791 /* ContentPlayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentPlayerView.swift; sourceTree = "<group>"; };
+		1B8F13592AFF5DBB004FC791 /* ContentLayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentLayer.swift; sourceTree = "<group>"; };
 		1B9398452AEFF0A70050089D /* StringsAndWords.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringsAndWords.swift; sourceTree = "<group>"; };
 		1B93984A2AEFF1290050089D /* ko */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ko; path = ko.lproj/Localizable.strings; sourceTree = "<group>"; };
 		1B93984C2AEFF12D0050089D /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -1379,8 +1376,6 @@
 		1B3955332A95069C00BCB4DF = {
 			isa = PBXGroup;
 			children = (
-				1B8F135C2AFF6B7F004FC791 /* ContentPlayerView.swift */,
-				1B8F13592AFF5DBB004FC791 /* ContentLayer.swift */,
 				1B93984B2AEFF1290050089D /* Localizable.strings */,
 				1B21C9EC2AA0AB8A0036158F /* .swiftformat */,
 				1BB7A0692A9514B4002DD86F /* .swiftlint.yml */,
@@ -2368,6 +2363,7 @@
 		1BDE48DE2AF49F8400E33585 /* Layers */ = {
 			isa = PBXGroup;
 			children = (
+				1B8F13592AFF5DBB004FC791 /* ContentLayer.swift */,
 				1BCB90322AEEBCE60088B2F2 /* DimsThick.swift */,
 				1BDE48D82AF3D2F900E33585 /* DimsUltraThin.swift */,
 				1BDE48D52AF3CE7000E33585 /* DimsDefault.swift */,
@@ -2905,7 +2901,6 @@
 				1B994EF22AF243470016AE8B /* CameraOrAccessView.swift in Sources */,
 				1B0A29AE2AA662CB009077A1 /* HapticsManager.swift in Sources */,
 				78730CEB2ACE8691008B9981 /* PhotoAssetCollection.swift in Sources */,
-				1B8F135D2AFF6B7F004FC791 /* ContentPlayerView.swift in Sources */,
 				1B3895452AB9CB7500B4C8DD /* VideoEditorView.swift in Sources */,
 				787173B42AA472070018CB14 /* ToastMessageView.swift in Sources */,
 				1B3895622AB9CBD300B4C8DD /* ToolModel.swift in Sources */,
@@ -3128,7 +3123,6 @@
 				1B99363C2AF3699E00F5C619 /* HapticsManager.swift in Sources */,
 				1B99363D2AF3699E00F5C619 /* PhotoAssetCollection.swift in Sources */,
 				1B99363E2AF3699E00F5C619 /* VideoEditorView.swift in Sources */,
-				1B8F135E2AFF6B7F004FC791 /* ContentPlayerView.swift in Sources */,
 				1B99363F2AF3699E00F5C619 /* ToastMessageView.swift in Sources */,
 				1B9936402AF3699E00F5C619 /* ToolModel.swift in Sources */,
 				1B9936412AF3699E00F5C619 /* FiltersView.swift in Sources */,
