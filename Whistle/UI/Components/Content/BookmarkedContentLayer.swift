@@ -141,10 +141,13 @@ struct BookmarkedContentLayer: View {
               }
             } label: {
               ContentLayerButton(
-                isFilled: $currentVideoInfo.isWhistled,
-                image: "heart",
-                filledImage: "heart.fill",
-                label: "\(currentVideoInfo.whistleCount)")
+                type: .whistle(currentVideoInfo.whistleCount),
+                isFilled: $currentVideoInfo.isWhistled)
+//              ContentLayerButton(
+//                isFilled: $currentVideoInfo.isWhistled,
+//                image: "heart",
+//                filledImage: "heart.fill",
+//                label: "\(currentVideoInfo.whistleCount)")
             }
             Button {
               currentVideoInfo.isBookmarked.toggle()
@@ -175,15 +178,12 @@ struct BookmarkedContentLayer: View {
                       }
                       return mutableItem
                     }
-                    apiViewModel.publisherSend()
                   }
                 }
             } label: {
               ContentLayerButton(
-                isFilled: $currentVideoInfo.isBookmarked,
-                image: "bookmark",
-                filledImage: "bookmark.fill",
-                label: CommonWords().bookmark)
+                type: .bookmark,
+                isFilled: $currentVideoInfo.isBookmarked)
             }
             Button {
               let shareURL = URL(string: "https://readywhistle.com/content_uni?contentId=\(currentVideoInfo.contentId ?? 0)")!
@@ -193,12 +193,12 @@ struct BookmarkedContentLayer: View {
                 animated: true,
                 completion: nil)
             } label: {
-              ContentLayerButton(image: "square.and.arrow.up", label: CommonWords().share)
+              ContentLayerButton(type: .share)
             }
             Button {
               feedMoreModel.bottomSheetPosition = .absolute(186)
             } label: {
-              ContentLayerButton(image: "ellipsis", label: CommonWords().more)
+              ContentLayerButton(type: .more)
             }
           }
           .foregroundColor(.Gray10)

@@ -50,12 +50,18 @@ extension View {
         .scaledToFill()
         .frame(width: size, height: size)
         .clipShape(Circle())
+        .overlay {
+          Circle().strokeBorder(Color.Dim_Thin)
+        }
     } else {
       Image("ProfileDefault")
         .resizable()
         .scaledToFit()
         .frame(width: size, height: size)
         .clipShape(Circle())
+        .overlay {
+          Circle().strokeBorder(Color.Dim_Thin)
+        }
     }
   }
 }

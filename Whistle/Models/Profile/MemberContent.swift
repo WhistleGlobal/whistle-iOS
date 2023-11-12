@@ -38,7 +38,7 @@ class MemberContent: ObservableObject, Codable, Hashable {
   var musicArtist: String?
   var musicTitle: String?
   var hashtags: [String]?
-  var whistleCount: Int?
+  var whistleCount: Int
   var viewCount: Int?
   var isWhistled = false
   var isFollowed = false
@@ -46,7 +46,9 @@ class MemberContent: ObservableObject, Codable, Hashable {
   var isHated = false
   var aspectRatio: Double?
 
-  init() { }
+  init() {
+    whistleCount = 0
+  }
 
   required init(from decoder: Decoder) throws {
     let container = try decoder.container(keyedBy: CodingKeys.self)
@@ -60,7 +62,7 @@ class MemberContent: ObservableObject, Codable, Hashable {
     musicArtist = try container.decode(String?.self, forKey: .musicArtist)
     musicTitle = try container.decode(String?.self, forKey: .musicTitle)
     hashtags = try container.decode([String]?.self, forKey: .hashtags)
-    whistleCount = try container.decode(Int?.self, forKey: .whistleCount)
+    whistleCount = try container.decode(Int?.self, forKey: .whistleCount) ?? 0
     viewCount = try container.decode(Int?.self, forKey: .viewCount)
     isWhistled = try container.decode(Int.self, forKey: .isWhistled) == 1 ? true : false
     isFollowed = try container.decode(Int.self, forKey: .isFollowed) == 1 ? true : false

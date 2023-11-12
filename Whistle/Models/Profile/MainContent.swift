@@ -9,7 +9,6 @@ import AVFoundation
 import Foundation
 
 class MainContent: Hashable, ObservableObject, Decodable {
-
   enum CodingKeys: String, CodingKey {
     case contentId = "content_id"
     case userId = "user_id"
@@ -66,22 +65,22 @@ class MainContent: Hashable, ObservableObject, Decodable {
 
   // MARK: Internal
 
-  @Published var id = UUID()
-  @Published var contentId: Int?
-  @Published var userId: Int?
-  @Published var userName: String?
-  @Published var profileImg: String?
-  @Published var caption: String?
-  @Published var videoUrl: String?
-  @Published var thumbnailUrl: String?
-  @Published var musicArtist: String?
-  @Published var musicTitle: String?
-  @Published var hashtags: [String]?
-  @Published var whistleCount: Int
+  var id = UUID()
+  var contentId: Int?
+  var userId: Int?
+  var userName: String?
+  var profileImg: String?
+  var caption: String?
+  var videoUrl: String?
+  var thumbnailUrl: String?
+  var musicArtist: String?
+  var musicTitle: String?
+  var hashtags: [String]?
+  var whistleCount: Int
   @Published var isWhistled: Bool
-  @Published var isFollowed = false
-  @Published var isBookmarked = false
-  @Published var aspectRatio: Double?
+  var isFollowed = false
+  var isBookmarked = false
+  var aspectRatio: Double?
 
   required init(from decoder: Decoder) throws {
     let container = try decoder.container(keyedBy: CodingKeys.self)

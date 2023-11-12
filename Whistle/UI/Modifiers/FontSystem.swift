@@ -104,7 +104,7 @@ struct FontSystem: ViewModifier {
     case .body2:
       content
         .font(.system(size: 14))
-        .lineSpacing(6)
+        .lineSpacing(3)
         .padding(.vertical, 2)
     case .caption_Regular:
       content
