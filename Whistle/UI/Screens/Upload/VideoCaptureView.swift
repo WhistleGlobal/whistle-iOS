@@ -92,6 +92,7 @@ struct VideoCaptureView: View {
   var body: some View {
     GeometryReader { _ in
       ZStack {
+        Color.black.ignoresSafeArea()
         NavigationLink(destination: PrivacyPolicyView(), isActive: $showPrivacyPolicy) {
           EmptyView()
         }

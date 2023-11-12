@@ -104,12 +104,14 @@ struct GuestContentLayer: View {
             Button {
               feedMoreModel.bottomSheetPosition = .dynamic
             } label: {
-              ContentLayerButton(image: "heart", label: "\(currentVideoInfo.whistleCount ?? 0)")
+              ContentLayerButton(
+                type: .whistle(currentVideoInfo.whistleCount ?? 0))
             }
             Button {
               feedMoreModel.bottomSheetPosition = .dynamic
             } label: {
-              ContentLayerButton(image: "bookmark", label: CommonWords().bookmark)
+              ContentLayerButton(
+                type: .bookmark)
             }
             Button {
               let shareURL = URL(
@@ -120,12 +122,12 @@ struct GuestContentLayer: View {
                 animated: true,
                 completion: nil)
             } label: {
-              ContentLayerButton(image: "square.and.arrow.up", label: CommonWords().share)
+              ContentLayerButton(type: .share)
             }
             Button {
               feedMoreModel.bottomSheetPosition = .dynamic
             } label: {
-              ContentLayerButton(image: "ellipsis", label: CommonWords().more)
+              ContentLayerButton(type: .more)
             }
           }
           .foregroundColor(.Gray10)

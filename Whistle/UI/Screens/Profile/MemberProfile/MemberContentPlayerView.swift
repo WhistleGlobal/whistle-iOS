@@ -55,20 +55,6 @@ struct MemberContentPlayerView: View {
                 .overlay {
                   if content.isHated {
                     VStack {
-                      HStack(spacing: 0) {
-                        Button {
-                          dismissAction()
-                        } label: {
-                          Image(systemName: "chevron.backward")
-                            .font(.system(size: 20))
-                            .foregroundColor(.white)
-                            .padding(.vertical, 16)
-                            .padding(.trailing, 16)
-                        }
-                        Spacer()
-                      }
-                      .padding(.top, 38)
-                      .padding(.horizontal, UIScreen.getWidth(16))
                       Spacer()
                       Image(systemName: "eye.slash.fill")
                         .font(.system(size: 44))
@@ -139,10 +125,17 @@ struct MemberContentPlayerView: View {
                     ContentGradientLayer()
                       .allowsHitTesting(false)
                     if tabbarModel.tabWidth != 56 {
-                      MemberContentLayer(
+                      ContentLayer(
                         currentVideoInfo: content,
+                        feedMoreModel: MemberFeedMoreModel.shared,
+                        feedPlayersViewModel: MemeberPlayersViewModel.shared,
+                        feedArray: apiViewModel.memberFeed,
                         whistleAction: whistleToggle,
                         dismissAction: dismissAction)
+//                      MemberContentLayer(
+//                        currentVideoInfo: content,
+//                        whistleAction: whistleToggle,
+//                        dismissAction: dismissAction)
                         .padding(.bottom, UIScreen.main.nativeBounds.height == 1334 ? 24 : 0)
                     }
                     if feedMoreModel.bottomSheetPosition != .hidden {
@@ -250,14 +243,14 @@ extension MemberContentPlayerView {
           await apiViewModel.whistleAction(contentID: currentContentInfo?.contentId ?? 0, method: .delete)
         }
       }
-      apiViewModel.memberFeed[index].whistleCount! -= 1
+      apiViewModel.memberFeed[index].whistleCount -= 1
     } else {
       timer = Timer.scheduledTimer(withTimeInterval: 2, repeats: false) { _ in
         Task {
           await apiViewModel.whistleAction(contentID: currentContentInfo?.contentId ?? 0, method: .post)
         }
       }
-      apiViewModel.memberFeed[index].whistleCount! += 1
+      apiViewModel.memberFeed[index].whistleCount += 1
     }
     apiViewModel.memberFeed[index].isWhistled.toggle()
     currentContentInfo = apiViewModel.memberFeed[index]

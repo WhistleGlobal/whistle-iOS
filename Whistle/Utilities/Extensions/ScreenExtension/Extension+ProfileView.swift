@@ -316,9 +316,23 @@ extension ProfileView {
           if apiViewModel.memberProfile.isFollowed {
             apiViewModel.memberProfile.isFollowed.toggle()
             await apiViewModel.followAction(userID: userId, method: .delete)
+            apiViewModel.mainFeed = apiViewModel.mainFeed.map { item in
+              let mutableItem = item
+              if mutableItem.userId == userId {
+                mutableItem.isFollowed = apiViewModel.memberProfile.isFollowed
+              }
+              return mutableItem
+            }
           } else {
             apiViewModel.memberProfile.isFollowed.toggle()
             await apiViewModel.followAction(userID: userId, method: .post)
+            apiViewModel.mainFeed = apiViewModel.mainFeed.map { item in
+              let mutableItem = item
+              if mutableItem.userId == userId {
+                mutableItem.isFollowed = apiViewModel.memberProfile.isFollowed
+              }
+              return mutableItem
+            }
           }
         }
       }

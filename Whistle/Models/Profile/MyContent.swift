@@ -36,13 +36,12 @@ class MyContent: ObservableObject, Decodable, Hashable {
   @Published var musicArtist: String?
   @Published var musicTitle: String?
   @Published var hashtags: [String]?
-  @Published var whistleCount: Int?
+  @Published var whistleCount: Int
   @Published var viewCount: Int?
   @Published var isWhistled = false
   @Published var isBookmarked = false
   @Published var aspectRatio: Double?
-
-  init() { }
+  var isFollowed = false
 
   required init(from decoder: Decoder) throws {
     let container = try decoder.container(keyedBy: CodingKeys.self)
@@ -56,7 +55,7 @@ class MyContent: ObservableObject, Decodable, Hashable {
     musicArtist = try container.decode(String?.self, forKey: .musicArtist)
     musicTitle = try container.decode(String?.self, forKey: .musicTitle)
     hashtags = try container.decode([String]?.self, forKey: .hashtags)
-    whistleCount = try container.decode(Int?.self, forKey: .whistleCount)
+    whistleCount = try container.decode(Int?.self, forKey: .whistleCount) ?? 0
     viewCount = try container.decode(Int?.self, forKey: .viewCount)
     isWhistled = try container.decode(Int.self, forKey: .isWhistled) == 1
     isBookmarked = try container.decode(Int?.self, forKey: .isBookmarked) == 1

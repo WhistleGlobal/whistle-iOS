@@ -23,6 +23,7 @@ struct MyContentPlayerView: View {
   @StateObject var feedMoreModel = MyFeedMoreModel.shared
   @StateObject private var tabbarModel = TabbarModel.shared
   @StateObject var bartintModel = BarTintModel.shared
+
   @State var newId = UUID()
   @State var timer: Timer? = nil
   @State var viewTimer: Timer? = nil
@@ -102,11 +103,19 @@ struct MyContentPlayerView: View {
                   ContentGradientLayer()
                     .allowsHitTesting(false)
                   if tabbarModel.tabWidth != 56 {
-                    MyContentLayer(
+                    ContentLayer(
                       currentVideoInfo: content,
+                      feedMoreModel: MyFeedMoreModel.shared,
+                      feedPlayersViewModel: MyFeedPlayersViewModel.shared,
+                      feedArray: apiViewModel.myFeed,
                       whistleAction: {
                         whistleToggle(content: content, index)
                       })
+//                    MyContentLayer(
+//                      currentVideoInfo: content,
+//                      whistleAction: {
+//                        whistleToggle(content: content, index)
+//                      })
                       .padding(.bottom, UIScreen.main.nativeBounds.height == 1334 ? 24 : 0)
                   }
                   if feedMoreModel.bottomSheetPosition != .hidden {
@@ -211,14 +220,14 @@ extension MyContentPlayerView {
           await apiViewModel.whistleAction(contentID: content.contentId ?? 0, method: .delete)
         }
       }
-      apiViewModel.myFeed[index].whistleCount! -= 1
+      apiViewModel.myFeed[index].whistleCount -= 1
     } else {
       timer = Timer.scheduledTimer(withTimeInterval: 2, repeats: false) { _ in
         Task {
           await apiViewModel.whistleAction(contentID: content.contentId ?? 0, method: .post)
         }
       }
-      apiViewModel.myFeed[index].whistleCount! += 1
+      apiViewModel.myFeed[index].whistleCount += 1
     }
     apiViewModel.myFeed[index].isWhistled.toggle()
     currentContentInfo = apiViewModel.myFeed[index]

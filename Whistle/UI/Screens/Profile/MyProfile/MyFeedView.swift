@@ -125,4 +125,6 @@ class MyFeedMoreModel: ObservableObject {
   static let shared = MyFeedMoreModel()
   private init() { }
   @Published var bottomSheetPosition: BottomSheetPosition = .hidden
+  var showReport = false
+  var isRootStacked = false
 }

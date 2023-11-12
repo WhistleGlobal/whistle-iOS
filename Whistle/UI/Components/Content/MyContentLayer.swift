@@ -12,7 +12,7 @@ import SwiftUI
 // MARK: - MyContentLayer
 
 struct MyContentLayer: View {
-  @StateObject var currentVideoInfo: MyContent = .init()
+  @StateObject var currentVideoInfo: MyContent
   @StateObject var apiViewModel = APIViewModel.shared
   @StateObject var toastViewModel = ToastViewModel.shared
   @StateObject private var feedMoreModel = MyFeedMoreModel.shared
@@ -84,10 +84,8 @@ struct MyContentLayer: View {
               }
             } label: {
               ContentLayerButton(
-                isFilled: $currentVideoInfo.isWhistled,
-                image: "heart",
-                filledImage: "heart.fill",
-                label: "\(currentVideoInfo.whistleCount ?? 0)")
+                type: .whistle(currentVideoInfo.whistleCount ?? 0),
+                isFilled: $currentVideoInfo.isWhistled)
             }
             Button {
               Task {
@@ -113,14 +111,11 @@ struct MyContentLayer: View {
                   }
                   return mutableItem
                 }
-                apiViewModel.publisherSend()
               }
             } label: {
               ContentLayerButton(
-                isFilled: $currentVideoInfo.isBookmarked,
-                image: "bookmark",
-                filledImage: "bookmark.fill",
-                label: CommonWords().bookmark)
+                type: .bookmark,
+                isFilled: $currentVideoInfo.isBookmarked)
             }
 
             Button {
@@ -131,12 +126,12 @@ struct MyContentLayer: View {
                 animated: true,
                 completion: nil)
             } label: {
-              ContentLayerButton(image: "square.and.arrow.up", label: CommonWords().share)
+              ContentLayerButton(type: .share)
             }
             Button {
               feedMoreModel.bottomSheetPosition = .absolute(186)
             } label: {
-              ContentLayerButton(image: "ellipsis", label: CommonWords().more)
+              ContentLayerButton(type: .more)
             }
           }
           .foregroundColor(.Gray10)

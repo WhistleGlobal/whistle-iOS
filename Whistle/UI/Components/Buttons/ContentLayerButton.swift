@@ -8,32 +8,32 @@
 import SwiftUI
 
 struct ContentLayerButton: View {
+  let buttonType: ContentLayerButtonType
   @Binding var isFilled: Bool
-  let image: String
-  let filledImage: String?
-  let label: LocalizedStringKey
 
-  init(isFilled: Binding<Bool> = .constant(false), image: String, filledImage: String? = nil, label: LocalizedStringKey) {
+  init(
+    type: ContentLayerButtonType,
+    isFilled: Binding<Bool> = .constant(false))
+  {
+    buttonType = type
     _isFilled = isFilled
-    self.image = image
-    self.filledImage = filledImage
-    self.label = label
   }
 
   var body: some View {
     VStack(spacing: 2) {
-      if let filledImage {
-        Image(systemName: isFilled ? filledImage : image)
+      switch buttonType {
+      case .whistle(_), .bookmark:
+        Image(systemName: isFilled ? buttonType.filledSymbol : buttonType.defaultSymbol)
           .font(.system(size: 26))
           .shadow(color: isFilled ? .black.opacity(0.15) : .black.opacity(0.3), radius: 4, x: 0, y: 0)
           .frame(width: 36, height: 36)
-      } else {
-        Image(systemName: image)
+      case .share, .more:
+        Image(systemName: buttonType.defaultSymbol)
           .font(.system(size: 26))
           .shadow(color: .black.opacity(0.3), radius: 4, x: 0, y: 0)
           .frame(width: 36, height: 36)
       }
-      Text(label)
+      Text(buttonType.buttonLabel)
         .fontSystem(fontDesignSystem: .caption_SemiBold)
         .shadow(color: .black.opacity(0.5), radius: 3, x: 0, y: 0)
     }

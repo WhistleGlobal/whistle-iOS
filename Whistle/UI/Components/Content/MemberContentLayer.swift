@@ -12,14 +12,14 @@ import SwiftUI
 // MARK: - MemberContentLayer
 
 struct MemberContentLayer: View {
-  @StateObject var currentVideoInfo: MemberContent = .init()
+  @StateObject var currentVideoInfo: MemberContent
   @StateObject var apiViewModel = APIViewModel.shared
   @StateObject var toastViewModel = ToastViewModel.shared
   @StateObject private var feedMoreModel = MemberFeedMoreModel.shared
   @StateObject var feedPlayersViewModel = MemeberPlayersViewModel.shared
   @State var isExpanded = false
   var whistleAction: () -> Void
-  var dismissAction: DismissAction
+  let dismissAction: DismissAction
 
   var body: some View {
     ZStack {
@@ -128,17 +128,15 @@ struct MemberContentLayer: View {
               apiViewModel.mainFeed = apiViewModel.mainFeed.map { item in
                 let mutableItem = item
                 if mutableItem.contentId == currentContent.contentId {
-                  mutableItem.whistleCount = currentContent.whistleCount ?? 0
+                  mutableItem.whistleCount = currentContent.whistleCount
                   mutableItem.isWhistled = currentContent.isWhistled
                 }
                 return mutableItem
               }
             } label: {
               ContentLayerButton(
-                isFilled: $currentVideoInfo.isWhistled,
-                image: "heart",
-                filledImage: "heart.fill",
-                label: "\(currentVideoInfo.whistleCount ?? 0)")
+                type: .whistle(currentVideoInfo.whistleCount),
+                isFilled: $currentVideoInfo.isWhistled)
             }
             Button {
               Task {
@@ -164,14 +162,11 @@ struct MemberContentLayer: View {
                   }
                   return mutableItem
                 }
-                apiViewModel.publisherSend()
               }
             } label: {
               ContentLayerButton(
-                isFilled: $currentVideoInfo.isBookmarked,
-                image: "bookmark",
-                filledImage: "bookmark.fill",
-                label: CommonWords().bookmark)
+                type: .bookmark,
+                isFilled: $currentVideoInfo.isBookmarked)
             }
             Button {
               let shareURL = URL(string: "https://readywhistle.com/content_uni?contentId=\(currentVideoInfo.contentId ?? 0)")!
@@ -181,12 +176,12 @@ struct MemberContentLayer: View {
                 animated: true,
                 completion: nil)
             } label: {
-              ContentLayerButton(image: "square.and.arrow.up", label: CommonWords().share)
+              ContentLayerButton(type: .share)
             }
             Button {
               feedMoreModel.bottomSheetPosition = .absolute(242)
             } label: {
-              ContentLayerButton(image: "ellipsis", label: CommonWords().more)
+              ContentLayerButton(type: .more)
             }
           }
           .foregroundColor(.Gray10)

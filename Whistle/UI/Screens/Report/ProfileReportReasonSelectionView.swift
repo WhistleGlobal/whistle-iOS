@@ -48,6 +48,7 @@ struct ProfileReportReasonSelectionView: View {
           } label: {
             reportRow(text: reason.rawValue)
           }
+          .id(UUID())
           Divider().frame(height: 0.5).padding(.leading, 16).foregroundColor(.Disable_Placeholder)
         }
       } else {
@@ -71,6 +72,8 @@ struct ProfileReportReasonSelectionView: View {
           } label: {
             reportRow(text: reason.rawValue)
           }
+          .id(UUID())
+
           Divider().frame(height: 0.5).padding(.leading, 16).foregroundColor(.Disable_Placeholder)
         }
       }

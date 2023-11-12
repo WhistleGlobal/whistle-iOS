@@ -34,7 +34,7 @@ struct MainContentLayer: View {
       VStack(spacing: 0) {
         Spacer()
         HStack(spacing: 0) {
-          VStack(alignment: .leading, spacing: 12) {
+          VStack(alignment: .leading, spacing: 0) {
             Spacer()
             HStack(spacing: 0) {
               if currentVideoInfo.userName ?? "" != apiViewModel.myProfile.userName {
@@ -93,6 +93,7 @@ struct MainContentLayer: View {
                 }
               }
             }
+            .padding(.bottom, 12)
             if let caption = currentVideoInfo.caption {
               if !caption.isEmpty {
                 Text(caption)
@@ -106,15 +107,19 @@ struct MainContentLayer: View {
                       isExpanded.toggle()
                     }
                   }
+                  .padding(.bottom, 12)
               }
             }
-            Label(LocalizedStringKey(stringLiteral: currentVideoInfo.musicTitle ?? "원본 오디오"), systemImage: "music.note")
-              .fontSystem(fontDesignSystem: .body2)
-              .foregroundColor(.white)
-              .padding(.top, 4)
+            HStack(spacing: 8) {
+              Image(systemName: "music.note")
+                .font(.system(size: 16))
+              Text(LocalizedStringKey(stringLiteral: currentVideoInfo.musicTitle ?? "원본 오디오"))
+                .fontSystem(fontDesignSystem: .body2)
+            }
+            .padding(.leading, 2)
+            .foregroundColor(.white)
           }
-          .padding(.bottom, 4)
-          .padding(.leading, 4)
+          .padding(.leading, 2)
           Spacer()
 
           // MARK: - Action Buttons
@@ -123,36 +128,65 @@ struct MainContentLayer: View {
             Spacer()
             Button {
               whistleAction()
-            } label: {
-              ContentLayerButton(
-                isFilled: $currentVideoInfo.isWhistled,
-                image: "heart",
-                filledImage: "heart.fill",
-                label: "\(currentVideoInfo.whistleCount)")
-            }
-            Button {
-              Task {
-                if currentVideoInfo.isBookmarked {
-                  currentVideoInfo.isBookmarked.toggle()
-                  _ = await apiViewModel.bookmarkAction(
-                    contentID: currentVideoInfo.contentId ?? 0,
-                    method: .delete)
-                  toastViewModel.toastInit(message: ToastMessages().bookmarkDeleted)
-                } else {
-                  currentVideoInfo.isBookmarked.toggle()
-                  _ = await apiViewModel.bookmarkAction(
-                    contentID: currentVideoInfo.contentId ?? 0,
-                    method: .post)
-                  toastViewModel.toastInit(message: ToastMessages().bookmark)
+              let currentContent = apiViewModel.mainFeed[feedPlayersViewModel.currentVideoIndex]
+              apiViewModel.mainFeed = apiViewModel.mainFeed.map { item in
+                let mutableItem = item
+                if mutableItem.contentId == currentContent.contentId {
+                  mutableItem.whistleCount = currentContent.whistleCount
+                  mutableItem.isWhistled = currentContent.isWhistled
                 }
-                await apiViewModel.requestMyBookmark()
+                return mutableItem
               }
             } label: {
               ContentLayerButton(
-                isFilled: $currentVideoInfo.isBookmarked,
-                image: "bookmark",
-                filledImage: "bookmark.fill",
-                label: CommonWords().bookmark)
+                type: .whistle(currentVideoInfo.whistleCount),
+                isFilled: $currentVideoInfo.isWhistled)
+            }
+            .buttonStyle(PressEffectButtonStyle())
+            Button {
+              Task {
+                let currentContent = apiViewModel.mainFeed[feedPlayersViewModel.currentVideoIndex]
+                if currentContent.isBookmarked {
+                  currentContent.isBookmarked.toggle()
+                  _ = await apiViewModel.bookmarkAction(
+                    contentID: currentContent.contentId ?? 0,
+                    method: .delete)
+                  toastViewModel.toastInit(message: ToastMessages().bookmarkDeleted)
+                } else {
+                  currentContent.isBookmarked.toggle()
+                  _ = await apiViewModel.bookmarkAction(
+                    contentID: currentContent.contentId ?? 0,
+                    method: .post)
+                  toastViewModel.toastInit(message: ToastMessages().bookmark)
+                }
+//                if currentVideoInfo.isBookmarked {
+//                  currentVideoInfo.isBookmarked.toggle()
+//                  _ = await apiViewModel.bookmarkAction(
+//                    contentID: currentVideoInfo.contentId ?? 0,
+//                    method: .delete
+//                  )
+//                  toastViewModel.toastInit(message: ToastMessages().bookmarkDeleted)
+//                } else {
+//                  currentVideoInfo.isBookmarked.toggle()
+//                  _ = await apiViewModel.bookmarkAction(
+//                    contentID: currentVideoInfo.contentId ?? 0,
+//                    method: .post
+//                  )
+//                  toastViewModel.toastInit(message: ToastMessages().bookmark)
+//                }
+//                await apiViewModel.requestMyBookmark()
+//                apiViewModel.mainFeed = apiViewModel.mainFeed.map { item in
+//                  let mutableItem = item
+//                  if mutableItem.contentId == currentContent.contentId {
+//                    mutableItem.isBookmarked = currentContent.isBookmarked
+//                  }
+//                  return mutableItem
+//                }
+              }
+            } label: {
+              ContentLayerButton(
+                type: .bookmark,
+                isFilled: $currentVideoInfo.isBookmarked)
             }
             Button {
               let shareURL = URL(
@@ -163,19 +197,32 @@ struct MainContentLayer: View {
                 animated: true,
                 completion: nil)
             } label: {
-              ContentLayerButton(image: "square.and.arrow.up", label: CommonWords().share)
+              ContentLayerButton(type: .share)
             }
             Button {
               feedMoreModel.bottomSheetPosition = .absolute(242)
             } label: {
-              ContentLayerButton(image: "ellipsis", label: CommonWords().more)
+              ContentLayerButton(type: .more)
             }
           }
           .foregroundColor(.Gray10)
+          .padding(.bottom, UIScreen.getHeight(4))
         }
       }
-      .padding(.bottom, UIScreen.getHeight(102))
+      .padding(.bottom, UIScreen.getHeight(98))
       .padding(.horizontal, UIScreen.getWidth(16))
     }
+  }
+}
+
+// MARK: - PressEffectButtonStyle
+
+struct PressEffectButtonStyle: ButtonStyle {
+  func makeBody(configuration: Configuration) -> some View {
+    configuration.label
+      .foregroundColor(.white)
+      .scaleEffect(configuration.isPressed ? 0.9 : 1.0)
+      .opacity(configuration.isPressed ? 0.6 : 1.0)
+      .animation(.easeInOut, value: configuration.isPressed)
   }
 }
