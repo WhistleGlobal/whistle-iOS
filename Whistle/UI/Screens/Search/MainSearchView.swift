@@ -81,10 +81,6 @@ struct MainSearchView: View {
       }
     }
   }
-      Spacer()
-    }
-    .background()
-  }
 }
 
 #Preview {

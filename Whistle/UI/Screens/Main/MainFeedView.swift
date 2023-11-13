@@ -13,6 +13,7 @@ import SwiftUI
 
 struct MainFeedView: View {
 
+  @Environment(\.dismiss) var dismiss
   @EnvironmentObject var universalRoutingModel: UniversalRoutingModel
   @StateObject private var apiViewModel = APIViewModel.shared
   @StateObject private var feedPlayersViewModel = MainFeedPlayersViewModel.shared
@@ -56,7 +57,7 @@ struct MainFeedView: View {
         ToolbarItem(placement: .topBarLeading) {
           FeedSearchBar(
             searchText: $searchQueryString,
-            isSearching: $isSearching)
+            isSearching: $isSearching, cancelTapAction: dismiss)
             .simultaneousGesture(TapGesture().onEnded {
               //                      tapSearchBar?()
             })
