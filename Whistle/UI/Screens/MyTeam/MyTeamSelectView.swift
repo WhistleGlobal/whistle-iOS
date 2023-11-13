@@ -14,6 +14,10 @@ struct MyTeamSelectView: View {
   @State private var currentIndex = 0
   @State private var isDragging = false
   @State var aniBool = false
+<<<<<<< HEAD
+=======
+  @State private var colorlist: [Color] = [.pink, .cyan, .purple]
+>>>>>>> v2.0
   var myTeamSelection: MyTeamType {
     MyTeamType.teamTypeList()[currentIndex]
   }
@@ -88,6 +92,10 @@ struct MyTeamSelectView: View {
           .padding(.bottom, UIScreen.getHeight(30))
         }
         .padding(.bottom, UIScreen.getHeight(14))
+<<<<<<< HEAD
+=======
+
+>>>>>>> v2.0
         Button {
           // 완료 액션
         } label: {
