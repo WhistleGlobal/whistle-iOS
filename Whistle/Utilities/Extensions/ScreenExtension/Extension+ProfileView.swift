@@ -14,6 +14,33 @@ import SwiftUI
 
 extension ProfileView {
   @ViewBuilder
+  func navigationLinks() -> some View {
+    Group {
+      NavigationLink(
+        destination: NotificationSettingView().tint(Color.LabelColor_Primary),
+        isActive: $goNotiSetting)
+      {
+        EmptyView()
+      }
+      .id(UUID())
+      NavigationLink(
+        destination: LegalInfoView(),
+        isActive: $goLegalInfo)
+      {
+        EmptyView()
+      }
+      .id(UUID())
+      NavigationLink(
+        destination: GuideStatusView(),
+        isActive: $goGuideStatus)
+      {
+        EmptyView()
+      }
+      .id(UUID())
+    }
+  }
+
+  @ViewBuilder
   func profileCardLayer() -> some View {
     VStack(spacing: 0) {
       // TopSpacing
@@ -489,15 +516,12 @@ extension ProfileView {
       } label: {
         bottomSheetRowWithIcon(systemName: "bell", text: CommonWords().notification)
       }
-      .id(UUID())
       Rectangle().frame(height: 0.5).padding(.leading, 52).foregroundColor(Color.Border_Default_Dark)
-      NavigationLink {
-        LegalInfoView()
-          .id(UUID())
+      Button {
+        goLegalInfo = true
       } label: {
         bottomSheetRowWithIcon(systemName: "info.circle", text: CommonWords().about)
       }
-      .id(UUID())
       Rectangle().frame(height: 0.5).padding(.leading, 52).foregroundColor(Color.Border_Default_Dark)
       Button {
         withAnimation {
@@ -514,14 +538,11 @@ extension ProfileView {
         bottomSheetRowWithIcon(systemName: "square.and.arrow.up", text: CommonWords().shareProfile)
       }
       Rectangle().frame(height: 0.5).padding(.leading, 52).foregroundColor(Color.Border_Default_Dark)
-      NavigationLink {
-        GuideStatusView()
-          .id(UUID())
+      Button {
+        goGuideStatus = true
       } label: {
         bottomSheetRowWithIcon(systemName: "exclamationmark.triangle.fill", text: CommonWords().guideStatus)
       }
-      .id(UUID())
-
       Group {
         Rectangle().frame(width: UIScreen.width, height: 1).foregroundColor(Color.Border_Default_Dark)
         Button {

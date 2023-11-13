@@ -111,11 +111,10 @@ struct MainContentPlayerView: View {
                       currentVideoInfo: content,
                       feedMoreModel: MainFeedMoreModel.shared,
                       feedPlayersViewModel: MainFeedPlayersViewModel.shared,
-                      feedArray: apiViewModel.mainFeed)
-                    {
-                      whistleToggle(content: content, index)
-                    }
-                    .padding(.bottom, UIScreen.main.nativeBounds.height == 1334 ? 24 : 0)
+                      feedArray: apiViewModel.mainFeed,
+                      whistleAction: { whistleToggle(content: content, index)
+                      })
+                      .padding(.bottom, UIScreen.main.nativeBounds.height == 1334 ? 24 : 0)
                   }
                   if feedMoreModel.bottomSheetPosition != .hidden {
                     DimsThick()

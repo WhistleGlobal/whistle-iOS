@@ -38,5 +38,6 @@ struct ContentLayerButton: View {
         .shadow(color: .black.opacity(0.5), radius: 3, x: 0, y: 0)
     }
     .frame(height: UIScreen.getHeight(56))
+    .contentShape(Rectangle())
   }
 }
