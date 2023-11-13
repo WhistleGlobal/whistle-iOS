@@ -28,8 +28,16 @@ struct TagResultView: View {
       .frame(height: 23)
       .padding(.top)
       .padding(.horizontal, 16)
-      taggedVideoList()
+      switch tagTabSelection {
+      case .popular:
+        taggedVideoList()
+      case .recent:
+        taggedVideoList()
+      }
       Spacer()
+    }
+    .onAppear {
+      UIApplication().endEditing()
     }
     .toolbarRole(.editor)
     .toolbar {
