@@ -59,7 +59,7 @@ struct MainFeedView: View {
           toastViewModel.cancelToastInit(message: ToastMessages().postHidden) {
             Task {
               let currentContent = apiViewModel.mainFeed[feedPlayersViewModel.currentVideoIndex]
-              await apiViewModel.actionContentHate(contentID: currentContent.contentId ?? 0)
+              await apiViewModel.actionContentHate(contentID: currentContent.contentId ?? 0, method: .post)
               feedPlayersViewModel.removePlayer {
                 index -= 1
               }
