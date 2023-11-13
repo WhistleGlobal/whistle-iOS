@@ -63,6 +63,7 @@ struct MainSearchView: View {
         .frame(height: 74)
       }
       .padding(.horizontal, 16)
+      .id(UUID())
       Spacer()
     }
     .navigationBarBackButtonHidden()

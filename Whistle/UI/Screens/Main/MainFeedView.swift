@@ -42,6 +42,7 @@ struct MainFeedView: View {
                 .font(.system(size: 24))
                 .foregroundColor(.white)
             }
+            .id(UUID())
           }
           .frame(height: 28)
           .padding(.horizontal, 16)

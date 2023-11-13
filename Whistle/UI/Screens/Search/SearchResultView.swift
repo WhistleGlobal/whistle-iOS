@@ -19,6 +19,11 @@ struct SearchResultView: View {
   @State var isSearching = false
   @State var searchTabSelection: SearchTabSelection = .content
 
+  // test
+  @State private var videoCount = 10 // Initial video count
+
+  @State private var reachedBottom = false
+
   var body: some View {
     VStack(spacing: 0) {
       HStack(spacing: 0) {
@@ -75,28 +80,39 @@ extension SearchResultView {
   @ViewBuilder
   func searchVideoList() -> some View {
     ScrollView {
-      LazyVGrid(columns: [
-        GridItem(.flexible()),
-        GridItem(.flexible()),
-        GridItem(.flexible()),
-      ], spacing: 8) {
-        ForEach(0..<10, id: \.self) { _ in
-          NavigationLink {
-            EmptyView()
-          } label: {
-            videoThumbnailView(
-              thumbnailUrl: "https://picsum.photos/id/\(Int.random(in: 0..<200))/200/300",
-              whistleCount: Int.random(in: 0..<1000000))
+      ScrollViewReader { scrollView in
+        LazyVGrid(columns: [
+          GridItem(.flexible()),
+          GridItem(.flexible()),
+          GridItem(.flexible()),
+        ], spacing: 8) {
+          ForEach(0..<videoCount, id: \.self) { index in
+            NavigationLink {
+              EmptyView()
+            } label: {
+              videoThumbnailView(
+                thumbnailUrl: "https://picsum.photos/id/\(index)/200/300",
+                whistleCount: Int.random(in: 0..<1000000))
+            }
+            .id(UUID())
+            .onAppear {
+              if index == videoCount - 1 {
+                let scrollPosition = CGFloat(index + 1) *
+                  (UIScreen.getHeight(204) + 8)
+                scrollView.scrollTo(scrollPosition, anchor: .top)
+                videoCount += 10
+              }
+            }
           }
-          .id(UUID())
         }
+        Spacer().frame(height: 150)
       }
-      Spacer().frame(height: 150)
+      .padding(.top, 15)
+      .padding(.horizontal, 16)
+      .scrollIndicators(.hidden)
     }
-    .padding(.top, 15)
-    .padding(.horizontal, 16)
-    .scrollIndicators(.hidden)
   }
+
 
   @ViewBuilder
   func searchAccountList() -> some View {
