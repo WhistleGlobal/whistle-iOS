@@ -138,3 +138,13 @@
 "님이 회원님을 팔로우하기 시작했습니다. " = " started following you. ";
 "광고성 정보 알림 수신동의 안내" = "Advertising Information Notification Consent Guide";
 "광고성 정보 알림 수신거부 안내" = "Advertising Information Notification Opt-out Guide";
+
+// 검색 관련
+"최근 검색" = "Recent searches";
+"모두 지우기" = "Clear all";
+"게시물 %@개" = "%@ posts";
+"콘텐츠" = "Content";
+"계정" = "User";
+"해시태그" = "Hashtag";
+"인기순" = "Popular";
+"최신순" = "Recent";

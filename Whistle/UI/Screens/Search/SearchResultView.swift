@@ -71,10 +71,10 @@ struct SearchResultView: View {
 
 // MARK: - SearchTabSelection
 
-enum SearchTabSelection: String {
-  case content
-  case account
-  case hashtag
+enum SearchTabSelection: LocalizedStringKey {
+  case content = "콘텐츠"
+  case account = "계정"
+  case hashtag = "해시태그"
 }
 
 // MARK: - ViewBuilders

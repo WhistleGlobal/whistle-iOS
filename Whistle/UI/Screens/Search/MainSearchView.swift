@@ -36,7 +36,7 @@ struct MainSearchView: View {
       Spacer().frame(height: 14)
       Divider()
       HStack {
-        Text("최근 검색")
+        Text(SearchWords().recentSearces)
           .fontSystem(fontDesignSystem: .subtitle1)
           .foregroundColor(.LabelColor_Primary)
         Spacer()
@@ -47,7 +47,7 @@ struct MainSearchView: View {
             searchHistory = String(data: jsonData, encoding: .utf8) ?? ""
           }
         } label: {
-          Text("모두 지우기")
+          Text(SearchWords().clearAll)
             .fontSystem(fontDesignSystem: .subtitle3)
             .foregroundColor(.info)
         }

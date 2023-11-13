@@ -16,7 +16,7 @@ struct TagResultView: View {
 
   var body: some View {
     VStack(spacing: 0) {
-      Text("게시물 100개")
+      Text("게시물 \(100.roundedWithAbbreviations)개")
         .fontSystem(fontDesignSystem: .subtitle3)
         .foregroundColor(.LabelColor_Secondary)
         .frame(height: 30, alignment: .top)
@@ -52,9 +52,9 @@ struct TagResultView: View {
 
 // MARK: - TagTabSelection
 
-enum TagTabSelection: String {
-  case popular
-  case recent
+enum TagTabSelection: LocalizedStringKey {
+  case popular = "인기순"
+  case recent = "최신순"
 }
 
 extension TagResultView {

@@ -10,7 +10,7 @@ import SwiftUI
 
 // MARK: - SearchTabItemView
 
-struct SearchTabItem<T>: View where T: RawRepresentable, T.RawValue == String {
+struct SearchTabItem<T>: View where T: RawRepresentable, T.RawValue == LocalizedStringKey {
   @Binding var tabSelected: T
   let tabType: T
   var body: some View {

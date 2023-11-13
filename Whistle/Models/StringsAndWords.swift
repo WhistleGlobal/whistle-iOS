@@ -151,3 +151,15 @@ struct NotificationWords {
   let agreedTitle: LocalizedStringKey = "광고성 정보 알림 수신동의 안내"
   let disagreedTitle: LocalizedStringKey = "광고성 정보 알림 수신거부 안내"
 }
+
+// MARK: - SearchWords
+
+struct SearchWords {
+  let recentSearces: LocalizedStringKey = "최근 검색"
+  let clearAll: LocalizedStringKey = "모두 지우기"
+  let content: LocalizedStringKey = "콘텐츠"
+  let account: LocalizedStringKey = "계정"
+  let hashtag: LocalizedStringKey = "해시태그"
+  let popular: LocalizedStringKey = "인기순"
+  let recent: LocalizedStringKey = "최신순"
+}
