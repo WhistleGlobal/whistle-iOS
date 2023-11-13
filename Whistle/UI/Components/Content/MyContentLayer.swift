@@ -77,14 +77,14 @@ struct MyContentLayer: View {
               apiViewModel.mainFeed = apiViewModel.mainFeed.map { item in
                 let mutableItem = item
                 if mutableItem.contentId == currentContent.contentId {
-                  mutableItem.whistleCount = currentContent.whistleCount ?? 0
+                  mutableItem.whistleCount = currentContent.whistleCount
                   mutableItem.isWhistled = currentContent.isWhistled
                 }
                 return mutableItem
               }
             } label: {
               ContentLayerButton(
-                type: .whistle(currentVideoInfo.whistleCount ?? 0),
+                type: .whistle(currentVideoInfo.whistleCount.roundedWithAbbreviations),
                 isFilled: $currentVideoInfo.isWhistled)
             }
             Button {

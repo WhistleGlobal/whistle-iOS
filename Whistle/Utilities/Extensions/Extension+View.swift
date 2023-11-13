@@ -89,7 +89,7 @@ extension View {
           Image(systemName: "heart.fill")
             .font(.system(size: 16))
             .foregroundColor(.Danger)
-          Text("\(whistleCount)")
+          Text("\(whistleCount.roundedWithAbbreviations)")
             .fontSystem(fontDesignSystem: .caption_SemiBold)
             .foregroundColor(Color.LabelColor_Primary_Dark)
         }

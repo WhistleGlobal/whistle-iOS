@@ -92,7 +92,7 @@ struct SingleContentLayer: View {
               apiViewModel.singleContent.isWhistled.toggle()
             } label: {
               ContentLayerButton(
-                type: .whistle(currentVideoInfo.whistleCount),
+                type: .whistle(currentVideoInfo.whistleCount.roundedWithAbbreviations),
                 isFilled: $currentVideoInfo.isWhistled)
             }
             Button {

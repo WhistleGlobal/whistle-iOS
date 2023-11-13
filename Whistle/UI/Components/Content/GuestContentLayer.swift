@@ -105,7 +105,7 @@ struct GuestContentLayer: View {
               feedMoreModel.bottomSheetPosition = .dynamic
             } label: {
               ContentLayerButton(
-                type: .whistle(currentVideoInfo.whistleCount ?? 0))
+                type: .whistle(currentVideoInfo.whistleCount?.roundedWithAbbreviations ?? "0"))
             }
             Button {
               feedMoreModel.bottomSheetPosition = .dynamic

@@ -22,13 +22,13 @@ struct SearchResultView: View {
   var body: some View {
     VStack(spacing: 0) {
       HStack(spacing: 0) {
-        SearchTabItemView(tabSelected: $searchTabSelection, tabType: .content)
-        SearchTabItemView(tabSelected: $searchTabSelection, tabType: .account)
-        SearchTabItemView(tabSelected: $searchTabSelection, tabType: .hashtag)
+        SearchTabItem(tabSelected: $searchTabSelection, tabType: .content)
+        SearchTabItem(tabSelected: $searchTabSelection, tabType: .account)
+        SearchTabItem(tabSelected: $searchTabSelection, tabType: .hashtag)
       }
-      .padding(.top, 20)
-      .padding(.horizontal, 16)
       .frame(height: 23)
+      .padding(.top)
+      .padding(.horizontal, 16)
       switch searchTabSelection {
       case .content:
         searchVideoList()
@@ -60,38 +60,6 @@ struct SearchResultView: View {
   SearchResultView()
 }
 
-// MARK: - SearchTabItemView
-
-struct SearchTabItemView: View {
-
-  @Binding var tabSelected: SearchTabSelection
-  let tabType: SearchTabSelection
-  var body: some View {
-    ZStack {
-      VStack(spacing: 0) {
-        Spacer()
-        Rectangle()
-          .foregroundColor(Color.Gray30_Dark)
-          .frame(height: 1)
-          .overlay {
-            Capsule()
-              .frame(height: 2)
-              .foregroundColor(.LabelColor_Primary)
-              .opacity(tabType == tabSelected ? 1 : 0)
-          }
-      }
-      Text(tabType.rawValue)
-        .fontSystem(fontDesignSystem: .subtitle3)
-        .fontWeight(.semibold)
-        .foregroundColor(tabType == tabSelected ? Color.LabelColor_Primary : Color.Disable_Placeholder)
-    }
-    .frame(maxWidth: .infinity, maxHeight: .infinity)
-    .onTapGesture {
-      tabSelected = tabType
-    }
-  }
-}
-
 // MARK: - SearchTabSelection
 
 enum SearchTabSelection: String {
@@ -118,7 +86,7 @@ extension SearchResultView {
           } label: {
             videoThumbnailView(
               thumbnailUrl: "https://picsum.photos/id/\(Int.random(in: 0..<200))/200/300",
-              whistleCount: Int.random(in: 0..<100))
+              whistleCount: Int.random(in: 0..<1000000))
           }
           .id(UUID())
         }
@@ -154,7 +122,7 @@ extension SearchResultView {
     ScrollView {
       ForEach(0..<10, id: \.self) { _ in
         NavigationLink {
-          EmptyView()
+          TagResultView(tagText: "#뽀삐뽀")
         } label: {
           searchTagRow()
         }
@@ -209,7 +177,7 @@ extension SearchResultView {
           .fontSystem(fontDesignSystem: .subtitle2)
           .frame(width: .infinity,alignment: .leading)
           .foregroundColor(.LabelColor_Primary)
-        Text("게시물 100개")
+        Text("게시물 \(100000.roundedWithAbbreviations)개")
           .fontSystem(fontDesignSystem: .body2)
           .frame(width: .infinity,alignment: .leading)
           .foregroundColor(.LabelColor_Secondary)

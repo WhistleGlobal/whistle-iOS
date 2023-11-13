@@ -114,7 +114,7 @@ struct ContentLayer<
               whistle()
             } label: {
               ContentLayerButton(
-                type: .whistle(whistleCount),
+                type: .whistle(whistleCount.roundedWithAbbreviations),
                 isFilled: $isWhistled)
             }
             .buttonStyle(PressEffectButtonStyle())
