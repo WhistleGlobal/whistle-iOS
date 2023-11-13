@@ -12,6 +12,7 @@ import UIKit
 
 struct MainSearchView: View {
 
+  @Environment(\.dismiss) var dismiss
   @State var searchText = ""
   @State var searchHistory: [String] = []
   @State var text = ""
@@ -21,7 +22,7 @@ struct MainSearchView: View {
 
   var body: some View {
     VStack(spacing: 0) {
-      Spacer().frame(height: 106)
+      Spacer().frame(height: 14)
       Divider()
       HStack {
         Text("최근 검색")
@@ -64,7 +65,20 @@ struct MainSearchView: View {
       .padding(.horizontal, 16)
       Spacer()
     }
+    .navigationBarBackButtonHidden()
     .background()
+    .toolbar {
+      ToolbarItem(placement: .topBarLeading) {
+        FeedSearchBar(
+          searchText: $searchQueryString,
+          isSearching: $isSearching,
+          cancelTapAction: dismiss)
+          .simultaneousGesture(TapGesture().onEnded {
+            //                      tapSearchBar?()
+          })
+          .frame(width: UIScreen.width - 32)
+      }
+    }
   }
 }
 
@@ -80,6 +94,7 @@ struct FeedSearchBar: View {
   @FocusState private var isFocused: Bool
   @Binding var searchText: String
   @Binding var isSearching: Bool
+  var cancelTapAction: DismissAction
 
   var body: some View {
     ZStack {
@@ -123,7 +138,7 @@ struct FeedSearchBar: View {
               .padding(.trailing, 8)
             }
           }
-        if isSearching {
+        if !isNeedBackButton {
           Text(CommonWords().cancel)
             .foregroundStyle(colorModel.cancelButtonColor)
             .fontSystem(fontDesignSystem: .body1)
@@ -135,30 +150,16 @@ struct FeedSearchBar: View {
               withAnimation {
                 isSearching = false
               }
+              if isNeedBackButton {
+                return
+              }
+              cancelTapAction()
             }
         }
       }
     }
-    .frame(width: searchBarWidth())
-//    .padding(.horizontal, 16)
-//    .padding(.top, 16)
-//    .padding(.bottom, 8)
     .onDisappear {
       UIApplication.shared.endEditing()
-    }
-  }
-
-  func searchBarWidth() -> CGFloat {
-    withAnimation {
-      if isNeedBackButton {
-        if isSearching {
-          return UIScreen.width - 32
-        } else {
-          return UIScreen.width - 32 - 24
-        }
-      } else {
-        return UIScreen.width - 32
-      }
     }
   }
 }

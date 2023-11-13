@@ -35,8 +35,8 @@ struct MainFeedView: View {
         VStack(spacing: 0) {
           HStack {
             Spacer()
-            Button {
-              feedMoreModel.showSearch = true
+            NavigationLink {
+              MainSearchView()
             } label: {
               Image(systemName: "magnifyingglass")
                 .font(.system(size: 24))
@@ -48,24 +48,6 @@ struct MainFeedView: View {
           .padding(.top, 54)
           Spacer()
         }
-      }
-    }
-    .toolbar {
-      if feedMoreModel.showSearch {
-        ToolbarItem(placement: .topBarLeading) {
-          FeedSearchBar(
-            searchText: $searchQueryString,
-            isSearching: $isSearching)
-            .simultaneousGesture(TapGesture().onEnded {
-              //                      tapSearchBar?()
-            })
-            .frame(width: UIScreen.width - 32)
-        }
-      }
-    }
-    .overlay {
-      if feedMoreModel.showSearch {
-        MainSearchView()
       }
     }
     .background(Color.black.edgesIgnoringSafeArea(.all))
@@ -179,10 +161,6 @@ struct MainFeedView: View {
             .onDisappear {
               universalRoutingModel.isUniversalProfile = false
             }
-//          MemberProfileView(userId: universalRoutingModel.userId)
-//            .onDisappear {
-//              universalRoutingModel.isUniversalProfile = false
-//            }
         }
       } else {
         if !apiViewModel.mainFeed.isEmpty {
