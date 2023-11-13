@@ -12,7 +12,6 @@ import SwiftUI
 // MARK: - MyFeedView
 
 struct MyFeedView: View {
-
   @Environment(\.dismiss) var dismiss
   @StateObject private var apiViewModel = APIViewModel.shared
   @StateObject private var feedPlayersViewModel = MyFeedPlayersViewModel.shared

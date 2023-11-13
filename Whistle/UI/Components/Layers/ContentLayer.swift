@@ -34,6 +34,7 @@ struct ContentLayer<
   @State var isBookmarked = false
   @State var caption = ""
   @State var musicTitle = ""
+  var index: Binding<Int>?
 
   var body: some View {
     ZStack {
@@ -56,7 +57,7 @@ struct ContentLayer<
               } label: {
                 Group {
                   profileImageView(url: profileImg, size: 36)
-                    .padding(.trailing, UIScreen.getWidth(8))
+                    .padding(.trailing, UIScreen.getWidth(4))
                   Text(username)
                     .foregroundColor(.white)
                     .fontSystem(fontDesignSystem: .subtitle1)
@@ -69,7 +70,7 @@ struct ContentLayer<
                 } label: {
                   Text(isFollowed ? CommonWords().following : CommonWords().follow)
                     .padding(.horizontal, 12)
-                    .padding(.vertical, 4)
+                    .padding(.vertical, 3)
                     .fontSystem(fontDesignSystem: .caption_SemiBold)
                     .foregroundColor(Color.LabelColor_Primary_Dark)
                     .background {
@@ -125,25 +126,28 @@ struct ContentLayer<
                 type: .bookmark,
                 isFilled: $isBookmarked)
             }
+            .buttonStyle(PressEffectButtonStyle())
             Button {
               showShareSheet()
             } label: {
               ContentLayerButton(type: .share)
             }
+            .buttonStyle(PressEffectButtonStyle())
             Button {
               moreButtonAction()
             } label: {
               ContentLayerButton(type: .more)
             }
+            .buttonStyle(PressEffectButtonStyle())
           }
           .foregroundColor(.Gray10)
-          .padding(.bottom, UIScreen.getHeight(4))
+          .padding(.bottom, UIScreen.getHeight(2))
         }
       }
       .onAppear {
         getContentInfo()
       }
-      .padding(.bottom, UIScreen.getHeight(98))
+      .padding(.bottom, UIScreen.getHeight(100))
       .padding(.horizontal, UIScreen.getWidth(16))
     }
   }
@@ -194,14 +198,12 @@ struct ContentLayer<
       return
     }
 
-    if username != apiViewModel.myProfile.userName {
-      if playersViewModel is MainFeedPlayersViewModel {
-        feedMoreModel.isRootStacked = true
-      }
-      playersViewModel.stopPlayer()
-      if playersViewModel is MemeberPlayersViewModel {
-        dismissAction?()
-      }
+    if feedMoreModel is MainFeedMoreModel || feedMoreModel is BookmarkedFeedMoreModel {
+      feedMoreModel.isRootStacked = true
+    }
+    playersViewModel.stopPlayer()
+    if playersViewModel is MemeberPlayersViewModel || playersViewModel is MyFeedPlayersViewModel {
+      dismissAction?()
     }
   }
 
@@ -318,6 +320,10 @@ extension MemberContent: ContentInfo { }
 
 extension MyContent: ContentInfo { }
 
+// MARK: - Bookmark + ContentInfo
+
+extension Bookmark: ContentInfo { }
+
 // MARK: - FeedMoreModel
 
 protocol FeedMoreModel {
@@ -337,6 +343,10 @@ extension MemberFeedMoreModel: FeedMoreModel { }
 // MARK: - MyFeedMoreModel + FeedMoreModel
 
 extension MyFeedMoreModel: FeedMoreModel { }
+
+// MARK: - BookmarkedFeedMoreModel + FeedMoreModel
+
+extension BookmarkedFeedMoreModel: FeedMoreModel { }
 
 // MARK: - PlayersViewModel
 
@@ -359,3 +369,7 @@ extension MemeberPlayersViewModel: PlayersViewModel { }
 // MARK: - MyFeedPlayersViewModel + PlayersViewModel
 
 extension MyFeedPlayersViewModel: PlayersViewModel { }
+
+// MARK: - BookmarkedPlayersViewModel + PlayersViewModel
+
+extension BookmarkedPlayersViewModel: PlayersViewModel { }

@@ -33,6 +33,8 @@ struct ProfileView: View {
   @State var bottomSheetPosition: BottomSheetPosition = .hidden
   @State var showProfileEditView = false
   @State var goNotiSetting = false
+  @State var goLegalInfo = false
+  @State var goGuideStatus = false
   @State var tabSelection: profileTabCase = .myVideo
   @State var profileType: ProfileType = .my
   @State var offsetY: CGFloat = 0
@@ -47,13 +49,7 @@ struct ProfileView: View {
 
   var body: some View {
     ZStack {
-      NavigationLink(
-        destination: NotificationSettingView().tint(Color.LabelColor_Primary),
-        isActive: $goNotiSetting)
-      {
-        EmptyView()
-      }
-      .id(UUID())
+      navigationLinks()
       if bottomSheetPosition != .hidden {
         DimsThick().zIndex(1000)
       }

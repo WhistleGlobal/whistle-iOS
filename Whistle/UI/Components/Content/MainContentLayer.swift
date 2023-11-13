@@ -221,7 +221,7 @@ struct PressEffectButtonStyle: ButtonStyle {
   func makeBody(configuration: Configuration) -> some View {
     configuration.label
       .foregroundColor(.white)
-      .scaleEffect(configuration.isPressed ? 0.9 : 1.0)
+      .scaleEffect(configuration.isPressed ? 0.8 : 1.0)
       .opacity(configuration.isPressed ? 0.6 : 1.0)
       .animation(.easeInOut, value: configuration.isPressed)
   }

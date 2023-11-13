@@ -33,12 +33,12 @@ struct SingleContentLayer: View {
       VStack(spacing: 0) {
         Spacer()
         HStack(spacing: 0) {
-          VStack(alignment: .leading, spacing: 12) {
+          VStack(alignment: .leading, spacing: 0) {
             Spacer()
             HStack(spacing: 0) {
               Group {
                 profileImageView(url: currentVideoInfo.profileImg, size: 36)
-                  .padding(.trailing, 12)
+                  .padding(.trailing, UIScreen.getWidth(4))
                 Text(currentVideoInfo.userName ?? "")
                   .foregroundColor(.white)
                   .fontSystem(fontDesignSystem: .subtitle1)
@@ -58,15 +58,19 @@ struct SingleContentLayer: View {
                       isExpanded.toggle()
                     }
                   }
+                  .padding(.bottom, 12)
               }
             }
-            Label(LocalizedStringKey(stringLiteral: currentVideoInfo.musicTitle ?? "원본 오디오"), systemImage: "music.note")
-              .fontSystem(fontDesignSystem: .body2)
-              .foregroundColor(.white)
-              .padding(.top, 4)
+            HStack(spacing: 8) {
+              Image(systemName: "music.note")
+                .font(.system(size: 16))
+              Text(LocalizedStringKey(stringLiteral: currentVideoInfo.musicTitle ?? "원본 오디오"))
+                .fontSystem(fontDesignSystem: .body2)
+            }
+            .padding(.leading, 2)
+            .foregroundColor(.white)
           }
-          .padding(.bottom, 4)
-          .padding(.leading, 4)
+          .padding(.leading, 2)
           Spacer()
           // MARK: - Action Buttons
           VStack(spacing: 26) {
@@ -95,6 +99,7 @@ struct SingleContentLayer: View {
                 type: .whistle(currentVideoInfo.whistleCount),
                 isFilled: $currentVideoInfo.isWhistled)
             }
+            .buttonStyle(PressEffectButtonStyle())
             Button {
               Task {
                 if currentVideoInfo.isBookmarked {
@@ -142,9 +147,10 @@ struct SingleContentLayer: View {
             }
           }
           .foregroundColor(.Gray10)
+          .padding(.bottom, UIScreen.getHeight(2))
         }
       }
-      .padding(.bottom, UIScreen.getHeight(102))
+      .padding(.bottom, UIScreen.getHeight(100))
       .padding(.horizontal, UIScreen.getWidth(16))
     }
   }
