@@ -51,6 +51,19 @@ struct MainFeedView: View {
         }
       }
     }
+    .toolbar {
+      if feedMoreModel.showSearch {
+        ToolbarItem(placement: .topBarLeading) {
+          FeedSearchBar(
+            searchText: $searchQueryString,
+            isSearching: $isSearching)
+            .simultaneousGesture(TapGesture().onEnded {
+              //                      tapSearchBar?()
+            })
+            .frame(width: UIScreen.width - 32)
+        }
+      }
+    }
     .background(Color.black.edgesIgnoringSafeArea(.all))
     .edgesIgnoringSafeArea(.all)
     .bottomSheet(
