@@ -63,7 +63,7 @@ struct BookmarkedContentPlayerview: View {
                   if let index = viewCount.views.firstIndex(where: { $0.contentId == content.contentId }) {
                     viewCount.views[index].viewDate = dateString
                   } else {
-                    viewCount.views.append(.init(contentId: content.contentId, viewDate: dateString))
+                    viewCount.views.append(.init(contentId: content.contentId ?? 0, viewDate: dateString))
                   }
                 }
                 .onDisappear {
@@ -102,6 +102,13 @@ struct BookmarkedContentPlayerview: View {
                   ContentGradientLayer()
                     .allowsHitTesting(false)
                   if tabbarModel.tabWidth != 56 {
+//                    ContentLayer(
+//                      currentVideoInfo: content,
+//                      feedMoreModel: BookmarkedFeedMoreModel.shared,
+//                      feedPlayersViewModel: BookmarkedPlayersViewModel.shared,
+//                      feedArray: apiViewModel.bookmark,
+//                      whistleAction: { whistleToggle(content: content, index) },
+//                      index: $index)
                     BookmarkedContentLayer(
                       currentVideoInfo: content,
                       index: $index,
@@ -118,7 +125,7 @@ struct BookmarkedContentPlayerview: View {
                 .opacity(showPlayButton ? 1 : 0)
                 .allowsHitTesting(false)
             }
-            if BlockList.shared.userIds.contains(content.userId) {
+            if BlockList.shared.userIds.contains(content.userId ?? 0) {
               KFImage.url(URL(string: content.thumbnailUrl))
                 .placeholder {
                   Color.black
@@ -168,6 +175,7 @@ struct BookmarkedContentPlayerview: View {
     .onDisappear {
       bartintModel.tintColor = .LabelColor_Primary
       lifecycleDelegate?.onDisappear()
+      feedPlayersViewModel.stopPlayer()
     }
     .ignoresSafeArea()
     .onChange(of: tabbarModel.tabSelectionNoAnimation) { newValue in
@@ -209,14 +217,14 @@ extension BookmarkedContentPlayerview {
     if apiViewModel.bookmark[index].isWhistled {
       timer = Timer.scheduledTimer(withTimeInterval: 2, repeats: false) { _ in
         Task {
-          await apiViewModel.whistleAction(contentID: content.contentId, method: .delete)
+          await apiViewModel.whistleAction(contentID: content.contentId ?? 0, method: .delete)
         }
       }
       apiViewModel.bookmark[index].whistleCount -= 1
     } else {
       timer = Timer.scheduledTimer(withTimeInterval: 2, repeats: false) { _ in
         Task {
-          await apiViewModel.whistleAction(contentID: content.contentId, method: .post)
+          await apiViewModel.whistleAction(contentID: content.contentId ?? 0, method: .post)
         }
       }
       apiViewModel.bookmark[index].whistleCount += 1

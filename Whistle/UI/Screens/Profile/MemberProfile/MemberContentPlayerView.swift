@@ -132,10 +132,6 @@ struct MemberContentPlayerView: View {
                         feedArray: apiViewModel.memberFeed,
                         whistleAction: whistleToggle,
                         dismissAction: dismissAction)
-//                      MemberContentLayer(
-//                        currentVideoInfo: content,
-//                        whistleAction: whistleToggle,
-//                        dismissAction: dismissAction)
                         .padding(.bottom, UIScreen.main.nativeBounds.height == 1334 ? 24 : 0)
                     }
                     if feedMoreModel.bottomSheetPosition != .hidden {
@@ -197,6 +193,7 @@ struct MemberContentPlayerView: View {
     .onDisappear {
       bartintModel.tintColor = .LabelColor_Primary
       lifecycleDelegate?.onDisappear()
+      feedPlayersViewModel.stopPlayer()
     }
     .ignoresSafeArea()
     .onChange(of: tabbarModel.tabSelectionNoAnimation) { newValue in

@@ -27,9 +27,9 @@ class Bookmark: ObservableObject, Codable, Hashable {
     case aspectRatio = "aspect_ratio"
   }
 
-  var contentId = 0
-  var userId = 0
-  var userName = ""
+  var contentId: Int?
+  var userId: Int?
+  var userName: String?
   var profileImg: String?
   var caption: String?
   var videoUrl = ""
