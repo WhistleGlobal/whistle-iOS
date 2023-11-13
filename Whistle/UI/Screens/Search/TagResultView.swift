@@ -37,7 +37,7 @@ struct TagResultView: View {
       Spacer()
     }
     .onAppear {
-      UIApplication().endEditing()
+      UIApplication.shared.endEditing()
     }
     .toolbarRole(.editor)
     .toolbar {

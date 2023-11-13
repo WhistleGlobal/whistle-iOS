@@ -51,6 +51,7 @@ struct SearchResultView: View {
           isNeedBackButton: true,
           searchText: $searchQueryString,
           isSearching: $isSearching,
+          submitAction: { },
           cancelTapAction: dismiss)
           .simultaneousGesture(TapGesture().onEnded {
             //                      tapSearchBar?()

@@ -16,6 +16,7 @@ struct FeedSearchBar: View {
   @FocusState private var isFocused: Bool
   @Binding var searchText: String
   @Binding var isSearching: Bool
+  var submitAction: () -> Void
   var cancelTapAction: DismissAction
 
   var body: some View {
@@ -40,6 +41,7 @@ struct FeedSearchBar: View {
               isSearching = false
               isFocused = false
             }
+            submitAction()
           }
           .overlay(alignment: .leading) {
             Image(systemName: "magnifyingglass")

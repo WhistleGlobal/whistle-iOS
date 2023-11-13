@@ -57,7 +57,9 @@ struct MainFeedView: View {
         ToolbarItem(placement: .topBarLeading) {
           FeedSearchBar(
             searchText: $searchQueryString,
-            isSearching: $isSearching, cancelTapAction: dismiss)
+            isSearching: $isSearching,
+            submitAction: { },
+            cancelTapAction: dismiss)
             .simultaneousGesture(TapGesture().onEnded {
               //                      tapSearchBar?()
             })
