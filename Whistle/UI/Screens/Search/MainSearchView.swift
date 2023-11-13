@@ -41,7 +41,11 @@ struct MainSearchView: View {
           .foregroundColor(.LabelColor_Primary)
         Spacer()
         Button {
-          //
+          searchHistoryArray.removeAll()
+          let jsonArray = searchHistoryArray.map { JSON($0) }
+          if let jsonData = try? JSON(jsonArray).rawData() {
+            searchHistory = String(data: jsonData, encoding: .utf8) ?? ""
+          }
         } label: {
           Text("모두 지우기")
             .fontSystem(fontDesignSystem: .subtitle3)
@@ -79,34 +83,6 @@ struct MainSearchView: View {
         }
         .padding(.horizontal, 16)
         .id(UUID())
-//        NavigationLink {
-//          SearchResultView()
-//        } label: {
-//          HStack(spacing: 0) {
-//            Image(systemName: "magnifyingglass")
-//              .font(.system(size: 28))
-//              .frame(width: 48, height: 48)
-//              .padding(.trailing, 10)
-//            Text(item)
-//              .fontSystem(fontDesignSystem: .body2)
-//              .foregroundColor(.LabelColor_Primary)
-//            Spacer()
-//            Image(systemName: "xmark")
-//              .font(.system(size: 16))
-//              .frame(width: 16, height: 16)
-//              .foregroundColor(.LabelColor_Primary)
-//              .onTapGesture {
-//                searchHistoryArray.remove(at: index)
-//                let jsonArray = searchHistoryArray.map { JSON($0) }
-//                if let jsonData = try? JSON(jsonArray).rawData() {
-//                  searchHistory = String(data: jsonData, encoding: .utf8) ?? ""
-//                }
-//              }
-//          }
-//          .frame(height: 74)
-//        }
-//        .padding(.horizontal, 16)
-//        .id(UUID())
       }
       Spacer()
     }

@@ -59,6 +59,9 @@ struct SearchResultView: View {
           .frame(width: UIScreen.width - 63)
       }
     }
+    .onDisappear {
+      UIApplication.shared.endEditing()
+    }
   }
 }
 
@@ -113,7 +116,6 @@ extension SearchResultView {
       .scrollIndicators(.hidden)
     }
   }
-
 
   @ViewBuilder
   func searchAccountList() -> some View {
