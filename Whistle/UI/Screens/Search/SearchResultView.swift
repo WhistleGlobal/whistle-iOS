@@ -18,6 +18,7 @@ struct SearchResultView: View {
   @State var searchQueryString = ""
   @State var isSearching = false
   @State var searchTabSelection: SearchTabSelection = .content
+  @StateObject var apiViewModel = APIViewModel.shared
 
   // test
   @State private var videoCount = 21 // Initial video count
@@ -125,11 +126,11 @@ extension SearchResultView {
   @ViewBuilder
   func searchAccountList() -> some View {
     ScrollView {
-      ForEach(0..<10, id: \.self) { _ in
+      ForEach(apiViewModel.searchedUser, id: \.uuid) { user in
         NavigationLink {
           EmptyView()
         } label: {
-          searchAccountRow()
+          searchAccountRow(user: user)
         }
         .padding(.horizontal, 16)
         .id(UUID())
@@ -144,11 +145,11 @@ extension SearchResultView {
   @ViewBuilder
   func searchTagList() -> some View {
     ScrollView {
-      ForEach(0..<10, id: \.self) { _ in
+      ForEach(apiViewModel.searchedTag, id: \.uuid) { tag in
         NavigationLink {
-          TagResultView(tagText: "#뽀삐뽀")
+          TagResultView(tagText: "#\(tag.contentHashtag)")
         } label: {
-          searchTagRow()
+          searchTagRow(tag: tag)
         }
         .padding(.horizontal, 16)
         .id(UUID())
@@ -161,19 +162,16 @@ extension SearchResultView {
   }
 
   @ViewBuilder
-  func searchAccountRow() -> some View {
+  func searchAccountRow(user: SearchedUser) -> some View {
     HStack(spacing: 0) {
-      Image("ProfileDefault")
-        .resizable()
-        .scaledToFit()
-        .frame(width: 48, height: 48)
+      profileImageView(url: user.profileImage, size: 48)
         .padding(.trailing, 10)
       VStack(alignment: .leading, spacing: 0) {
-        Text("Username")
+        Text(user.userName)
           .fontSystem(fontDesignSystem: .subtitle2)
           .frame(width: .infinity,alignment: .leading)
           .foregroundColor(.LabelColor_Primary)
-        Text("Description")
+        Text(user.introduce ?? "")
           .fontSystem(fontDesignSystem: .body2)
           .frame(width: .infinity,alignment: .leading)
           .foregroundColor(.LabelColor_Secondary)
@@ -188,7 +186,7 @@ extension SearchResultView {
   }
 
   @ViewBuilder
-  func searchTagRow() -> some View {
+  func searchTagRow(tag: SearchedTag) -> some View {
     HStack(spacing: 0) {
       Text("#")
         .font(.system(size: 28))
@@ -197,11 +195,11 @@ extension SearchResultView {
         .frame(width: 48, height: 48)
         .padding(.trailing, 10)
       VStack(alignment: .leading, spacing: 0) {
-        Text("뽀삐뽀")
+        Text(tag.contentHashtag)
           .fontSystem(fontDesignSystem: .subtitle2)
           .frame(width: .infinity,alignment: .leading)
           .foregroundColor(.LabelColor_Primary)
-        Text("게시물 \(100000.roundedWithAbbreviations)개")
+        Text("게시물 \(tag.contentHashtagCount.roundedWithAbbreviations)개")
           .fontSystem(fontDesignSystem: .body2)
           .frame(width: .infinity,alignment: .leading)
           .foregroundColor(.LabelColor_Secondary)

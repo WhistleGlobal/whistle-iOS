@@ -31,6 +31,8 @@ struct MainSearchView: View {
   @State var goSearchResult = false
   @State var searchHistoryArray: [String] = []
 
+  @StateObject var apiViewModel = APIViewModel.shared
+
   var body: some View {
     VStack(spacing: 0) {
       Spacer().frame(height: 14)
@@ -111,6 +113,10 @@ struct MainSearchView: View {
             if let jsonData = try? JSON(jsonArray).rawData() {
               searchHistory = String(data: jsonData, encoding: .utf8) ?? ""
             }
+            apiViewModel.searchedTag = []
+            apiViewModel.searchedUser = []
+            apiViewModel.requestSearchedUser(queryString: searchQueryString)
+            apiViewModel.requestSearchedTag(queryString: searchQueryString)
             searchQueryString = ""
             goSearchResult = true
           },
