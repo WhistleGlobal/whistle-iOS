@@ -19,7 +19,7 @@ protocol PostFeedProtocol {
   func publisherSend()
   func bookmarkAction(contentID: Int, method: HTTPMethod) async -> Bool
   func whistleAction(contentID: Int, method: HTTPMethod) async
-  func actionContentHate(contentID: Int) async
+  func actionContentHate(contentID: Int, method: HTTPMethod) async
   func deleteContent(contentID: Int) async
   func reportContent(userID: Int, contentID: Int, reportReason: Int, reportDescription: String) async -> Int
   func reportUser(usedID: Int, contentID: Int, reportReason: Int, reportDescription: String) async -> Int

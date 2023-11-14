@@ -188,11 +188,11 @@ extension APIViewModel: PostFeedProtocol {
     }
   }
 
-  func actionContentHate(contentID: Int) async {
+  func actionContentHate(contentID: Int, method: HTTPMethod) async {
     await withCheckedContinuation { continuation in
       AF.request(
-        "\(domainURL)/action/\(contentID)/hate",
-        method: .post,
+        "\(domainURL)/action/\(contentID)/\(method == .post ? "hate" : "unhate")",
+        method: method,
         headers: contentTypeXwwwForm)
         .validate(statusCode: 200 ... 300)
         .response { response in
