@@ -41,8 +41,8 @@ enum ContentReportReason: String, CaseIterable {
   case spamOrConfusion = "스팸 또는 혼동을 야기하는 콘텐츠"
   case violentOrHatefulContent = "폭력적 또는 혐오스러운 콘텐츠"
   case sexualContent = "성적인 콘텐츠"
-  case none = "해당 사유 없음"
   case copyrightInfringement = "저작권 침해 콘텐츠"
+  case none = "해당 사유 없음"
 
   var numericValue: Int {
     switch self {

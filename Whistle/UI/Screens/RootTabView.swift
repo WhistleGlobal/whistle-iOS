@@ -38,6 +38,7 @@ struct RootTabView: View {
 
   @State private var uploadBottomSheetPosition: BottomSheetPosition = .hidden
   @State private var pickerOptions = PickerOptionsInfo()
+  @StateObject private var feedPlayersViewModel = MainFeedPlayersViewModel.shared
   @StateObject private var tabbarModel = TabbarModel.shared
   @StateObject var apiViewModel = APIViewModel.shared
   @StateObject var alertViewModel = AlertViewModel.shared
@@ -153,7 +154,11 @@ struct RootTabView: View {
         AlertPopup()
       }
     }
-    .fullScreenCover(isPresented: $tabbarModel.showVideoCaptureView) {
+    .fullScreenCover(isPresented: $tabbarModel.showVideoCaptureView, onDismiss: {
+      if tabbarModel.tabSelectionNoAnimation == .main {
+        feedPlayersViewModel.currentPlayer?.play()
+      }
+    }) {
       CameraOrAccessView(
         isCam: $isCameraAuthorized,
         isMic: $isMicrophoneAuthorized,

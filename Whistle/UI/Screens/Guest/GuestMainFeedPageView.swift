@@ -85,6 +85,7 @@ struct GuestMainFeedPageView: UIViewRepresentable {
 
     func onDisappear() {
       parent.feedPlayersViewModel.stopPlayer()
+      parent.feedPlayersViewModel.resetPlayer()
     }
 
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
