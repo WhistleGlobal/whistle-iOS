@@ -133,6 +133,7 @@ extension MainSearchView {
   func search(query: String) {
     apiViewModel.searchedTag = []
     apiViewModel.searchedUser = []
+    apiViewModel.searchedContent = []
     apiViewModel.requestSearchedUser(queryString: query)
     apiViewModel.requestSearchedTag(queryString: query)
     apiViewModel.requestSearchedContent(queryString: query)
