@@ -59,6 +59,7 @@ struct CustomNavigationBarViewController: UIViewControllerRepresentable {
 
   class Coordinator: NSObject {
     var parent: CustomNavigationBarViewController
+    var isNextButtonEnbaled = true
 
     init(_ parent: CustomNavigationBarViewController) {
       self.parent = parent
@@ -71,7 +72,10 @@ struct CustomNavigationBarViewController: UIViewControllerRepresentable {
 
     @objc
     func nextButtonTapped() {
-      parent.nextButtonAction()
+      if isNextButtonEnbaled {
+        parent.nextButtonAction()
+        isNextButtonEnbaled = false
+      }
     }
   }
 }

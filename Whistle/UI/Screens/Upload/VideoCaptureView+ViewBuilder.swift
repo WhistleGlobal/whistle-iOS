@@ -627,7 +627,9 @@ extension VideoCaptureView {
   func recordedVideoPreview(video: EditableVideo) -> some View {
     EditablePlayer(player: videoPlayer.videoPlayer, isFullScreen: true)
       .onAppear {
-        videoPlayer.playLoop(video)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+          videoPlayer.playLoop(video)
+        }
       }
       .onTapGesture {
         videoPlayer.playLoop(video)

@@ -27,6 +27,7 @@ struct DescriptionAndTagEditorView: View {
   @FocusState private var isFocused: Bool
 
   @State var content = ""
+  @State var onProgress = false
   @State var sheetPosition: BottomSheetPosition = .hidden
   @State var showTagCountMax = false
   @State var showTagTextCountMax = false
@@ -65,6 +66,7 @@ struct DescriptionAndTagEditorView: View {
         dismiss()
         toastViewModel.onFullScreenCover = false
       } nextButtonAction: {
+        onProgress = true
         toastViewModel.onFullScreenCover = false
         Task {
           if guestUploadModel.istempAccess {
