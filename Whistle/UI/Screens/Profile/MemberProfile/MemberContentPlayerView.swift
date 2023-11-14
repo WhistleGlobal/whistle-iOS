@@ -68,6 +68,19 @@ struct MemberContentPlayerView: View {
                         .multilineTextAlignment(.center)
                         .fontSystem(fontDesignSystem: .body2)
                         .foregroundColor(.LabelColor_Secondary_Dark)
+                        .padding(.bottom, 24)
+                      Button {
+                        Task {
+                          await apiViewModel.actionContentHate(contentID: content.contentId ?? 0, method: .delete)
+                          content.isHated = false
+                          currentContentInfo?.isHated = false
+                          apiViewModel.publisherSend()
+                        }
+                      } label: {
+                        Text("실행 취소")
+                          .fontSystem(fontDesignSystem: .body2)
+                          .foregroundColor(.info)
+                      }
                       Spacer()
                     }
                   }
