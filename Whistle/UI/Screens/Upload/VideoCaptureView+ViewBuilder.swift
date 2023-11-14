@@ -844,7 +844,6 @@ extension VideoCaptureView {
                     FileManager.default.removefileExists(for: renderedVideoURL)
                   }
                   exporterVM.renderedVideoURL = nil
-                  exporterVM.renderedVideoURL = nil
                 }
               } else {
                 uploadBottomSheetPosition = .dynamic
@@ -862,6 +861,7 @@ extension VideoCaptureView {
                   }
               }
           }
+//          .disabled(disableUploadButton)
           Button {
             if isAccess || musicVM.musicInfo != nil {
               guestUploadModel.goDescriptionTagView = true
