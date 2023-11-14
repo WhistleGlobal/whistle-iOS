@@ -96,7 +96,8 @@ extension ProfileView {
       // Whistle or Follow count
       HStack(spacing: 0) {
         VStack(spacing: 4) {
-          Text("\(profileType == .my ? apiViewModel.myWhistleCount : apiViewModel.memberWhistleCount)")
+          Text(
+            "\(apiViewModel.memberProfile.isBlocked ? 0 : (profileType == .my ? apiViewModel.myWhistleCount : apiViewModel.memberWhistleCount))")
             .foregroundColor(Color.LabelColor_Primary_Dark)
             .fontSystem(fontDesignSystem: .title2_Expanded)
             .scaleEffect(whistleFollowerTextScale)
@@ -115,7 +116,7 @@ extension ProfileView {
           }
         } label: {
           VStack(spacing: 4) {
-            Text("\(filteredFollower.count)")
+            Text("\(apiViewModel.memberProfile.isBlocked ? 0 : filteredFollower.count)")
               .foregroundColor(Color.LabelColor_Primary_Dark)
               .fontSystem(fontDesignSystem: .title2_Expanded)
               .scaleEffect(whistleFollowerTextScale)
