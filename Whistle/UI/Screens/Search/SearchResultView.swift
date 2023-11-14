@@ -148,7 +148,13 @@ extension SearchResultView {
       ScrollView {
         ForEach(apiViewModel.searchedUser, id: \.uuid) { user in
           NavigationLink {
-            EmptyView()
+            ProfileView(
+              profileType:
+              user.userID == apiViewModel.myProfile.userId
+                ? .my
+                : .member,
+              isFirstProfileLoaded: .constant(true),
+              userId: user.userID)
           } label: {
             searchAccountRow(user: user)
           }
