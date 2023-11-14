@@ -147,7 +147,7 @@ struct ProfileView: View {
                   } label: {
                     videoThumbnailView(
                       thumbnailUrl: content.thumbnailUrl ?? "",
-                      whistleCount: content.whistleCount ?? 0)
+                      whistleCount: content.whistleCount)
                   }
                   .id(UUID())
                 }
@@ -238,7 +238,7 @@ struct ProfileView: View {
                   } label: {
                     videoThumbnailView(
                       thumbnailUrl: content.thumbnailUrl ?? "",
-                      whistleCount: content.whistleCount ?? 0,
+                      whistleCount: content.whistleCount,
                       isHated: content.isHated)
                   }
                   .id(UUID())

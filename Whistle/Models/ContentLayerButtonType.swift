@@ -11,7 +11,7 @@ import SwiftUI
 // MARK: - ContentLayerButtonType
 
 enum ContentLayerButtonType {
-  case whistle(Int), bookmark, share, more
+  case whistle(String), bookmark, share, more
 
   var buttonLabel: LocalizedStringKey {
     switch self {

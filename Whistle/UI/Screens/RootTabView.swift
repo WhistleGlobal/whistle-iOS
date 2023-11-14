@@ -58,7 +58,7 @@ struct RootTabView: View {
           MainFeedView()
             .environmentObject(universalRoutingModel)
         }
-        .tint(Color.LabelColor_Primary)
+        .tint(bartintModel.tintColor)
       } else {
         GuestMainFeedView()
           .onChange(of: tabbarModel.tabSelectionNoAnimation) { newValue in
