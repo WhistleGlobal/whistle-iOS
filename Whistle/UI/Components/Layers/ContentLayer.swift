@@ -348,6 +348,10 @@ extension MyFeedMoreModel: FeedMoreModel { }
 
 extension BookmarkedFeedMoreModel: FeedMoreModel { }
 
+// MARK: - SearchFeedMoreModel + FeedMoreModel
+
+extension SearchFeedMoreModel: FeedMoreModel { }
+
 // MARK: - PlayersViewModel
 
 protocol PlayersViewModel {
@@ -373,3 +377,7 @@ extension MyFeedPlayersViewModel: PlayersViewModel { }
 // MARK: - BookmarkedPlayersViewModel + PlayersViewModel
 
 extension BookmarkedPlayersViewModel: PlayersViewModel { }
+
+// MARK: - SearchPlayersViewModel + PlayersViewModel
+
+extension SearchPlayersViewModel: PlayersViewModel { }

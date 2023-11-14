@@ -566,6 +566,14 @@
 		780CF0AB2AF3BB480010E773 /* NotificationModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 780CF0AA2AF3BB480010E773 /* NotificationModel.swift */; };
 		780CF0AD2AF3C3B50010E773 /* NotificationListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 780CF0AC2AF3C3B50010E773 /* NotificationListView.swift */; };
 		780CF0AE2AF3C3B50010E773 /* NotificationListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 780CF0AC2AF3C3B50010E773 /* NotificationListView.swift */; };
+		780E3E932B03856500744CD8 /* SearchFeedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 780E3E922B03856500744CD8 /* SearchFeedView.swift */; };
+		780E3E952B03857500744CD8 /* SearchFeedPageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 780E3E942B03857500744CD8 /* SearchFeedPageView.swift */; };
+		780E3E972B03857F00744CD8 /* SearchContentPlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 780E3E962B03857F00744CD8 /* SearchContentPlayerView.swift */; };
+		780E3E992B0385D800744CD8 /* SearchPlayersViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 780E3E982B0385D800744CD8 /* SearchPlayersViewModel.swift */; };
+		780E3E9A2B0385D800744CD8 /* SearchPlayersViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 780E3E982B0385D800744CD8 /* SearchPlayersViewModel.swift */; };
+		780E3E9B2B0387E700744CD8 /* SearchFeedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 780E3E922B03856500744CD8 /* SearchFeedView.swift */; };
+		780E3E9C2B0387EA00744CD8 /* SearchFeedPageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 780E3E942B03857500744CD8 /* SearchFeedPageView.swift */; };
+		780E3E9D2B0387EC00744CD8 /* SearchContentPlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 780E3E962B03857F00744CD8 /* SearchContentPlayerView.swift */; };
 		7822B23A2ADD509C000B15AB /* Notion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7822B2392ADD509C000B15AB /* Notion.swift */; };
 		782904A92AFB208B00DCB90F /* CustomRefresh.swift in Sources */ = {isa = PBXBuildFile; fileRef = 782904A82AFB208B00DCB90F /* CustomRefresh.swift */; };
 		782904AA2AFB20B500DCB90F /* CustomRefresh.swift in Sources */ = {isa = PBXBuildFile; fileRef = 782904A82AFB208B00DCB90F /* CustomRefresh.swift */; };
@@ -1140,6 +1148,10 @@
 		780CF0A82AF3A2E50010E773 /* Dev-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Dev-Info.plist"; sourceTree = "<group>"; };
 		780CF0AA2AF3BB480010E773 /* NotificationModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationModel.swift; sourceTree = "<group>"; };
 		780CF0AC2AF3C3B50010E773 /* NotificationListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationListView.swift; sourceTree = "<group>"; };
+		780E3E922B03856500744CD8 /* SearchFeedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchFeedView.swift; sourceTree = "<group>"; };
+		780E3E942B03857500744CD8 /* SearchFeedPageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchFeedPageView.swift; sourceTree = "<group>"; };
+		780E3E962B03857F00744CD8 /* SearchContentPlayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchContentPlayerView.swift; sourceTree = "<group>"; };
+		780E3E982B0385D800744CD8 /* SearchPlayersViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchPlayersViewModel.swift; sourceTree = "<group>"; };
 		7822B2392ADD509C000B15AB /* Notion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Notion.swift; sourceTree = "<group>"; };
 		782904A82AFB208B00DCB90F /* CustomRefresh.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomRefresh.swift; sourceTree = "<group>"; };
 		782A6DD42AF1EAFC004D0A60 /* GuestMainFeedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GuestMainFeedView.swift; sourceTree = "<group>"; };
@@ -1659,6 +1671,7 @@
 				78BCA95D2AF086970084E92F /* MemeberPlayersViewModel.swift */,
 				782A6DDC2AF1EBCB004D0A60 /* GuestPlayersViewModel.swift */,
 				787093672AF28CB30023B400 /* ZoomFactorCombineViewModel.swift */,
+				780E3E982B0385D800744CD8 /* SearchPlayersViewModel.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -2690,6 +2703,9 @@
 				784D276E2AFCC0070001EEDC /* MainSearchView.swift */,
 				784D27712AFCC0180001EEDC /* SearchResultView.swift */,
 				7852AF2F2B01F40F001D2485 /* TagResultView.swift */,
+				780E3E922B03856500744CD8 /* SearchFeedView.swift */,
+				780E3E942B03857500744CD8 /* SearchFeedPageView.swift */,
+				780E3E962B03857F00744CD8 /* SearchContentPlayerView.swift */,
 			);
 			path = Search;
 			sourceTree = "<group>";
@@ -3295,6 +3311,7 @@
 				7847A3172AE1311200C4FF61 /* AlbumAccessView.swift in Sources */,
 				78FDA5462AEFC967001C3DA4 /* MyContentLayer.swift in Sources */,
 				1B8F135A2AFF5DBB004FC791 /* ContentLayer.swift in Sources */,
+				780E3E952B03857500744CD8 /* SearchFeedPageView.swift in Sources */,
 				78E175602ABA8DE100731259 /* TermsOfServiceView.swift in Sources */,
 				7874CB882AA0842D0081DE54 /* FontSystem.swift in Sources */,
 				780CF0AD2AF3C3B50010E773 /* NotificationListView.swift in Sources */,
@@ -3323,6 +3340,7 @@
 				78D85E522AB2D9F800B3AD6E /* ProfileReportReasonSelectionView.swift in Sources */,
 				1BE8EA082AAE595000EB0A55 /* MusicListView.swift in Sources */,
 				784D27722AFCC0180001EEDC /* SearchResultView.swift in Sources */,
+				780E3E972B03857F00744CD8 /* SearchContentPlayerView.swift in Sources */,
 				788010872ABC7EF800116FD5 /* MemberFollowListView.swift in Sources */,
 				788E68702AD6C9DB0056C18B /* RecordAccessView.swift in Sources */,
 				7880108A2ABC82FC00116FD5 /* MainFeedReportReasonSelectionView.swift in Sources */,
@@ -3459,7 +3477,9 @@
 				787347F92AF62A6300551A84 /* Extension+ProfileView.swift in Sources */,
 				78BCA95A2AF085B20084E92F /* MemberFeedPageView.swift in Sources */,
 				782A6DD52AF1EAFC004D0A60 /* GuestMainFeedView.swift in Sources */,
+				780E3E992B0385D800744CD8 /* SearchPlayersViewModel.swift in Sources */,
 				787AF5792AA8930700C190E6 /* NotiSetting.swift in Sources */,
+				780E3E932B03856500744CD8 /* SearchFeedView.swift in Sources */,
 				787AF56D2AA8846100C190E6 /* MyFollow.swift in Sources */,
 				78730CF12ACE8F23008B9981 /* PhotoLibrary.swift in Sources */,
 				1BD4E7C62ABA68D500ADB783 /* PickerConfigViewController.swift in Sources */,
@@ -3615,6 +3635,7 @@
 				1B9936772AF3699E00F5C619 /* TabbarModel.swift in Sources */,
 				1B9936782AF3699E00F5C619 /* VideoEditorToolsSection.swift in Sources */,
 				1B9936792AF3699E00F5C619 /* VideoPlayerManager.swift in Sources */,
+				780E3E9D2B0387EC00744CD8 /* SearchContentPlayerView.swift in Sources */,
 				1B99367A2AF3699E00F5C619 /* BookmarkedPlayersViewModel.swift in Sources */,
 				1B99367C2AF3699E00F5C619 /* ProfileReportCommentView.swift in Sources */,
 				1B99367D2AF3699E00F5C619 /* MemberFeedView.swift in Sources */,
@@ -3679,6 +3700,7 @@
 				1B9936A92AF3699E00F5C619 /* View+GoogleSignIn.swift in Sources */,
 				1B9936AA2AF3699E00F5C619 /* VideoQuality.swift in Sources */,
 				1B9936AB2AF3699E00F5C619 /* MemeberPlayersViewModel.swift in Sources */,
+				780E3E9C2B0387EA00744CD8 /* SearchFeedPageView.swift in Sources */,
 				1B9936AC2AF3699E00F5C619 /* CachedImageManager.swift in Sources */,
 				1B9936AD2AF3699E00F5C619 /* MyFeedPageView.swift in Sources */,
 				7852AF362B01F784001D2485 /* SearchTabItem.swift in Sources */,
@@ -3705,6 +3727,7 @@
 				1B9936C12AF3699E00F5C619 /* VideoExporterViewModel.swift in Sources */,
 				1B9936C22AF3699E00F5C619 /* AppKeys.swift in Sources */,
 				1B9936C32AF3699E00F5C619 /* ReportedContent.swift in Sources */,
+				780E3E9A2B0385D800744CD8 /* SearchPlayersViewModel.swift in Sources */,
 				1B9936C42AF3699E00F5C619 /* BookmarkedPageView.swift in Sources */,
 				1B9936C52AF3699E00F5C619 /* WhistleLogger.swift in Sources */,
 				1B9936C62AF3699E00F5C619 /* UploadProgressViewModel.swift in Sources */,
@@ -3715,6 +3738,7 @@
 				1B9936CA2AF3699E00F5C619 /* AudioModel.swift in Sources */,
 				1B9936CB2AF3699E00F5C619 /* ProfileEditButtonStyle.swift in Sources */,
 				1B9936CC2AF3699E00F5C619 /* WhistleApp.swift in Sources */,
+				780E3E9B2B0387E700744CD8 /* SearchFeedView.swift in Sources */,
 				1B9936CD2AF3699E00F5C619 /* APIViewModel+Profile.swift in Sources */,
 				1B9936CE2AF3699E00F5C619 /* AudioEntity+Ext.swift in Sources */,
 				1B9936CF2AF3699E00F5C619 /* APIViewModel+Setting.swift in Sources */,

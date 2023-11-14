@@ -104,9 +104,10 @@ extension SearchResultView {
             GridItem(.flexible()),
             GridItem(.flexible()),
           ], spacing: 8) {
-            ForEach(Array(apiViewModel.searchedContent.enumerated()), id: \.element) { _, content in
+            ForEach(Array(apiViewModel.searchedContent.enumerated()), id: \.element) { index, content in
               NavigationLink {
-                EmptyView()
+//                EmptyView()
+                SearchFeedView(index: index, userId: content.userId ?? 0)
               } label: {
                 videoThumbnailView(
                   thumbnailUrl: "\(content.thumbnailUrl ?? "")",
