@@ -6,17 +6,23 @@
 //
 
 import SwiftUI
+import SwiftyJSON
 
 // MARK: - SearchResultView
 
 struct SearchResultView: View {
+  @AppStorage("searchHistory") var searchHistory =
+    """
+        [
+      ]
+    """
   @Environment(\.dismiss) var dismiss
   @State var searchText = ""
-  @State var searchHistory: [String] = []
   @State var text = ""
   @State var scopeSelection = 0
   @State var searchQueryString = ""
   @State var isSearching = false
+  @State var searchHistoryArray: [String] = []
   @State var searchTabSelection: SearchTabSelection = .content
   @StateObject var apiViewModel = APIViewModel.shared
 
@@ -45,6 +51,7 @@ struct SearchResultView: View {
       }
       Spacer()
     }
+    .id(UUID())
     .toolbarRole(.editor)
     .toolbar {
       ToolbarItem(placement: .topBarLeading) {
@@ -52,11 +59,19 @@ struct SearchResultView: View {
           isNeedBackButton: true,
           searchText: $searchQueryString,
           isSearching: $isSearching,
-          submitAction: { },
+          submitAction: {
+            if searchHistoryArray.contains(searchQueryString) || searchQueryString.isEmpty {
+              return
+            }
+            searchHistoryArray.append(searchQueryString)
+            let jsonArray = searchHistoryArray.map { JSON($0) }
+            if let jsonData = try? JSON(jsonArray).rawData() {
+              searchHistory = String(data: jsonData, encoding: .utf8) ?? ""
+            }
+            search(query: searchQueryString)
+          },
           cancelTapAction: dismiss)
-          .simultaneousGesture(TapGesture().onEnded {
-            //                      tapSearchBar?()
-          })
+          .simultaneousGesture(TapGesture().onEnded { })
           .frame(width: UIScreen.width - 63)
       }
     }
@@ -211,5 +226,16 @@ extension SearchResultView {
         .foregroundColor(.LabelColor_DisablePlaceholder)
     }
     .frame(height: 74)
+  }
+}
+
+extension SearchResultView {
+  func search(query: String) {
+    apiViewModel.searchedTag = []
+    apiViewModel.searchedUser = []
+    apiViewModel.requestSearchedUser(queryString: query)
+    apiViewModel.requestSearchedTag(queryString: query)
+    apiViewModel.requestSearchedContent(queryString: query)
+    searchQueryString = ""
   }
 }

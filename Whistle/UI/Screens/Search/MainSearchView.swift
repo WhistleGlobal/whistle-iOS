@@ -16,10 +16,6 @@ struct MainSearchView: View {
   @AppStorage("searchHistory") var searchHistory =
     """
         [
-        "history1",
-        "history2",
-        "history3",
-        "history4"
       ]
     """
   @Environment(\.dismiss) var dismiss
@@ -58,6 +54,7 @@ struct MainSearchView: View {
       .frame(height: 50)
       ForEach(Array(searchHistoryArray.enumerated()), id: \.element) { index ,item in
         Button {
+          search(query: item)
           goSearchResult = true
         } label: {
           HStack(spacing: 0) {
@@ -94,6 +91,7 @@ struct MainSearchView: View {
       NavigationLink(destination: SearchResultView(), isActive: $goSearchResult) {
         EmptyView()
       }
+      .id(UUID())
     }
     .onTapGesture {
       searchQueryString = ""
@@ -113,17 +111,11 @@ struct MainSearchView: View {
             if let jsonData = try? JSON(jsonArray).rawData() {
               searchHistory = String(data: jsonData, encoding: .utf8) ?? ""
             }
-            apiViewModel.searchedTag = []
-            apiViewModel.searchedUser = []
-            apiViewModel.requestSearchedUser(queryString: searchQueryString)
-            apiViewModel.requestSearchedTag(queryString: searchQueryString)
-            searchQueryString = ""
+            search(query: searchQueryString)
             goSearchResult = true
           },
           cancelTapAction: dismiss)
-          .simultaneousGesture(TapGesture().onEnded {
-//                                  tapSearchBar?()
-          })
+          .simultaneousGesture(TapGesture().onEnded { })
           .frame(width: UIScreen.width - 32)
       }
     }
@@ -133,5 +125,16 @@ struct MainSearchView: View {
         searchHistoryArray = json?.arrayValue.map { $0.stringValue } ?? []
       }
     }
+  }
+}
+
+extension MainSearchView {
+  func search(query: String) {
+    apiViewModel.searchedTag = []
+    apiViewModel.searchedUser = []
+    apiViewModel.requestSearchedUser(queryString: query)
+    apiViewModel.requestSearchedTag(queryString: query)
+    apiViewModel.requestSearchedContent(queryString: query)
+    searchQueryString = ""
   }
 }

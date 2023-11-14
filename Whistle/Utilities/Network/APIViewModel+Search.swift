@@ -44,4 +44,21 @@ extension APIViewModel: SearchProtocol {
         }
       }
   }
+
+  func requestSearchedContent(queryString: String) {
+    AF.request(
+      "\(domainURL)/search/content?query=\(queryString)",
+      method: .get,
+      headers: contentTypeJson)
+      .validate(statusCode: 200...300)
+      .responseDecodable(of: [MainContent].self) { response in
+        switch response.result {
+        case .success(let data):
+          self.searchedContent = data
+        case .failure(let error):
+          WhistleLogger.logger.error("requestSearchedTag(queryString: String) \(error)")
+          break
+        }
+      }
+  }
 }
