@@ -23,13 +23,14 @@ final class AlbumCell: UITableViewCell {
   private lazy var titleLabel: UILabel = {
     let view = UILabel(frame: .zero)
     view.font = UIFont.systemFont(ofSize: 18, weight: .semibold)
+    view.textColor = .white
     return view
   }()
 
   private lazy var subTitleLabel: UILabel = {
     let view = UILabel(frame: .zero)
     view.font = UIFont.systemFont(ofSize: 14, weight: .regular)
-    view.textColor = UIColor(named: "Gray20_Dark")
+    view.textColor = #colorLiteral(red: 0.9137254902, green: 0.9215686275, blue: 0.9333333333, alpha: 1)
     return view
   }()
 
@@ -77,7 +78,7 @@ extension AlbumCell {
     backgroundColor = UIColor.clear
 
     titleLabel.textColor = theme[color: .whiteText]
-    subTitleLabel.textColor = theme[color: .subText]
+//    subTitleLabel.textColor = theme[color: .subText]
 
     theme.labelConfiguration[.albumCellTitle]?.configuration(titleLabel)
     theme.labelConfiguration[.albumCellSubTitle]?.configuration(subTitleLabel)

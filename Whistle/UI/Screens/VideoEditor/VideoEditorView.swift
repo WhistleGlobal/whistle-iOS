@@ -158,30 +158,6 @@ struct VideoEditorView: View {
         bottomSheetPosition: $bottomSheetPosition,
         switchablePositions: sheetPositions)
       {
-        if editorVM.selectedTools != .music {
-          VStack(spacing: 0) {
-            ZStack {
-              Text(bottomSheetTitle)
-                .fontSystem(fontDesignSystem: .subtitle1)
-                .hCenter()
-              Text(CommonWords().cancel)
-                .fontSystem(fontDesignSystem: .subtitle2)
-                .contentShape(Rectangle())
-                .hTrailing()
-                .onTapGesture {
-                  bottomSheetPosition = .hidden
-                  editorVM.selectedTools = nil
-                }
-            }
-            .foregroundStyle(.white)
-            .padding(.horizontal, 16)
-            .padding(.vertical, 6)
-            Rectangle()
-              .fill(Color.Border_Default_Dark)
-              .frame(height: 1)
-          }
-        }
-      } mainContent: {
         switch editorVM.selectedTools {
         //      case .speed:
         //        if let toolState = editorVM.selectedTools, let video = editorVM.currentVideo {
@@ -211,11 +187,13 @@ struct VideoEditorView: View {
             editorVM: editorVM,
             bottomSheetPosition: $bottomSheetPosition,
             showMusicTrimView: $showMusicTrimView)
-          {
-            bottomSheetPosition = .relative(1)
-          }
         case .audio:
-          VolumeSliderSheetView(videoPlayer: videoPlayer, editorVM: editorVM, musicVM: musicVM) {
+          VolumeSliderSheetView(
+            videoPlayer: videoPlayer,
+            editorVM: editorVM,
+            musicVM: musicVM,
+            bottomSheetPosition: $bottomSheetPosition)
+          {
             bottomSheetPosition = .hidden
             editorVM.selectedTools = nil
           }

@@ -279,9 +279,6 @@ struct VideoCaptureView: View {
             editorVM: editorVM,
             bottomSheetPosition: $musicBottomSheetPosition,
             showMusicTrimView: $showMusicTrimView)
-          {
-            musicBottomSheetPosition = .relative(1)
-          }
         }
       }
       .enableSwipeToDismiss(true)
