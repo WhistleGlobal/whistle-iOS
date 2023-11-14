@@ -54,6 +54,7 @@ struct MainSearchView: View {
       .frame(height: 50)
       ForEach(Array(searchHistoryArray.enumerated()), id: \.element) { index ,item in
         Button {
+          searchQueryString = item
           search(query: item)
           goSearchResult = true
         } label: {
@@ -88,7 +89,7 @@ struct MainSearchView: View {
     .navigationBarBackButtonHidden()
     .background()
     .overlay {
-      NavigationLink(destination: SearchResultView(), isActive: $goSearchResult) {
+      NavigationLink(destination: SearchResultView(searchQueryString: $searchQueryString), isActive: $goSearchResult) {
         EmptyView()
       }
       .id(UUID())
@@ -135,6 +136,5 @@ extension MainSearchView {
     apiViewModel.requestSearchedUser(queryString: query)
     apiViewModel.requestSearchedTag(queryString: query)
     apiViewModel.requestSearchedContent(queryString: query)
-    searchQueryString = ""
   }
 }

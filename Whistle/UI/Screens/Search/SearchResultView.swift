@@ -17,10 +17,7 @@ struct SearchResultView: View {
       ]
     """
   @Environment(\.dismiss) var dismiss
-  @State var searchText = ""
-  @State var text = ""
   @State var scopeSelection = 0
-  @State var searchQueryString = ""
   @State var isSearching = false
   @State var searchHistoryArray: [String] = []
   @State var searchTabSelection: SearchTabSelection = .content
@@ -30,6 +27,8 @@ struct SearchResultView: View {
   @State private var videoCount = 21 // Initial video count
 
   @State private var reachedBottom = false
+
+  @Binding var searchQueryString: String
 
   var body: some View {
     VStack(spacing: 0) {
@@ -81,10 +80,6 @@ struct SearchResultView: View {
   }
 }
 
-#Preview {
-  SearchResultView()
-}
-
 // MARK: - SearchTabSelection
 
 enum SearchTabSelection: LocalizedStringKey {
@@ -99,81 +94,96 @@ extension SearchResultView {
 
   @ViewBuilder
   func searchVideoList() -> some View {
-    ScrollView {
-      ScrollViewReader { _ in
-        LazyVGrid(columns: [
-          GridItem(.flexible()),
-          GridItem(.flexible()),
-          GridItem(.flexible()),
-        ], spacing: 8) {
-          ForEach(0..<videoCount, id: \.self) { index in
-            NavigationLink {
-              EmptyView()
-            } label: {
-              videoThumbnailView(
-                thumbnailUrl: "https://picsum.photos/id/\(index)/200/300",
-                whistleCount: Int.random(in: 0..<1000000))
-            }
-            .id(UUID())
-          }
-          Color.clear
-            .frame(height: 150)
-          Color.clear
-            .frame(height: 150)
-            .overlay {
-              ProgressView()
-            }
-            .onAppear {
-              DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-                videoCount += 21
+    if apiViewModel.searchedContent.isEmpty {
+      searchEmptyView()
+    } else {
+      ScrollView {
+        ScrollViewReader { _ in
+          LazyVGrid(columns: [
+            GridItem(.flexible()),
+            GridItem(.flexible()),
+            GridItem(.flexible()),
+          ], spacing: 8) {
+            ForEach(Array(apiViewModel.searchedContent.enumerated()), id: \.element) { _, content in
+              NavigationLink {
+                EmptyView()
+              } label: {
+                videoThumbnailView(
+                  thumbnailUrl: "\(content.thumbnailUrl ?? "")",
+                  whistleCount: content.whistleCount)
               }
+              .id(UUID())
             }
-          Color.clear
-            .frame(height: 150)
+            // // 페이징 구현시 사용할 것들
+            // Color.clear
+            //  .frame(height: 150)
+            // Color.clear
+            //  .frame(height: 150)
+            //  .overlay {
+            //    ProgressView()
+            //  }
+            //  .onAppear {
+            //    DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+            //      videoCount += 21
+            //    }
+            //  }
+            // Color.clear
+            //  .frame(height: 150)
+          }
         }
+        .padding(.top, 15)
+        .padding(.horizontal, 16)
+        .scrollIndicators(.hidden)
       }
-      .padding(.top, 15)
-      .padding(.horizontal, 16)
       .scrollIndicators(.hidden)
+      .padding(.top, 15)
     }
   }
 
   @ViewBuilder
   func searchAccountList() -> some View {
-    ScrollView {
-      ForEach(apiViewModel.searchedUser, id: \.uuid) { user in
-        NavigationLink {
-          EmptyView()
-        } label: {
-          searchAccountRow(user: user)
+    if apiViewModel.searchedUser.isEmpty {
+      searchEmptyView()
+    } else {
+      ScrollView {
+        ForEach(apiViewModel.searchedUser, id: \.uuid) { user in
+          NavigationLink {
+            EmptyView()
+          } label: {
+            searchAccountRow(user: user)
+          }
+          .padding(.horizontal, 16)
+          .id(UUID())
+          Divider().frame(height: 0.5).padding(.leading, 74).foregroundColor(.Disable_Placeholder)
         }
-        .padding(.horizontal, 16)
-        .id(UUID())
-        Divider().frame(height: 0.5).padding(.leading, 74).foregroundColor(.Disable_Placeholder)
+        Spacer().frame(height: 150)
       }
-      Spacer().frame(height: 150)
+      .scrollIndicators(.hidden)
+      .padding(.top, 15)
     }
-    .scrollIndicators(.hidden)
-    .padding(.top, 15)
   }
 
   @ViewBuilder
   func searchTagList() -> some View {
-    ScrollView {
-      ForEach(apiViewModel.searchedTag, id: \.uuid) { tag in
-        NavigationLink {
-          TagResultView(tagText: "#\(tag.contentHashtag)")
-        } label: {
-          searchTagRow(tag: tag)
+    if apiViewModel.searchedTag.isEmpty {
+      searchEmptyView()
+    } else {
+      ScrollView {
+        ForEach(apiViewModel.searchedTag, id: \.uuid) { tag in
+          NavigationLink {
+            TagResultView(tagText: "#\(tag.contentHashtag)")
+          } label: {
+            searchTagRow(tag: tag)
+          }
+          .padding(.horizontal, 16)
+          .id(UUID())
+          Divider().frame(height: 0.5).padding(.leading, 74).foregroundColor(.Disable_Placeholder)
         }
-        .padding(.horizontal, 16)
-        .id(UUID())
-        Divider().frame(height: 0.5).padding(.leading, 74).foregroundColor(.Disable_Placeholder)
+        Spacer().frame(height: 150)
       }
-      Spacer().frame(height: 150)
+      .scrollIndicators(.hidden)
+      .padding(.top, 15)
     }
-    .scrollIndicators(.hidden)
-    .padding(.top, 15)
   }
 
   @ViewBuilder
@@ -227,15 +237,28 @@ extension SearchResultView {
     }
     .frame(height: 74)
   }
+
+  @ViewBuilder
+  func searchEmptyView() -> some View {
+    HStack {
+      Text("\"\(searchQueryString)\" 검색결과 없음")
+        .fontSystem(fontDesignSystem: .body2)
+        .foregroundColor(.LabelColor_Secondary)
+        .frame(width: .infinity, alignment: .leading)
+        .padding(.vertical, 14)
+      Spacer()
+    }
+    .padding(.horizontal, 16)
+  }
 }
 
 extension SearchResultView {
   func search(query: String) {
     apiViewModel.searchedTag = []
     apiViewModel.searchedUser = []
+    apiViewModel.searchedContent = []
     apiViewModel.requestSearchedUser(queryString: query)
     apiViewModel.requestSearchedTag(queryString: query)
     apiViewModel.requestSearchedContent(queryString: query)
-    searchQueryString = ""
   }
 }
