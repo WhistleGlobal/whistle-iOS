@@ -312,7 +312,7 @@ extension AespaSession: VideoContext {
       case .success(let videoFile):
         // 비디오 파일의 URL을 completionHandler로 전달
         completionHandler(.success(videoFile))
-        print("url: ", videoFile)
+        WhistleLogger.logger.debug("url: \(videoFile)")
       case .failure(let error):
         completionHandler(.failure(error))
       }

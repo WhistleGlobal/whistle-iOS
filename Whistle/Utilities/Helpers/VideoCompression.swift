@@ -270,6 +270,11 @@ public enum VideoCompression {
                 audioDone = true
               }
             }
+          } else {
+            if !audioDone {
+              audioInput.markAsFinished()
+            }
+            audioDone = true
           }
         }
 

@@ -786,30 +786,23 @@ extension VideoCaptureView {
       if buttonState == .completed {
         HStack(spacing: 8) {
           Button {
-            if isAccess {
+            if isAccess, !disableUploadButton {
               disableUploadButton = true
               if musicVM.isTrimmed {
                 editorVM.currentVideo?.setVolume(0)
               }
-            }
-            Task {
-              if !isAccess {
-                return
+              Task {
+                UploadProgressViewModel.shared.uploadStarted()
+                tabbarModel.tabSelectionNoAnimation = .main
+                tabbarModel.tabSelection = .main
+                alertViewModel.onFullScreenCover = false
               }
-              UploadProgressViewModel.shared.uploadStarted()
-              tabbarModel.tabSelectionNoAnimation = .main
-              tabbarModel.tabSelection = .main
-              alertViewModel.onFullScreenCover = false
-            }
-            Task {
-              if isAccess {
+              Task {
                 if let video = editorVM.currentVideo {
+                  UploadProgressViewModel.shared.thumbnail = video.getThumbnail()
+                  dismiss()
                   let exporterVM = VideoExporterViewModel(video: video, musicVolume: musicVM.musicVolume)
                   await exporterVM.action(.save, start: video.rangeDuration.lowerBound)
-                  if let thumbnail = exporterVM.thumbnailImage {
-                    UploadProgressViewModel.shared.thumbnail = Image(uiImage: thumbnail)
-                  }
-                  dismiss()
                   if let url = exporterVM.renderedVideoURL {
                     VideoCompression
                       .compressh264Video(from: url, cache: .forceDelete, preferred: .quantity(ratio: 1.0)) { item, error in
@@ -845,9 +838,10 @@ extension VideoCaptureView {
                   }
                   exporterVM.renderedVideoURL = nil
                 }
-              } else {
-                uploadBottomSheetPosition = .dynamic
               }
+            }
+            if !isAccess {
+              uploadBottomSheetPosition = .dynamic
             }
           } label: {
             Text(ContentWords().uploadNow)
@@ -861,9 +855,14 @@ extension VideoCaptureView {
                   }
               }
           }
-//          .disabled(disableUploadButton)
           Button {
             if isAccess || musicVM.musicInfo != nil {
+              if let video = editorVM.currentVideo {
+                if videoPlayer.isPlaying {
+                  videoPlayer.action(video)
+                }
+                thumbnail = video.getThumbnail()
+              }
               guestUploadModel.goDescriptionTagView = true
             } else {
               uploadBottomSheetPosition = .dynamic

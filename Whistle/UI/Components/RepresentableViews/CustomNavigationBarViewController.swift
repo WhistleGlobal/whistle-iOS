@@ -11,6 +11,7 @@ import UIKit
 struct CustomNavigationBarViewController: UIViewControllerRepresentable {
   var title: String
   var nextText = "다음"
+  var isPostNavBar = false
   var backgroundColor = Color.Background_Default_Dark
   var backButtonAction: () -> Void
   var nextButtonAction: () -> Void
@@ -59,7 +60,7 @@ struct CustomNavigationBarViewController: UIViewControllerRepresentable {
 
   class Coordinator: NSObject {
     var parent: CustomNavigationBarViewController
-    var isNextButtonEnbaled = true
+    var isNextButtonEnabled = true
 
     init(_ parent: CustomNavigationBarViewController) {
       self.parent = parent
@@ -72,9 +73,11 @@ struct CustomNavigationBarViewController: UIViewControllerRepresentable {
 
     @objc
     func nextButtonTapped() {
-      if isNextButtonEnbaled {
+      if isNextButtonEnabled {
         parent.nextButtonAction()
-        isNextButtonEnbaled = false
+        if parent.isPostNavBar {
+          isNextButtonEnabled = false
+        }
       }
     }
   }

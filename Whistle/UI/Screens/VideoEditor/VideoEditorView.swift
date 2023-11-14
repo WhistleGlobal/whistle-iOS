@@ -28,7 +28,7 @@ struct VideoEditorView: View {
   @State var bottomSheetTitle: LocalizedStringKey = ""
   @State var bottomSheetPosition: BottomSheetPosition = .hidden
   @State var sheetPositions: [BottomSheetPosition] = [.hidden, .dynamic]
-
+  @State var thumbnail: Image?
   var project: ProjectEntity?
   var selectedVideoURL: URL?
 
@@ -52,6 +52,7 @@ struct VideoEditorView: View {
               if videoPlayer.isPlaying {
                 videoPlayer.action(video)
               }
+              thumbnail = video.getThumbnail(start: video.rangeDuration.lowerBound)
             }
             goUpload = true
           }
@@ -59,7 +60,9 @@ struct VideoEditorView: View {
           if let video = editorVM.currentVideo {
             NavigationLink(
               destination: DescriptionAndTagEditorView(
-                video: video, editorVM: editorVM,
+                video: video,
+                thumbnail: thumbnail,
+                editorVM: editorVM,
                 videoPlayer: videoPlayer,
                 musicVM: musicVM,
                 isInitial: $isInitial),
