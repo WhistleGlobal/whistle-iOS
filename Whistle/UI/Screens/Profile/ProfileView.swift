@@ -47,6 +47,10 @@ struct ProfileView: View {
   let center = UNUserNotificationCenter.current()
   let userId: Int
 
+  var profileUrl: String? {
+    profileType == .my ? apiViewModel.myProfile.profileImage : apiViewModel.memberProfile.profileImg
+  }
+
   var body: some View {
     ZStack {
       navigationLinks()
@@ -54,7 +58,7 @@ struct ProfileView: View {
         DimsThick().zIndex(1000)
       }
       Color.clear.overlay {
-        if let url = apiViewModel.myProfile.profileImage, !url.isEmpty {
+        if let url = profileUrl, !url.isEmpty {
           KFImage.url(URL(string: url))
             .placeholder { _ in
               Image("BlurredDefaultBG")
@@ -269,7 +273,7 @@ struct ProfileView: View {
     .task {
       if profileType == .my {
         if isFirstProfileLoaded {
-          await apiViewModel.requestMyProfile()
+//          await apiViewModel.requestMyProfile()
           isProfileLoaded = true
           await apiViewModel.requestMyFollow()
           await apiViewModel.requestMyWhistlesCount()
