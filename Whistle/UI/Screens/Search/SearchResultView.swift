@@ -20,7 +20,7 @@ struct SearchResultView: View {
   @State var searchTabSelection: SearchTabSelection = .content
 
   // test
-  @State private var videoCount = 10 // Initial video count
+  @State private var videoCount = 21 // Initial video count
 
   @State private var reachedBottom = false
 
@@ -84,7 +84,7 @@ extension SearchResultView {
   @ViewBuilder
   func searchVideoList() -> some View {
     ScrollView {
-      ScrollViewReader { scrollView in
+      ScrollViewReader { _ in
         LazyVGrid(columns: [
           GridItem(.flexible()),
           GridItem(.flexible()),
@@ -99,17 +99,22 @@ extension SearchResultView {
                 whistleCount: Int.random(in: 0..<1000000))
             }
             .id(UUID())
+          }
+          Color.clear
+            .frame(height: 150)
+          Color.clear
+            .frame(height: 150)
+            .overlay {
+              ProgressView()
+            }
             .onAppear {
-              if index == videoCount - 1 {
-                let scrollPosition = CGFloat(index + 1) *
-                  (UIScreen.getHeight(204) + 8)
-                scrollView.scrollTo(scrollPosition, anchor: .top)
-                videoCount += 10
+              DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                videoCount += 21
               }
             }
-          }
+          Color.clear
+            .frame(height: 150)
         }
-        Spacer().frame(height: 150)
       }
       .padding(.top, 15)
       .padding(.horizontal, 16)
