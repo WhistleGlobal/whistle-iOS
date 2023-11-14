@@ -324,6 +324,9 @@ struct ProfileView: View {
     .onDismiss {
       tabbarModel.tabbarOpacity = 1.0
     }
+    .onChange(of: apiViewModel.memberProfile.isBlocked) { _ in
+      offsetY = 0
+    }
   }
 }
 
