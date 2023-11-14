@@ -29,8 +29,11 @@ struct MemberFeedView: View {
       } else {
         VStack {
           Spacer()
-          Text(ContentWords().noBookmarkedContent)
-            .fontSystem(fontDesignSystem: .body1)
+          Image(systemName: "photo.fill")
+            .font(.system(size: 44, weight: .light))
+            .foregroundColor(.LabelColor_Primary_Dark)
+          Text(ContentWords().noConent)
+            .fontSystem(fontDesignSystem: .subtitle1)
             .foregroundColor(.LabelColor_Primary_Dark)
           Spacer()
         }

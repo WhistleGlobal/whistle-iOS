@@ -195,13 +195,7 @@ struct MemberContentPlayerView: View {
     .toolbarRole(.editor)
     .onAppear {
       bartintModel.tintColor = .white
-      if index == 0 {
-        lifecycleDelegate?.onAppear()
-      } else {
-        lifecycleDelegate?.onAppear()
-        feedPlayersViewModel.currentPlayer?.seek(to: .zero)
-        feedPlayersViewModel.currentPlayer?.play()
-      }
+      lifecycleDelegate?.onAppear()
     }
     .onDisappear {
       bartintModel.tintColor = .LabelColor_Primary

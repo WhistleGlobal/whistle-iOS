@@ -45,6 +45,11 @@ struct VideoEditorView: View {
               cancelText: AlertButtons().continueEditing,
               destructiveText: AlertButtons().stopEditing)
             {
+              if let video = editorVM.currentVideo {
+                if videoPlayer.isPlaying {
+                  videoPlayer.action(video)
+                }
+              }
               dismiss()
             }
           } nextButtonAction: {
