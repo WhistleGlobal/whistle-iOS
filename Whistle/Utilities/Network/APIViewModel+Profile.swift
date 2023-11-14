@@ -323,4 +323,26 @@ extension APIViewModel: ProfileProtocol {
         }
     }
   }
+
+  func updateMyTeam(myTeam: String) async {
+    let params = [
+      "myteam": myTeam,
+    ]
+    return await withCheckedContinuation { _ in
+      AF.request(
+        "\(domainURL)/user/myteam",
+        method: .put,
+        parameters: params,
+        headers: contentTypeXwwwForm)
+        .validate(statusCode: 200...300)
+        .response { response in
+          switch response.result {
+          case .success(let data):
+            WhistleLogger.logger.debug("updateMyTeam success!!")
+          case .failure(let error):
+            WhistleLogger.logger.error("updateMyTeam: \(error)")
+          }
+        }
+    }
+  }
 }

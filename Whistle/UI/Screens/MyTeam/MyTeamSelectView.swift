@@ -14,6 +14,7 @@ struct MyTeamSelectView: View {
   @State private var currentIndex = 0
   @State private var isDragging = false
   @State var aniBool = false
+  @StateObject var apiViewModel = APIViewModel.shared
   var myTeamSelection: MyTeamType {
     MyTeamType.teamTypeList()[currentIndex]
   }
@@ -89,7 +90,9 @@ struct MyTeamSelectView: View {
         }
         .padding(.bottom, UIScreen.getHeight(14))
         Button {
-          // 완료 액션
+          Task {
+            await apiViewModel.updateMyTeam(myTeam: MyTeamType.teamName(myTeamSelection))
+          }
         } label: {
           Text(CommonWords().done)
             .font(.system(size: 16, weight: .semibold))
