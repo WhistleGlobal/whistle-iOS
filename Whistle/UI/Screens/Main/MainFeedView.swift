@@ -98,7 +98,7 @@ struct MainFeedView: View {
           toastViewModel.cancelToastInit(message: ToastMessages().postHidden) {
             Task {
               let currentContent = apiViewModel.mainFeed[feedPlayersViewModel.currentVideoIndex]
-              await apiViewModel.actionContentHate(contentID: currentContent.contentId ?? 0)
+              await apiViewModel.actionContentHate(contentID: currentContent.contentId ?? 0, method: .post)
               feedPlayersViewModel.removePlayer {
                 index -= 1
               }
@@ -152,9 +152,9 @@ struct MainFeedView: View {
           return
         }
       }
-      if apiViewModel.myProfile.userName.isEmpty {
-        await apiViewModel.requestMyProfile()
-      }
+//      if apiViewModel.myProfile.userName.isEmpty {
+//        await apiViewModel.requestMyProfile()
+//      }
       if apiViewModel.mainFeed.isEmpty {
         if universalRoutingModel.isUniversalContent {
           apiViewModel.requestUniversalFeed(contentID: universalRoutingModel.contentId) {
@@ -198,6 +198,11 @@ struct MainFeedView: View {
         goReport: $feedMoreModel.showReport,
         contentId: apiViewModel.mainFeed[feedPlayersViewModel.currentVideoIndex].contentId ?? 0,
         userId: apiViewModel.mainFeed[feedPlayersViewModel.currentVideoIndex].userId ?? 0)
+    }
+    .onChange(of: tabbarModel.tabSelectionNoAnimation) { _ in
+      if tabbarModel.tabSelectionNoAnimation == .main {
+        feedPlayersViewModel.currentPlayer?.play()
+      }
     }
   }
 }

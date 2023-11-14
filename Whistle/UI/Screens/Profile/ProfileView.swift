@@ -33,6 +33,8 @@ struct ProfileView: View {
   @State var bottomSheetPosition: BottomSheetPosition = .hidden
   @State var showProfileEditView = false
   @State var goNotiSetting = false
+  @State var goLegalInfo = false
+  @State var goGuideStatus = false
   @State var tabSelection: profileTabCase = .myVideo
   @State var profileType: ProfileType = .my
   @State var offsetY: CGFloat = 0
@@ -45,20 +47,18 @@ struct ProfileView: View {
   let center = UNUserNotificationCenter.current()
   let userId: Int
 
+  var profileUrl: String? {
+    profileType == .my ? apiViewModel.myProfile.profileImage : apiViewModel.memberProfile.profileImg
+  }
+
   var body: some View {
     ZStack {
-      NavigationLink(
-        destination: NotificationSettingView().tint(Color.LabelColor_Primary),
-        isActive: $goNotiSetting)
-      {
-        EmptyView()
-      }
-      .id(UUID())
+      navigationLinks()
       if bottomSheetPosition != .hidden {
         DimsThick().zIndex(1000)
       }
       Color.clear.overlay {
-        if let url = apiViewModel.myProfile.profileImage, !url.isEmpty {
+        if let url = profileUrl, !url.isEmpty {
           KFImage.url(URL(string: url))
             .placeholder { _ in
               Image("BlurredDefaultBG")
@@ -273,7 +273,7 @@ struct ProfileView: View {
     .task {
       if profileType == .my {
         if isFirstProfileLoaded {
-          await apiViewModel.requestMyProfile()
+//          await apiViewModel.requestMyProfile()
           isProfileLoaded = true
           await apiViewModel.requestMyFollow()
           await apiViewModel.requestMyWhistlesCount()
@@ -327,6 +327,9 @@ struct ProfileView: View {
         })
     .onDismiss {
       tabbarModel.tabbarOpacity = 1.0
+    }
+    .onChange(of: apiViewModel.memberProfile.isBlocked) { _ in
+      offsetY = 0
     }
   }
 }

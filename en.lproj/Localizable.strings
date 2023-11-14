@@ -78,7 +78,8 @@
 // MARK: - Content Words
 "새 게시물" = "New post";
 "게시" = "Post";
-"저장한 콘텐츠가 없습니다" = "No bookmarked post";
+"저장된 콘텐츠가 없습니다" = "No  bookmark content available";
+"콘텐츠가 없습니다" = "No content available";
 "공유하고 싶은 첫번째 콘텐츠를 업로드해보세요" = "Try uploading the first post you want to share.";
 "업로드하러 가기" = "Go upload";
 

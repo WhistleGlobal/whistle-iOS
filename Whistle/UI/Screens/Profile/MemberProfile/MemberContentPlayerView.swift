@@ -68,6 +68,19 @@ struct MemberContentPlayerView: View {
                         .multilineTextAlignment(.center)
                         .fontSystem(fontDesignSystem: .body2)
                         .foregroundColor(.LabelColor_Secondary_Dark)
+                        .padding(.bottom, 24)
+                      Button {
+                        Task {
+                          await apiViewModel.actionContentHate(contentID: content.contentId ?? 0, method: .delete)
+                          content.isHated = false
+                          currentContentInfo?.isHated = false
+                          apiViewModel.publisherSend()
+                        }
+                      } label: {
+                        Text("실행 취소")
+                          .fontSystem(fontDesignSystem: .body2)
+                          .foregroundColor(.info)
+                      }
                       Spacer()
                     }
                   }
@@ -132,10 +145,6 @@ struct MemberContentPlayerView: View {
                         feedArray: apiViewModel.memberFeed,
                         whistleAction: whistleToggle,
                         dismissAction: dismissAction)
-//                      MemberContentLayer(
-//                        currentVideoInfo: content,
-//                        whistleAction: whistleToggle,
-//                        dismissAction: dismissAction)
                         .padding(.bottom, UIScreen.main.nativeBounds.height == 1334 ? 24 : 0)
                     }
                     if feedMoreModel.bottomSheetPosition != .hidden {
@@ -186,17 +195,12 @@ struct MemberContentPlayerView: View {
     .toolbarRole(.editor)
     .onAppear {
       bartintModel.tintColor = .white
-      if index == 0 {
-        lifecycleDelegate?.onAppear()
-      } else {
-        lifecycleDelegate?.onAppear()
-        feedPlayersViewModel.currentPlayer?.seek(to: .zero)
-        feedPlayersViewModel.currentPlayer?.play()
-      }
+      lifecycleDelegate?.onAppear()
     }
     .onDisappear {
       bartintModel.tintColor = .LabelColor_Primary
       lifecycleDelegate?.onDisappear()
+      feedPlayersViewModel.stopPlayer()
     }
     .ignoresSafeArea()
     .onChange(of: tabbarModel.tabSelectionNoAnimation) { newValue in

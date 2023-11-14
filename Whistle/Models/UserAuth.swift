@@ -39,6 +39,7 @@ class UserAuth: ObservableObject {
   @AppStorage("provider") var provider: Provider = .apple
   @AppStorage("deviceToken") var deviceToken: String?
 
+
   var apiViewModel = APIViewModel.shared
   var email: String? = ""
   var userName = ""
@@ -73,9 +74,9 @@ class UserAuth: ObservableObject {
     let headers: HTTPHeaders = ["Authorization": "Bearer \(idTokenKey)"]
     AF.request(url, method: .get, headers: headers)
       .validate(statusCode: 200 ... 300)
-      .response { response in
+      .responseDecodable(of: MyProfile.self) { response in
         switch response.result {
-        case .success:
+        case .success(let data):
           guard let deviceToken = self.deviceToken else {
             return
           }
@@ -87,6 +88,7 @@ class UserAuth: ObservableObject {
             GuestUploadModel.shared.istempAccess = true
           } else {
             self.isAccess = true
+            APIViewModel.shared.myProfile = data
           }
           completion()
         case .failure(let error):

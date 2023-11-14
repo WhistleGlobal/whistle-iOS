@@ -29,8 +29,11 @@ struct MemberFeedView: View {
       } else {
         VStack {
           Spacer()
-          Text(ContentWords().noBookmarkedContent)
-            .fontSystem(fontDesignSystem: .body1)
+          Image(systemName: "photo.fill")
+            .font(.system(size: 44, weight: .light))
+            .foregroundColor(.LabelColor_Primary_Dark)
+          Text(ContentWords().noConent)
+            .fontSystem(fontDesignSystem: .subtitle1)
             .foregroundColor(.LabelColor_Primary_Dark)
           Spacer()
         }
@@ -67,7 +70,7 @@ struct MemberFeedView: View {
           toastViewModel.cancelToastInit(message: ToastMessages().postHidden) {
             Task {
               let currentContent = apiViewModel.memberFeed[feedPlayersViewModel.currentVideoIndex]
-              await apiViewModel.actionContentHate(contentID: currentContent.contentId ?? 0)
+              await apiViewModel.actionContentHate(contentID: currentContent.contentId ?? 0, method: .post)
               feedPlayersViewModel.removePlayer {
                 index -= 1
               }

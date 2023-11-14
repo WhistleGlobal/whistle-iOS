@@ -12,7 +12,6 @@ import SwiftUI
 // MARK: - BookmarkedContentLayer
 
 struct BookmarkedContentLayer: View {
-
   @StateObject var currentVideoInfo: Bookmark = .init()
   @StateObject var apiViewModel = APIViewModel.shared
   @StateObject var toastViewModel = ToastViewModel.shared
@@ -42,17 +41,17 @@ struct BookmarkedContentLayer: View {
                 NavigationLink {
                   ProfileView(
                     profileType:
-                    apiViewModel.bookmark[feedPlayersViewModel.currentVideoIndex].userId == apiViewModel.myProfile.userId
+                    apiViewModel.bookmark[feedPlayersViewModel.currentVideoIndex].userId ?? 0 == apiViewModel.myProfile.userId
                       ? .my
                       : .member,
                     isFirstProfileLoaded: .constant(true),
-                    userId: apiViewModel.bookmark[feedPlayersViewModel.currentVideoIndex].userId)
+                    userId: apiViewModel.bookmark[feedPlayersViewModel.currentVideoIndex].userId ?? 0)
                     .id(UUID())
                 } label: {
                   Group {
                     profileImageView(url: currentVideoInfo.profileImg, size: 36)
                       .padding(.trailing, UIScreen.getWidth(8))
-                    Text(currentVideoInfo.userName)
+                    Text(currentVideoInfo.userName ?? "")
                       .foregroundColor(.white)
                       .fontSystem(fontDesignSystem: .subtitle1)
                       .padding(.trailing, 16)
@@ -63,27 +62,27 @@ struct BookmarkedContentLayer: View {
                 Group {
                   profileImageView(url: currentVideoInfo.profileImg, size: 36)
                     .padding(.trailing, 12)
-                  Text(currentVideoInfo.userName)
+                  Text(currentVideoInfo.userName ?? "")
                     .foregroundColor(.white)
                     .fontSystem(fontDesignSystem: .subtitle1)
                     .padding(.trailing, 16)
                 }
               }
-              if currentVideoInfo.userName != apiViewModel.myProfile.userName {
+              if currentVideoInfo.userName ?? "" != apiViewModel.myProfile.userName {
                 Button {
                   Task {
                     if currentVideoInfo.isFollowed {
-                      await apiViewModel.followAction(userID: currentVideoInfo.userId, method: .delete)
-                      toastViewModel.toastInit(message: "\(currentVideoInfo.userName)님을 팔로우 취소했습니다")
+                      await apiViewModel.followAction(userID: currentVideoInfo.userId ?? 0, method: .delete)
+                      toastViewModel.toastInit(message: "\(currentVideoInfo.userName ?? "")님을 팔로우 취소했습니다")
                     } else {
-                      await apiViewModel.followAction(userID: currentVideoInfo.userId, method: .post)
-                      toastViewModel.toastInit(message: "\(currentVideoInfo.userName)님을 팔로우 중입니다")
+                      await apiViewModel.followAction(userID: currentVideoInfo.userId ?? 0, method: .post)
+                      toastViewModel.toastInit(message: "\(currentVideoInfo.userName ?? "")님을 팔로우 중입니다")
                     }
                     currentVideoInfo.isFollowed.toggle()
 
                     apiViewModel.mainFeed = apiViewModel.mainFeed.map { item in
                       let mutableItem = item
-                      if mutableItem.userId == currentVideoInfo.userId {
+                      if mutableItem.userId == currentVideoInfo.userId ?? 0 {
                         mutableItem.isFollowed = currentVideoInfo.isFollowed
                       }
                       return mutableItem
@@ -125,7 +124,9 @@ struct BookmarkedContentLayer: View {
           .padding(.bottom, 4)
           .padding(.leading, 4)
           Spacer()
+
           // MARK: - Action Buttons
+
           VStack(spacing: 26) {
             Spacer()
             Button {
@@ -133,7 +134,7 @@ struct BookmarkedContentLayer: View {
               let currentContent = apiViewModel.bookmark[feedPlayersViewModel.currentVideoIndex]
               apiViewModel.mainFeed = apiViewModel.mainFeed.map { item in
                 let mutableItem = item
-                if mutableItem.contentId == currentContent.contentId {
+                if mutableItem.contentId == currentContent.contentId ?? 0 {
                   mutableItem.whistleCount = currentContent.whistleCount
                   mutableItem.isWhistled = currentContent.isWhistled
                 }
@@ -143,11 +144,6 @@ struct BookmarkedContentLayer: View {
               ContentLayerButton(
                 type: .whistle(currentVideoInfo.whistleCount.roundedWithAbbreviations),
                 isFilled: $currentVideoInfo.isWhistled)
-//              ContentLayerButton(
-//                isFilled: $currentVideoInfo.isWhistled,
-//                image: "heart",
-//                filledImage: "heart.fill",
-//                label: "\(currentVideoInfo.whistleCount)")
             }
             Button {
               currentVideoInfo.isBookmarked.toggle()
@@ -160,12 +156,12 @@ struct BookmarkedContentLayer: View {
                 }) {
                   Task {
                     let currentContent = apiViewModel.bookmark[feedPlayersViewModel.currentVideoIndex]
-                    _ = await apiViewModel.bookmarkAction(contentID: currentContent.contentId, method: .delete)
+                    _ = await apiViewModel.bookmarkAction(contentID: currentContent.contentId ?? 0, method: .delete)
                     feedPlayersViewModel.removePlayer {
                       index -= 1
                       apiViewModel.mainFeed = apiViewModel.mainFeed.map { item in
                         let mutableItem = item
-                        if mutableItem.contentId == currentContent.contentId {
+                        if mutableItem.contentId == currentContent.contentId ?? 0 {
                           mutableItem.isBookmarked = false
                         }
                         return mutableItem
@@ -173,7 +169,7 @@ struct BookmarkedContentLayer: View {
                     }
                     apiViewModel.mainFeed = apiViewModel.mainFeed.map { item in
                       let mutableItem = item
-                      if mutableItem.contentId == currentContent.contentId {
+                      if mutableItem.contentId == currentContent.contentId ?? 0 {
                         mutableItem.isBookmarked = currentContent.isBookmarked
                       }
                       return mutableItem

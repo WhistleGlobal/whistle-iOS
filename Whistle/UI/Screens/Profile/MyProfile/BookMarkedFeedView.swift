@@ -12,7 +12,6 @@ import SwiftUI
 // MARK: - BookMarkedFeedView
 
 struct BookMarkedFeedView: View {
-
   @Environment(\.dismiss) var dismiss
   @StateObject private var apiViewModel = APIViewModel.shared
   @StateObject private var feedPlayersViewModel = BookmarkedPlayersViewModel.shared
@@ -113,8 +112,8 @@ struct BookMarkedFeedView: View {
     }) {
       MainFeedReportReasonSelectionView(
         goReport: $feedMoreModel.showReport,
-        contentId: apiViewModel.bookmark[feedPlayersViewModel.currentVideoIndex].contentId,
-        userId: apiViewModel.bookmark[feedPlayersViewModel.currentVideoIndex].userId)
+        contentId: apiViewModel.bookmark[feedPlayersViewModel.currentVideoIndex].contentId ?? 0,
+        userId: apiViewModel.bookmark[feedPlayersViewModel.currentVideoIndex].userId ?? 0)
     }
   }
 }
@@ -124,6 +123,7 @@ struct BookMarkedFeedView: View {
 class BookmarkedFeedMoreModel: ObservableObject {
   static let shared = BookmarkedFeedMoreModel()
   private init() { }
+  @Published var isRootStacked = false
   @Published var showReport = false
   @Published var goProfile = false
   @Published var bottomSheetPosition: BottomSheetPosition = .hidden

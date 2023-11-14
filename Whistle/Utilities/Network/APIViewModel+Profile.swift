@@ -12,6 +12,7 @@ import SwiftyJSON
 extension APIViewModel: ProfileProtocol {
 
   func requestMyProfile() async {
+    WhistleLogger.logger.debug("requestMyProfile()")
     await withCheckedContinuation { continuation in
       AF.request(
         "\(domainURL)/user/profile",
