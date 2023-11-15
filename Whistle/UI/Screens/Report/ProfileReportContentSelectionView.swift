@@ -52,7 +52,7 @@ struct ProfileReportContentSelectionView: View {
       .padding(.top, 12)
     }
     .padding(.horizontal, 16)
-    .background(Color.reactiveBackground)
+    .background(Color.backgroundDefault)
     .toolbarRole(.editor)
     .navigationTitle("콘텐츠 선택")
     .navigationBarTitleDisplayMode(.inline)

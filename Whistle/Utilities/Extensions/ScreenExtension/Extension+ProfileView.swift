@@ -17,21 +17,21 @@ extension ProfileView {
   func navigationLinks() -> some View {
     Group {
       NavigationLink(
-        destination: NotificationSettingView().tint(Color.LabelColor_Primary),
+        destination: NotificationSettingView().tint(Color.labelColorPrimary).background(.backgroundDefault),
         isActive: $goNotiSetting)
       {
         EmptyView()
       }
       .id(UUID())
       NavigationLink(
-        destination: LegalInfoView(),
+        destination: LegalInfoView().background(.backgroundDefault),
         isActive: $goLegalInfo)
       {
         EmptyView()
       }
       .id(UUID())
       NavigationLink(
-        destination: GuideStatusView(),
+        destination: GuideStatusView().background(.backgroundDefault),
         isActive: $goGuideStatus)
       {
         EmptyView()
@@ -476,7 +476,7 @@ extension ProfileView {
       HStack {
         Color.clear.frame(width: 28)
         Spacer()
-        Text(CommonWords().settings)
+        Text(CommonWords().more)
           .fontSystem(fontDesignSystem: .subtitle1)
           .foregroundColor(.white)
         Spacer()
@@ -515,13 +515,13 @@ extension ProfileView {
           }
         }
       } label: {
-        bottomSheetRowWithIcon(systemName: "bell", text: CommonWords().notification)
+        bottomSheetRowWithIcon(systemName: "bell.fill", text: CommonWords().setNotification)
       }
       Rectangle().frame(height: 0.5).padding(.leading, 52).foregroundColor(Color.Border_Default_Dark)
       Button {
         goLegalInfo = true
       } label: {
-        bottomSheetRowWithIcon(systemName: "info.circle", text: CommonWords().about)
+        bottomSheetRowWithIcon(systemName: "info.circle.fill", text: CommonWords().about)
       }
       Rectangle().frame(height: 0.5).padding(.leading, 52).foregroundColor(Color.Border_Default_Dark)
       Button {

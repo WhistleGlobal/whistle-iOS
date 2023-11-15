@@ -67,9 +67,12 @@ extension View {
 }
 
 extension View {
-  func disableSwipeBack() -> some View {
-    background(
-      DisableSwipeBackView())
+  func disableSwipeBack(disabled: Bool = true) -> some View {
+    if disabled {
+      return AnyView(background(DisableSwipeBackView()))
+    } else {
+      return AnyView(self)
+    }
   }
 }
 

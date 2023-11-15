@@ -35,14 +35,14 @@ struct FollowTabItemButtonStyle: ButtonStyle {
             .overlay {
               Capsule()
                 .frame(height: 5)
-                .foregroundColor(.LabelColor_Primary)
+                .foregroundColor(.labelColorPrimary)
                 .opacity(tab == selectedTab.rawValue ? 1 : 0)
             }
         }
         Text(tab == profileTabStatus.follower.rawValue ? "\(followNum) 팔로워" : "\(followNum) 팔로잉")
           .fontSystem(fontDesignSystem: .subtitle2)
           .fontWeight(.semibold)
-          .foregroundColor(tab == selectedTab.rawValue ? Color.LabelColor_Primary : Color.Disable_Placeholder)
+          .foregroundColor(tab == selectedTab.rawValue ? Color.labelColorPrimary : Color.labelColorDisablePlaceholder)
       }
       .frame(maxWidth: .infinity, maxHeight: .infinity)
     }

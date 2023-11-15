@@ -34,6 +34,8 @@ struct MainContentPlayerView: View {
   @State var isUploading = false
   @Binding var currentContentInfo: MainContent?
   @Binding var index: Int
+  @Binding var isChangable: Bool
+
   let lifecycleDelegate: ViewLifecycleDelegate?
   let processor = BlurImageProcessor(blurRadius: 100)
 
@@ -118,6 +120,12 @@ struct MainContentPlayerView: View {
                   }
                   if feedMoreModel.bottomSheetPosition != .hidden {
                     DimsThick()
+                      .onAppear {
+                        isChangable = false
+                      }
+                      .onDisappear {
+                        isChangable = true
+                      }
                   }
                 }
               playButton(toPlay: player.rate == 0)

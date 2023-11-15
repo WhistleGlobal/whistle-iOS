@@ -115,9 +115,6 @@ struct VideoEditorView: View {
           }
         }
       }
-      .gesture(DragGesture().onEnded { _ in
-
-      })
       .disableSwipeBack()
       .toolbar(.hidden)
       .background(Color.Background_Default_Dark)
