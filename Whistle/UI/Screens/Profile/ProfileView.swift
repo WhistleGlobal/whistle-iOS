@@ -33,6 +33,7 @@ struct ProfileView: View {
   @State var bottomSheetPosition: BottomSheetPosition = .hidden
   @State var showProfileEditView = false
   @State var goMyTeamSelect = false
+  @State var goMyTeamSkinSelect = false
   @State var goNotiSetting = false
   @State var goLegalInfo = false
   @State var goGuideStatus = false

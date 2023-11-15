@@ -57,6 +57,8 @@
 "최근 항목" = "Recents";
 "마이팀 선택" = "Select My Team";
 "마이팀 스킨 설정" = "Set My Team Skin";
+"마이팀 플래그 표시" = "Show My Team Flag";
+"마이팀 프로필 배경 표시" = "Show My Team Profile Background";
 
 // MARK: - Video Capture
 "카운트 다운" = "Count down";

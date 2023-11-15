@@ -657,6 +657,8 @@
 		787ECF8A2B0492A700643242 /* TagSearchContentPlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 787ECF882B0492A700643242 /* TagSearchContentPlayerView.swift */; };
 		787ECF8C2B0492F500643242 /* TagSeacrhPlayersViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 787ECF8B2B0492F500643242 /* TagSeacrhPlayersViewModel.swift */; };
 		787ECF8D2B0492F500643242 /* TagSeacrhPlayersViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 787ECF8B2B0492F500643242 /* TagSeacrhPlayersViewModel.swift */; };
+		787ECF8F2B04B05A00643242 /* MyTeamSkinSettingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 787ECF8E2B04B05A00643242 /* MyTeamSkinSettingView.swift */; };
+		787ECF902B04B05A00643242 /* MyTeamSkinSettingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 787ECF8E2B04B05A00643242 /* MyTeamSkinSettingView.swift */; };
 		787FA24E2AE8E3B700B9BBDE /* WhistleLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 787FA24D2AE8E3B700B9BBDE /* WhistleLogger.swift */; };
 		787FA2502AE8E43900B9BBDE /* WhistleLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 787FA24F2AE8E43900B9BBDE /* WhistleLogger.swift */; };
 		787FA2522AE8E46F00B9BBDE /* WhistleLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 787FA2512AE8E46F00B9BBDE /* WhistleLogger.swift */; };
@@ -1222,6 +1224,7 @@
 		787ECF842B04929500643242 /* TagSearchFeedPageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagSearchFeedPageView.swift; sourceTree = "<group>"; };
 		787ECF882B0492A700643242 /* TagSearchContentPlayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagSearchContentPlayerView.swift; sourceTree = "<group>"; };
 		787ECF8B2B0492F500643242 /* TagSeacrhPlayersViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagSeacrhPlayersViewModel.swift; sourceTree = "<group>"; };
+		787ECF8E2B04B05A00643242 /* MyTeamSkinSettingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyTeamSkinSettingView.swift; sourceTree = "<group>"; };
 		787FA24D2AE8E3B700B9BBDE /* WhistleLogger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WhistleLogger.swift; sourceTree = "<group>"; };
 		787FA24F2AE8E43900B9BBDE /* WhistleLogger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WhistleLogger.swift; sourceTree = "<group>"; };
 		787FA2512AE8E46F00B9BBDE /* WhistleLogger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WhistleLogger.swift; sourceTree = "<group>"; };
@@ -2878,6 +2881,7 @@
 			isa = PBXGroup;
 			children = (
 				78F7C0372AFC7007009AA23E /* MyTeamSelectView.swift */,
+				787ECF8E2B04B05A00643242 /* MyTeamSkinSettingView.swift */,
 			);
 			path = MyTeam;
 			sourceTree = "<group>";
@@ -3299,6 +3303,7 @@
 				1B4E22F72AFD59AB0066D979 /* VideoCaptureView+Func.swift in Sources */,
 				78FDA5422AEFC65B001C3DA4 /* MyFeedPlayersViewModel.swift in Sources */,
 				1B54480B2AF882F600A73A27 /* FollowerList.swift in Sources */,
+				787ECF8F2B04B05A00643242 /* MyTeamSkinSettingView.swift in Sources */,
 				78E1755B2ABA802000731259 /* PrivacyPolicyView.swift in Sources */,
 				787AF5712AA887E600C190E6 /* MyContent.swift in Sources */,
 				787AF5602AA85CBC00C190E6 /* MyProfile.swift in Sources */,
@@ -3709,6 +3714,7 @@
 				787347FB2AF87F9D00551A84 /* NotificationModel.swift in Sources */,
 				1B54480C2AF882F600A73A27 /* FollowerList.swift in Sources */,
 				1B9936972AF3699E00F5C619 /* SettingProtocol.swift in Sources */,
+				787ECF902B04B05A00643242 /* MyTeamSkinSettingView.swift in Sources */,
 				1B9936982AF3699E00F5C619 /* GuestContentLayer.swift in Sources */,
 				1B9936992AF3699E00F5C619 /* NavigationModel.swift in Sources */,
 				1B99369A2AF3699E00F5C619 /* AlertPopup.swift in Sources */,

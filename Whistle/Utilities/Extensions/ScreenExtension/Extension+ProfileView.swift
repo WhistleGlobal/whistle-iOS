@@ -44,6 +44,13 @@ extension ProfileView {
         EmptyView()
       }
       .id(UUID())
+      NavigationLink(
+        destination: MyTeamSkinSettingView(),
+        isActive: $goMyTeamSkinSelect)
+      {
+        EmptyView()
+      }
+      .id(UUID())
     }
   }
 
@@ -497,6 +504,7 @@ extension ProfileView {
       Rectangle().frame(height: 0.5).padding(.leading, 52).foregroundColor(Color.Border_Default_Dark)
       Button {
         bottomSheetPosition = .hidden
+        goMyTeamSkinSelect = true
       } label: {
         bottomSheetRowWithIcon(systemName: "wand.and.stars", text: ProfileEditWords().myTeamSkinSelect)
       }
