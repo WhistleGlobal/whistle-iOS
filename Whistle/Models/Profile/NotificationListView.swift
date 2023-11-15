@@ -5,11 +5,10 @@
 //  Created by ChoiYujin on 11/2/23.
 //
 
-import Kingfisher
-import SwiftUI
-
 import AVFoundation
 import BottomSheet
+import Kingfisher
+import SwiftUI
 
 // MARK: - NotificationListView
 
@@ -96,17 +95,18 @@ extension NotificationListView {
       Spacer()
       KFImage.url(URL(string: notification.thumbnailURL ?? ""))
         .placeholder { // 플레이스 홀더 설정
-          Color.black
+          Image("noVideo")
+            .resizable()
+            .scaledToFill()
         }
         .resizable()
         .frame(width: 55, height: 55)
-        .scaledToFit()
+        .scaledToFill()
         .cornerRadius(8)
     }
     .frame(height: 72)
     .padding(.horizontal, 16)
   }
-
 
   @ViewBuilder
   func contentFollowNotiRow(_ notification: NotificationModel) -> some View {
@@ -172,9 +172,9 @@ extension NotificationListView {
         .fontSystem(fontDesignSystem: .caption_SemiBold)
         .foregroundColor(
           isFollowed.wrappedValue
-            ? .LabelColor_DisablePlaceholder
+            ? .LabelColor_DisablePlaceholder_Dark
             : .LabelColor_Primary_Dark)
-          .padding(.vertical, 4)
+          .padding(.vertical, 2)
           .padding(.horizontal, 12)
           .background {
             Capsule()
@@ -183,7 +183,7 @@ extension NotificationListView {
                 if isFollowed.wrappedValue {
                   Capsule()
                     .stroke(lineWidth: 1)
-                    .foregroundColor(.LabelColor_DisablePlaceholder)
+                    .foregroundColor(.LabelColor_DisablePlaceholder_Dark)
                 }
               }
           }

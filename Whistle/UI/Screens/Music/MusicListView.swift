@@ -61,8 +61,6 @@ struct MusicListView: View {
     }
   }
 
-  let tapSearchBar: (() -> Void)?
-
   var body: some View {
     VStack(spacing: 0) {
       customNavigationBar
@@ -71,7 +69,7 @@ struct MusicListView: View {
         searchText: $searchQueryString,
         isSearching: $isSearching)
         .simultaneousGesture(TapGesture().onEnded {
-          tapSearchBar?()
+          bottomSheetPosition = .relative(1)
         })
 
       if musicList.isEmpty {

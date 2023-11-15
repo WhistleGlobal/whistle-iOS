@@ -167,6 +167,8 @@ struct MainFeedView: View {
     .onChange(of: tabbarModel.tabSelectionNoAnimation) { _ in
       if tabbarModel.tabSelectionNoAnimation == .main {
         feedPlayersViewModel.currentPlayer?.play()
+      } else {
+        feedPlayersViewModel.stopPlayer()
       }
     }
   }

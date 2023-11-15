@@ -627,7 +627,9 @@ extension VideoCaptureView {
   func recordedVideoPreview(video: EditableVideo) -> some View {
     EditablePlayer(player: videoPlayer.videoPlayer, isFullScreen: true)
       .onAppear {
-        videoPlayer.playLoop(video)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+          videoPlayer.playLoop(video)
+        }
       }
       .onTapGesture {
         videoPlayer.playLoop(video)
@@ -784,30 +786,23 @@ extension VideoCaptureView {
       if buttonState == .completed {
         HStack(spacing: 8) {
           Button {
-            if isAccess {
+            if isAccess, !disableUploadButton {
               disableUploadButton = true
               if musicVM.isTrimmed {
                 editorVM.currentVideo?.setVolume(0)
               }
-            }
-            Task {
-              if !isAccess {
-                return
+              Task {
+                UploadProgressViewModel.shared.uploadStarted()
+                tabbarModel.tabSelectionNoAnimation = .main
+                tabbarModel.tabSelection = .main
+                alertViewModel.onFullScreenCover = false
               }
-              UploadProgressViewModel.shared.uploadStarted()
-              tabbarModel.tabSelectionNoAnimation = .main
-              tabbarModel.tabSelection = .main
-              alertViewModel.onFullScreenCover = false
-            }
-            Task {
-              if isAccess {
+              Task {
                 if let video = editorVM.currentVideo {
+                  UploadProgressViewModel.shared.thumbnail = video.getThumbnail()
+                  dismiss()
                   let exporterVM = VideoExporterViewModel(video: video, musicVolume: musicVM.musicVolume)
                   await exporterVM.action(.save, start: video.rangeDuration.lowerBound)
-                  if let thumbnail = exporterVM.thumbnailImage {
-                    UploadProgressViewModel.shared.thumbnail = Image(uiImage: thumbnail)
-                  }
-                  dismiss()
                   if let url = exporterVM.renderedVideoURL {
                     VideoCompression
                       .compressh264Video(from: url, cache: .forceDelete, preferred: .quantity(ratio: 1.0)) { item, error in
@@ -842,11 +837,11 @@ extension VideoCaptureView {
                     FileManager.default.removefileExists(for: renderedVideoURL)
                   }
                   exporterVM.renderedVideoURL = nil
-                  exporterVM.renderedVideoURL = nil
                 }
-              } else {
-                uploadBottomSheetPosition = .dynamic
               }
+            }
+            if !isAccess {
+              uploadBottomSheetPosition = .dynamic
             }
           } label: {
             Text(ContentWords().uploadNow)
@@ -862,6 +857,12 @@ extension VideoCaptureView {
           }
           Button {
             if isAccess || musicVM.musicInfo != nil {
+              if let video = editorVM.currentVideo {
+                if videoPlayer.isPlaying {
+                  videoPlayer.action(video)
+                }
+                thumbnail = video.getThumbnail()
+              }
               guestUploadModel.goDescriptionTagView = true
             } else {
               uploadBottomSheetPosition = .dynamic

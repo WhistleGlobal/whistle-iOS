@@ -51,7 +51,7 @@ struct VideoCaptureView: View {
   @State var musicBottomSheetPosition: BottomSheetPosition = .hidden
   @State var uploadBottomSheetPosition: BottomSheetPosition = .hidden
   @State var albumCover = Image("noVideo")
-
+  @State var thumbnail: Image?
   // MARK: - Bools
 
   @State var isAlbumAuthorized = false
@@ -104,6 +104,7 @@ struct VideoCaptureView: View {
             destination:
             DescriptionAndTagEditorView(
               video: video,
+              thumbnail: thumbnail,
               editorVM: editorVM,
               videoPlayer: videoPlayer,
               musicVM: musicVM,
@@ -172,6 +173,12 @@ struct VideoCaptureView: View {
           Text("\(Int(count + 0.9))")
             .fontSystem(fontDesignSystem: .largeTitle_Expanded)
             .foregroundColor(.white)
+        }
+      }
+      .overlay {
+        if disableUploadButton {
+          DimsThin()
+          LottieProgress()
         }
       }
       .frame(width: UIScreen.width, height: UIScreen.height)
@@ -272,9 +279,6 @@ struct VideoCaptureView: View {
             editorVM: editorVM,
             bottomSheetPosition: $musicBottomSheetPosition,
             showMusicTrimView: $showMusicTrimView)
-          {
-            musicBottomSheetPosition = .relative(1)
-          }
         }
       }
       .enableSwipeToDismiss(true)

@@ -27,6 +27,7 @@ struct DescriptionAndTagEditorView: View {
   @FocusState private var isFocused: Bool
 
   @State var content = ""
+  @State var onProgress = false
   @State var sheetPosition: BottomSheetPosition = .hidden
   @State var showTagCountMax = false
   @State var showTagTextCountMax = false
@@ -34,18 +35,21 @@ struct DescriptionAndTagEditorView: View {
   @Binding var isInitial: Bool
 
   let video: EditableVideo
+  var thumbnail: Image?
   let videoScale: CGFloat = 16 / 9
   let videoWidth: CGFloat = 203
   let textLimit = 100
 
   init(
     video: EditableVideo,
+    thumbnail: Image?,
     editorVM: VideoEditorViewModel,
     videoPlayer: VideoPlayerManager,
     musicVM: MusicViewModel,
     isInitial: Binding<Bool>)
   {
     self.video = video
+    self.thumbnail = thumbnail
     _exporterVM = StateObject(wrappedValue: VideoExporterViewModel(video: video, musicVolume: musicVM.musicVolume))
     self.editorVM = editorVM
     self.videoPlayer = videoPlayer
@@ -60,11 +64,12 @@ struct DescriptionAndTagEditorView: View {
         .onTapGesture {
           isFocused = false
         }
-      CustomNavigationBarViewController(title: "새 게시물", nextText: "게시", backgroundColor: .white) {
+      CustomNavigationBarViewController(title: "새 게시물", nextText: "게시", isPostNavBar: true, backgroundColor: .white) {
         isInitial = false
         dismiss()
         toastViewModel.onFullScreenCover = false
       } nextButtonAction: {
+        onProgress = true
         toastViewModel.onFullScreenCover = false
         Task {
           if guestUploadModel.istempAccess {
@@ -75,11 +80,9 @@ struct DescriptionAndTagEditorView: View {
         }
         Task {
           if let video = editorVM.currentVideo {
-            await exporterVM.action(.save, start: video.rangeDuration.lowerBound)
-            if let thumbnail = exporterVM.thumbnailImage {
-              UploadProgressViewModel.shared.thumbnail = Image(uiImage: thumbnail)
-            }
+            UploadProgressViewModel.shared.thumbnail = video.getThumbnail(start: video.rangeDuration.lowerBound)
             NavigationModel.shared.navigate.toggle()
+            await exporterVM.action(.save, start: video.rangeDuration.lowerBound)
             if let url = exporterVM.renderedVideoURL {
               VideoCompression
                 .compressh264Video(from: url, cache: .forceDelete, preferred: .quantity(ratio: 1.0)) { item, error in
@@ -129,23 +132,39 @@ struct DescriptionAndTagEditorView: View {
 
       ScrollView {
         VStack(spacing: 16) {
-          Image(
-            uiImage: editorVM
-              .returnThumbnail(Int((
-                (editorVM.currentVideo?.rangeDuration.lowerBound)! /
-                  (editorVM.currentVideo?.originalDuration)! * 21).rounded())))
-            .resizable()
-            .scaledToFit()
-            .frame(width: UIScreen.getWidth(videoWidth), height: UIScreen.getHeight(videoWidth * videoScale))
-            .cornerRadius(12)
-            .background {
-              Color.black.clipShape(RoundedRectangle(cornerRadius: 12))
-            }
-            .overlay {
-              if editorVM.currentVideo?.thumbHQImages.isEmpty ?? true {
-                ProgressView()
+          if let thumbnail {
+            thumbnail
+              .resizable()
+              .scaledToFit()
+              .frame(width: UIScreen.getWidth(videoWidth), height: UIScreen.getHeight(videoWidth * videoScale))
+              .cornerRadius(12)
+              .background {
+                Color.black.clipShape(RoundedRectangle(cornerRadius: 12))
               }
-            }
+              .overlay {
+                if editorVM.currentVideo?.thumbHQImages.isEmpty ?? true {
+                  ProgressView()
+                }
+              }
+          } else {
+            Image(
+              uiImage: editorVM
+                .returnThumbnail(Int((
+                  (editorVM.currentVideo?.rangeDuration.lowerBound)! /
+                    (editorVM.currentVideo?.originalDuration)! * 21).rounded())))
+              .resizable()
+              .scaledToFit()
+              .frame(width: UIScreen.getWidth(videoWidth), height: UIScreen.getHeight(videoWidth * videoScale))
+              .cornerRadius(12)
+              .background {
+                Color.black.clipShape(RoundedRectangle(cornerRadius: 12))
+              }
+              .overlay {
+                if editorVM.currentVideo?.thumbHQImages.isEmpty ?? true {
+                  ProgressView()
+                }
+              }
+          }
           TextField(
             "",
             text: $content,
