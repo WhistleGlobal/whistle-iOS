@@ -97,11 +97,11 @@ struct ContentLayer<
                   }
                 }
             }
-            TagList(tags: hashtags, verticalSpacing: 0) { tag in
+            TagList(tags: hashtags,horizontalSpacing: 0, verticalSpacing: 0) { tag in
               NavigationLink {
                 TagResultView(tagText: tag)
               } label: {
-                Text("#\(tag)")
+                Text("#\(tag)  ")
                   .fontSystem(fontDesignSystem: .subtitle3)
                   .foregroundColor(.LabelColor_Primary_Dark)
               }
