@@ -63,12 +63,6 @@ struct RootTabView: View {
             !apiViewModel.myProfile.userName.isEmpty
           {
             MyTeamSelectView()
-              .onAppear {
-                tabbarModel.tabbarOpacity = 0.0
-              }
-              .onDisappear {
-                tabbarModel.tabbarOpacity = 1.0
-              }
           } else {
             MainFeedView()
               .environmentObject(universalRoutingModel)

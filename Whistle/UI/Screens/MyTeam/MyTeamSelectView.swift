@@ -13,107 +13,115 @@ import SwiftUI
 struct MyTeamSelectView: View {
 
   @AppStorage("isMyTeamSelectPassed") var isMyTeamSelectPassed = false
+  @Environment(\.dismiss) var dismiss
   @State private var currentIndex = 0
   @State private var isDragging = false
   @State var aniBool = false
   @StateObject var apiViewModel = APIViewModel.shared
+  @StateObject private var tabbarModel = TabbarModel.shared
   var myTeamSelection: MyTeamType {
     MyTeamType.teamTypeList()[currentIndex]
   }
 
   var body: some View {
-    ZStack {
-      MyTeamType.teamGradient(myTeamSelection).ignoresSafeArea()
-      VStack(spacing: 0) {
-        Image("\(myTeamSelection.rawValue)Card")
-          .resizable()
-          .scaledToFit()
-          .frame(width: UIScreen.getWidth(334), height: UIScreen.getHeight(444))
-          .padding(.bottom, UIScreen.getHeight(24))
-        Carousel(
-          pageCount: 10,
-          visibleEdgeSpace: 85,
-          spacing: 37,
-          currentIndex: $currentIndex,
-          isDragging: $isDragging)
-        { index in
-          VStack(spacing: 10) {
-            //  Image("\(myTeamSelection.rawValue)Card")
-            Image("\(MyTeamType.teamTypeList()[index].rawValue)Cell_disable")
-              .resizable()
-              .scaledToFit()
-              .frame(width: UIScreen.getWidth(150), height: UIScreen.getHeight(100))
-              .overlay {
-                if currentIndex == index {
-                  Image("\(MyTeamType.teamTypeList()[index].rawValue)Cell")
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: UIScreen.getWidth(150), height: UIScreen.getHeight(100))
-                    .opacity(isDragging ? 0.0 : 1.0)
-                }
+    VStack(spacing: 0) {
+      Image("\(myTeamSelection.rawValue)Card")
+        .resizable()
+        .scaledToFit()
+        .frame(width: UIScreen.getWidth(334), height: UIScreen.getHeight(444))
+        .padding(.bottom, UIScreen.getHeight(24))
+        .padding(.top, UIScreen.getHeight(14))
+      Carousel(
+        pageCount: 10,
+        visibleEdgeSpace: 85,
+        spacing: 37,
+        currentIndex: $currentIndex,
+        isDragging: $isDragging)
+      { index in
+        VStack(spacing: 10) {
+          Image("\(MyTeamType.teamTypeList()[index].rawValue)Cell_disable")
+            .resizable()
+            .scaledToFit()
+            .frame(width: UIScreen.getWidth(150), height: UIScreen.getHeight(100))
+            .overlay {
+              if currentIndex == index {
+                Image("\(MyTeamType.teamTypeList()[index].rawValue)Cell")
+                  .resizable()
+                  .scaledToFit()
+                  .frame(width: UIScreen.getWidth(150), height: UIScreen.getHeight(100))
+                  .opacity(isDragging ? 0.0 : 1.0)
               }
-            Text(MyTeamType.teamName(MyTeamType.teamTypeList()[index]))
-              .fontSystem(fontDesignSystem: .body2)
-              .foregroundColor(.white)
-          }
-        }
-        .frame(height: UIScreen.getHeight(150))
-        .overlay {
-          HStack(spacing: UIScreen.getWidth(164)) {
-            Spacer()
-            Button {
-              currentIndex = max(currentIndex - 1, 0)
-              isDragging = true
-              DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
-                isDragging = false
-              }
-            } label: {
-              Image(systemName: "arrowtriangle.left.fill")
             }
-            .disabled(currentIndex == 0)
-            .opacity(currentIndex == 0 || isDragging ? 0.0 : 1.0)
-
-            Button {
-              currentIndex = min(currentIndex + 1, 9)
-              isDragging = true
-              DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
-                isDragging = false
-              }
-            } label: {
-              Image(systemName: "arrowtriangle.right.fill")
-            }
-            .disabled(currentIndex == 9)
-            .opacity(currentIndex == 9 || isDragging ? 0.0 : 1.0)
-            Spacer()
-          }
-          .font(.system(size: 19))
-          .foregroundColor(.white)
-          .padding(.bottom, UIScreen.getHeight(30))
+          Text(MyTeamType.teamName(MyTeamType.teamTypeList()[index]))
+            .fontSystem(fontDesignSystem: .body2)
+            .foregroundColor(.white)
         }
-        .padding(.bottom, UIScreen.getHeight(14))
-        Button {
-          Task {
-            await apiViewModel.updateMyTeam(myTeam: MyTeamType.teamName(myTeamSelection))
-            isMyTeamSelectPassed = true
-            await apiViewModel.requestMyProfile()
-          }
-        } label: {
-          Text(CommonWords().done)
-            .font(.system(size: 16, weight: .semibold))
-            .foregroundColor(.gray10)
-            .frame(height: UIScreen.getHeight(56))
-            .frame(maxWidth: .infinity)
-            .background {
-              glassProfile(cornerRadius: 14)
-            }
-        }
-        .padding(.horizontal, 16)
-        .padding(.bottom, UIScreen.getHeight(14))
-        Text("마이팀은 선택 후 프로필 탭에서 언제든 변경할 수 있습니다.")
-          .fontSystem(fontDesignSystem: .caption_Regular)
-          .foregroundColor(.LabelColor_DisablePlaceholder)
-        Spacer()
       }
+      .frame(height: UIScreen.getHeight(150))
+      .overlay {
+        HStack(spacing: UIScreen.getWidth(164)) {
+          Spacer()
+          Button {
+            currentIndex = max(currentIndex - 1, 0)
+            isDragging = true
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
+              isDragging = false
+            }
+          } label: {
+            Image(systemName: "arrowtriangle.left.fill")
+          }
+          .disabled(currentIndex == 0)
+          .opacity(currentIndex == 0 || isDragging ? 0.0 : 1.0)
+
+          Button {
+            currentIndex = min(currentIndex + 1, 9)
+            isDragging = true
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
+              isDragging = false
+            }
+          } label: {
+            Image(systemName: "arrowtriangle.right.fill")
+          }
+          .disabled(currentIndex == 9)
+          .opacity(currentIndex == 9 || isDragging ? 0.0 : 1.0)
+          Spacer()
+        }
+        .font(.system(size: 19))
+        .foregroundColor(.white)
+        .padding(.bottom, UIScreen.getHeight(30))
+      }
+      .padding(.bottom, UIScreen.getHeight(14))
+      Button {
+        Task {
+          await apiViewModel.updateMyTeam(myTeam: MyTeamType.teamName(myTeamSelection))
+          await apiViewModel.requestMyProfile()
+          if isMyTeamSelectPassed {
+            dismiss()
+          } else {
+            isMyTeamSelectPassed = true
+          }
+        }
+      } label: {
+        Text(CommonWords().done)
+          .font(.system(size: 16, weight: .semibold))
+          .foregroundColor(.gray10)
+          .frame(height: UIScreen.getHeight(56))
+          .frame(maxWidth: .infinity)
+          .background {
+            glassProfile(cornerRadius: 14)
+          }
+      }
+      .padding(.horizontal, 16)
+      .padding(.bottom, UIScreen.getHeight(14))
+      Text("마이팀은 선택 후 프로필 탭에서 언제든 변경할 수 있습니다.")
+        .fontSystem(fontDesignSystem: .caption_Regular)
+        .foregroundColor(.LabelColor_DisablePlaceholder)
+      Spacer()
+    }
+    .toolbarRole(.editor)
+    .navigationBarTitleDisplayMode(.inline)
+    .background {
+      MyTeamType.teamGradient(myTeamSelection).ignoresSafeArea(.all)
     }
     .toolbar {
       ToolbarItem(placement: .principal) {
@@ -123,13 +131,22 @@ struct MyTeamSelectView: View {
       }
       ToolbarItem(placement: .confirmationAction) {
         Button("건너뛰기") {
-          isMyTeamSelectPassed = true
+          if isMyTeamSelectPassed {
+            dismiss()
+          } else {
+            isMyTeamSelectPassed = true
+          }
         }
         .fontSystem(fontDesignSystem: .body2)
         .foregroundColor(.LabelColor_DisablePlaceholder)
       }
     }
-    Spacer()
+    .onAppear {
+      tabbarModel.tabbarOpacity = 0.0
+    }
+    .onDisappear {
+      tabbarModel.tabbarOpacity = 1.0
+    }
   }
 }
 

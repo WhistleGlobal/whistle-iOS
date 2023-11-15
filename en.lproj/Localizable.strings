@@ -55,6 +55,8 @@
 "앨범에서 사진 업로드" = "Choose from Library";
 "기본 이미지로 변경" = "Set to Default";
 "최근 항목" = "Recents";
+"마이팀 선택" = "Select My Team";
+"마이팀 스킨 설정" = "Set My Team Skin";
 
 // MARK: - Video Capture
 "카운트 다운" = "Count down";

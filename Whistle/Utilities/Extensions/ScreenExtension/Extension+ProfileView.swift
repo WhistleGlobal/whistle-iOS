@@ -37,6 +37,13 @@ extension ProfileView {
         EmptyView()
       }
       .id(UUID())
+      NavigationLink(
+        destination: MyTeamSelectView(),
+        isActive: $goMyTeamSelect)
+      {
+        EmptyView()
+      }
+      .id(UUID())
     }
   }
 
@@ -482,6 +489,20 @@ extension ProfileView {
       }
       Rectangle().frame(height: 0.5).padding(.leading, 52).foregroundColor(Color.Border_Default_Dark)
       Button {
+        bottomSheetPosition = .hidden
+        goMyTeamSelect = true
+      } label: {
+        bottomSheetRowWithIcon(systemName: "person.badge.shield.checkmark.fill", text: ProfileEditWords().myTeamSelect)
+      }
+      Rectangle().frame(height: 0.5).padding(.leading, 52).foregroundColor(Color.Border_Default_Dark)
+      Button {
+        bottomSheetPosition = .hidden
+      } label: {
+        bottomSheetRowWithIcon(systemName: "wand.and.stars", text: ProfileEditWords().myTeamSkinSelect)
+      }
+      Rectangle().frame(height: 0.5).padding(.leading, 52).foregroundColor(Color.Border_Default_Dark)
+
+      Button {
         goLegalInfo = true
       } label: {
         bottomSheetRowWithIcon(systemName: "info.circle", text: CommonWords().about)
@@ -555,7 +576,7 @@ extension ProfileView {
       }
       Spacer()
     }
-    .frame(height: 420)
+    .frame(height: 578)
   }
 }
 

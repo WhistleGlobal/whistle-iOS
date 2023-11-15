@@ -60,6 +60,8 @@ struct ProfileEditWords {
   let albumUpload: LocalizedStringKey = "앨범에서 사진 업로드"
   let setDefaultImage: LocalizedStringKey = "기본 이미지로 변경"
   let recents: LocalizedStringKey = "최근 항목"
+  let myTeamSelect: LocalizedStringKey = "마이팀 선택"
+  let myTeamSkinSelect: LocalizedStringKey = "마이팀 스킨 설정"
 }
 
 // MARK: - VideoCaptureWords
