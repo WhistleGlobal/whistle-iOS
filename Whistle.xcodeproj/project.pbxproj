@@ -622,6 +622,8 @@
 		786669552AA12F7F00448EC7 /* KeychainSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 786669542AA12F7F00448EC7 /* KeychainSwift */; };
 		786A7D542ACD7278001CC4F2 /* GuestContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 786A7D532ACD7278001CC4F2 /* GuestContent.swift */; };
 		786CFEB12AAC5D5100DB2ADD /* ProfileReportTypeSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 786CFEB02AAC5D5100DB2ADD /* ProfileReportTypeSelectionView.swift */; };
+		786F62A12B04D7D600EEB09F /* TagKit in Frameworks */ = {isa = PBXBuildFile; productRef = 786F62A02B04D7D600EEB09F /* TagKit */; };
+		786F62A32B04D7E000EEB09F /* TagKit in Frameworks */ = {isa = PBXBuildFile; productRef = 786F62A22B04D7E000EEB09F /* TagKit */; };
 		787093692AF28CED0023B400 /* ZoomFactorCombineViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 787093672AF28CB30023B400 /* ZoomFactorCombineViewModel.swift */; };
 		787173B42AA472070018CB14 /* ToastMessageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 787173B32AA472070018CB14 /* ToastMessageView.swift */; };
 		78730CE72ACE8660008B9981 /* PhotoCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78730CE62ACE8660008B9981 /* PhotoCollection.swift */; };
@@ -1308,6 +1310,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				786F62A12B04D7D600EEB09F /* TagKit in Frameworks */,
 				78A58E062AD1C287007F6A69 /* ReverseMask in Frameworks */,
 				1BD4E5B92ABA2F5600ADB783 /* VideoPicker.framework in Frameworks */,
 				78F780052AB34876005623CD /* GoogleSignIn in Frameworks */,
@@ -1334,6 +1337,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				786F62A32B04D7E000EEB09F /* TagKit in Frameworks */,
 				1B9936EB2AF3699E00F5C619 /* ReverseMask in Frameworks */,
 				1B9936EC2AF3699E00F5C619 /* VideoPicker.framework in Frameworks */,
 				1B9936ED2AF3699E00F5C619 /* GoogleSignIn in Frameworks */,
@@ -2991,6 +2995,7 @@
 				78F780062AB34876005623CD /* GoogleSignInSwift */,
 				1BD4E56A2ABA275200ADB783 /* SnapKit */,
 				78A58E052AD1C287007F6A69 /* ReverseMask */,
+				786F62A02B04D7D600EEB09F /* TagKit */,
 			);
 			productName = Whistle;
 			productReference = 1B39553C2A95069C00BCB4DF /* Whistle.app */;
@@ -3043,6 +3048,7 @@
 				1B9936242AF3699E00F5C619 /* SnapKit */,
 				1B9936262AF3699E00F5C619 /* ReverseMask */,
 				1B395D952AFA533B00E28180 /* Lottie */,
+				786F62A22B04D7E000EEB09F /* TagKit */,
 			);
 			productName = Whistle;
 			productReference = 1B9937082AF3699E00F5C619 /* WhistleDev.app */;
@@ -3133,6 +3139,7 @@
 				1BD4E5692ABA275200ADB783 /* XCRemoteSwiftPackageReference "SnapKit" */,
 				78A58E042AD1C287007F6A69 /* XCRemoteSwiftPackageReference "ReverseMask" */,
 				1B395D8E2AF9B88D00E28180 /* XCRemoteSwiftPackageReference "lottie-ios" */,
+				786F629F2B04D7D600EEB09F /* XCRemoteSwiftPackageReference "TagKit" */,
 			);
 			productRefGroup = 1B39553D2A95069C00BCB4DF /* Products */;
 			projectDirPath = "";
@@ -4748,6 +4755,14 @@
 				minimumVersion = 20.0.0;
 			};
 		};
+		786F629F2B04D7D600EEB09F /* XCRemoteSwiftPackageReference "TagKit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/danielsaidi/TagKit.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.1.1;
+			};
+		};
 		787AF5632AA85D2C00C190E6 /* XCRemoteSwiftPackageReference "SwiftyJSON" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/SwiftyJSON/SwiftyJSON.git";
@@ -4857,6 +4872,16 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 786669532AA12F7F00448EC7 /* XCRemoteSwiftPackageReference "keychain-swift" */;
 			productName = KeychainSwift;
+		};
+		786F62A02B04D7D600EEB09F /* TagKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 786F629F2B04D7D600EEB09F /* XCRemoteSwiftPackageReference "TagKit" */;
+			productName = TagKit;
+		};
+		786F62A22B04D7E000EEB09F /* TagKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 786F629F2B04D7D600EEB09F /* XCRemoteSwiftPackageReference "TagKit" */;
+			productName = TagKit;
 		};
 		787AF5642AA85D2C00C190E6 /* SwiftyJSON */ = {
 			isa = XCSwiftPackageProductDependency;
