@@ -141,6 +141,7 @@ extension Color {
     Color.lightAndDarkColor(light: "Gray40", dark: "Gray30")
   }
 
+  static var LabelColor_DisablePlaceholder_Dark: Color = Gray30_Dark
   // MARK: - Noti section
   static var NotiSectionColor: Color {
     Color.lightAndDarkColor(light: "Gray20", dark: "Gray60_Dark")

@@ -134,7 +134,7 @@ public enum VideoCompression {
 
       // Tracks
       let videoTrack = asset.tracks(withMediaType: AVMediaType.video).first!
-      let audioTrack = asset.tracks(withMediaType: AVMediaType.audio).first!
+      let audioTrack = asset.tracks(withMediaType: AVMediaType.audio).first
 
       // Calculate correct size
       let origin: CGSize = videoTrack.naturalSize
@@ -215,16 +215,17 @@ public enum VideoCompression {
       let decompressionAudioSettings: [String: Any] = [
         AVFormatIDKey: UInt(kAudioFormatLinearPCM),
       ]
-      let readerAudioTrackOutput = AVAssetReaderTrackOutput(track: audioTrack, outputSettings: decompressionAudioSettings)
+      var readerAudioTrackOutput: AVAssetReaderTrackOutput?
+      if let audioTrack {
+        readerAudioTrackOutput = AVAssetReaderTrackOutput(track: audioTrack, outputSettings: decompressionAudioSettings)
+        readerAudioTrackOutput!.alwaysCopiesSampleData = false
 
-      readerAudioTrackOutput.alwaysCopiesSampleData = false
-
-      guard reader.canAdd(readerAudioTrackOutput) else {
-        completion(nil, VideoCompressionError(message: "Cannot add audio output"))
-        return Cancellable(isCancelled: true)
+        guard reader.canAdd(readerAudioTrackOutput!) else {
+          completion(nil, VideoCompressionError(message: "Cannot add audio output"))
+          return Cancellable(isCancelled: true)
+        }
+        reader.add(readerAudioTrackOutput!)
       }
-      reader.add(readerAudioTrackOutput)
-
       // Begin Compression
       reader.timeRange = .init(start: .zero, end: asset.duration)
       writer.shouldOptimizeForNetworkUse = true
@@ -241,29 +242,6 @@ public enum VideoCompression {
         var audioDone = false
 
         while !videoDone || !audioDone {
-          // Check for Writer Errors (out of storage etc.)
-//          if writer.status == .failed {
-//            reader.cancelReading()
-//            writer.cancelWriting()
-//            if let e = writer.error {
-//              return completion(nil, e)
-//            }
-//          }
-
-          // Check for Reader Errors (source file corruption etc.)
-//          if reader.status == .failed {
-//            reader.cancelReading()
-//            writer.cancelWriting()
-//            if let e = reader.error { return completion(nil, e) }
-//          }
-
-          // Check for Cancel
-//          if cancelable.isCancelled {
-//            reader.cancelReading()
-//            writer.cancelWriting()
-//            return completion(nil, nil)
-//          }
-
           // Check if enough data is ready for encoding a single frame
           if videoInput.isReadyForMoreMediaData {
             // Copy a single frame from source to destination with applied transforms
@@ -279,18 +257,24 @@ public enum VideoCompression {
               videoDone = true
             }
           }
-
-          if audioInput.isReadyForMoreMediaData {
-            // Copy a single audio sample from source to destination
-            if let aBuffer = readerAudioTrackOutput.copyNextSampleBuffer(), CMSampleBufferDataIsReady(aBuffer) {
-              _ = audioInput.append(processor?.process(buffer: aBuffer, of: .audio) ?? aBuffer)
-            } else {
-              // Audio source is depleted, mark as finished
-              if !audioDone {
-                audioInput.markAsFinished()
+          if let readerAudioTrackOutput {
+            if audioInput.isReadyForMoreMediaData {
+              // Copy a single audio sample from source to destination
+              if let aBuffer = readerAudioTrackOutput.copyNextSampleBuffer(), CMSampleBufferDataIsReady(aBuffer) {
+                _ = audioInput.append(processor?.process(buffer: aBuffer, of: .audio) ?? aBuffer)
+              } else {
+                // Audio source is depleted, mark as finished
+                if !audioDone {
+                  audioInput.markAsFinished()
+                }
+                audioDone = true
               }
-              audioDone = true
             }
+          } else {
+            if !audioDone {
+              audioInput.markAsFinished()
+            }
+            audioDone = true
           }
         }
 

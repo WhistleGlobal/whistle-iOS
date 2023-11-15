@@ -95,6 +95,7 @@
 		1B6C04322AC2B93A00DF4045 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = 1B6C04312AC2B93A00DF4045 /* Kingfisher */; };
 		1B7D801D2AC881490030CAC3 /* CustomNavigationBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B7D801C2AC881490030CAC3 /* CustomNavigationBarViewController.swift */; };
 		1B8132DD2AE6285E00000C32 /* NavigationModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B8132DC2AE6285E00000C32 /* NavigationModel.swift */; };
+		1B83CB642B03C9510011030D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1B3955432A95069D00BCB4DF /* Assets.xcassets */; };
 		1B89314A2AE6903100F8579B /* TabbarModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B8931492AE6903100F8579B /* TabbarModel.swift */; };
 		1B8F135A2AFF5DBB004FC791 /* ContentLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B8F13592AFF5DBB004FC791 /* ContentLayer.swift */; };
 		1B8F135B2AFF5DBB004FC791 /* ContentLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B8F13592AFF5DBB004FC791 /* ContentLayer.swift */; };
@@ -528,7 +529,6 @@
 		1BD4E7692ABA2F8600ADB783 /* ScalePresentationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BD4E6652ABA2F8600ADB783 /* ScalePresentationController.swift */; };
 		1BD4E76A2ABA2F8600ADB783 /* MenuDropDownPresentationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BD4E6662ABA2F8600ADB783 /* MenuDropDownPresentationController.swift */; };
 		1BD4E76B2ABA2F8600ADB783 /* PickerResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BD4E6672ABA2F8600ADB783 /* PickerResult.swift */; };
-		1BD4E7702ABA2F8600ADB783 /* Picker.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1BD4E67C2ABA2F8600ADB783 /* Picker.xcassets */; };
 		1BD4E7722ABA2F8600ADB783 /* Editor.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1BD4E6812ABA2F8600ADB783 /* Editor.xcassets */; };
 		1BD4E7C62ABA68D500ADB783 /* PickerConfigViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BD4E7C52ABA68D500ADB783 /* PickerConfigViewController.swift */; };
 		1BD4E7D22ABA690400ADB783 /* Extension+UITableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BD4E7D12ABA690400ADB783 /* Extension+UITableViewCell.swift */; };
@@ -3171,7 +3171,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				1B09FEC32AFA61470031BAC6 /* ProgressLottie.json in Resources */,
-				1BD4E7702ABA2F8600ADB783 /* Picker.xcassets in Resources */,
+				1B83CB642B03C9510011030D /* Assets.xcassets in Resources */,
 				1BD4E7722ABA2F8600ADB783 /* Editor.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

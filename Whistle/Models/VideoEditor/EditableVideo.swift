@@ -20,6 +20,7 @@ struct EditableVideo: Identifiable {
   var thumbHQImages = [ThumbnailImage]()
   var rate: Float = 1.0
   var rotation: Double = 0
+  var aspectRatio: Double = 16 / 9
   var frameSize: CGSize = .zero
   var geometrySize: CGSize = .zero
   var isMirror = false
@@ -75,8 +76,13 @@ struct EditableVideo: Identifiable {
     thumbHQImages.remove(at: 0)
   }
 
-  func getFirstThumbnail() -> UIImage? {
-    asset.getImage(second: 0, compressionQuality: 0.5)
+  mutating func updateAspectRatio() {
+    let image = asset.getImage(second: 0)
+    aspectRatio = image!.size.width / image!.size.height
+  }
+  
+  func getThumbnail(start: Double = 0) -> Image {
+    Image(uiImage: asset.getImage(second: start, compressionQuality: 0.5) ?? UIImage(named: "noVideo")!)
   }
 
   /// reset and update

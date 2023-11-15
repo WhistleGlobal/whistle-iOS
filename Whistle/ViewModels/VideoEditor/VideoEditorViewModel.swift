@@ -26,6 +26,7 @@ class VideoEditorViewModel: ObservableObject {
     currentVideo = .init(url: url)
     currentVideo?.updateThumbnails()
     currentVideo?.generateHQThumbnails()
+    currentVideo?.updateAspectRatio()
     createProject()
   }
 

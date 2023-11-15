@@ -52,7 +52,7 @@ struct MusicTrimView: View {
       VStack(spacing: 0) {
         customNavigationBar()
           .padding(.bottom, 8)
-        MusicInfo(musicVM: musicVM, showMusicTrimView: $showMusicTrimView) { } onDelete: { }
+        MusicInfo(musicVM: musicVM, showMusicTrimView: $showMusicTrimView, showXmark: false) { } onDelete: { }
 
         Spacer()
 

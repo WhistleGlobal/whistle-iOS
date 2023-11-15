@@ -71,9 +71,13 @@ extension VideoEditorToolsSection {
         MusicListView(
           musicVM: MusicViewModel(),
           editorVM: editorVM,
-          bottomSheetPosition: .constant(.hidden), showMusicTrimView: .constant(false)) { }
+          bottomSheetPosition: .constant(.hidden), showMusicTrimView: .constant(false))
       case .audio:
-        VolumeSliderSheetView(videoPlayer: videoPlayer, editorVM: editorVM, musicVM: MusicViewModel()) { }
+        VolumeSliderSheetView(
+          videoPlayer: videoPlayer,
+          editorVM: editorVM,
+          musicVM: MusicViewModel(),
+          bottomSheetPosition: .constant(.hidden)) { }
 //      case .filters:
 //        FiltersView(selectedFilterName: video.filterName, viewModel: filtersVM) { filterName in
 //          if let filterName {
