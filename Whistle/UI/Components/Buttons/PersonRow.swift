@@ -11,8 +11,8 @@ struct PersonRow: View {
   @StateObject var apiViewModel = APIViewModel.shared
   @Binding var isFollowed: Bool
   var userName: String
-  var description: String
-  var profileImage: String
+  var description: String?
+  var profileImage: String?
   var userID: Int
 
   var body: some View {
@@ -24,6 +24,12 @@ struct PersonRow: View {
             .fontSystem(fontDesignSystem: .subtitle2)
             .foregroundColor(.LabelColor_Primary)
             .frame(maxWidth: .infinity, alignment: .leading)
+          if !(description ?? "").isEmpty {
+            Text(description ?? "")
+              .fontSystem(fontDesignSystem: .body2)
+              .foregroundColor(.LabelColor_Secondary)
+              .frame(maxWidth: .infinity, alignment: .leading)
+          }
         }
         .padding(.leading, 16)
         if userName != apiViewModel.myProfile.userName {

@@ -80,7 +80,7 @@ struct EditableVideo: Identifiable {
     let image = asset.getImage(second: 0)
     aspectRatio = image!.size.width / image!.size.height
   }
-  
+
   func getThumbnail(start: Double = 0) -> Image {
     Image(uiImage: asset.getImage(second: start, compressionQuality: 0.5) ?? UIImage(named: "noVideo")!)
   }
