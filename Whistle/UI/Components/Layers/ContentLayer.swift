@@ -352,6 +352,10 @@ extension BookmarkedFeedMoreModel: FeedMoreModel { }
 
 extension SearchFeedMoreModel: FeedMoreModel { }
 
+// MARK: - TagSearchFeedMoreModel + FeedMoreModel
+
+extension TagSearchFeedMoreModel: FeedMoreModel { }
+
 // MARK: - PlayersViewModel
 
 protocol PlayersViewModel {
@@ -381,3 +385,7 @@ extension BookmarkedPlayersViewModel: PlayersViewModel { }
 // MARK: - SearchPlayersViewModel + PlayersViewModel
 
 extension SearchPlayersViewModel: PlayersViewModel { }
+
+// MARK: - TagSearchPlayersViewModel + PlayersViewModel
+
+extension TagSearchPlayersViewModel: PlayersViewModel { }

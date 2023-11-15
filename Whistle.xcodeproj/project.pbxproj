@@ -649,6 +649,14 @@
 		787C0A5A2AC19C730021BC02 /* Roboto-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 787C0A592AC19C730021BC02 /* Roboto-Medium.ttf */; };
 		787C8AE02AB3293C00723085 /* ProfileReportCommentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 787C8ADF2AB3293C00723085 /* ProfileReportCommentView.swift */; };
 		787C8B1A2AB340E500723085 /* ReportCompleteView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 787C8B192AB340E500723085 /* ReportCompleteView.swift */; };
+		787ECF832B04928300643242 /* TagSearchFeedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 787ECF822B04928300643242 /* TagSearchFeedView.swift */; };
+		787ECF852B04929500643242 /* TagSearchFeedPageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 787ECF842B04929500643242 /* TagSearchFeedPageView.swift */; };
+		787ECF862B04929500643242 /* TagSearchFeedPageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 787ECF842B04929500643242 /* TagSearchFeedPageView.swift */; };
+		787ECF872B04929900643242 /* TagSearchFeedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 787ECF822B04928300643242 /* TagSearchFeedView.swift */; };
+		787ECF892B0492A700643242 /* TagSearchContentPlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 787ECF882B0492A700643242 /* TagSearchContentPlayerView.swift */; };
+		787ECF8A2B0492A700643242 /* TagSearchContentPlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 787ECF882B0492A700643242 /* TagSearchContentPlayerView.swift */; };
+		787ECF8C2B0492F500643242 /* TagSeacrhPlayersViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 787ECF8B2B0492F500643242 /* TagSeacrhPlayersViewModel.swift */; };
+		787ECF8D2B0492F500643242 /* TagSeacrhPlayersViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 787ECF8B2B0492F500643242 /* TagSeacrhPlayersViewModel.swift */; };
 		787FA24E2AE8E3B700B9BBDE /* WhistleLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 787FA24D2AE8E3B700B9BBDE /* WhistleLogger.swift */; };
 		787FA2502AE8E43900B9BBDE /* WhistleLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 787FA24F2AE8E43900B9BBDE /* WhistleLogger.swift */; };
 		787FA2522AE8E46F00B9BBDE /* WhistleLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 787FA2512AE8E46F00B9BBDE /* WhistleLogger.swift */; };
@@ -1210,6 +1218,10 @@
 		787C0A592AC19C730021BC02 /* Roboto-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Roboto-Medium.ttf"; sourceTree = "<group>"; };
 		787C8ADF2AB3293C00723085 /* ProfileReportCommentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileReportCommentView.swift; sourceTree = "<group>"; };
 		787C8B192AB340E500723085 /* ReportCompleteView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportCompleteView.swift; sourceTree = "<group>"; };
+		787ECF822B04928300643242 /* TagSearchFeedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagSearchFeedView.swift; sourceTree = "<group>"; };
+		787ECF842B04929500643242 /* TagSearchFeedPageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagSearchFeedPageView.swift; sourceTree = "<group>"; };
+		787ECF882B0492A700643242 /* TagSearchContentPlayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagSearchContentPlayerView.swift; sourceTree = "<group>"; };
+		787ECF8B2B0492F500643242 /* TagSeacrhPlayersViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagSeacrhPlayersViewModel.swift; sourceTree = "<group>"; };
 		787FA24D2AE8E3B700B9BBDE /* WhistleLogger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WhistleLogger.swift; sourceTree = "<group>"; };
 		787FA24F2AE8E43900B9BBDE /* WhistleLogger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WhistleLogger.swift; sourceTree = "<group>"; };
 		787FA2512AE8E46F00B9BBDE /* WhistleLogger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WhistleLogger.swift; sourceTree = "<group>"; };
@@ -1672,6 +1684,7 @@
 				782A6DDC2AF1EBCB004D0A60 /* GuestPlayersViewModel.swift */,
 				787093672AF28CB30023B400 /* ZoomFactorCombineViewModel.swift */,
 				780E3E982B0385D800744CD8 /* SearchPlayersViewModel.swift */,
+				787ECF8B2B0492F500643242 /* TagSeacrhPlayersViewModel.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -2697,15 +2710,34 @@
 			path = SignIn;
 			sourceTree = "<group>";
 		};
-		784D276D2AFCBFD90001EEDC /* Search */ = {
+		784B01422B04736F00B8F39F /* Tag */ = {
 			isa = PBXGroup;
 			children = (
-				784D276E2AFCC0070001EEDC /* MainSearchView.swift */,
-				784D27712AFCC0180001EEDC /* SearchResultView.swift */,
-				7852AF2F2B01F40F001D2485 /* TagResultView.swift */,
+				787ECF822B04928300643242 /* TagSearchFeedView.swift */,
+				787ECF842B04929500643242 /* TagSearchFeedPageView.swift */,
+				787ECF882B0492A700643242 /* TagSearchContentPlayerView.swift */,
+			);
+			path = Tag;
+			sourceTree = "<group>";
+		};
+		784B01432B04924500B8F39F /* SearchContent */ = {
+			isa = PBXGroup;
+			children = (
 				780E3E922B03856500744CD8 /* SearchFeedView.swift */,
 				780E3E942B03857500744CD8 /* SearchFeedPageView.swift */,
 				780E3E962B03857F00744CD8 /* SearchContentPlayerView.swift */,
+			);
+			path = SearchContent;
+			sourceTree = "<group>";
+		};
+		784D276D2AFCBFD90001EEDC /* Search */ = {
+			isa = PBXGroup;
+			children = (
+				784B01432B04924500B8F39F /* SearchContent */,
+				784B01422B04736F00B8F39F /* Tag */,
+				784D276E2AFCC0070001EEDC /* MainSearchView.swift */,
+				784D27712AFCC0180001EEDC /* SearchResultView.swift */,
+				7852AF2F2B01F40F001D2485 /* TagResultView.swift */,
 			);
 			path = Search;
 			sourceTree = "<group>";
@@ -3270,6 +3302,7 @@
 				78E1755B2ABA802000731259 /* PrivacyPolicyView.swift in Sources */,
 				787AF5712AA887E600C190E6 /* MyContent.swift in Sources */,
 				787AF5602AA85CBC00C190E6 /* MyProfile.swift in Sources */,
+				787ECF832B04928300643242 /* TagSearchFeedView.swift in Sources */,
 				787C8B1A2AB340E500723085 /* ReportCompleteView.swift in Sources */,
 				1BCB902F2AEEB0740088B2F2 /* Extension+String.swift in Sources */,
 				1B3895752AB9CBFC00B4C8DD /* Extension+AVAssets.swift in Sources */,
@@ -3293,6 +3326,7 @@
 				780039082AD7E0020033B9F1 /* VersionCheck.swift in Sources */,
 				1B3895272AB9CB6000B4C8DD /* EditorToolButton.swift in Sources */,
 				786A7D542ACD7278001CC4F2 /* GuestContent.swift in Sources */,
+				787ECF8C2B0492F500643242 /* TagSeacrhPlayersViewModel.swift in Sources */,
 				7866694B2AA1287500448EC7 /* UserResponse.swift in Sources */,
 				782DD4732AA30BDD006183D3 /* MyFollowListView.swift in Sources */,
 				788E68682AD6B6710056C18B /* VideoAsset.swift in Sources */,
@@ -3329,6 +3363,7 @@
 				1B4E22F42AFD59200066D979 /* VideoCaptureState.swift in Sources */,
 				1B3895872AB9CC4300B4C8DD /* ProjectEntity+Ext.swift in Sources */,
 				7822B23A2ADD509C000B15AB /* Notion.swift in Sources */,
+				787ECF852B04929500643242 /* TagSearchFeedPageView.swift in Sources */,
 				1B38954B2AB9CB7500B4C8DD /* CropView.swift in Sources */,
 				786669492AA1284F00448EC7 /* UserAuth.swift in Sources */,
 				7880108C2ABC837A00116FD5 /* MainFeedReportCommentView.swift in Sources */,
@@ -3474,6 +3509,7 @@
 				78D148E02A9E0D1B00DDCE48 /* AppleSDGothic.swift in Sources */,
 				1B08DCC32AA1872200CA1DE1 /* MusicTrimView.swift in Sources */,
 				1B38957A2AB9CC2C00B4C8DD /* VideoFilterHelpers.swift in Sources */,
+				787ECF892B0492A700643242 /* TagSearchContentPlayerView.swift in Sources */,
 				787347F92AF62A6300551A84 /* Extension+ProfileView.swift in Sources */,
 				78BCA95A2AF085B20084E92F /* MemberFeedPageView.swift in Sources */,
 				782A6DD52AF1EAFC004D0A60 /* GuestMainFeedView.swift in Sources */,
@@ -3612,7 +3648,9 @@
 				1B9936652AF3699E00F5C619 /* UserAuth.swift in Sources */,
 				1B9936662AF3699E00F5C619 /* MainFeedReportCommentView.swift in Sources */,
 				1B9936672AF3699E00F5C619 /* MyFeedView.swift in Sources */,
+				787ECF862B04929500643242 /* TagSearchFeedPageView.swift in Sources */,
 				1B9936682AF3699E00F5C619 /* Extension+Array.swift in Sources */,
+				787ECF8A2B0492A700643242 /* TagSearchContentPlayerView.swift in Sources */,
 				1B9936692AF3699E00F5C619 /* ToastMessage.swift in Sources */,
 				1B99366A2AF3699E00F5C619 /* MusicViewModel.swift in Sources */,
 				1B99366B2AF3699E00F5C619 /* ProfileReportReasonSelectionView.swift in Sources */,
@@ -3693,6 +3731,7 @@
 				1BDE48DA2AF3D2F900E33585 /* DimsUltraThin.swift in Sources */,
 				1BE6529E2AF7E25E00CE8858 /* MiniAudioVisualizer.swift in Sources */,
 				1B9936A52AF3699E00F5C619 /* VideoFile.swift in Sources */,
+				787ECF8D2B0492F500643242 /* TagSeacrhPlayersViewModel.swift in Sources */,
 				1B9936A62AF3699E00F5C619 /* VideoEditorViewModel.swift in Sources */,
 				1B9936A72AF3699E00F5C619 /* UploadProtocol.swift in Sources */,
 				1B9936A82AF3699E00F5C619 /* MusicProtocol.swift in Sources */,
@@ -3712,6 +3751,7 @@
 				1B9936B32AF3699E00F5C619 /* MainContentLayer.swift in Sources */,
 				1B9936B42AF3699E00F5C619 /* RootTabView.swift in Sources */,
 				782904AA2AFB20B500DCB90F /* CustomRefresh.swift in Sources */,
+				787ECF872B04929900643242 /* TagSearchFeedView.swift in Sources */,
 				1B9936B52AF3699E00F5C619 /* MusicServiceProtocol.swift in Sources */,
 				1B9936B62AF3699E00F5C619 /* DimsThick.swift in Sources */,
 				1B9936B72AF3699E00F5C619 /* PhotoCollection.swift in Sources */,

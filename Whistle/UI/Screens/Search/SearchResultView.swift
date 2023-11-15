@@ -179,7 +179,7 @@ extension SearchResultView {
       ScrollView {
         ForEach(apiViewModel.searchedTag, id: \.uuid) { tag in
           NavigationLink {
-            TagResultView(tagText: "#\(tag.contentHashtag)")
+            TagResultView(tagText: "\(tag.contentHashtag)")
           } label: {
             searchTagRow(tag: tag)
           }

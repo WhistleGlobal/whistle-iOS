@@ -61,4 +61,22 @@ extension APIViewModel: SearchProtocol {
         }
       }
   }
+
+  // FIXME: - 고칠 것
+  func requestTagSearchedRecentContent(queryString: String) {
+    AF.request(
+      "\(domainURL)/search/hashtag-content?query=\(queryString)",
+      method: .get,
+      headers: contentTypeJson)
+      .validate(statusCode: 200...300)
+      .responseDecodable(of: [MainContent].self) { response in
+        switch response.result {
+        case .success(let data):
+          self.tagSearchedRecentContent = data
+        case .failure(let error):
+          WhistleLogger.logger.error("requestTagSearchedContent(queryString: String) \(error)")
+          break
+        }
+      }
+  }
 }
