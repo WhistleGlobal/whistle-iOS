@@ -328,7 +328,7 @@ extension APIViewModel: ProfileProtocol {
     let params = [
       "myteam": myTeam,
     ]
-    return await withCheckedContinuation { _ in
+    return await withCheckedContinuation { continuaion in
       AF.request(
         "\(domainURL)/user/myteam",
         method: .put,
@@ -339,8 +339,10 @@ extension APIViewModel: ProfileProtocol {
           switch response.result {
           case .success(let data):
             WhistleLogger.logger.debug("updateMyTeam success!!")
+            continuaion.resume()
           case .failure(let error):
             WhistleLogger.logger.error("updateMyTeam: \(error)")
+            continuaion.resume()
           }
         }
     }

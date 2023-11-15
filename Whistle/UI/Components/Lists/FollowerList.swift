@@ -33,7 +33,7 @@ struct FollowerList: View {
                 follower.isFollowed = newValue
               }),
               userName: follower.userName,
-              description: follower.userName,
+              description: follower.introduce,
               profileImage: follower.profileImg,
               userID: follower.followerId)
           }

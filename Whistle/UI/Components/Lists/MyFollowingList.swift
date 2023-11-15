@@ -32,7 +32,7 @@ struct MyFollowingList: View {
                 following.isFollowed = newValue
               }),
               userName: following.userName,
-              description: following.userName,
+              description: following.introduce,
               profileImage: following.profileImg,
               userID: following.followingId)
           }

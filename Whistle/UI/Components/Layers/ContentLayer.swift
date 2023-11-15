@@ -8,6 +8,7 @@
 import AVFoundation
 import BottomSheet
 import SwiftUI
+import TagKit
 
 // MARK: - ContentLayer
 
@@ -33,6 +34,7 @@ struct ContentLayer<
   @State var isWhistled = false
   @State var isBookmarked = false
   @State var caption = ""
+  @State var hashtags: [String] = []
   @State var musicTitle = ""
   var index: Binding<Int>?
 
@@ -88,13 +90,24 @@ struct ContentLayer<
                 .foregroundColor(.white)
                 .lineLimit(isExpanded ? nil : 2)
                 .multilineTextAlignment(.leading)
+                .frame(maxWidth: .infinity, alignment: .leading)
                 .onTapGesture {
                   withAnimation {
                     isExpanded.toggle()
                   }
                 }
-                .padding(.bottom, 12)
             }
+            TagList(tags: hashtags,horizontalSpacing: 0, verticalSpacing: 0) { tag in
+              NavigationLink {
+                TagResultView(tagText: tag)
+              } label: {
+                Text("#\(tag)  ")
+                  .fontSystem(fontDesignSystem: .subtitle3)
+                  .foregroundColor(.LabelColor_Primary_Dark)
+              }
+              .id(UUID())
+            }
+            .padding(.bottom, 8)
             HStack(spacing: 8) {
               Image(systemName: "music.note")
                 .font(.system(size: 16))
@@ -288,6 +301,7 @@ struct ContentLayer<
       isWhistled = contentInfo.isWhistled
       isBookmarked = contentInfo.isBookmarked
       caption = contentInfo.caption ?? ""
+      hashtags = contentInfo.hashtags ?? []
       musicTitle = contentInfo.musicTitle ?? "원본 오디오"
     }
   }
@@ -305,6 +319,7 @@ protocol ContentInfo {
   var isWhistled: Bool { get set }
   var isBookmarked: Bool { get set }
   var caption: String? { get }
+  var hashtags: [String]? { get }
   var musicTitle: String? { get }
 }
 
@@ -352,6 +367,10 @@ extension BookmarkedFeedMoreModel: FeedMoreModel { }
 
 extension SearchFeedMoreModel: FeedMoreModel { }
 
+// MARK: - TagSearchFeedMoreModel + FeedMoreModel
+
+extension TagSearchFeedMoreModel: FeedMoreModel { }
+
 // MARK: - PlayersViewModel
 
 protocol PlayersViewModel {
@@ -381,3 +400,7 @@ extension BookmarkedPlayersViewModel: PlayersViewModel { }
 // MARK: - SearchPlayersViewModel + PlayersViewModel
 
 extension SearchPlayersViewModel: PlayersViewModel { }
+
+// MARK: - TagSearchPlayersViewModel + PlayersViewModel
+
+extension TagSearchPlayersViewModel: PlayersViewModel { }

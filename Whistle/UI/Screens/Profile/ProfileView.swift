@@ -32,6 +32,8 @@ struct ProfileView: View {
 
   @State var bottomSheetPosition: BottomSheetPosition = .hidden
   @State var showProfileEditView = false
+  @State var goMyTeamSelect = false
+  @State var goMyTeamSkinSelect = false
   @State var goNotiSetting = false
   @State var goLegalInfo = false
   @State var goGuideStatus = false
@@ -261,6 +263,7 @@ struct ProfileView: View {
       .ignoresSafeArea()
     }
     .navigationBarBackButtonHidden()
+    .ignoresSafeArea()
     .gesture(DragGesture().updating($dragOffset) { value, _, _ in
       if value.startLocation.x < 30, value.translation.width > 100 {
         dismiss()

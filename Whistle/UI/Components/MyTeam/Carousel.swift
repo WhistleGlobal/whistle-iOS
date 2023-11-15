@@ -14,6 +14,7 @@ struct Carousel<Content: View>: View {
   let pageCount: Int
   let visibleEdgeSpace: CGFloat
   let spacing: CGFloat
+  @State var isLoaded = false
   @Binding var currentIndex: Int
   @Binding private var isDragging: Bool
   let content: (PageIndex) -> Content
@@ -50,7 +51,7 @@ struct Carousel<Content: View>: View {
               height: proxy.size.height)
         }
         .contentShape(Rectangle())
-        .animation(.spring(duration: 0.4))
+        .animation(isLoaded ? .spring(duration: 0.4) : .linear(duration: 0.0))
         .allowsHitTesting(!isDragging)
       }
       .offset(x: offsetX)
@@ -72,6 +73,11 @@ struct Carousel<Content: View>: View {
               isDragging = false
             }
           })
+    }
+    .onAppear {
+      DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+        isLoaded = true
+      }
     }
   }
 }

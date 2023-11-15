@@ -27,7 +27,7 @@ struct SearchResultView: View {
   @State private var videoCount = 21 // Initial video count
 
   @State private var reachedBottom = false
-
+  @State var inputText = ""
   @Binding var searchQueryString: String
 
   var body: some View {
@@ -56,7 +56,7 @@ struct SearchResultView: View {
       ToolbarItem(placement: .topBarLeading) {
         FeedSearchBar(
           isNeedBackButton: true,
-          searchText: $searchQueryString,
+          searchText: $inputText,
           isSearching: $isSearching,
           submitAction: {
             if searchHistoryArray.contains(searchQueryString) || searchQueryString.isEmpty {
@@ -70,9 +70,11 @@ struct SearchResultView: View {
             search(query: searchQueryString)
           },
           cancelTapAction: dismiss)
-          .simultaneousGesture(TapGesture().onEnded { })
           .frame(width: UIScreen.width - 63)
       }
+    }
+    .onAppear {
+      inputText = searchQueryString
     }
     .onDisappear {
       UIApplication.shared.endEditing()
@@ -106,7 +108,6 @@ extension SearchResultView {
           ], spacing: 8) {
             ForEach(Array(apiViewModel.searchedContent.enumerated()), id: \.element) { index, content in
               NavigationLink {
-//                EmptyView()
                 SearchFeedView(index: index, userId: content.userId ?? 0)
               } label: {
                 videoThumbnailView(
@@ -178,7 +179,7 @@ extension SearchResultView {
       ScrollView {
         ForEach(apiViewModel.searchedTag, id: \.uuid) { tag in
           NavigationLink {
-            TagResultView(tagText: "#\(tag.contentHashtag)")
+            TagResultView(tagText: "\(tag.contentHashtag)")
           } label: {
             searchTagRow(tag: tag)
           }
@@ -203,10 +204,13 @@ extension SearchResultView {
           .fontSystem(fontDesignSystem: .subtitle2)
           .frame(width: .infinity,alignment: .leading)
           .foregroundColor(.LabelColor_Primary)
-        Text(user.introduce ?? "")
-          .fontSystem(fontDesignSystem: .body2)
-          .frame(width: .infinity,alignment: .leading)
-          .foregroundColor(.LabelColor_Secondary)
+        if !(user.introduce ?? "").isEmpty {
+          Text(user.introduce ?? "")
+            .fontSystem(fontDesignSystem: .body2)
+            .frame(width: .infinity,alignment: .leading)
+            .foregroundColor(.LabelColor_Secondary)
+            .multilineTextAlignment(.leading)
+        }
       }
       Spacer()
       Image(systemName: "chevron.forward")
@@ -261,6 +265,7 @@ extension SearchResultView {
 
 extension SearchResultView {
   func search(query: String) {
+    searchQueryString = inputText
     apiViewModel.searchedTag = []
     apiViewModel.searchedUser = []
     apiViewModel.searchedContent = []
