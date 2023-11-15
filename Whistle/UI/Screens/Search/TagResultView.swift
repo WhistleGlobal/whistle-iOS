@@ -73,7 +73,7 @@ extension TagResultView {
         // FIXME: - 태그 검색 결과로 고쳐야함
         ForEach(Array(apiViewModel.tagSearchedRecentContent.enumerated()), id: \.element) { index, content in
           NavigationLink {
-              TagSearchFeedView(index: index, userId: content.userId ?? 0)
+            TagSearchFeedView(index: index, userId: content.userId ?? 0)
           } label: {
             videoThumbnailView(
               thumbnailUrl: content.thumbnailUrl ?? "",

@@ -19,6 +19,8 @@ import VideoPicker
 struct RootTabView: View {
   @AppStorage("showGuide") var showGuide = true
   @AppStorage("isAccess") var isAccess = false
+  @AppStorage("isMyTeamSelectPassed") var isMyTeamSelectPassed = false
+
   @State var isFirstProfileLoaded = true
   @State var mainOpacity = 1.0
   @State var isRootStacked = false
@@ -55,8 +57,22 @@ struct RootTabView: View {
       guideView
       if isAccess {
         NavigationStack {
-          MainFeedView()
-            .environmentObject(universalRoutingModel)
+          if
+            !isMyTeamSelectPassed,
+            apiViewModel.myProfile.myTeam == nil,
+            !apiViewModel.myProfile.userName.isEmpty
+          {
+            MyTeamSelectView()
+              .onAppear {
+                tabbarModel.tabbarOpacity = 0.0
+              }
+              .onDisappear {
+                tabbarModel.tabbarOpacity = 1.0
+              }
+          } else {
+            MainFeedView()
+              .environmentObject(universalRoutingModel)
+          }
         }
         .tint(bartintModel.tintColor)
       } else {
@@ -386,7 +402,7 @@ extension RootTabView {
 
   @ViewBuilder
   var guideView: some View {
-    if showGuide {
+    if showGuide, isMyTeamSelectPassed {
       ZStack {
         Image("gestureGuide")
           .resizable()

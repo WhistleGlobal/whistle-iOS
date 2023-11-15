@@ -11,6 +11,8 @@ import SwiftUI
 // MARK: - MyTeamSelectView
 
 struct MyTeamSelectView: View {
+
+  @AppStorage("isMyTeamSelectPassed") var isMyTeamSelectPassed = false
   @State private var currentIndex = 0
   @State private var isDragging = false
   @State var aniBool = false
@@ -92,6 +94,8 @@ struct MyTeamSelectView: View {
         Button {
           Task {
             await apiViewModel.updateMyTeam(myTeam: MyTeamType.teamName(myTeamSelection))
+            isMyTeamSelectPassed = true
+            await apiViewModel.requestMyProfile()
           }
         } label: {
           Text(CommonWords().done)
@@ -119,7 +123,7 @@ struct MyTeamSelectView: View {
       }
       ToolbarItem(placement: .confirmationAction) {
         Button("건너뛰기") {
-          // 건너뛰기 액션
+          isMyTeamSelectPassed = true
         }
         .fontSystem(fontDesignSystem: .body2)
         .foregroundColor(.LabelColor_DisablePlaceholder)
