@@ -209,6 +209,7 @@ extension SearchResultView {
             .fontSystem(fontDesignSystem: .body2)
             .frame(width: .infinity,alignment: .leading)
             .foregroundColor(.LabelColor_Secondary)
+            .multilineTextAlignment(.leading)
         }
       }
       Spacer()

@@ -29,6 +29,7 @@ struct PersonRow: View {
               .fontSystem(fontDesignSystem: .body2)
               .foregroundColor(.LabelColor_Secondary)
               .frame(maxWidth: .infinity, alignment: .leading)
+              .multilineTextAlignment(.leading)
           }
         }
         .padding(.leading, 16)
