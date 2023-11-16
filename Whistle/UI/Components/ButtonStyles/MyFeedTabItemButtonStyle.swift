@@ -43,7 +43,7 @@ struct MyFeedTabItemButtonStyle: ButtonStyle {
           .opacity(tab == selectedTab.rawValue ? 1 : 0)
           .offset(y: 2.5)
       }
-      .foregroundColor(tab == selectedTab.rawValue ? .white : Color.Gray30_Dark)
+      .foregroundColor(tab == selectedTab.rawValue ? .white : Color.Disable_Placeholder_Dark)
       .background(.clear)
   }
 }

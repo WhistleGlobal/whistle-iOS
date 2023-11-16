@@ -199,8 +199,8 @@ struct MainFeedView: View {
         contentId: apiViewModel.mainFeed[feedPlayersViewModel.currentVideoIndex].contentId ?? 0,
         userId: apiViewModel.mainFeed[feedPlayersViewModel.currentVideoIndex].userId ?? 0)
     }
-    .onChange(of: tabbarModel.tabSelectionNoAnimation) { _ in
-      if tabbarModel.tabSelectionNoAnimation == .main {
+    .onChange(of: tabbarModel.tabSelection) { _ in
+      if tabbarModel.tabSelection == .main {
         feedPlayersViewModel.currentPlayer?.play()
       } else {
         feedPlayersViewModel.stopPlayer()

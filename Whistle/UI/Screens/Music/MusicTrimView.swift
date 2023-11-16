@@ -8,6 +8,7 @@
 import AVFoundation
 import AVKit
 import Combine
+import Kingfisher
 import SwiftUI
 
 // MARK: - MusicTrimView
@@ -52,7 +53,31 @@ struct MusicTrimView: View {
       VStack(spacing: 0) {
         customNavigationBar()
           .padding(.bottom, 8)
-        MusicInfo(musicVM: musicVM, showMusicTrimView: $showMusicTrimView, showXmark: false) { } onDelete: { }
+        if let musicInfo = musicVM.musicInfo {
+          VStack(spacing: 0) {
+            KFImage(URL(string: musicInfo.albumCover))
+              .cancelOnDisappear(true)
+              .placeholder {
+                Image("noVideo")
+                  .resizable()
+                  .scaledToFill()
+              }
+              .retry(maxCount: 3, interval: .seconds(0.5))
+              .resizable()
+              .frame(width: UIScreen.getWidth(36), height: UIScreen.getWidth(36))
+              .cornerRadius(4)
+              .overlay {
+                RoundedRectangle(cornerRadius: 4)
+                  .strokeBorder(.white, lineWidth: 2)
+              }
+              .padding(.bottom, 16)
+            Text(musicInfo.musicTitle)
+              .fontSystem(fontDesignSystem: .body1)
+              .foregroundStyle(Color.white)
+          }
+          .frame(width: UIScreen.getWidth(184))
+          .padding(8)
+        }
 
         Spacer()
 

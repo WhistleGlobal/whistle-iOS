@@ -5,10 +5,12 @@
 //  Created by ChoiYujin on 9/14/23.
 //
 
+import Combine
 import SwiftUI
 
 struct ProfileReportCommentView: View {
   @Environment(\.dismiss) var dismiss
+  @Environment(\.colorScheme) var colorScheme
   @StateObject var apiViewModel = APIViewModel.shared
   @StateObject var alertViewModel = AlertViewModel.shared
   @FocusState private var isFocused: Bool
@@ -20,6 +22,7 @@ struct ProfileReportCommentView: View {
   let reportCategory: ProfileReportTypeSelectionView.ReportCategory
   let reportReason: Int
   let userId: Int
+  let textLimit = 150
 
   var body: some View {
     VStack(spacing: 0) {
@@ -27,28 +30,37 @@ struct ProfileReportCommentView: View {
       Text("이 \(reportCategory == .post ? "콘텐츠를" : "계정을") 신고하는 이유는 무엇인가요?")
         .fontSystem(fontDesignSystem: .subtitle2)
         .frame(maxWidth: .infinity, alignment: .leading)
-        .foregroundColor(.LabelColor_Primary)
+        .foregroundColor(.labelColorPrimary)
         .padding(.top, 16)
         .padding(.bottom, 4)
       Text("이 \(reportCategory == .post ? "콘텐츠를" : "계정을") 신고하는 이유에 대해 추가적인 내용을 알려주세요.")
         .fontSystem(fontDesignSystem: .caption_Regular)
         .frame(maxWidth: .infinity, alignment: .leading)
-        .foregroundColor(.LabelColor_Secondary)
+        .foregroundColor(.labelColorSecondary)
         .padding(.bottom, 16)
       TextField("기타 참고사항을 알려주세요 (선택사항)", text: $inputReportDetail, axis: .vertical)
         .padding(16)
         .frame(height: 160, alignment: .top)
-        .frame(maxWidth: UIScreen.width - 32)
-        .cornerRadius(8)
         .contentShape(Rectangle())
         .tint(.Info)
         .focused($isFocused)
         .overlay {
-          RoundedRectangle(cornerRadius: 8)
-            .stroke(lineWidth: 1)
-            .foregroundColor(.Disable_Placeholder)
+          if colorScheme == .light {
+            RoundedRectangle(cornerRadius: 8)
+              .stroke(lineWidth: 1)
+              .foregroundColor(.labelColorDisablePlaceholder)
+          }
         }
-        .background(Color.reactiveBackground)
+        .overlay(alignment: .bottomTrailing) {
+          Text("\(inputReportDetail.count)/\(textLimit)자")
+            .padding()
+            .foregroundStyle(Color.Disable_Placeholder_Light)
+            .fontSystem(fontDesignSystem: .body2)
+        }
+        .onReceive(Just(inputReportDetail)) { _ in
+          limitText(textLimit)
+        }
+        .background(RoundedRectangle(cornerRadius: 8).fill(colorScheme == .dark ? Color.Elevated_Dark : Color.white))
         .onSubmit {
           isFocused = false
         }
@@ -57,14 +69,14 @@ struct ProfileReportCommentView: View {
         }
       Spacer()
     }
-    .onAppear {
-      print("selectedContentId: \(selectedContentId)")
-    }
     .onTapGesture {
       isFocused = false
     }
+    .toolbarBackground(Color.backgroundDefault, for: .navigationBar)
+    .toolbarBackground(.visible, for: .navigationBar)
+    .foregroundColor(.labelColorPrimary)
     .padding(.horizontal, 16)
-    .background(Color.reactiveBackground)
+    .background(Color.backgroundDefault)
     .toolbarRole(.editor)
     .navigationTitle(CommonWords().report)
     .navigationBarTitleDisplayMode(.inline)
@@ -129,10 +141,7 @@ struct ProfileReportCommentView: View {
           Text(CommonWords().submit)
             .foregroundColor(.Info)
             .fontSystem(fontDesignSystem: .subtitle2)
-            .opacity(alertViewModel.showAlert ? 0.3 : 1)
-            .grayscale(alertViewModel.showAlert ? 0.5 : 0)
         }
-        .disabled(alertViewModel.showAlert)
       }
     }
     .onAppear {
@@ -141,10 +150,11 @@ struct ProfileReportCommentView: View {
     .onDisappear {
       alertViewModel.onFullScreenCover = false
     }
-    .overlay {
-      if alertViewModel.onFullScreenCover {
-        AlertPopup()
-      }
+  }
+
+  func limitText(_ upper: Int) {
+    if inputReportDetail.count > upper {
+      inputReportDetail = String(inputReportDetail.prefix(upper))
     }
   }
 }

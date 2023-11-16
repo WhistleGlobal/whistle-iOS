@@ -50,13 +50,13 @@ struct ProfileImagePickerView: View {
           Image(systemName: "xmark")
             .font(.system(size: 20))
             .contentShape(Rectangle())
-            .foregroundColor(.LabelColor_Primary)
+            .foregroundColor(.labelColorPrimary)
             .frame(width: 24, height: 24)
         }
         Spacer()
         Text(CommonWords().album)
           .fontSystem(fontDesignSystem: .subtitle1)
-          .foregroundColor(.LabelColor_Primary)
+          .foregroundColor(.labelColorPrimary)
         Spacer()
         Button {
           guard selectedImage != nil else {
@@ -102,9 +102,9 @@ struct ProfileImagePickerView: View {
           HStack {
             Text(albumName)
               .fontSystem(fontDesignSystem: .subtitle2)
-              .foregroundColor(.LabelColor_Primary)
+              .foregroundColor(.labelColorPrimary)
             Image(systemName: "chevron.down")
-              .foregroundColor(.LabelColor_Primary)
+              .foregroundColor(.labelColorPrimary)
           }
           .frame(height: 54)
         }
@@ -127,7 +127,7 @@ struct ProfileImagePickerView: View {
       }
       .ignoresSafeArea()
     }
-    .background(Color.Background_Default)
+    .background(Color.backgroundDefault)
     .task {
       let authorized = await PhotoLibrary.checkAuthorization()
       guard authorized else {
@@ -355,12 +355,12 @@ struct AlbumListView: View {
           Image(systemName: "xmark")
             .font(.system(size: 20))
             .contentShape(Rectangle())
-            .foregroundColor(.LabelColor_Primary)
+            .foregroundColor(.labelColorPrimary)
         }
         Spacer()
         Text(CommonWords().album)
           .fontSystem(fontDesignSystem: .subtitle1)
-          .foregroundColor(.LabelColor_Primary)
+          .foregroundColor(.labelColorPrimary)
         Spacer()
         EmptyView()
       }
@@ -388,17 +388,17 @@ struct AlbumListView: View {
               .overlay {
                 RoundedRectangle(cornerRadius: 8)
                   .stroke(lineWidth: 1)
-                  .foregroundColor(.Border_Default)
+                  .foregroundColor(.borderDefault)
                   .frame(width: 64, height: 64)
               }
             VStack(spacing: 0) {
               Text("\(album.name)")
                 .fontSystem(fontDesignSystem: .subtitle1)
-                .foregroundColor(.LabelColor_Primary)
+                .foregroundColor(.labelColorPrimary)
                 .frame(maxWidth: .infinity, alignment: .leading)
               Text("\(album.count)")
                 .fontSystem(fontDesignSystem: .body1)
-                .foregroundColor(.LabelColor_Secondary)
+                .foregroundColor(.labelColorSecondary)
                 .frame(maxWidth: .infinity, alignment: .leading)
             }
           }
@@ -408,7 +408,7 @@ struct AlbumListView: View {
       }
       .listStyle(.plain)
     }
-    .background(Color.Background_Default)
+    .background(Color.backgroundDefault)
     .padding(.horizontal, 16)
   }
 }
