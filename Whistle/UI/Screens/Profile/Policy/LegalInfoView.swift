@@ -18,32 +18,32 @@ struct LegalInfoView: View {
         .padding(.top, 36)
         .padding(.bottom, 16)
       Text(apiViewModel.myProfile.userName)
-        .foregroundColor(.LabelColor_Primary)
+        .foregroundColor(.labelColorPrimary)
         .fontSystem(fontDesignSystem: .title2_Expanded)
         .padding(.bottom, 36)
       VStack(spacing: 0) {
         Divider().frame(height: 0.5).padding(.leading, 16)
-          .foregroundColor(.Disable_Placeholder)
+          .foregroundColor(.labelColorDisablePlaceholder)
         HStack {
           Text("가입한 날짜")
             .fontSystem(fontDesignSystem: .subtitle2)
-            .foregroundColor(.LabelColor_Primary)
+            .foregroundColor(.labelColorPrimary)
           Spacer()
           Text("\(apiViewModel.userCreatedDate)")
             .fontSystem(fontDesignSystem: .body1)
-            .foregroundColor(.Disable_Placeholder)
+            .foregroundColor(.labelColorDisablePlaceholder)
         }
         .padding(.horizontal, 16)
         .frame(height: 56)
         Divider().frame(height: 0.5).padding(.leading, 16)
-          .foregroundColor(.Disable_Placeholder)
+          .foregroundColor(.labelColorDisablePlaceholder)
         NavigationLink {
-          PrivacyPolicyView()
+          PrivacyPolicyView().background(.backgroundDefault)
         } label: {
           HStack {
             Text("개인정보처리방침")
               .fontSystem(fontDesignSystem: .subtitle2)
-              .foregroundColor(.LabelColor_Primary)
+              .foregroundColor(.labelColorPrimary)
             Spacer()
             Image(systemName: "chevron.forward")
               .font(.system(size: 16))
@@ -54,14 +54,14 @@ struct LegalInfoView: View {
         }
         .padding(.horizontal, 16)
         Divider().frame(height: 0.5).padding(.leading, 16)
-          .foregroundColor(.Disable_Placeholder)
+          .foregroundColor(.labelColorDisablePlaceholder)
         NavigationLink {
-          TermsOfServiceView()
+          TermsOfServiceView().background(.backgroundDefault)
         } label: {
           HStack {
             Text("이용약관")
               .fontSystem(fontDesignSystem: .subtitle2)
-              .foregroundColor(.LabelColor_Primary)
+              .foregroundColor(.labelColorPrimary)
             Spacer()
             Image(systemName: "chevron.forward")
               .font(.system(size: 16))
@@ -72,10 +72,14 @@ struct LegalInfoView: View {
         }
         .padding(.horizontal, 16)
         Divider().frame(height: 0.5).padding(.leading, 16)
-          .foregroundColor(.Disable_Placeholder)
+          .foregroundColor(.labelColorDisablePlaceholder)
       }
       Spacer()
     }
+    .toolbarBackground(
+      Color.backgroundDefault,
+      for: .navigationBar)
+    .toolbarBackground(.visible, for: .navigationBar)
     .toolbarRole(.editor)
     .navigationBarTitleDisplayMode(.inline)
     .navigationTitle(CommonWords().about)

@@ -260,6 +260,7 @@ struct ProfileView: View {
       }
       .ignoresSafeArea()
     }
+    .background(.backgroundDefault)
     .navigationBarBackButtonHidden()
     .gesture(DragGesture().updating($dragOffset) { value, _, _ in
       if value.startLocation.x < 30, value.translation.width > 100 {

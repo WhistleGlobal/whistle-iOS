@@ -75,6 +75,8 @@ struct MyFollowListView: View {
       }
       Spacer()
     }
+    .background(.backgroundDefault)
+    .toolbarBackground(.hidden, for: .navigationBar)
     .toolbarRole(.editor)
     .toolbar {
       ToolbarItem(placement: .principal) {

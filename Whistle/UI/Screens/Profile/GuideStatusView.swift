@@ -16,14 +16,20 @@ struct GuideStatusView: View {
     VStack(spacing: 0) {
 //      if apiViewModel.reportedContent.isEmpty {
       if true {
-        Text("회원님의 콘텐츠는\n현재 영향을 받지 않습니다.")
-          .fontSystem(fontDesignSystem: .subtitle1)
-          .foregroundColor(.LabelColor_Primary)
-          .multilineTextAlignment(.center)
-          .padding(.bottom, 12)
+        Spacer()
+        HStack {
+          Spacer()
+          Text("회원님의 콘텐츠는\n현재 영향을 받지 않습니다.")
+            .fontSystem(fontDesignSystem: .subtitle1)
+            .foregroundColor(.labelColorPrimary)
+            .multilineTextAlignment(.center)
+            .padding(.bottom, 12)
+          Spacer()
+        }
         Text("커뮤니티 가이드라인을 준수해주셔서 감사합니다.")
           .fontSystem(fontDesignSystem: .body2)
-          .foregroundColor(.LabelColor_Secondary)
+          .foregroundColor(.labelColorSecondary)
+        Spacer()
       } else {
         Divider()
         Group {
@@ -35,7 +41,7 @@ struct GuideStatusView: View {
             + Text("로 해당 내용을 알려주세요.")
         }
         .fontSystem(fontDesignSystem: .caption_Regular)
-        .foregroundColor(.LabelColor_Secondary)
+        .foregroundColor(.labelColorSecondary)
         .padding(.vertical, 12)
         Divider()
         List {
@@ -48,6 +54,8 @@ struct GuideStatusView: View {
       }
     }
     .toolbarRole(.editor)
+    .toolbarBackground(Color.backgroundDefault, for: .navigationBar)
+    .toolbarBackground(.visible, for: .navigationBar)
     .navigationBarTitleDisplayMode(.inline)
     .navigationTitle(CommonWords().guideStatus)
     .task {
@@ -80,7 +88,7 @@ struct GuideStatusView: View {
         Text(dateString)
           .frame(maxWidth: .infinity, alignment: .leading)
           .fontSystem(fontDesignSystem: .body2)
-          .foregroundColor(.LabelColor_Secondary)
+          .foregroundColor(.labelColorSecondary)
           .lineLimit(1)
       }
     }

@@ -14,6 +14,7 @@ struct MemberFeedPageView: UIViewRepresentable {
   @StateObject var apiViewModel = APIViewModel.shared
   @StateObject var feedPlayersViewModel = MemeberPlayersViewModel.shared
   @State var currentContentInfo: MemberContent?
+  @State var isChangable = true
   @Binding var index: Int
   let dismissAction: DismissAction
 
@@ -23,6 +24,7 @@ struct MemberFeedPageView: UIViewRepresentable {
       rootView: MemberContentPlayerView(
         currentContentInfo: $currentContentInfo,
         index: $index,
+        isChangable: $isChangable,
         lifecycleDelegate: context.coordinator,
         dismissAction: dismissAction))
     childView.view.frame = CGRect(
@@ -34,6 +36,7 @@ struct MemberFeedPageView: UIViewRepresentable {
       width: UIScreen.main.bounds.width,
       height: UIScreen.main.bounds.height * CGFloat(apiViewModel.memberFeed.count))
     view.addSubview(childView.view)
+    view.isScrollEnabled = isChangable
     view.showsVerticalScrollIndicator = false
     view.showsHorizontalScrollIndicator = false
     view.contentInsetAdjustmentBehavior = .never
@@ -56,20 +59,23 @@ struct MemberFeedPageView: UIViewRepresentable {
         width: UIScreen.width,
         height: UIScreen.height * CGFloat(apiViewModel.memberFeed.count))
     }
+    uiView.isScrollEnabled = isChangable
   }
 
   func makeCoordinator() -> Coordinator {
-    MemberFeedPageView.Coordinator(parent: self, index: $index)
+    MemberFeedPageView.Coordinator(parent: self, index: $index, changable: $isChangable)
   }
 
   class Coordinator: NSObject, UIScrollViewDelegate, ViewLifecycleDelegate {
 
     var parent: MemberFeedPageView
     @Binding var index: Int
+    @Binding var changable: Bool
 
-    init(parent: MemberFeedPageView, index: Binding<Int>) {
+    init(parent: MemberFeedPageView, index: Binding<Int>, changable: Binding<Bool>) {
       self.parent = parent
       _index = index
+      _changable = changable
     }
 
     func onAppear() {
@@ -90,6 +96,10 @@ struct MemberFeedPageView: UIViewRepresentable {
       parent.feedPlayersViewModel.resetPlayer()
     }
 
+    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+      scrollView.isScrollEnabled = changable
+    }
+
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
       parent.feedPlayersViewModel.currentVideoIndex = Int(scrollView.contentOffset.y / UIScreen.main.bounds.height)
       if index < parent.feedPlayersViewModel.currentVideoIndex {
@@ -104,6 +114,7 @@ struct MemberFeedPageView: UIViewRepresentable {
       }
       index = parent.feedPlayersViewModel.currentVideoIndex
       parent.currentContentInfo = parent.apiViewModel.memberFeed[index]
+      scrollView.isScrollEnabled = changable
     }
 
     func scrollViewDidScrollToTop(_ scrollView: UIScrollView) {

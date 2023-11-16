@@ -22,7 +22,7 @@ struct PersonRow: View {
         VStack(spacing: 0) {
           Text(userName)
             .fontSystem(fontDesignSystem: .subtitle2)
-            .foregroundColor(.LabelColor_Primary)
+            .foregroundColor(.labelColorPrimary)
             .frame(maxWidth: .infinity, alignment: .leading)
         }
         .padding(.leading, 16)
@@ -59,7 +59,7 @@ struct PersonRow: View {
       .frame(height: 72)
       .frame(maxWidth: .infinity)
       Divider().frame(height: 0.5).padding(.leading, 80)
-        .foregroundColor(.Disable_Placeholder)
+        .foregroundColor(.labelColorDisablePlaceholder)
     }
   }
 }

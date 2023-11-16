@@ -14,6 +14,7 @@ struct BookmarkedPageView: UIViewRepresentable {
   @StateObject var apiViewModel = APIViewModel.shared
   @StateObject var feedPlayersViewModel = BookmarkedPlayersViewModel.shared
   @State var currentContentInfo: Bookmark?
+  @State var isChangable = true
   @Binding var index: Int
   let dismissAction: DismissAction
 
@@ -23,6 +24,7 @@ struct BookmarkedPageView: UIViewRepresentable {
       rootView: BookmarkedContentPlayerview(
         currentContentInfo: $currentContentInfo,
         index: $index,
+        isChangable: $isChangable,
         lifecycleDelegate: context.coordinator,
         dismissAction: dismissAction))
     childView.view.frame = CGRect(
@@ -34,6 +36,7 @@ struct BookmarkedPageView: UIViewRepresentable {
       width: UIScreen.main.bounds.width,
       height: UIScreen.main.bounds.height * CGFloat(apiViewModel.bookmark.count))
     view.addSubview(childView.view)
+    view.isScrollEnabled = isChangable
     view.showsVerticalScrollIndicator = false
     view.showsHorizontalScrollIndicator = false
     view.contentInsetAdjustmentBehavior = .never
@@ -56,20 +59,23 @@ struct BookmarkedPageView: UIViewRepresentable {
         width: UIScreen.width,
         height: UIScreen.height * CGFloat(apiViewModel.bookmark.count))
     }
+    uiView.isScrollEnabled = isChangable
   }
 
   func makeCoordinator() -> Coordinator {
-    BookmarkedPageView.Coordinator(parent: self, index: $index)
+    BookmarkedPageView.Coordinator(parent: self, index: $index, changable: $isChangable)
   }
 
   class Coordinator: NSObject, UIScrollViewDelegate, ViewLifecycleDelegate {
 
     var parent: BookmarkedPageView
     @Binding var index: Int
+    @Binding var changable: Bool
 
-    init(parent: BookmarkedPageView, index: Binding<Int>) {
+    init(parent: BookmarkedPageView, index: Binding<Int>, changable: Binding<Bool>) {
       self.parent = parent
       _index = index
+      _changable = changable
     }
 
     func onAppear() {
@@ -87,6 +93,10 @@ struct BookmarkedPageView: UIViewRepresentable {
       parent.feedPlayersViewModel.resetPlayer()
     }
 
+    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+      scrollView.isScrollEnabled = changable
+    }
+
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
       parent.feedPlayersViewModel.currentVideoIndex = Int(scrollView.contentOffset.y / UIScreen.main.bounds.height)
       if index < parent.feedPlayersViewModel.currentVideoIndex {
@@ -101,6 +111,7 @@ struct BookmarkedPageView: UIViewRepresentable {
       }
       index = parent.feedPlayersViewModel.currentVideoIndex
       parent.currentContentInfo = parent.apiViewModel.bookmark[index]
+      scrollView.isScrollEnabled = changable
     }
 
     func scrollViewDidScrollToTop(_ scrollView: UIScrollView) {

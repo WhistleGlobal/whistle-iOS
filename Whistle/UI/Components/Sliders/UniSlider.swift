@@ -87,7 +87,7 @@ struct UniSlider<Value, Track, Thumb>: View
           maximumValueLabel
         }
         .fontSystem(fontDesignSystem: .caption_SemiBold)
-        .foregroundStyle(Color.Disable_Placeholder)
+        .foregroundStyle(Color.labelColorDisablePlaceholder)
         .frame(width: trackSize.width)
       }
       // Represent the custom slider. ZStack overlays `fill` on top of `track`,

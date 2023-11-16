@@ -30,6 +30,8 @@ struct GuestContentPlayerView: View {
   @State var showPlayButton = false
   @Binding var currentContentInfo: GuestContent?
   @Binding var index: Int
+  @Binding var isChangable: Bool
+
   let lifecycleDelegate: ViewLifecycleDelegate?
 
   var body: some View {
@@ -86,6 +88,12 @@ struct GuestContentPlayerView: View {
                   }
                   if feedMoreModel.bottomSheetPosition != .hidden {
                     DimsThick()
+                      .onAppear {
+                        isChangable = false
+                      }
+                      .onDisappear {
+                        isChangable = true
+                      }
                   }
                 }
                 .onChange(of: tabbarModel.tabSelectionNoAnimation) { newValue in

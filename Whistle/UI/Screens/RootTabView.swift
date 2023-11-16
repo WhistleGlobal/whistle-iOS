@@ -58,7 +58,7 @@ struct RootTabView: View {
           MainFeedView()
             .environmentObject(universalRoutingModel)
         }
-        .tint(Color.LabelColor_Primary)
+        .tint(Color.labelColorPrimary)
       } else {
         GuestMainFeedView()
           .onChange(of: tabbarModel.tabSelectionNoAnimation) { newValue in
@@ -77,6 +77,7 @@ struct RootTabView: View {
           NavigationStack {
             ProfileView(isFirstStack: true, isFirstProfileLoaded: $isFirstProfileLoaded, userId: 0)
           }
+          .background(.backgroundDefault)
           .tint(bartintModel.tintColor)
         } else {
           GuestProfileView()
@@ -354,6 +355,8 @@ extension RootTabView {
         getMicrophonePermission()
         checkAllPermissions()
         tabbarModel.showVideoCaptureView = true
+        tabbarModel.tabSelection = .upload
+        tabbarModel.tabSelectionNoAnimation = .upload
       } label: {
         Capsule()
           .fill(Color.Dim_Thin)
