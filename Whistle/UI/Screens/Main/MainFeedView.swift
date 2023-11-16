@@ -167,30 +167,6 @@ struct MainFeedView: View {
         }
       }
     }
-    .navigationDestination(isPresented: $feedMoreModel.isRootStacked) {
-      if universalRoutingModel.isUniversalProfile {
-        if !apiViewModel.mainFeed.isEmpty {
-          ProfileView(
-            profileType:
-            universalRoutingModel.userId == apiViewModel.myProfile.userId ? .my : .member,
-            isFirstProfileLoaded: .constant(true),
-            userId: universalRoutingModel.userId)
-            .onDisappear {
-              universalRoutingModel.isUniversalProfile = false
-            }
-        }
-      } else {
-        if !apiViewModel.mainFeed.isEmpty {
-          ProfileView(
-            profileType:
-            apiViewModel.mainFeed[feedPlayersViewModel.currentVideoIndex].userId ?? 0 == apiViewModel.myProfile.userId
-              ? .my
-              : .member,
-            isFirstProfileLoaded: .constant(true),
-            userId: apiViewModel.mainFeed[feedPlayersViewModel.currentVideoIndex].userId ?? 0)
-        }
-      }
-    }
     .fullScreenCover(isPresented: $feedMoreModel.showReport, onDismiss: {
       feedPlayersViewModel.currentPlayer?.play()
     }) {
@@ -200,11 +176,19 @@ struct MainFeedView: View {
         userId: apiViewModel.mainFeed[feedPlayersViewModel.currentVideoIndex].userId ?? 0)
     }
     .onChange(of: tabbarModel.tabSelectionNoAnimation) { _ in
-      if tabbarModel.tabSelectionNoAnimation == .main {
+      if tabbarModel.tabSelectionNoAnimation == .main, !feedMoreModel.isRootStacked {
         feedPlayersViewModel.currentPlayer?.play()
       } else {
         feedPlayersViewModel.stopPlayer()
       }
+    }
+    .onAppear {
+      WhistleLogger.logger.debug("MainFeedView onAppear")
+      feedMoreModel.isRootStacked = false
+    }
+    .onDisappear {
+      WhistleLogger.logger.debug("MainFeedView onDisappear")
+      feedMoreModel.isRootStacked = true
     }
   }
 }
