@@ -107,3 +107,71 @@ extension LinearGradient {
     startPoint: .leading,
     endPoint: .trailing)
 }
+
+// MARK: - MyTeamGradient
+
+extension LinearGradient {
+
+  static var samsungGradient = LinearGradient(
+    gradient: Gradient(colors: [Color(hex: 0x2A62AB), Color(hex: 0x1E4194)]),
+    startPoint: .top, endPoint: .bottom)
+
+  static var doosanGradient = LinearGradient(
+    gradient: Gradient(colors: [Color(hex: 0x2D3858), Color(hex: 0x3C4164), Color(hex: 0x151432)]),
+    startPoint: .topLeading, endPoint: .bottomTrailing)
+
+  static var kiwoomGradient = LinearGradient(
+    gradient: Gradient(colors: [Color(hex: 0x310006), Color(hex: 0x82222E), Color(hex: 0x50050A)]),
+    startPoint: .topLeading, endPoint: .bottomTrailing)
+
+  static var ssgGradient = LinearGradient(
+    gradient: Gradient(colors: [Color(hex: 0x7E0C12), Color(hex: 0xCF0A2C)]),
+    startPoint: .top, endPoint: .bottom)
+
+  static var hanwhaGradient = LinearGradient(
+    gradient: Gradient(colors: [Color(hex: 0x383835), Color(hex: 0x26282A), Color(hex: 0x070706)]),
+    startPoint: .topTrailing, endPoint: .bottomLeading)
+
+  static var ktGradient = LinearGradient(
+    gradient: Gradient(colors: [Color(hex: 0x464143), Color(hex: 0x000000)]),
+    startPoint: .top, endPoint: .bottom)
+
+  static var lotteGradient = LinearGradient(
+    gradient: Gradient(colors: [Color(hex: 0x0B2242), Color(hex: 0x334169), Color(hex: 0x00132E)]),
+    startPoint: .topLeading, endPoint: .bottomTrailing)
+
+  static var ncGradient = LinearGradient(
+    gradient: Gradient(colors: [Color(hex: 0x0D1D3B), Color(hex: 0x678DB7)]),
+    startPoint: .top, endPoint: .bottom)
+
+  static var lgGradient = LinearGradient(
+    gradient: Gradient(colors: [Color(hex: 0x2F343F), Color(hex: 0x595D61)]),
+    startPoint: .top, endPoint: .bottom)
+
+  static var kiaGradient = LinearGradient(
+    gradient: Gradient(colors: [Color(hex: 0x091231), Color(hex: 0x08141E)]),
+    startPoint: .top, endPoint: .bottom)
+}
+
+extension Color {
+  static func lightAndDarkColor(light: String, dark: String) -> Color {
+    if UITraitCollection.current.userInterfaceStyle == .dark {
+      Color(dark)
+    } else {
+      if light == "white" {
+        Color.white
+      } else {
+        Color(light)
+      }
+    }
+  }
+}
+
+extension Color {
+  init(hex: Int, opacity: Double = 1.0) {
+    let red = Double((hex >> 16) & 0xff) / 255
+    let green = Double((hex >> 8) & 0xff) / 255
+    let blue = Double((hex >> 0) & 0xff) / 255
+    self.init(.sRGB, red: red, green: green, blue: blue, opacity: opacity)
+  }
+}

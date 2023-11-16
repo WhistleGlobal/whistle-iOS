@@ -32,6 +32,8 @@ struct ProfileView: View {
 
   @State var bottomSheetPosition: BottomSheetPosition = .hidden
   @State var showProfileEditView = false
+  @State var goMyTeamSelect = false
+  @State var goMyTeamSkinSelect = false
   @State var goNotiSetting = false
   @State var goLegalInfo = false
   @State var goGuideStatus = false
@@ -147,7 +149,7 @@ struct ProfileView: View {
                   } label: {
                     videoThumbnailView(
                       thumbnailUrl: content.thumbnailUrl ?? "",
-                      whistleCount: content.whistleCount ?? 0)
+                      whistleCount: content.whistleCount)
                   }
                   .id(UUID())
                 }
@@ -238,7 +240,7 @@ struct ProfileView: View {
                   } label: {
                     videoThumbnailView(
                       thumbnailUrl: content.thumbnailUrl ?? "",
-                      whistleCount: content.whistleCount ?? 0,
+                      whistleCount: content.whistleCount,
                       isHated: content.isHated)
                   }
                   .id(UUID())
@@ -262,6 +264,7 @@ struct ProfileView: View {
     }
     .background(.backgroundDefault)
     .navigationBarBackButtonHidden()
+    .ignoresSafeArea()
     .gesture(DragGesture().updating($dragOffset) { value, _, _ in
       if value.startLocation.x < 30, value.translation.width > 100 {
         dismiss()

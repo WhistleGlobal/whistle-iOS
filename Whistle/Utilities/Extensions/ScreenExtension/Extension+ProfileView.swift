@@ -37,6 +37,20 @@ extension ProfileView {
         EmptyView()
       }
       .id(UUID())
+      NavigationLink(
+        destination: MyTeamSelectView(),
+        isActive: $goMyTeamSelect)
+      {
+        EmptyView()
+      }
+      .id(UUID())
+      NavigationLink(
+        destination: MyTeamSkinSettingView(),
+        isActive: $goMyTeamSkinSelect)
+      {
+        EmptyView()
+      }
+      .id(UUID())
     }
   }
 
@@ -212,43 +226,6 @@ extension ProfileView {
       }
       .padding(16)
     }
-  }
-
-  @ViewBuilder
-  func videoThumbnailView(thumbnailUrl: String, whistleCount: Int, isHated: Bool = false) -> some View {
-    Color.black.overlay {
-      KFImage.url(URL(string: thumbnailUrl))
-        .placeholder { // 플레이스 홀더 설정
-          Color.black
-        }
-        .resizable()
-        .scaledToFit()
-        .blur(radius: isHated ? 30 : 0, opaque: false)
-        .scaleEffect(isHated ? 1.3 : 1)
-        .overlay {
-          if isHated {
-            Image(systemName: "eye.slash.fill")
-              .font(.system(size: 30))
-              .foregroundColor(.Gray10)
-          }
-        }
-      VStack {
-        Spacer()
-        HStack(spacing: 4) {
-          Image(systemName: "heart.fill")
-            .font(.system(size: 16))
-            .foregroundColor(.Danger)
-          Text("\(whistleCount)")
-            .fontSystem(fontDesignSystem: .caption_SemiBold)
-            .foregroundColor(Color.LabelColor_Primary_Dark)
-        }
-        .padding(.bottom, 8.5)
-        .padding(.leading, 8)
-        .frame(maxWidth: .infinity, alignment: .leading)
-      }
-    }
-    .frame(width: UIScreen.getWidth(204 * 9 / 16), height: UIScreen.getHeight(204))
-    .cornerRadius(12)
   }
 
   @ViewBuilder
@@ -519,6 +496,21 @@ extension ProfileView {
       }
       Rectangle().frame(height: 0.5).padding(.leading, 52).foregroundColor(Color.Border_Default_Dark)
       Button {
+        bottomSheetPosition = .hidden
+        goMyTeamSelect = true
+      } label: {
+        bottomSheetRowWithIcon(systemName: "person.badge.shield.checkmark.fill", text: ProfileEditWords().myTeamSelect)
+      }
+      Rectangle().frame(height: 0.5).padding(.leading, 52).foregroundColor(Color.Border_Default_Dark)
+      Button {
+        bottomSheetPosition = .hidden
+        goMyTeamSkinSelect = true
+      } label: {
+        bottomSheetRowWithIcon(systemName: "wand.and.stars", text: ProfileEditWords().myTeamSkinSelect)
+      }
+      Rectangle().frame(height: 0.5).padding(.leading, 52).foregroundColor(Color.Border_Default_Dark)
+
+      Button {
         goLegalInfo = true
       } label: {
         bottomSheetRowWithIcon(systemName: "info.circle.fill", text: CommonWords().about)
@@ -592,7 +584,7 @@ extension ProfileView {
       }
       Spacer()
     }
-    .frame(height: 420)
+    .frame(height: 578)
   }
 }
 
