@@ -560,7 +560,7 @@ extension ProfileView {
             feedPlayersViewModel.resetPlayer()
             GIDSignIn.sharedInstance.signOut()
             userAuth.appleSignout()
-            tabbarModel.tabSelectionNoAnimation = .main
+            tabbarModel.tabSelection = .main
             tabbarModel.tabSelection = .main
           }
         } label: {

@@ -212,7 +212,7 @@ struct MemberContentPlayerView: View {
       feedPlayersViewModel.stopPlayer()
     }
     .ignoresSafeArea()
-    .onChange(of: tabbarModel.tabSelectionNoAnimation) { newValue in
+    .onChange(of: tabbarModel.tabSelection) { newValue in
       if newValue == .main {
         feedPlayersViewModel.currentPlayer?.seek(to: .zero)
         feedPlayersViewModel.currentPlayer?.play()
