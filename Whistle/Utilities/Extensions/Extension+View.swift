@@ -92,13 +92,12 @@ extension View {
         }
         .clipShape(RoundedRectangle(cornerRadius: 28, style: .continuous))
       }
-      .frame(width: width, height: 56)
+      .frame(width: width, height: UIScreen.getWidth(56))
       .overlay {
         Capsule()
           .stroke(lineWidth: 1)
           .foregroundStyle(
             LinearGradient.Border_Glass)
-          .frame(maxWidth: .infinity)
       }
     }
   }

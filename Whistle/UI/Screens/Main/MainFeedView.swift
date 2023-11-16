@@ -95,13 +95,13 @@ struct MainFeedView: View {
               LinearGradient.Border_Glass)
         })
     .onDismiss {
-      tabbarModel.tabbarOpacity = 1.0
+      tabbarModel.showTabbar()
     }
     .onChange(of: feedMoreModel.bottomSheetPosition) { newValue in
       if newValue == .hidden {
-        tabbarModel.tabbarOpacity = 1.0
+        tabbarModel.showTabbar()
       } else {
-        tabbarModel.tabbarOpacity = 0.0
+        tabbarModel.hideTabbar()
       }
     }
     .task {

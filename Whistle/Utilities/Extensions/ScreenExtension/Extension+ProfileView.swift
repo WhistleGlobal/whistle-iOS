@@ -528,13 +528,15 @@ extension ProfileView {
         withAnimation {
           bottomSheetPosition = .hidden
         }
-        let shareURL = URL(
-          string: "https://readywhistle.com/profile_uni?id=\(apiViewModel.myProfile.userId)")!
-        let activityViewController = UIActivityViewController(activityItems: [shareURL], applicationActivities: nil)
-        UIApplication.shared.windows.first?.rootViewController?.present(
-          activityViewController,
-          animated: true,
-          completion: nil)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+          let shareURL = URL(
+            string: "https://readywhistle.com/profile_uni?id=\(apiViewModel.myProfile.userId)")!
+          let activityViewController = UIActivityViewController(activityItems: [shareURL], applicationActivities: nil)
+          UIApplication.shared.windows.first?.rootViewController?.present(
+            activityViewController,
+            animated: true,
+            completion: nil)
+        }
       } label: {
         bottomSheetRowWithIcon(systemName: "square.and.arrow.up", text: CommonWords().shareProfile)
       }
@@ -560,8 +562,7 @@ extension ProfileView {
             feedPlayersViewModel.resetPlayer()
             GIDSignIn.sharedInstance.signOut()
             userAuth.appleSignout()
-            tabbarModel.tabSelection = .main
-            tabbarModel.tabSelection = .main
+            tabbarModel.switchTab(to: .main)
           }
         } label: {
           bottomSheetRow(text: CommonWords().logout, color: Color.Info)

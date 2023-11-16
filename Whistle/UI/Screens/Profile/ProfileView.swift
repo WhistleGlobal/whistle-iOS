@@ -123,6 +123,7 @@ struct ProfileView: View {
                 tab: profileTabCase.bookmark.rawValue,
                 selectedTab: $tabSelection))
             }
+            .padding(.horizontal, 16)
             .frame(height: 48)
             .offset(y: tabOffset)
           }
@@ -297,9 +298,9 @@ struct ProfileView: View {
     }
     .onChange(of: bottomSheetPosition) { newValue in
       if newValue == .hidden {
-        tabbarModel.tabbarOpacity = 1.0
+        tabbarModel.showTabbar()
       } else {
-        tabbarModel.tabbarOpacity = 0.0
+        tabbarModel.hideTabbar()
       }
     }
     .bottomSheet(
@@ -327,7 +328,7 @@ struct ProfileView: View {
             .frame(maxWidth: .infinity, maxHeight: .infinity)
         })
     .onDismiss {
-      tabbarModel.tabbarOpacity = 1.0
+      tabbarModel.showTabbar()
     }
     .onChange(of: apiViewModel.memberProfile.isBlocked) { _ in
       offsetY = 0

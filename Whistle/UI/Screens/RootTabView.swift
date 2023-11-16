@@ -45,6 +45,8 @@ struct RootTabView: View {
   @StateObject var toastViewModel = ToastViewModel.shared
   @StateObject var userAuth = UserAuth.shared
   @StateObject var bartintModel = BarTintModel.shared
+  @StateObject var tabSelection = TabSelectionModel.shared
+  
   @EnvironmentObject var universalRoutingModel: UniversalRoutingModel
   @StateObject var appleSignInViewModel = AppleSignInViewModel()
 
@@ -53,24 +55,20 @@ struct RootTabView: View {
   var body: some View {
     ZStack {
       guideView
-      if isAccess {
-        NavigationStack {
-          MainFeedView()
-            .environmentObject(universalRoutingModel)
-        }
-        .tint(bartintModel.tintColor)
-      } else {
-        GuestMainFeedView()
-          .onChange(of: tabbarModel.tabSelection) { newValue in
-            mainOpacity = newValue == .main ? 1 : 0
+
+      TabView(selection: $tabSelection.currentTab) {
+        if isAccess {
+          NavigationStack {
+            MainFeedView()
+              .environmentObject(universalRoutingModel)
           }
-      }
-
-      switch tabbarModel.tabSelection {
-      case .main, .upload:
-        Color.clear
-
-      case .profile:
+          .tint(bartintModel.tintColor)
+        } else {
+          GuestMainFeedView()
+            .onChange(of: tabbarModel.tabSelection) { newValue in
+              mainOpacity = newValue == .main ? 1 : 0
+            }
+        }
         if isAccess {
           // MARK: - profile
 
@@ -83,6 +81,35 @@ struct RootTabView: View {
           GuestProfileView()
         }
       }
+      
+//      switch tabbarModel.tabSelection {
+//      case .main:
+//        if isAccess {
+//          NavigationStack {
+//            MainFeedView()
+//              .environmentObject(universalRoutingModel)
+//          }
+//          .tint(bartintModel.tintColor)
+//        } else {
+//          GuestMainFeedView()
+//            .onChange(of: tabbarModel.tabSelection) { newValue in
+//              mainOpacity = newValue == .main ? 1 : 0
+//            }
+//        }
+//
+//      case .profile:
+//        if isAccess {
+//          // MARK: - profile
+//
+//          NavigationStack {
+//            ProfileView(isFirstStack: true, isFirstProfileLoaded: $isFirstProfileLoaded, userId: 0)
+//          }
+//          .background(.backgroundDefault)
+//          .tint(bartintModel.tintColor)
+//        } else {
+//          GuestProfileView()
+//        }
+//      }
       if !toastViewModel.onFullScreenCover {
         ToastMessageView()
           .zIndex(9)
@@ -94,7 +121,7 @@ struct RootTabView: View {
         Spacer()
         glassMorphicTab(width: tabbarModel.tabWidth)
           .overlay {
-            if tabbarModel.tabWidth != 56 {
+            if !tabbarModel.isCollpased() {
               tabItems()
             } else {
               HStack(spacing: 0) {
@@ -115,9 +142,7 @@ struct RootTabView: View {
                   }
                   .gesture(
                     DragGesture(minimumDistance: 0, coordinateSpace: .local).onEnded { _ in
-                      withAnimation {
-                        tabbarModel.tabWidth = UIScreen.width - 32
-                      }
+                      tabbarModel.expand()
                     })
               }
             }
@@ -126,9 +151,7 @@ struct RootTabView: View {
             DragGesture(minimumDistance: 0, coordinateSpace: .local)
               .onEnded { value in
                 if value.translation.width > 50 {
-                  withAnimation {
-                    tabbarModel.tabWidth = 56
-                  }
+                  tabbarModel.collapse()
                 }
               })
       }
@@ -139,15 +162,9 @@ struct RootTabView: View {
       .opacity(showGuide ? 0.0 : tabbarModel.tabbarOpacity)
       .onReceive(NavigationModel.shared.$navigate, perform: { _ in
         if UploadProgressViewModel.shared.isUploading {
-          tabbarModel.tabSelection = .main
-          tabbarModel.tabSelection = .main
+          tabbarModel.switchTab(to: .main)
           tabbarModel.showVideoCaptureView = false
         }
-//        else {
-//            tabbarModel.tabSelection = tabbarModel.prevTabSelection ?? .main
-//            tabbarModel.tabSelection = tabbarModel.prevTabSelection ?? .main
-//          }
-//        }
       })
     }
     .overlay {
@@ -155,11 +172,7 @@ struct RootTabView: View {
         AlertPopup()
       }
     }
-    .fullScreenCover(isPresented: $tabbarModel.showVideoCaptureView, onDismiss: {
-      if tabbarModel.tabSelection == .main {
-        feedPlayersViewModel.currentPlayer?.play()
-      }
-    }) {
+    .fullScreenCover(isPresented: $tabbarModel.showVideoCaptureView) {
       CameraOrAccessView(
         isCam: $isCameraAuthorized,
         isMic: $isMicrophoneAuthorized,
@@ -293,13 +306,13 @@ struct RootTabView: View {
               LinearGradient.Border_Glass)
         })
     .onDismiss {
-      tabbarModel.tabbarOpacity = 1.0
+      tabbarModel.showTabbar()
     }
     .onChange(of: uploadBottomSheetPosition) { newValue in
       if newValue == .hidden {
-        tabbarModel.tabbarOpacity = 1.0
+        tabbarModel.showTabbar()
       } else {
-        tabbarModel.tabbarOpacity = 0.0
+        tabbarModel.hideTabbar()
       }
     }
     .navigationDestination(isPresented: $showTermsOfService) {
@@ -330,7 +343,7 @@ extension RootTabView {
             NavigationUtil.popToRootView()
           }
         } else {
-          switchTab(to: .main)
+          tabbarModel.switchTab(to: .main)
         }
       } label: {
         VStack {
@@ -343,20 +356,10 @@ extension RootTabView {
         .padding(.leading, 4)
       }
       Button {
-//        if isAccess {
-//          getCameraPermission()
-//          getMicrophonePermission()
-//          checkAllPermissions()
-//          showVideoCaptureView = true
-//        } else {
-//          uploadBottomSheetPosition = .relative(1)
-//        }
         getCameraPermission()
         getMicrophonePermission()
         checkAllPermissions()
         tabbarModel.showVideoCaptureView = true
-        tabbarModel.tabSelection = .upload
-        tabbarModel.tabSelection = .upload
       } label: {
         Capsule()
           .fill(Color.Dim_Thin)
@@ -382,7 +385,6 @@ extension RootTabView {
       }
     }
     .foregroundColor(.white)
-//    .padding(.horizontal, 16)
     .frame(height: UIScreen.getHeight(56))
     .frame(maxWidth: .infinity)
   }
@@ -419,10 +421,10 @@ extension RootTabView {
       .ignoresSafeArea()
       .frame(width: UIScreen.width, height: UIScreen.height)
       .onAppear {
-        tabbarModel.tabbarOpacity = 0.0
+        tabbarModel.hideTabbar()
       }
       .onDisappear {
-        tabbarModel.tabbarOpacity = 1.0
+        tabbarModel.showTabbar()
       }
       .zIndex(1000)
     }
@@ -435,8 +437,8 @@ extension RootTabView {
   var profileTabClicked: () -> Void {
     {
       if tabbarModel.tabSelection == .profile {
-        switchTab(to: .profile)
         HapticManager.instance.impact(style: .medium)
+        NavigationUtil.popToRootView()
         Task {
           await apiViewModel.requestMyFollow()
         }
@@ -451,34 +453,9 @@ extension RootTabView {
         }
         isFirstProfileLoaded = false
       } else {
-        switchTab(to: .profile)
-//        if isFirstProfileLoaded {
-//          Task {
-//            await apiViewModel.requestMyFollow()
-//          }
-//          Task {
-//            await apiViewModel.requestMyWhistlesCount()
-//          }
-//          Task {
-//            await apiViewModel.requestMyBookmark()
-//          }
-//          Task {
-//            await apiViewModel.requestMyPostFeed()
-//          }
-//          isFirstProfileLoaded = false
-//        }
+        tabbarModel.switchTab(to: .profile)
       }
     }
-  }
-
-  func switchTab(to tabSelection: TabSelection) {
-    if tabbarModel.prevTabSelection == nil {
-      tabbarModel.prevTabSelection = .main
-    } else {
-      tabbarModel.prevTabSelection = tabbarModel.tabSelection
-    }
-    tabbarModel.tabSelection = tabSelection
-    tabbarModel.tabSelection = tabSelection
   }
 }
 
@@ -486,7 +463,6 @@ extension RootTabView {
 
 public enum TabSelection: CGFloat {
   case main = -1.0
-  case upload = 0.0
   case profile = 1.0
 }
 

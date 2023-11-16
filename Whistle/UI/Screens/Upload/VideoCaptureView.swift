@@ -249,7 +249,7 @@ struct VideoCaptureView: View {
           }
           if guestUploadModel.istempAccess {
             isAccess = true
-            tabbarModel.tabbarOpacity = 1.0
+            tabbarModel.showTabbar()
           }
         }
       }
@@ -315,13 +315,13 @@ struct VideoCaptureView: View {
           })
       .onDismiss {
         uploadBottomSheetPosition = .hidden
-        tabbarModel.tabbarOpacity = 1.0
+        tabbarModel.showTabbar()
       }
       .onChange(of: uploadBottomSheetPosition) { newValue in
         if newValue == .hidden {
-          tabbarModel.tabbarOpacity = 1.0
+          tabbarModel.showTabbar()
         } else {
-          tabbarModel.tabbarOpacity = 0.0
+          tabbarModel.hideTabbar()
         }
       }
     }

@@ -82,7 +82,7 @@ struct GuestContentPlayerView: View {
                   feedMoreModel.bottomSheetPosition = .dynamic
                 }
                 .overlay {
-                  if tabbarModel.tabWidth != 56 {
+                  if !tabbarModel.isCollpased() {
                     GuestContentLayer(currentVideoInfo: content)
                       .padding(.bottom, UIScreen.main.nativeBounds.height == 1334 ? 24 : 0)
                   }

@@ -58,14 +58,13 @@ struct GuestProfileView: View {
       if newValue {
         apiViewModel.myProfile = .init()
         apiViewModel.mainFeed = []
-        tabbarModel.tabSelection = .main
-        tabbarModel.tabSelection = .main
-        tabbarModel.tabbarOpacity = 1.0
+        tabbarModel.switchTab(to: .main)
+        tabbarModel.showTabbar()
       }
     }
     .onChange(of: bottomSheetPosition) { newValue in
       if newValue == .hidden {} else {
-        tabbarModel.tabbarOpacity = 0.0
+        tabbarModel.hideTabbar()
       }
     }
     .navigationDestination(isPresented: $showTermsOfService) {
@@ -82,7 +81,7 @@ struct GuestProfileView: View {
         HStack {
           Spacer()
           Button {
-            tabbarModel.tabbarOpacity = 1.0
+            tabbarModel.showTabbar()
             bottomSheetPosition = .hidden
           } label: {
             Text(CommonWords().cancel)
@@ -202,7 +201,7 @@ struct GuestProfileView: View {
               LinearGradient.Border_Glass)
         })
     .onDismiss {
-      tabbarModel.tabbarOpacity = 1.0
+      tabbarModel.showTabbar()
     }
   }
 }

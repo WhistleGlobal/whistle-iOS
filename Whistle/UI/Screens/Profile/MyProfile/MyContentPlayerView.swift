@@ -104,7 +104,7 @@ struct MyContentPlayerView: View {
                 .overlay {
                   ContentGradientLayer()
                     .allowsHitTesting(false)
-                  if tabbarModel.tabWidth != 56 {
+                  if !tabbarModel.isCollpased() {
                     ContentLayer(
                       currentVideoInfo: content,
                       feedMoreModel: MyFeedMoreModel.shared,
