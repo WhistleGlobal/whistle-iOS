@@ -27,6 +27,7 @@ struct ContentLayer<
   let whistleAction: () -> Void
   var dismissAction: DismissAction? = nil
   @State var isExpanded = false
+  @State var userId = 0
   @State var whistleCount = 0
   @State var profileImg = ""
   @State var username = ""
@@ -54,18 +55,7 @@ struct ContentLayer<
           VStack(alignment: .leading, spacing: 0) {
             Spacer()
             HStack(spacing: 0) {
-              Button {
-                navigateToProfile()
-              } label: {
-                Group {
-                  profileImageView(url: profileImg, size: 36)
-                    .padding(.trailing, UIScreen.getWidth(4))
-                  Text(username)
-                    .foregroundColor(.white)
-                    .fontSystem(fontDesignSystem: .subtitle1)
-                    .padding(.trailing, 16)
-                }
-              }
+              userNameAndProfile
               if username != apiViewModel.myProfile.userName {
                 Button {
                   follow()
@@ -210,10 +200,6 @@ struct ContentLayer<
     guard let playersViewModel = feedPlayersViewModel as? PlayersViewModel else {
       return
     }
-
-    if feedMoreModel is MainFeedMoreModel || feedMoreModel is BookmarkedFeedMoreModel {
-      feedMoreModel.isRootStacked = true
-    }
     playersViewModel.stopPlayer()
     if playersViewModel is MemeberPlayersViewModel || playersViewModel is MyFeedPlayersViewModel {
       dismissAction?()
@@ -295,6 +281,7 @@ struct ContentLayer<
 
     for contentInfo in commonInfo {
       whistleCount = contentInfo.whistleCount
+      userId = contentInfo.userId ?? 0
       profileImg = contentInfo.profileImg ?? ""
       username = contentInfo.userName ?? ""
       isFollowed = contentInfo.isFollowed
@@ -404,3 +391,44 @@ extension SearchPlayersViewModel: PlayersViewModel { }
 // MARK: - TagSearchPlayersViewModel + PlayersViewModel
 
 extension TagSearchPlayersViewModel: PlayersViewModel { }
+
+
+extension ContentLayer {
+  @ViewBuilder
+  var userNameAndProfile: some View {
+    if
+      feedMoreModel is MainFeedMoreModel || feedMoreModel is BookmarkedFeedMoreModel ||
+      feedMoreModel is TagSearchFeedMoreModel
+    {
+      NavigationLink {
+        ProfileView(
+          profileType: userId == apiViewModel.myProfile.userId ? .my : .member,
+          isFirstProfileLoaded: .constant(true),
+          userId: userId)
+      } label: {
+        Group {
+          profileImageView(url: profileImg, size: 36)
+            .padding(.trailing, UIScreen.getWidth(4))
+          Text(username)
+            .foregroundColor(.white)
+            .fontSystem(fontDesignSystem: .subtitle1)
+            .padding(.trailing, 16)
+        }
+      }
+      .id(UUID())
+    } else {
+      Button {
+        navigateToProfile()
+      } label: {
+        Group {
+          profileImageView(url: profileImg, size: 36)
+            .padding(.trailing, UIScreen.getWidth(4))
+          Text(username)
+            .foregroundColor(.white)
+            .fontSystem(fontDesignSystem: .subtitle1)
+            .padding(.trailing, 16)
+        }
+      }
+    }
+  }
+}

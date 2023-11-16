@@ -106,8 +106,8 @@ struct TagSearchContentPlayerView: View {
                   if tabbarModel.tabWidth != 56 {
                     ContentLayer(
                       currentVideoInfo: content,
-                      feedMoreModel: SearchFeedMoreModel.shared,
-                      feedPlayersViewModel: SearchPlayersViewModel.shared,
+                      feedMoreModel: TagSearchFeedMoreModel.shared,
+                      feedPlayersViewModel: TagSearchPlayersViewModel.shared,
                       feedArray: apiViewModel.tagSearchedRecentContent,
                       whistleAction: whistleToggle,
                       dismissAction: dismissAction)
