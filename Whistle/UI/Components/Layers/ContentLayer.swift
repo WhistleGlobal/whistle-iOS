@@ -392,7 +392,6 @@ extension SearchPlayersViewModel: PlayersViewModel { }
 
 extension TagSearchPlayersViewModel: PlayersViewModel { }
 
-
 extension ContentLayer {
   @ViewBuilder
   var userNameAndProfile: some View {
