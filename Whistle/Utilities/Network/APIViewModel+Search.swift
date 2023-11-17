@@ -62,8 +62,7 @@ extension APIViewModel: SearchProtocol {
       }
   }
 
-  // FIXME: - 고칠 것
-  func requestTagSearchedRecentContent(queryString: String) {
+  func requestTagSearchedRecentContent(queryString: String, completion: @escaping ([MainContent]) -> Void) {
     AF.request(
       "\(domainURL)/search/hashtag-content?query=\(queryString)",
       method: .get,
@@ -73,6 +72,7 @@ extension APIViewModel: SearchProtocol {
         switch response.result {
         case .success(let data):
           self.tagSearchedRecentContent = data
+          completion(self.tagSearchedRecentContent)
         case .failure(let error):
           WhistleLogger.logger.error("requestTagSearchedContent(queryString: String) \(error)")
           break

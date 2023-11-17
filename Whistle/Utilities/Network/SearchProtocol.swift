@@ -11,4 +11,5 @@ protocol SearchProtocol {
 
   func requestSearchedUser(queryString: String)
   func requestSearchedTag(queryString: String)
+  func requestTagSearchedRecentContent(queryString: String, completion: @escaping ([MainContent]) -> Void)
 }
