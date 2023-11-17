@@ -14,7 +14,7 @@ import UIKit
 class TabbarModel: ObservableObject {
   static let shared = TabbarModel()
   private init() { }
-
+  
   @Published var tabSelection: TabSelection = .main
   @Published var tabbarOpacity = 1.0
   @Published var tabWidth = UIScreen.width - 32

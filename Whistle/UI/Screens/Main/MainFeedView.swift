@@ -139,10 +139,6 @@ struct MainFeedView: View {
             .onDisappear {
               universalRoutingModel.isUniversalProfile = false
             }
-//          MemberProfileView(userId: universalRoutingModel.userId)
-//            .onDisappear {
-//              universalRoutingModel.isUniversalProfile = false
-//            }
         }
       } else {
         if !apiViewModel.mainFeed.isEmpty {

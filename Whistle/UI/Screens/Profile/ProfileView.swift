@@ -261,6 +261,7 @@ struct ProfileView: View {
       }
       .ignoresSafeArea()
     }
+//    .toolbar(.hidden, for: .tabBar)
     .background(.backgroundDefault)
     .navigationBarBackButtonHidden()
     .gesture(DragGesture().updating($dragOffset) { value, _, _ in

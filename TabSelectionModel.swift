@@ -7,12 +7,21 @@
 
 import SwiftUI
 
-enum Tab {
-  case main, profile
+// MARK: - Tab
+
+enum Tab: String {
+  case main
+  case profile
 }
+
+// MARK: - TabSelectionModel
 
 class TabSelectionModel: ObservableObject {
   static let shared = TabSelectionModel()
-  private init() {}
+  private init() { }
   @Published var currentTab: Tab = .main
+
+  func switchTab(to tabSelection: Tab) {
+    currentTab = tabSelection
+  }
 }

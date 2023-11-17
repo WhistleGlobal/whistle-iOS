@@ -46,7 +46,7 @@ struct RootTabView: View {
   @StateObject var userAuth = UserAuth.shared
   @StateObject var bartintModel = BarTintModel.shared
   @StateObject var tabSelection = TabSelectionModel.shared
-  
+
   @EnvironmentObject var universalRoutingModel: UniversalRoutingModel
   @StateObject var appleSignInViewModel = AppleSignInViewModel()
 
@@ -55,14 +55,14 @@ struct RootTabView: View {
   var body: some View {
     ZStack {
       guideView
-
       TabView(selection: $tabSelection.currentTab) {
         if isAccess {
           NavigationStack {
             MainFeedView()
               .environmentObject(universalRoutingModel)
+              .toolbar(.hidden, for: .tabBar)
           }
-          .tint(bartintModel.tintColor)
+          .tag(Tab.main)
         } else {
           GuestMainFeedView()
             .onChange(of: tabbarModel.tabSelection) { newValue in
@@ -74,42 +74,16 @@ struct RootTabView: View {
 
           NavigationStack {
             ProfileView(isFirstStack: true, isFirstProfileLoaded: $isFirstProfileLoaded, userId: 0)
+              .toolbar(.hidden, for: .tabBar)
           }
-          .background(.backgroundDefault)
-          .tint(bartintModel.tintColor)
+          .tag(Tab.profile)
         } else {
           GuestProfileView()
         }
       }
-      
-//      switch tabbarModel.tabSelection {
-//      case .main:
-//        if isAccess {
-//          NavigationStack {
-//            MainFeedView()
-//              .environmentObject(universalRoutingModel)
-//          }
-//          .tint(bartintModel.tintColor)
-//        } else {
-//          GuestMainFeedView()
-//            .onChange(of: tabbarModel.tabSelection) { newValue in
-//              mainOpacity = newValue == .main ? 1 : 0
-//            }
-//        }
-//
-//      case .profile:
-//        if isAccess {
-//          // MARK: - profile
-//
-//          NavigationStack {
-//            ProfileView(isFirstStack: true, isFirstProfileLoaded: $isFirstProfileLoaded, userId: 0)
-//          }
-//          .background(.backgroundDefault)
-//          .tint(bartintModel.tintColor)
-//        } else {
-//          GuestProfileView()
-//        }
-//      }
+      .background(.backgroundDefault)
+      .tint(bartintModel.tintColor)
+      .ignoresSafeArea()
       if !toastViewModel.onFullScreenCover {
         ToastMessageView()
           .zIndex(9)
@@ -337,13 +311,13 @@ extension RootTabView {
   func tabItems() -> some View {
     HStack(spacing: 0) {
       Button {
-        if tabbarModel.tabSelection == .main {
+        if tabSelection.currentTab == .main {
           if isAccess {
             HapticManager.instance.impact(style: .medium)
             NavigationUtil.popToRootView()
           }
         } else {
-          tabbarModel.switchTab(to: .main)
+          tabSelection.switchTab(to: .main)
         }
       } label: {
         VStack {
@@ -372,7 +346,26 @@ extension RootTabView {
       .frame(width: UIScreen.getWidth(80), height: UIScreen.getHeight(40))
       .padding(.horizontal, 8)
       Button {
-        profileTabClicked()
+        if tabSelection.currentTab == .profile {
+          HapticManager.instance.impact(style: .medium)
+          NavigationUtil.popToRootView()
+          Task {
+            await apiViewModel.requestMyFollow()
+          }
+          Task {
+            await apiViewModel.requestMyWhistlesCount()
+          }
+          Task {
+            await apiViewModel.requestMyBookmark()
+          }
+          Task {
+            await apiViewModel.requestMyPostFeed()
+          }
+          isFirstProfileLoaded = false
+        } else {
+          tabSelection.switchTab(to: .profile)
+        }
+//        profileTabClicked()
       } label: {
         VStack {
           Image(systemName: tabbarModel.tabSelection == .profile ? "person.fill" : "person")
@@ -436,7 +429,7 @@ extension RootTabView {
 extension RootTabView {
   var profileTabClicked: () -> Void {
     {
-      if tabbarModel.tabSelection == .profile {
+      if tabSelection.currentTab == .profile {
         HapticManager.instance.impact(style: .medium)
         NavigationUtil.popToRootView()
         Task {
@@ -453,7 +446,7 @@ extension RootTabView {
         }
         isFirstProfileLoaded = false
       } else {
-        tabbarModel.switchTab(to: .profile)
+        tabSelection.switchTab(to: .profile)
       }
     }
   }
