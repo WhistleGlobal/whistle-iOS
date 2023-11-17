@@ -13,8 +13,8 @@ import SwiftUI
 
 struct TagSearchFeedView: View {
   @Environment(\.dismiss) var dismiss
+  @EnvironmentObject var feedPlayersViewModel: TagSearchPlayersViewModel
   @StateObject private var apiViewModel = APIViewModel.shared
-  @StateObject private var feedPlayersViewModel = SearchPlayersViewModel.shared
   @StateObject private var toastViewModel = ToastViewModel.shared
   @StateObject private var feedMoreModel = TagSearchFeedMoreModel.shared
   @StateObject private var tabbarModel = TabbarModel.shared
@@ -24,8 +24,11 @@ struct TagSearchFeedView: View {
   var body: some View {
     ZStack {
       Color.black
-      if !apiViewModel.tagSearchedRecentContent.isEmpty {
-        TagSearchFeedPageView(index: $index, dismissAction: dismiss)
+      if !feedPlayersViewModel.searchedContents.isEmpty {
+        TagSearchFeedPageView(
+          index: $index,
+          dismissAction: dismiss)
+          .environmentObject(feedPlayersViewModel)
       } else {
         VStack {
           Spacer()
@@ -69,7 +72,7 @@ struct TagSearchFeedView: View {
           feedMoreModel.bottomSheetPosition = .hidden
           toastViewModel.cancelToastInit(message: ToastMessages().postHidden) {
             Task {
-              let currentContent = apiViewModel.tagSearchedRecentContent[feedPlayersViewModel.currentVideoIndex]
+              let currentContent = feedPlayersViewModel.searchedContents[feedPlayersViewModel.currentVideoIndex]
               await apiViewModel.actionContentHate(contentID: currentContent.contentId ?? 0, method: .post)
               feedPlayersViewModel.removePlayer {
                 index -= 1
@@ -116,15 +119,15 @@ struct TagSearchFeedView: View {
       }
     }
     .navigationDestination(isPresented: $feedMoreModel.isRootStacked) {
-      if !apiViewModel.tagSearchedRecentContent.isEmpty {
+      if !feedPlayersViewModel.searchedContents.isEmpty {
         ProfileView(
           profileType:
-          apiViewModel.tagSearchedRecentContent[feedPlayersViewModel.currentVideoIndex].userId ?? 0 == apiViewModel.myProfile
+          feedPlayersViewModel.searchedContents[feedPlayersViewModel.currentVideoIndex].userId ?? 0 == apiViewModel.myProfile
             .userId
             ? .my
             : .member,
           isFirstProfileLoaded: .constant(true),
-          userId: apiViewModel.tagSearchedRecentContent[feedPlayersViewModel.currentVideoIndex].userId ?? 0)
+          userId: feedPlayersViewModel.searchedContents[feedPlayersViewModel.currentVideoIndex].userId ?? 0)
       }
     }
     .fullScreenCover(isPresented: $feedMoreModel.showReport, onDismiss: {
@@ -132,7 +135,7 @@ struct TagSearchFeedView: View {
     }) {
       MainFeedReportReasonSelectionView(
         goReport: $feedMoreModel.showReport,
-        contentId: apiViewModel.tagSearchedRecentContent[feedPlayersViewModel.currentVideoIndex].contentId ?? 0,
+        contentId: feedPlayersViewModel.searchedContents[feedPlayersViewModel.currentVideoIndex].contentId ?? 0,
         userId: userId)
     }
   }

@@ -14,6 +14,7 @@ struct TagResultView: View {
   let tagText: String
   @State var tagTabSelection: TagTabSelection = .popular
   @StateObject var apiViewModel = APIViewModel.shared
+  @StateObject var feedPlayersViewModel = TagSearchPlayersViewModel()
 
   var body: some View {
     VStack(spacing: 0) {
@@ -41,7 +42,9 @@ struct TagResultView: View {
       UIApplication.shared.endEditing()
     }
     .task {
-      apiViewModel.requestTagSearchedRecentContent(queryString: tagText)
+      apiViewModel.requestTagSearchedRecentContent(queryString: tagText) { contents in
+        feedPlayersViewModel.searchedContents = contents
+      }
     }
     .toolbarRole(.editor)
     .toolbar {
@@ -70,10 +73,12 @@ extension TagResultView {
         GridItem(.flexible()),
         GridItem(.flexible()),
       ], spacing: 8) {
-        // FIXME: - 태그 검색 결과로 고쳐야함
-        ForEach(Array(apiViewModel.tagSearchedRecentContent.enumerated()), id: \.element) { index, content in
+        ForEach(Array(feedPlayersViewModel.searchedContents.enumerated()), id: \.element) { index, content in
           NavigationLink {
-            TagSearchFeedView(index: index, userId: content.userId ?? 0)
+            TagSearchFeedView(
+              index: index,
+              userId: content.userId ?? 0)
+              .environmentObject(feedPlayersViewModel)
           } label: {
             videoThumbnailView(
               thumbnailUrl: content.thumbnailUrl ?? "",

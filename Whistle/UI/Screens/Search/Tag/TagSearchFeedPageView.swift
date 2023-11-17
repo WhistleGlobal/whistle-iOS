@@ -10,9 +10,8 @@ import SwiftUI
 // MARK: - TagSearchFeedPageView
 
 struct TagSearchFeedPageView: UIViewRepresentable {
-
+  @EnvironmentObject var feedPlayersViewModel: TagSearchPlayersViewModel
   @StateObject var apiViewModel = APIViewModel.shared
-  @StateObject var feedPlayersViewModel = TagSearchPlayersViewModel.shared
   @State var currentContentInfo: MainContent?
   @Binding var index: Int
   let dismissAction: DismissAction
@@ -25,15 +24,15 @@ struct TagSearchFeedPageView: UIViewRepresentable {
         index: $index,
         lifecycleDelegate: context.coordinator,
         dismissAction: dismissAction)
-        .toolbarRole(.editor))
+        .environmentObject(feedPlayersViewModel))
     childView.view.frame = CGRect(
       x: 0,
       y: 0,
       width: UIScreen.main.bounds.width,
-      height: UIScreen.main.bounds.height * CGFloat(apiViewModel.tagSearchedRecentContent.count))
+      height: UIScreen.main.bounds.height * CGFloat(feedPlayersViewModel.searchedContents.count))
     view.contentSize = CGSize(
       width: UIScreen.main.bounds.width,
-      height: UIScreen.main.bounds.height * CGFloat(apiViewModel.tagSearchedRecentContent.count))
+      height: UIScreen.main.bounds.height * CGFloat(feedPlayersViewModel.searchedContents.count))
     view.addSubview(childView.view)
     view.showsVerticalScrollIndicator = false
     view.showsHorizontalScrollIndicator = false
@@ -48,14 +47,14 @@ struct TagSearchFeedPageView: UIViewRepresentable {
   func updateUIView(_ uiView: UIScrollView, context _: Context) {
     uiView.contentSize = CGSize(
       width: UIScreen.width,
-      height: UIScreen.height * CGFloat(apiViewModel.tagSearchedRecentContent.count))
+      height: UIScreen.height * CGFloat(feedPlayersViewModel.searchedContents.count))
 
     for i in 0..<uiView.subviews.count {
       uiView.subviews[i].frame = CGRect(
         x: 0,
         y: 0,
         width: UIScreen.width,
-        height: UIScreen.height * CGFloat(apiViewModel.tagSearchedRecentContent.count))
+        height: UIScreen.height * CGFloat(feedPlayersViewModel.searchedContents.count))
     }
   }
 
@@ -74,8 +73,8 @@ struct TagSearchFeedPageView: UIViewRepresentable {
     }
 
     func onAppear() {
-      if !parent.apiViewModel.tagSearchedRecentContent.isEmpty {
-        parent.currentContentInfo = parent.apiViewModel.tagSearchedRecentContent[index]
+      if !parent.feedPlayersViewModel.searchedContents.isEmpty {
+        parent.currentContentInfo = parent.feedPlayersViewModel.searchedContents[index]
         parent.feedPlayersViewModel.currentVideoIndex = index
         parent.feedPlayersViewModel.initialPlayers(index: index)
         parent.feedPlayersViewModel.currentPlayer?.seek(to: .zero)
@@ -91,7 +90,7 @@ struct TagSearchFeedPageView: UIViewRepresentable {
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
       parent.feedPlayersViewModel.currentVideoIndex = Int(scrollView.contentOffset.y / UIScreen.main.bounds.height)
       if index < parent.feedPlayersViewModel.currentVideoIndex {
-        if index == parent.apiViewModel.tagSearchedRecentContent.count - 1 {
+        if index == parent.feedPlayersViewModel.searchedContents.count - 1 {
           return
         }
         parent.feedPlayersViewModel.goPlayerNext()
@@ -101,7 +100,7 @@ struct TagSearchFeedPageView: UIViewRepresentable {
         index = parent.feedPlayersViewModel.currentVideoIndex
       }
       index = parent.feedPlayersViewModel.currentVideoIndex
-      parent.currentContentInfo = parent.apiViewModel.tagSearchedRecentContent[index]
+      parent.currentContentInfo = parent.feedPlayersViewModel.searchedContents[index]
     }
 
     func scrollViewDidScrollToTop(_ scrollView: UIScrollView) {
