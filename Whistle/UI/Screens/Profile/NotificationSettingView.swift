@@ -10,7 +10,6 @@ import SwiftUI
 // MARK: - NotificationSettingView
 
 struct NotificationSettingView: View {
-  @AppStorage("isAllOff") var isAllOff = false
   @Environment(\.dismiss) var dismiss
   @StateObject var apiViewModel = APIViewModel.shared
   @StateObject private var alertViewModel = AlertViewModel.shared
@@ -18,32 +17,28 @@ struct NotificationSettingView: View {
 
   var body: some View {
     VStack(spacing: 0) {
-      Divider().frame(height: 1)
-      Toggle("모두 일시 중단", isOn: $isAllOff)
-        .frame(height: 64)
-        .padding(.horizontal, 16)
-      Divider().frame(height: 0.5).padding(.leading, 16)
       Toggle("게시글 휘슬 알림", isOn: $apiViewModel.notiSetting.whistleEnabled)
         .frame(height: 64)
         .padding(.horizontal, 16)
-      Divider().frame(height: 0.5).padding(.leading, 16).foregroundColor(.Disable_Placeholder)
+      Divider().frame(height: 0.5).padding(.leading, 16).foregroundColor(.labelColorDisablePlaceholder)
       Toggle("팔로워 알림", isOn: $apiViewModel.notiSetting.followEnabled)
         .frame(height: 64)
         .padding(.horizontal, 16)
-      Divider().frame(height: 0.5).padding(.leading, 16).foregroundColor(.Disable_Placeholder)
+      Divider().frame(height: 0.5).padding(.leading, 16).foregroundColor(.labelColorDisablePlaceholder)
       Toggle("Whistle에서 보내는 알림", isOn: $apiViewModel.notiSetting.infoEnabled)
         .frame(height: 64)
         .padding(.horizontal, 16)
-      Divider().frame(height: 1)
-      Color.NotiSectionColor.frame(height: 16)
-      Divider().frame(height: 1)
+      Color.elevatedBackground.frame(height: 16)
       Toggle("광고성 정보 알림", isOn: $apiViewModel.notiSetting.adEnabled)
         .frame(height: 64)
         .padding(.horizontal, 16)
       Spacer()
     }
+    .toolbarBackground(Color.backgroundDefault, for: .navigationBar)
+    .toolbarBackground(.visible, for: .navigationBar)
     .fontSystem(fontDesignSystem: .subtitle2)
-    .foregroundColor(.LabelColor_Primary)
+    .ignoresSafeArea(edges: .bottom)
+    .foregroundColor(.labelColorPrimary)
     .tint(.Primary_Default)
     .navigationBarTitleDisplayMode(.inline)
     .navigationTitle("알림 설정")
@@ -57,39 +52,19 @@ struct NotificationSettingView: View {
         AlertPopup()
       }
     }
-    .onChange(of: isAllOff) { newValue in
-      if newValue {
-        Task {
-          await apiViewModel.updateWhistleNoti(newSetting: false)
-          await apiViewModel.updateFollowNoti(newSetting: false)
-          await apiViewModel.updateServerNoti(newSetting: false)
-          await apiViewModel.updateAdNoti(newSetting: false)
-          await apiViewModel.requestNotiSetting()
-        }
-      }
-    }
     .onChange(of: apiViewModel.notiSetting.whistleEnabled) { newValue in
       Task {
         await apiViewModel.updateWhistleNoti(newSetting: newValue)
-        if newValue {
-          isAllOff = false
-        }
       }
     }
     .onChange(of: apiViewModel.notiSetting.followEnabled) { newValue in
       Task {
         await apiViewModel.updateFollowNoti(newSetting: newValue)
-        if newValue {
-          isAllOff = false
-        }
       }
     }
     .onChange(of: apiViewModel.notiSetting.infoEnabled) { newValue in
       Task {
         await apiViewModel.updateServerNoti(newSetting: newValue)
-        if newValue {
-          isAllOff = false
-        }
       }
     }
     .onChange(of: apiViewModel.notiSetting.adEnabled) { newValue in
@@ -103,9 +78,6 @@ struct NotificationSettingView: View {
         submitText:CommonWords().confirm)
       Task {
         await apiViewModel.updateAdNoti(newSetting: newValue)
-        if newValue {
-          isAllOff = false
-        }
       }
     }
   }

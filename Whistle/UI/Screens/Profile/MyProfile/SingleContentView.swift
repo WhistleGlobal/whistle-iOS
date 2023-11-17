@@ -143,7 +143,7 @@ struct SingleContentView: View {
       bartintModel.tintColor = .white
     }
     .onDisappear {
-      bartintModel.tintColor = .LabelColor_Primary
+      bartintModel.tintColor = .labelColorPrimary
       player?.pause()
     }
     .bottomSheet(

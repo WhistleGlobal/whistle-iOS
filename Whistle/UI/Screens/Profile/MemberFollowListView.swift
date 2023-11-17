@@ -71,13 +71,10 @@ struct MemberFollowListView: View {
       }
       Spacer()
     }
+    .background(.backgroundDefault)
     .toolbarRole(.editor)
-    .toolbar {
-      ToolbarItem(placement: .principal) {
-        Text("\(userName)")
-          .fontSystem(fontDesignSystem: .subtitle2)
-      }
-    }
+    .navigationTitle(Text("\(userName)"))
+    .navigationBarTitleDisplayMode(.inline)
     .task {
       await apiViewModel.requestMemberFollow(userID: userId)
       memberFollower = apiViewModel.memberFollow.followerList

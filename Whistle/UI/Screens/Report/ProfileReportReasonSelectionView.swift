@@ -12,6 +12,7 @@ import SwiftUI
 struct ProfileReportReasonSelectionView: View {
   @Environment(\.dismiss) var dismiss
   @StateObject var apiViewModel = APIViewModel.shared
+
   @State var goComplete = false
   @Binding var goReport: Bool
   @Binding var selectedContentId: Int
@@ -24,14 +25,14 @@ struct ProfileReportReasonSelectionView: View {
       Group {
         Text(reportCategory == .user ? "이 계정을 신고하는 이유는 무엇인가요?" : "이 콘텐츠를 신고하는 이유는 무엇인가요?")
           .fontSystem(fontDesignSystem: .subtitle2)
-          .foregroundColor(.LabelColor_Primary)
+          .foregroundColor(.labelColorPrimary)
           .frame(maxWidth: .infinity, alignment: .leading)
           .padding(.top, 16)
           .padding(.bottom, 4)
         Text("지식재산권 침해를 신고하는 경우를 제외하고 회원님의 신고는 익명으로 처리됩니다. 누군가 위급한 상황에 있다고 생각된다면 즉시 현지 응급 서비스 기관에 연락하시기 바랍니다.")
           .lineLimit(5)
           .fontSystem(fontDesignSystem: .caption_Regular)
-          .foregroundColor(.LabelColor_Secondary)
+          .foregroundColor(.labelColorSecondary)
           .padding(.bottom, 16)
       }
       .padding(.horizontal, 16)
@@ -49,7 +50,7 @@ struct ProfileReportReasonSelectionView: View {
             reportRow(text: reason.rawValue)
           }
           .id(UUID())
-          Divider().frame(height: 0.5).padding(.leading, 16).foregroundColor(.Disable_Placeholder)
+          Divider().frame(height: 0.5).padding(.leading, 16).foregroundColor(.labelColorDisablePlaceholder)
         }
       } else {
         ForEach(UserReportReason.allCases, id: \.self) { reason in
@@ -74,12 +75,12 @@ struct ProfileReportReasonSelectionView: View {
           }
           .id(UUID())
 
-          Divider().frame(height: 0.5).padding(.leading, 16).foregroundColor(.Disable_Placeholder)
+          Divider().frame(height: 0.5).padding(.leading, 16).foregroundColor(.labelColorDisablePlaceholder)
         }
       }
       Spacer()
     }
-    .background(Color.reactiveBackground)
+    .background(Color.backgroundDefault)
     .navigationTitle(CommonWords().report)
     .navigationBarTitleDisplayMode(.inline)
     .toolbarRole(.editor)
@@ -95,7 +96,7 @@ extension ProfileReportReasonSelectionView {
     HStack {
       Text(text)
         .fontSystem(fontDesignSystem: .subtitle2)
-        .foregroundColor(.LabelColor_Primary)
+        .foregroundColor(.labelColorPrimary)
         .frame(maxWidth: .infinity, alignment: .leading)
         .listRowSeparator(.hidden)
       Spacer()

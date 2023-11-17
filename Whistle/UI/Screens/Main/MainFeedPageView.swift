@@ -15,6 +15,7 @@ struct MainFeedPageView: UIViewRepresentable {
   @StateObject var apiViewModel = APIViewModel.shared
   @StateObject var feedPlayersViewModel = MainFeedPlayersViewModel.shared
   @State var currentContentInfo: MainContent?
+  @State var isChangable = true
   @Binding var index: Int
 
   func makeUIView(context: Context) -> UIScrollView {
@@ -23,6 +24,7 @@ struct MainFeedPageView: UIViewRepresentable {
       rootView: MainContentPlayerView(
         currentContentInfo: $currentContentInfo,
         index: $index,
+        isChangable: $isChangable,
         lifecycleDelegate: context.coordinator))
 
     childView.view.frame = CGRect(
@@ -34,6 +36,7 @@ struct MainFeedPageView: UIViewRepresentable {
       width: UIScreen.main.bounds.width,
       height: UIScreen.main.bounds.height * CGFloat(apiViewModel.mainFeed.count))
     view.addSubview(childView.view)
+    view.isScrollEnabled = isChangable
     view.showsVerticalScrollIndicator = false
     view.showsHorizontalScrollIndicator = false
     view.contentInsetAdjustmentBehavior = .never
@@ -71,20 +74,23 @@ struct MainFeedPageView: UIViewRepresentable {
         width: UIScreen.width,
         height: UIScreen.height * CGFloat(apiViewModel.mainFeed.count))
     }
+    uiView.isScrollEnabled = isChangable
   }
 
   func makeCoordinator() -> Coordinator {
-    MainFeedPageView.Coordinator(parent: self, index: $index)
+    MainFeedPageView.Coordinator(parent: self, index: $index, changable: $isChangable)
   }
 
   class Coordinator: NSObject, UIScrollViewDelegate, ViewLifecycleDelegate {
 
     var parent: MainFeedPageView
     @Binding var index: Int
+    @Binding var changable: Bool
 
-    init(parent: MainFeedPageView, index: Binding<Int>) {
+    init(parent: MainFeedPageView, index: Binding<Int>, changable: Binding<Bool>) {
       self.parent = parent
       _index = index
+      _changable = changable
     }
 
     func onAppear() {
@@ -120,6 +126,10 @@ struct MainFeedPageView: UIViewRepresentable {
       parent.currentContentInfo = parent.apiViewModel.mainFeed[index]
     }
 
+    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+      scrollView.isScrollEnabled = changable
+    }
+
     func scrollViewDidScrollToTop(_ scrollView: UIScrollView) {
       if scrollView.contentOffset.y <= -scrollView.contentInset.top {
         index = 0
@@ -138,6 +148,7 @@ struct MainFeedPageView: UIViewRepresentable {
       if scrollView.contentOffset.y < -scrollView.contentInset.top {
         refresh()
       }
+      scrollView.isScrollEnabled = changable
     }
 
     @objc

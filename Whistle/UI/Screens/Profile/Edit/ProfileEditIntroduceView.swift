@@ -30,7 +30,7 @@ struct ProfileEditIntroduceView: View {
         .overlay(alignment: .bottom) {
           Text("\(introduce.count)/40자")
             .fontSystem(fontDesignSystem: .body1)
-            .foregroundColor(.Disable_Placeholder)
+            .foregroundColor(.labelColorDisablePlaceholder)
             .frame(maxWidth: .infinity, alignment: .trailing)
         }
         .tint(.Info)
@@ -38,6 +38,11 @@ struct ProfileEditIntroduceView: View {
       Divider().frame(width: UIScreen.width)
       Spacer()
     }
+    .toolbarBackground(
+      Color.backgroundDefault,
+      for: .navigationBar)
+    .toolbarBackground(.visible, for: .navigationBar)
+    .background(.backgroundDefault)
     .padding(.horizontal, 16)
     .toolbarRole(.editor)
     .navigationTitle(ProfileEditWords().intro)
@@ -61,9 +66,6 @@ struct ProfileEditIntroduceView: View {
     .overlay {
       if toastViewModel.onFullScreenCover {
         ToastMessageView()
-      }
-      if alertViewModel.onFullScreenCover {
-        AlertPopup()
       }
     }
     .onAppear {
