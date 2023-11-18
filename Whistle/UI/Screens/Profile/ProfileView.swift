@@ -88,7 +88,7 @@ struct ProfileView: View {
             }
           }
           // 프로필 카드
-          if offsetY <= -291 {
+          if offsetY <= -UIScreen.getHeight(291) {
             Color.black.frame(height: UIScreen.getHeight(177))
               .padding(.bottom, 12)
               .offset(y: -offsetY)
@@ -129,7 +129,7 @@ struct ProfileView: View {
                   selectedTab: $tabSelection))
               }
               .frame(height: 48)
-              .offset(y: offsetY <= -291 ? -offsetY - 42 : 0)
+              .offset(y: offsetY <= -UIScreen.getHeight(291) ? -offsetY - 42 : 0)
             }
             .padding(.bottom, 16)
             .zIndex(3)
@@ -155,7 +155,7 @@ struct ProfileView: View {
                 }
               }
               .zIndex(0)
-              .offset(y: offsetY <= -291 ? 291 - 42 : 0)
+              .offset(y: offsetY <= -UIScreen.getHeight(291) ? UIScreen.getHeight(291) - 42 : 0)
               .padding(.top, 12)
 
             // O 탭 & 올린 컨텐츠 있음
@@ -175,7 +175,7 @@ struct ProfileView: View {
                 }
               }
               .zIndex(0)
-              .offset(y: offsetY <= -291 ? 291 - 42 : 0)
+              .offset(y: offsetY <= -UIScreen.getHeight(291) ? UIScreen.getHeight(291) - 42 : 0)
               .padding(.top, 12)
             // 내 비디오 탭 & 올린 컨텐츠 없음
             case (.myVideo, true, _):
