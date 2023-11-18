@@ -22,6 +22,8 @@ public enum profileTabCase: String {
 // MARK: - ProfileView
 
 struct ProfileView: View {
+  @AppStorage("isMyTeamLabelOn") var isMyTeamLabelOn = false
+  @AppStorage("isMyTeamBackgroundOn") var isMyTeamBackgroundOn = false
   @Environment(\.dismiss) var dismiss
   @StateObject var userAuth = UserAuth.shared
   @StateObject var apiViewModel = APIViewModel.shared
@@ -61,13 +63,13 @@ struct ProfileView: View {
       }
 
       if profileType == .my {
-        if let myTeam = apiViewModel.myProfile.myTeam {
+        if let myTeam = apiViewModel.myProfile.myTeam, isMyTeamBackgroundOn {
           MyTeamType.teamGradient(myTeam)
         } else {
           profileDefaultBackground()
         }
       } else {
-        if let myTeam = apiViewModel.memberProfile.myTeam {
+        if let myTeam = apiViewModel.memberProfile.myTeam, isMyTeamBackgroundOn {
           MyTeamType.teamGradient(myTeam)
         } else {
           profileDefaultBackground()

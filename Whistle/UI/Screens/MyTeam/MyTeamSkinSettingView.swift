@@ -9,13 +9,13 @@ import SwiftUI
 
 struct MyTeamSkinSettingView: View {
 
-  @AppStorage("isMyTeamFlagOn") var isMyTeamFlagOn = false
+  @AppStorage("isMyTeamLabelOn") var isMyTeamLabelOn = false
   @AppStorage("isMyTeamBackgroundOn") var isMyTeamBackgroundOn = false
 
   var body: some View {
     VStack(spacing: 0) {
       Divider().foregroundColor(.Disable_Placeholder)
-      Toggle(ProfileEditWords().showMyTeamFlag, isOn: $isMyTeamFlagOn)
+      Toggle(ProfileEditWords().showMyTeamFlag, isOn: $isMyTeamLabelOn)
         .frame(height: 64)
         .padding(.horizontal, 16)
       Divider().frame(height: 0.5).padding(.leading, 16).foregroundColor(.Disable_Placeholder)
