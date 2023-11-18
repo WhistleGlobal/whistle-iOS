@@ -62,10 +62,16 @@ extension ProfileView {
           MyTeamType.teamProfile(myTeam)
             .resizable()
             .scaledToFit()
+          MyTeamType.teamLabel(myTeam)
+            .resizable()
+            .scaledToFit()
         }
       } else {
         if let myTeam = apiViewModel.memberProfile.myTeam {
           MyTeamType.teamProfile(myTeam)
+            .resizable()
+            .scaledToFit()
+          MyTeamType.teamLabel(myTeam)
             .resizable()
             .scaledToFit()
         }

@@ -278,4 +278,31 @@ enum MyTeamType: String {
       return Image("")
     }
   }
+
+  static func teamLabel(_ teamName: String) -> Image {
+    switch teamName {
+    case "삼성 라이온즈":
+      return Image("samsungLabel")
+    case "두산 베어스":
+      return Image("doosanLabel")
+    case "키움 히어로즈":
+      return Image("kiwoomLabel")
+    case "SSG 랜더스":
+      return Image("ssgLabel")
+    case "한화 이글스":
+      return Image("hanwhaLabel")
+    case "KT 위즈":
+      return Image("ktLabel")
+    case "롯데 자이언츠":
+      return Image("lotteLabel")
+    case "NC 다이노스":
+      return Image("ncLabel")
+    case "LG 트윈스":
+      return Image("lgLabel")
+    case "KIA 타이거즈":
+      return Image("kiaLabel")
+    default:
+      return Image("")
+    }
+  }
 }
