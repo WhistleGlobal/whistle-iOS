@@ -221,4 +221,61 @@ enum MyTeamType: String {
       return LinearGradient.kiaGradient
     }
   }
+
+  static func teamGradient(_ teamName: String) -> LinearGradient {
+    switch teamName {
+    case "삼성 라이온즈":
+      return LinearGradient.samsungGradient
+    case "두산 베어스":
+      return LinearGradient.doosanGradient
+    case "키움 히어로즈":
+      return LinearGradient.kiwoomGradient
+    case "SSG 랜더스":
+      return LinearGradient.ssgGradient
+    case "한화 이글스":
+      return LinearGradient.hanwhaGradient
+    case "KT 위즈":
+      return LinearGradient.ktGradient
+    case "롯데 자이언츠":
+      return LinearGradient.lotteGradient
+    case "NC 다이노스":
+      return LinearGradient.ncGradient
+    case "LG 트윈스":
+      return LinearGradient.lgGradient
+    case "KIA 타이거즈":
+      return LinearGradient.kiaGradient
+    default:
+      return LinearGradient(
+        colors: [Color.clear],
+        startPoint: .topLeading,
+        endPoint: .bottomTrailing)
+    }
+  }
+
+  static func teamProfile(_ teamName: String) -> Image {
+    switch teamName {
+    case "삼성 라이온즈":
+      return Image("samsungProfile")
+    case "두산 베어스":
+      return Image("doosanProfile")
+    case "키움 히어로즈":
+      return Image("kiwoomProfile")
+    case "SSG 랜더스":
+      return Image("ssgProfile")
+    case "한화 이글스":
+      return Image("hanwhaProfile")
+    case "KT 위즈":
+      return Image("ktProfile")
+    case "롯데 자이언츠":
+      return Image("lotteProfile")
+    case "NC 다이노스":
+      return Image("ncProfile")
+    case "LG 트윈스":
+      return Image("lgProfile")
+    case "KIA 타이거즈":
+      return Image("kiaProfile")
+    default:
+      return Image("")
+    }
+  }
 }

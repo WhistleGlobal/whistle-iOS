@@ -59,26 +59,22 @@ struct ProfileView: View {
       if bottomSheetPosition != .hidden {
         DimsThick().zIndex(1000)
       }
-      Color.clear.overlay {
-        if let url = profileUrl, !url.isEmpty {
-          KFImage.url(URL(string: url))
-            .placeholder { _ in
-              Image("BlurredDefaultBG")
-                .resizable()
-                .scaledToFill()
-                .ignoresSafeArea()
-            }
-            .resizable()
-            .setProcessor(processor)
-            .scaledToFill()
-            .scaleEffect(2.0)
+
+      if profileType == .my {
+        if let myTeam = apiViewModel.myProfile.myTeam {
+          MyTeamType.teamGradient(myTeam)
         } else {
-          Image("BlurredDefaultBG")
-            .resizable()
-            .scaledToFill()
-            .ignoresSafeArea()
+          profileDefaultBackground()
+        }
+      } else {
+        if let myTeam = apiViewModel.memberProfile.myTeam {
+          MyTeamType.teamGradient(myTeam)
+        } else {
+          profileDefaultBackground()
         }
       }
+
+
       VStack(spacing: 0) {
         VStack(spacing: 0) {
           if UIDevice.current.userInterfaceIdiom == .phone {
