@@ -89,16 +89,25 @@ struct ProfileView: View {
           }
           // 프로필 카드
           if offsetY <= -UIScreen.getHeight(339) {
-            Color.black.frame(height: 177)
-              .ignoresSafeArea()
-              .padding(.bottom, 12)
-              .offset(y: -offsetY - 64)
-              .zIndex(2)
+            ZStack {
+              glassMorphicView(cornerRadius: 0)
+              Text(
+                profileType == .my
+                  ? apiViewModel.myProfile.userName
+                  : apiViewModel.memberProfile.userName)
+                .foregroundColor(Color.LabelColor_Primary_Dark)
+                .fontSystem(fontDesignSystem: .title2_Expanded)
+            }
+            .frame(height: profileType == .my ? 177 : 142)
+            .ignoresSafeArea()
+            .padding(.bottom, 12)
+            .offset(y: -offsetY - 64)
+            .zIndex(2)
           } else {
             profileCardLayer()
               .background {
                 glassProfile(
-                  cornerRadius: profileCornerRadius)
+                  cornerRadius: 32)
               }
               .padding(.horizontal, 16)
               .padding(.bottom, 12)
@@ -131,10 +140,10 @@ struct ProfileView: View {
                   selectedTab: $tabSelection))
               }
               .frame(height: 48)
-              .offset(y: offsetY <= -UIScreen.getHeight(339) ? -offsetY - 42 - 64 : 0)
+              .offset(y: offsetY <= -UIScreen.getHeight(339) ? -offsetY - 42 - 64 - 16 : 0)
             }
             .padding(.horizontal, 16)
-            .padding(.bottom, 16)
+            .padding(.vertical, 16)
             .zIndex(3)
           }
           if profileType == .my {
@@ -158,7 +167,7 @@ struct ProfileView: View {
                 }
               }
               .zIndex(0)
-              .offset(y: offsetY <= -UIScreen.getHeight(339) ? UIScreen.getHeight(339) - 42 - 64 : 0)
+              .offset(y: offsetY <= -UIScreen.getHeight(339) ? UIScreen.getHeight(339) - 42 - 64 : 12)
               .padding(.top, 12)
               .padding(.horizontal, 16)
 
@@ -179,12 +188,13 @@ struct ProfileView: View {
                 }
               }
               .zIndex(0)
-              .offset(y: offsetY <= -UIScreen.getHeight(339) ? UIScreen.getHeight(339) - 42 - 64 : 0)
-              .padding(.top, 12)
+              .offset(y: offsetY <= -UIScreen.getHeight(339) ? UIScreen.getHeight(339) - 42 - 64 : 12)
+              .padding(.top, 20)
               .padding(.horizontal, 16)
             // 내 비디오 탭 & 올린 컨텐츠 없음
             case (.myVideo, true, _):
               listEmptyView()
+                .zIndex(0)
                 .padding(.horizontal, 16)
             // 북마크 탭 & 올린 컨텐츠 없음
             case (.bookmark, _, true):
@@ -194,7 +204,7 @@ struct ProfileView: View {
           } else {
             if apiViewModel.memberFeed.isEmpty {
               if !apiViewModel.memberProfile.isBlocked {
-                Spacer()
+                Spacer().frame(height: UIScreen.getHeight(90))
                 Image(systemName: "photo.fill")
                   .resizable()
                   .scaledToFit()
@@ -206,7 +216,7 @@ struct ProfileView: View {
                   .foregroundColor(.LabelColor_Primary_Dark)
                   .padding(.bottom, 76)
               } else {
-                Spacer()
+                Spacer().frame(height: UIScreen.getHeight(90))
                 Text("차단된 계정")
                   .fontSystem(fontDesignSystem: .subtitle1)
                   .foregroundColor(.LabelColor_Primary_Dark)
@@ -236,7 +246,7 @@ struct ProfileView: View {
               }
               .zIndex(0)
               .offset(y: offsetY <= -UIScreen.getHeight(339) ? UIScreen.getHeight(339) - 42 - 64 : 0)
-              .padding(.top, 12)
+              .padding(.top, 20)
               .padding(.horizontal, 16)
             }
           }
@@ -246,7 +256,18 @@ struct ProfileView: View {
           offsetY = offset
           WhistleLogger.logger.info("offsetY: \(offsetY)")
         }
-        Spacer().frame(height: 1000)
+        if profileType == .my {
+          if !apiViewModel.myFeed.isEmpty, tabSelection == .myVideo {
+            Spacer().frame(height: 1000)
+          }
+          if !apiViewModel.bookmark.isEmpty, tabSelection == .bookmark {
+            Spacer().frame(height: 1000)
+          }
+        } else {
+          if !apiViewModel.memberFeed.isEmpty {
+            Spacer().frame(height: 1000)
+          }
+        }
       }
       .ignoresSafeArea()
       .scrollIndicators(.hidden)

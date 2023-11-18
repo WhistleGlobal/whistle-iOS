@@ -92,7 +92,7 @@ extension ProfileView {
           url: profileType == .my
             ? apiViewModel.myProfile.profileImage
             : apiViewModel.memberProfile.profileImg,
-          size: UIScreen.getHeight(profileImageSize))
+          size: UIScreen.getHeight(100))
           .padding(.bottom, UIScreen.getHeight(16))
         // userName
         Text(
@@ -101,7 +101,6 @@ extension ProfileView {
             : apiViewModel.memberProfile.userName)
           .foregroundColor(Color.LabelColor_Primary_Dark)
           .fontSystem(fontDesignSystem: .title2_Expanded)
-          .offset(y: usernameOffset)
           .padding(.bottom, UIScreen.getHeight(4))
         // intruduce
         if profileType == .my {
@@ -117,12 +116,11 @@ extension ProfileView {
             Text(ProfileEditWords().edit)
               .font(.system(size: 16, weight: .semibold)) // subtitle 2
               .foregroundColor(Color.LabelColor_Primary_Dark)
-              .scaleEffect(profileEditButtonScale)
               .frame(
-                width: UIScreen.getWidth(profileEditButtonWidth),
-                height: UIScreen.getHeight(profileEditButtonHeight))
+                width: UIScreen.getWidth(114),
+                height: UIScreen.getHeight(36))
           }
-          .frame(width: UIScreen.getWidth(profileEditButtonWidth), height: UIScreen.getHeight(profileEditButtonHeight))
+          .frame(width: UIScreen.getWidth(114), height: UIScreen.getHeight(36))
           .padding(.bottom, UIScreen.getHeight(24))
           .buttonStyle(ProfileEditButtonStyle())
         } else {
@@ -135,11 +133,9 @@ extension ProfileView {
               "\(apiViewModel.memberProfile.isBlocked ? 0 : (profileType == .my ? apiViewModel.myWhistleCount : apiViewModel.memberWhistleCount))")
               .foregroundColor(Color.LabelColor_Primary_Dark)
               .fontSystem(fontDesignSystem: .title2_Expanded)
-              .scaleEffect(whistleFollowerTextScale)
             Text(CommonWords().whistle)
               .foregroundColor(Color.LabelColor_Secondary_Dark)
               .fontSystem(fontDesignSystem: .caption_SemiBold)
-              .scaleEffect(whistleFollowerTextScale)
           }
           .hCenter()
           Rectangle().frame(width: 1).foregroundColor(.white).scaleEffect(0.5)
@@ -154,17 +150,15 @@ extension ProfileView {
               Text("\(apiViewModel.memberProfile.isBlocked ? 0 : filteredFollower.count)")
                 .foregroundColor(Color.LabelColor_Primary_Dark)
                 .fontSystem(fontDesignSystem: .title2_Expanded)
-                .scaleEffect(whistleFollowerTextScale)
               Text(CommonWords().follower)
                 .foregroundColor(Color.LabelColor_Secondary_Dark)
                 .fontSystem(fontDesignSystem: .caption_SemiBold)
-                .scaleEffect(whistleFollowerTextScale)
             }
             .hCenter()
           }
           .id(UUID())
         }
-        .frame(height: UIScreen.getHeight(whistleFollowerTabHeight))
+        .frame(height: UIScreen.getHeight(54))
         .padding(.bottom, UIScreen.getHeight(32))
       }
       .fullScreenCover(isPresented: $showProfileEditView) {
@@ -179,30 +173,30 @@ extension ProfileView {
 
   @ViewBuilder
   func listEmptyView() -> some View {
-    Spacer()
-    Text(ContentWords().noUploadedContent).fontSystem(fontDesignSystem: .body1)
-      .foregroundColor(.LabelColor_Primary_Dark)
-    Button {
-      tabbarModel.showVideoCaptureView = true
-    } label: {
-      Text(ContentWords().goUpload)
-        .fontSystem(fontDesignSystem: .subtitle2)
-        .foregroundColor(Color.LabelColor_Primary_Dark)
-        .frame(width: 142, height: 36)
+    VStack(spacing: 0) {
+      Spacer().frame(height: UIScreen.getHeight(90))
+      Text(ContentWords().noUploadedContent).fontSystem(fontDesignSystem: .body1)
+        .foregroundColor(.LabelColor_Primary_Dark)
+      Button {
+        tabbarModel.showVideoCaptureView = true
+      } label: {
+        Text(ContentWords().goUpload)
+          .fontSystem(fontDesignSystem: .subtitle2)
+          .foregroundColor(Color.LabelColor_Primary_Dark)
+          .frame(width: 142, height: 36)
+      }
+      .buttonStyle(ProfileEditButtonStyle())
     }
-    .buttonStyle(ProfileEditButtonStyle())
-    .padding(.bottom, 76)
-    Spacer()
   }
 
   @ViewBuilder
   func bookmarkEmptyView() -> some View {
-    Spacer()
-    Text(ContentWords().noBookmarkedContent)
-      .fontSystem(fontDesignSystem: .body1)
-      .foregroundColor(.LabelColor_Primary_Dark)
-      .padding(.bottom, 64)
-    Spacer()
+    VStack(spacing: 0) {
+      Spacer().frame(height: UIScreen.getHeight(90))
+      Text(ContentWords().noBookmarkedContent)
+        .fontSystem(fontDesignSystem: .body1)
+        .foregroundColor(.LabelColor_Primary_Dark)
+    }
   }
 
   @ViewBuilder
@@ -227,8 +221,7 @@ extension ProfileView {
       .truncationMode(.tail)
       .multilineTextAlignment(.center)
       .fixedSize(horizontal: false, vertical: true)
-      .scaleEffect(introduceScale)
-      .frame(height: UIScreen.getHeight(introduceHeight))
+      .frame(height: UIScreen.getHeight(20))
       .padding(.top, text.isEmpty ? 0 : UIScreen.getHeight(16))
       .padding(.bottom, UIScreen.getHeight(16))
       .padding(.bottom, UIScreen.getHeight(8))
@@ -291,8 +284,7 @@ extension ProfileView {
         }
       }
       .buttonStyle(FollowButtonStyle(isFollowed: $apiViewModel.memberProfile.isFollowed))
-      .frame(width: UIScreen.getWidth(profileEditButtonWidth), height: UIScreen.getHeight(profileEditButtonHeight))
-      .scaleEffect(profileEditButtonScale)
+      .frame(width: UIScreen.getWidth(114), height: UIScreen.getHeight(36))
       .opacity(isProfileLoaded ? 1 : 0)
       .disabled(userId == apiViewModel.myProfile.userId)
       .padding(.bottom, UIScreen.getHeight(24))
