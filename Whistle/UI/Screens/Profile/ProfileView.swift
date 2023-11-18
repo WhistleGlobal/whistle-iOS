@@ -89,7 +89,7 @@ struct ProfileView: View {
           }
           // 프로필 카드
           if offsetY <= -UIScreen.getHeight(339) {
-            Color.black.frame(height: UIScreen.getHeight(177))
+            Color.black.frame(height: 177)
               .ignoresSafeArea()
               .padding(.bottom, 12)
               .offset(y: -offsetY - 64)
@@ -268,14 +268,14 @@ struct ProfileView: View {
               Image(systemName: "bell")
                 .foregroundColor(.white)
                 .fontWeight(.semibold)
-                .frame(width: UIScreen.getWidth(48), height: UIScreen.getHeight(48))
+                .frame(width: 48, height: 48)
                 .background(
                   Circle()
                     .foregroundColor(.Gray_Default)
-                    .frame(width: UIScreen.getWidth(48), height: UIScreen.getHeight(48)))
+                    .frame(width: 48, height: 48))
             }
             .id(UUID())
-            .padding(.horizontal, UIScreen.getWidth(16))
+            .padding(.horizontal, 16)
           } else {
             Button {
               dismiss()
@@ -283,13 +283,13 @@ struct ProfileView: View {
               Image(systemName: "chevron.left")
                 .foregroundColor(.white)
                 .fontWeight(.semibold)
-                .frame(width: UIScreen.getWidth(48), height: UIScreen.getHeight(48))
+                .frame(width: 48, height: 48)
                 .background(
                   Circle()
                     .foregroundColor(.Gray_Default)
-                    .frame(width: UIScreen.getWidth(48), height: UIScreen.getHeight(48)))
+                    .frame(width: 48, height: 48))
             }
-            .padding(.horizontal, UIScreen.getWidth(16))
+            .padding(.horizontal, 16)
           }
 
           Spacer()
@@ -300,22 +300,22 @@ struct ProfileView: View {
           } label: {
             Circle()
               .foregroundColor(.Gray_Default)
-              .frame(width: UIScreen.getWidth(48), height: UIScreen.getHeight(48))
+              .frame(width: 48, height: 48)
               .overlay {
                 Image(systemName: "ellipsis")
                   .resizable()
                   .scaledToFit()
                   .foregroundColor(Color.white)
                   .fontWeight(.semibold)
-                  .frame(width: UIScreen.getWidth(20), height: UIScreen.getHeight(20))
+                  .frame(width: 20, height: 20)
               }
           }
-          .padding(.horizontal, UIScreen.getWidth(16))
+          .padding(.horizontal, 16)
         }
         Spacer()
       }
-      .padding(UIScreen.getWidth(16))
-      .padding(.top, UIScreen.getWidth(16))
+      .padding(16)
+      .padding(.top, 16)
     }
     .gesture(DragGesture().updating($dragOffset) { value, _, _ in
       if value.startLocation.x < 30, value.translation.width > 100 {
