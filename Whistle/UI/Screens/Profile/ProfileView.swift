@@ -82,16 +82,17 @@ struct ProfileView: View {
           if UIDevice.current.userInterfaceIdiom == .phone {
             switch UIScreen.main.nativeBounds.height {
             case 1334: // iPhone SE 3rd generation
-              Spacer().frame(height: topSpacerHeightSE * 2)
+              Spacer().frame(height: 20 * 2)
             default:
-              Spacer().frame(height: topSpacerHeight)
+              Spacer().frame(height: 64)
             }
           }
           // 프로필 카드
-          if offsetY <= -UIScreen.getHeight(291) {
+          if offsetY <= -UIScreen.getHeight(339) {
             Color.black.frame(height: UIScreen.getHeight(177))
+              .ignoresSafeArea()
               .padding(.bottom, 12)
-              .offset(y: -offsetY)
+              .offset(y: -offsetY - 64)
               .zIndex(2)
           } else {
             profileCardLayer()
@@ -99,6 +100,7 @@ struct ProfileView: View {
                 glassProfile(
                   cornerRadius: profileCornerRadius)
               }
+              .padding(.horizontal, 16)
               .padding(.bottom, 12)
           }
           // contentTab
@@ -129,8 +131,9 @@ struct ProfileView: View {
                   selectedTab: $tabSelection))
               }
               .frame(height: 48)
-              .offset(y: offsetY <= -UIScreen.getHeight(291) ? -offsetY - 42 : 0)
+              .offset(y: offsetY <= -UIScreen.getHeight(339) ? -offsetY - 42 - 64 : 0)
             }
+            .padding(.horizontal, 16)
             .padding(.bottom, 16)
             .zIndex(3)
           }
@@ -155,8 +158,9 @@ struct ProfileView: View {
                 }
               }
               .zIndex(0)
-              .offset(y: offsetY <= -UIScreen.getHeight(291) ? UIScreen.getHeight(291) - 42 : 0)
+              .offset(y: offsetY <= -UIScreen.getHeight(339) ? UIScreen.getHeight(339) - 42 - 64 : 0)
               .padding(.top, 12)
+              .padding(.horizontal, 16)
 
             // O 탭 & 올린 컨텐츠 있음
             case (.bookmark, _, false):
@@ -175,8 +179,9 @@ struct ProfileView: View {
                 }
               }
               .zIndex(0)
-              .offset(y: offsetY <= -UIScreen.getHeight(291) ? UIScreen.getHeight(291) - 42 : 0)
+              .offset(y: offsetY <= -UIScreen.getHeight(339) ? UIScreen.getHeight(339) - 42 - 64 : 0)
               .padding(.top, 12)
+              .padding(.horizontal, 16)
             // 내 비디오 탭 & 올린 컨텐츠 없음
             case (.myVideo, true, _):
               listEmptyView()
@@ -230,17 +235,20 @@ struct ProfileView: View {
                 }
               }
               .zIndex(0)
+              .offset(y: offsetY <= -UIScreen.getHeight(339) ? UIScreen.getHeight(339) - 42 - 64 : 0)
+              .padding(.top, 12)
               .padding(.horizontal, 16)
             }
           }
         }
-        .padding(.horizontal, 16)
+        .ignoresSafeArea()
         .offset(coordinateSpace: .named("SCROLL")) { offset in
           offsetY = offset
           WhistleLogger.logger.info("offsetY: \(offsetY)")
         }
         Spacer().frame(height: 1000)
       }
+      .ignoresSafeArea()
       .scrollIndicators(.hidden)
       .coordinateSpace(name: "SCROLL")
       .zIndex(0)
@@ -250,6 +258,65 @@ struct ProfileView: View {
     }
     .navigationBarBackButtonHidden()
     .ignoresSafeArea()
+    .overlay {
+      VStack(spacing: 0) {
+        HStack {
+          if profileType == .my, isFirstStack {
+            NavigationLink {
+              NotificationListView()
+            } label: {
+              Image(systemName: "bell")
+                .foregroundColor(.white)
+                .fontWeight(.semibold)
+                .frame(width: UIScreen.getWidth(48), height: UIScreen.getHeight(48))
+                .background(
+                  Circle()
+                    .foregroundColor(.Gray_Default)
+                    .frame(width: UIScreen.getWidth(48), height: UIScreen.getHeight(48)))
+            }
+            .id(UUID())
+            .padding(.horizontal, UIScreen.getWidth(16))
+          } else {
+            Button {
+              dismiss()
+            } label: {
+              Image(systemName: "chevron.left")
+                .foregroundColor(.white)
+                .fontWeight(.semibold)
+                .frame(width: UIScreen.getWidth(48), height: UIScreen.getHeight(48))
+                .background(
+                  Circle()
+                    .foregroundColor(.Gray_Default)
+                    .frame(width: UIScreen.getWidth(48), height: UIScreen.getHeight(48)))
+            }
+            .padding(.horizontal, UIScreen.getWidth(16))
+          }
+
+          Spacer()
+          Button {
+            withAnimation {
+              bottomSheetPosition = .dynamic
+            }
+          } label: {
+            Circle()
+              .foregroundColor(.Gray_Default)
+              .frame(width: UIScreen.getWidth(48), height: UIScreen.getHeight(48))
+              .overlay {
+                Image(systemName: "ellipsis")
+                  .resizable()
+                  .scaledToFit()
+                  .foregroundColor(Color.white)
+                  .fontWeight(.semibold)
+                  .frame(width: UIScreen.getWidth(20), height: UIScreen.getHeight(20))
+              }
+          }
+          .padding(.horizontal, UIScreen.getWidth(16))
+        }
+        Spacer()
+      }
+      .padding(UIScreen.getWidth(16))
+      .padding(.top, UIScreen.getWidth(16))
+    }
     .gesture(DragGesture().updating($dragOffset) { value, _, _ in
       if value.startLocation.x < 30, value.translation.width > 100 {
         dismiss()
