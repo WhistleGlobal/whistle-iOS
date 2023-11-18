@@ -398,9 +398,11 @@ extension RootTabView {
   var guideView: some View {
     if showGuide, isMyTeamSelectPassed {
       ZStack {
-        Image("gestureGuide")
-          .resizable()
-          .scaledToFill()
+        Color.clear.overlay {
+          Image("gestureGuide")
+            .resizable()
+            .scaledToFill()
+        }
         VStack {
           Spacer()
           Button {

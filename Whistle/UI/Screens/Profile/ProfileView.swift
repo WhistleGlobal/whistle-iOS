@@ -89,7 +89,7 @@ struct ProfileView: View {
           }
           // 프로필 카드
           if offsetY <= -291 {
-            Color.black.frame(height: 177)
+            Color.black.frame(height: UIScreen.getHeight(177))
               .padding(.bottom, 12)
               .offset(y: -offsetY)
               .zIndex(2)
