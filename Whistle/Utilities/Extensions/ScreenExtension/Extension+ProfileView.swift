@@ -172,7 +172,7 @@ extension ProfileView {
           ProfileEditView()
         }
       }
-      .frame(height: UIScreen.getHeight(418 + (240 * progress)))
+      .frame(height: UIScreen.getHeight(418))
       .frame(maxWidth: .infinity)
       .overlay {
         VStack(spacing: 0) {
