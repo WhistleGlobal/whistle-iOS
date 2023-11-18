@@ -254,7 +254,6 @@ struct ProfileView: View {
         .ignoresSafeArea()
         .offset(coordinateSpace: .named("SCROLL")) { offset in
           offsetY = offset
-          WhistleLogger.logger.info("offsetY: \(offsetY)")
         }
         if profileType == .my {
           if !apiViewModel.myFeed.isEmpty, tabSelection == .myVideo {
@@ -275,6 +274,36 @@ struct ProfileView: View {
       .zIndex(0)
       .refreshable {
         HapticManager.instance.impact(style: .medium)
+        if profileType == .my {
+          Task {
+            await apiViewModel.requestMyProfile()
+          }
+          Task {
+            await apiViewModel.requestMyFollow()
+          }
+          Task {
+            await apiViewModel.requestMyWhistlesCount()
+          }
+          Task {
+            await apiViewModel.requestMyPostFeed()
+          }
+          Task {
+            await apiViewModel.requestMyBookmark()
+          }
+        } else {
+          Task {
+            await apiViewModel.requestMemberProfile(userID: userId)
+          }
+          Task {
+            await apiViewModel.requestMemberFollow(userID: userId)
+          }
+          Task {
+            await apiViewModel.requestMemberWhistlesCount(userID: userId)
+          }
+          Task {
+            await apiViewModel.requestMemberPostFeed(userID: userId)
+          }
+        }
       }
     }
     .navigationBarBackButtonHidden()
