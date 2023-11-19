@@ -12,6 +12,13 @@ import SwiftUI
 
 struct WhistleRankingView: View {
 
+  @StateObject var bartintModel = BarTintModel.shared
+
+  init() {
+    UINavigationBar.appearance().largeTitleTextAttributes = [.foregroundColor: UIColor.white]
+    UINavigationBar.appearance().titleTextAttributes = [.foregroundColor: UIColor.white]
+  }
+
   var body: some View {
     ZStack {
       Color.clear.overlay {
@@ -30,6 +37,7 @@ struct WhistleRankingView: View {
             Image(systemName: "trophy.fill")
               .font(.system(size: 20, weight: .semibold))
               .padding(.trailing, 10)
+              .foregroundColor(Color("Gray30").opacity(64))
             Text("상위 98%")
               .fontSystem(fontDesignSystem: .title1_SemiBold)
             Spacer()
@@ -58,9 +66,16 @@ struct WhistleRankingView: View {
         ScrollView {
           VStack(spacing: 0) {
             ForEach(0..<10) { index in
-              rankingRow()
+              if index == 2 {
+                myRankingRow()
+              } else {
+                rankingRow()
+              }
               if index != 9 {
                 Divider()
+                  .frame(height: 0.5)
+                  .padding(.horizontal, 16)
+                  .foregroundColor(.Disable_Placeholder)
               }
             }
           }
@@ -72,18 +87,28 @@ struct WhistleRankingView: View {
                   .foregroundStyle(
                     LinearGradient.Border_Glass)
               }
+              .padding(.horizontal, 16)
           }
           Spacer().frame(height: 100)
         }
         .scrollIndicators(.hidden)
-        .padding(.horizontal, 16)
         .padding(.top, 10)
       }
     }
     .toolbarRole(.editor)
-    .navigationTitle(CommonWords().whistle)
+    .navigationTitle(Text(CommonWords().whistle).foregroundColor(.white))
     .navigationBarTitleDisplayMode(.inline)
     .ignoresSafeArea(edges: .horizontal)
+    .onAppear {
+      bartintModel.tintColor = .white
+      UINavigationBar.appearance().largeTitleTextAttributes = [.foregroundColor: UIColor.white]
+      UINavigationBar.appearance().titleTextAttributes = [.foregroundColor: UIColor.white]
+    }
+    .onDisappear {
+      bartintModel.tintColor = .LabelColor_Primary
+      UINavigationBar.appearance().largeTitleTextAttributes = [.foregroundColor: UIColor(Color.LabelColor_Primary)]
+      UINavigationBar.appearance().titleTextAttributes = [.foregroundColor: UIColor(Color.LabelColor_Primary)]
+    }
   }
 }
 
@@ -112,7 +137,46 @@ extension WhistleRankingView {
         .fontSystem(fontDesignSystem: .subtitle3)
     }
     .frame(height: 84)
+    .padding(.horizontal, 36)
+    .foregroundColor(.white)
+  }
+
+  @ViewBuilder
+  func myRankingRow() -> some View {
+    HStack(spacing: 0) {
+      Text("1")
+        .fontSystem(fontDesignSystem: .title1)
+        .foregroundColor(.white)
+        .frame(width: 32, height: 36)
+        .padding(.trailing, 10)
+        .padding(.leading, 20)
+      profileImageView(url: "", size: 48)
+        .padding(.trailing, 20)
+      VStack(alignment: .leading, spacing: 0) {
+        Text("UserName")
+          .fontSystem(fontDesignSystem: .subtitle2)
+        Text("두산 베어스")
+          .fontSystem(fontDesignSystem: .body2)
+      }
+      Spacer()
+      Text("\(1500000.roundedWithAbbreviations)")
+        .fontSystem(fontDesignSystem: .subtitle3)
+      Image(systemName: "heart.fill")
+        .fontSystem(fontDesignSystem: .subtitle3)
+        .padding(.trailing, 20)
+    }
+    .frame(height: 84)
     .padding(.horizontal, 16)
     .foregroundColor(.white)
+    .background {
+      glassMorphicView(cornerRadius: 16)
+        .overlay {
+          RoundedRectangle(cornerRadius: 16)
+            .stroke(lineWidth: 1)
+            .foregroundStyle(
+              LinearGradient.Border_Glass)
+        }
+        .padding(.horizontal, 11)
+    }
   }
 }
