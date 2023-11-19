@@ -82,7 +82,7 @@ struct GuestContentPlayerView: View {
                   feedMoreModel.bottomSheetPosition = .dynamic
                 }
                 .overlay {
-                  if tabbarModel.tabWidth != 56 {
+                  if !tabbarModel.isCollpased() {
                     GuestContentLayer(currentVideoInfo: content)
                       .padding(.bottom, UIScreen.main.nativeBounds.height == 1334 ? 24 : 0)
                   }
@@ -96,7 +96,7 @@ struct GuestContentPlayerView: View {
                       }
                   }
                 }
-                .onChange(of: tabbarModel.tabSelectionNoAnimation) { newValue in
+                .onChange(of: tabbarModel.tabSelection) { newValue in
                   if newValue == .main {
                     guard let currentPlayer = feedPlayersViewModel.currentPlayer else {
                       return
@@ -162,7 +162,7 @@ struct GuestContentPlayerView: View {
       lifecycleDelegate?.onDisappear()
     }
     .ignoresSafeArea()
-    .onChange(of: tabbarModel.tabSelectionNoAnimation) { newValue in
+    .onChange(of: tabbarModel.tabSelection) { newValue in
       if newValue == .main {
         feedPlayersViewModel.currentPlayer?.seek(to: .zero)
         feedPlayersViewModel.currentPlayer?.play()

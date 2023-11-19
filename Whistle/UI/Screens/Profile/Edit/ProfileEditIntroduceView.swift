@@ -69,7 +69,7 @@ struct ProfileEditIntroduceView: View {
       }
     }
     .onAppear {
-      tabbarModel.tabbarOpacity = 0.0
+      tabbarModel.hideTabbar()
     }
   }
 }

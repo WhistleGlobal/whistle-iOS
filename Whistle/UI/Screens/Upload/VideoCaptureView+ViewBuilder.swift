@@ -18,7 +18,7 @@ extension VideoCaptureView {
       HStack {
         Spacer()
         Button {
-          tabbarModel.tabbarOpacity = 1.0
+          tabbarModel.showTabbar()
           uploadBottomSheetPosition = .hidden
         } label: {
           Text(CommonWords().cancel)
@@ -793,8 +793,7 @@ extension VideoCaptureView {
               }
               Task {
                 UploadProgressViewModel.shared.uploadStarted()
-                tabbarModel.tabSelectionNoAnimation = .main
-                tabbarModel.tabSelection = .main
+                tabbarModel.switchTab(to: .main)
                 alertViewModel.onFullScreenCover = false
               }
               Task {

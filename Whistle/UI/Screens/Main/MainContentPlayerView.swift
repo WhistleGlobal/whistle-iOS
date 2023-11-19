@@ -108,7 +108,7 @@ struct MainContentPlayerView: View {
                 .overlay {
                   ContentGradientLayer()
                     .allowsHitTesting(false)
-                  if tabbarModel.tabWidth != 56 {
+                  if !tabbarModel.isCollpased() {
                     ContentLayer(
                       currentVideoInfo: content,
                       feedMoreModel: MainFeedMoreModel.shared,
@@ -192,7 +192,7 @@ struct MainContentPlayerView: View {
       .id(newId)
     }
     .onAppear {
-      tabbarModel.tabbarOpacity = 1.0
+      tabbarModel.showTabbar()
       if index == 0 {
         lifecycleDelegate?.onAppear()
       } else {
@@ -207,7 +207,7 @@ struct MainContentPlayerView: View {
       lifecycleDelegate?.onDisappear()
     }
     .ignoresSafeArea()
-    .onChange(of: tabbarModel.tabSelectionNoAnimation) { newValue in
+    .onChange(of: tabbarModel.tabSelection) { newValue in
       if newValue == .main {
         feedPlayersViewModel.currentPlayer?.seek(to: .zero)
         feedPlayersViewModel.currentPlayer?.play()

@@ -22,28 +22,35 @@ struct MyFeedTabItemButtonStyle: ButtonStyle {
   let tab: String
   @Binding var selectedTab: profileTabCase
 
-  func makeBody(configuration: Configuration) -> some View {
-    configuration.label
-      .frame(maxWidth: .infinity, maxHeight: .infinity)
-      .overlay {
+  struct FeedTabItem: View {
+    let systemName: String
+    let tab: String
+    @Binding var selectedTab: profileTabCase
+    var body: some View {
+      ZStack {
+        VStack(spacing: 0) {
+          Spacer()
+          Rectangle()
+            .foregroundColor(Color.Gray30_Dark)
+            .frame(height: 1)
+            .overlay {
+              Capsule()
+                .frame(height: 5)
+                .foregroundColor(.white)
+                .opacity(tab == selectedTab.rawValue ? 1 : 0)
+            }
+        }
         Image(systemName: systemName)
           .resizable()
           .scaledToFit()
           .frame(width: 20, height: 20)
+          .foregroundColor(tab == selectedTab.rawValue ? Color.white : Color.LabelColor_DisablePlaceholder_Dark)
       }
-      .overlay(alignment: .bottom) {
-        Rectangle()
-          .foregroundColor(Color.Gray30_Dark)
-          .frame(height: 1)
-      }
-      .overlay(alignment: .bottom) {
-        Capsule()
-          .frame(width: (UIScreen.width - 32) / 2, height: 5)
-          .foregroundColor(.white)
-          .opacity(tab == selectedTab.rawValue ? 1 : 0)
-          .offset(y: 2.5)
-      }
-      .foregroundColor(tab == selectedTab.rawValue ? .white : Color.Disable_Placeholder_Dark)
-      .background(.clear)
+      .frame(maxWidth: .infinity, maxHeight: .infinity)
+    }
+  }
+
+  func makeBody(configuration _: Configuration) -> some View {
+    FeedTabItem(systemName: systemName, tab: tab, selectedTab: $selectedTab)
   }
 }

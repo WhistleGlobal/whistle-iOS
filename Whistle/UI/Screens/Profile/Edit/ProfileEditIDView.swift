@@ -115,7 +115,7 @@ struct ProfileEditIDView: View {
     }
     .onAppear {
       originalUsername = apiViewModel.myProfile.userName
-      tabbarModel.tabbarOpacity = 0.0
+      tabbarModel.hideTabbar()
     }
   }
 }

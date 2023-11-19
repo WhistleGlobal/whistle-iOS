@@ -106,29 +106,18 @@ struct MemberFeedView: View {
               LinearGradient.Border_Glass)
         })
     .onDismiss {
-      tabbarModel.tabbarOpacity = 1.0
+      tabbarModel.showTabbar()
     }
     .onChange(of: feedMoreModel.bottomSheetPosition) { newValue in
       if newValue == .hidden {
-        tabbarModel.tabbarOpacity = 1.0
+        tabbarModel.showTabbar()
       } else {
-        tabbarModel.tabbarOpacity = 0.0
+        tabbarModel.hideTabbar()
       }
     }
     .task {
       if apiViewModel.memberFeed.isEmpty {
         await apiViewModel.requestMemberPostFeed(userID: userId)
-      }
-    }
-    .navigationDestination(isPresented: $feedMoreModel.isRootStacked) {
-      if !apiViewModel.memberFeed.isEmpty {
-        ProfileView(
-          profileType:
-          apiViewModel.memberFeed[feedPlayersViewModel.currentVideoIndex].userId ?? 0 == apiViewModel.myProfile.userId
-            ? .my
-            : .member,
-          isFirstProfileLoaded: .constant(true),
-          userId: apiViewModel.memberFeed[feedPlayersViewModel.currentVideoIndex].userId ?? 0)
       }
     }
     .fullScreenCover(isPresented: $feedMoreModel.showReport, onDismiss: {

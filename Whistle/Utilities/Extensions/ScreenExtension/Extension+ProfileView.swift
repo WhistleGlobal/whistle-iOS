@@ -455,13 +455,15 @@ extension ProfileView {
       Rectangle().frame(height: 0.5).padding(.leading, 52).foregroundColor(Color.Border_Default_Dark)
       Button {
         bottomSheetPosition = .hidden
-        let shareURL = URL(
-          string: "https://readywhistle.com/profile_uni?id=\(userId)")!
-        let activityViewController = UIActivityViewController(activityItems: [shareURL], applicationActivities: nil)
-        UIApplication.shared.windows.first?.rootViewController?.present(
-          activityViewController,
-          animated: true,
-          completion: nil)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+          let shareURL = URL(
+            string: "https://readywhistle.com/profile_uni?id=\(userId)")!
+          let activityViewController = UIActivityViewController(activityItems: [shareURL], applicationActivities: nil)
+          UIApplication.shared.windows.first?.rootViewController?.present(
+            activityViewController,
+            animated: true,
+            completion: nil)
+        }
       } label: {
         bottomSheetRowWithIcon(systemName: "square.and.arrow.up", text: CommonWords().shareProfile)
       }
@@ -525,16 +527,16 @@ extension ProfileView {
       }
       Rectangle().frame(height: 0.5).padding(.leading, 52).foregroundColor(Color.Border_Default_Dark)
       Button {
-        withAnimation {
-          bottomSheetPosition = .hidden
+        bottomSheetPosition = .hidden
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+          let shareURL = URL(
+            string: "https://readywhistle.com/profile_uni?id=\(apiViewModel.myProfile.userId)")!
+          let activityViewController = UIActivityViewController(activityItems: [shareURL], applicationActivities: nil)
+          UIApplication.shared.windows.first?.rootViewController?.present(
+            activityViewController,
+            animated: true,
+            completion: nil)
         }
-        let shareURL = URL(
-          string: "https://readywhistle.com/profile_uni?id=\(apiViewModel.myProfile.userId)")!
-        let activityViewController = UIActivityViewController(activityItems: [shareURL], applicationActivities: nil)
-        UIApplication.shared.windows.first?.rootViewController?.present(
-          activityViewController,
-          animated: true,
-          completion: nil)
       } label: {
         bottomSheetRowWithIcon(systemName: "square.and.arrow.up", text: CommonWords().shareProfile)
       }
@@ -560,8 +562,7 @@ extension ProfileView {
             feedPlayersViewModel.resetPlayer()
             GIDSignIn.sharedInstance.signOut()
             userAuth.appleSignout()
-            tabbarModel.tabSelectionNoAnimation = .main
-            tabbarModel.tabSelection = .main
+            tabbarModel.switchTab(to: .main)
           }
         } label: {
           bottomSheetRow(text: CommonWords().logout, color: Color.Info)

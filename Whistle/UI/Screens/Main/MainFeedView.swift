@@ -12,7 +12,6 @@ import SwiftUI
 // MARK: - MainFeedView
 
 struct MainFeedView: View {
-
   @EnvironmentObject var universalRoutingModel: UniversalRoutingModel
   @StateObject private var apiViewModel = APIViewModel.shared
   @StateObject private var feedPlayersViewModel = MainFeedPlayersViewModel.shared
@@ -95,13 +94,13 @@ struct MainFeedView: View {
               LinearGradient.Border_Glass)
         })
     .onDismiss {
-      tabbarModel.tabbarOpacity = 1.0
+      tabbarModel.showTabbar()
     }
     .onChange(of: feedMoreModel.bottomSheetPosition) { newValue in
       if newValue == .hidden {
-        tabbarModel.tabbarOpacity = 1.0
+        tabbarModel.showTabbar()
       } else {
-        tabbarModel.tabbarOpacity = 0.0
+        tabbarModel.hideTabbar()
       }
     }
     .task {
@@ -113,9 +112,9 @@ struct MainFeedView: View {
           return
         }
       }
-//      if apiViewModel.myProfile.userName.isEmpty {
-//        await apiViewModel.requestMyProfile()
-//      }
+      //      if apiViewModel.myProfile.userName.isEmpty {
+      //        await apiViewModel.requestMyProfile()
+      //      }
       if apiViewModel.mainFeed.isEmpty {
         if universalRoutingModel.isUniversalContent {
           apiViewModel.requestUniversalFeed(contentID: universalRoutingModel.contentId) {
@@ -139,10 +138,6 @@ struct MainFeedView: View {
             .onDisappear {
               universalRoutingModel.isUniversalProfile = false
             }
-//          MemberProfileView(userId: universalRoutingModel.userId)
-//            .onDisappear {
-//              universalRoutingModel.isUniversalProfile = false
-//            }
         }
       } else {
         if !apiViewModel.mainFeed.isEmpty {
@@ -164,8 +159,8 @@ struct MainFeedView: View {
         contentId: apiViewModel.mainFeed[feedPlayersViewModel.currentVideoIndex].contentId ?? 0,
         userId: apiViewModel.mainFeed[feedPlayersViewModel.currentVideoIndex].userId ?? 0)
     }
-    .onChange(of: tabbarModel.tabSelectionNoAnimation) { _ in
-      if tabbarModel.tabSelectionNoAnimation == .main {
+    .onChange(of: tabbarModel.tabSelection) { _ in
+      if tabbarModel.tabSelection == .main {
         feedPlayersViewModel.currentPlayer?.play()
       } else {
         feedPlayersViewModel.stopPlayer()

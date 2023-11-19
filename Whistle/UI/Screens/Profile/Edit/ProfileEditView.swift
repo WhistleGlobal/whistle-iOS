@@ -108,7 +108,7 @@ struct ProfileEditView: View {
       .toolbar {
         ToolbarItem(placement: .cancellationAction) {
           Button {
-            tabbarModel.tabbarOpacity = 1.0
+            tabbarModel.showTabbar()
             toastViewModel.onFullScreenCover = false
             toastViewModel.showToast = false
             alertViewModel.onFullScreenCover = false
@@ -120,7 +120,7 @@ struct ProfileEditView: View {
         }
         ToolbarItem(placement: .confirmationAction) {
           Button {
-            tabbarModel.tabbarOpacity = 1.0
+            tabbarModel.showTabbar()
             toastViewModel.onFullScreenCover = false
             toastViewModel.showToast = false
             alertViewModel.onFullScreenCover = false
@@ -136,7 +136,7 @@ struct ProfileEditView: View {
         await apiViewModel.requestMyProfile()
       }
       .onAppear {
-        tabbarModel.tabbarOpacity = 0.0
+        tabbarModel.hideTabbar()
         getAlbumAuth()
       }
     }

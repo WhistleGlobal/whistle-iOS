@@ -74,7 +74,7 @@ struct DescriptionAndTagEditorView: View {
         Task {
           if guestUploadModel.istempAccess {
             isAccess = true
-            tabbarModel.tabbarOpacity = 1.0
+            tabbarModel.showTabbar()
           }
           UploadProgressViewModel.shared.uploadStarted()
         }
@@ -287,7 +287,7 @@ struct DescriptionAndTagEditorView: View {
       if newValue == .background {
         if guestUploadModel.istempAccess {
           isAccess = true
-          tabbarModel.tabbarOpacity = 1.0
+          tabbarModel.showTabbar()
         }
       }
     }
@@ -299,12 +299,3 @@ struct DescriptionAndTagEditorView: View {
     }
   }
 }
-
-//
-// #Preview {
-//  DescriptionAndTagEditorView(
-//    editorVM: VideoEditorViewModel(),
-//    videoPlayer: VideoPlayerManager(),
-//    musicVM: MusicViewModel(),
-//    isInitial: .constant(false))
-// }

@@ -78,12 +78,8 @@ struct MyFollowListView: View {
     .background(.backgroundDefault)
     .toolbarBackground(.hidden, for: .navigationBar)
     .toolbarRole(.editor)
-    .toolbar {
-      ToolbarItem(placement: .principal) {
-        Text("\(apiViewModel.myProfile.userName)")
-          .fontSystem(fontDesignSystem: .subtitle2)
-      }
-    }
+    .navigationTitle(Text("\(apiViewModel.myProfile.userName)"))
+    .navigationBarTitleDisplayMode(.inline)
     .task {
       await apiViewModel.requestMyFollow()
     }

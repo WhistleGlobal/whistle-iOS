@@ -8,12 +8,39 @@
 import Foundation
 import UIKit
 
-struct NavigationUtil {
+extension UIApplication {
+  class func topNavigationController(
+    viewController: UIViewController? = UIApplication.shared.windows.filter { $0.isKeyWindow }.first?.rootViewController)
+    -> UINavigationController?
+  {
+    if let nav = viewController as? UINavigationController {
+      return nav
+    }
+    if let tab = viewController as? UITabBarController {
+      if let selected = tab.selectedViewController {
+        return selected.children.first! as? UINavigationController
+      }
+    }
+    guard let viewController else {
+      return nil
+    }
+    for childViewController in viewController.children {
+      return topNavigationController(
+        viewController:
+        childViewController)
+    }
+    return nil
+  }
+}
+
+// MARK: - NavigationUtil
+
+enum NavigationUtil {
   static func popToRootView() {
     DispatchQueue.main.asyncAfter(deadline: .now()) {
       findNavigationController(
         viewController:
-        UIApplication.shared.windows.filter { $0.isKeyWindow }.first?.rootViewController)?
+        UIApplication.topNavigationController())?
         .popToRootViewController(animated: true)
     }
   }

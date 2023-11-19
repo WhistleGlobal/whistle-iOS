@@ -104,7 +104,7 @@ struct MyContentPlayerView: View {
                 .overlay {
                   ContentGradientLayer()
                     .allowsHitTesting(false)
-                  if tabbarModel.tabWidth != 56 {
+                  if !tabbarModel.isCollpased() {
                     ContentLayer(
                       currentVideoInfo: content,
                       feedMoreModel: MyFeedMoreModel.shared,
@@ -183,7 +183,7 @@ struct MyContentPlayerView: View {
       feedPlayersViewModel.stopPlayer()
     }
     .ignoresSafeArea()
-    .onChange(of: tabbarModel.tabSelectionNoAnimation) { newValue in
+    .onChange(of: tabbarModel.tabSelection) { newValue in
       if newValue == .main {
         feedPlayersViewModel.currentPlayer?.seek(to: .zero)
         feedPlayersViewModel.currentPlayer?.play()

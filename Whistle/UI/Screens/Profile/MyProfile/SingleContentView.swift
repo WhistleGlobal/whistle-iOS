@@ -70,7 +70,7 @@ struct SingleContentView: View {
             .overlay {
               ContentGradientLayer()
                 .allowsHitTesting(false)
-              if tabbarModel.tabWidth != 56 {
+              if !tabbarModel.isCollpased() {
                 SingleContentLayer(
                   currentVideoInfo: apiViewModel.singleContent,
                   bottomSheetPosition: $bottomSheetPosition)
@@ -201,13 +201,13 @@ struct SingleContentView: View {
               LinearGradient.Border_Glass)
         })
     .onDismiss {
-      tabbarModel.tabbarOpacity = 1.0
+      tabbarModel.showTabbar()
     }
     .onChange(of: bottomSheetPosition) { newValue in
       if newValue == .hidden {
-        tabbarModel.tabbarOpacity = 1.0
+        tabbarModel.showTabbar()
       } else {
-        tabbarModel.tabbarOpacity = 0.0
+        tabbarModel.hideTabbar()
       }
     }
   }
