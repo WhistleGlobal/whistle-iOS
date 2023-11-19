@@ -39,6 +39,7 @@ struct ProfileView: View {
   @State var goNotiSetting = false
   @State var goLegalInfo = false
   @State var goGuideStatus = false
+  @State var goWhistleRanking = false
   @State var tabSelection: profileTabCase = .myVideo
   @State var profileType: ProfileType = .my
   @State var offsetY: CGFloat = 0

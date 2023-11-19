@@ -51,6 +51,13 @@ extension ProfileView {
         EmptyView()
       }
       .id(UUID())
+      NavigationLink(
+        destination: WhistleRankingView(),
+        isActive: $goWhistleRanking)
+      {
+        EmptyView()
+      }
+      .id(UUID())
     }
   }
 
@@ -128,16 +135,20 @@ extension ProfileView {
         }
         // Whistle or Follow count
         HStack(spacing: 0) {
-          VStack(spacing: 4) {
-            Text(
-              "\(apiViewModel.memberProfile.isBlocked ? 0 : (profileType == .my ? apiViewModel.myWhistleCount : apiViewModel.memberWhistleCount))")
-              .foregroundColor(Color.LabelColor_Primary_Dark)
-              .fontSystem(fontDesignSystem: .title2_Expanded)
-            Text(CommonWords().whistle)
-              .foregroundColor(Color.LabelColor_Secondary_Dark)
-              .fontSystem(fontDesignSystem: .caption_SemiBold)
+          Button {
+            goWhistleRanking = true
+          } label: {
+            VStack(spacing: 4) {
+              Text(
+                "\(apiViewModel.memberProfile.isBlocked ? 0 : (profileType == .my ? apiViewModel.myWhistleCount : apiViewModel.memberWhistleCount))")
+                .foregroundColor(Color.LabelColor_Primary_Dark)
+                .fontSystem(fontDesignSystem: .title2_Expanded)
+              Text(CommonWords().whistle)
+                .foregroundColor(Color.LabelColor_Secondary_Dark)
+                .fontSystem(fontDesignSystem: .caption_SemiBold)
+            }
+            .hCenter()
           }
-          .hCenter()
           Rectangle().frame(width: 1).foregroundColor(.white).scaleEffect(0.5)
           NavigationLink {
             if profileType == .my {
