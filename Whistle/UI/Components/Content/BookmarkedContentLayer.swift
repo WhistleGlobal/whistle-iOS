@@ -142,7 +142,7 @@ struct BookmarkedContentLayer: View {
               }
             } label: {
               ContentLayerButton(
-                type: .whistle(currentVideoInfo.whistleCount.roundedWithAbbreviations),
+                type: .whistle(currentVideoInfo.whistleCount),
                 isFilled: $currentVideoInfo.isWhistled)
             }
             Button {

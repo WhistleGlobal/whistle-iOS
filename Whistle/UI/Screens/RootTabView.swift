@@ -19,8 +19,6 @@ import VideoPicker
 struct RootTabView: View {
   @AppStorage("showGuide") var showGuide = true
   @AppStorage("isAccess") var isAccess = false
-  @AppStorage("isMyTeamSelectPassed") var isMyTeamSelectPassed = false
-
   @State var isFirstProfileLoaded = true
   @State var mainOpacity = 1.0
   @State var isRootStacked = false
@@ -57,26 +55,18 @@ struct RootTabView: View {
       guideView
       if isAccess {
         NavigationStack {
-          if
-            !isMyTeamSelectPassed,
-            apiViewModel.myProfile.myTeam == nil,
-            !apiViewModel.myProfile.userName.isEmpty
-          {
-            MyTeamSelectView()
-          } else {
-            MainFeedView()
-              .environmentObject(universalRoutingModel)
-          }
+          MainFeedView()
+            .environmentObject(universalRoutingModel)
         }
-        .tint(bartintModel.tintColor)
+        .tint(Color.labelColorPrimary)
       } else {
         GuestMainFeedView()
-          .onChange(of: tabbarModel.tabSelection) { newValue in
+          .onChange(of: tabbarModel.tabSelectionNoAnimation) { newValue in
             mainOpacity = newValue == .main ? 1 : 0
           }
       }
 
-      switch tabbarModel.tabSelection {
+      switch tabbarModel.tabSelectionNoAnimation {
       case .main, .upload:
         Color.clear
 
@@ -150,12 +140,12 @@ struct RootTabView: View {
       .onReceive(NavigationModel.shared.$navigate, perform: { _ in
         if UploadProgressViewModel.shared.isUploading {
           tabbarModel.tabSelection = .main
-          tabbarModel.tabSelection = .main
+          tabbarModel.tabSelectionNoAnimation = .main
           tabbarModel.showVideoCaptureView = false
         }
 //        else {
 //            tabbarModel.tabSelection = tabbarModel.prevTabSelection ?? .main
-//            tabbarModel.tabSelection = tabbarModel.prevTabSelection ?? .main
+//            tabbarModel.tabSelectionNoAnimation = tabbarModel.prevTabSelection ?? .main
 //          }
 //        }
       })
@@ -166,7 +156,7 @@ struct RootTabView: View {
       }
     }
     .fullScreenCover(isPresented: $tabbarModel.showVideoCaptureView, onDismiss: {
-      if tabbarModel.tabSelection == .main {
+      if tabbarModel.tabSelectionNoAnimation == .main {
         feedPlayersViewModel.currentPlayer?.play()
       }
     }) {
@@ -319,7 +309,7 @@ struct RootTabView: View {
       PrivacyPolicyView()
     }
     .navigationBarBackButtonHidden()
-    .onChange(of: tabbarModel.tabSelection) { _ in
+    .onChange(of: tabbarModel.tabSelectionNoAnimation) { _ in
       apiViewModel.publisherSend()
     }
   }
@@ -334,7 +324,7 @@ extension RootTabView {
   func tabItems() -> some View {
     HStack(spacing: 0) {
       Button {
-        if tabbarModel.tabSelection == .main {
+        if tabbarModel.tabSelectionNoAnimation == .main {
           if isAccess {
             HapticManager.instance.impact(style: .medium)
             NavigationUtil.popToRootView()
@@ -366,7 +356,7 @@ extension RootTabView {
         checkAllPermissions()
         tabbarModel.showVideoCaptureView = true
         tabbarModel.tabSelection = .upload
-        tabbarModel.tabSelection = .upload
+        tabbarModel.tabSelectionNoAnimation = .upload
       } label: {
         Capsule()
           .fill(Color.Dim_Thin)
@@ -399,13 +389,11 @@ extension RootTabView {
 
   @ViewBuilder
   var guideView: some View {
-    if showGuide, isMyTeamSelectPassed {
+    if showGuide {
       ZStack {
-        Color.clear.overlay {
-          Image("gestureGuide")
-            .resizable()
-            .scaledToFill()
-        }
+        Image("gestureGuide")
+          .resizable()
+          .scaledToFill()
         VStack {
           Spacer()
           Button {
@@ -446,7 +434,7 @@ extension RootTabView {
 extension RootTabView {
   var profileTabClicked: () -> Void {
     {
-      if tabbarModel.tabSelection == .profile {
+      if tabbarModel.tabSelectionNoAnimation == .profile {
         switchTab(to: .profile)
         HapticManager.instance.impact(style: .medium)
         Task {
@@ -487,9 +475,9 @@ extension RootTabView {
     if tabbarModel.prevTabSelection == nil {
       tabbarModel.prevTabSelection = .main
     } else {
-      tabbarModel.prevTabSelection = tabbarModel.tabSelection
+      tabbarModel.prevTabSelection = tabbarModel.tabSelectionNoAnimation
     }
-    tabbarModel.tabSelection = tabSelection
+    tabbarModel.tabSelectionNoAnimation = tabSelection
     tabbarModel.tabSelection = tabSelection
   }
 }

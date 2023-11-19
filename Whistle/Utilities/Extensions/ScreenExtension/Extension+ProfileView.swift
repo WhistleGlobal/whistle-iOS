@@ -37,177 +37,246 @@ extension ProfileView {
         EmptyView()
       }
       .id(UUID())
-      NavigationLink(
-        destination: MyTeamSelectView(),
-        isActive: $goMyTeamSelect)
-      {
-        EmptyView()
-      }
-      .id(UUID())
-      NavigationLink(
-        destination: MyTeamSkinSettingView(),
-        isActive: $goMyTeamSkinSelect)
-      {
-        EmptyView()
-      }
-      .id(UUID())
-      NavigationLink(
-        destination: WhistleRankingView(),
-        isActive: $goWhistleRanking)
-      {
-        EmptyView()
-      }
-      .id(UUID())
     }
   }
 
-  // MARK: - MyTeam
   @ViewBuilder
   func profileCardLayer() -> some View {
-    ZStack {
-      if let myTeam: String = {
-        if profileType == .my {
-          return apiViewModel.myProfile.myTeam
-        } else {
-          return apiViewModel.memberProfile.myTeam
-        }
-      }() {
-        if isMyTeamBackgroundOn {
-          MyTeamType.teamProfile(myTeam)
-            .resizable()
-            .scaledToFit()
-        }
-        if isMyTeamLabelOn {
-          MyTeamType.teamLabel(myTeam)
-            .resizable()
-            .scaledToFit()
+    VStack(spacing: 0) {
+      // TopSpacing
+      if UIDevice.current.userInterfaceIdiom == .phone {
+        switch UIScreen.main.nativeBounds.height {
+        case 1334: // iPhone SE 3rd generation
+          Spacer().frame(height: topSpacerHeightSE + 20)
+        default:
+          Spacer().frame(height: UIScreen.getHeight(64))
         }
       }
-
-      VStack(spacing: 0) {
-        // TopSpacing
-        if UIDevice.current.userInterfaceIdiom == .phone {
-          switch UIScreen.main.nativeBounds.height {
-          case 1334: // iPhone SE 3rd generation
-            Spacer().frame(height: topSpacerHeightSE + 20)
-          default:
-            Spacer().frame(height: UIScreen.getHeight(64))
+      // Profile Image
+      profileImageView(
+        url: profileType == .my
+          ? apiViewModel.myProfile.profileImage
+          : apiViewModel.memberProfile.profileImg,
+        size: UIScreen.getHeight(profileImageSize))
+        .padding(.bottom, UIScreen.getHeight(16))
+      // userName
+      Text(
+        profileType == .my
+          ? apiViewModel.myProfile.userName
+          : apiViewModel.memberProfile.userName)
+        .foregroundColor(Color.LabelColor_Primary_Dark)
+        .fontSystem(fontDesignSystem: .title2_Expanded)
+        .offset(y: usernameOffset)
+        .padding(.bottom, UIScreen.getHeight(4))
+      // intruduce
+      if profileType == .my {
+        introduceText(text: apiViewModel.myProfile.introduce ?? "")
+      } else if profileType == .member {
+        introduceText(text: apiViewModel.memberProfile.introduce ?? "")
+      }
+      // Edit button or Follow Button
+      if profileType == .my {
+        Button {
+          showProfileEditView = true
+        } label: {
+          Text(ProfileEditWords().edit)
+            .font(.system(size: 16, weight: .semibold)) // subtitle 2
+            .foregroundColor(Color.LabelColor_Primary_Dark)
+            .scaleEffect(profileEditButtonScale)
+            .frame(
+              width: UIScreen.getWidth(profileEditButtonWidth),
+              height: UIScreen.getHeight(profileEditButtonHeight))
+        }
+        .frame(width: UIScreen.getWidth(profileEditButtonWidth), height: UIScreen.getHeight(profileEditButtonHeight))
+        .padding(.bottom, UIScreen.getHeight(24))
+        .buttonStyle(ProfileEditButtonStyle())
+      } else {
+        memberFollowBlockButton()
+      }
+      // Whistle or Follow count
+      HStack(spacing: 0) {
+        VStack(spacing: 4) {
+          Text(
+            "\(apiViewModel.memberProfile.isBlocked ? 0 : (profileType == .my ? apiViewModel.myWhistleCount : apiViewModel.memberWhistleCount))")
+            .foregroundColor(Color.LabelColor_Primary_Dark)
+            .fontSystem(fontDesignSystem: .title2_Expanded)
+            .scaleEffect(whistleFollowerTextScale)
+          Text(CommonWords().whistle)
+            .foregroundColor(Color.LabelColor_Secondary_Dark)
+            .fontSystem(fontDesignSystem: .caption_SemiBold)
+            .scaleEffect(whistleFollowerTextScale)
+        }
+        .hCenter()
+        Rectangle().frame(width: 1).foregroundColor(.white).scaleEffect(0.5)
+        NavigationLink {
+          if profileType == .my {
+            MyFollowListView()
+          } else {
+            MemberFollowListView(userName: apiViewModel.memberProfile.userName, userId: userId)
           }
-        }
-        // Profile Image
-        profileImageView(
-          url: profileType == .my
-            ? apiViewModel.myProfile.profileImage
-            : apiViewModel.memberProfile.profileImg,
-          size: UIScreen.getHeight(100))
-          .padding(.bottom, UIScreen.getHeight(16))
-        // userName
-        Text(
-          profileType == .my
-            ? apiViewModel.myProfile.userName
-            : apiViewModel.memberProfile.userName)
-          .foregroundColor(Color.LabelColor_Primary_Dark)
-          .fontSystem(fontDesignSystem: .title2_Expanded)
-          .padding(.bottom, UIScreen.getHeight(4))
-        // intruduce
-        if profileType == .my {
-          introduceText(text: apiViewModel.myProfile.introduce ?? "")
-        } else if profileType == .member {
-          introduceText(text: apiViewModel.memberProfile.introduce ?? "")
-        }
-        // Edit button or Follow Button
-        if profileType == .my {
-          Button {
-            showProfileEditView = true
-          } label: {
-            Text(ProfileEditWords().edit)
-              .font(.system(size: 16, weight: .semibold)) // subtitle 2
+        } label: {
+          VStack(spacing: 4) {
+            Text("\(apiViewModel.memberProfile.isBlocked ? 0 : filteredFollower.count)")
               .foregroundColor(Color.LabelColor_Primary_Dark)
-              .frame(
-                width: UIScreen.getWidth(114),
-                height: UIScreen.getHeight(36))
+              .fontSystem(fontDesignSystem: .title2_Expanded)
+              .scaleEffect(whistleFollowerTextScale)
+            Text(CommonWords().follower)
+              .foregroundColor(Color.LabelColor_Secondary_Dark)
+              .fontSystem(fontDesignSystem: .caption_SemiBold)
+              .scaleEffect(whistleFollowerTextScale)
           }
-          .frame(width: UIScreen.getWidth(114), height: UIScreen.getHeight(36))
-          .padding(.bottom, UIScreen.getHeight(24))
-          .buttonStyle(ProfileEditButtonStyle())
-        } else {
-          memberFollowBlockButton()
+          .hCenter()
         }
-        // Whistle or Follow count
-        HStack(spacing: 0) {
-          Button {
-            goWhistleRanking = true
-          } label: {
-            VStack(spacing: 4) {
-              Text(
-                "\(apiViewModel.memberProfile.isBlocked ? 0 : (profileType == .my ? apiViewModel.myWhistleCount : apiViewModel.memberWhistleCount))")
-                .foregroundColor(Color.LabelColor_Primary_Dark)
-                .fontSystem(fontDesignSystem: .title2_Expanded)
-              Text(CommonWords().whistle)
-                .foregroundColor(Color.LabelColor_Secondary_Dark)
-                .fontSystem(fontDesignSystem: .caption_SemiBold)
-            }
-            .hCenter()
-          }
-          Rectangle().frame(width: 1).foregroundColor(.white).scaleEffect(0.5)
-          NavigationLink {
-            if profileType == .my {
-              MyFollowListView()
-            } else {
-              MemberFollowListView(userName: apiViewModel.memberProfile.userName, userId: userId)
-            }
-          } label: {
-            VStack(spacing: 4) {
-              Text("\(apiViewModel.memberProfile.isBlocked ? 0 : filteredFollower.count)")
-                .foregroundColor(Color.LabelColor_Primary_Dark)
-                .fontSystem(fontDesignSystem: .title2_Expanded)
-              Text(CommonWords().follower)
-                .foregroundColor(Color.LabelColor_Secondary_Dark)
-                .fontSystem(fontDesignSystem: .caption_SemiBold)
-            }
-            .hCenter()
-          }
-          .id(UUID())
-        }
-        .frame(height: UIScreen.getHeight(54))
-        .padding(.bottom, UIScreen.getHeight(32))
+        .id(UUID())
       }
-      .fullScreenCover(isPresented: $showProfileEditView) {
-        NavigationView {
-          ProfileEditView()
-        }
-      }
-      .frame(height: UIScreen.getHeight(418))
-      .frame(maxWidth: .infinity)
+      .frame(height: UIScreen.getHeight(whistleFollowerTabHeight))
+      .padding(.bottom, UIScreen.getHeight(32))
     }
+    .fullScreenCover(isPresented: $showProfileEditView) {
+      NavigationView {
+        ProfileEditView()
+      }
+    }
+    .frame(height: UIScreen.getHeight(418 + (240 * progress)))
+    .frame(maxWidth: .infinity)
+    .overlay {
+      VStack(spacing: 0) {
+        HStack {
+          if profileType == .my, isFirstStack {
+            NavigationLink {
+              NotificationListView()
+            } label: {
+              Circle()
+                .foregroundColor(.Gray_Default)
+                .frame(width: 48, height: 48)
+                .overlay {
+                  Image(systemName: "bell")
+                    .resizable()
+                    .scaledToFit()
+                    .foregroundColor(Color.white)
+                    .fontWeight(.semibold)
+                    .frame(width: 20, height: 20)
+                }
+            }
+            .id(UUID())
+            .offset(
+              y: UIScreen.main.nativeBounds.height == 1334
+                ? UIScreen.getHeight(20 - topSpacerHeightSE)
+                : UIScreen.getHeight(64 - topSpacerHeight))
+              .padding(.horizontal, 16 - profileHorizontalPadding)
+          } else {
+            Button {
+              dismiss()
+            } label: {
+              Image(systemName: "chevron.left")
+                .foregroundColor(.white)
+                .fontWeight(.semibold)
+                .frame(width: 48, height: 48)
+                .background(
+                  Circle()
+                    .foregroundColor(.Gray_Default)
+                    .frame(width: 48, height: 48))
+            }
+            .offset(
+              y: UIScreen.main.nativeBounds.height == 1334
+                ? UIScreen.getHeight(20 - topSpacerHeightSE)
+                : UIScreen.getHeight(64 - topSpacerHeight))
+              .padding(.horizontal, 16 - profileHorizontalPadding)
+          }
+
+          Spacer()
+          Button {
+            withAnimation {
+              bottomSheetPosition = .dynamic
+            }
+          } label: {
+            Circle()
+              .foregroundColor(.Gray_Default)
+              .frame(width: 48, height: 48)
+              .overlay {
+                Image(systemName: "ellipsis")
+                  .resizable()
+                  .scaledToFit()
+                  .foregroundColor(Color.white)
+                  .fontWeight(.semibold)
+                  .frame(width: 20, height: 20)
+              }
+          }
+          .offset(
+            y: UIScreen.main.nativeBounds.height == 1334
+              ? UIScreen.getHeight(20 - topSpacerHeightSE)
+              : UIScreen.getHeight(64 - topSpacerHeight))
+            .padding(.horizontal, 16 - profileHorizontalPadding)
+        }
+        Spacer()
+      }
+      .padding(16)
+    }
+  }
+
+  @ViewBuilder
+  func videoThumbnailView(thumbnailUrl: String, whistleCount: Int, isHated: Bool = false) -> some View {
+    Color.black.overlay {
+      KFImage.url(URL(string: thumbnailUrl))
+        .placeholder { // 플레이스 홀더 설정
+          Color.black
+        }
+        .resizable()
+        .scaledToFit()
+        .blur(radius: isHated ? 30 : 0, opaque: false)
+        .scaleEffect(isHated ? 1.3 : 1)
+        .overlay {
+          if isHated {
+            Image(systemName: "eye.slash.fill")
+              .font(.system(size: 30))
+              .foregroundColor(.Gray10)
+          }
+        }
+      VStack {
+        Spacer()
+        HStack(spacing: 4) {
+          Image(systemName: "heart.fill")
+            .font(.system(size: 16))
+            .foregroundColor(.Danger)
+          Text("\(whistleCount)")
+            .fontSystem(fontDesignSystem: .caption_SemiBold)
+            .foregroundColor(Color.LabelColor_Primary_Dark)
+        }
+        .padding(.bottom, 8.5)
+        .padding(.leading, 8)
+        .frame(maxWidth: .infinity, alignment: .leading)
+      }
+    }
+    .frame(width: UIScreen.getWidth(204 * 9 / 16), height: UIScreen.getHeight(204))
+    .cornerRadius(12)
   }
 
   @ViewBuilder
   func listEmptyView() -> some View {
-    VStack(spacing: 0) {
-      Spacer().frame(height: UIScreen.getHeight(90))
-      Text(ContentWords().noUploadedContent).fontSystem(fontDesignSystem: .body1)
-        .foregroundColor(.LabelColor_Primary_Dark)
-      Button {
-        tabbarModel.showVideoCaptureView = true
-      } label: {
-        Text(ContentWords().goUpload)
-          .fontSystem(fontDesignSystem: .subtitle2)
-          .foregroundColor(Color.LabelColor_Primary_Dark)
-          .frame(width: 142, height: 36)
-      }
-      .buttonStyle(ProfileEditButtonStyle())
+    Spacer()
+    Text(ContentWords().noUploadedContent).fontSystem(fontDesignSystem: .body1)
+      .foregroundColor(.LabelColor_Primary_Dark)
+    Button {
+      tabbarModel.showVideoCaptureView = true
+    } label: {
+      Text(ContentWords().goUpload)
+        .fontSystem(fontDesignSystem: .subtitle2)
+        .foregroundColor(Color.LabelColor_Primary_Dark)
+        .frame(width: 142, height: 36)
     }
+    .buttonStyle(ProfileEditButtonStyle())
+    .padding(.bottom, 76)
+    Spacer()
   }
 
   @ViewBuilder
   func bookmarkEmptyView() -> some View {
-    VStack(spacing: 0) {
-      Spacer().frame(height: UIScreen.getHeight(90))
-      Text(ContentWords().noBookmarkedContent)
-        .fontSystem(fontDesignSystem: .body1)
-        .foregroundColor(.LabelColor_Primary_Dark)
-    }
+    Spacer()
+    Text(ContentWords().noBookmarkedContent)
+      .fontSystem(fontDesignSystem: .body1)
+      .foregroundColor(.LabelColor_Primary_Dark)
+      .padding(.bottom, 64)
+    Spacer()
   }
 
   @ViewBuilder
@@ -232,7 +301,8 @@ extension ProfileView {
       .truncationMode(.tail)
       .multilineTextAlignment(.center)
       .fixedSize(horizontal: false, vertical: true)
-      .frame(height: UIScreen.getHeight(20))
+      .scaleEffect(introduceScale)
+      .frame(height: UIScreen.getHeight(introduceHeight))
       .padding(.top, text.isEmpty ? 0 : UIScreen.getHeight(16))
       .padding(.bottom, UIScreen.getHeight(16))
       .padding(.bottom, UIScreen.getHeight(8))
@@ -295,7 +365,8 @@ extension ProfileView {
         }
       }
       .buttonStyle(FollowButtonStyle(isFollowed: $apiViewModel.memberProfile.isFollowed))
-      .frame(width: UIScreen.getWidth(114), height: UIScreen.getHeight(36))
+      .frame(width: UIScreen.getWidth(profileEditButtonWidth), height: UIScreen.getHeight(profileEditButtonHeight))
+      .scaleEffect(profileEditButtonScale)
       .opacity(isProfileLoaded ? 1 : 0)
       .disabled(userId == apiViewModel.myProfile.userId)
       .padding(.bottom, UIScreen.getHeight(24))
@@ -448,21 +519,6 @@ extension ProfileView {
       }
       Rectangle().frame(height: 0.5).padding(.leading, 52).foregroundColor(Color.Border_Default_Dark)
       Button {
-        bottomSheetPosition = .hidden
-        goMyTeamSelect = true
-      } label: {
-        bottomSheetRowWithIcon(systemName: "person.badge.shield.checkmark.fill", text: ProfileEditWords().myTeamSelect)
-      }
-      Rectangle().frame(height: 0.5).padding(.leading, 52).foregroundColor(Color.Border_Default_Dark)
-      Button {
-        bottomSheetPosition = .hidden
-        goMyTeamSkinSelect = true
-      } label: {
-        bottomSheetRowWithIcon(systemName: "wand.and.stars", text: ProfileEditWords().myTeamSkinSelect)
-      }
-      Rectangle().frame(height: 0.5).padding(.leading, 52).foregroundColor(Color.Border_Default_Dark)
-
-      Button {
         goLegalInfo = true
       } label: {
         bottomSheetRowWithIcon(systemName: "info.circle.fill", text: CommonWords().about)
@@ -504,7 +560,7 @@ extension ProfileView {
             feedPlayersViewModel.resetPlayer()
             GIDSignIn.sharedInstance.signOut()
             userAuth.appleSignout()
-            tabbarModel.tabSelection = .main
+            tabbarModel.tabSelectionNoAnimation = .main
             tabbarModel.tabSelection = .main
           }
         } label: {
@@ -536,33 +592,8 @@ extension ProfileView {
       }
       Spacer()
     }
-    .frame(height: 578)
+    .frame(height: 420)
   }
-
-  @ViewBuilder
-  func profileDefaultBackground() -> some View {
-    Color.clear.overlay {
-      if let url = profileUrl, !url.isEmpty {
-        KFImage.url(URL(string: url))
-          .placeholder { _ in
-            Image("BlurredDefaultBG")
-              .resizable()
-              .scaledToFill()
-              .ignoresSafeArea()
-          }
-          .resizable()
-          .setProcessor(processor)
-          .scaledToFill()
-          .scaleEffect(2.0)
-      } else {
-        Image("BlurredDefaultBG")
-          .resizable()
-          .scaledToFill()
-          .ignoresSafeArea()
-      }
-    }
-  }
-
 }
 
 // MARK: - Sticky Header Computed Properties

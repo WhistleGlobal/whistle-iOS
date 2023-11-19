@@ -38,10 +38,6 @@ class APIViewModel: ObservableObject {
   @Published var versionCheck = VersionCheck()
   @Published var notiList: [NotificationModel] = []
   @Published var singleContent = MainContent()
-  @Published var searchedUser: [SearchedUser] = []
-  @Published var searchedTag: [SearchedTag] = []
-  @Published var searchedContent: [MainContent] = []
-  @Published var tagSearchedRecentContent: [MainContent] = []
 
   let decoder = JSONDecoder()
 
@@ -62,9 +58,6 @@ class APIViewModel: ObservableObject {
     userCreatedDate = ""
     notiList = []
     singleContent = MainContent()
-    searchedUser = []
-    searchedTag = []
-    searchedContent = []
   }
 }
 

@@ -793,7 +793,7 @@ extension VideoCaptureView {
               }
               Task {
                 UploadProgressViewModel.shared.uploadStarted()
-                tabbarModel.tabSelection = .main
+                tabbarModel.tabSelectionNoAnimation = .main
                 tabbarModel.tabSelection = .main
                 alertViewModel.onFullScreenCover = false
               }

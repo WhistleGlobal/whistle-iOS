@@ -36,7 +36,7 @@ class Bookmark: ObservableObject, Codable, Hashable {
   var thumbnailUrl = ""
   var musicArtist: String?
   var musicTitle: String?
-  var hashtags: [String]?
+  var hashtags: [String] = []
   var whistleCount = 0
   var viewCount = 0
   var isWhistled = false

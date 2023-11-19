@@ -205,7 +205,6 @@ class PhotoCollection: NSObject, ObservableObject {
     }
   }
 
-
   func fetchAssetsInAlbum(albumName: String) async {
     // 먼저 앨범 이름을 사용하여 앨범을 찾습니다.
     let albumOptions = PHFetchOptions()

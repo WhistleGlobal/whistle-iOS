@@ -8,7 +8,6 @@
 import AVFoundation
 import BottomSheet
 import SwiftUI
-import TagKit
 
 // MARK: - ContentLayer
 
@@ -27,7 +26,6 @@ struct ContentLayer<
   let whistleAction: () -> Void
   var dismissAction: DismissAction? = nil
   @State var isExpanded = false
-  @State var userId = 0
   @State var whistleCount = 0
   @State var profileImg = ""
   @State var username = ""
@@ -35,7 +33,6 @@ struct ContentLayer<
   @State var isWhistled = false
   @State var isBookmarked = false
   @State var caption = ""
-  @State var hashtags: [String] = []
   @State var musicTitle = ""
   var index: Binding<Int>?
 
@@ -55,7 +52,18 @@ struct ContentLayer<
           VStack(alignment: .leading, spacing: 0) {
             Spacer()
             HStack(spacing: 0) {
-              userNameAndProfile
+              Button {
+                navigateToProfile()
+              } label: {
+                Group {
+                  profileImageView(url: profileImg, size: 36)
+                    .padding(.trailing, UIScreen.getWidth(4))
+                  Text(username)
+                    .foregroundColor(.white)
+                    .fontSystem(fontDesignSystem: .subtitle1)
+                    .padding(.trailing, 16)
+                }
+              }
               if username != apiViewModel.myProfile.userName {
                 Button {
                   follow()
@@ -80,24 +88,13 @@ struct ContentLayer<
                 .foregroundColor(.white)
                 .lineLimit(isExpanded ? nil : 2)
                 .multilineTextAlignment(.leading)
-                .frame(maxWidth: .infinity, alignment: .leading)
                 .onTapGesture {
                   withAnimation {
                     isExpanded.toggle()
                   }
                 }
+                .padding(.bottom, 12)
             }
-            TagList(tags: hashtags,horizontalSpacing: 0, verticalSpacing: 0) { tag in
-              NavigationLink {
-                TagResultView(tagText: tag)
-              } label: {
-                Text("#\(tag)  ")
-                  .fontSystem(fontDesignSystem: .subtitle3)
-                  .foregroundColor(.LabelColor_Primary_Dark)
-              }
-              .id(UUID())
-            }
-            .padding(.bottom, 8)
             HStack(spacing: 8) {
               Image(systemName: "music.note")
                 .font(.system(size: 16))
@@ -118,7 +115,7 @@ struct ContentLayer<
               whistle()
             } label: {
               ContentLayerButton(
-                type: .whistle(whistleCount.roundedWithAbbreviations),
+                type: .whistle(whistleCount),
                 isFilled: $isWhistled)
             }
             .buttonStyle(PressEffectButtonStyle())
@@ -199,6 +196,10 @@ struct ContentLayer<
     }
     guard let playersViewModel = feedPlayersViewModel as? PlayersViewModel else {
       return
+    }
+
+    if feedMoreModel is MainFeedMoreModel || feedMoreModel is BookmarkedFeedMoreModel {
+      feedMoreModel.isRootStacked = true
     }
     playersViewModel.stopPlayer()
     if playersViewModel is MemeberPlayersViewModel || playersViewModel is MyFeedPlayersViewModel {
@@ -281,14 +282,12 @@ struct ContentLayer<
 
     for contentInfo in commonInfo {
       whistleCount = contentInfo.whistleCount
-      userId = contentInfo.userId ?? 0
       profileImg = contentInfo.profileImg ?? ""
       username = contentInfo.userName ?? ""
       isFollowed = contentInfo.isFollowed
       isWhistled = contentInfo.isWhistled
       isBookmarked = contentInfo.isBookmarked
       caption = contentInfo.caption ?? ""
-      hashtags = contentInfo.hashtags ?? []
       musicTitle = contentInfo.musicTitle ?? "원본 오디오"
     }
   }
@@ -306,7 +305,6 @@ protocol ContentInfo {
   var isWhistled: Bool { get set }
   var isBookmarked: Bool { get set }
   var caption: String? { get }
-  var hashtags: [String]? { get }
   var musicTitle: String? { get }
 }
 
@@ -350,14 +348,6 @@ extension MyFeedMoreModel: FeedMoreModel { }
 
 extension BookmarkedFeedMoreModel: FeedMoreModel { }
 
-// MARK: - SearchFeedMoreModel + FeedMoreModel
-
-extension SearchFeedMoreModel: FeedMoreModel { }
-
-// MARK: - TagSearchFeedMoreModel + FeedMoreModel
-
-extension TagSearchFeedMoreModel: FeedMoreModel { }
-
 // MARK: - PlayersViewModel
 
 protocol PlayersViewModel {
@@ -383,51 +373,3 @@ extension MyFeedPlayersViewModel: PlayersViewModel { }
 // MARK: - BookmarkedPlayersViewModel + PlayersViewModel
 
 extension BookmarkedPlayersViewModel: PlayersViewModel { }
-
-// MARK: - SearchPlayersViewModel + PlayersViewModel
-
-extension SearchPlayersViewModel: PlayersViewModel { }
-
-// MARK: - TagSearchPlayersViewModel + PlayersViewModel
-
-extension TagSearchPlayersViewModel: PlayersViewModel { }
-
-extension ContentLayer {
-  @ViewBuilder
-  var userNameAndProfile: some View {
-    if
-      feedMoreModel is MainFeedMoreModel || feedMoreModel is BookmarkedFeedMoreModel ||
-      feedMoreModel is TagSearchFeedMoreModel
-    {
-      NavigationLink {
-        ProfileView(
-          profileType: userId == apiViewModel.myProfile.userId ? .my : .member,
-          isFirstProfileLoaded: .constant(true),
-          userId: userId)
-      } label: {
-        Group {
-          profileImageView(url: profileImg, size: 36)
-            .padding(.trailing, UIScreen.getWidth(4))
-          Text(username)
-            .foregroundColor(.white)
-            .fontSystem(fontDesignSystem: .subtitle1)
-            .padding(.trailing, 16)
-        }
-      }
-      .id(UUID())
-    } else {
-      Button {
-        navigateToProfile()
-      } label: {
-        Group {
-          profileImageView(url: profileImg, size: 36)
-            .padding(.trailing, UIScreen.getWidth(4))
-          Text(username)
-            .foregroundColor(.white)
-            .fontSystem(fontDesignSystem: .subtitle1)
-            .padding(.trailing, 16)
-        }
-      }
-    }
-  }
-}
