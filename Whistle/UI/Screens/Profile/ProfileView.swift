@@ -367,6 +367,7 @@ struct ProfileView: View {
       }
       .padding(16)
       .padding(.top, 16)
+      .offset(y: offsetY > 0 ? offsetY : 0)
     }
     .gesture(DragGesture().updating($dragOffset) { value, _, _ in
       if value.startLocation.x < 30, value.translation.width > 100 {
