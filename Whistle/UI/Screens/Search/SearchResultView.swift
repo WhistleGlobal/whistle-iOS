@@ -139,6 +139,9 @@ extension SearchResultView {
       }
       .scrollIndicators(.hidden)
       .padding(.top, 15)
+      .refreshable {
+        apiViewModel.requestSearchedContent(queryString: searchQueryString)
+      }
     }
   }
 
@@ -168,6 +171,9 @@ extension SearchResultView {
       }
       .scrollIndicators(.hidden)
       .padding(.top, 15)
+      .refreshable {
+        apiViewModel.requestSearchedUser(queryString: searchQueryString)
+      }
     }
   }
 
@@ -191,6 +197,9 @@ extension SearchResultView {
       }
       .scrollIndicators(.hidden)
       .padding(.top, 15)
+      .refreshable {
+        apiViewModel.requestSearchedTag(queryString: searchQueryString)
+      }
     }
   }
 

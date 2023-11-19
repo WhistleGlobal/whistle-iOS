@@ -574,6 +574,8 @@
 		780E3E9B2B0387E700744CD8 /* SearchFeedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 780E3E922B03856500744CD8 /* SearchFeedView.swift */; };
 		780E3E9C2B0387EA00744CD8 /* SearchFeedPageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 780E3E942B03857500744CD8 /* SearchFeedPageView.swift */; };
 		780E3E9D2B0387EC00744CD8 /* SearchContentPlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 780E3E962B03857F00744CD8 /* SearchContentPlayerView.swift */; };
+		78174B2E2B0A1C2F0015100B /* WhistleRankingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78174B2D2B0A1C2F0015100B /* WhistleRankingView.swift */; };
+		78174B2F2B0A1C2F0015100B /* WhistleRankingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78174B2D2B0A1C2F0015100B /* WhistleRankingView.swift */; };
 		7822B23A2ADD509C000B15AB /* Notion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7822B2392ADD509C000B15AB /* Notion.swift */; };
 		782904A92AFB208B00DCB90F /* CustomRefresh.swift in Sources */ = {isa = PBXBuildFile; fileRef = 782904A82AFB208B00DCB90F /* CustomRefresh.swift */; };
 		782904AA2AFB20B500DCB90F /* CustomRefresh.swift in Sources */ = {isa = PBXBuildFile; fileRef = 782904A82AFB208B00DCB90F /* CustomRefresh.swift */; };
@@ -1164,6 +1166,7 @@
 		780E3E942B03857500744CD8 /* SearchFeedPageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchFeedPageView.swift; sourceTree = "<group>"; };
 		780E3E962B03857F00744CD8 /* SearchContentPlayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchContentPlayerView.swift; sourceTree = "<group>"; };
 		780E3E982B0385D800744CD8 /* SearchPlayersViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchPlayersViewModel.swift; sourceTree = "<group>"; };
+		78174B2D2B0A1C2F0015100B /* WhistleRankingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WhistleRankingView.swift; sourceTree = "<group>"; };
 		7822B2392ADD509C000B15AB /* Notion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Notion.swift; sourceTree = "<group>"; };
 		782904A82AFB208B00DCB90F /* CustomRefresh.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomRefresh.swift; sourceTree = "<group>"; };
 		782A6DD42AF1EAFC004D0A60 /* GuestMainFeedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GuestMainFeedView.swift; sourceTree = "<group>"; };
@@ -2854,6 +2857,7 @@
 				788010862ABC7EF800116FD5 /* MemberFollowListView.swift */,
 				7874CB8F2AA0B5350081DE54 /* NotificationSettingView.swift */,
 				7874CB932AA0B5430081DE54 /* GuideStatusView.swift */,
+				78174B2D2B0A1C2F0015100B /* WhistleRankingView.swift */,
 			);
 			path = Profile;
 			sourceTree = "<group>";
@@ -3509,6 +3513,7 @@
 				1B0A29AC2AA64AF3009077A1 /* MusicNote.swift in Sources */,
 				1B547D592AEA864300EDE344 /* AlertViewModel.swift in Sources */,
 				1B395D932AFA531E00E28180 /* LottieProgress.swift in Sources */,
+				78174B2E2B0A1C2F0015100B /* WhistleRankingView.swift in Sources */,
 				1B3895862AB9CC4300B4C8DD /* CoreDataManager.swift in Sources */,
 				782A6DDD2AF1EBCB004D0A60 /* GuestPlayersViewModel.swift in Sources */,
 				1B38954C2AB9CB7500B4C8DD /* FramesToolView.swift in Sources */,
@@ -3718,6 +3723,7 @@
 				1B9936942AF3699E00F5C619 /* StringsAndWords.swift in Sources */,
 				1B9936952AF3699E00F5C619 /* MemberContent.swift in Sources */,
 				1B9936962AF3699E00F5C619 /* EditablePlayer.swift in Sources */,
+				78174B2F2B0A1C2F0015100B /* WhistleRankingView.swift in Sources */,
 				787347FB2AF87F9D00551A84 /* NotificationModel.swift in Sources */,
 				1B54480C2AF882F600A73A27 /* FollowerList.swift in Sources */,
 				1B9936972AF3699E00F5C619 /* SettingProtocol.swift in Sources */,
