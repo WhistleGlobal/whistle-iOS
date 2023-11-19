@@ -92,5 +92,10 @@ extension TagResultView {
     .padding(.top, 15)
     .padding(.horizontal, 16)
     .scrollIndicators(.hidden)
+    .refreshable {
+      apiViewModel.requestTagSearchedRecentContent(queryString: tagText) { contents in
+        feedPlayersViewModel.searchedContents = contents
+      }
+    }
   }
 }
