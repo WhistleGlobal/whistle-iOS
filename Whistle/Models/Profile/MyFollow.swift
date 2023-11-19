@@ -86,21 +86,18 @@ class FollowingData: Decodable {
     case followingId = "following_id"
     case userName = "user_name"
     case profileImg = "profile_img"
-    case introduce
   }
 
   var isFollowed = true
   var followingId: Int
   var userName: String
-  var profileImg: String?
-  var introduce: String?
+  var profileImg: String
 
   required init(from decoder: Decoder) throws {
     let container = try decoder.container(keyedBy: CodingKeys.self)
     followingId = try container.decode(Int.self, forKey: .followingId)
     userName = try container.decode(String.self, forKey: .userName)
-    profileImg = try container.decode(String?.self, forKey: .profileImg)
-    introduce = try container.decode(String?.self, forKey: .introduce)
+    profileImg = try container.decodeIfPresent(String.self, forKey: .profileImg) ?? ""
   }
 }
 
@@ -123,22 +120,19 @@ class FollowerData: Decodable {
     case userName = "user_name"
     case profileImg = "profile_img"
     case isFollowed = "is_followed"
-    case introduce
   }
 
   var followerId: Int
   var userName: String
-  var profileImg: String?
+  var profileImg: String
   var isFollowed: Bool
-  var introduce: String?
 
   required init(from decoder: Decoder) throws {
     let container = try decoder.container(keyedBy: CodingKeys.self)
     followerId = try container.decode(Int.self, forKey: .followerId)
     userName = try container.decode(String.self, forKey: .userName)
-    profileImg = try container.decode(String?.self, forKey: .profileImg)
+    profileImg = try container.decodeIfPresent(String.self, forKey: .profileImg) ?? ""
     isFollowed = try container.decode(Int.self, forKey: .isFollowed) == 1 ? true : false
-    introduce = try container.decode(String?.self, forKey: .introduce)
   }
 }
 
@@ -157,21 +151,18 @@ class MemberFollowingData: Decodable {
     case userName = "user_name"
     case profileImg = "profile_img"
     case isFollowed = "is_followed"
-    case introduce
   }
 
   var followingId: Int
   var userName: String
-  var profileImg: String?
+  var profileImg: String
   var isFollowed: Bool
-  var introduce: String?
 
   required init(from decoder: Decoder) throws {
     let container = try decoder.container(keyedBy: CodingKeys.self)
     followingId = try container.decode(Int.self, forKey: .followingId)
     userName = try container.decode(String.self, forKey: .userName)
-    profileImg = try container.decode(String?.self, forKey: .profileImg)
+    profileImg = try container.decodeIfPresent(String.self, forKey: .profileImg) ?? ""
     isFollowed = try container.decode(Int.self, forKey: .isFollowed) == 1 ? true : false
-    introduce = try container.decode(String?.self, forKey: .introduce)
   }
 }

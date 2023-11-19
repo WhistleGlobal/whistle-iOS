@@ -17,7 +17,6 @@ class MyProfile: ObservableObject, Decodable {
     case profileImage = "profile_img"
     case introduce
     case status = "user_status"
-    case myTeam = "myteam"
   }
 
   var userId = 0
@@ -26,7 +25,6 @@ class MyProfile: ObservableObject, Decodable {
   var profileImage: String?
   var introduce: String?
   var status: UserStatus = .active
-  var myTeam: String?
 }
 
 // MARK: - UserStatus

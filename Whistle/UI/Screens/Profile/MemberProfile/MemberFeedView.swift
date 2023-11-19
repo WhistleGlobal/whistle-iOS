@@ -120,6 +120,17 @@ struct MemberFeedView: View {
         await apiViewModel.requestMemberPostFeed(userID: userId)
       }
     }
+    .navigationDestination(isPresented: $feedMoreModel.isRootStacked) {
+      if !apiViewModel.memberFeed.isEmpty {
+        ProfileView(
+          profileType:
+          apiViewModel.memberFeed[feedPlayersViewModel.currentVideoIndex].userId ?? 0 == apiViewModel.myProfile.userId
+            ? .my
+            : .member,
+          isFirstProfileLoaded: .constant(true),
+          userId: apiViewModel.memberFeed[feedPlayersViewModel.currentVideoIndex].userId ?? 0)
+      }
+    }
     .fullScreenCover(isPresented: $feedMoreModel.showReport, onDismiss: {
       feedPlayersViewModel.currentPlayer?.play()
     }) {

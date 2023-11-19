@@ -24,6 +24,7 @@ struct MemberFollowingList: View {
                 : .member,
               isFirstProfileLoaded: .constant(true),
               userId: following.followingId)
+              .environmentObject(apiViewModel)
           } label: {
             PersonRow(
               isFollowed: Binding(get: {
@@ -32,7 +33,7 @@ struct MemberFollowingList: View {
                 following.isFollowed = newValue
               }),
               userName: following.userName,
-              description: following.introduce,
+              description: following.userName,
               profileImage: following.profileImg,
               userID: following.followingId)
           }

@@ -13,7 +13,6 @@ import SwiftUI
 
 struct MainFeedView: View {
 
-  @Environment(\.dismiss) var dismiss
   @EnvironmentObject var universalRoutingModel: UniversalRoutingModel
   @StateObject private var apiViewModel = APIViewModel.shared
   @StateObject private var feedPlayersViewModel = MainFeedPlayersViewModel.shared
@@ -21,50 +20,12 @@ struct MainFeedView: View {
   @StateObject private var feedMoreModel = MainFeedMoreModel.shared
   @StateObject private var tabbarModel = TabbarModel.shared
   @State var index = 0
-  @State var searchText = ""
-  @State var searchHistory: [String] = []
-  @State var text = ""
-  @State var scopeSelection = 0
-  @State var searchQueryString = ""
-  @State var isSearching = false
 
   var body: some View {
     ZStack {
       Color.black
       if !apiViewModel.mainFeed.isEmpty {
         MainFeedPageView(index: $index)
-        VStack(spacing: 0) {
-          HStack {
-            Spacer()
-            NavigationLink {
-              MainSearchView()
-            } label: {
-              Image(systemName: "magnifyingglass")
-                .font(.system(size: 24))
-                .foregroundColor(.white)
-            }
-            .id(UUID())
-          }
-          .frame(height: 28)
-          .padding(.horizontal, 16)
-          .padding(.top, 54)
-          Spacer()
-        }
-      }
-    }
-    .toolbar {
-      if feedMoreModel.showSearch {
-        ToolbarItem(placement: .topBarLeading) {
-          FeedSearchBar(
-            searchText: $searchQueryString,
-            isSearching: $isSearching,
-            submitAction: { },
-            cancelTapAction: dismiss)
-            .simultaneousGesture(TapGesture().onEnded {
-              //                      tapSearchBar?()
-            })
-            .frame(width: UIScreen.width - 32)
-        }
       }
     }
     .background(Color.black.edgesIgnoringSafeArea(.all))
@@ -167,6 +128,34 @@ struct MainFeedView: View {
         }
       }
     }
+    .navigationDestination(isPresented: $feedMoreModel.isRootStacked) {
+      if universalRoutingModel.isUniversalProfile {
+        if !apiViewModel.mainFeed.isEmpty {
+          ProfileView(
+            profileType:
+            universalRoutingModel.userId == apiViewModel.myProfile.userId ? .my : .member,
+            isFirstProfileLoaded: .constant(true),
+            userId: universalRoutingModel.userId)
+            .onDisappear {
+              universalRoutingModel.isUniversalProfile = false
+            }
+//          MemberProfileView(userId: universalRoutingModel.userId)
+//            .onDisappear {
+//              universalRoutingModel.isUniversalProfile = false
+//            }
+        }
+      } else {
+        if !apiViewModel.mainFeed.isEmpty {
+          ProfileView(
+            profileType:
+            apiViewModel.mainFeed[feedPlayersViewModel.currentVideoIndex].userId ?? 0 == apiViewModel.myProfile.userId
+              ? .my
+              : .member,
+            isFirstProfileLoaded: .constant(true),
+            userId: apiViewModel.mainFeed[feedPlayersViewModel.currentVideoIndex].userId ?? 0)
+        }
+      }
+    }
     .fullScreenCover(isPresented: $feedMoreModel.showReport, onDismiss: {
       feedPlayersViewModel.currentPlayer?.play()
     }) {
@@ -175,20 +164,12 @@ struct MainFeedView: View {
         contentId: apiViewModel.mainFeed[feedPlayersViewModel.currentVideoIndex].contentId ?? 0,
         userId: apiViewModel.mainFeed[feedPlayersViewModel.currentVideoIndex].userId ?? 0)
     }
-    .onChange(of: tabbarModel.tabSelection) { _ in
-      if tabbarModel.tabSelection == .main, !feedMoreModel.isRootStacked {
+    .onChange(of: tabbarModel.tabSelectionNoAnimation) { _ in
+      if tabbarModel.tabSelectionNoAnimation == .main {
         feedPlayersViewModel.currentPlayer?.play()
       } else {
         feedPlayersViewModel.stopPlayer()
       }
-    }
-    .onAppear {
-      WhistleLogger.logger.debug("MainFeedView onAppear")
-      feedMoreModel.isRootStacked = false
-    }
-    .onDisappear {
-      WhistleLogger.logger.debug("MainFeedView onDisappear")
-      feedMoreModel.isRootStacked = true
     }
   }
 }
@@ -198,7 +179,6 @@ struct MainFeedView: View {
 class MainFeedMoreModel: ObservableObject {
   static let shared = MainFeedMoreModel()
   private init() { }
-  @Published var showSearch = false
   @Published var showReport = false
   @Published var showUpdate = false
   @Published var isRootStacked = false

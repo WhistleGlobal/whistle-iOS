@@ -59,7 +59,7 @@ struct GuestProfileView: View {
         apiViewModel.myProfile = .init()
         apiViewModel.mainFeed = []
         tabbarModel.tabSelection = .main
-        tabbarModel.tabSelection = .main
+        tabbarModel.tabSelectionNoAnimation = .main
         tabbarModel.tabbarOpacity = 1.0
       }
     }

@@ -61,12 +61,6 @@ struct ProfileEditWords {
   let albumUpload: LocalizedStringKey = "앨범에서 사진 업로드"
   let setDefaultImage: LocalizedStringKey = "기본 이미지로 변경"
   let recents: LocalizedStringKey = "최근 항목"
-  let myTeamSelect: LocalizedStringKey = "마이팀 선택"
-  let myTeamSkinSelect: LocalizedStringKey = "마이팀 스킨 설정"
-  let showMyTeamFlag: LocalizedStringKey = "마이팀 플래그 표시"
-  let showMyTeamProfileBackground: LocalizedStringKey = "마이팀 프로필 배경 표시"
-  // "마이팀 플래그 표시" = "마이팀 플래그 표시";
-  // "마이팀 프로필 배경 표시" = "마이팀 프로필 배경 표시";
 }
 
 // MARK: - VideoCaptureWords
@@ -158,16 +152,4 @@ struct ToastMessages {
 struct NotificationWords {
   let agreedTitle: LocalizedStringKey = "광고성 정보 알림 수신동의 안내"
   let disagreedTitle: LocalizedStringKey = "광고성 정보 알림 수신거부 안내"
-}
-
-// MARK: - SearchWords
-
-struct SearchWords {
-  let recentSearces: LocalizedStringKey = "최근 검색"
-  let clearAll: LocalizedStringKey = "모두 지우기"
-  let content: LocalizedStringKey = "콘텐츠"
-  let account: LocalizedStringKey = "계정"
-  let hashtag: LocalizedStringKey = "해시태그"
-  let popular: LocalizedStringKey = "인기순"
-  let recent: LocalizedStringKey = "최신순"
 }
