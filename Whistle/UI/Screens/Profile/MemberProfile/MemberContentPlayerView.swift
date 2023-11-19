@@ -32,6 +32,8 @@ struct MemberContentPlayerView: View {
   @State var processedContentId: Set<Int> = []
   @Binding var currentContentInfo: MemberContent?
   @Binding var index: Int
+  @Binding var isChangable: Bool
+
   let lifecycleDelegate: ViewLifecycleDelegate?
   let dismissAction: DismissAction
 
@@ -149,6 +151,12 @@ struct MemberContentPlayerView: View {
                     }
                     if feedMoreModel.bottomSheetPosition != .hidden {
                       DimsThick()
+                        .onAppear {
+                          isChangable = false
+                        }
+                        .onDisappear {
+                          isChangable = true
+                        }
                     }
                   }
                 playButton(toPlay: player.rate == 0)
@@ -192,18 +200,19 @@ struct MemberContentPlayerView: View {
         .id(newId)
       }
     }
+    .navigationBarBackButtonHidden(!isChangable)
     .toolbarRole(.editor)
     .onAppear {
       bartintModel.tintColor = .white
       lifecycleDelegate?.onAppear()
     }
     .onDisappear {
-      bartintModel.tintColor = .LabelColor_Primary
+      bartintModel.tintColor = .labelColorPrimary
       lifecycleDelegate?.onDisappear()
       feedPlayersViewModel.stopPlayer()
     }
     .ignoresSafeArea()
-    .onChange(of: tabbarModel.tabSelectionNoAnimation) { newValue in
+    .onChange(of: tabbarModel.tabSelection) { newValue in
       if newValue == .main {
         feedPlayersViewModel.currentPlayer?.seek(to: .zero)
         feedPlayersViewModel.currentPlayer?.play()

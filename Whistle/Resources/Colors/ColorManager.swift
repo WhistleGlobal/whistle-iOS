@@ -78,40 +78,12 @@ extension Color {
 
   static var Border_Default_Dark = Color("Gray20_Dark").opacity(0.36)
 
-  // 위 Alert color와 이름 동일
-  // static let Success = Color("Success")
-  // static let Info = Color("Info")
-  // static let Danger = Color("Danger")
-  static var Primary: Color {
-    Color.lightAndDarkColor(light: "Gray60", dark: "Gray10")
-  }
-
-  static var Secondary: Color {
-    Color.lightAndDarkColor(light: "Gray50", dark: "Gray20")
-  }
-
-  static var Disable_Placeholder: Color {
-    Color.lightAndDarkColor(light: "Gray40", dark: "Gray30")
-  }
-
   static var Disable_Placeholder_Light: Color = .Gray40_Light
 
   static var Disable_Placeholder_Dark: Color = .Gray30_Dark
 
-  // MARK: - Background_Default
-
-  static var Background_Default: Color {
-    Color.lightAndDarkColor(light: "white", dark: "Gray80")
-  }
-
   static var Background_Default_Dark: Color {
     Color("Gray80_Dark")
-  }
-
-  // MARK: - Background_Elevated
-
-  static var Elevated: Color {
-    Color.lightAndDarkColor(light: "white", dark: "Gray70")
   }
 
   static var Elevated_Dark: Color {
@@ -119,33 +91,10 @@ extension Color {
   }
 
   // MARK: - Border Color
-
-  static var Border_Default: Color {
-    Color.lightAndDarkColor(light: "Gray30", dark: "Gray60")
-  }
-
   static var Border_Default_Light = Color.Gray30_Light
   // static var Border_Glass => extension LinearGradient 참고
 
-  // MARK: - Label Color
-
-  static var LabelColor_Primary: Color {
-    Color.lightAndDarkColor(light: "Gray60", dark: "Gray10")
-  }
-
-  static var LabelColor_Secondary: Color {
-    Color.lightAndDarkColor(light: "Gray50", dark: "Gray20")
-  }
-
-  static var LabelColor_DisablePlaceholder: Color {
-    Color.lightAndDarkColor(light: "Gray40", dark: "Gray30")
-  }
-
   static var LabelColor_DisablePlaceholder_Dark: Color = Gray30_Dark
-  // MARK: - Noti section
-  static var NotiSectionColor: Color {
-    Color.lightAndDarkColor(light: "Gray20", dark: "Gray60_Dark")
-  }
 }
 
 extension LinearGradient {

@@ -154,5 +154,5 @@ class GuestUploadModel: ObservableObject {
 class BarTintModel: ObservableObject {
   static let shared = BarTintModel()
   private init() { }
-  @Published var tintColor: Color = .LabelColor_Primary
+  @Published var tintColor: Color = .labelColorPrimary
 }

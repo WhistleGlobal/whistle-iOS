@@ -31,6 +31,7 @@ struct CommonWords {
   let delete: LocalizedStringKey = "삭제"
   let deleteAccount: LocalizedStringKey = "계정삭제"
   let logout: LocalizedStringKey = "로그아웃"
+  let setNotification: LocalizedStringKey = "알림 설정"
   let notification: LocalizedStringKey = "알림"
   let settings: LocalizedStringKey = "설정"
   let about: LocalizedStringKey = "약관 및 정책"

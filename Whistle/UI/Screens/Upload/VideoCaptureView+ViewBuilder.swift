@@ -190,7 +190,7 @@ extension VideoCaptureView {
             } label: {
               Text("3s")
                 .fontSystem(fontDesignSystem: .subtitle3)
-                .foregroundColor(selectedSec.0 == .sec3 ? .white : Color.LabelColor_DisablePlaceholder)
+                .foregroundColor(selectedSec.0 == .sec3 ? .white : Color.labelColorDisablePlaceholder)
                 .frame(width: 58, height: 30)
             }
             .frame(width: 58, height: 30)
@@ -201,7 +201,7 @@ extension VideoCaptureView {
             } label: {
               Text("10s")
                 .fontSystem(fontDesignSystem: .subtitle3)
-                .foregroundColor(selectedSec.0 == .sec10 ? .white : Color.LabelColor_DisablePlaceholder)
+                .foregroundColor(selectedSec.0 == .sec10 ? .white : Color.labelColorDisablePlaceholder)
                 .frame(width: 58, height: 30)
             }
             .frame(width: 58, height: 30)
@@ -793,7 +793,7 @@ extension VideoCaptureView {
               }
               Task {
                 UploadProgressViewModel.shared.uploadStarted()
-                tabbarModel.tabSelectionNoAnimation = .main
+                tabbarModel.tabSelection = .main
                 tabbarModel.tabSelection = .main
                 alertViewModel.onFullScreenCover = false
               }

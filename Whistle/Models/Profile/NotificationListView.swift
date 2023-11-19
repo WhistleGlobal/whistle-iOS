@@ -19,7 +19,7 @@ struct NotificationListView: View {
   var body: some View {
     ScrollView {
       VStack(spacing: 0) {
-        Divider().foregroundColor(.Disable_Placeholder)
+        Divider().foregroundColor(.labelColorDisablePlaceholder)
 
         ForEach(
           apiViewModel.notiList.filter { noti in noti.senderID != apiViewModel.myProfile.userId },
@@ -46,7 +46,7 @@ struct NotificationListView: View {
           Divider()
             .frame(height: 0.5)
             .padding(.leading, 74)
-            .foregroundColor(.Disable_Placeholder)
+            .foregroundColor(.labelColorDisablePlaceholder)
         }
         .onReceive(apiViewModel.publisher) { id in
           newId = id
@@ -55,6 +55,11 @@ struct NotificationListView: View {
         Spacer().frame(height: 200)
       }
     }
+    .toolbarBackground(
+      Color.backgroundDefault,
+      for: .navigationBar)
+    .toolbarBackground(.visible, for: .navigationBar)
+    .background(.backgroundDefault)
     .navigationTitle(CommonWords().notification)
     .navigationBarTitleDisplayMode(.large)
     .toolbarRole(.editor)
@@ -90,7 +95,7 @@ extension NotificationListView {
         .multilineTextAlignment(.leading)
         .lineSpacing(6)
         .padding(.vertical, 3)
-        .foregroundColor(.LabelColor_Primary)
+        .foregroundColor(Color.labelColorPrimary)
       }
       Spacer()
       KFImage.url(URL(string: notification.thumbnailURL ?? ""))
@@ -127,7 +132,7 @@ extension NotificationListView {
         .multilineTextAlignment(.leading)
         .lineSpacing(6)
         .padding(.vertical, 3)
-        .foregroundColor(.LabelColor_Primary)
+        .foregroundColor(Color.labelColorPrimary)
       }
       Spacer()
       followButton(

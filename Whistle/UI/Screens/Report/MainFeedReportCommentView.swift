@@ -5,10 +5,12 @@
 //  Created by ChoiYujin on 9/21/23.
 //
 
+import Combine
 import SwiftUI
 
 struct MainFeedReportCommentView: View {
   @Environment(\.dismiss) var dismiss
+  @Environment(\.colorScheme) var colorScheme
   @StateObject var apiViewModel = APIViewModel.shared
   @StateObject var alertViewModel = AlertViewModel.shared
   @FocusState private var isFocused: Bool
@@ -19,6 +21,7 @@ struct MainFeedReportCommentView: View {
   let reportReason: Int
   let contentId: Int
   let uesrId: Int
+  let textLimit = 150
 
   var body: some View {
     VStack(spacing: 0) {
@@ -26,26 +29,35 @@ struct MainFeedReportCommentView: View {
       Text("이 콘텐츠를 신고하는 이유는 무엇인가요?")
         .fontSystem(fontDesignSystem: .subtitle2)
         .frame(maxWidth: .infinity, alignment: .leading)
-        .foregroundColor(.LabelColor_Primary)
+        .foregroundColor(.labelColorPrimary)
         .padding(.top, 16)
         .padding(.bottom, 4)
       Text("이 콘텐츠를 신고하는 이유에 대해 추가적인 내용을 알려주세요.")
         .fontSystem(fontDesignSystem: .caption_Regular)
         .frame(maxWidth: .infinity, alignment: .leading)
-        .foregroundColor(.LabelColor_Secondary)
+        .foregroundColor(.labelColorSecondary)
         .padding(.bottom, 16)
       TextField("기타 참고사항을 알려주세요 (선택사항)", text: $inputReportDetail, axis: .vertical)
         .padding(16)
         .frame(height: 160, alignment: .top)
-        .frame(maxWidth: .infinity)
-        .cornerRadius(8)
         .contentShape(Rectangle())
-        .tint(.Info)
         .focused($isFocused)
+        .tint(.Info)
         .overlay {
-          RoundedRectangle(cornerRadius: 8)
-            .stroke(lineWidth: 1)
-            .foregroundColor(.Disable_Placeholder)
+          if colorScheme == .light {
+            RoundedRectangle(cornerRadius: 8)
+              .stroke(lineWidth: 1)
+              .foregroundColor(.labelColorDisablePlaceholder)
+          }
+        }
+        .overlay(alignment: .bottomTrailing) {
+          Text("\(inputReportDetail.count)/\(textLimit)자")
+            .padding()
+            .foregroundStyle(Color.Disable_Placeholder_Light)
+            .fontSystem(fontDesignSystem: .body2)
+        }
+        .onReceive(Just(inputReportDetail)) { _ in
+          limitText(textLimit)
         }
         .onSubmit {
           isFocused = false
@@ -53,14 +65,17 @@ struct MainFeedReportCommentView: View {
         .onTapGesture {
           isFocused = true
         }
-        .background(UITraitCollection.current.userInterfaceStyle == .dark ? Color.Elevated_Dark : Color.white)
+        .background(RoundedRectangle(cornerRadius: 8).fill(colorScheme == .dark ? Color.Elevated_Dark : Color.white))
       Spacer()
     }
     .onTapGesture {
       isFocused = false
     }
+    .toolbarBackground(Color.backgroundDefault, for: .navigationBar)
+    .toolbarBackground(.visible, for: .navigationBar)
+    .foregroundColor(.labelColorPrimary)
     .padding(.horizontal, 16)
-    .background(Color.reactiveBackground)
+    .background(.backgroundDefault)
     .toolbarRole(.editor)
     .navigationTitle(CommonWords().report)
     .navigationBarTitleDisplayMode(.inline)
@@ -72,11 +87,6 @@ struct MainFeedReportCommentView: View {
     }
     .onDisappear {
       alertViewModel.onFullScreenCover = false
-    }
-    .overlay {
-      if alertViewModel.onFullScreenCover {
-        AlertPopup()
-      }
     }
     .toolbar {
       ToolbarItem(placement: .confirmationAction) {
@@ -109,11 +119,14 @@ struct MainFeedReportCommentView: View {
           Text(CommonWords().submit)
             .foregroundColor(.Info)
             .fontSystem(fontDesignSystem: .subtitle2)
-            .opacity(alertViewModel.showAlert ? 0.3 : 1)
-            .grayscale(alertViewModel.showAlert ? 0.5 : 0)
         }
-        .disabled(alertViewModel.showAlert)
       }
+    }
+  }
+
+  func limitText(_ upper: Int) {
+    if inputReportDetail.count > upper {
+      inputReportDetail = String(inputReportDetail.prefix(upper))
     }
   }
 }

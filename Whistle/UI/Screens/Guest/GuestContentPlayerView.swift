@@ -30,6 +30,8 @@ struct GuestContentPlayerView: View {
   @State var showPlayButton = false
   @Binding var currentContentInfo: GuestContent?
   @Binding var index: Int
+  @Binding var isChangable: Bool
+
   let lifecycleDelegate: ViewLifecycleDelegate?
 
   var body: some View {
@@ -86,9 +88,15 @@ struct GuestContentPlayerView: View {
                   }
                   if feedMoreModel.bottomSheetPosition != .hidden {
                     DimsThick()
+                      .onAppear {
+                        isChangable = false
+                      }
+                      .onDisappear {
+                        isChangable = true
+                      }
                   }
                 }
-                .onChange(of: tabbarModel.tabSelectionNoAnimation) { newValue in
+                .onChange(of: tabbarModel.tabSelection) { newValue in
                   if newValue == .main {
                     guard let currentPlayer = feedPlayersViewModel.currentPlayer else {
                       return
@@ -154,7 +162,7 @@ struct GuestContentPlayerView: View {
       lifecycleDelegate?.onDisappear()
     }
     .ignoresSafeArea()
-    .onChange(of: tabbarModel.tabSelectionNoAnimation) { newValue in
+    .onChange(of: tabbarModel.tabSelection) { newValue in
       if newValue == .main {
         feedPlayersViewModel.currentPlayer?.seek(to: .zero)
         feedPlayersViewModel.currentPlayer?.play()

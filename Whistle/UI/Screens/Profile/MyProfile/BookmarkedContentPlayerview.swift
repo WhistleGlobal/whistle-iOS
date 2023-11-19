@@ -31,6 +31,8 @@ struct BookmarkedContentPlayerview: View {
   @State var processedContentId: Set<Int> = []
   @Binding var currentContentInfo: Bookmark?
   @Binding var index: Int
+  @Binding var isChangable: Bool
+
   let lifecycleDelegate: ViewLifecycleDelegate?
   let dismissAction: DismissAction
 
@@ -119,6 +121,12 @@ struct BookmarkedContentPlayerview: View {
                   }
                   if feedMoreModel.bottomSheetPosition != .hidden {
                     DimsThick()
+                      .onAppear {
+                        isChangable = false
+                      }
+                      .onDisappear {
+                        isChangable = true
+                      }
                   }
                 }
               playButton(toPlay: player.rate == 0)
@@ -161,6 +169,7 @@ struct BookmarkedContentPlayerview: View {
         .id(newId)
       }
     }
+    .navigationBarBackButtonHidden(!isChangable)
     .toolbarRole(.editor)
     .onAppear {
       bartintModel.tintColor = .white
@@ -173,12 +182,12 @@ struct BookmarkedContentPlayerview: View {
       }
     }
     .onDisappear {
-      bartintModel.tintColor = .LabelColor_Primary
+      bartintModel.tintColor = .labelColorPrimary
       lifecycleDelegate?.onDisappear()
       feedPlayersViewModel.stopPlayer()
     }
     .ignoresSafeArea()
-    .onChange(of: tabbarModel.tabSelectionNoAnimation) { newValue in
+    .onChange(of: tabbarModel.tabSelection) { newValue in
       if newValue == .main {
         feedPlayersViewModel.currentPlayer?.seek(to: .zero)
         feedPlayersViewModel.currentPlayer?.play()

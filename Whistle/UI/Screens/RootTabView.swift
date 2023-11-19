@@ -71,12 +71,12 @@ struct RootTabView: View {
         .tint(bartintModel.tintColor)
       } else {
         GuestMainFeedView()
-          .onChange(of: tabbarModel.tabSelectionNoAnimation) { newValue in
+          .onChange(of: tabbarModel.tabSelection) { newValue in
             mainOpacity = newValue == .main ? 1 : 0
           }
       }
 
-      switch tabbarModel.tabSelectionNoAnimation {
+      switch tabbarModel.tabSelection {
       case .main, .upload:
         Color.clear
 
@@ -87,6 +87,7 @@ struct RootTabView: View {
           NavigationStack {
             ProfileView(isFirstStack: true, isFirstProfileLoaded: $isFirstProfileLoaded, userId: 0)
           }
+          .background(.backgroundDefault)
           .tint(bartintModel.tintColor)
         } else {
           GuestProfileView()
@@ -149,12 +150,12 @@ struct RootTabView: View {
       .onReceive(NavigationModel.shared.$navigate, perform: { _ in
         if UploadProgressViewModel.shared.isUploading {
           tabbarModel.tabSelection = .main
-          tabbarModel.tabSelectionNoAnimation = .main
+          tabbarModel.tabSelection = .main
           tabbarModel.showVideoCaptureView = false
         }
 //        else {
 //            tabbarModel.tabSelection = tabbarModel.prevTabSelection ?? .main
-//            tabbarModel.tabSelectionNoAnimation = tabbarModel.prevTabSelection ?? .main
+//            tabbarModel.tabSelection = tabbarModel.prevTabSelection ?? .main
 //          }
 //        }
       })
@@ -165,7 +166,7 @@ struct RootTabView: View {
       }
     }
     .fullScreenCover(isPresented: $tabbarModel.showVideoCaptureView, onDismiss: {
-      if tabbarModel.tabSelectionNoAnimation == .main {
+      if tabbarModel.tabSelection == .main {
         feedPlayersViewModel.currentPlayer?.play()
       }
     }) {
@@ -318,7 +319,7 @@ struct RootTabView: View {
       PrivacyPolicyView()
     }
     .navigationBarBackButtonHidden()
-    .onChange(of: tabbarModel.tabSelectionNoAnimation) { _ in
+    .onChange(of: tabbarModel.tabSelection) { _ in
       apiViewModel.publisherSend()
     }
   }
@@ -333,7 +334,7 @@ extension RootTabView {
   func tabItems() -> some View {
     HStack(spacing: 0) {
       Button {
-        if tabbarModel.tabSelectionNoAnimation == .main {
+        if tabbarModel.tabSelection == .main {
           if isAccess {
             HapticManager.instance.impact(style: .medium)
             NavigationUtil.popToRootView()
@@ -364,6 +365,8 @@ extension RootTabView {
         getMicrophonePermission()
         checkAllPermissions()
         tabbarModel.showVideoCaptureView = true
+        tabbarModel.tabSelection = .upload
+        tabbarModel.tabSelection = .upload
       } label: {
         Capsule()
           .fill(Color.Dim_Thin)
@@ -441,7 +444,7 @@ extension RootTabView {
 extension RootTabView {
   var profileTabClicked: () -> Void {
     {
-      if tabbarModel.tabSelectionNoAnimation == .profile {
+      if tabbarModel.tabSelection == .profile {
         switchTab(to: .profile)
         HapticManager.instance.impact(style: .medium)
         Task {
@@ -482,9 +485,9 @@ extension RootTabView {
     if tabbarModel.prevTabSelection == nil {
       tabbarModel.prevTabSelection = .main
     } else {
-      tabbarModel.prevTabSelection = tabbarModel.tabSelectionNoAnimation
+      tabbarModel.prevTabSelection = tabbarModel.tabSelection
     }
-    tabbarModel.tabSelectionNoAnimation = tabSelection
+    tabbarModel.tabSelection = tabSelection
     tabbarModel.tabSelection = tabSelection
   }
 }

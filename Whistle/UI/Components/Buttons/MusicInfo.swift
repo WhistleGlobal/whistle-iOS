@@ -7,13 +7,13 @@
 
 import Kingfisher
 import SwiftUI
+
 // MARK: - MusicInfo
 
 struct MusicInfo: View {
   @ObservedObject var musicVM: MusicViewModel
   @Binding var showMusicTrimView: Bool
 
-  var showXmark = true
   let onClick: () -> Void
   let onDelete: () -> Void
 
@@ -44,21 +44,19 @@ struct MusicInfo: View {
           .onTapGesture {
             showMusicTrimView = true
           }
-        if showXmark {
-          Rectangle()
-            .fill(Color.Border_Default_Dark)
-            .frame(width: 1)
+        Rectangle()
+          .fill(Color.Border_Default_Dark)
+          .frame(width: 1)
+          .padding(.vertical, 8)
+        Button {
+          onDelete()
+        } label: {
+          Image(systemName: "xmark")
+            .font(.system(size: 16))
+            .frame(width: UIScreen.getWidth(32), height: UIScreen.getWidth(32))
+            .contentShape(Rectangle())
+            .padding(.horizontal, 4)
             .padding(.vertical, 8)
-          Button {
-            onDelete()
-          } label: {
-            Image(systemName: "xmark")
-              .font(.system(size: 16))
-              .frame(width: UIScreen.getWidth(32), height: UIScreen.getWidth(32))
-              .contentShape(Rectangle())
-              .padding(.horizontal, 4)
-              .padding(.vertical, 8)
-          }
         }
       }
       .foregroundStyle(.white)
