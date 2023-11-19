@@ -15,10 +15,10 @@ import SwiftUI
 
 struct TagSearchContentPlayerView: View {
   @AppStorage("showGuide") var showGuide = true
+  @EnvironmentObject var feedPlayersViewModel: TagSearchPlayersViewModel
   @Environment(\.scenePhase) var scenePhase
   @Environment(\.dismiss) var dismiss
   @StateObject var apiViewModel = APIViewModel.shared
-  @StateObject var feedPlayersViewModel = TagSearchPlayersViewModel.shared
   @StateObject private var toastViewModel = ToastViewModel.shared
   @StateObject private var feedMoreModel = TagSearchFeedMoreModel.shared
   @StateObject private var tabbarModel = TabbarModel.shared
@@ -37,10 +37,10 @@ struct TagSearchContentPlayerView: View {
 
   var body: some View {
     VStack(spacing: 0) {
-      ForEach(Array(apiViewModel.tagSearchedRecentContent.enumerated()), id: \.element) { index, content in
+      ForEach(Array(feedPlayersViewModel.searchedContents.enumerated()), id: \.element) { index, content in
         ZStack {
           Color.black.overlay {
-            KFImage.url(URL(string: apiViewModel.tagSearchedRecentContent[index].thumbnailUrl ?? ""))
+            KFImage.url(URL(string: feedPlayersViewModel.searchedContents[index].thumbnailUrl ?? ""))
               .placeholder {
                 Color.black
                   .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -106,9 +106,9 @@ struct TagSearchContentPlayerView: View {
                   if tabbarModel.tabWidth != 56 {
                     ContentLayer(
                       currentVideoInfo: content,
-                      feedMoreModel: SearchFeedMoreModel.shared,
-                      feedPlayersViewModel: SearchPlayersViewModel.shared,
-                      feedArray: apiViewModel.tagSearchedRecentContent,
+                      feedMoreModel: TagSearchFeedMoreModel.shared,
+                      feedPlayersViewModel: feedPlayersViewModel,
+                      feedArray: feedPlayersViewModel.searchedContents,
                       whistleAction: whistleToggle,
                       dismissAction: dismissAction)
                       .padding(.bottom, UIScreen.main.nativeBounds.height == 1334 ? 24 : 0)
@@ -206,23 +206,23 @@ extension TagSearchContentPlayerView {
     let index = feedPlayersViewModel.currentVideoIndex
     HapticManager.instance.impact(style: .medium)
     timer?.invalidate()
-    if apiViewModel.tagSearchedRecentContent[index].isWhistled {
+    if feedPlayersViewModel.searchedContents[index].isWhistled {
       timer = Timer.scheduledTimer(withTimeInterval: 2, repeats: false) { _ in
         Task {
           await apiViewModel.whistleAction(contentID: currentContentInfo?.contentId ?? 0, method: .delete)
         }
       }
-      apiViewModel.tagSearchedRecentContent[index].whistleCount -= 1
+      feedPlayersViewModel.searchedContents[index].whistleCount -= 1
     } else {
       timer = Timer.scheduledTimer(withTimeInterval: 2, repeats: false) { _ in
         Task {
           await apiViewModel.whistleAction(contentID: currentContentInfo?.contentId ?? 0, method: .post)
         }
       }
-      apiViewModel.tagSearchedRecentContent[index].whistleCount += 1
+      feedPlayersViewModel.searchedContents[index].whistleCount += 1
     }
-    apiViewModel.tagSearchedRecentContent[index].isWhistled.toggle()
-    currentContentInfo = apiViewModel.tagSearchedRecentContent[index]
+    feedPlayersViewModel.searchedContents[index].isWhistled.toggle()
+    currentContentInfo = feedPlayersViewModel.searchedContents[index]
   }
 
 }

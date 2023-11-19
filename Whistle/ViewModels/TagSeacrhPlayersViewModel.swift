@@ -9,18 +9,19 @@ import AVFoundation
 
 class TagSearchPlayersViewModel: ObservableObject {
 
-  static let shared = TagSearchPlayersViewModel()
-  private init() { }
+//  static let shared = TagSearchPlayersViewModel()
+//  private init() { }
 
   @Published var prevPlayer: AVPlayer?
   @Published var currentPlayer: AVPlayer?
   @Published var nextPlayer: AVPlayer?
   @Published var apiViewModel = APIViewModel.shared
+  @Published var searchedContents: [MainContent] = []
   @Published var currentVideoIndex = 0
 
   func goPlayerNext() {
-    let index = min(max(0, currentVideoIndex), apiViewModel.tagSearchedRecentContent.count - 1)
-    if index == apiViewModel.tagSearchedRecentContent.count - 1 {
+    let index = min(max(0, currentVideoIndex), searchedContents.count - 1)
+    if index == searchedContents.count - 1 {
       stopPlayer()
       prevPlayer = nil
       prevPlayer = currentPlayer
@@ -34,7 +35,7 @@ class TagSearchPlayersViewModel: ObservableObject {
       prevPlayer = currentPlayer
       currentPlayer = nextPlayer
       nextPlayer = nil
-      nextPlayer = AVPlayer(url: URL(string: apiViewModel.tagSearchedRecentContent[index + 1].videoUrl ?? "")!)
+      nextPlayer = AVPlayer(url: URL(string: searchedContents[index + 1].videoUrl ?? "")!)
       currentPlayer?.seek(to: .zero)
       currentPlayer?.play()
     }
@@ -59,7 +60,7 @@ class TagSearchPlayersViewModel: ObservableObject {
     currentPlayer = prevPlayer
     prevPlayer = nil
     if currentVideoIndex != 0 {
-      prevPlayer = AVPlayer(url: URL(string: apiViewModel.tagSearchedRecentContent[currentVideoIndex - 1].videoUrl ?? "")!)
+      prevPlayer = AVPlayer(url: URL(string: searchedContents[currentVideoIndex - 1].videoUrl ?? "")!)
     }
     currentPlayer?.seek(to: .zero)
     currentPlayer?.play()
@@ -87,68 +88,68 @@ class TagSearchPlayersViewModel: ObservableObject {
   }
 
   func initialPlayers() {
-    if apiViewModel.tagSearchedRecentContent.isEmpty { return }
-    guard let urlString = apiViewModel.tagSearchedRecentContent.first?.videoUrl else { return }
+    if searchedContents.isEmpty { return }
+    guard let urlString = searchedContents.first?.videoUrl else { return }
     currentPlayer = AVPlayer(url: URL(string: urlString)!)
-    if apiViewModel.tagSearchedRecentContent.count < 2 { return }
-    let urlStringNext = apiViewModel.tagSearchedRecentContent[1].videoUrl
+    if searchedContents.count < 2 { return }
+    let urlStringNext = searchedContents[1].videoUrl
     nextPlayer = AVPlayer(url: URL(string: urlStringNext ?? "")!)
   }
 
   func initialPlayers(index: Int) {
-    if apiViewModel.tagSearchedRecentContent.isEmpty { return }
-    if apiViewModel.tagSearchedRecentContent.count == 1 {
-      guard let urlString = apiViewModel.tagSearchedRecentContent.first?.videoUrl else { return }
+    if searchedContents.isEmpty { return }
+    if searchedContents.count == 1 {
+      guard let urlString = searchedContents.first?.videoUrl else { return }
       currentPlayer = AVPlayer(url: URL(string: urlString)!)
       return
     }
     if index == 0 {
-      guard let urlString = apiViewModel.tagSearchedRecentContent.first?.videoUrl else { return }
+      guard let urlString = searchedContents.first?.videoUrl else { return }
       currentPlayer = AVPlayer(url: URL(string: urlString)!)
-      let urlStringNext = apiViewModel.tagSearchedRecentContent[1].videoUrl
+      let urlStringNext = searchedContents[1].videoUrl
       nextPlayer = AVPlayer(url: URL(string: urlStringNext ?? "")!)
-    } else if index == apiViewModel.tagSearchedRecentContent.count - 1 {
-      guard let urlString = apiViewModel.tagSearchedRecentContent.last?.videoUrl else { return }
+    } else if index == searchedContents.count - 1 {
+      guard let urlString = searchedContents.last?.videoUrl else { return }
       currentPlayer = AVPlayer(url: URL(string: urlString)!)
-      let urlStringPrev = apiViewModel.tagSearchedRecentContent[index - 1].videoUrl
+      let urlStringPrev = searchedContents[index - 1].videoUrl
       prevPlayer = AVPlayer(url: URL(string: urlStringPrev ?? "")!)
     } else {
-      let urlString = apiViewModel.tagSearchedRecentContent[index].videoUrl
+      let urlString = searchedContents[index].videoUrl
       currentPlayer = AVPlayer(url: URL(string: urlString ?? "")!)
-      let urlStringPrev = apiViewModel.tagSearchedRecentContent[index - 1].videoUrl
+      let urlStringPrev = searchedContents[index - 1].videoUrl
       prevPlayer = AVPlayer(url: URL(string: urlStringPrev ?? "")!)
-      let urlStringNext = apiViewModel.tagSearchedRecentContent[index + 1].videoUrl
+      let urlStringNext = searchedContents[index + 1].videoUrl
       nextPlayer = AVPlayer(url: URL(string: urlStringNext ?? "")!)
     }
   }
 
   func removePlayer(completion: @escaping () -> Void) {
     stopPlayer()
-    if apiViewModel.tagSearchedRecentContent.count == 1 {
-      apiViewModel.tagSearchedRecentContent.removeAll()
+    if searchedContents.count == 1 {
+      searchedContents.removeAll()
       prevPlayer = nil
       currentPlayer = nil
       nextPlayer = nil
       return
     }
-    if apiViewModel.tagSearchedRecentContent.count == 2, currentVideoIndex == 0 {
+    if searchedContents.count == 2, currentVideoIndex == 0 {
       currentPlayer = nil
       currentPlayer = nextPlayer
-      apiViewModel.tagSearchedRecentContent.remove(at: currentVideoIndex)
-      nextPlayer = AVPlayer(url: URL(string: apiViewModel.tagSearchedRecentContent[currentVideoIndex].videoUrl ?? "")!)
+      searchedContents.remove(at: currentVideoIndex)
+      nextPlayer = AVPlayer(url: URL(string: searchedContents[currentVideoIndex].videoUrl ?? "")!)
       currentPlayer?.seek(to: .zero)
       currentPlayer?.play()
       return
     }
-    if currentVideoIndex == apiViewModel.tagSearchedRecentContent.count - 1 {
+    if currentVideoIndex == searchedContents.count - 1 {
       currentPlayer = nil
       currentPlayer = prevPlayer
-      apiViewModel.tagSearchedRecentContent.removeLast()
+      searchedContents.removeLast()
       currentVideoIndex -= 1
       if currentVideoIndex == 0 {
         prevPlayer = nil
       } else {
-        prevPlayer = AVPlayer(url: URL(string: apiViewModel.tagSearchedRecentContent[currentVideoIndex - 1].videoUrl ?? "")!)
+        prevPlayer = AVPlayer(url: URL(string: searchedContents[currentVideoIndex - 1].videoUrl ?? "")!)
       }
       currentPlayer?.seek(to: .zero)
       currentPlayer?.play()
@@ -156,8 +157,8 @@ class TagSearchPlayersViewModel: ObservableObject {
     } else {
       currentPlayer = nil
       currentPlayer = nextPlayer
-      nextPlayer = AVPlayer(url: URL(string: apiViewModel.tagSearchedRecentContent[currentVideoIndex + 1].videoUrl ?? "")!)
-      apiViewModel.tagSearchedRecentContent.remove(at: currentVideoIndex)
+      nextPlayer = AVPlayer(url: URL(string: searchedContents[currentVideoIndex + 1].videoUrl ?? "")!)
+      searchedContents.remove(at: currentVideoIndex)
       currentPlayer?.seek(to: .zero)
       currentPlayer?.play()
     }
