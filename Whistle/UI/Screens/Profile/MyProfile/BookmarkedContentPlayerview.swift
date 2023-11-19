@@ -187,7 +187,7 @@ struct BookmarkedContentPlayerview: View {
       feedPlayersViewModel.stopPlayer()
     }
     .ignoresSafeArea()
-    .onChange(of: tabbarModel.tabSelection) { newValue in
+    .onChange(of: tabbarModel.tabSelectionNoAnimation) { newValue in
       if newValue == .main {
         feedPlayersViewModel.currentPlayer?.seek(to: .zero)
         feedPlayersViewModel.currentPlayer?.play()
