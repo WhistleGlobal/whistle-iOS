@@ -115,7 +115,7 @@ struct MyTeamSelectView: View {
       .padding(.bottom, UIScreen.getHeight(14))
       Text("마이팀은 선택 후 프로필 탭에서 언제든 변경할 수 있습니다.")
         .fontSystem(fontDesignSystem: .caption_Regular)
-        .foregroundColor(.LabelColor_DisablePlaceholder)
+        .foregroundColor(.labelColorDisablePlaceholder)
       Spacer()
     }
     .toolbarRole(.editor)
@@ -138,7 +138,7 @@ struct MyTeamSelectView: View {
           }
         }
         .fontSystem(fontDesignSystem: .body2)
-        .foregroundColor(.LabelColor_DisablePlaceholder)
+        .foregroundColor(.labelColorDisablePlaceholder)
       }
     }
     .onAppear {

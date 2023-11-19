@@ -14,20 +14,20 @@ struct MyTeamSkinSettingView: View {
 
   var body: some View {
     VStack(spacing: 0) {
-      Divider().foregroundColor(.Disable_Placeholder)
+      Divider().foregroundColor(.labelColorDisablePlaceholder)
       Toggle(ProfileEditWords().showMyTeamFlag, isOn: $isMyTeamLabelOn)
         .frame(height: 64)
         .padding(.horizontal, 16)
-      Divider().frame(height: 0.5).padding(.leading, 16).foregroundColor(.Disable_Placeholder)
+      Divider().frame(height: 0.5).padding(.leading, 16).foregroundColor(.labelColorDisablePlaceholder)
       Toggle(ProfileEditWords().showMyTeamProfileBackground, isOn: $isMyTeamBackgroundOn)
         .frame(height: 64)
         .padding(.horizontal, 16)
-      Divider().frame(height: 0.5).padding(.leading, 16).foregroundColor(.Disable_Placeholder)
+      Divider().frame(height: 0.5).padding(.leading, 16).foregroundColor(.labelColorDisablePlaceholder)
       Spacer()
     }
     .tint(.Primary_Default)
     .fontSystem(fontDesignSystem: .subtitle2)
-    .foregroundColor(.LabelColor_Primary)
+    .foregroundColor(.labelColorPrimary)
     .navigationBarTitleDisplayMode(.inline)
     .navigationTitle(ProfileEditWords().myTeamSkinSelect)
     .toolbarRole(.editor)

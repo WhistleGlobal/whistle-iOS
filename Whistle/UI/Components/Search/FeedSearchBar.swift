@@ -94,5 +94,6 @@ class FeedSearchBarColorModel {
   var bgColor: Color = .init(hex: 0x767680, opacity: 0.24)
   var placeholderColor: Color = .Disable_Placeholder_Dark
   var cancelButtonColor: Color = .info
-  var textColor: Color = .LabelColor_Primary
+//  var textColor: Color = .labelColorPrimary
+  var textColor: Color = .labelColorPrimary
 }

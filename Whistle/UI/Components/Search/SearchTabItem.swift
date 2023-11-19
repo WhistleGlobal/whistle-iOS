@@ -23,14 +23,14 @@ struct SearchTabItem<T>: View where T: RawRepresentable, T.RawValue == Localized
           .overlay {
             Capsule()
               .frame(height: 2)
-              .foregroundColor(.LabelColor_Primary)
+              .foregroundColor(.labelColorPrimary)
               .opacity(tabType == tabSelected ? 1 : 0)
           }
       }
       Text(tabType.rawValue)
         .fontSystem(fontDesignSystem: .subtitle3)
         .fontWeight(.semibold)
-        .foregroundColor(tabType == tabSelected ? Color.LabelColor_Primary : Color.Disable_Placeholder)
+        .foregroundColor(tabType == tabSelected ? Color.labelColorPrimary : Color.labelColorDisablePlaceholder)
     }
     .frame(maxWidth: .infinity, maxHeight: .infinity)
     .onTapGesture {
