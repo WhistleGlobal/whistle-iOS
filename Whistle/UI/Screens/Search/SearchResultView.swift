@@ -165,7 +165,7 @@ extension SearchResultView {
           }
           .padding(.horizontal, 16)
           .id(UUID())
-          Divider().frame(height: 0.5).padding(.leading, 74).foregroundColor(.Disable_Placeholder)
+          Divider().frame(height: 0.5).padding(.leading, 74).foregroundColor(.labelColorDisablePlaceholder)
         }
         Spacer().frame(height: 150)
       }
@@ -191,7 +191,7 @@ extension SearchResultView {
           }
           .padding(.horizontal, 16)
           .id(UUID())
-          Divider().frame(height: 0.5).padding(.leading, 74).foregroundColor(.Disable_Placeholder)
+          Divider().frame(height: 0.5).padding(.leading, 74).foregroundColor(.labelColorDisablePlaceholder)
         }
         Spacer().frame(height: 150)
       }
@@ -212,12 +212,12 @@ extension SearchResultView {
         Text(user.userName)
           .fontSystem(fontDesignSystem: .subtitle2)
           .frame(width: .infinity,alignment: .leading)
-          .foregroundColor(.LabelColor_Primary)
+          .foregroundColor(.labelColorPrimary)
         if !(user.introduce ?? "").isEmpty {
           Text(user.introduce ?? "")
             .fontSystem(fontDesignSystem: .body2)
             .frame(width: .infinity,alignment: .leading)
-            .foregroundColor(.LabelColor_Secondary)
+            .foregroundColor(.labelColorSecondary)
             .multilineTextAlignment(.leading)
         }
       }
@@ -225,7 +225,7 @@ extension SearchResultView {
       Image(systemName: "chevron.forward")
         .font(.system(size: 16))
         .frame(width: 18, height: 18)
-        .foregroundColor(.LabelColor_DisablePlaceholder)
+        .foregroundColor(.labelColorDisablePlaceholder)
     }
     .frame(height: 74)
   }
@@ -236,24 +236,24 @@ extension SearchResultView {
       Text("#")
         .font(.system(size: 28))
         .lineSpacing(20)
-        .foregroundColor(.LabelColor_Primary)
+        .foregroundColor(.labelColorPrimary)
         .frame(width: 48, height: 48)
         .padding(.trailing, 10)
       VStack(alignment: .leading, spacing: 0) {
         Text(tag.contentHashtag)
           .fontSystem(fontDesignSystem: .subtitle2)
           .frame(width: .infinity,alignment: .leading)
-          .foregroundColor(.LabelColor_Primary)
+          .foregroundColor(.labelColorPrimary)
         Text("게시물 \(tag.contentHashtagCount.roundedWithAbbreviations)개")
           .fontSystem(fontDesignSystem: .body2)
           .frame(width: .infinity,alignment: .leading)
-          .foregroundColor(.LabelColor_Secondary)
+          .foregroundColor(.labelColorSecondary)
       }
       Spacer()
       Image(systemName: "chevron.forward")
         .font(.system(size: 16))
         .frame(width: 18, height: 18)
-        .foregroundColor(.LabelColor_DisablePlaceholder)
+        .foregroundColor(.labelColorDisablePlaceholder)
     }
     .frame(height: 74)
   }
@@ -263,7 +263,7 @@ extension SearchResultView {
     HStack {
       Text("\"\(searchQueryString)\" 검색결과 없음")
         .fontSystem(fontDesignSystem: .body2)
-        .foregroundColor(.LabelColor_Secondary)
+        .foregroundColor(.labelColorSecondary)
         .frame(width: .infinity, alignment: .leading)
         .padding(.vertical, 14)
       Spacer()

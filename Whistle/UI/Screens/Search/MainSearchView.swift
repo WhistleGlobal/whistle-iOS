@@ -36,7 +36,7 @@ struct MainSearchView: View {
       HStack {
         Text(SearchWords().recentSearces)
           .fontSystem(fontDesignSystem: .subtitle1)
-          .foregroundColor(.LabelColor_Primary)
+          .foregroundColor(.labelColorPrimary)
         Spacer()
         Button {
           searchHistoryArray.removeAll()
@@ -65,12 +65,12 @@ struct MainSearchView: View {
               .padding(.trailing, 10)
             Text(item)
               .fontSystem(fontDesignSystem: .body2)
-              .foregroundColor(.LabelColor_Primary)
+              .foregroundColor(.labelColorPrimary)
             Spacer()
             Image(systemName: "xmark")
               .font(.system(size: 16))
               .frame(width: 16, height: 16)
-              .foregroundColor(.LabelColor_Primary)
+              .foregroundColor(.labelColorPrimary)
               .onTapGesture {
                 searchHistoryArray.remove(at: index)
                 let jsonArray = searchHistoryArray.map { JSON($0) }

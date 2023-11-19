@@ -75,7 +75,7 @@ struct WhistleRankingView: View {
                 Divider()
                   .frame(height: 0.5)
                   .padding(.horizontal, 16)
-                  .foregroundColor(.Disable_Placeholder)
+                  .foregroundColor(.labelColorDisablePlaceholder)
               }
             }
           }
@@ -105,9 +105,9 @@ struct WhistleRankingView: View {
       UINavigationBar.appearance().titleTextAttributes = [.foregroundColor: UIColor.white]
     }
     .onDisappear {
-      bartintModel.tintColor = .LabelColor_Primary
-      UINavigationBar.appearance().largeTitleTextAttributes = [.foregroundColor: UIColor(Color.LabelColor_Primary)]
-      UINavigationBar.appearance().titleTextAttributes = [.foregroundColor: UIColor(Color.LabelColor_Primary)]
+      bartintModel.tintColor = .labelColorPrimary
+      UINavigationBar.appearance().largeTitleTextAttributes = [.foregroundColor: UIColor(Color.labelColorPrimary)]
+      UINavigationBar.appearance().titleTextAttributes = [.foregroundColor: UIColor(Color.labelColorPrimary)]
     }
   }
 }

@@ -20,7 +20,7 @@ struct TagResultView: View {
     VStack(spacing: 0) {
       Text("게시물 \(apiViewModel.tagSearchedRecentContent.count.roundedWithAbbreviations)개")
         .fontSystem(fontDesignSystem: .subtitle3)
-        .foregroundColor(.LabelColor_Secondary)
+        .foregroundColor(.labelColorSecondary)
         .frame(height: 30, alignment: .top)
         .padding(.bottom, 5)
       HStack(spacing: 0) {
@@ -51,7 +51,7 @@ struct TagResultView: View {
       ToolbarItem(placement: .principal) {
         Text("#\(tagText)")
           .fontSystem(fontDesignSystem: .subtitle2)
-          .foregroundColor(.LabelColor_Primary)
+          .foregroundColor(.labelColorPrimary)
       }
     }
   }

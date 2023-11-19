@@ -27,7 +27,7 @@ struct PersonRow: View {
           if !(description ?? "").isEmpty {
             Text(description ?? "")
               .fontSystem(fontDesignSystem: .body2)
-              .foregroundColor(.LabelColor_Secondary)
+              .foregroundColor(Color.labelColorSecondary)
               .frame(maxWidth: .infinity, alignment: .leading)
               .multilineTextAlignment(.leading)
           }
