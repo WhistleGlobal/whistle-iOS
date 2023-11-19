@@ -66,19 +66,6 @@ struct RootTabView: View {
               mainOpacity = newValue == .main ? 1 : 0
             }
         }
-        .tint(Color.labelColorPrimary)
-      } else {
-        GuestMainFeedView()
-          .onChange(of: tabbarModel.tabSelectionNoAnimation) { newValue in
-            mainOpacity = newValue == .main ? 1 : 0
-          }
-      }
-
-      switch tabbarModel.tabSelectionNoAnimation {
-      case .main, .upload:
-        Color.clear
-
-      case .profile:
         if isAccess {
           // MARK: - profile
 
@@ -148,11 +135,6 @@ struct RootTabView: View {
           tabbarModel.switchTab(to: .main)
           tabbarModel.showVideoCaptureView = false
         }
-//        else {
-//            tabbarModel.tabSelection = tabbarModel.prevTabSelection ?? .main
-//            tabbarModel.tabSelectionNoAnimation = tabbarModel.prevTabSelection ?? .main
-//          }
-//        }
       })
     }
     .onAppear {
@@ -313,7 +295,7 @@ struct RootTabView: View {
       PrivacyPolicyView()
     }
     .navigationBarBackButtonHidden()
-    .onChange(of: tabbarModel.tabSelectionNoAnimation) { _ in
+    .onChange(of: tabbarModel.tabSelection) { _ in
       apiViewModel.publisherSend()
     }
   }
@@ -328,7 +310,7 @@ extension RootTabView {
   func tabItems() -> some View {
     HStack(spacing: 0) {
       Button {
-        if tabbarModel.tabSelectionNoAnimation == .main {
+        if tabbarModel.tabSelection == .main {
           if isAccess {
             HapticManager.instance.impact(style: .medium)
             NavigationUtil.popToRootView()
@@ -351,8 +333,6 @@ extension RootTabView {
         getMicrophonePermission()
         checkAllPermissions()
         tabbarModel.showVideoCaptureView = true
-        tabbarModel.tabSelection = .upload
-        tabbarModel.tabSelectionNoAnimation = .upload
       } label: {
         Capsule()
           .fill(Color.Dim_Thin)
@@ -449,16 +429,6 @@ extension RootTabView {
         tabbarModel.switchTab(to: .profile)
       }
     }
-  }
-
-  func switchTab(to tabSelection: TabSelection) {
-    if tabbarModel.prevTabSelection == nil {
-      tabbarModel.prevTabSelection = .main
-    } else {
-      tabbarModel.prevTabSelection = tabbarModel.tabSelectionNoAnimation
-    }
-    tabbarModel.tabSelectionNoAnimation = tabSelection
-    tabbarModel.tabSelection = tabSelection
   }
 }
 
