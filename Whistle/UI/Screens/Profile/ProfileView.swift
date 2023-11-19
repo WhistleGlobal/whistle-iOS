@@ -261,7 +261,6 @@ struct ProfileView: View {
       }
       .ignoresSafeArea()
     }
-//    .toolbar(.hidden, for: .tabBar)
     .background(.backgroundDefault)
     .navigationBarBackButtonHidden()
     .gesture(DragGesture().updating($dragOffset) { value, _, _ in
@@ -276,7 +275,7 @@ struct ProfileView: View {
     .task {
       if profileType == .my {
         if isFirstProfileLoaded {
-//          await apiViewModel.requestMyProfile()
+          //          await apiViewModel.requestMyProfile()
           isProfileLoaded = true
           await apiViewModel.requestMyFollow()
           await apiViewModel.requestMyWhistlesCount()

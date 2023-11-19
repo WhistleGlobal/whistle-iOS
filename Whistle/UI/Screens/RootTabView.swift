@@ -22,7 +22,6 @@ struct RootTabView: View {
   @State var isFirstProfileLoaded = true
   @State var mainOpacity = 1.0
   @State var isRootStacked = false
-
   @State var refreshCount = 0
 
   @State private var albumAuthorizationStatus = PHPhotoLibrary.authorizationStatus(for: .readWrite)
@@ -45,7 +44,6 @@ struct RootTabView: View {
   @StateObject var toastViewModel = ToastViewModel.shared
   @StateObject var userAuth = UserAuth.shared
   @StateObject var bartintModel = BarTintModel.shared
-  @StateObject var tabSelection = TabSelectionModel.shared
 
   @EnvironmentObject var universalRoutingModel: UniversalRoutingModel
   @StateObject var appleSignInViewModel = AppleSignInViewModel()
@@ -55,14 +53,13 @@ struct RootTabView: View {
   var body: some View {
     ZStack {
       guideView
-      TabView(selection: $tabSelection.currentTab) {
+      TabView(selection: $tabbarModel.tabSelection) {
         if isAccess {
           NavigationStack {
             MainFeedView()
               .environmentObject(universalRoutingModel)
-              .toolbar(.hidden, for: .tabBar)
           }
-          .tag(Tab.main)
+          .tag(TabSelection.main)
         } else {
           GuestMainFeedView()
             .onChange(of: tabbarModel.tabSelection) { newValue in
@@ -74,9 +71,8 @@ struct RootTabView: View {
 
           NavigationStack {
             ProfileView(isFirstStack: true, isFirstProfileLoaded: $isFirstProfileLoaded, userId: 0)
-              .toolbar(.hidden, for: .tabBar)
           }
-          .tag(Tab.profile)
+          .tag(TabSelection.profile)
         } else {
           GuestProfileView()
         }
@@ -140,6 +136,9 @@ struct RootTabView: View {
           tabbarModel.showVideoCaptureView = false
         }
       })
+    }
+    .onAppear {
+      UITabBar.appearance().isHidden = true
     }
     .overlay {
       if !alertViewModel.onFullScreenCover {
@@ -311,13 +310,13 @@ extension RootTabView {
   func tabItems() -> some View {
     HStack(spacing: 0) {
       Button {
-        if tabSelection.currentTab == .main {
+        if tabbarModel.tabSelection == .main {
           if isAccess {
             HapticManager.instance.impact(style: .medium)
             NavigationUtil.popToRootView()
           }
         } else {
-          tabSelection.switchTab(to: .main)
+          tabbarModel.switchTab(to: .main)
         }
       } label: {
         VStack {
@@ -346,26 +345,7 @@ extension RootTabView {
       .frame(width: UIScreen.getWidth(80), height: UIScreen.getHeight(40))
       .padding(.horizontal, 8)
       Button {
-        if tabSelection.currentTab == .profile {
-          HapticManager.instance.impact(style: .medium)
-          NavigationUtil.popToRootView()
-          Task {
-            await apiViewModel.requestMyFollow()
-          }
-          Task {
-            await apiViewModel.requestMyWhistlesCount()
-          }
-          Task {
-            await apiViewModel.requestMyBookmark()
-          }
-          Task {
-            await apiViewModel.requestMyPostFeed()
-          }
-          isFirstProfileLoaded = false
-        } else {
-          tabSelection.switchTab(to: .profile)
-        }
-//        profileTabClicked()
+        profileTabClicked()
       } label: {
         VStack {
           Image(systemName: tabbarModel.tabSelection == .profile ? "person.fill" : "person")
@@ -429,7 +409,7 @@ extension RootTabView {
 extension RootTabView {
   var profileTabClicked: () -> Void {
     {
-      if tabSelection.currentTab == .profile {
+      if tabbarModel.tabSelection == .profile {
         HapticManager.instance.impact(style: .medium)
         NavigationUtil.popToRootView()
         Task {
@@ -446,7 +426,7 @@ extension RootTabView {
         }
         isFirstProfileLoaded = false
       } else {
-        tabSelection.switchTab(to: .profile)
+        tabbarModel.switchTab(to: .profile)
       }
     }
   }

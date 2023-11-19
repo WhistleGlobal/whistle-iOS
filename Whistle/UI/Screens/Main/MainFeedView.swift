@@ -12,7 +12,6 @@ import SwiftUI
 // MARK: - MainFeedView
 
 struct MainFeedView: View {
-
   @EnvironmentObject var universalRoutingModel: UniversalRoutingModel
   @StateObject private var apiViewModel = APIViewModel.shared
   @StateObject private var feedPlayersViewModel = MainFeedPlayersViewModel.shared
@@ -113,9 +112,9 @@ struct MainFeedView: View {
           return
         }
       }
-//      if apiViewModel.myProfile.userName.isEmpty {
-//        await apiViewModel.requestMyProfile()
-//      }
+      //      if apiViewModel.myProfile.userName.isEmpty {
+      //        await apiViewModel.requestMyProfile()
+      //      }
       if apiViewModel.mainFeed.isEmpty {
         if universalRoutingModel.isUniversalContent {
           apiViewModel.requestUniversalFeed(contentID: universalRoutingModel.contentId) {

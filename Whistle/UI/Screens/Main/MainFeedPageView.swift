@@ -53,7 +53,6 @@ struct MainFeedPageView: UIViewRepresentable {
 //    refreshControl.addTarget(context.coordinator, action: #selector(context.coordinator.refresh), for: .valueChanged)
     refreshControl.addSubview(customRefreshView.view)
     view.refreshControl = refreshControl
-    view.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 100, right: 0)
     return view
   }
 
