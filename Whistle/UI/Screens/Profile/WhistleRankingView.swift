@@ -22,7 +22,7 @@ struct WhistleRankingView: View {
   var body: some View {
     ZStack {
       Color.clear.overlay {
-        Image("BlurredDefaultBG")
+        Image("DefaultBG")
           .resizable()
           .scaledToFill()
       }
@@ -53,7 +53,7 @@ struct WhistleRankingView: View {
         .foregroundColor(.white)
         .frame(width: UIScreen.width - 32, height: 130)
         .background {
-          glassMorphicView(cornerRadius: 20)
+          glassMorphicDarkView(cornerRadius: 20)
             .overlay {
               RoundedRectangle(cornerRadius: 20)
                 .stroke(lineWidth: 1)
@@ -80,7 +80,7 @@ struct WhistleRankingView: View {
             }
           }
           .background {
-            glassMorphicView(cornerRadius: 20)
+            glassMorphicDarkView(cornerRadius: 20)
               .overlay {
                 RoundedRectangle(cornerRadius: 20)
                   .stroke(lineWidth: 1)
