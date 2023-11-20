@@ -37,7 +37,7 @@ class GuestContent: Hashable, ObservableObject, Codable {
     musicArtist: String? = nil,
     musicTitle: String? = nil,
     hashtags: [String]? = nil,
-    whistleCount: Int? = nil)
+    whistleCount: Int = 0)
   {
     self.id = id
     self.contentId = contentId
@@ -66,8 +66,11 @@ class GuestContent: Hashable, ObservableObject, Codable {
   var musicArtist: String?
   var musicTitle: String?
   var hashtags: [String]?
-  var whistleCount: Int?
+  var whistleCount: Int
   var aspectRatio: Double?
+  var isFollowed = false
+  var isWhistled = false
+  var isBookmarked = false
 
   required init(from decoder: Decoder) throws {
     let container = try decoder.container(keyedBy: CodingKeys.self)
@@ -81,7 +84,7 @@ class GuestContent: Hashable, ObservableObject, Codable {
     musicArtist = try container.decode(String?.self, forKey: .musicArtist)
     musicTitle = try container.decode(String?.self, forKey: .musicTitle)
     hashtags = try container.decode([String]?.self, forKey: .hashtags)
-    whistleCount = try container.decode(Int?.self, forKey: .whistleCount)
+    whistleCount = try container.decode(Int.self, forKey: .whistleCount)
     aspectRatio = try container.decode(Double?.self, forKey: .aspectRatio)
   }
 

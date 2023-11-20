@@ -28,6 +28,7 @@ struct GuestContentPlayerView: View {
   @State var timer: Timer? = nil
   @State var viewTimer: Timer? = nil
   @State var showPlayButton = false
+  @State var refreshToken = false
   @Binding var currentContentInfo: GuestContent?
   @Binding var index: Int
   @Binding var isChangable: Bool
@@ -83,7 +84,13 @@ struct GuestContentPlayerView: View {
                 }
                 .overlay {
                   if !tabbarModel.isCollpased() {
-                    GuestContentLayer(currentVideoInfo: content)
+                    ContentLayer(
+                      currentVideoInfo: content,
+                      feedMoreModel: GuestMainFeedMoreModel.shared,
+                      feedPlayersViewModel: GuestFeedPlayersViewModel.shared,
+                      feedArray: apiViewModel.guestFeed,
+                      whistleAction: { },
+                      refreshToken: $refreshToken)
                       .padding(.bottom, UIScreen.main.nativeBounds.height == 1334 ? 24 : 0)
                   }
                   if feedMoreModel.bottomSheetPosition != .hidden {

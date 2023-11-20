@@ -65,6 +65,7 @@ struct RootTabView: View {
             .onChange(of: tabbarModel.tabSelection) { newValue in
               mainOpacity = newValue == .main ? 1 : 0
             }
+            .tag(TabSelection.main)
         }
         if isAccess {
           // MARK: - profile
@@ -75,6 +76,7 @@ struct RootTabView: View {
           .tag(TabSelection.profile)
         } else {
           GuestProfileView()
+            .tag(TabSelection.profile)
         }
       }
       .background(.backgroundDefault)
