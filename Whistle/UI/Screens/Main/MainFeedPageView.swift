@@ -10,7 +10,6 @@ import SwiftUI
 // MARK: - MainFeedPageView
 
 struct MainFeedPageView: UIViewRepresentable {
-
   @ObservedObject var refreshableModel = MainRefreshableModel()
   @StateObject var apiViewModel = APIViewModel.shared
   @StateObject var feedPlayersViewModel = MainFeedPlayersViewModel.shared
@@ -66,7 +65,7 @@ struct MainFeedPageView: UIViewRepresentable {
       width: UIScreen.width,
       height: UIScreen.height * CGFloat(apiViewModel.mainFeed.count))
 
-    for i in 0..<uiView.subviews.count {
+    for i in 0 ..< uiView.subviews.count {
       uiView.subviews[i].frame = CGRect(
         x: 0,
         y: 0,
@@ -81,7 +80,6 @@ struct MainFeedPageView: UIViewRepresentable {
   }
 
   class Coordinator: NSObject, UIScrollViewDelegate, ViewLifecycleDelegate {
-
     var parent: MainFeedPageView
     @Binding var index: Int
     @Binding var changable: Bool
@@ -105,9 +103,7 @@ struct MainFeedPageView: UIViewRepresentable {
       }
     }
 
-    func onDisappear() {
-      parent.feedPlayersViewModel.stopPlayer()
-    }
+    func onDisappear() { }
 
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
       parent.feedPlayersViewModel.currentVideoIndex = Int(scrollView.contentOffset.y / UIScreen.main.bounds.height)
@@ -156,7 +152,6 @@ struct MainFeedPageView: UIViewRepresentable {
       parent.refreshableModel.isRefreshing = true
       parent.refreshableModel.refresh()
     }
-
   }
 }
 

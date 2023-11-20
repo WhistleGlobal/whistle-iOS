@@ -205,7 +205,7 @@ struct DescriptionAndTagEditorView: View {
               EmptyView()
             }
           }
-          .padding(.bottom, CGFloat(tagsViewModel.getEditableCount()) * 0.5 * 100)
+          .padding(.bottom, CGFloat(tagsViewModel.editableTagCount) * 0.5 * 100)
         }
         .padding(.top, UIScreen.getHeight(54))
       }
@@ -237,9 +237,7 @@ struct DescriptionAndTagEditorView: View {
             .contentShape(Rectangle())
             .onTapGesture {
               if !inputText.isEmpty, inputText != "\u{200B}" {
-                tagsViewModel.dataObject.insert(
-                  TagsDataModel(titleKey: inputText),
-                  at: max(0, tagsViewModel.dataObject.count - 2))
+                tagsViewModel.addTag(chipText: inputText)
                 inputText = "\u{200B}"
               }
               sheetPosition = .hidden

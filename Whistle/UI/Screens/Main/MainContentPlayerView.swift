@@ -32,6 +32,7 @@ struct MainContentPlayerView: View {
   @State var uploadingThumbnail = Image("noVideo")
   @State var uploadProgress = 0.0
   @State var isUploading = false
+  @State var refreshToken = false
   @Binding var currentContentInfo: MainContent?
   @Binding var index: Int
   @Binding var isChangable: Bool
@@ -61,9 +62,13 @@ struct MainContentPlayerView: View {
               ContentPlayer(player: player, aspectRatio: content.aspectRatio)
                 .frame(width: UIScreen.width, height: UIScreen.height)
                 .onTapGesture(count: 2) {
-                  whistleToggle(content: content, index)
+                  refreshToken.toggle()
                 }
                 .onAppear {
+                  isChangable = false
+                  DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                    isChangable = true
+                  }
                   let dateFormatter = DateFormatter()
                   dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
                   let dateString = dateFormatter.string(from: .now)
@@ -114,8 +119,8 @@ struct MainContentPlayerView: View {
                       feedMoreModel: MainFeedMoreModel.shared,
                       feedPlayersViewModel: MainFeedPlayersViewModel.shared,
                       feedArray: apiViewModel.mainFeed,
-                      whistleAction: { whistleToggle(content: content, index)
-                      })
+                      whistleAction: { whistleToggle(content: content, index) },
+                      refreshToken: $refreshToken)
                       .padding(.bottom, UIScreen.main.nativeBounds.height == 1334 ? 24 : 0)
                   }
                   if feedMoreModel.bottomSheetPosition != .hidden {
@@ -195,25 +200,13 @@ struct MainContentPlayerView: View {
       tabbarModel.showTabbar()
       if index == 0 {
         lifecycleDelegate?.onAppear()
-      } else {
-        feedPlayersViewModel.currentPlayer?.seek(to: .zero)
-        if BlockList.shared.userIds.contains(currentContentInfo?.userId ?? 0) {
-          return
-        }
-        feedPlayersViewModel.currentPlayer?.play()
       }
     }
     .onDisappear {
       lifecycleDelegate?.onDisappear()
     }
     .ignoresSafeArea()
-    .onChange(of: tabbarModel.tabSelection) { newValue in
-      if newValue == .main {
-        feedPlayersViewModel.currentPlayer?.seek(to: .zero)
-        feedPlayersViewModel.currentPlayer?.play()
-        return
-      }
-      feedPlayersViewModel.stopPlayer()
+    .onChange(of: tabbarModel.tabSelection) { _ in
       apiViewModel.addViewCount(viewCount, notInclude: processedContentId) { viewCountList in
         var tempSet: Set<Int> = []
         for view in viewCountList {

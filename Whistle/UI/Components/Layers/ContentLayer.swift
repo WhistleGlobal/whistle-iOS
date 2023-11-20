@@ -34,7 +34,8 @@ struct ContentLayer<
   @State var isBookmarked = false
   @State var caption = ""
   @State var musicTitle = ""
-  var index: Binding<Int>?
+  @Binding var refreshToken: Bool
+  var index: Int? = nil
 
   var body: some View {
     ZStack {
@@ -149,6 +150,9 @@ struct ContentLayer<
       }
       .padding(.bottom, UIScreen.getHeight(100))
       .padding(.horizontal, UIScreen.getWidth(16))
+    }
+    .onChange(of: refreshToken) { _ in
+      whistle()
     }
   }
 
