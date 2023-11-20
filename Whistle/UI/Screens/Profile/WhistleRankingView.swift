@@ -37,7 +37,7 @@ struct WhistleRankingView: View {
             Image(systemName: "trophy.fill")
               .font(.system(size: 20, weight: .semibold))
               .padding(.trailing, 10)
-              .foregroundColor(Color("Gray30").opacity(64))
+              .foregroundColor(Color("Gray30").opacity(30))
             Text("상위 98%")
               .fontSystem(fontDesignSystem: .title1_SemiBold)
             Spacer()
@@ -94,6 +94,14 @@ struct WhistleRankingView: View {
         .scrollIndicators(.hidden)
         .padding(.top, 10)
       }
+      VStack {
+        Spacer()
+        LinearGradient(
+          colors: [Color.black.opacity(0.0), Color.black.opacity(0.8)],
+          startPoint: .top,
+          endPoint: .bottom)
+          .frame(height: 140)
+      }.ignoresSafeArea()
     }
     .toolbarRole(.editor)
     .navigationTitle(Text(CommonWords().whistle).foregroundColor(.white))
