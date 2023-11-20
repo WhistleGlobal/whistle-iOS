@@ -98,6 +98,7 @@ struct ProfileView: View {
                   : apiViewModel.memberProfile.userName)
                 .foregroundColor(Color.LabelColor_Primary_Dark)
                 .fontSystem(fontDesignSystem: .title2_Expanded)
+                .padding(.top, profileType == .my ? 22 : 42)
             }
             .frame(height: profileType == .my ? 177 : 142)
             .ignoresSafeArea()
