@@ -104,7 +104,12 @@ struct MainSearchView: View {
           searchText: $searchQueryString,
           isSearching: $isSearching,
           submitAction: {
-            if searchHistoryArray.contains(searchQueryString) || searchQueryString.isEmpty {
+            if searchQueryString.isEmpty {
+              return
+            }
+            if searchHistoryArray.contains(searchQueryString) {
+              search(query: searchQueryString)
+              goSearchResult = true
               return
             }
             searchHistoryArray.append(searchQueryString)
@@ -112,8 +117,6 @@ struct MainSearchView: View {
             if let jsonData = try? JSON(jsonArray).rawData() {
               searchHistory = String(data: jsonData, encoding: .utf8) ?? ""
             }
-            search(query: searchQueryString)
-            goSearchResult = true
           },
           cancelTapAction: dismiss)
           .simultaneousGesture(TapGesture().onEnded { })

@@ -155,6 +155,20 @@ extension View {
   }
 
   @ViewBuilder
+  func glassMorphicDarkView(cornerRadius: CGFloat) -> some View {
+    ZStack {
+      Rectangle()
+        .fill(Color.black.opacity(0.3))
+        .cornerRadius(cornerRadius, corners: .allCorners)
+      CustomBlurEffect(effect: .systemUltraThinMaterialDark) { view in
+//          view.saturationAmount = 2.2
+        view.gaussianBlurRadius = 32
+      }
+      .clipShape(RoundedRectangle(cornerRadius: cornerRadius, style: .continuous))
+    }
+  }
+
+  @ViewBuilder
   func disabledGlass(cornerRadius: CGFloat) -> some View {
     ZStack {
       Rectangle()
