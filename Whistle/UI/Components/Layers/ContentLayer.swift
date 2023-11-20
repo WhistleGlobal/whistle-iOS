@@ -34,7 +34,8 @@ struct ContentLayer<
   @State var isBookmarked = false
   @State var caption = ""
   @State var musicTitle = ""
-  var index: Binding<Int>?
+  @Binding var refreshToken: Bool
+  var index: Int? = nil
 
   var body: some View {
     ZStack {
@@ -150,6 +151,9 @@ struct ContentLayer<
       .padding(.bottom, UIScreen.getHeight(100))
       .padding(.horizontal, UIScreen.getWidth(16))
     }
+    .onChange(of: refreshToken) { _ in
+      whistle()
+    }
   }
 
   func follow() {
@@ -157,7 +161,14 @@ struct ContentLayer<
       guard var currentVideoInfo = currentVideoInfo as? ContentInfo else {
         return
       }
+      guard var feedMoreModel = feedMoreModel as? FeedMoreModel else {
+        return
+      }
 
+      if type(of: feedMoreModel) == GuestMainFeedMoreModel.self {
+        feedMoreModel.bottomSheetPosition = .dynamic
+        return
+      }
       if isFollowed {
         await apiViewModel.followAction(userID: currentVideoInfo.userId ?? 0, method: .delete)
         toastViewModel.toastInit(message: "\(username)님을 팔로우 취소했습니다")
@@ -198,6 +209,11 @@ struct ContentLayer<
       return
     }
 
+    if type(of: feedMoreModel) == GuestMainFeedMoreModel.self {
+      feedMoreModel.bottomSheetPosition = .dynamic
+      return
+    }
+
     if feedMoreModel is MainFeedMoreModel || feedMoreModel is BookmarkedFeedMoreModel {
       feedMoreModel.isRootStacked = true
     }
@@ -214,6 +230,8 @@ struct ContentLayer<
 
     if let feedMoreModel = feedMoreModel as? MyFeedMoreModel {
       feedMoreModel.bottomSheetPosition = .absolute(186)
+    } else if type(of: feedMoreModel) == GuestMainFeedMoreModel.self {
+      feedMoreModel.bottomSheetPosition = .dynamic
     } else {
       feedMoreModel.bottomSheetPosition = .absolute(242)
     }
@@ -221,6 +239,16 @@ struct ContentLayer<
 
   func whistle() {
     whistleAction()
+
+    guard var feedMoreModel = feedMoreModel as? FeedMoreModel else {
+      return
+    }
+
+    if type(of: feedMoreModel) == GuestMainFeedMoreModel.self {
+      feedMoreModel.bottomSheetPosition = .dynamic
+      return
+    }
+
     guard let currentVideoInfo = currentVideoInfo as? ContentInfo else {
       return
     }
@@ -246,6 +274,13 @@ struct ContentLayer<
       return
     }
     guard var currentContent = feedArray[playersViewModel.currentVideoIndex] as? ContentInfo else { return }
+    guard var feedMoreModel = feedMoreModel as? FeedMoreModel else {
+      return
+    }
+    if type(of: feedMoreModel) == GuestMainFeedMoreModel.self {
+      feedMoreModel.bottomSheetPosition = .dynamic
+      return
+    }
     Task {
       if currentContent.isBookmarked {
         currentContent.isBookmarked.toggle()
@@ -324,6 +359,10 @@ extension MyContent: ContentInfo { }
 
 extension Bookmark: ContentInfo { }
 
+// MARK: - GuestContent + ContentInfo
+
+extension GuestContent: ContentInfo { }
+
 // MARK: - FeedMoreModel
 
 protocol FeedMoreModel {
@@ -347,6 +386,10 @@ extension MyFeedMoreModel: FeedMoreModel { }
 // MARK: - BookmarkedFeedMoreModel + FeedMoreModel
 
 extension BookmarkedFeedMoreModel: FeedMoreModel { }
+
+// MARK: - GuestMainFeedMoreModel + FeedMoreModel
+
+extension GuestMainFeedMoreModel: FeedMoreModel { }
 
 // MARK: - PlayersViewModel
 
@@ -373,3 +416,7 @@ extension MyFeedPlayersViewModel: PlayersViewModel { }
 // MARK: - BookmarkedPlayersViewModel + PlayersViewModel
 
 extension BookmarkedPlayersViewModel: PlayersViewModel { }
+
+// MARK: - GuestFeedPlayersViewModel + PlayersViewModel
+
+extension GuestFeedPlayersViewModel: PlayersViewModel { }

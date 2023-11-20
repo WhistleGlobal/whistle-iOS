@@ -13,38 +13,49 @@ class TagsViewModel: ObservableObject {
     TagsDataModel(role: .noneditable, titleKey: "해시태그 추가 (최대 5개)"),
   ]
 
-  func editableDataObject() -> [TagsDataModel] {
-    dataObject.filter { $0.role == .editable || $0.role == .textfield }
-  }
-
-  func tagDataObject() -> [TagsDataModel] {
+  var displayedTags: [TagsDataModel] {
     dataObject.filter { $0.role == .editable || $0.role == .noneditable }
   }
 
-  func appendChip(chipText: String) {
-    dataObject.append(TagsDataModel(titleKey: chipText))
+  var editingTags: [TagsDataModel] {
+    dataObject.filter { $0.role == .editable || $0.role == .textfield }
   }
 
-  func getEditableCount() -> Int {
+  var editableTagCount: Int {
     dataObject.filter { $0.role == .editable }.count
   }
 
+  func addTag(chipText: String) {
+    dataObject.insert(TagsDataModel(titleKey: chipText), at: max(0, dataObject.count - 2))
+  }
+
+  func removeTag(id: UUID) {
+    if dataObject.count > 1 {
+      withAnimation {
+        dataObject.removeAll(where: { $0.id == id })
+      }
+    }
+  }
+
   func getEditableAndTextfieldLastID() -> UUID {
-    editableDataObject().last!.id
+    editingTags.last!.id
   }
 
   func getTagDataLastID() -> UUID {
-    tagDataObject().last!.id
+    displayedTags.last!.id
   }
 
   func getTags() -> [String] {
-    let inputArray = editableDataObject().map { $0.titleKey }
+    let inputArray = editingTags.map { $0.titleKey }
+    WhistleLogger.logger.debug("inputArr: \(inputArray)")
     // 공백을 제거한 결과를 저장할 배열
     var resultArray: [String] = []
 
     for inputString in inputArray {
+      WhistleLogger.logger.debug("inputString: \(inputString)")
       // 문자열의 앞 뒤 공백을 제거하고, 빈 문자열이 아닌 경우에만 결과 배열에 추가
       let trimmedString = inputString.trimmingCharacters(in: .whitespaces)
+      WhistleLogger.logger.debug("trimmedString: \(trimmedString)")
       if !trimmedString.isEmpty {
         resultArray.append(trimmedString)
       }

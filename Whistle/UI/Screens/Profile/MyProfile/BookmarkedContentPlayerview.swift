@@ -29,6 +29,7 @@ struct BookmarkedContentPlayerview: View {
   @State var showPlayButton = false
   @State var viewCount: ViewCount = .init()
   @State var processedContentId: Set<Int> = []
+  @State var isSwipeable = true
   @Binding var currentContentInfo: Bookmark?
   @Binding var index: Int
   @Binding var isChangable: Bool
@@ -59,6 +60,10 @@ struct BookmarkedContentPlayerview: View {
                   whistleToggle(content: content, index)
                 }
                 .onAppear {
+                  isChangable = false
+                  DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                    isChangable = true
+                  }
                   let dateFormatter = DateFormatter()
                   dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
                   let dateString = dateFormatter.string(from: .now)
@@ -123,9 +128,11 @@ struct BookmarkedContentPlayerview: View {
                     DimsThick()
                       .onAppear {
                         isChangable = false
+                        isSwipeable = false
                       }
                       .onDisappear {
                         isChangable = true
+                        isSwipeable = true
                       }
                   }
                 }
@@ -169,7 +176,7 @@ struct BookmarkedContentPlayerview: View {
         .id(newId)
       }
     }
-    .navigationBarBackButtonHidden(!isChangable)
+    .toolbar(!isSwipeable ? .hidden : .visible, for: .navigationBar)
     .toolbarRole(.editor)
     .onAppear {
       bartintModel.tintColor = .white

@@ -11,9 +11,7 @@ import UIKit
 // MARK: - DisableSwipeBackView
 
 struct DisableSwipeBackView: UIViewControllerRepresentable {
-
   typealias UIViewControllerType = DisableSwipeBackViewController
-
 
   func makeUIViewController(context _: Context) -> UIViewControllerType {
     UIViewControllerType()
@@ -25,7 +23,6 @@ struct DisableSwipeBackView: UIViewControllerRepresentable {
 // MARK: - DisableSwipeBackViewController
 
 class DisableSwipeBackViewController: UIViewController {
-
   override func didMove(toParent parent: UIViewController?) {
     super.didMove(toParent: parent)
     if

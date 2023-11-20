@@ -30,6 +30,8 @@ struct MemberContentPlayerView: View {
   @State var showPlayButton = false
   @State var viewCount: ViewCount = .init()
   @State var processedContentId: Set<Int> = []
+  @State var refreshToken = false
+  @State var isSwipeable = true
   @Binding var currentContentInfo: MemberContent?
   @Binding var index: Int
   @Binding var isChangable: Bool
@@ -92,9 +94,13 @@ struct MemberContentPlayerView: View {
                 ContentPlayer(player: player, aspectRatio: content.aspectRatio)
                   .frame(width: UIScreen.width, height: UIScreen.height)
                   .onTapGesture(count: 2) {
-                    whistleToggle()
+                    refreshToken.toggle()
                   }
                   .onAppear {
+                    isChangable = false
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                      isChangable = true
+                    }
                     let dateFormatter = DateFormatter()
                     dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
                     let dateString = dateFormatter.string(from: .now)
@@ -146,16 +152,19 @@ struct MemberContentPlayerView: View {
                         feedPlayersViewModel: MemeberPlayersViewModel.shared,
                         feedArray: apiViewModel.memberFeed,
                         whistleAction: whistleToggle,
-                        dismissAction: dismissAction)
+                        dismissAction: dismissAction,
+                        refreshToken: $refreshToken)
                         .padding(.bottom, UIScreen.main.nativeBounds.height == 1334 ? 24 : 0)
                     }
                     if feedMoreModel.bottomSheetPosition != .hidden {
                       DimsThick()
                         .onAppear {
                           isChangable = false
+                          isSwipeable = false
                         }
                         .onDisappear {
                           isChangable = true
+                          isSwipeable = true
                         }
                     }
                   }
@@ -200,7 +209,7 @@ struct MemberContentPlayerView: View {
         .id(newId)
       }
     }
-    .navigationBarBackButtonHidden(!isChangable)
+    .toolbar(!isSwipeable ? .hidden : .visible, for: .navigationBar)
     .toolbarRole(.editor)
     .onAppear {
       bartintModel.tintColor = .white

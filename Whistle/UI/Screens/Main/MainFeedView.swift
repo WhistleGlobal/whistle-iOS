@@ -159,12 +159,25 @@ struct MainFeedView: View {
         contentId: apiViewModel.mainFeed[feedPlayersViewModel.currentVideoIndex].contentId ?? 0,
         userId: apiViewModel.mainFeed[feedPlayersViewModel.currentVideoIndex].userId ?? 0)
     }
-    .onChange(of: tabbarModel.tabSelection) { _ in
-      if tabbarModel.tabSelection == .main {
+    .onAppear {
+      tabbarModel.showTabbar()
+      if feedPlayersViewModel.currentVideoIndex != 0 {
+        feedPlayersViewModel.currentPlayer?.seek(to: .zero)
+        if BlockList.shared.userIds.contains(apiViewModel.mainFeed[feedPlayersViewModel.currentVideoIndex].userId ?? 0) {
+          return
+        }
         feedPlayersViewModel.currentPlayer?.play()
-      } else {
-        feedPlayersViewModel.stopPlayer()
       }
+    }
+    .onDisappear {
+      feedPlayersViewModel.stopPlayer()
+    }
+    .onChange(of: tabbarModel.tabSelection) { selection in
+      if selection == .main, !feedMoreModel.isRootStacked {
+        feedPlayersViewModel.currentPlayer?.play()
+        return
+      }
+      feedPlayersViewModel.stopPlayer()
     }
   }
 }
