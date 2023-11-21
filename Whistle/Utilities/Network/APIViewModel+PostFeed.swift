@@ -104,7 +104,7 @@ extension APIViewModel: PostFeedProtocol {
     }
   }
 
-  func requestMainFeed(completion: @escaping () -> Void) {
+  func requestMainFeed(completion: @escaping (DataResponse<[MainContent], AFError>) -> Void) {
     AF.request(
       "\(domainURL)/content/content-list",
       method: .get,
@@ -114,9 +114,10 @@ extension APIViewModel: PostFeedProtocol {
         switch response.result {
         case .success(let success):
           self.mainFeed = success
-          completion()
+          completion(response)
         case .failure:
           WhistleLogger.logger.error("Failure")
+          completion(response)
           break
         }
       }
