@@ -64,6 +64,43 @@ extension View {
         }
     }
   }
+
+  @ViewBuilder
+  func videoThumbnailView(thumbnailUrl: String, whistleCount: Int, isHated: Bool = false) -> some View {
+    Color.black.overlay {
+      KFImage.url(URL(string: thumbnailUrl))
+        .placeholder { // 플레이스 홀더 설정
+          Color.black
+        }
+        .resizable()
+        .scaledToFit()
+        .blur(radius: isHated ? 30 : 0, opaque: false)
+        .scaleEffect(isHated ? 1.3 : 1)
+        .overlay {
+          if isHated {
+            Image(systemName: "eye.slash.fill")
+              .font(.system(size: 30))
+              .foregroundColor(.Gray10)
+          }
+        }
+      VStack {
+        Spacer()
+        HStack(spacing: 4) {
+          Image(systemName: "heart.fill")
+            .font(.system(size: 16))
+            .foregroundColor(.Danger)
+          Text("\(whistleCount.roundedWithAbbreviations)")
+            .fontSystem(fontDesignSystem: .caption_SemiBold)
+            .foregroundColor(Color.LabelColor_Primary_Dark)
+        }
+        .padding(.bottom, 8.5)
+        .padding(.leading, 8)
+        .frame(maxWidth: .infinity, alignment: .leading)
+      }
+    }
+    .frame(width: UIScreen.getWidth(204 * 9 / 16), height: UIScreen.getHeight(204))
+    .cornerRadius(12)
+  }
 }
 
 extension View {
@@ -110,6 +147,20 @@ extension View {
         .cornerRadius(cornerRadius, corners: .allCorners)
       CustomBlurEffect(effect: .systemUltraThinMaterialLight) { view in
         view.saturationAmount = 2.2
+        view.gaussianBlurRadius = 32
+      }
+      .clipShape(RoundedRectangle(cornerRadius: cornerRadius, style: .continuous))
+    }
+  }
+
+  @ViewBuilder
+  func glassMorphicDarkView(cornerRadius: CGFloat) -> some View {
+    ZStack {
+      Rectangle()
+        .fill(Color.black.opacity(0.3))
+        .cornerRadius(cornerRadius, corners: .allCorners)
+      CustomBlurEffect(effect: .systemUltraThinMaterialDark) { view in
+//          view.saturationAmount = 2.2
         view.gaussianBlurRadius = 32
       }
       .clipShape(RoundedRectangle(cornerRadius: cornerRadius, style: .continuous))

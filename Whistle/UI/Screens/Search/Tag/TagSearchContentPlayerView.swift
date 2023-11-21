@@ -30,6 +30,7 @@ struct TagSearchContentPlayerView: View {
   @State var showPlayButton = false
   @State var viewCount: ViewCount = .init()
   @State var processedContentId: Set<Int> = []
+  @State var refreshToken = false
   @Binding var currentContentInfo: MainContent?
   @Binding var index: Int
   let lifecycleDelegate: ViewLifecycleDelegate?
@@ -56,7 +57,8 @@ struct TagSearchContentPlayerView: View {
               ContentPlayer(player: player, aspectRatio: content.aspectRatio)
                 .frame(width: UIScreen.width, height: UIScreen.height)
                 .onTapGesture(count: 2) {
-                  whistleToggle()
+//                  whistleToggle()
+                  refreshToken.toggle()
                 }
                 .onAppear {
                   let dateFormatter = DateFormatter()
@@ -110,7 +112,8 @@ struct TagSearchContentPlayerView: View {
                       feedPlayersViewModel: feedPlayersViewModel,
                       feedArray: feedPlayersViewModel.searchedContents,
                       whistleAction: whistleToggle,
-                      dismissAction: dismissAction)
+                      dismissAction: dismissAction,
+                      refreshToken: $refreshToken)
                       .padding(.bottom, UIScreen.main.nativeBounds.height == 1334 ? 24 : 0)
                   }
                   if feedMoreModel.bottomSheetPosition != .hidden {
