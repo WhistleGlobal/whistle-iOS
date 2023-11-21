@@ -13,7 +13,7 @@ protocol PostFeedProtocol {
   func requestMyPostFeed() async
   func requestMemberPostFeed(userID: Int) async
   func requestMyBookmark() async
-  func requestMainFeed(completion: @escaping () -> Void)
+  func requestMainFeed(completion: @escaping (DataResponse<[MainContent], AFError>) -> Void)
   func requestReportedFeed() async
   // TODO: - MainView 정리 시 함께 정리
   func publisherSend()

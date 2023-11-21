@@ -52,6 +52,12 @@ struct RootTabView: View {
 
   var body: some View {
     ZStack {
+      if LaunchScreenViewModel.shared.displayLaunchScreen {
+        SignInPlayer()
+          .ignoresSafeArea()
+          .allowsTightening(false)
+          .zIndex(200)
+      }
       guideView
       TabView(selection: $tabbarModel.tabSelection) {
         if isAccess {
@@ -88,56 +94,57 @@ struct RootTabView: View {
       }
 
       // MARK: - Tabbar
-
-      VStack {
-        Spacer()
-        glassMorphicTab(width: tabbarModel.tabWidth)
-          .overlay {
-            if !tabbarModel.isCollpased() {
-              tabItems()
-            } else {
-              HStack(spacing: 0) {
-                Spacer().frame(minWidth: 0)
-                Circle()
-                  .foregroundColor(.Dim_Default)
-                  .frame(width: 48, height: 48)
-                  .overlay {
-                    Circle()
-                      .stroke(lineWidth: 1)
-                      .foregroundStyle(LinearGradient.Border_Glass)
-                  }
-                  .padding(4)
-                  .overlay {
-                    Image(systemName: "arrow.left.and.right")
-                      .foregroundColor(.white)
-                      .frame(width: 20, height: 20)
-                  }
-                  .gesture(
-                    DragGesture(minimumDistance: 0, coordinateSpace: .local).onEnded { _ in
-                      tabbarModel.expand()
-                    })
+      if !LaunchScreenViewModel.shared.displayLaunchScreen {
+        VStack {
+          Spacer()
+          glassMorphicTab(width: tabbarModel.tabWidth)
+            .overlay {
+              if !tabbarModel.isCollpased() {
+                tabItems()
+              } else {
+                HStack(spacing: 0) {
+                  Spacer().frame(minWidth: 0)
+                  Circle()
+                    .foregroundColor(.Dim_Default)
+                    .frame(width: 48, height: 48)
+                    .overlay {
+                      Circle()
+                        .stroke(lineWidth: 1)
+                        .foregroundStyle(LinearGradient.Border_Glass)
+                    }
+                    .padding(4)
+                    .overlay {
+                      Image(systemName: "arrow.left.and.right")
+                        .foregroundColor(.white)
+                        .frame(width: 20, height: 20)
+                    }
+                    .gesture(
+                      DragGesture(minimumDistance: 0, coordinateSpace: .local).onEnded { _ in
+                        tabbarModel.expand()
+                      })
+                }
               }
             }
-          }
-          .gesture(
-            DragGesture(minimumDistance: 0, coordinateSpace: .local)
-              .onEnded { value in
-                if value.translation.width > 50 {
-                  tabbarModel.collapse()
-                }
-              })
-      }
-      .zIndex(10)
-      .padding(.bottom, 24)
-      .ignoresSafeArea()
-      .padding(.horizontal, 16)
-      .opacity(showGuide ? 0.0 : tabbarModel.tabbarOpacity)
-      .onReceive(NavigationModel.shared.$navigate, perform: { _ in
-        if UploadProgressViewModel.shared.isUploading {
-          tabbarModel.switchTab(to: .main)
-          tabbarModel.showVideoCaptureView = false
+            .gesture(
+              DragGesture(minimumDistance: 0, coordinateSpace: .local)
+                .onEnded { value in
+                  if value.translation.width > 50 {
+                    tabbarModel.collapse()
+                  }
+                })
         }
-      })
+        .zIndex(10)
+        .padding(.bottom, 24)
+        .ignoresSafeArea()
+        .padding(.horizontal, 16)
+        .opacity(showGuide ? 0.0 : tabbarModel.tabbarOpacity)
+        .onReceive(NavigationModel.shared.$navigate, perform: { _ in
+          if UploadProgressViewModel.shared.isUploading {
+            tabbarModel.switchTab(to: .main)
+            tabbarModel.showVideoCaptureView = false
+          }
+        })
+      }
     }
     .onAppear {
       UITabBar.appearance().isHidden = true
@@ -368,9 +375,11 @@ extension RootTabView {
   var guideView: some View {
     if showGuide {
       ZStack {
-        Image("gestureGuide")
-          .resizable()
-          .scaledToFill()
+        Color.clear.overlay {
+          Image("gestureGuide")
+            .resizable()
+            .scaledToFill()
+        }
         VStack {
           Spacer()
           Button {
@@ -401,7 +410,7 @@ extension RootTabView {
       .onDisappear {
         tabbarModel.showTabbar()
       }
-      .zIndex(1000)
+      .zIndex(100)
     }
   }
 }

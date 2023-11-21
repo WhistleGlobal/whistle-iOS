@@ -163,7 +163,7 @@ class MainRefreshableModel: ObservableObject {
   @Published var feedPlayersViewModel = MainFeedPlayersViewModel.shared
 
   func refresh() {
-    apiViewModel.requestMainFeed {
+    apiViewModel.requestMainFeed { _ in
       self.feedPlayersViewModel.stopPlayer()
       self.feedPlayersViewModel.initialPlayers()
       self.apiViewModel.publisherSend()

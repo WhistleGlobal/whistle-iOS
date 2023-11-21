@@ -123,7 +123,15 @@ struct MainFeedView: View {
             feedPlayersViewModel.currentPlayer?.play()
           }
         } else {
-          apiViewModel.requestMainFeed { }
+          apiViewModel.requestMainFeed { value in
+            switch value.result {
+            case .success:
+              LaunchScreenViewModel.shared.mainFeedDownloaded()
+            case .failure:
+              WhistleLogger.logger.debug("MainFeed Download Failure")
+              apiViewModel.requestMainFeed { _ in }
+            }
+          }
         }
       }
     }
