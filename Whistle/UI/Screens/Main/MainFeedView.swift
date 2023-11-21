@@ -152,9 +152,6 @@ struct MainFeedView: View {
           return
         }
       }
-      //      if apiViewModel.myProfile.userName.isEmpty {
-      //        await apiViewModel.requestMyProfile()
-      //      }
       if apiViewModel.mainFeed.isEmpty {
         if universalRoutingModel.isUniversalContent {
           apiViewModel.requestUniversalFeed(contentID: universalRoutingModel.contentId) {
