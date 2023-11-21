@@ -50,7 +50,7 @@ extension APIViewModel: UploadProtocol {
   {
     let params: [String: Any] = [
       "caption": caption,
-      "music_id": musicID,
+      "music_id": musicID == 0 ? nil : musicID,
       "video_length": videoLength,
       "aspect_ratio": aspectRatio,
     ]

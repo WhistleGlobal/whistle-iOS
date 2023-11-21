@@ -65,6 +65,7 @@ struct MainContentPlayerView: View {
                   refreshToken.toggle()
                 }
                 .onAppear {
+                  LaunchScreenViewModel.shared.mainContentPlayerReady()
                   isChangable = false
                   DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                     isChangable = true
