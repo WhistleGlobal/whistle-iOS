@@ -184,30 +184,30 @@ extension ProfileView {
 
   @ViewBuilder
   func listEmptyView() -> some View {
-    Spacer()
-    Text(ContentWords().noUploadedContent).fontSystem(fontDesignSystem: .body1)
-      .foregroundColor(.LabelColor_Primary_Dark)
-    Button {
-      tabbarModel.showVideoCaptureView = true
-    } label: {
-      Text(ContentWords().goUpload)
-        .fontSystem(fontDesignSystem: .subtitle2)
-        .foregroundColor(Color.LabelColor_Primary_Dark)
-        .frame(width: 142, height: 36)
+    VStack(spacing: 0) {
+      Spacer().frame(height: UIScreen.getHeight(90))
+      Text(ContentWords().noUploadedContent).fontSystem(fontDesignSystem: .body1)
+        .foregroundColor(.LabelColor_Primary_Dark)
+      Button {
+        tabbarModel.showVideoCaptureView = true
+      } label: {
+        Text(ContentWords().goUpload)
+          .fontSystem(fontDesignSystem: .subtitle2)
+          .foregroundColor(Color.LabelColor_Primary_Dark)
+          .frame(width: 142, height: 36)
+      }
+      .buttonStyle(ProfileEditButtonStyle())
     }
-    .buttonStyle(ProfileEditButtonStyle())
-    .padding(.bottom, 76)
-    Spacer()
   }
 
   @ViewBuilder
   func bookmarkEmptyView() -> some View {
-    Spacer()
-    Text(ContentWords().noBookmarkedContent)
-      .fontSystem(fontDesignSystem: .body1)
-      .foregroundColor(.LabelColor_Primary_Dark)
-      .padding(.bottom, 64)
-    Spacer()
+    VStack(spacing: 0) {
+      Spacer().frame(height: UIScreen.getHeight(90))
+      Text(ContentWords().noBookmarkedContent)
+        .fontSystem(fontDesignSystem: .body1)
+        .foregroundColor(.LabelColor_Primary_Dark)
+    }
   }
 
   @ViewBuilder
