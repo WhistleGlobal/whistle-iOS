@@ -25,8 +25,10 @@ struct DescriptionAndTagEditorView: View {
   @ObservedObject var videoPlayer: VideoPlayerManager
   @ObservedObject var musicVM: MusicViewModel
   @FocusState private var isFocused: Bool
+  @FocusState private var isURLFocused: Bool
 
   @State var content = ""
+  @State var sourceURL = ""
   @State var onProgress = false
   @State var sheetPosition: BottomSheetPosition = .hidden
   @State var showTagCountMax = false
@@ -63,6 +65,7 @@ struct DescriptionAndTagEditorView: View {
         .ignoresSafeArea()
         .onTapGesture {
           isFocused = false
+          isURLFocused = false
         }
       CustomNavigationBarViewController(title: "새 게시물", nextText: "게시", isPostNavBar: true, backgroundColor: .white) {
         isInitial = false
@@ -83,10 +86,14 @@ struct DescriptionAndTagEditorView: View {
             UploadProgressViewModel.shared.thumbnail = video.getThumbnail(start: video.rangeDuration.lowerBound)
             NavigationModel.shared.navigate.toggle()
             await exporterVM.action(.save, start: video.rangeDuration.lowerBound)
+            // 출처 url의 형식 점검. 반드시 http가 포함되어야 정상 URL로 간주됨
+            if !sourceURL.hasPrefix("http") {
+              sourceURL = "https://" + sourceURL
+            }
             if let url = exporterVM.renderedVideoURL {
               VideoCompression
                 .compressh264Video(from: url, cache: .forceDelete, preferred: .quantity(ratio: 1.0)) { item, error in
-                  if let error {
+                  if error != nil {
                     apiViewModel.uploadContent(
                       video: exporterVM.videoData,
                       thumbnail: exporterVM.thumbnailData,
@@ -170,13 +177,13 @@ struct DescriptionAndTagEditorView: View {
             text: $content,
             prompt: Text("내용을 입력해 주세요. (\(textLimit)자 내)")
               .foregroundColor(Color.Disable_Placeholder_Light)
-              .font(.custom("AppleSDGothicNeo-Regular", size: 16)),
+              .font(.system(size: 16)),
             axis: .vertical)
             .foregroundStyle(Color.black)
             .onReceive(Just(content)) { _ in
               limitText(textLimit)
             }
-            .frame(height: UIScreen.getHeight(160), alignment: .topLeading)
+            .frame(height: UIScreen.getHeight(150 - 32), alignment: .topLeading)
             .contentShape(Rectangle())
             .onTapGesture {
               isFocused = true
@@ -193,6 +200,30 @@ struct DescriptionAndTagEditorView: View {
                 .fontSystem(fontDesignSystem: .body2)
             }
             .padding(.horizontal, UIScreen.getWidth(16))
+            .tint(.Info)
+
+          TextField(
+            "",
+            text: $sourceURL,
+            prompt: Text("영상 출처 URL을 입력해주세요.")
+              .foregroundColor(Color.Disable_Placeholder_Light)
+              .font(.system(size: 16)))
+            .foregroundStyle(Color.black)
+            .lineLimit(1)
+            .keyboardType(.URL)
+            .textContentType(.URL)
+            .frame(height: UIScreen.getHeight(50 - 26), alignment: .topLeading)
+            .contentShape(Rectangle())
+            .onTapGesture {
+              isURLFocused = true
+            }
+            .padding(UIScreen.getWidth(13))
+            .focused($isURLFocused)
+            .background(
+              RoundedRectangle(cornerRadius: 8)
+                .strokeBorder(Color.Border_Default_Dark))
+            .padding(.horizontal, UIScreen.getWidth(16))
+            .tint(.Info)
 
           ZStack(alignment: .topLeading) {
             TagsContent(
@@ -211,9 +242,11 @@ struct DescriptionAndTagEditorView: View {
       }
       .onTapGesture {
         isFocused = false
+        isURLFocused = false
       }
       .scrollIndicators(.visible)
       .offset(y: isFocused ? UIScreen.getHeight(-300) : 0)
+      .offset(y: isURLFocused ? UIScreen.getHeight(-300) : 0)
       .animation(.easeInOut)
       .ignoresSafeArea(edges: .bottom)
     }
