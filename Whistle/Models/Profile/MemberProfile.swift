@@ -16,6 +16,7 @@ class MemberProfile: ObservableObject, Codable {
     case status = "user_status"
     case isFollowed = "is_followed"
     case isBlocked = "is_blocked"
+    case myTeam = "myteam"
   }
 
   var userId = 0
@@ -25,6 +26,7 @@ class MemberProfile: ObservableObject, Codable {
   var status: UserStatus = .active
   var isFollowed = false
   var isBlocked = false
+  var myTeam: String?
 
   init() { }
 
@@ -38,5 +40,6 @@ class MemberProfile: ObservableObject, Codable {
     status = try container.decode(UserStatus.self, forKey: .status)
     isFollowed = try container.decode(Int.self, forKey: .isFollowed) == 1 ? true : false
     isBlocked = try container.decode(Int.self, forKey: .isBlocked) == 1 ? true : false
+    myTeam = try container.decode(String?.self, forKey: .myTeam)
   }
 }
