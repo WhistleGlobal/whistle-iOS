@@ -149,7 +149,6 @@ struct RootTabView: View {
         .padding(.bottom, 24)
         .ignoresSafeArea()
         .padding(.horizontal, 16)
-        .opacity(showGuide ? 0.0 : tabbarModel.tabbarOpacity)
         .onReceive(NavigationModel.shared.$navigate, perform: { _ in
           if UploadProgressViewModel.shared.isUploading {
             tabbarModel.switchTab(to: .main)
