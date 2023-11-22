@@ -20,6 +20,8 @@ struct RootTabView: View {
   @AppStorage("showGuide") var showGuide = true
   @AppStorage("isAccess") var isAccess = false
   @AppStorage("isMyTeamSelectPassed") var isMyTeamSelectPassed = false
+  @AppStorage("isMyTeamLabelOn") var isMyTeamLabelOn = true
+  @AppStorage("isMyTeamBackgroundOn") var isMyTeamBackgroundOn = true
 
   @State var isFirstProfileLoaded = true
   @State var mainOpacity = 1.0
@@ -148,6 +150,7 @@ struct RootTabView: View {
         .zIndex(10)
         .padding(.bottom, 24)
         .ignoresSafeArea()
+        .opacity(tabbarModel.tabbarOpacity)
         .padding(.horizontal, 16)
         .onReceive(NavigationModel.shared.$navigate, perform: { _ in
           if UploadProgressViewModel.shared.isUploading {

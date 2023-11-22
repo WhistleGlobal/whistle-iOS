@@ -9,8 +9,8 @@ import SwiftUI
 
 struct MyTeamSkinSettingView: View {
 
-  @AppStorage("isMyTeamLabelOn") var isMyTeamLabelOn = false
-  @AppStorage("isMyTeamBackgroundOn") var isMyTeamBackgroundOn = false
+  @AppStorage("isMyTeamLabelOn") var isMyTeamLabelOn = true
+  @AppStorage("isMyTeamBackgroundOn") var isMyTeamBackgroundOn = true
 
   var body: some View {
     VStack(spacing: 0) {
