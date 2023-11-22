@@ -501,11 +501,10 @@ extension ProfileView {
           {
             NavigationUtil.popToRootView()
             isFirstProfileLoaded = true
-            feedPlayersViewModel.resetPlayer()
             GIDSignIn.sharedInstance.signOut()
             userAuth.appleSignout()
-            tabbarModel.tabSelection = .main
-            tabbarModel.tabSelection = .main
+//            tabbarModel.switchTab(to: .main)
+            feedPlayersViewModel.resetPlayer()
           }
         } label: {
           bottomSheetRow(text: CommonWords().logout, color: Color.Info)

@@ -59,6 +59,9 @@ struct GuestContentPlayerView: View {
                 .onTapGesture(count: 2) {
                   feedMoreModel.bottomSheetPosition = .dynamic
                 }
+                .onAppear {
+                  LaunchScreenViewModel.shared.contentPlayerReady()
+                }
                 .onTapGesture {
                   if player.rate == 0.0 {
                     player.play()

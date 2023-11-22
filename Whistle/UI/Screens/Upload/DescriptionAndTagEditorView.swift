@@ -148,11 +148,6 @@ struct DescriptionAndTagEditorView: View {
               .background {
                 Color.black.clipShape(RoundedRectangle(cornerRadius: 12))
               }
-              .overlay {
-                if editorVM.currentVideo?.thumbHQImages.isEmpty ?? true {
-                  ProgressView()
-                }
-              }
           } else {
             Image(
               uiImage: editorVM
@@ -165,11 +160,6 @@ struct DescriptionAndTagEditorView: View {
               .cornerRadius(12)
               .background {
                 Color.black.clipShape(RoundedRectangle(cornerRadius: 12))
-              }
-              .overlay {
-                if editorVM.currentVideo?.thumbHQImages.isEmpty ?? true {
-                  ProgressView()
-                }
               }
           }
           TextField(
@@ -261,6 +251,7 @@ struct DescriptionAndTagEditorView: View {
             .foregroundStyle(Color.black)
             .contentShape(Rectangle())
             .onTapGesture {
+              tagsViewModel.dataObject = tagsViewModel.displayedDataObject
               sheetPosition = .hidden
             }
           Spacer()
@@ -273,6 +264,7 @@ struct DescriptionAndTagEditorView: View {
                 tagsViewModel.addTag(chipText: inputText)
                 inputText = "\u{200B}"
               }
+              tagsViewModel.displayedDataObject = tagsViewModel.dataObject
               sheetPosition = .hidden
             }
         }

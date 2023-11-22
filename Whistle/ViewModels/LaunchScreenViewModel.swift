@@ -12,17 +12,17 @@ class LaunchScreenViewModel: ObservableObject {
 
   private init() { }
 
-  @Published var isMainFeedDownloded = false
-  @Published var isMainContentPlayerReady = false
+  @Published var isFeedDownloded = false
+  @Published var isContentPlayerReady = false
   var displayLaunchScreen: Bool {
-    isMainFeedDownloded && isMainContentPlayerReady ? false : true
+    isFeedDownloded && isContentPlayerReady ? false : true
   }
 
-  func mainFeedDownloaded() {
-    isMainFeedDownloded = true
+  func feedDownloaded() {
+    isFeedDownloded = true
   }
 
-  func mainContentPlayerReady() {
-    isMainContentPlayerReady = true
+  func contentPlayerReady() {
+    isContentPlayerReady = true
   }
 }
