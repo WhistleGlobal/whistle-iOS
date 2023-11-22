@@ -33,7 +33,12 @@ struct MainFeedPageTabView<Content: View>: View {
 
 // MARK: - MainFeedTabSelection
 
-enum MainFeedTabSelection {
+enum MainFeedTabSelection: Identifiable {
   case all
   case myteam
+
+  var id: MainFeedTabSelection {
+    self
+  }
 }
+

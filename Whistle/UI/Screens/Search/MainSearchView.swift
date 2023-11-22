@@ -9,7 +9,6 @@ import SwiftUI
 import SwiftyJSON
 import UIKit
 
-
 // MARK: - MainSearchView
 
 struct MainSearchView: View {

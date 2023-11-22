@@ -636,6 +636,8 @@
 		78433E4A2AEFEB970054035C /* BookmarkedPageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78433E492AEFEB970054035C /* BookmarkedPageView.swift */; };
 		78433E4C2AEFEBA50054035C /* BookmarkedContentPlayerview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78433E4B2AEFEBA50054035C /* BookmarkedContentPlayerview.swift */; };
 		7847A3172AE1311200C4FF61 /* AlbumAccessView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7847A3162AE1311200C4FF61 /* AlbumAccessView.swift */; };
+		7848F4442B0DC7890044C3D0 /* SwiftUIPager in Frameworks */ = {isa = PBXBuildFile; productRef = 7848F4432B0DC7890044C3D0 /* SwiftUIPager */; };
+		7848F4462B0DC7920044C3D0 /* SwiftUIPager in Frameworks */ = {isa = PBXBuildFile; productRef = 7848F4452B0DC7920044C3D0 /* SwiftUIPager */; };
 		785258572ACC6D680024E466 /* GuestProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 785258562ACC6D680024E466 /* GuestProfileView.swift */; };
 		785E82722AAC8FDD00EF3576 /* MainContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 785E82712AAC8FDD00EF3576 /* MainContent.swift */; };
 		7860FC232AB04A2F007C5C79 /* OffsetKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7860FC222AB04A2F007C5C79 /* OffsetKey.swift */; };
@@ -1337,6 +1339,7 @@
 				1B96AC012B01CA2F00CDA102 /* BottomSheet.framework in Frameworks */,
 				78F780072AB34876005623CD /* GoogleSignInSwift in Frameworks */,
 				1BA24B4F2ADBFFAF00DB0992 /* Aespa.framework in Frameworks */,
+				7848F4442B0DC7890044C3D0 /* SwiftUIPager in Frameworks */,
 				786669552AA12F7F00448EC7 /* KeychainSwift in Frameworks */,
 				7866694E2AA1289900448EC7 /* Alamofire in Frameworks */,
 				1B96AC0A2B01CA4200CDA102 /* BottomSheet.framework in Frameworks */,
@@ -1364,6 +1367,7 @@
 				1B9936F22AF3699E00F5C619 /* GoogleSignInSwift in Frameworks */,
 				1B9936F32AF3699E00F5C619 /* Aespa.framework in Frameworks */,
 				1B9936F42AF3699E00F5C619 /* KeychainSwift in Frameworks */,
+				7848F4462B0DC7920044C3D0 /* SwiftUIPager in Frameworks */,
 				1B9936F52AF3699E00F5C619 /* Alamofire in Frameworks */,
 				1B395D962AFA533B00E28180 /* Lottie in Frameworks */,
 				1B96AC062B01CA3C00CDA102 /* BottomSheet.framework in Frameworks */,
@@ -3019,6 +3023,7 @@
 				1BD4E56A2ABA275200ADB783 /* SnapKit */,
 				78A58E052AD1C287007F6A69 /* ReverseMask */,
 				1B2E3D492B0CAEAB003A5288 /* TagKit */,
+				7848F4432B0DC7890044C3D0 /* SwiftUIPager */,
 			);
 			productName = Whistle;
 			productReference = 1B39553C2A95069C00BCB4DF /* Whistle.app */;
@@ -3072,6 +3077,7 @@
 				1B9936262AF3699E00F5C619 /* ReverseMask */,
 				1B395D952AFA533B00E28180 /* Lottie */,
 				1B2E3D4B2B0CAEB2003A5288 /* TagKit */,
+				7848F4452B0DC7920044C3D0 /* SwiftUIPager */,
 			);
 			productName = Whistle;
 			productReference = 1B9937082AF3699E00F5C619 /* WhistleDev.app */;
@@ -3163,6 +3169,7 @@
 				78A58E042AD1C287007F6A69 /* XCRemoteSwiftPackageReference "ReverseMask" */,
 				1B395D8E2AF9B88D00E28180 /* XCRemoteSwiftPackageReference "lottie-ios" */,
 				1B2E3D482B0CAE44003A5288 /* XCRemoteSwiftPackageReference "TagKit" */,
+				7848F4422B0DC7890044C3D0 /* XCRemoteSwiftPackageReference "SwiftUIPager" */,
 			);
 			productRefGroup = 1B39553D2A95069C00BCB4DF /* Products */;
 			projectDirPath = "";
@@ -4780,6 +4787,14 @@
 				minimumVersion = 5.0.0;
 			};
 		};
+		7848F4422B0DC7890044C3D0 /* XCRemoteSwiftPackageReference "SwiftUIPager" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/fermoya/SwiftUIPager.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.5.0;
+			};
+		};
 		7866694C2AA1289900448EC7 /* XCRemoteSwiftPackageReference "Alamofire" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/Alamofire/Alamofire.git";
@@ -4905,6 +4920,16 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 1BD4E5692ABA275200ADB783 /* XCRemoteSwiftPackageReference "SnapKit" */;
 			productName = SnapKit;
+		};
+		7848F4432B0DC7890044C3D0 /* SwiftUIPager */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 7848F4422B0DC7890044C3D0 /* XCRemoteSwiftPackageReference "SwiftUIPager" */;
+			productName = SwiftUIPager;
+		};
+		7848F4452B0DC7920044C3D0 /* SwiftUIPager */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 7848F4422B0DC7890044C3D0 /* XCRemoteSwiftPackageReference "SwiftUIPager" */;
+			productName = SwiftUIPager;
 		};
 		7866694D2AA1289900448EC7 /* Alamofire */ = {
 			isa = XCSwiftPackageProductDependency;

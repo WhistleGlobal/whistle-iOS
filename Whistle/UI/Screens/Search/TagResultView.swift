@@ -47,13 +47,15 @@ struct TagResultView: View {
       }
     }
     .toolbarRole(.editor)
-    .toolbar {
-      ToolbarItem(placement: .principal) {
-        Text("#\(tagText)")
-          .fontSystem(fontDesignSystem: .subtitle2)
-          .foregroundColor(.labelColorPrimary)
-      }
-    }
+    .navigationTitle("#\(tagText)")
+    .navigationBarTitleDisplayMode(.inline)
+//    .toolbar {
+//      ToolbarItem(placement: .principal) {
+//        Text("#\(tagText)")
+//          .fontSystem(fontDesignSystem: .subtitle2)
+//          .foregroundColor(.labelColorPrimary)
+//      }
+//    }
   }
 }
 

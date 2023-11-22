@@ -8,6 +8,7 @@
 import _AVKit_SwiftUI
 import BottomSheet
 import SwiftUI
+import SwiftUIPager
 
 // MARK: - MainFeedView
 
@@ -21,6 +22,7 @@ struct MainFeedView: View {
   @StateObject private var toastViewModel = ToastViewModel.shared
   @StateObject private var feedMoreModel = MainFeedMoreModel.shared
   @StateObject private var tabbarModel = TabbarModel.shared
+  @StateObject var page: Page = .first()
   @State var allIndex = 0
   @State var myTeamIndex = 0
   @State var searchText = ""
@@ -29,15 +31,22 @@ struct MainFeedView: View {
   @State var scopeSelection = 0
   @State var searchQueryString = ""
   @State var isSearching = false
-  @State var feedSelection: MainFeedTabSelection = .all
+  @State var feedSelection: MainFeedTabSelection = .myteam
 
   var body: some View {
-    MainFeedPageTabView(selection: $feedSelection) {
-      myTeamFeedTab()
-        .tag(MainFeedTabSelection.myteam)
-      allFeedTab()
-        .tag(MainFeedTabSelection.all)
+    Pager(page: page, data: [MainFeedTabSelection.myteam, MainFeedTabSelection.all]) { selection in
+      feedPager(selection: selection)
     }
+    .singlePagination(ratio: 0.33, sensitivity: .low)
+    .preferredItemSize(CGSize(width: UIScreen.width, height: UIScreen.height))
+    .onPageChanged { index in
+      if index == 0 {
+        feedSelection = .myteam
+      } else {
+        feedSelection = .all
+      }
+    }
+    .background(Color.black)
     .ignoresSafeArea()
     .bottomSheet(
       bottomSheetPosition: $feedMoreModel.bottomSheetPosition,
@@ -166,20 +175,50 @@ struct MainFeedView: View {
       }
       mainFeedPlayersViewModel.stopPlayer()
     }
-    .toolbar {
-      if feedMoreModel.showSearch {
-        ToolbarItem(placement: .topBarLeading) {
-          FeedSearchBar(
-            searchText: $searchQueryString,
-            isSearching: $isSearching,
-            submitAction: { },
-            cancelTapAction: dismiss)
-            .simultaneousGesture(TapGesture().onEnded {
-              //                      tapSearchBar?()
-            })
-            .frame(width: UIScreen.width - 32)
+    .overlay {
+      VStack {
+        HStack {
+          Color.clear.frame(width: 28, height: 28)
+          Spacer()
+          Text("마이팀")
+            .fontSystem(fontDesignSystem: .subtitle2)
+            .foregroundColor(.white)
+            .scaleEffect(feedSelection == .myteam ? 1.1 : 1.0)
+            .onTapGesture {
+              withAnimation {
+                feedSelection = .myteam
+                page.update(.moveToFirst)
+              }
+            }
+
+          Divider()
+            .background(Color.white).frame(height: 12)
+          Text("전체")
+            .fontSystem(fontDesignSystem: .subtitle2)
+            .foregroundColor(.white)
+            .scaleEffect(feedSelection == .all ? 1.1 : 1.0)
+            .onTapGesture {
+              withAnimation {
+                feedSelection = .all
+                page.update(.moveToLast)
+              }
+            }
+            .foregroundColor(.white)
+          Spacer()
+          NavigationLink {
+            MainSearchView()
+          } label: {
+            Image(systemName: "magnifyingglass")
+              .font(.system(size: 24))
+              .foregroundColor(.white)
+          }
+          .frame(width: 28, height: 28)
+          .id(UUID())
         }
+        .frame(height: 28)
+        Spacer()
       }
+      .padding(.horizontal, 16)
     }
     .onAppear {
       feedMoreModel.isRootStacked = false
@@ -218,23 +257,6 @@ extension MainFeedView {
       Color.black
       if !apiViewModel.mainFeed.isEmpty {
         MainFeedPageView(index: $allIndex)
-        VStack(spacing: 0) {
-          HStack {
-            Spacer()
-            NavigationLink {
-              MainSearchView()
-            } label: {
-              Image(systemName: "magnifyingglass")
-                .font(.system(size: 24))
-                .foregroundColor(.white)
-            }
-            .id(UUID())
-          }
-          .frame(height: 28)
-          .padding(.horizontal, 16)
-          .padding(.top, 54)
-          Spacer()
-        }
       }
     }
     .background(Color.black.edgesIgnoringSafeArea(.all))
@@ -247,26 +269,19 @@ extension MainFeedView {
       Color.black
       if !apiViewModel.mainFeed.isEmpty {
         MyTeamFeedPageView(index: $myTeamIndex)
-        VStack(spacing: 0) {
-          HStack {
-            Spacer()
-            NavigationLink {
-              MainSearchView()
-            } label: {
-              Image(systemName: "magnifyingglass")
-                .font(.system(size: 24))
-                .foregroundColor(.white)
-            }
-            .id(UUID())
-          }
-          .frame(height: 28)
-          .padding(.horizontal, 16)
-          .padding(.top, 54)
-          Spacer()
-        }
       }
     }
     .background(Color.black.edgesIgnoringSafeArea(.all))
     .edgesIgnoringSafeArea(.all)
+  }
+
+  @ViewBuilder
+  func feedPager(selection: MainFeedTabSelection) -> some View {
+    switch selection {
+    case .all:
+      allFeedTab()
+    case .myteam:
+      myTeamFeedTab()
+    }
   }
 }
