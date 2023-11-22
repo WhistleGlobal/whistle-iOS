@@ -58,22 +58,31 @@ struct RootTabView: View {
 
   var body: some View {
     ZStack {
-      if LaunchScreenViewModel.shared.displayLaunchScreen {
-        SignInPlayer()
-          .ignoresSafeArea()
-          .allowsTightening(false)
-          .zIndex(200)
+      if !LaunchScreenViewModel.shared.displayLaunchScreen {
+        guideView
       }
-      guideView
       TabView(selection: $tabbarModel.tabSelection) {
         if isAccess {
           NavigationStack {
-            if
-              !isMyTeamSelectPassed,
-              apiViewModel.myProfile.myTeam == nil,
-              !apiViewModel.myProfile.userName.isEmpty
-            {
-              MyTeamSelectView()
+            ZStack {
+              if
+                !isMyTeamSelectPassed,
+                apiViewModel.myProfile.myTeam == nil,
+                !apiViewModel.myProfile.userName.isEmpty
+              {
+                MyTeamSelectView()
+                  .tag(TabSelection.main)
+              } else {
+                ZStack {
+                  if LaunchScreenViewModel.shared.displayLaunchScreen {
+                    SignInPlayer()
+                      .ignoresSafeArea()
+                      .allowsTightening(false)
+                      .zIndex(200)
+                  }
+                  MainFeedView()
+                    .environmentObject(universalRoutingModel)
+                }
                 .tag(TabSelection.main)
             } else {
               MainFeedView(feedSelection: $feedSelection)
@@ -82,11 +91,19 @@ struct RootTabView: View {
             }
           }
         } else {
-          GuestMainFeedView()
-            .onChange(of: tabbarModel.tabSelection) { newValue in
-              mainOpacity = newValue == .main ? 1 : 0
+          ZStack {
+            if LaunchScreenViewModel.shared.displayLaunchScreen {
+              SignInPlayer()
+                .ignoresSafeArea()
+                .allowsTightening(false)
+                .zIndex(200)
             }
-            .tag(TabSelection.main)
+            GuestMainFeedView()
+              .onChange(of: tabbarModel.tabSelection) { newValue in
+                mainOpacity = newValue == .main ? 1 : 0
+              }
+          }
+          .tag(TabSelection.main)
         }
 
         if isAccess {
@@ -110,6 +127,7 @@ struct RootTabView: View {
       }
 
       // MARK: - Tabbar
+
       if !LaunchScreenViewModel.shared.displayLaunchScreen {
         VStack {
           Spacer()
@@ -170,7 +188,10 @@ struct RootTabView: View {
         AlertPopup()
       }
     }
-    .fullScreenCover(isPresented: $tabbarModel.showVideoCaptureView) {
+    .fullScreenCover(
+      isPresented: $tabbarModel.showVideoCaptureView,
+      onDismiss: { feedPlayersViewModel.currentPlayer?.play() })
+    {
       CameraOrAccessView(
         isCam: $isCameraAuthorized,
         isMic: $isMicrophoneAuthorized,
@@ -358,6 +379,7 @@ extension RootTabView {
         getMicrophonePermission()
         checkAllPermissions()
         tabbarModel.showVideoCaptureView = true
+        feedPlayersViewModel.stopPlayer()
       } label: {
         Capsule()
           .fill(Color.Dim_Thin)

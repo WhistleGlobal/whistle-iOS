@@ -79,6 +79,9 @@ struct TagsContent<Overlay>: View where Overlay: View {
           .padding(.top, 16)
           .padding(.horizontal, 12)
         }
+        .onDisappear {
+          inputText = zwsp
+        }
       } else {
         // Description 뷰에서 보여줄 뷰
         ZStack(alignment: .topLeading) {
@@ -164,7 +167,8 @@ struct TagsContent<Overlay>: View where Overlay: View {
       .onAppear {
         isFocused = true
       }
-      .onChange(of: inputText) { _ in
+      .onChange(of: inputText) { value in
+        viewModel.dataObject[viewModel.dataObject.count - 2].titleKey = value
         // 입력 도중 공백이 들어왔을 때
         if inputText.hasSuffix(" ") {
           viewModel.addTag(chipText: String(inputText[..<inputText.index(before: inputText.endIndex)]))

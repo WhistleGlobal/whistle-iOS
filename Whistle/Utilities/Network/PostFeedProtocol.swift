@@ -24,7 +24,7 @@ protocol PostFeedProtocol {
   func reportContent(userID: Int, contentID: Int, reportReason: Int, reportDescription: String) async -> Int
   func reportUser(usedID: Int, contentID: Int, reportReason: Int, reportDescription: String) async -> Int
   func addViewCount(_ viewCount: ViewCount, notInclude: Set<Int>, completion: @escaping ([ViewCountModel]) -> Void)
-  func requestGuestFeed(completion: @escaping () -> Void)
+  func requestGuestFeed(completion: @escaping (DataResponse<[GuestContent], AFError>) -> Void)
   func requestUniversalFeed(contentID: Int, completion: @escaping () -> Void)
   func requestMyTeamFeed(completion: @escaping (DataResponse<[MainContent], AFError>) -> Void)
 }

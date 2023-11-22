@@ -318,7 +318,7 @@ extension APIViewModel: PostFeedProtocol {
     }
   }
 
-  func requestGuestFeed(completion: @escaping () -> Void) {
+  func requestGuestFeed(completion: @escaping (DataResponse<[GuestContent], AFError>) -> Void) {
     AF.request(
       "\(domainURL)/content/all-content-list",
       method: .get,
@@ -331,9 +331,10 @@ extension APIViewModel: PostFeedProtocol {
           if self.guestFeed.count >= 10 {
             self.guestFeed.removeSubrange(10...)
           }
-          completion()
+          completion(response)
         case .failure:
           WhistleLogger.logger.error("Error parsing JSON")
+          completion(response)
           break
         }
       }

@@ -174,7 +174,7 @@ struct MainFeedView: View {
           apiViewModel.requestMainFeed { value in
             switch value.result {
             case .success:
-              LaunchScreenViewModel.shared.mainFeedDownloaded()
+              LaunchScreenViewModel.shared.feedDownloaded()
             case .failure:
               WhistleLogger.logger.debug("MainFeed Download Failure")
               apiViewModel.requestMainFeed { _ in }
