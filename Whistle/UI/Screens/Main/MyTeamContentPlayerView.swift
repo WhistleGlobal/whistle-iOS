@@ -199,9 +199,7 @@ struct MyTeamContentPlayerView: View {
     }
     .onAppear {
       tabbarModel.showTabbar()
-      if index == 0 {
-        lifecycleDelegate?.onAppear()
-      }
+      lifecycleDelegate?.onAppear()
     }
     .onDisappear {
       lifecycleDelegate?.onDisappear()
