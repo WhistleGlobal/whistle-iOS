@@ -19,15 +19,15 @@ struct Tags: View {
         .frame(minWidth: UIScreen.getWidth(28))
         .lineLimit(1)
       if editable {
-        Image(systemName: "x.circle.fill")
+        Image(systemName: "xmark.circle.fill")
           .foregroundStyle(Color.Dim_Default)
-          .font(.system(size: 18))
+          .font(.system(size: 16))
           .onTapGesture {
             onDelete()
           }
       }
     }
-    .padding(.vertical, 4)
+    .padding(.vertical, 2)
     .padding(.horizontal, 12)
   }
 }
