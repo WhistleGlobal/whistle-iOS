@@ -13,7 +13,6 @@ import SwiftUI
 // MARK: - GuestMainFeedView
 
 struct GuestMainFeedView: View {
-
   @StateObject private var apiViewModel = APIViewModel.shared
   @StateObject var appleSignInViewModel = AppleSignInViewModel()
   @StateObject private var feedPlayersViewModel = GuestFeedPlayersViewModel.shared
@@ -189,7 +188,15 @@ struct GuestMainFeedView: View {
         await apiViewModel.requestMyProfile()
       }
       if apiViewModel.guestFeed.isEmpty {
-        apiViewModel.requestGuestFeed { }
+        apiViewModel.requestGuestFeed { value in
+          switch value.result {
+          case .success:
+            LaunchScreenViewModel.shared.feedDownloaded()
+          case .failure:
+            WhistleLogger.logger.debug("MainFeed Download Failure")
+            apiViewModel.requestGuestFeed { _ in }
+          }
+        }
       }
     }
   }

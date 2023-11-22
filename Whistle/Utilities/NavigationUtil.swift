@@ -18,7 +18,9 @@ extension UIApplication {
     }
     if let tab = viewController as? UITabBarController {
       if let selected = tab.selectedViewController {
-        return selected.children.first! as? UINavigationController
+        if !selected.children.isEmpty {
+          return selected.children.first as? UINavigationController
+        }
       }
     }
     guard let viewController else {

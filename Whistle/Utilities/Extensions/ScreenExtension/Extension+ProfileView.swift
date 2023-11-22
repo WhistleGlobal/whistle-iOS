@@ -559,10 +559,10 @@ extension ProfileView {
           {
             NavigationUtil.popToRootView()
             isFirstProfileLoaded = true
-            feedPlayersViewModel.resetPlayer()
             GIDSignIn.sharedInstance.signOut()
             userAuth.appleSignout()
-            tabbarModel.switchTab(to: .main)
+//            tabbarModel.switchTab(to: .main)
+            feedPlayersViewModel.resetPlayer()
           }
         } label: {
           bottomSheetRow(text: CommonWords().logout, color: Color.Info)
