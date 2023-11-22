@@ -106,17 +106,26 @@ struct MyTeamFeedPageView: UIViewRepresentable {
       if !parent.apiViewModel.myTeamFeed.isEmpty {
         if index == 0 {
           parent.feedPlayersViewModel.initialPlayers()
+        } else {
+          parent.feedPlayersViewModel.initialPlayers(index: index)
         }
         parent.feedPlayersViewModel.currentPlayer?.seek(to: .zero)
         if BlockList.shared.userIds.contains(parent.currentContentInfo?.userId ?? 0) {
           return
         }
-        parent.feedPlayersViewModel.currentPlayer?.play()
+        WhistleLogger.logger.debug("MyTeamFeedPageView onAppear()")
+        if feedSelection == .myteam {
+          parent.feedPlayersViewModel.currentPlayer?.pause()
+          parent.feedPlayersViewModel.currentPlayer?.seek(to: .zero)
+          parent.feedPlayersViewModel.currentPlayer?.play()
+        }
       }
     }
 
     func onDisappear() {
+      WhistleLogger.logger.debug("MyTeamFeedPageView onDisappear()")
       parent.feedPlayersViewModel.currentPlayer?.pause()
+      parent.feedPlayersViewModel.resetPlayer()
     }
 
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {

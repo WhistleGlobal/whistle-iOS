@@ -515,3 +515,11 @@ extension RootTabView {
     }
   }
 }
+
+// MARK: - FeedSelected
+
+class FeedSelected: ObservableObject {
+  static let shared: FeedSelected = .init()
+  @Published var feedSelection: MainFeedTabSelection = .myteam
+  private init() { }
+}

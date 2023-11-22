@@ -107,6 +107,34 @@ class MainFeedPlayersViewModel: ObservableObject {
     nextPlayer = AVPlayer(url: URL(string: urlStringNext)!)
   }
 
+  func initialPlayers(index: Int) {
+    WhistleLogger.logger.debug("initialPlayers(index: \(index))")
+    if apiViewModel.mainFeed.isEmpty { return }
+    if apiViewModel.mainFeed.count == 1 {
+      guard let urlString = apiViewModel.mainFeed.first?.videoUrl else { return }
+      currentPlayer = AVPlayer(url: URL(string: urlString)!)
+      return
+    }
+    if index == 0 {
+      guard let urlString = apiViewModel.mainFeed.first?.videoUrl else { return }
+      currentPlayer = AVPlayer(url: URL(string: urlString)!)
+      guard let urlStringNext = apiViewModel.mainFeed[1].videoUrl else { return }
+      nextPlayer = AVPlayer(url: URL(string: urlStringNext)!)
+    } else if index == apiViewModel.myFeed.count - 1 {
+      guard let urlString = apiViewModel.mainFeed.last?.videoUrl else { return }
+      currentPlayer = AVPlayer(url: URL(string: urlString)!)
+      guard let urlStringPrev = apiViewModel.mainFeed[index - 1].videoUrl else { return }
+      prevPlayer = AVPlayer(url: URL(string: urlStringPrev)!)
+    } else {
+      guard let urlString = apiViewModel.mainFeed[index].videoUrl else { return }
+      currentPlayer = AVPlayer(url: URL(string: urlString)!)
+      guard let urlStringPrev = apiViewModel.mainFeed[index - 1].videoUrl else { return }
+      prevPlayer = AVPlayer(url: URL(string: urlStringPrev)!)
+      guard let urlStringNext = apiViewModel.mainFeed[index + 1].videoUrl else { return }
+      nextPlayer = AVPlayer(url: URL(string: urlStringNext)!)
+    }
+  }
+
   func removePlayer(completion: @escaping () -> Void) {
     stopPlayer()
     if apiViewModel.mainFeed.count == 1 {

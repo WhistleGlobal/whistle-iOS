@@ -45,12 +45,14 @@ struct MainFeedView: View {
         feedSelection = .myteam
         if myTeamfeedPlayersViewModel.currentPlayer?.rate == 0.0 {
           myTeamfeedPlayersViewModel.currentPlayer?.play()
+          WhistleLogger.logger.debug("MainFeedView onPageChanged index 0")
         }
       } else {
         myTeamfeedPlayersViewModel.stopPlayer()
         feedSelection = .all
         if mainFeedPlayersViewModel.currentPlayer?.rate == 0.0 {
           mainFeedPlayersViewModel.currentPlayer?.play()
+          WhistleLogger.logger.debug("MainFeedView onPageChanged index 1")
         }
       }
     }
@@ -154,7 +156,7 @@ struct MainFeedView: View {
           case .success:
             break
           case .failure:
-            WhistleLogger.logger.debug("MainFeed Download Failure")
+            WhistleLogger.logger.debug("MyTeamFeed Download Failure")
             apiViewModel.requestMyTeamFeed { _ in }
           }
         }
@@ -182,16 +184,31 @@ struct MainFeedView: View {
       }
     }
     .fullScreenCover(isPresented: $feedMoreModel.showReport, onDismiss: {
-      mainFeedPlayersViewModel.currentPlayer?.play()
+      if feedSelection == .all {
+        mainFeedPlayersViewModel.currentPlayer?.play()
+      } else {
+        myTeamfeedPlayersViewModel.currentPlayer?.play()
+      }
     }) {
-      MainFeedReportReasonSelectionView(
-        goReport: $feedMoreModel.showReport,
-        contentId: apiViewModel.mainFeed[mainFeedPlayersViewModel.currentVideoIndex].contentId ?? 0,
-        userId: apiViewModel.mainFeed[mainFeedPlayersViewModel.currentVideoIndex].userId ?? 0)
+      if feedSelection == .all {
+        MainFeedReportReasonSelectionView(
+          goReport: $feedMoreModel.showReport,
+          contentId: apiViewModel.mainFeed[mainFeedPlayersViewModel.currentVideoIndex].contentId ?? 0,
+          userId: apiViewModel.mainFeed[mainFeedPlayersViewModel.currentVideoIndex].userId ?? 0)
+      } else {
+        MainFeedReportReasonSelectionView(
+          goReport: $feedMoreModel.showReport,
+          contentId: apiViewModel.myTeamFeed[myTeamfeedPlayersViewModel.currentVideoIndex].contentId ?? 0,
+          userId: apiViewModel.myTeamFeed[myTeamfeedPlayersViewModel.currentVideoIndex].userId ?? 0)
+      }
     }
     .onChange(of: tabbarModel.tabSelection) { selection in
       if selection == .main, !feedMoreModel.isRootStacked {
-        mainFeedPlayersViewModel.currentPlayer?.play()
+        if feedSelection == .all {
+          mainFeedPlayersViewModel.currentPlayer?.play()
+        } else {
+          myTeamfeedPlayersViewModel.currentPlayer?.play()
+        }
         return
       }
       mainFeedPlayersViewModel.stopPlayer()
@@ -260,9 +277,7 @@ struct MainFeedView: View {
             return
           }
         }
-//        myTeamfeedPlayersViewModel.currentPlayer?.pause()
-//        myTeamfeedPlayersViewModel.currentPlayer?.seek(to: .zero)
-//        myTeamfeedPlayersViewModel.currentPlayer?.play()
+        WhistleLogger.logger.debug("MainFeedView onAppear if")
       } else {
         if mainFeedPlayersViewModel.currentVideoIndex != 0 {
           mainFeedPlayersViewModel.currentPlayer?.seek(to: .zero)
@@ -273,15 +288,18 @@ struct MainFeedView: View {
             return
           }
         }
-//        mainFeedPlayersViewModel.currentPlayer?.pause()
-//        mainFeedPlayersViewModel.currentPlayer?.seek(to: .zero)
-//        mainFeedPlayersViewModel.currentPlayer?.play()
+        WhistleLogger.logger.debug("MainFeedView onAppear else")
       }
     }
     .onDisappear {
-      feedMoreModel.isRootStacked = true
+      if tabbarModel.tabSelection == .main {
+        feedMoreModel.isRootStacked = true
+      }
       mainFeedPlayersViewModel.stopPlayer()
       myTeamfeedPlayersViewModel.stopPlayer()
+      mainFeedPlayersViewModel.resetPlayer()
+      myTeamfeedPlayersViewModel.resetPlayer()
+      WhistleLogger.logger.debug("MainFeedView onDisappear")
     }
   }
 }

@@ -17,6 +17,7 @@ struct ContentPlayer: UIViewControllerRepresentable {
   var aspectRatio: Double?
 
   func makeUIViewController(context _: Context) -> AVPlayerViewController {
+    WhistleLogger.logger.debug("ContentPlayer: \(player.debugDescription)")
     let view = AVPlayerViewController()
     let audioSession = AVAudioSession.sharedInstance()
     do {

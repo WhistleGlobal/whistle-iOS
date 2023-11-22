@@ -106,12 +106,17 @@ struct MainFeedPageView: UIViewRepresentable {
       if !parent.apiViewModel.mainFeed.isEmpty {
         if index == 0 {
           parent.feedPlayersViewModel.initialPlayers()
+        } else {
+          parent.feedPlayersViewModel.initialPlayers(index: index)
         }
         parent.feedPlayersViewModel.currentPlayer?.seek(to: .zero)
         if BlockList.shared.userIds.contains(parent.currentContentInfo?.userId ?? 0) {
           return
         }
+        WhistleLogger.logger.debug("MainFeedPageView onAppear()")
         if feedSelection == .all {
+          parent.feedPlayersViewModel.currentPlayer?.pause()
+          parent.feedPlayersViewModel.currentPlayer?.seek(to: .zero)
           parent.feedPlayersViewModel.currentPlayer?.play()
         }
       }
@@ -119,6 +124,8 @@ struct MainFeedPageView: UIViewRepresentable {
 
     func onDisappear() {
       parent.feedPlayersViewModel.currentPlayer?.pause()
+      parent.feedPlayersViewModel.resetPlayer()
+      WhistleLogger.logger.debug("MainFeedPageView onDisappear()")
     }
 
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
