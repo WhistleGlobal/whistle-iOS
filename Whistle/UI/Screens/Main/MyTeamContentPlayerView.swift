@@ -118,7 +118,7 @@ struct MyTeamContentPlayerView: View {
                     ContentLayer(
                       currentVideoInfo: content,
                       feedMoreModel: MainFeedMoreModel.shared,
-                      feedPlayersViewModel: MyFeedPlayersViewModel.shared,
+                      feedPlayersViewModel: MyTeamFeedPlayersViewModel.shared,
                       feedArray: apiViewModel.myTeamFeed,
                       whistleAction: { whistleToggle(content: content, index) },
                       refreshToken: $refreshToken)
