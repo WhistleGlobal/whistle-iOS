@@ -454,6 +454,10 @@ extension TagSearchPlayersViewModel: PlayersViewModel { }
 
 extension GuestFeedPlayersViewModel: PlayersViewModel { }
 
+// MARK: - MyTeamFeedPlayersViewModel + PlayersViewModel
+
+extension MyTeamFeedPlayersViewModel: PlayersViewModel { }
+
 extension ContentLayer {
   @ViewBuilder
   var userNameAndProfile: some View {

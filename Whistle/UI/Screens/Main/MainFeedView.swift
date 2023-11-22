@@ -16,7 +16,8 @@ struct MainFeedView: View {
   @Environment(\.dismiss) var dismiss
   @EnvironmentObject var universalRoutingModel: UniversalRoutingModel
   @StateObject private var apiViewModel = APIViewModel.shared
-  @StateObject private var feedPlayersViewModel = MainFeedPlayersViewModel.shared
+  @StateObject private var mainFeedPlayersViewModel = MainFeedPlayersViewModel.shared
+  @StateObject private var myTeamfeedPlayersViewModel = MyTeamFeedPlayersViewModel.shared
   @StateObject private var toastViewModel = ToastViewModel.shared
   @StateObject private var feedMoreModel = MainFeedMoreModel.shared
   @StateObject private var tabbarModel = TabbarModel.shared
@@ -27,48 +28,16 @@ struct MainFeedView: View {
   @State var scopeSelection = 0
   @State var searchQueryString = ""
   @State var isSearching = false
+  @State var feedSelection: MainFeedTabSelection = .all
 
   var body: some View {
-    ZStack {
-      Color.black
-      if !apiViewModel.mainFeed.isEmpty {
-        MainFeedPageView(index: $index)
-        VStack(spacing: 0) {
-          HStack {
-            Spacer()
-            NavigationLink {
-              MainSearchView()
-            } label: {
-              Image(systemName: "magnifyingglass")
-                .font(.system(size: 24))
-                .foregroundColor(.white)
-            }
-            .id(UUID())
-          }
-          .frame(height: 28)
-          .padding(.horizontal, 16)
-          .padding(.top, 54)
-          Spacer()
-        }
-      }
+    MainFeedPageTabView(selection: $feedSelection) {
+      allFeedTab()
+        .tag(MainFeedTabSelection.all)
+      myTeamFeedTab()
+        .tag(MainFeedTabSelection.myteam)
     }
-    .toolbar {
-      if feedMoreModel.showSearch {
-        ToolbarItem(placement: .topBarLeading) {
-          FeedSearchBar(
-            searchText: $searchQueryString,
-            isSearching: $isSearching,
-            submitAction: { },
-            cancelTapAction: dismiss)
-            .simultaneousGesture(TapGesture().onEnded {
-              //                      tapSearchBar?()
-            })
-            .frame(width: UIScreen.width - 32)
-        }
-      }
-    }
-    .background(Color.black.edgesIgnoringSafeArea(.all))
-    .edgesIgnoringSafeArea(.all)
+    .ignoresSafeArea()
     .bottomSheet(
       bottomSheetPosition: $feedMoreModel.bottomSheetPosition,
       switchablePositions: [.hidden, .absolute(242)])
@@ -97,9 +66,9 @@ struct MainFeedView: View {
           feedMoreModel.bottomSheetPosition = .hidden
           toastViewModel.cancelToastInit(message: ToastMessages().postHidden) {
             Task {
-              let currentContent = apiViewModel.mainFeed[feedPlayersViewModel.currentVideoIndex]
+              let currentContent = apiViewModel.mainFeed[mainFeedPlayersViewModel.currentVideoIndex]
               await apiViewModel.actionContentHate(contentID: currentContent.contentId ?? 0, method: .post)
-              feedPlayersViewModel.removePlayer {
+              mainFeedPlayersViewModel.removePlayer {
                 index -= 1
               }
             }
@@ -110,7 +79,7 @@ struct MainFeedView: View {
         Rectangle().frame(height: 0.5).padding(.leading, 52).foregroundColor(Color.Border_Default_Dark)
         Button {
           feedMoreModel.bottomSheetPosition = .hidden
-          feedPlayersViewModel.stopPlayer()
+          mainFeedPlayersViewModel.stopPlayer()
           feedMoreModel.showReport = true
         } label: {
           bottomSheetRowWithIcon(systemName: "exclamationmark.triangle.fill", text: CommonWords().reportAction)
@@ -156,8 +125,8 @@ struct MainFeedView: View {
         if universalRoutingModel.isUniversalContent {
           apiViewModel.requestUniversalFeed(contentID: universalRoutingModel.contentId) {
             universalRoutingModel.isUniversalContent = false
-            feedPlayersViewModel.currentPlayer?.seek(to: .zero)
-            feedPlayersViewModel.currentPlayer?.play()
+            mainFeedPlayersViewModel.currentPlayer?.seek(to: .zero)
+            mainFeedPlayersViewModel.currentPlayer?.play()
           }
         } else {
           apiViewModel.requestMainFeed { value in
@@ -173,34 +142,49 @@ struct MainFeedView: View {
       }
     }
     .fullScreenCover(isPresented: $feedMoreModel.showReport, onDismiss: {
-      feedPlayersViewModel.currentPlayer?.play()
+      mainFeedPlayersViewModel.currentPlayer?.play()
     }) {
       MainFeedReportReasonSelectionView(
         goReport: $feedMoreModel.showReport,
-        contentId: apiViewModel.mainFeed[feedPlayersViewModel.currentVideoIndex].contentId ?? 0,
-        userId: apiViewModel.mainFeed[feedPlayersViewModel.currentVideoIndex].userId ?? 0)
+        contentId: apiViewModel.mainFeed[mainFeedPlayersViewModel.currentVideoIndex].contentId ?? 0,
+        userId: apiViewModel.mainFeed[mainFeedPlayersViewModel.currentVideoIndex].userId ?? 0)
+    }
+    .onChange(of: tabbarModel.tabSelection) { selection in
+      if selection == .main, !feedMoreModel.isRootStacked {
+        mainFeedPlayersViewModel.currentPlayer?.play()
+        return
+      }
+      mainFeedPlayersViewModel.stopPlayer()
+    }
+    .toolbar {
+      if feedMoreModel.showSearch {
+        ToolbarItem(placement: .topBarLeading) {
+          FeedSearchBar(
+            searchText: $searchQueryString,
+            isSearching: $isSearching,
+            submitAction: { },
+            cancelTapAction: dismiss)
+            .simultaneousGesture(TapGesture().onEnded {
+              //                      tapSearchBar?()
+            })
+            .frame(width: UIScreen.width - 32)
+        }
+      }
     }
     .onAppear {
       feedMoreModel.isRootStacked = false
       tabbarModel.showTabbar()
-      if feedPlayersViewModel.currentVideoIndex != 0 {
-        feedPlayersViewModel.currentPlayer?.seek(to: .zero)
-        if BlockList.shared.userIds.contains(apiViewModel.mainFeed[feedPlayersViewModel.currentVideoIndex].userId ?? 0) {
+      if mainFeedPlayersViewModel.currentVideoIndex != 0 {
+        mainFeedPlayersViewModel.currentPlayer?.seek(to: .zero)
+        if BlockList.shared.userIds.contains(apiViewModel.mainFeed[mainFeedPlayersViewModel.currentVideoIndex].userId ?? 0) {
           return
         }
-        feedPlayersViewModel.currentPlayer?.play()
+        mainFeedPlayersViewModel.currentPlayer?.play()
       }
     }
     .onDisappear {
       feedMoreModel.isRootStacked = true
-      feedPlayersViewModel.stopPlayer()
-    }
-    .onChange(of: tabbarModel.tabSelection) { selection in
-      if selection == .main, !feedMoreModel.isRootStacked {
-        feedPlayersViewModel.currentPlayer?.play()
-        return
-      }
-      feedPlayersViewModel.stopPlayer()
+      mainFeedPlayersViewModel.stopPlayer()
     }
   }
 }
@@ -215,4 +199,64 @@ class MainFeedMoreModel: ObservableObject {
   @Published var showUpdate = false
   @Published var isRootStacked = false
   @Published var bottomSheetPosition: BottomSheetPosition = .hidden
+}
+
+extension MainFeedView {
+  @ViewBuilder
+  func allFeedTab() -> some View {
+    ZStack {
+      Color.black
+      if !apiViewModel.mainFeed.isEmpty {
+        MainFeedPageView(index: $index)
+        VStack(spacing: 0) {
+          HStack {
+            Spacer()
+            NavigationLink {
+              MainSearchView()
+            } label: {
+              Image(systemName: "magnifyingglass")
+                .font(.system(size: 24))
+                .foregroundColor(.white)
+            }
+            .id(UUID())
+          }
+          .frame(height: 28)
+          .padding(.horizontal, 16)
+          .padding(.top, 54)
+          Spacer()
+        }
+      }
+    }
+    .background(Color.black.edgesIgnoringSafeArea(.all))
+    .edgesIgnoringSafeArea(.all)
+  }
+
+  @ViewBuilder
+  func myTeamFeedTab() -> some View {
+    ZStack {
+      Color.black
+      if !apiViewModel.mainFeed.isEmpty {
+        MyTeamFeedPageView(index: $index)
+        VStack(spacing: 0) {
+          HStack {
+            Spacer()
+            NavigationLink {
+              MainSearchView()
+            } label: {
+              Image(systemName: "magnifyingglass")
+                .font(.system(size: 24))
+                .foregroundColor(.white)
+            }
+            .id(UUID())
+          }
+          .frame(height: 28)
+          .padding(.horizontal, 16)
+          .padding(.top, 54)
+          Spacer()
+        }
+      }
+    }
+    .background(Color.black.edgesIgnoringSafeArea(.all))
+    .edgesIgnoringSafeArea(.all)
+  }
 }

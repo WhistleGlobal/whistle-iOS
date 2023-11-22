@@ -7,8 +7,10 @@
 
 import SwiftUI
 
+// MARK: - MainFeedPageTabView
+
 struct MainFeedPageTabView<Content: View>: View {
-  @Binding var selection: Int
+  @Binding var selection: MainFeedTabSelection
   let content: () -> Content
   var body: some View {
     GeometryReader { geo in
@@ -23,8 +25,15 @@ struct MainFeedPageTabView<Content: View>: View {
     }
   }
 
-  init(selection: Binding<Int>, @ViewBuilder content: @escaping () -> Content) {
+  init(selection: Binding<MainFeedTabSelection>, @ViewBuilder content: @escaping () -> Content) {
     self.content = content
     _selection = selection
   }
+}
+
+// MARK: - MainFeedTabSelection
+
+enum MainFeedTabSelection {
+  case all
+  case myteam
 }
