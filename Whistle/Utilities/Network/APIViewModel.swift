@@ -42,6 +42,7 @@ class APIViewModel: ObservableObject {
   @Published var searchedTag: [SearchedTag] = []
   @Published var searchedContent: [MainContent] = []
   @Published var tagSearchedRecentContent: [MainContent] = []
+  @Published var myTeamFeed: [MainContent] = []
 
   let decoder = JSONDecoder()
 
@@ -65,6 +66,7 @@ class APIViewModel: ObservableObject {
     searchedUser = []
     searchedTag = []
     searchedContent = []
+    myTeamFeed = []
   }
 }
 

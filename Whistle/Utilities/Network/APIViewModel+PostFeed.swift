@@ -46,7 +46,8 @@ extension APIViewModel: PostFeedProtocol {
 
   // FIXME: - 데이터가 없을 시 처리할 로직 생각할 것
   func requestMemberPostFeed(userID: Int) async {
-    await withCheckedContinuation { continuation in
+    if userID == 0 { return }
+    return await withCheckedContinuation { continuation in
       AF.request(
         "\(domainURL)/user/\(userID)/post/feed",
         method: .get,
@@ -152,7 +153,8 @@ extension APIViewModel: PostFeedProtocol {
   }
 
   func bookmarkAction(contentID: Int, method: HTTPMethod) async -> Bool {
-    await withCheckedContinuation { continuation in
+    if contentID == 0 { return false }
+    return await withCheckedContinuation { continuation in
       AF.request(
         "\(domainURL)/action/\(contentID)/bookmark",
         method: method,
@@ -171,7 +173,8 @@ extension APIViewModel: PostFeedProtocol {
   }
 
   func whistleAction(contentID: Int, method: HTTPMethod) async {
-    await withCheckedContinuation { continuation in
+    if contentID == 0 { return }
+    return await withCheckedContinuation { continuation in
       AF.request(
         "\(domainURL)/action/\(contentID)/whistle",
         method: method,
@@ -190,7 +193,8 @@ extension APIViewModel: PostFeedProtocol {
   }
 
   func actionContentHate(contentID: Int, method: HTTPMethod) async {
-    await withCheckedContinuation { continuation in
+    if contentID == 0 { return }
+    return await withCheckedContinuation { continuation in
       AF.request(
         "\(domainURL)/action/\(contentID)/\(method == .post ? "hate" : "unhate")",
         method: method,
@@ -209,6 +213,7 @@ extension APIViewModel: PostFeedProtocol {
   }
 
   func deleteContent(contentID: Int) async {
+    if contentID == 0 { return }
     await withCheckedContinuation { continuation in
       AF.request(
         "\(domainURL)/content/\(contentID)",
@@ -336,6 +341,7 @@ extension APIViewModel: PostFeedProtocol {
   }
 
   func requestUniversalFeed(contentID: Int, completion: @escaping () -> Void) {
+    if contentID == 0 { return }
     AF.request(
       "\(domainURL)/content/universal/\(contentID)",
       method: .get,
@@ -400,7 +406,8 @@ extension APIViewModel: PostFeedProtocol {
   }
 
   func requestSingleContent(contentID: Int) async {
-    await withCheckedContinuation { continuation in
+    if contentID == 0 { return }
+    return await withCheckedContinuation { continuation in
       AF.request(
         "\(domainURL)/content/\(contentID)",
         method: .get,
@@ -446,6 +453,25 @@ extension APIViewModel: PostFeedProtocol {
           }
         }
     }
+  }
+
+  func requestMyTeamFeed(completion: @escaping (DataResponse<[MainContent], AFError>) -> Void) {
+    AF.request(
+      "\(domainURL)/content/content-list/myteam",
+      method: .get,
+      headers: contentTypeJson)
+      .validate(statusCode: 200 ... 300)
+      .responseDecodable(of: [MainContent].self) { response in
+        switch response.result {
+        case .success(let success):
+          self.myTeamFeed = success
+          completion(response)
+        case .failure:
+          WhistleLogger.logger.error("Failure")
+          completion(response)
+          break
+        }
+      }
   }
 
   func publisherSend() {

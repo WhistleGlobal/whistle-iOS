@@ -1,8 +1,8 @@
 //
-//  MainContentPlayerView.swift
+//  MyTeamContentPlayerView.swift
 //  Whistle
 //
-//  Created by ChoiYujin on 10/26/23.
+//  Created by ChoiYujin on 11/22/23.
 //
 
 import _AVKit_SwiftUI
@@ -12,13 +12,13 @@ import Combine
 import Kingfisher
 import SwiftUI
 
-// MARK: - MainContentPlayerView
+// MARK: - MyTeamContentPlayerView
 
-struct MainContentPlayerView: View {
+struct MyTeamContentPlayerView: View {
   @AppStorage("showGuide") var showGuide = true
   @Environment(\.scenePhase) var scenePhase
   @StateObject var apiViewModel = APIViewModel.shared
-  @StateObject var feedPlayersViewModel = MainFeedPlayersViewModel.shared
+  @StateObject var feedPlayersViewModel = MyTeamFeedPlayersViewModel.shared
   @StateObject private var toastViewModel = ToastViewModel.shared
   @StateObject private var feedMoreModel = MainFeedMoreModel.shared
   @StateObject private var tabbarModel = TabbarModel.shared
@@ -42,10 +42,10 @@ struct MainContentPlayerView: View {
 
   var body: some View {
     VStack(spacing: 0) {
-      ForEach(Array(apiViewModel.mainFeed.enumerated()), id: \.element) { index, content in
+      ForEach(Array(apiViewModel.myTeamFeed.enumerated()), id: \.element) { index, content in
         ZStack {
           Color.black.overlay {
-            if let url = apiViewModel.mainFeed[index].thumbnailUrl {
+            if let url = apiViewModel.myTeamFeed[index].thumbnailUrl {
               KFImage.url(URL(string: url))
                 .placeholder {
                   Color.black
@@ -118,8 +118,8 @@ struct MainContentPlayerView: View {
                     ContentLayer(
                       currentVideoInfo: content,
                       feedMoreModel: MainFeedMoreModel.shared,
-                      feedPlayersViewModel: MainFeedPlayersViewModel.shared,
-                      feedArray: apiViewModel.mainFeed,
+                      feedPlayersViewModel: MyTeamFeedPlayersViewModel.shared,
+                      feedArray: apiViewModel.myTeamFeed,
                       whistleAction: { whistleToggle(content: content, index) },
                       refreshToken: $refreshToken)
                       .padding(.bottom, UIScreen.main.nativeBounds.height == 1334 ? 24 : 0)
@@ -256,33 +256,27 @@ struct MainContentPlayerView: View {
   }
 }
 
-// MARK: - ViewLifecycleDelegate
-
-protocol ViewLifecycleDelegate {
-  func onAppear()
-  func onDisappear()
-}
-
-extension MainContentPlayerView {
+extension MyTeamContentPlayerView {
   func whistleToggle(content: MainContent, _ index: Int) {
     HapticManager.instance.impact(style: .medium)
     timer?.invalidate()
-    if apiViewModel.mainFeed[index].isWhistled {
+    if apiViewModel.myTeamFeed[index].isWhistled {
       timer = Timer.scheduledTimer(withTimeInterval: 2, repeats: false) { _ in
         Task {
           await apiViewModel.whistleAction(contentID: content.contentId ?? 0, method: .delete)
         }
       }
-      apiViewModel.mainFeed[index].whistleCount -= 1
+      apiViewModel.myTeamFeed[index].whistleCount -= 1
     } else {
       timer = Timer.scheduledTimer(withTimeInterval: 2, repeats: false) { _ in
         Task {
           await apiViewModel.whistleAction(contentID: content.contentId ?? 0, method: .post)
         }
       }
-      apiViewModel.mainFeed[index].whistleCount += 1
+      apiViewModel.myTeamFeed[index].whistleCount += 1
     }
-    apiViewModel.mainFeed[index].isWhistled.toggle()
-    currentContentInfo = apiViewModel.mainFeed[index]
+    apiViewModel.myTeamFeed[index].isWhistled.toggle()
+    currentContentInfo = apiViewModel.myTeamFeed[index]
   }
 }
+

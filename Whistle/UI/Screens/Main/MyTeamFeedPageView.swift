@@ -1,18 +1,18 @@
 //
-//  MainFeedPageView.swift
+//  MyTeamFeedPageView.swift
 //  Whistle
 //
-//  Created by ChoiYujin on 10/26/23.
+//  Created by ChoiYujin on 11/22/23.
 //
 
 import SwiftUI
 
-// MARK: - MainFeedPageView
+// MARK: - MyTeamFeedPageView
 
-struct MainFeedPageView: UIViewRepresentable {
-  @ObservedObject var refreshableModel = MainRefreshableModel()
+struct MyTeamFeedPageView: UIViewRepresentable {
+  @ObservedObject var refreshableModel = MyTeamRefreshableModel()
   @StateObject var apiViewModel = APIViewModel.shared
-  @StateObject var feedPlayersViewModel = MainFeedPlayersViewModel.shared
+  @StateObject var feedPlayersViewModel = MyTeamFeedPlayersViewModel.shared
   @State var currentContentInfo: MainContent?
   @State var isChangable = true
   @Binding var index: Int
@@ -21,7 +21,7 @@ struct MainFeedPageView: UIViewRepresentable {
   func makeUIView(context: Context) -> UIScrollView {
     let view = UIScrollView()
     let childView = UIHostingController(
-      rootView: MainContentPlayerView(
+      rootView: MyTeamContentPlayerView(
         currentContentInfo: $currentContentInfo,
         index: $index,
         isChangable: $isChangable,
@@ -31,10 +31,10 @@ struct MainFeedPageView: UIViewRepresentable {
       x: 0,
       y: 0,
       width: UIScreen.main.bounds.width,
-      height: UIScreen.main.bounds.height * CGFloat(apiViewModel.mainFeed.count))
+      height: UIScreen.main.bounds.height * CGFloat(apiViewModel.myTeamFeed.count))
     view.contentSize = CGSize(
       width: UIScreen.main.bounds.width,
-      height: UIScreen.main.bounds.height * CGFloat(apiViewModel.mainFeed.count))
+      height: UIScreen.main.bounds.height * CGFloat(apiViewModel.myTeamFeed.count))
     view.addSubview(childView.view)
     view.isScrollEnabled = isChangable
     view.showsVerticalScrollIndicator = false
@@ -64,20 +64,20 @@ struct MainFeedPageView: UIViewRepresentable {
     }
     uiView.contentSize = CGSize(
       width: UIScreen.width,
-      height: UIScreen.height * CGFloat(apiViewModel.mainFeed.count))
+      height: UIScreen.height * CGFloat(apiViewModel.myTeamFeed.count))
 
     for i in 0 ..< uiView.subviews.count {
       uiView.subviews[i].frame = CGRect(
         x: 0,
         y: 0,
         width: UIScreen.width,
-        height: UIScreen.height * CGFloat(apiViewModel.mainFeed.count))
+        height: UIScreen.height * CGFloat(apiViewModel.myTeamFeed.count))
     }
     uiView.isScrollEnabled = isChangable
   }
 
   func makeCoordinator() -> Coordinator {
-    MainFeedPageView.Coordinator(
+    MyTeamFeedPageView.Coordinator(
       parent: self,
       index: $index,
       changable: $isChangable,
@@ -85,13 +85,13 @@ struct MainFeedPageView: UIViewRepresentable {
   }
 
   class Coordinator: NSObject, UIScrollViewDelegate, ViewLifecycleDelegate {
-    var parent: MainFeedPageView
+    var parent: MyTeamFeedPageView
     @Binding var index: Int
     @Binding var changable: Bool
     @Binding var feedSelection: MainFeedTabSelection
 
     init(
-      parent: MainFeedPageView,
+      parent: MyTeamFeedPageView,
       index: Binding<Int>,
       changable: Binding<Bool>,
       feedSelection: Binding<MainFeedTabSelection>)
@@ -103,7 +103,7 @@ struct MainFeedPageView: UIViewRepresentable {
     }
 
     func onAppear() {
-      if !parent.apiViewModel.mainFeed.isEmpty {
+      if !parent.apiViewModel.myTeamFeed.isEmpty {
         if index == 0 {
           parent.feedPlayersViewModel.initialPlayers()
         } else {
@@ -113,8 +113,8 @@ struct MainFeedPageView: UIViewRepresentable {
         if BlockList.shared.userIds.contains(parent.currentContentInfo?.userId ?? 0) {
           return
         }
-        WhistleLogger.logger.debug("MainFeedPageView onAppear()")
-        if feedSelection == .all {
+        WhistleLogger.logger.debug("MyTeamFeedPageView onAppear()")
+        if feedSelection == .myteam {
           parent.feedPlayersViewModel.currentPlayer?.pause()
           parent.feedPlayersViewModel.currentPlayer?.seek(to: .zero)
           parent.feedPlayersViewModel.currentPlayer?.play()
@@ -123,15 +123,15 @@ struct MainFeedPageView: UIViewRepresentable {
     }
 
     func onDisappear() {
+      WhistleLogger.logger.debug("MyTeamFeedPageView onDisappear()")
       parent.feedPlayersViewModel.currentPlayer?.pause()
       parent.feedPlayersViewModel.resetPlayer()
-      WhistleLogger.logger.debug("MainFeedPageView onDisappear()")
     }
 
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
       parent.feedPlayersViewModel.currentVideoIndex = Int(scrollView.contentOffset.y / UIScreen.main.bounds.height)
       if index < parent.feedPlayersViewModel.currentVideoIndex {
-        if index == parent.apiViewModel.mainFeed.count - 1 {
+        if index == parent.apiViewModel.myTeamFeed.count - 1 {
           return
         }
         parent.feedPlayersViewModel.goPlayerNext()
@@ -141,7 +141,7 @@ struct MainFeedPageView: UIViewRepresentable {
         index = parent.feedPlayersViewModel.currentVideoIndex
       }
       index = parent.feedPlayersViewModel.currentVideoIndex
-      parent.currentContentInfo = parent.apiViewModel.mainFeed[index]
+      parent.currentContentInfo = parent.apiViewModel.myTeamFeed[index]
     }
 
     func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
@@ -158,7 +158,9 @@ struct MainFeedPageView: UIViewRepresentable {
         if BlockList.shared.userIds.contains(parent.currentContentInfo?.userId ?? 0) {
           return
         }
-        parent.feedPlayersViewModel.currentPlayer?.play()
+        if feedSelection == .myteam {
+          parent.feedPlayersViewModel.currentPlayer?.play()
+        }
       }
     }
 
@@ -178,15 +180,15 @@ struct MainFeedPageView: UIViewRepresentable {
   }
 }
 
-// MARK: - MainRefreshableModel
+// MARK: - MyTeamRefreshableModel
 
-class MainRefreshableModel: ObservableObject {
+class MyTeamRefreshableModel: ObservableObject {
   @Published var isRefreshing = false
   @Published var apiViewModel = APIViewModel.shared
-  @Published var feedPlayersViewModel = MainFeedPlayersViewModel.shared
+  @Published var feedPlayersViewModel = MyTeamFeedPlayersViewModel.shared
 
   func refresh() {
-    apiViewModel.requestMainFeed { _ in
+    apiViewModel.requestMyTeamFeed { _ in
       self.feedPlayersViewModel.stopPlayer()
       self.feedPlayersViewModel.initialPlayers()
       self.apiViewModel.publisherSend()

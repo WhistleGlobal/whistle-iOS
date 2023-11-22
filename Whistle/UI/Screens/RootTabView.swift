@@ -20,6 +20,8 @@ struct RootTabView: View {
   @AppStorage("showGuide") var showGuide = true
   @AppStorage("isAccess") var isAccess = false
   @AppStorage("isMyTeamSelectPassed") var isMyTeamSelectPassed = false
+  @AppStorage("isMyTeamLabelOn") var isMyTeamLabelOn = true
+  @AppStorage("isMyTeamBackgroundOn") var isMyTeamBackgroundOn = true
 
   @State var isFirstProfileLoaded = true
   @State var mainOpacity = 1.0
@@ -36,6 +38,8 @@ struct RootTabView: View {
   @State var isNavigationActive = true
   @State var showTermsOfService = false
   @State var showPrivacyPolicy = false
+
+  @State var feedSelection: MainFeedTabSelection = .myteam
 
   @State private var uploadBottomSheetPosition: BottomSheetPosition = .hidden
   @State private var pickerOptions = PickerOptionsInfo()
@@ -60,27 +64,25 @@ struct RootTabView: View {
       TabView(selection: $tabbarModel.tabSelection) {
         if isAccess {
           NavigationStack {
-            ZStack {
-              if
-                !isMyTeamSelectPassed,
-                apiViewModel.myProfile.myTeam == nil,
-                !apiViewModel.myProfile.userName.isEmpty
-              {
-                MyTeamSelectView()
-                  .tag(TabSelection.main)
-              } else {
-                ZStack {
-                  if LaunchScreenViewModel.shared.displayLaunchScreen {
-                    SignInPlayer()
-                      .ignoresSafeArea()
-                      .allowsTightening(false)
-                      .zIndex(200)
-                  }
-                  MainFeedView()
-                    .environmentObject(universalRoutingModel)
-                }
+            if
+              !isMyTeamSelectPassed,
+              apiViewModel.myProfile.myTeam == nil,
+              !apiViewModel.myProfile.userName.isEmpty
+            {
+              MyTeamSelectView()
                 .tag(TabSelection.main)
+            } else {
+              ZStack {
+                if LaunchScreenViewModel.shared.displayLaunchScreen {
+                  SignInPlayer()
+                    .ignoresSafeArea()
+                    .allowsTightening(false)
+                    .zIndex(200)
+                }
+                MainFeedView(feedSelection: $feedSelection)
+                  .environmentObject(universalRoutingModel)
               }
+              .tag(TabSelection.main)
             }
           }
         } else {
@@ -120,7 +122,6 @@ struct RootTabView: View {
       }
 
       // MARK: - Tabbar
-
       if !LaunchScreenViewModel.shared.displayLaunchScreen {
         VStack {
           Spacer()
@@ -163,8 +164,8 @@ struct RootTabView: View {
         .zIndex(10)
         .padding(.bottom, 24)
         .ignoresSafeArea()
-        .padding(.horizontal, 16)
         .opacity(showGuide ? 0.0 : tabbarModel.tabbarOpacity)
+        .padding(.horizontal, 16)
         .onReceive(NavigationModel.shared.$navigate, perform: { _ in
           if UploadProgressViewModel.shared.isUploading {
             tabbarModel.switchTab(to: .main)
@@ -181,10 +182,7 @@ struct RootTabView: View {
         AlertPopup()
       }
     }
-    .fullScreenCover(
-      isPresented: $tabbarModel.showVideoCaptureView,
-      onDismiss: { feedPlayersViewModel.currentPlayer?.play() })
-    {
+    .fullScreenCover(isPresented: $tabbarModel.showVideoCaptureView) {
       CameraOrAccessView(
         isCam: $isCameraAuthorized,
         isMic: $isMicrophoneAuthorized,
@@ -372,7 +370,6 @@ extension RootTabView {
         getMicrophonePermission()
         checkAllPermissions()
         tabbarModel.showVideoCaptureView = true
-        feedPlayersViewModel.stopPlayer()
       } label: {
         Capsule()
           .fill(Color.Dim_Thin)
@@ -404,7 +401,7 @@ extension RootTabView {
 
   @ViewBuilder
   var guideView: some View {
-    if showGuide, isMyTeamSelectPassed {
+    if showGuide {
       ZStack {
         Color.clear.overlay {
           Image("gestureGuide")

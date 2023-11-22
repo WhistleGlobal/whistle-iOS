@@ -441,6 +441,12 @@ struct ProfileView: View {
     .onChange(of: apiViewModel.memberProfile.isBlocked) { _ in
       offsetY = 0
     }
+    .onChange(of: apiViewModel.myFeed) { _ in
+      offsetY = 0
+    }
+    .onChange(of: apiViewModel.bookmark) { _ in
+      offsetY = 0
+    }
   }
 }
 

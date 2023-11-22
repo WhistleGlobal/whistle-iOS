@@ -59,15 +59,18 @@ struct SearchResultView: View {
           searchText: $inputText,
           isSearching: $isSearching,
           submitAction: {
-            if searchHistoryArray.contains(searchQueryString) || searchQueryString.isEmpty {
+            if inputText.isEmpty {
               return
             }
-            searchHistoryArray.append(searchQueryString)
+            if !searchHistoryArray.contains(inputText) {
+              searchHistoryArray.append(inputText)
+            }
             let jsonArray = searchHistoryArray.map { JSON($0) }
             if let jsonData = try? JSON(jsonArray).rawData() {
               searchHistory = String(data: jsonData, encoding: .utf8) ?? ""
             }
-            search(query: searchQueryString)
+            searchQueryString = inputText
+            search(query: inputText)
           },
           cancelTapAction: dismiss)
           .frame(width: UIScreen.width - 63)

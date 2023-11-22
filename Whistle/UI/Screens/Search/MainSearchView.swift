@@ -9,7 +9,6 @@ import SwiftUI
 import SwiftyJSON
 import UIKit
 
-
 // MARK: - MainSearchView
 
 struct MainSearchView: View {
@@ -107,16 +106,15 @@ struct MainSearchView: View {
             if searchQueryString.isEmpty {
               return
             }
-            if searchHistoryArray.contains(searchQueryString) {
-              search(query: searchQueryString)
-              goSearchResult = true
-              return
+            if !searchHistoryArray.contains(searchQueryString) {
+              searchHistoryArray.append(searchQueryString)
+              let jsonArray = searchHistoryArray.map { JSON($0) }
+              if let jsonData = try? JSON(jsonArray).rawData() {
+                searchHistory = String(data: jsonData, encoding: .utf8) ?? ""
+              }
             }
-            searchHistoryArray.append(searchQueryString)
-            let jsonArray = searchHistoryArray.map { JSON($0) }
-            if let jsonData = try? JSON(jsonArray).rawData() {
-              searchHistory = String(data: jsonData, encoding: .utf8) ?? ""
-            }
+            search(query: searchQueryString)
+            goSearchResult = true
           },
           cancelTapAction: dismiss)
           .simultaneousGesture(TapGesture().onEnded { })

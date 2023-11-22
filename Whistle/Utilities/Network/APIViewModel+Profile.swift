@@ -61,7 +61,10 @@ extension APIViewModel: ProfileProtocol {
   }
 
   func requestMemberProfile(userID: Int) async {
-    await withCheckedContinuation { continuation in
+    if userID == 0 {
+      return
+    }
+    return await withCheckedContinuation { continuation in
       AF.request(
         "\(domainURL)/user/\(userID)/profile",
         method: .get,
@@ -116,7 +119,10 @@ extension APIViewModel: ProfileProtocol {
   }
 
   func requestMemberWhistlesCount(userID: Int) async {
-    await withCheckedContinuation { continuation in
+    if userID == 0 {
+      return
+    }
+    return await withCheckedContinuation { continuation in
       AF.request(
         "\(domainURL)/user/\(userID)/whistle/count",
         method: .get,
@@ -173,7 +179,10 @@ extension APIViewModel: ProfileProtocol {
   }
 
   func requestMemberFollow(userID: Int) async {
-    await withCheckedContinuation { continuation in
+    if userID == 0 {
+      return
+    }
+    return await withCheckedContinuation { continuation in
       AF.request(
         "\(domainURL)/user/\(userID)/follow-list",
         method: .get,
@@ -237,7 +246,10 @@ extension APIViewModel: ProfileProtocol {
   }
 
   func followAction(userID: Int, method: Alamofire.HTTPMethod) async {
-    await withCheckedContinuation { continuation in
+    if userID == 0 {
+      return
+    }
+    return await withCheckedContinuation { continuation in
       AF.request(
         "\(domainURL)/action/\(userID)/follow",
         method: method,
@@ -306,7 +318,10 @@ extension APIViewModel: ProfileProtocol {
   }
 
   func blockAction(userID: Int, method: Alamofire.HTTPMethod) async {
-    await withCheckedContinuation { continuation in
+    if userID == 0 {
+      return
+    }
+    return await withCheckedContinuation { continuation in
       AF.request(
         "\(domainURL)/action/\(userID)/block",
         method: method,

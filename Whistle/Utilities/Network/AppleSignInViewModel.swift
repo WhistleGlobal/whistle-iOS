@@ -11,6 +11,7 @@ import Foundation
 import KeychainSwift
 import SwiftUI
 
+
 class AppleSignInViewModel: ObservableObject {
   @Published var userAuth = UserAuth.shared
   @Published var gotoTab = false

@@ -8,6 +8,7 @@
 import _AVKit_SwiftUI
 import BottomSheet
 import SwiftUI
+import SwiftUIPager
 
 // MARK: - MainFeedView
 
@@ -16,59 +17,52 @@ struct MainFeedView: View {
   @Environment(\.dismiss) var dismiss
   @EnvironmentObject var universalRoutingModel: UniversalRoutingModel
   @StateObject private var apiViewModel = APIViewModel.shared
-  @StateObject private var feedPlayersViewModel = MainFeedPlayersViewModel.shared
+  @StateObject private var mainFeedPlayersViewModel = MainFeedPlayersViewModel.shared
+  @StateObject private var myTeamfeedPlayersViewModel = MyTeamFeedPlayersViewModel.shared
   @StateObject private var toastViewModel = ToastViewModel.shared
   @StateObject private var feedMoreModel = MainFeedMoreModel.shared
   @StateObject private var tabbarModel = TabbarModel.shared
-  @State var index = 0
+  @StateObject var page: Page = .first()
+  @State var allIndex = 0
+  @State var myTeamIndex = 0
   @State var searchText = ""
   @State var searchHistory: [String] = []
   @State var text = ""
   @State var scopeSelection = 0
   @State var searchQueryString = ""
   @State var isSearching = false
+  @State var myTeamSheetPosition: BottomSheetPosition = .hidden
+  @Binding var feedSelection: MainFeedTabSelection
 
   var body: some View {
-    ZStack {
-      Color.black
-      if !apiViewModel.mainFeed.isEmpty {
-        MainFeedPageView(index: $index)
-        VStack(spacing: 0) {
-          HStack {
-            Spacer()
-            NavigationLink {
-              MainSearchView()
-            } label: {
-              Image(systemName: "magnifyingglass")
-                .font(.system(size: 24))
-                .foregroundColor(.white)
-            }
-            .id(UUID())
-          }
-          .frame(height: 28)
-          .padding(.horizontal, 16)
-          .padding(.top, 54)
-          Spacer()
+    Pager(page: page, data: [MainFeedTabSelection.myteam, MainFeedTabSelection.all]) { selection in
+      feedPager(selection: selection)
+    }
+    .singlePagination(ratio: 0.33, sensitivity: .low)
+    .preferredItemSize(CGSize(width: UIScreen.width, height: UIScreen.height))
+    .onPageChanged { index in
+      if index == 0 {
+        mainFeedPlayersViewModel.stopPlayer()
+        feedSelection = .myteam
+        if myTeamfeedPlayersViewModel.currentPlayer?.rate == 0.0 {
+          myTeamfeedPlayersViewModel.currentPlayer?.play()
+          WhistleLogger.logger.debug("MainFeedView onPageChanged index 0")
+        }
+        if apiViewModel.myProfile.myTeam == nil {
+          tabbarModel.tabbarOpacity = 0.0
+          myTeamSheetPosition = .dynamic
+        }
+      } else {
+        myTeamfeedPlayersViewModel.stopPlayer()
+        feedSelection = .all
+        if mainFeedPlayersViewModel.currentPlayer?.rate == 0.0 {
+          mainFeedPlayersViewModel.currentPlayer?.play()
+          WhistleLogger.logger.debug("MainFeedView onPageChanged index 1")
         }
       }
     }
-    .toolbar {
-      if feedMoreModel.showSearch {
-        ToolbarItem(placement: .topBarLeading) {
-          FeedSearchBar(
-            searchText: $searchQueryString,
-            isSearching: $isSearching,
-            submitAction: { },
-            cancelTapAction: dismiss)
-            .simultaneousGesture(TapGesture().onEnded {
-              //                      tapSearchBar?()
-            })
-            .frame(width: UIScreen.width - 32)
-        }
-      }
-    }
-    .background(Color.black.edgesIgnoringSafeArea(.all))
-    .edgesIgnoringSafeArea(.all)
+    .background(Color.black)
+    .ignoresSafeArea()
     .bottomSheet(
       bottomSheetPosition: $feedMoreModel.bottomSheetPosition,
       switchablePositions: [.hidden, .absolute(242)])
@@ -97,10 +91,19 @@ struct MainFeedView: View {
           feedMoreModel.bottomSheetPosition = .hidden
           toastViewModel.cancelToastInit(message: ToastMessages().postHidden) {
             Task {
-              let currentContent = apiViewModel.mainFeed[feedPlayersViewModel.currentVideoIndex]
-              await apiViewModel.actionContentHate(contentID: currentContent.contentId ?? 0, method: .post)
-              feedPlayersViewModel.removePlayer {
-                index -= 1
+              if feedSelection == .all {
+                let currentContent = apiViewModel.mainFeed[mainFeedPlayersViewModel.currentVideoIndex]
+                await apiViewModel.actionContentHate(contentID: currentContent.contentId ?? 0, method: .post)
+                mainFeedPlayersViewModel.removePlayer {
+                  allIndex -= 1
+                }
+              } else {
+                // FIXME: - 마이팀으로 고칠 것
+                let currentContent = apiViewModel.mainFeed[mainFeedPlayersViewModel.currentVideoIndex]
+                await apiViewModel.actionContentHate(contentID: currentContent.contentId ?? 0, method: .post)
+                mainFeedPlayersViewModel.removePlayer {
+                  allIndex -= 1
+                }
               }
             }
           }
@@ -110,7 +113,7 @@ struct MainFeedView: View {
         Rectangle().frame(height: 0.5).padding(.leading, 52).foregroundColor(Color.Border_Default_Dark)
         Button {
           feedMoreModel.bottomSheetPosition = .hidden
-          feedPlayersViewModel.stopPlayer()
+          mainFeedPlayersViewModel.stopPlayer()
           feedMoreModel.showReport = true
         } label: {
           bottomSheetRowWithIcon(systemName: "exclamationmark.triangle.fill", text: CommonWords().reportAction)
@@ -143,6 +146,110 @@ struct MainFeedView: View {
         tabbarModel.hideTabbar()
       }
     }
+    .bottomSheet(
+      bottomSheetPosition: $myTeamSheetPosition,
+      switchablePositions: [.hidden, .dynamic])
+    {
+      VStack(spacing: 0) {
+        HStack {
+          Spacer()
+          Button {
+            myTeamSheetPosition = .hidden
+            withAnimation {
+              feedSelection = .all
+              page.update(.moveToLast)
+              myTeamfeedPlayersViewModel.stopPlayer()
+              mainFeedPlayersViewModel.currentPlayer?.play()
+            }
+          } label: {
+            Text(CommonWords().cancel)
+              .fontSystem(fontDesignSystem: .subtitle2)
+              .foregroundColor(.LabelColor_Primary_Dark)
+          }
+        }
+        .frame(height: 52)
+        .padding(.horizontal, 16)
+        .padding(.bottom, 36)
+        Text("아직 마이팀이 없으신가요?")
+          .font(Font.custom("Apple SD Gothic Neo", size: 24))
+          .fontWeight(.bold)
+          .foregroundColor(.LabelColor_Primary_Dark)
+          .padding(.bottom, 8)
+        Text("응원하는 구단을 선택하고 맞춤 콘텐츠를 즐겨보세요")
+          .fontSystem(fontDesignSystem: .body2)
+          .foregroundColor(.LabelColor_Primary_Dark)
+          .padding(.bottom, 55)
+        HStack(spacing: 0) {
+          Image("lotteCard")
+            .resizable()
+            .scaledToFit()
+            .frame(width: 126, height: 168)
+            .rotationEffect(Angle(degrees: -12))
+            .offset(x: 62)
+          Color.clear
+            .frame(width: 158, height: 211)
+          Image("ssgCard")
+            .resizable()
+            .scaledToFit()
+            .frame(width: 126, height: 168)
+            .rotationEffect(Angle(degrees: 12))
+            .offset(x: -62)
+        }
+        .overlay {
+          Image("samsungCard")
+            .resizable()
+            .scaledToFit()
+            .frame(width: 158, height: 211)
+        }
+        .padding(.bottom, 55)
+        .shadow(
+          color: Color(red: 0, green: 0, blue: 0, opacity: 0.25), radius: 8.80, y: 1.10)
+        NavigationLink {
+          MyTeamSelectView()
+            .onAppear {
+              myTeamSheetPosition = .hidden
+            }
+        } label: {
+          Text("마이팀 선택하기")
+            .font(.system(size: 16, weight: .semibold))
+            .foregroundColor(.white)
+            .frame(width: UIScreen.width - 32, height: 47)
+            .background {
+              Capsule()
+                .foregroundColor(.Primary_Default)
+            }
+        }
+        .padding(.bottom, 24)
+        Text("마이팀은 선택 후 프로필 탭에서 언제든 변경할 수 있습니다.")
+          .fontSystem(fontDesignSystem: .caption_Regular)
+          .foregroundColor(.LabelColor_Primary_Dark)
+        Spacer()
+      }
+      .frame(width: UIScreen.width, height: 610)
+    }
+    .enableSwipeToDismiss(true)
+    .enableTapToDismiss(true)
+    .enableContentDrag(true)
+    .enableAppleScrollBehavior(false)
+    .dragIndicatorColor(Color.Border_Default_Dark)
+    .customBackground(
+      glassMorphicView(cornerRadius: 24)
+        .overlay {
+          RoundedRectangle(cornerRadius: 24)
+            .stroke(lineWidth: 1)
+            .foregroundStyle(
+              LinearGradient.Border_Glass)
+        })
+    .onDismiss {
+      tabbarModel.tabbarOpacity = 1.0
+    }
+    .onChange(of: feedMoreModel.bottomSheetPosition) { newValue in
+      if newValue == .hidden {
+        tabbarModel.showTabbar()
+      } else {
+        tabbarModel.hideTabbar()
+      }
+    }
     .task {
       let updateAvailable = await apiViewModel.checkUpdateAvailable()
       if updateAvailable {
@@ -152,15 +259,25 @@ struct MainFeedView: View {
           return
         }
       }
-      //      if apiViewModel.myProfile.userName.isEmpty {
-      //        await apiViewModel.requestMyProfile()
-      //      }
+      if apiViewModel.myTeamFeed.isEmpty {
+        apiViewModel.requestMyTeamFeed { value in
+          switch value.result {
+          case .success:
+            break
+          case .failure:
+            WhistleLogger.logger.debug("MyTeamFeed Download Failure")
+            apiViewModel.requestMyTeamFeed { _ in }
+          }
+        }
+      }
       if apiViewModel.mainFeed.isEmpty {
         if universalRoutingModel.isUniversalContent {
           apiViewModel.requestUniversalFeed(contentID: universalRoutingModel.contentId) {
             universalRoutingModel.isUniversalContent = false
-            feedPlayersViewModel.currentPlayer?.seek(to: .zero)
-            feedPlayersViewModel.currentPlayer?.play()
+            mainFeedPlayersViewModel.currentPlayer?.seek(to: .zero)
+            if mainFeedPlayersViewModel.currentPlayer?.rate == 0.0 {
+              mainFeedPlayersViewModel.currentPlayer?.play()
+            }
           }
         } else {
           apiViewModel.requestMainFeed { value in
@@ -176,38 +293,126 @@ struct MainFeedView: View {
       }
     }
     .fullScreenCover(isPresented: $feedMoreModel.showReport, onDismiss: {
-      feedPlayersViewModel.currentPlayer?.play()
+      if feedSelection == .all {
+        mainFeedPlayersViewModel.currentPlayer?.play()
+      } else {
+        myTeamfeedPlayersViewModel.currentPlayer?.play()
+      }
     }) {
-      MainFeedReportReasonSelectionView(
-        goReport: $feedMoreModel.showReport,
-        contentId: apiViewModel.mainFeed[feedPlayersViewModel.currentVideoIndex].contentId ?? 0,
-        userId: apiViewModel.mainFeed[feedPlayersViewModel.currentVideoIndex].userId ?? 0)
+      if feedSelection == .all {
+        MainFeedReportReasonSelectionView(
+          goReport: $feedMoreModel.showReport,
+          contentId: apiViewModel.mainFeed[mainFeedPlayersViewModel.currentVideoIndex].contentId ?? 0,
+          userId: apiViewModel.mainFeed[mainFeedPlayersViewModel.currentVideoIndex].userId ?? 0)
+      } else {
+        MainFeedReportReasonSelectionView(
+          goReport: $feedMoreModel.showReport,
+          contentId: apiViewModel.myTeamFeed[myTeamfeedPlayersViewModel.currentVideoIndex].contentId ?? 0,
+          userId: apiViewModel.myTeamFeed[myTeamfeedPlayersViewModel.currentVideoIndex].userId ?? 0)
+      }
+    }
+    .onChange(of: tabbarModel.tabSelection) { selection in
+      if selection == .main, !feedMoreModel.isRootStacked {
+        if feedSelection == .all {
+          mainFeedPlayersViewModel.currentPlayer?.play()
+        } else {
+          myTeamfeedPlayersViewModel.currentPlayer?.play()
+        }
+        return
+      }
+      mainFeedPlayersViewModel.stopPlayer()
+    }
+    .overlay {
+      VStack {
+        HStack {
+          Color.clear.frame(width: 28, height: 28)
+          Spacer()
+          Text("마이팀")
+            .fontSystem(fontDesignSystem: .subtitle2)
+            .foregroundColor(.white)
+            .scaleEffect(feedSelection == .myteam ? 1.1 : 1.0)
+            .onTapGesture {
+              withAnimation {
+                feedSelection = .myteam
+                page.update(.moveToFirst)
+                mainFeedPlayersViewModel.stopPlayer()
+                feedSelection = .myteam
+                myTeamfeedPlayersViewModel.currentPlayer?.play()
+              }
+            }
+
+          Divider()
+            .background(Color.white).frame(height: 12)
+          Text("전체")
+            .fontSystem(fontDesignSystem: .subtitle2)
+            .foregroundColor(.white)
+            .scaleEffect(feedSelection == .all ? 1.1 : 1.0)
+            .onTapGesture {
+              withAnimation {
+                feedSelection = .all
+                page.update(.moveToLast)
+                myTeamfeedPlayersViewModel.stopPlayer()
+                mainFeedPlayersViewModel.currentPlayer?.play()
+              }
+            }
+            .foregroundColor(.white)
+          Spacer()
+          NavigationLink {
+            MainSearchView()
+          } label: {
+            Image(systemName: "magnifyingglass")
+              .font(.system(size: 24))
+              .foregroundColor(.white)
+          }
+          .frame(width: 28, height: 28)
+          .id(UUID())
+        }
+        .frame(height: 28)
+        Spacer()
+      }
+      .padding(.horizontal, 16)
     }
     .onAppear {
       feedMoreModel.isRootStacked = false
       tabbarModel.showTabbar()
-      if feedPlayersViewModel.currentVideoIndex != 0 {
-        feedPlayersViewModel.currentPlayer?.seek(to: .zero)
-        if
-          !apiViewModel.mainFeed.isEmpty,
-          BlockList.shared.userIds.contains(apiViewModel.mainFeed[feedPlayersViewModel.currentVideoIndex].userId ?? 0)
-        {
-          return
+      if feedSelection == .myteam {
+        if myTeamfeedPlayersViewModel.currentVideoIndex != 0 {
+          myTeamfeedPlayersViewModel.currentPlayer?.seek(to: .zero)
+          if
+            BlockList.shared.userIds
+              .contains(apiViewModel.myTeamFeed[myTeamfeedPlayersViewModel.currentVideoIndex].userId ?? 0)
+          {
+            return
+          }
         }
-        feedPlayersViewModel.currentPlayer?.play()
+        WhistleLogger.logger.debug("MainFeedView onAppear if")
+      } else {
+        if mainFeedPlayersViewModel.currentVideoIndex != 0 {
+          mainFeedPlayersViewModel.currentPlayer?.seek(to: .zero)
+          if
+            BlockList.shared.userIds
+              .contains(apiViewModel.mainFeed[mainFeedPlayersViewModel.currentVideoIndex].userId ?? 0)
+          {
+            return
+          }
+        }
+        WhistleLogger.logger.debug("MainFeedView onAppear else")
+      }
+      if apiViewModel.myProfile.myTeam == nil {
+        feedSelection = .all
+        page.update(.moveToLast)
       }
     }
     .onDisappear {
-      feedMoreModel.isRootStacked = true
-      feedPlayersViewModel.stopPlayer()
+      if tabbarModel.tabSelection == .main {
+        feedMoreModel.isRootStacked = true
+      }
+      mainFeedPlayersViewModel.stopPlayer()
+      myTeamfeedPlayersViewModel.stopPlayer()
+      mainFeedPlayersViewModel.resetPlayer()
+      myTeamfeedPlayersViewModel.resetPlayer()
+      WhistleLogger.logger.debug("MainFeedView onDisappear")
     }
-//    .onChange(of: tabbarModel.tabSelection) { selection in
-//      if selection == .main, !feedMoreModel.isRootStacked {
-//        feedPlayersViewModel.currentPlayer?.play()
-//        return
-//      }
-//      feedPlayersViewModel.stopPlayer()
-//    }
   }
 }
 
@@ -221,4 +426,40 @@ class MainFeedMoreModel: ObservableObject {
   @Published var showUpdate = false
   @Published var isRootStacked = false
   @Published var bottomSheetPosition: BottomSheetPosition = .hidden
+}
+
+extension MainFeedView {
+  @ViewBuilder
+  func allFeedTab() -> some View {
+    ZStack {
+      Color.black
+      if !apiViewModel.mainFeed.isEmpty {
+        MainFeedPageView(index: $allIndex, feedSelection: $feedSelection)
+      }
+    }
+    .background(Color.black.edgesIgnoringSafeArea(.all))
+    .edgesIgnoringSafeArea(.all)
+  }
+
+  @ViewBuilder
+  func myTeamFeedTab() -> some View {
+    ZStack {
+      Color.black
+      if !apiViewModel.myTeamFeed.isEmpty {
+        MyTeamFeedPageView(index: $myTeamIndex, feedSelection: $feedSelection)
+      }
+    }
+    .background(Color.black.edgesIgnoringSafeArea(.all))
+    .edgesIgnoringSafeArea(.all)
+  }
+
+  @ViewBuilder
+  func feedPager(selection: MainFeedTabSelection) -> some View {
+    switch selection {
+    case .all:
+      allFeedTab()
+    case .myteam:
+      myTeamFeedTab()
+    }
+  }
 }
