@@ -95,10 +95,14 @@ struct MyTeamSelectView: View {
         Task {
           await apiViewModel.updateMyTeam(myTeam: MyTeamType.teamName(myTeamSelection))
           await apiViewModel.requestMyProfile()
-          if isMyTeamSelectPassed {
-            dismiss()
-          } else {
-            isMyTeamSelectPassed = true
+          if apiViewModel.myTeamFeed.isEmpty {
+            apiViewModel.requestMyTeamFeed { _ in
+              if isMyTeamSelectPassed {
+                dismiss()
+              } else {
+                isMyTeamSelectPassed = true
+              }
+            }
           }
         }
       } label: {

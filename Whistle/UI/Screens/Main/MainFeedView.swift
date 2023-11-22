@@ -31,6 +31,7 @@ struct MainFeedView: View {
   @State var scopeSelection = 0
   @State var searchQueryString = ""
   @State var isSearching = false
+  @State var myTeamSheetPosition: BottomSheetPosition = .hidden
   @Binding var feedSelection: MainFeedTabSelection
 
   var body: some View {
@@ -46,6 +47,10 @@ struct MainFeedView: View {
         if myTeamfeedPlayersViewModel.currentPlayer?.rate == 0.0 {
           myTeamfeedPlayersViewModel.currentPlayer?.play()
           WhistleLogger.logger.debug("MainFeedView onPageChanged index 0")
+        }
+        if apiViewModel.myProfile.myTeam == nil {
+          tabbarModel.tabbarOpacity = 0.0
+          myTeamSheetPosition = .dynamic
         }
       } else {
         myTeamfeedPlayersViewModel.stopPlayer()
@@ -133,6 +138,110 @@ struct MainFeedView: View {
         })
     .onDismiss {
       tabbarModel.showTabbar()
+    }
+    .onChange(of: feedMoreModel.bottomSheetPosition) { newValue in
+      if newValue == .hidden {
+        tabbarModel.showTabbar()
+      } else {
+        tabbarModel.hideTabbar()
+      }
+    }
+    .bottomSheet(
+      bottomSheetPosition: $myTeamSheetPosition,
+      switchablePositions: [.hidden, .dynamic])
+    {
+      VStack(spacing: 0) {
+        HStack {
+          Spacer()
+          Button {
+            myTeamSheetPosition = .hidden
+            withAnimation {
+              feedSelection = .all
+              page.update(.moveToLast)
+              myTeamfeedPlayersViewModel.stopPlayer()
+              mainFeedPlayersViewModel.currentPlayer?.play()
+            }
+          } label: {
+            Text(CommonWords().cancel)
+              .fontSystem(fontDesignSystem: .subtitle2)
+              .foregroundColor(.LabelColor_Primary_Dark)
+          }
+        }
+        .frame(height: 52)
+        .padding(.horizontal, 16)
+        .padding(.bottom, 36)
+        Text("아직 마이팀이 없으신가요?")
+          .font(Font.custom("Apple SD Gothic Neo", size: 24))
+          .fontWeight(.bold)
+          .foregroundColor(.LabelColor_Primary_Dark)
+          .padding(.bottom, 8)
+        Text("응원하는 구단을 선택하고 맞춤 콘텐츠를 즐겨보세요")
+          .fontSystem(fontDesignSystem: .body2)
+          .foregroundColor(.LabelColor_Primary_Dark)
+          .padding(.bottom, 55)
+        HStack(spacing: 0) {
+          Image("lotteCard")
+            .resizable()
+            .scaledToFit()
+            .frame(width: 126, height: 168)
+            .rotationEffect(Angle(degrees: -12))
+            .offset(x: 62)
+          Color.clear
+            .frame(width: 158, height: 211)
+          Image("ssgCard")
+            .resizable()
+            .scaledToFit()
+            .frame(width: 126, height: 168)
+            .rotationEffect(Angle(degrees: 12))
+            .offset(x: -62)
+        }
+        .overlay {
+          Image("samsungCard")
+            .resizable()
+            .scaledToFit()
+            .frame(width: 158, height: 211)
+        }
+        .padding(.bottom, 55)
+        .shadow(
+          color: Color(red: 0, green: 0, blue: 0, opacity: 0.25), radius: 8.80, y: 1.10)
+        NavigationLink {
+          MyTeamSelectView()
+            .onAppear {
+              myTeamSheetPosition = .hidden
+            }
+        } label: {
+          Text("마이팀 선택하기")
+            .font(.system(size: 16, weight: .semibold))
+            .foregroundColor(.white)
+            .frame(width: UIScreen.width - 32, height: 47)
+            .background {
+              Capsule()
+                .foregroundColor(.Primary_Default)
+            }
+        }
+        .padding(.bottom, 24)
+        Text("마이팀은 선택 후 프로필 탭에서 언제든 변경할 수 있습니다.")
+          .fontSystem(fontDesignSystem: .caption_Regular)
+          .foregroundColor(.LabelColor_Primary_Dark)
+        Spacer()
+      }
+      .frame(width: UIScreen.width, height: 610)
+    }
+    .enableSwipeToDismiss(true)
+    .enableTapToDismiss(true)
+    .enableContentDrag(true)
+    .enableAppleScrollBehavior(false)
+    .dragIndicatorColor(Color.Border_Default_Dark)
+    .customBackground(
+      glassMorphicView(cornerRadius: 24)
+        .overlay {
+          RoundedRectangle(cornerRadius: 24)
+            .stroke(lineWidth: 1)
+            .foregroundStyle(
+              LinearGradient.Border_Glass)
+        })
+    .onDismiss {
+      tabbarModel.tabbarOpacity = 1.0
     }
     .onChange(of: feedMoreModel.bottomSheetPosition) { newValue in
       if newValue == .hidden {
@@ -243,7 +352,6 @@ struct MainFeedView: View {
                 feedSelection = .all
                 page.update(.moveToLast)
                 myTeamfeedPlayersViewModel.stopPlayer()
-                feedSelection = .all
                 mainFeedPlayersViewModel.currentPlayer?.play()
               }
             }
@@ -289,6 +397,10 @@ struct MainFeedView: View {
           }
         }
         WhistleLogger.logger.debug("MainFeedView onAppear else")
+      }
+      if apiViewModel.myProfile.myTeam == nil {
+        feedSelection = .all
+        page.update(.moveToLast)
       }
     }
     .onDisappear {

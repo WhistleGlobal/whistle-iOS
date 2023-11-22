@@ -45,7 +45,8 @@ extension ProfileView {
       }
       .id(UUID())
       NavigationLink(
-        destination: MyTeamSkinSettingView(),
+        destination: MyTeamSkinSettingView(
+          isMyTeamLabelOn: $isMyTeamLabelOn, isMyTeamBackgroundOn: $isMyTeamBackgroundOn),
         isActive: $goMyTeamSkinSelect)
       {
         EmptyView()

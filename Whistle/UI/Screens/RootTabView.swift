@@ -64,30 +64,25 @@ struct RootTabView: View {
       TabView(selection: $tabbarModel.tabSelection) {
         if isAccess {
           NavigationStack {
-            ZStack {
-              if
-                !isMyTeamSelectPassed,
-                apiViewModel.myProfile.myTeam == nil,
-                !apiViewModel.myProfile.userName.isEmpty
-              {
-                MyTeamSelectView()
-                  .tag(TabSelection.main)
-              } else {
-                ZStack {
-                  if LaunchScreenViewModel.shared.displayLaunchScreen {
-                    SignInPlayer()
-                      .ignoresSafeArea()
-                      .allowsTightening(false)
-                      .zIndex(200)
-                  }
-                  MainFeedView()
-                    .environmentObject(universalRoutingModel)
-                }
+            if
+              !isMyTeamSelectPassed,
+              apiViewModel.myProfile.myTeam == nil,
+              !apiViewModel.myProfile.userName.isEmpty
+            {
+              MyTeamSelectView()
                 .tag(TabSelection.main)
             } else {
-              MainFeedView(feedSelection: $feedSelection)
-                .environmentObject(universalRoutingModel)
-                .tag(TabSelection.main)
+              ZStack {
+                if LaunchScreenViewModel.shared.displayLaunchScreen {
+                  SignInPlayer()
+                    .ignoresSafeArea()
+                    .allowsTightening(false)
+                    .zIndex(200)
+                }
+                MainFeedView(feedSelection: $feedSelection)
+                  .environmentObject(universalRoutingModel)
+              }
+              .tag(TabSelection.main)
             }
           }
         } else {
@@ -127,7 +122,6 @@ struct RootTabView: View {
       }
 
       // MARK: - Tabbar
-
       if !LaunchScreenViewModel.shared.displayLaunchScreen {
         VStack {
           Spacer()
@@ -170,7 +164,7 @@ struct RootTabView: View {
         .zIndex(10)
         .padding(.bottom, 24)
         .ignoresSafeArea()
-        .opacity(tabbarModel.tabbarOpacity)
+        .opacity(showGuide ? 0.0 : tabbarModel.tabbarOpacity)
         .padding(.horizontal, 16)
         .onReceive(NavigationModel.shared.$navigate, perform: { _ in
           if UploadProgressViewModel.shared.isUploading {
@@ -188,10 +182,7 @@ struct RootTabView: View {
         AlertPopup()
       }
     }
-    .fullScreenCover(
-      isPresented: $tabbarModel.showVideoCaptureView,
-      onDismiss: { feedPlayersViewModel.currentPlayer?.play() })
-    {
+    .fullScreenCover(isPresented: $tabbarModel.showVideoCaptureView) {
       CameraOrAccessView(
         isCam: $isCameraAuthorized,
         isMic: $isMicrophoneAuthorized,
@@ -379,7 +370,6 @@ extension RootTabView {
         getMicrophonePermission()
         checkAllPermissions()
         tabbarModel.showVideoCaptureView = true
-        feedPlayersViewModel.stopPlayer()
       } label: {
         Capsule()
           .fill(Color.Dim_Thin)

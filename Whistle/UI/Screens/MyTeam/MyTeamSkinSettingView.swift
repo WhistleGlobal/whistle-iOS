@@ -9,8 +9,8 @@ import SwiftUI
 
 struct MyTeamSkinSettingView: View {
 
-  @AppStorage("isMyTeamLabelOn") var isMyTeamLabelOn = true
-  @AppStorage("isMyTeamBackgroundOn") var isMyTeamBackgroundOn = true
+  @Binding var isMyTeamLabelOn: Bool
+  @Binding var isMyTeamBackgroundOn: Bool
 
   var body: some View {
     VStack(spacing: 0) {
@@ -32,8 +32,4 @@ struct MyTeamSkinSettingView: View {
     .navigationTitle(ProfileEditWords().myTeamSkinSelect)
     .toolbarRole(.editor)
   }
-}
-
-#Preview {
-  MyTeamSkinSettingView()
 }
