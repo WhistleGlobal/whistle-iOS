@@ -13,8 +13,13 @@ class TagsViewModel: ObservableObject {
     TagsDataModel(role: .noneditable, titleKey: "해시태그 추가 (최대 5개)"),
   ]
 
+  @Published var displayedDataObject: [TagsDataModel] = [
+    TagsDataModel(role: .textfield, titleKey: ""),
+    TagsDataModel(role: .noneditable, titleKey: "해시태그 추가 (최대 5개)"),
+  ]
+
   var displayedTags: [TagsDataModel] {
-    dataObject.filter { $0.role == .editable || $0.role == .noneditable }
+    displayedDataObject.filter { $0.role == .editable || $0.role == .noneditable }
   }
 
   var editingTags: [TagsDataModel] {
@@ -33,6 +38,7 @@ class TagsViewModel: ObservableObject {
     if dataObject.count > 1 {
       withAnimation {
         dataObject.removeAll(where: { $0.id == id })
+        displayedDataObject.removeAll(where: { $0.id == id })
       }
     }
   }
@@ -46,16 +52,14 @@ class TagsViewModel: ObservableObject {
   }
 
   func getTags() -> [String] {
-    let inputArray = editingTags.map { $0.titleKey }
+    let inputArray = editingTags.filter { $0.role == .editable }.map { $0.titleKey }
     WhistleLogger.logger.debug("inputArr: \(inputArray)")
     // 공백을 제거한 결과를 저장할 배열
     var resultArray: [String] = []
 
     for inputString in inputArray {
-      WhistleLogger.logger.debug("inputString: \(inputString)")
       // 문자열의 앞 뒤 공백을 제거하고, 빈 문자열이 아닌 경우에만 결과 배열에 추가
       let trimmedString = inputString.trimmingCharacters(in: .whitespaces)
-      WhistleLogger.logger.debug("trimmedString: \(trimmedString)")
       if !trimmedString.isEmpty {
         resultArray.append(trimmedString)
       }

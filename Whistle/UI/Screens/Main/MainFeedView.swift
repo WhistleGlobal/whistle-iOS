@@ -126,7 +126,7 @@ struct MainFeedView: View {
           apiViewModel.requestMainFeed { value in
             switch value.result {
             case .success:
-              LaunchScreenViewModel.shared.mainFeedDownloaded()
+              LaunchScreenViewModel.shared.feedDownloaded()
             case .failure:
               WhistleLogger.logger.debug("MainFeed Download Failure")
               apiViewModel.requestMainFeed { _ in }
@@ -171,7 +171,10 @@ struct MainFeedView: View {
       tabbarModel.showTabbar()
       if feedPlayersViewModel.currentVideoIndex != 0 {
         feedPlayersViewModel.currentPlayer?.seek(to: .zero)
-        if BlockList.shared.userIds.contains(apiViewModel.mainFeed[feedPlayersViewModel.currentVideoIndex].userId ?? 0) {
+        if
+          !apiViewModel.mainFeed.isEmpty,
+          BlockList.shared.userIds.contains(apiViewModel.mainFeed[feedPlayersViewModel.currentVideoIndex].userId ?? 0)
+        {
           return
         }
         feedPlayersViewModel.currentPlayer?.play()
@@ -180,13 +183,13 @@ struct MainFeedView: View {
     .onDisappear {
       feedPlayersViewModel.stopPlayer()
     }
-    .onChange(of: tabbarModel.tabSelection) { selection in
-      if selection == .main, !feedMoreModel.isRootStacked {
-        feedPlayersViewModel.currentPlayer?.play()
-        return
-      }
-      feedPlayersViewModel.stopPlayer()
-    }
+//    .onChange(of: tabbarModel.tabSelection) { selection in
+//      if selection == .main, !feedMoreModel.isRootStacked {
+//        feedPlayersViewModel.currentPlayer?.play()
+//        return
+//      }
+//      feedPlayersViewModel.stopPlayer()
+//    }
   }
 }
 

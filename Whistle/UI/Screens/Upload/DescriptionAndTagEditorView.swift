@@ -46,8 +46,8 @@ struct DescriptionAndTagEditorView: View {
     editorVM: VideoEditorViewModel,
     videoPlayer: VideoPlayerManager,
     musicVM: MusicViewModel,
-    isInitial: Binding<Bool>)
-  {
+    isInitial: Binding<Bool>
+  ) {
     self.video = video
     self.thumbnail = thumbnail
     _exporterVM = StateObject(wrappedValue: VideoExporterViewModel(video: video, musicVolume: musicVM.musicVolume))
@@ -94,7 +94,8 @@ struct DescriptionAndTagEditorView: View {
                       musicID: musicVM.musicInfo?.musicID ?? 0,
                       videoLength: video.totalDuration,
                       aspectRatio: exporterVM.aspectRatio,
-                      hashtags: tagsViewModel.getTags())
+                      hashtags: tagsViewModel.getTags()
+                    )
                   } else {
                     if let item {
                       var data = Data()
@@ -108,7 +109,8 @@ struct DescriptionAndTagEditorView: View {
                         musicID: musicVM.musicInfo?.musicID ?? 0,
                         videoLength: video.totalDuration,
                         aspectRatio: exporterVM.aspectRatio,
-                        hashtags: tagsViewModel.getTags())
+                        hashtags: tagsViewModel.getTags()
+                      )
                     }
                   }
                 }
@@ -141,11 +143,6 @@ struct DescriptionAndTagEditorView: View {
               .background {
                 Color.black.clipShape(RoundedRectangle(cornerRadius: 12))
               }
-              .overlay {
-                if editorVM.currentVideo?.thumbHQImages.isEmpty ?? true {
-                  ProgressView()
-                }
-              }
           } else {
             Image(
               uiImage: editorVM
@@ -159,11 +156,6 @@ struct DescriptionAndTagEditorView: View {
               .background {
                 Color.black.clipShape(RoundedRectangle(cornerRadius: 12))
               }
-              .overlay {
-                if editorVM.currentVideo?.thumbHQImages.isEmpty ?? true {
-                  ProgressView()
-                }
-              }
           }
           TextField(
             "",
@@ -171,28 +163,29 @@ struct DescriptionAndTagEditorView: View {
             prompt: Text("내용을 입력해 주세요. (\(textLimit)자 내)")
               .foregroundColor(Color.Disable_Placeholder_Light)
               .font(.custom("AppleSDGothicNeo-Regular", size: 16)),
-            axis: .vertical)
-            .foregroundStyle(Color.black)
-            .onReceive(Just(content)) { _ in
-              limitText(textLimit)
-            }
-            .frame(height: UIScreen.getHeight(160), alignment: .topLeading)
-            .contentShape(Rectangle())
-            .onTapGesture {
-              isFocused = true
-            }
-            .padding(UIScreen.getWidth(16))
-            .focused($isFocused)
-            .background(
-              RoundedRectangle(cornerRadius: 8)
-                .strokeBorder(Color.Border_Default_Dark))
-            .overlay(alignment: .bottomTrailing) {
-              Text("\(content.count)자 / \(textLimit)자")
-                .padding()
-                .foregroundStyle(Color.Disable_Placeholder_Light)
-                .fontSystem(fontDesignSystem: .body2)
-            }
-            .padding(.horizontal, UIScreen.getWidth(16))
+            axis: .vertical
+          )
+          .foregroundStyle(Color.black)
+          .onReceive(Just(content)) { _ in
+            limitText(textLimit)
+          }
+          .frame(height: UIScreen.getHeight(160), alignment: .topLeading)
+          .contentShape(Rectangle())
+          .onTapGesture {
+            isFocused = true
+          }
+          .padding(UIScreen.getWidth(16))
+          .focused($isFocused)
+          .background(
+            RoundedRectangle(cornerRadius: 8)
+              .strokeBorder(Color.Border_Default_Dark))
+          .overlay(alignment: .bottomTrailing) {
+            Text("\(content.count)자 / \(textLimit)자")
+              .padding()
+              .foregroundStyle(Color.Disable_Placeholder_Light)
+              .fontSystem(fontDesignSystem: .body2)
+          }
+          .padding(.horizontal, UIScreen.getWidth(16))
 
           ZStack(alignment: .topLeading) {
             TagsContent(
@@ -200,8 +193,8 @@ struct DescriptionAndTagEditorView: View {
               inputText: $inputText,
               sheetPosition: $sheetPosition,
               showTagCountMax: $showTagCountMax,
-              showTagTextCountMax: $showTagTextCountMax)
-            {
+              showTagTextCountMax: $showTagTextCountMax
+            ) {
               EmptyView()
             }
           }
@@ -228,6 +221,7 @@ struct DescriptionAndTagEditorView: View {
             .foregroundStyle(Color.black)
             .contentShape(Rectangle())
             .onTapGesture {
+              tagsViewModel.dataObject = tagsViewModel.displayedDataObject
               sheetPosition = .hidden
             }
           Spacer()
@@ -240,6 +234,7 @@ struct DescriptionAndTagEditorView: View {
                 tagsViewModel.addTag(chipText: inputText)
                 inputText = "\u{200B}"
               }
+              tagsViewModel.displayedDataObject = tagsViewModel.dataObject
               sheetPosition = .hidden
             }
         }
@@ -260,8 +255,8 @@ struct DescriptionAndTagEditorView: View {
           inputText: $inputText,
           sheetPosition: $sheetPosition,
           showTagCountMax: $showTagCountMax,
-          showTagTextCountMax: $showTagTextCountMax)
-        {
+          showTagTextCountMax: $showTagTextCountMax
+        ) {
           Text("")
         }
       }
