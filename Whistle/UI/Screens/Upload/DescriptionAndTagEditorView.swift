@@ -48,8 +48,8 @@ struct DescriptionAndTagEditorView: View {
     editorVM: VideoEditorViewModel,
     videoPlayer: VideoPlayerManager,
     musicVM: MusicViewModel,
-    isInitial: Binding<Bool>)
-  {
+    isInitial: Binding<Bool>
+  ) {
     self.video = video
     self.thumbnail = thumbnail
     _exporterVM = StateObject(wrappedValue: VideoExporterViewModel(video: video, musicVolume: musicVM.musicVolume))
@@ -101,7 +101,8 @@ struct DescriptionAndTagEditorView: View {
                       musicID: musicVM.musicInfo?.musicID ?? 0,
                       videoLength: video.totalDuration,
                       aspectRatio: exporterVM.aspectRatio,
-                      hashtags: tagsViewModel.getTags())
+                      hashtags: tagsViewModel.getTags()
+                    )
                   } else {
                     if let item {
                       var data = Data()
@@ -115,7 +116,8 @@ struct DescriptionAndTagEditorView: View {
                         musicID: musicVM.musicInfo?.musicID ?? 0,
                         videoLength: video.totalDuration,
                         aspectRatio: exporterVM.aspectRatio,
-                        hashtags: tagsViewModel.getTags())
+                        hashtags: tagsViewModel.getTags()
+                      )
                     }
                   }
                 }
@@ -148,11 +150,6 @@ struct DescriptionAndTagEditorView: View {
               .background {
                 Color.black.clipShape(RoundedRectangle(cornerRadius: 12))
               }
-              .overlay {
-                if editorVM.currentVideo?.thumbHQImages.isEmpty ?? true {
-                  ProgressView()
-                }
-              }
           } else {
             Image(
               uiImage: editorVM
@@ -165,11 +162,6 @@ struct DescriptionAndTagEditorView: View {
               .cornerRadius(12)
               .background {
                 Color.black.clipShape(RoundedRectangle(cornerRadius: 12))
-              }
-              .overlay {
-                if editorVM.currentVideo?.thumbHQImages.isEmpty ?? true {
-                  ProgressView()
-                }
               }
           }
           TextField(
@@ -231,8 +223,8 @@ struct DescriptionAndTagEditorView: View {
               inputText: $inputText,
               sheetPosition: $sheetPosition,
               showTagCountMax: $showTagCountMax,
-              showTagTextCountMax: $showTagTextCountMax)
-            {
+              showTagTextCountMax: $showTagTextCountMax
+            ) {
               EmptyView()
             }
           }
@@ -261,6 +253,7 @@ struct DescriptionAndTagEditorView: View {
             .foregroundStyle(Color.black)
             .contentShape(Rectangle())
             .onTapGesture {
+              tagsViewModel.dataObject = tagsViewModel.displayedDataObject
               sheetPosition = .hidden
             }
           Spacer()
@@ -273,6 +266,7 @@ struct DescriptionAndTagEditorView: View {
                 tagsViewModel.addTag(chipText: inputText)
                 inputText = "\u{200B}"
               }
+              tagsViewModel.displayedDataObject = tagsViewModel.dataObject
               sheetPosition = .hidden
             }
         }
@@ -293,8 +287,8 @@ struct DescriptionAndTagEditorView: View {
           inputText: $inputText,
           sheetPosition: $sheetPosition,
           showTagCountMax: $showTagCountMax,
-          showTagTextCountMax: $showTagTextCountMax)
-        {
+          showTagTextCountMax: $showTagTextCountMax
+        ) {
           Text("")
         }
       }
