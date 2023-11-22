@@ -16,6 +16,7 @@ struct MainFeedPageView: UIViewRepresentable {
   @State var currentContentInfo: MainContent?
   @State var isChangable = true
   @Binding var index: Int
+  @Binding var feedSelection: MainFeedTabSelection
 
   func makeUIView(context: Context) -> UIScrollView {
     let view = UIScrollView()
@@ -76,18 +77,29 @@ struct MainFeedPageView: UIViewRepresentable {
   }
 
   func makeCoordinator() -> Coordinator {
-    MainFeedPageView.Coordinator(parent: self, index: $index, changable: $isChangable)
+    MainFeedPageView.Coordinator(
+      parent: self,
+      index: $index,
+      changable: $isChangable,
+      feedSelection: $feedSelection)
   }
 
   class Coordinator: NSObject, UIScrollViewDelegate, ViewLifecycleDelegate {
     var parent: MainFeedPageView
     @Binding var index: Int
     @Binding var changable: Bool
+    @Binding var feedSelection: MainFeedTabSelection
 
-    init(parent: MainFeedPageView, index: Binding<Int>, changable: Binding<Bool>) {
+    init(
+      parent: MainFeedPageView,
+      index: Binding<Int>,
+      changable: Binding<Bool>,
+      feedSelection: Binding<MainFeedTabSelection>)
+    {
       self.parent = parent
       _index = index
       _changable = changable
+      _feedSelection = feedSelection
     }
 
     func onAppear() {
@@ -99,11 +111,15 @@ struct MainFeedPageView: UIViewRepresentable {
         if BlockList.shared.userIds.contains(parent.currentContentInfo?.userId ?? 0) {
           return
         }
-        parent.feedPlayersViewModel.currentPlayer?.play()
+        if feedSelection == .all {
+          parent.feedPlayersViewModel.currentPlayer?.play()
+        }
       }
     }
 
-    func onDisappear() { }
+    func onDisappear() {
+      parent.feedPlayersViewModel.currentPlayer?.pause()
+    }
 
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
       parent.feedPlayersViewModel.currentVideoIndex = Int(scrollView.contentOffset.y / UIScreen.main.bounds.height)

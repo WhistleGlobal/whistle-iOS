@@ -39,6 +39,8 @@ struct RootTabView: View {
   @State var showTermsOfService = false
   @State var showPrivacyPolicy = false
 
+  @State var feedSelection: MainFeedTabSelection = .myteam
+
   @State private var uploadBottomSheetPosition: BottomSheetPosition = .hidden
   @State private var pickerOptions = PickerOptionsInfo()
   @StateObject private var feedPlayersViewModel = MainFeedPlayersViewModel.shared
@@ -74,7 +76,7 @@ struct RootTabView: View {
               MyTeamSelectView()
                 .tag(TabSelection.main)
             } else {
-              MainFeedView()
+              MainFeedView(feedSelection: $feedSelection)
                 .environmentObject(universalRoutingModel)
                 .tag(TabSelection.main)
             }

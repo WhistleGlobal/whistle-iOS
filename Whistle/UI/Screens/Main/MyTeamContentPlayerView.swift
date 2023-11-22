@@ -42,10 +42,10 @@ struct MyTeamContentPlayerView: View {
 
   var body: some View {
     VStack(spacing: 0) {
-      ForEach(Array(apiViewModel.mainFeed.enumerated()), id: \.element) { index, content in
+      ForEach(Array(apiViewModel.myTeamFeed.enumerated()), id: \.element) { index, content in
         ZStack {
           Color.black.overlay {
-            if let url = apiViewModel.mainFeed[index].thumbnailUrl {
+            if let url = apiViewModel.myTeamFeed[index].thumbnailUrl {
               KFImage.url(URL(string: url))
                 .placeholder {
                   Color.black
@@ -119,7 +119,7 @@ struct MyTeamContentPlayerView: View {
                       currentVideoInfo: content,
                       feedMoreModel: MainFeedMoreModel.shared,
                       feedPlayersViewModel: MyFeedPlayersViewModel.shared,
-                      feedArray: apiViewModel.mainFeed,
+                      feedArray: apiViewModel.myTeamFeed,
                       whistleAction: { whistleToggle(content: content, index) },
                       refreshToken: $refreshToken)
                       .padding(.bottom, UIScreen.main.nativeBounds.height == 1334 ? 24 : 0)
@@ -262,23 +262,23 @@ extension MyTeamContentPlayerView {
   func whistleToggle(content: MainContent, _ index: Int) {
     HapticManager.instance.impact(style: .medium)
     timer?.invalidate()
-    if apiViewModel.mainFeed[index].isWhistled {
+    if apiViewModel.myTeamFeed[index].isWhistled {
       timer = Timer.scheduledTimer(withTimeInterval: 2, repeats: false) { _ in
         Task {
           await apiViewModel.whistleAction(contentID: content.contentId ?? 0, method: .delete)
         }
       }
-      apiViewModel.mainFeed[index].whistleCount -= 1
+      apiViewModel.myTeamFeed[index].whistleCount -= 1
     } else {
       timer = Timer.scheduledTimer(withTimeInterval: 2, repeats: false) { _ in
         Task {
           await apiViewModel.whistleAction(contentID: content.contentId ?? 0, method: .post)
         }
       }
-      apiViewModel.mainFeed[index].whistleCount += 1
+      apiViewModel.myTeamFeed[index].whistleCount += 1
     }
-    apiViewModel.mainFeed[index].isWhistled.toggle()
-    currentContentInfo = apiViewModel.mainFeed[index]
+    apiViewModel.myTeamFeed[index].isWhistled.toggle()
+    currentContentInfo = apiViewModel.myTeamFeed[index]
   }
 }
 

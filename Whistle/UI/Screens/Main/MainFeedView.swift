@@ -31,7 +31,7 @@ struct MainFeedView: View {
   @State var scopeSelection = 0
   @State var searchQueryString = ""
   @State var isSearching = false
-  @State var feedSelection: MainFeedTabSelection = .myteam
+  @Binding var feedSelection: MainFeedTabSelection
 
   var body: some View {
     Pager(page: page, data: [MainFeedTabSelection.myteam, MainFeedTabSelection.all]) { selection in
@@ -41,9 +41,17 @@ struct MainFeedView: View {
     .preferredItemSize(CGSize(width: UIScreen.width, height: UIScreen.height))
     .onPageChanged { index in
       if index == 0 {
+        mainFeedPlayersViewModel.stopPlayer()
         feedSelection = .myteam
+        if myTeamfeedPlayersViewModel.currentPlayer?.rate == 0.0 {
+          myTeamfeedPlayersViewModel.currentPlayer?.play()
+        }
       } else {
+        myTeamfeedPlayersViewModel.stopPlayer()
         feedSelection = .all
+        if mainFeedPlayersViewModel.currentPlayer?.rate == 0.0 {
+          mainFeedPlayersViewModel.currentPlayer?.play()
+        }
       }
     }
     .background(Color.black)
@@ -140,12 +148,25 @@ struct MainFeedView: View {
           return
         }
       }
+      if apiViewModel.myTeamFeed.isEmpty {
+        apiViewModel.requestMyTeamFeed { value in
+          switch value.result {
+          case .success:
+            break
+          case .failure:
+            WhistleLogger.logger.debug("MainFeed Download Failure")
+            apiViewModel.requestMyTeamFeed { _ in }
+          }
+        }
+      }
       if apiViewModel.mainFeed.isEmpty {
         if universalRoutingModel.isUniversalContent {
           apiViewModel.requestUniversalFeed(contentID: universalRoutingModel.contentId) {
             universalRoutingModel.isUniversalContent = false
             mainFeedPlayersViewModel.currentPlayer?.seek(to: .zero)
-            mainFeedPlayersViewModel.currentPlayer?.play()
+            if mainFeedPlayersViewModel.currentPlayer?.rate == 0.0 {
+              mainFeedPlayersViewModel.currentPlayer?.play()
+            }
           }
         } else {
           apiViewModel.requestMainFeed { value in
@@ -188,6 +209,9 @@ struct MainFeedView: View {
               withAnimation {
                 feedSelection = .myteam
                 page.update(.moveToFirst)
+                mainFeedPlayersViewModel.stopPlayer()
+                feedSelection = .myteam
+                myTeamfeedPlayersViewModel.currentPlayer?.play()
               }
             }
 
@@ -201,6 +225,9 @@ struct MainFeedView: View {
               withAnimation {
                 feedSelection = .all
                 page.update(.moveToLast)
+                myTeamfeedPlayersViewModel.stopPlayer()
+                feedSelection = .all
+                mainFeedPlayersViewModel.currentPlayer?.play()
               }
             }
             .foregroundColor(.white)
@@ -223,17 +250,38 @@ struct MainFeedView: View {
     .onAppear {
       feedMoreModel.isRootStacked = false
       tabbarModel.showTabbar()
-      if mainFeedPlayersViewModel.currentVideoIndex != 0 {
-        mainFeedPlayersViewModel.currentPlayer?.seek(to: .zero)
-        if BlockList.shared.userIds.contains(apiViewModel.mainFeed[mainFeedPlayersViewModel.currentVideoIndex].userId ?? 0) {
-          return
+      if feedSelection == .myteam {
+        if myTeamfeedPlayersViewModel.currentVideoIndex != 0 {
+          myTeamfeedPlayersViewModel.currentPlayer?.seek(to: .zero)
+          if
+            BlockList.shared.userIds
+              .contains(apiViewModel.myTeamFeed[myTeamfeedPlayersViewModel.currentVideoIndex].userId ?? 0)
+          {
+            return
+          }
         }
-        mainFeedPlayersViewModel.currentPlayer?.play()
+//        myTeamfeedPlayersViewModel.currentPlayer?.pause()
+//        myTeamfeedPlayersViewModel.currentPlayer?.seek(to: .zero)
+//        myTeamfeedPlayersViewModel.currentPlayer?.play()
+      } else {
+        if mainFeedPlayersViewModel.currentVideoIndex != 0 {
+          mainFeedPlayersViewModel.currentPlayer?.seek(to: .zero)
+          if
+            BlockList.shared.userIds
+              .contains(apiViewModel.mainFeed[mainFeedPlayersViewModel.currentVideoIndex].userId ?? 0)
+          {
+            return
+          }
+        }
+//        mainFeedPlayersViewModel.currentPlayer?.pause()
+//        mainFeedPlayersViewModel.currentPlayer?.seek(to: .zero)
+//        mainFeedPlayersViewModel.currentPlayer?.play()
       }
     }
     .onDisappear {
       feedMoreModel.isRootStacked = true
       mainFeedPlayersViewModel.stopPlayer()
+      myTeamfeedPlayersViewModel.stopPlayer()
     }
   }
 }
@@ -256,7 +304,7 @@ extension MainFeedView {
     ZStack {
       Color.black
       if !apiViewModel.mainFeed.isEmpty {
-        MainFeedPageView(index: $allIndex)
+        MainFeedPageView(index: $allIndex, feedSelection: $feedSelection)
       }
     }
     .background(Color.black.edgesIgnoringSafeArea(.all))
@@ -267,8 +315,8 @@ extension MainFeedView {
   func myTeamFeedTab() -> some View {
     ZStack {
       Color.black
-      if !apiViewModel.mainFeed.isEmpty {
-        MyTeamFeedPageView(index: $myTeamIndex)
+      if !apiViewModel.myTeamFeed.isEmpty {
+        MyTeamFeedPageView(index: $myTeamIndex, feedSelection: $feedSelection)
       }
     }
     .background(Color.black.edgesIgnoringSafeArea(.all))

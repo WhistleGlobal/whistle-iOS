@@ -473,8 +473,6 @@ extension APIViewModel: PostFeedProtocol {
       }
   }
 
-
-
   func publisherSend() {
     publisher.send(UUID())
   }

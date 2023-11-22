@@ -21,15 +21,15 @@ class MyTeamFeedPlayersViewModel: ObservableObject {
   @Published var currentVideoIndex = 0
 
   func goPlayerNext() {
-    let index = min(max(0, currentVideoIndex), apiViewModel.mainFeed.count - 1)
-    if index == apiViewModel.mainFeed.count - 1 {
+    let index = min(max(0, currentVideoIndex), apiViewModel.myTeamFeed.count - 1)
+    if index == apiViewModel.myTeamFeed.count - 1 {
       stopPlayer()
       prevPlayer = nil
       prevPlayer = currentPlayer
       currentPlayer = nextPlayer
       nextPlayer = nil
       currentPlayer?.seek(to: .zero)
-      if BlockList.shared.userIds.contains(apiViewModel.mainFeed[currentVideoIndex].userId ?? 0) {
+      if BlockList.shared.userIds.contains(apiViewModel.myTeamFeed[currentVideoIndex].userId ?? 0) {
         return
       }
       currentPlayer?.play()
@@ -39,9 +39,9 @@ class MyTeamFeedPlayersViewModel: ObservableObject {
       prevPlayer = currentPlayer
       currentPlayer = nextPlayer
       nextPlayer = nil
-      nextPlayer = AVPlayer(url: URL(string: apiViewModel.mainFeed[index + 1].videoUrl ?? "")!)
+      nextPlayer = AVPlayer(url: URL(string: apiViewModel.myTeamFeed[index + 1].videoUrl ?? "")!)
       currentPlayer?.seek(to: .zero)
-      if BlockList.shared.userIds.contains(apiViewModel.mainFeed[currentVideoIndex].userId ?? 0) {
+      if BlockList.shared.userIds.contains(apiViewModel.myTeamFeed[currentVideoIndex].userId ?? 0) {
         return
       }
       currentPlayer?.play()
@@ -57,7 +57,7 @@ class MyTeamFeedPlayersViewModel: ObservableObject {
       currentPlayer = prevPlayer
       prevPlayer = nil
       currentPlayer?.seek(to: .zero)
-      if BlockList.shared.userIds.contains(apiViewModel.mainFeed[currentVideoIndex].userId ?? 0) {
+      if BlockList.shared.userIds.contains(apiViewModel.myTeamFeed[currentVideoIndex].userId ?? 0) {
         return
       }
       currentPlayer?.play()
@@ -70,10 +70,10 @@ class MyTeamFeedPlayersViewModel: ObservableObject {
     currentPlayer = prevPlayer
     prevPlayer = nil
     if currentVideoIndex != 0 {
-      prevPlayer = AVPlayer(url: URL(string: apiViewModel.mainFeed[currentVideoIndex - 1].videoUrl ?? "")!)
+      prevPlayer = AVPlayer(url: URL(string: apiViewModel.myTeamFeed[currentVideoIndex - 1].videoUrl ?? "")!)
     }
     currentPlayer?.seek(to: .zero)
-    if BlockList.shared.userIds.contains(apiViewModel.mainFeed[currentVideoIndex].userId ?? 0) {
+    if BlockList.shared.userIds.contains(apiViewModel.myTeamFeed[currentVideoIndex].userId ?? 0) {
       return
     }
     currentPlayer?.play()
@@ -101,47 +101,47 @@ class MyTeamFeedPlayersViewModel: ObservableObject {
   }
 
   func initialPlayers() {
-    if apiViewModel.mainFeed.isEmpty { return }
-    guard let urlString = apiViewModel.mainFeed.first?.videoUrl else { return }
+    if apiViewModel.myTeamFeed.isEmpty { return }
+    guard let urlString = apiViewModel.myTeamFeed.first?.videoUrl else { return }
     currentPlayer = AVPlayer(url: URL(string: urlString)!)
-    if apiViewModel.mainFeed.count < 2 { return }
-    guard let urlStringNext = apiViewModel.mainFeed[1].videoUrl else { return }
+    if apiViewModel.myTeamFeed.count < 2 { return }
+    guard let urlStringNext = apiViewModel.myTeamFeed[1].videoUrl else { return }
     nextPlayer = AVPlayer(url: URL(string: urlStringNext)!)
   }
 
   func removePlayer(completion: @escaping () -> Void) {
     stopPlayer()
-    if apiViewModel.mainFeed.count == 1 {
-      apiViewModel.mainFeed.removeAll()
+    if apiViewModel.myTeamFeed.count == 1 {
+      apiViewModel.myTeamFeed.removeAll()
       prevPlayer = nil
       currentPlayer = nil
       nextPlayer = nil
       return
     }
-    if apiViewModel.mainFeed.count == 2, currentVideoIndex == 0 {
+    if apiViewModel.myTeamFeed.count == 2, currentVideoIndex == 0 {
       currentPlayer = nil
       currentPlayer = nextPlayer
-      apiViewModel.mainFeed.remove(at: currentVideoIndex)
-      nextPlayer = AVPlayer(url: URL(string: apiViewModel.mainFeed[currentVideoIndex].videoUrl ?? "")!)
+      apiViewModel.myTeamFeed.remove(at: currentVideoIndex)
+      nextPlayer = AVPlayer(url: URL(string: apiViewModel.myTeamFeed[currentVideoIndex].videoUrl ?? "")!)
       currentPlayer?.seek(to: .zero)
-      if BlockList.shared.userIds.contains(apiViewModel.mainFeed[currentVideoIndex].userId ?? 0) {
+      if BlockList.shared.userIds.contains(apiViewModel.myTeamFeed[currentVideoIndex].userId ?? 0) {
         return
       }
       currentPlayer?.play()
       return
     }
-    if currentVideoIndex == apiViewModel.mainFeed.count - 1 {
+    if currentVideoIndex == apiViewModel.myTeamFeed.count - 1 {
       currentPlayer = nil
       currentPlayer = prevPlayer
-      apiViewModel.mainFeed.removeLast()
+      apiViewModel.myTeamFeed.removeLast()
       currentVideoIndex -= 1
       if currentVideoIndex == 0 {
         prevPlayer = nil
       } else {
-        prevPlayer = AVPlayer(url: URL(string: apiViewModel.mainFeed[currentVideoIndex - 1].videoUrl ?? "")!)
+        prevPlayer = AVPlayer(url: URL(string: apiViewModel.myTeamFeed[currentVideoIndex - 1].videoUrl ?? "")!)
       }
       currentPlayer?.seek(to: .zero)
-      if BlockList.shared.userIds.contains(apiViewModel.mainFeed[currentVideoIndex].userId ?? 0) {
+      if BlockList.shared.userIds.contains(apiViewModel.myTeamFeed[currentVideoIndex].userId ?? 0) {
         return
       }
       currentPlayer?.play()
@@ -149,10 +149,10 @@ class MyTeamFeedPlayersViewModel: ObservableObject {
     } else {
       currentPlayer = nil
       currentPlayer = nextPlayer
-      apiViewModel.mainFeed.remove(at: currentVideoIndex)
-      nextPlayer = AVPlayer(url: URL(string: apiViewModel.mainFeed[currentVideoIndex + 1].videoUrl ?? "")!)
+      apiViewModel.myTeamFeed.remove(at: currentVideoIndex)
+      nextPlayer = AVPlayer(url: URL(string: apiViewModel.myTeamFeed[currentVideoIndex + 1].videoUrl ?? "")!)
       currentPlayer?.seek(to: .zero)
-      if BlockList.shared.userIds.contains(apiViewModel.mainFeed[currentVideoIndex].userId ?? 0) {
+      if BlockList.shared.userIds.contains(apiViewModel.myTeamFeed[currentVideoIndex].userId ?? 0) {
         return
       }
       currentPlayer?.play()
