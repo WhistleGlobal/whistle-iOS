@@ -454,6 +454,27 @@ extension APIViewModel: PostFeedProtocol {
     }
   }
 
+  func requestMyTeamFeed(completion: @escaping (DataResponse<[MainContent], AFError>) -> Void) {
+    AF.request(
+      "\(domainURL)/content/content-list/myteam",
+      method: .get,
+      headers: contentTypeJson)
+      .validate(statusCode: 200 ... 300)
+      .responseDecodable(of: [MainContent].self) { response in
+        switch response.result {
+        case .success(let success):
+          self.myTeamFeed = success
+          completion(response)
+        case .failure:
+          WhistleLogger.logger.error("Failure")
+          completion(response)
+          break
+        }
+      }
+  }
+
+
+
   func publisherSend() {
     publisher.send(UUID())
   }

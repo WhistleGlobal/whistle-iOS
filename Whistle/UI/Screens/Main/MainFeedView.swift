@@ -21,7 +21,8 @@ struct MainFeedView: View {
   @StateObject private var toastViewModel = ToastViewModel.shared
   @StateObject private var feedMoreModel = MainFeedMoreModel.shared
   @StateObject private var tabbarModel = TabbarModel.shared
-  @State var index = 0
+  @State var allIndex = 0
+  @State var myTeamIndex = 0
   @State var searchText = ""
   @State var searchHistory: [String] = []
   @State var text = ""
@@ -32,10 +33,10 @@ struct MainFeedView: View {
 
   var body: some View {
     MainFeedPageTabView(selection: $feedSelection) {
-      allFeedTab()
-        .tag(MainFeedTabSelection.all)
       myTeamFeedTab()
         .tag(MainFeedTabSelection.myteam)
+      allFeedTab()
+        .tag(MainFeedTabSelection.all)
     }
     .ignoresSafeArea()
     .bottomSheet(
@@ -66,10 +67,19 @@ struct MainFeedView: View {
           feedMoreModel.bottomSheetPosition = .hidden
           toastViewModel.cancelToastInit(message: ToastMessages().postHidden) {
             Task {
-              let currentContent = apiViewModel.mainFeed[mainFeedPlayersViewModel.currentVideoIndex]
-              await apiViewModel.actionContentHate(contentID: currentContent.contentId ?? 0, method: .post)
-              mainFeedPlayersViewModel.removePlayer {
-                index -= 1
+              if feedSelection == .all {
+                let currentContent = apiViewModel.mainFeed[mainFeedPlayersViewModel.currentVideoIndex]
+                await apiViewModel.actionContentHate(contentID: currentContent.contentId ?? 0, method: .post)
+                mainFeedPlayersViewModel.removePlayer {
+                  allIndex -= 1
+                }
+              } else {
+                // FIXME: - 마이팀으로 고칠 것
+                let currentContent = apiViewModel.mainFeed[mainFeedPlayersViewModel.currentVideoIndex]
+                await apiViewModel.actionContentHate(contentID: currentContent.contentId ?? 0, method: .post)
+                mainFeedPlayersViewModel.removePlayer {
+                  allIndex -= 1
+                }
               }
             }
           }
@@ -207,7 +217,7 @@ extension MainFeedView {
     ZStack {
       Color.black
       if !apiViewModel.mainFeed.isEmpty {
-        MainFeedPageView(index: $index)
+        MainFeedPageView(index: $allIndex)
         VStack(spacing: 0) {
           HStack {
             Spacer()
@@ -236,7 +246,7 @@ extension MainFeedView {
     ZStack {
       Color.black
       if !apiViewModel.mainFeed.isEmpty {
-        MyTeamFeedPageView(index: $index)
+        MyTeamFeedPageView(index: $myTeamIndex)
         VStack(spacing: 0) {
           HStack {
             Spacer()

@@ -26,4 +26,5 @@ protocol PostFeedProtocol {
   func addViewCount(_ viewCount: ViewCount, notInclude: Set<Int>, completion: @escaping ([ViewCountModel]) -> Void)
   func requestGuestFeed(completion: @escaping () -> Void)
   func requestUniversalFeed(contentID: Int, completion: @escaping () -> Void)
+func requestMyTeamFeed(completion: @escaping (DataResponse<[MainContent], AFError>) -> Void)
 }
