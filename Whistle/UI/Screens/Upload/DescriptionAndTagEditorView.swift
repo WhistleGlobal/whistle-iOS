@@ -48,8 +48,8 @@ struct DescriptionAndTagEditorView: View {
     editorVM: VideoEditorViewModel,
     videoPlayer: VideoPlayerManager,
     musicVM: MusicViewModel,
-    isInitial: Binding<Bool>
-  ) {
+    isInitial: Binding<Bool>)
+  {
     self.video = video
     self.thumbnail = thumbnail
     _exporterVM = StateObject(wrappedValue: VideoExporterViewModel(video: video, musicVolume: musicVM.musicVolume))
@@ -101,8 +101,7 @@ struct DescriptionAndTagEditorView: View {
                       musicID: musicVM.musicInfo?.musicID ?? 0,
                       videoLength: video.totalDuration,
                       aspectRatio: exporterVM.aspectRatio,
-                      hashtags: tagsViewModel.getTags()
-                    )
+                      hashtags: tagsViewModel.getTags())
                   } else {
                     if let item {
                       var data = Data()
@@ -116,8 +115,7 @@ struct DescriptionAndTagEditorView: View {
                         musicID: musicVM.musicInfo?.musicID ?? 0,
                         videoLength: video.totalDuration,
                         aspectRatio: exporterVM.aspectRatio,
-                        hashtags: tagsViewModel.getTags()
-                      )
+                        hashtags: tagsViewModel.getTags())
                     }
                   }
                 }
@@ -223,8 +221,8 @@ struct DescriptionAndTagEditorView: View {
               inputText: $inputText,
               sheetPosition: $sheetPosition,
               showTagCountMax: $showTagCountMax,
-              showTagTextCountMax: $showTagTextCountMax
-            ) {
+              showTagTextCountMax: $showTagTextCountMax)
+            {
               EmptyView()
             }
           }
@@ -287,8 +285,8 @@ struct DescriptionAndTagEditorView: View {
           inputText: $inputText,
           sheetPosition: $sheetPosition,
           showTagCountMax: $showTagCountMax,
-          showTagTextCountMax: $showTagTextCountMax
-        ) {
+          showTagTextCountMax: $showTagTextCountMax)
+        {
           Text("")
         }
       }

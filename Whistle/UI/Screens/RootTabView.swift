@@ -61,23 +61,26 @@ struct RootTabView: View {
         if isAccess {
           NavigationStack {
             ZStack {
-              if LaunchScreenViewModel.shared.displayLaunchScreen {
-                SignInPlayer()
-                  .ignoresSafeArea()
-                  .allowsTightening(false)
-                  .zIndex(200)
+              if
+                !isMyTeamSelectPassed,
+                apiViewModel.myProfile.myTeam == nil,
+                !apiViewModel.myProfile.userName.isEmpty
+              {
+                MyTeamSelectView()
+                  .tag(TabSelection.main)
+              } else {
+                ZStack {
+                  if LaunchScreenViewModel.shared.displayLaunchScreen {
+                    SignInPlayer()
+                      .ignoresSafeArea()
+                      .allowsTightening(false)
+                      .zIndex(200)
+                  }
+                  MainFeedView()
+                    .environmentObject(universalRoutingModel)
+                }
+                .tag(TabSelection.main)
               }
-            if
-              !isMyTeamSelectPassed,
-              apiViewModel.myProfile.myTeam == nil,
-              !apiViewModel.myProfile.userName.isEmpty
-            {
-              MyTeamSelectView()
-                .tag(TabSelection.main)
-            } else {
-              MainFeedView()
-                .environmentObject(universalRoutingModel)
-                .tag(TabSelection.main)
             }
           }
         } else {
