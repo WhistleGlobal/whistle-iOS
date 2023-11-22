@@ -389,7 +389,7 @@ extension RootTabView {
 
   @ViewBuilder
   var guideView: some View {
-    if showGuide, isMyTeamSelectPassed {
+    if showGuide {
       ZStack {
         Color.clear.overlay {
           Image("gestureGuide")
@@ -514,12 +514,4 @@ extension RootTabView {
       isNavigationActive = false
     }
   }
-}
-
-// MARK: - FeedSelected
-
-class FeedSelected: ObservableObject {
-  static let shared: FeedSelected = .init()
-  @Published var feedSelection: MainFeedTabSelection = .myteam
-  private init() { }
 }
