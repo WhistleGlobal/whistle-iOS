@@ -34,9 +34,11 @@ struct ContentLayer<
   @State var isFollowed = false
   @State var isWhistled = false
   @State var isBookmarked = false
+  @State var showSafariView = false
   @State var caption = ""
   @State var hashtags: [String] = []
   @State var musicTitle = ""
+  @State var sourceURL = ""
   @Binding var refreshToken: Bool
   var index: Int? = nil
 
@@ -99,7 +101,7 @@ struct ContentLayer<
                   }
                 }
             }
-            TagList(tags: hashtags,horizontalSpacing: 0, verticalSpacing: 0) { tag in
+            TagList(tags: hashtags, horizontalSpacing: 0, verticalSpacing: 0) { tag in
               NavigationLink {
                 TagResultView(tagText: tag)
               } label: {
@@ -110,11 +112,22 @@ struct ContentLayer<
               .id(UUID())
             }
             .padding(.bottom, 8)
-            HStack(spacing: 8) {
-              Image(systemName: "music.note")
-                .font(.system(size: 16))
-              Text(LocalizedStringKey(stringLiteral: musicTitle))
-                .fontSystem(fontDesignSystem: .body2)
+            HStack(spacing: 12) {
+              HStack(spacing: 8) {
+                Image(systemName: "music.note")
+                  .font(.system(size: 16))
+                Text(LocalizedStringKey(stringLiteral: musicTitle))
+                  .fontSystem(fontDesignSystem: .body2)
+              }
+              HStack(spacing: 8) {
+                Image(systemName: "link")
+                  .font(.system(size: 16, weight: .semibold))
+                Text(LocalizedStringKey(stringLiteral: "영상 출처"))
+                  .fontSystem(fontDesignSystem: .subtitle3)
+              }
+              .onTapGesture {
+                showBrowser()
+              }
             }
             .padding(.leading, 2)
             .foregroundColor(.white)
@@ -165,6 +178,10 @@ struct ContentLayer<
       .padding(.bottom, UIScreen.getHeight(100))
       .padding(.horizontal, UIScreen.getWidth(16))
     }
+    .sheet(isPresented: $showSafariView, onDismiss: { resumePlayer() }) {
+      SafariView(url: URL(string: "https://www.google.com")!)
+        .ignoresSafeArea()
+    }
     .onChange(of: refreshToken) { _ in
       whistle()
     }
@@ -201,6 +218,21 @@ struct ContentLayer<
         return mutableItem
       }
     }
+  }
+
+  func showBrowser() {
+    guard let playersViewModel = feedPlayersViewModel as? PlayersViewModel else {
+      return
+    }
+    playersViewModel.stopPlayer()
+    showSafariView = true
+  }
+
+  func resumePlayer() {
+    guard let playersViewModel = feedPlayersViewModel as? PlayersViewModel else {
+      return
+    }
+    playersViewModel.currentPlayer?.play()
   }
 
   func showShareSheet() {
@@ -340,6 +372,7 @@ struct ContentLayer<
       caption = contentInfo.caption ?? ""
       hashtags = contentInfo.hashtags ?? []
       musicTitle = contentInfo.musicTitle ?? "원본 오디오"
+//      sourceURL = contentInfo.sourceURL
     }
   }
 }

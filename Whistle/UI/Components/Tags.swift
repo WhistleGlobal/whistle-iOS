@@ -27,7 +27,7 @@ struct Tags: View {
           }
       }
     }
-    .padding(.vertical, 4)
+    .padding(.vertical, 2)
     .padding(.horizontal, 12)
   }
 }
