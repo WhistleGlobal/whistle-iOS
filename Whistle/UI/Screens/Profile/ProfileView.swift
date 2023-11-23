@@ -105,6 +105,7 @@ struct ProfileView: View {
             .padding(.bottom, 12)
             .offset(y: -offsetY - 64)
             .zIndex(2)
+            .allowsHitTesting(false)
           } else {
             profileCardLayer()
               .background {
