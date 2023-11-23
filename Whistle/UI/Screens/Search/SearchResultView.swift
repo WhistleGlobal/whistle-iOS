@@ -324,14 +324,14 @@ extension SearchResultView {
 }
 
 extension SearchResultView {
-  func search(query _: String) {
+  func search(query: String) {
     searchQueryString = inputText
     switch searchTabSelection {
     case .content:
       SearchProgressViewModel.shared.searchContent()
     case .account:
-    case .hashtag:
       SearchProgressViewModel.shared.searchUser()
+    case .hashtag:
       SearchProgressViewModel.shared.searchTag()
     }
     Mixpanel.mainInstance().people.increment(property: "search_count", by: 1)
