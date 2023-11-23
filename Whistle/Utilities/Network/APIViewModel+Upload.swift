@@ -83,6 +83,9 @@ extension APIViewModel: UploadProtocol {
         switch response.result {
         case .success(let data):
           WhistleLogger.logger.debug("upload success")
+          Mixpanel.mainInstance().people.set(property: "$first_upload_date", to: Date().koreaTimezone())
+          Mixpanel.mainInstance().people.set(property: "last_upload_date", to: Date().koreaTimezone())
+          Mixpanel.mainInstance().people.increment(property: "upload_count", by: 1)
           Mixpanel.mainInstance().track(event: "upload_complete", properties: [
             "upload_method": "\(uploadMethod.rawValue)",
             "content_caption": "\(caption)",
