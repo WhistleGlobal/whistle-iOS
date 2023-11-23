@@ -50,44 +50,53 @@ struct MainSearchView: View {
             .foregroundColor(.info)
         }
       }
+      .padding(.top, 12)
       .padding(.horizontal, 16)
-      .frame(height: 50)
-      ForEach(Array(searchHistoryArray.enumerated()), id: \.element) { index ,item in
-        Button {
-          searchQueryString = item
-          search(query: item)
-          goSearchResult = true
-        } label: {
-          HStack(spacing: 0) {
-            Image(systemName: "magnifyingglass")
-              .font(.system(size: 28))
-              .frame(width: 48, height: 48)
-              .padding(.trailing, 10)
-            Text(item)
-              .fontSystem(fontDesignSystem: .body2)
-              .foregroundColor(.labelColorPrimary)
-            Spacer()
-            Image(systemName: "xmark")
-              .font(.system(size: 16))
-              .frame(width: 16, height: 16)
-              .foregroundColor(.labelColorPrimary)
-              .onTapGesture {
-                searchHistoryArray.remove(at: index)
-                let jsonArray = searchHistoryArray.map { JSON($0) }
-                if let jsonData = try? JSON(jsonArray).rawData() {
-                  searchHistory = String(data: jsonData, encoding: .utf8) ?? ""
+      ScrollView {
+        VStack(spacing: 0) {
+          ForEach(Array(searchHistoryArray.reversed().enumerated()), id: \.element) { index, item in
+            Button {
+              searchQueryString = item
+              search(query: item)
+              goSearchResult = true
+            } label: {
+              HStack(spacing: 0) {
+                Image(systemName: "magnifyingglass")
+                  .font(.system(size: 24))
+                  .padding(.trailing, 10)
+                  .padding(.vertical, 12)
+                HStack(spacing: 0) {
+                  Text(item)
+                    .fontSystem(fontDesignSystem: .body2)
+                    .foregroundColor(.labelColorPrimary)
+                  Spacer()
+                  Image(systemName: "xmark")
+                    .font(.system(size: 16))
+                    .frame(width: 16, height: 16)
+                    .foregroundColor(.labelColorPrimary)
+                    .onTapGesture {
+                      searchHistoryArray.remove(at: index)
+                      let jsonArray = searchHistoryArray.map { JSON($0) }
+                      if let jsonData = try? JSON(jsonArray).rawData() {
+                        searchHistory = String(data: jsonData, encoding: .utf8) ?? ""
+                      }
+                    }
                 }
               }
+              .padding(.vertical, 4)
+              .padding(.horizontal, 16)
+            }
+            .id(UUID())
+            Divider().overlay { Color.Border_Default_Dark }.padding(.leading, 52)
           }
-          .frame(height: 74)
+          Spacer().frame(height: 70)
         }
-        .padding(.horizontal, 16)
-        .id(UUID())
       }
+      .ignoresSafeArea()
       Spacer()
     }
+    .background(.backgroundDefault)
     .navigationBarBackButtonHidden()
-    .background()
     .overlay {
       NavigationLink(destination: SearchResultView(searchQueryString: $searchQueryString), isActive: $goSearchResult) {
         EmptyView()
@@ -123,6 +132,7 @@ struct MainSearchView: View {
       }
     }
     .onAppear {
+      searchQueryString = ""
       if let jsonData = searchHistory.data(using: .utf8) {
         let json = try? JSON(data: jsonData)
         searchHistoryArray = json?.arrayValue.map { $0.stringValue } ?? []
@@ -133,11 +143,10 @@ struct MainSearchView: View {
 
 extension MainSearchView {
   func search(query: String) {
+    SearchProgressViewModel.shared.reset()
     apiViewModel.searchedTag = []
     apiViewModel.searchedUser = []
     apiViewModel.searchedContent = []
-    apiViewModel.requestSearchedUser(queryString: query)
-    apiViewModel.requestSearchedTag(queryString: query)
     apiViewModel.requestSearchedContent(queryString: query)
 
     Mixpanel.mainInstance().people.increment(property: "search_count", by: 1)

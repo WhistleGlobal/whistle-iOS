@@ -20,24 +20,23 @@ struct TagResultView: View {
     VStack(spacing: 0) {
       Text("게시물 \(apiViewModel.tagSearchedRecentContent.count.roundedWithAbbreviations)개")
         .fontSystem(fontDesignSystem: .subtitle3)
-        .foregroundColor(.labelColorSecondary)
-        .frame(height: 30, alignment: .top)
-        .padding(.bottom, 5)
+        .foregroundColor(.LabelColor_DisablePlaceholder_Dark)
       HStack(spacing: 0) {
         SearchTabItem(tabSelected: $tagTabSelection, tabType: .popular)
         SearchTabItem(tabSelected: $tagTabSelection, tabType: .recent)
       }
-      .frame(height: 23)
-      .padding(.top)
       .padding(.horizontal, 16)
       switch tagTabSelection {
       case .popular:
         taggedVideoList()
+          .padding(.top, 16)
       case .recent:
         taggedVideoList()
+          .padding(.top, 16)
       }
       Spacer()
     }
+    .background(.backgroundDefault)
     .onAppear {
       UIApplication.shared.endEditing()
     }
@@ -47,7 +46,7 @@ struct TagResultView: View {
       }
     }
     .toolbarRole(.editor)
-    .navigationTitle(Text("#\(tagText)").foregroundColor(.labelColorPrimary))
+    .navigationTitle("#\(tagText)")
     .navigationBarTitleDisplayMode(.inline)
   }
 }
@@ -82,9 +81,8 @@ extension TagResultView {
           .id(UUID())
         }
       }
-      Spacer().frame(height: 150)
+      Spacer().frame(height: 70)
     }
-    .padding(.top, 15)
     .padding(.horizontal, 16)
     .scrollIndicators(.hidden)
     .refreshable {

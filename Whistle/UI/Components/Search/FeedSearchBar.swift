@@ -47,7 +47,6 @@ struct FeedSearchBar: View {
             Image(systemName: "magnifyingglass")
               .foregroundStyle(colorModel.placeholderColor)
               .font(.system(size: 16))
-              .hLeading()
               .padding(.leading, 8)
           }
           .overlay(alignment: .trailing) {
@@ -56,10 +55,10 @@ struct FeedSearchBar: View {
                 searchText = ""
               }) {
                 Image(systemName: "xmark.circle.fill")
+                  .font(.system(size: 16))
                   .foregroundColor(colorModel.placeholderColor)
               }
-              .hTrailing()
-              .padding(.trailing, 8)
+              .padding(.trailing, 4)
             }
           }
         if !isNeedBackButton {
@@ -82,6 +81,7 @@ struct FeedSearchBar: View {
         }
       }
     }
+    .tint(.Info)
     .onDisappear {
       UIApplication.shared.endEditing()
     }

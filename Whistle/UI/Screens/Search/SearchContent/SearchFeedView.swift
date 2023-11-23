@@ -26,6 +26,7 @@ struct SearchFeedView: View {
       Color.black
       if !apiViewModel.searchedContent.isEmpty {
         SearchFeedPageView(index: $index, dismissAction: dismiss)
+          .toolbarRole(.editor)
       } else {
         VStack {
           Spacer()

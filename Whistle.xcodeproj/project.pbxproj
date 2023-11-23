@@ -118,6 +118,8 @@
 		1B395D962AFA533B00E28180 /* Lottie in Frameworks */ = {isa = PBXBuildFile; productRef = 1B395D952AFA533B00E28180 /* Lottie */; };
 		1B395D982AFA53F700E28180 /* ProgressLottie.json in Resources */ = {isa = PBXBuildFile; fileRef = 1B395D972AFA53F700E28180 /* ProgressLottie.json */; };
 		1B395D992AFA53F700E28180 /* ProgressLottie.json in Resources */ = {isa = PBXBuildFile; fileRef = 1B395D972AFA53F700E28180 /* ProgressLottie.json */; };
+		1B446F702B0F434F00DC8672 /* SearchProgressViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B446F6F2B0F434F00DC8672 /* SearchProgressViewModel.swift */; };
+		1B446F712B0F434F00DC8672 /* SearchProgressViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B446F6F2B0F434F00DC8672 /* SearchProgressViewModel.swift */; };
 		1B4E22F12AFD4E2E0066D979 /* VideoCaptureView+ViewBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B4E22F02AFD4E2E0066D979 /* VideoCaptureView+ViewBuilder.swift */; };
 		1B4E22F22AFD4E2E0066D979 /* VideoCaptureView+ViewBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B4E22F02AFD4E2E0066D979 /* VideoCaptureView+ViewBuilder.swift */; };
 		1B4E22F42AFD59200066D979 /* VideoCaptureState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B4E22F32AFD59200066D979 /* VideoCaptureState.swift */; };
@@ -940,6 +942,7 @@
 		1B395D8F2AF9FB0400E28180 /* VideoCompression.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoCompression.swift; sourceTree = "<group>"; };
 		1B395D922AFA531E00E28180 /* LottieProgress.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LottieProgress.swift; sourceTree = "<group>"; };
 		1B395D972AFA53F700E28180 /* ProgressLottie.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = ProgressLottie.json; sourceTree = "<group>"; };
+		1B446F6F2B0F434F00DC8672 /* SearchProgressViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchProgressViewModel.swift; sourceTree = "<group>"; };
 		1B4E22F02AFD4E2E0066D979 /* VideoCaptureView+ViewBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "VideoCaptureView+ViewBuilder.swift"; sourceTree = "<group>"; };
 		1B4E22F32AFD59200066D979 /* VideoCaptureState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoCaptureState.swift; sourceTree = "<group>"; };
 		1B4E22F62AFD59AB0066D979 /* VideoCaptureView+Func.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "VideoCaptureView+Func.swift"; sourceTree = "<group>"; };
@@ -1805,6 +1808,7 @@
 				1BEB20152AE12866008A7253 /* UploadProgressViewModel.swift */,
 				787093672AF28CB30023B400 /* ZoomFactorCombineViewModel.swift */,
 				1B2E3D422B0C9533003A5288 /* LaunchScreenViewModel.swift */,
+				1B446F6F2B0F434F00DC8672 /* SearchProgressViewModel.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -3402,6 +3406,7 @@
 				1B2E3D012B0C48FA003A5288 /* TagSeacrhPlayersViewModel.swift in Sources */,
 				788E68682AD6B6710056C18B /* VideoAsset.swift in Sources */,
 				1B38954D2AB9CB7500B4C8DD /* VolumeSliderSheetView.swift in Sources */,
+				1B446F702B0F434F00DC8672 /* SearchProgressViewModel.swift in Sources */,
 				78D148DD2A9E0CBA00DDCE48 /* Extension+View.swift in Sources */,
 				1B38958D2AB9CCCF00B4C8DD /* Color.swift in Sources */,
 				1BE8EA052AAE4D8B00EB0A55 /* Music.swift in Sources */,
@@ -3697,6 +3702,7 @@
 				1B9936492AF3699E00F5C619 /* VideoAsset.swift in Sources */,
 				1B99364A2AF3699E00F5C619 /* VolumeSliderSheetView.swift in Sources */,
 				1B99364B2AF3699E00F5C619 /* Extension+View.swift in Sources */,
+				1B446F712B0F434F00DC8672 /* SearchProgressViewModel.swift in Sources */,
 				1B99364C2AF3699E00F5C619 /* Color.swift in Sources */,
 				1B99364D2AF3699E00F5C619 /* Music.swift in Sources */,
 				1B99364E2AF3699E00F5C619 /* AppleSignInViewModel.swift in Sources */,

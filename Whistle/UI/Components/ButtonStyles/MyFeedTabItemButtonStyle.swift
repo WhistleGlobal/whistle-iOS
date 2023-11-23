@@ -41,16 +41,18 @@ struct MyFeedTabItemButtonStyle: ButtonStyle {
             }
         }
         Image(systemName: systemName)
-          .resizable()
-          .scaledToFit()
-          .frame(width: 20, height: 20)
+          .font(.system(size: 20))
           .foregroundColor(tab == selectedTab.rawValue ? Color.white : Color.LabelColor_DisablePlaceholder_Dark)
+          .frame(maxWidth: .infinity, maxHeight: .infinity)
       }
-      .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
   }
 
-  func makeBody(configuration _: Configuration) -> some View {
-    FeedTabItem(systemName: systemName, tab: tab, selectedTab: $selectedTab)
+  func makeBody(configuration: Configuration) -> some View {
+    configuration.label
+      .frame(maxWidth: .infinity, maxHeight: .infinity)
+      .overlay {
+        FeedTabItem(systemName: systemName, tab: tab, selectedTab: $selectedTab)
+      }
   }
 }
