@@ -204,7 +204,6 @@ struct GuestMainFeedView: View {
       Mixpanel.mainInstance().track(event: "login", properties: [
         "did_login": false,
       ])
-      Mixpanel.mainInstance().track(event: "write_content_description")
     }
   }
 }
