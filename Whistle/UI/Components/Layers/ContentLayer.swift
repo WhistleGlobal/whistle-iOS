@@ -119,14 +119,16 @@ struct ContentLayer<
                 Text(LocalizedStringKey(stringLiteral: musicTitle))
                   .fontSystem(fontDesignSystem: .body2)
               }
-              HStack(spacing: 8) {
-                Image(systemName: "link")
-                  .font(.system(size: 16, weight: .semibold))
-                Text(LocalizedStringKey(stringLiteral: "영상 출처"))
-                  .fontSystem(fontDesignSystem: .subtitle3)
-              }
-              .onTapGesture {
-                showBrowser()
+              if !sourceURL.isEmpty {
+                HStack(spacing: 8) {
+                  Image(systemName: "link")
+                    .font(.system(size: 16, weight: .semibold))
+                  Text(LocalizedStringKey(stringLiteral: "영상 출처"))
+                    .fontSystem(fontDesignSystem: .subtitle3)
+                }
+                .onTapGesture {
+                  showBrowser()
+                }
               }
             }
             .padding(.leading, 2)
@@ -179,7 +181,7 @@ struct ContentLayer<
       .padding(.horizontal, UIScreen.getWidth(16))
     }
     .sheet(isPresented: $showSafariView, onDismiss: { resumePlayer() }) {
-      SafariView(url: URL(string: "https://www.google.com")!)
+      SafariView(url: URL(string: sourceURL)!)
         .ignoresSafeArea()
     }
     .onChange(of: refreshToken) { _ in
@@ -370,9 +372,9 @@ struct ContentLayer<
       isWhistled = contentInfo.isWhistled
       isBookmarked = contentInfo.isBookmarked
       caption = contentInfo.caption ?? ""
+      sourceURL = contentInfo.sourceURL ?? ""
       hashtags = contentInfo.hashtags ?? []
       musicTitle = contentInfo.musicTitle ?? "원본 오디오"
-//      sourceURL = contentInfo.sourceURL
     }
   }
 }
@@ -389,6 +391,7 @@ protocol ContentInfo {
   var isWhistled: Bool { get set }
   var isBookmarked: Bool { get set }
   var caption: String? { get }
+  var sourceURL: String? { get }
   var hashtags: [String]? { get }
   var musicTitle: String? { get }
 }

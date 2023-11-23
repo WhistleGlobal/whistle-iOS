@@ -14,6 +14,7 @@ protocol UploadProtocol {
     video: Data,
     thumbnail: Data,
     caption: String,
+    sourceURL: String,
     musicID: Int,
     videoLength: Double,
     aspectRatio: Double,

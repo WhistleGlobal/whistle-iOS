@@ -29,9 +29,6 @@ struct MainContentPlayerView: View {
   @State var showPlayButton = false
   @State var viewCount: ViewCount = .init()
   @State var processedContentId: Set<Int> = []
-  @State var uploadingThumbnail = Image("noVideo")
-  @State var uploadProgress = 0.0
-  @State var isUploading = false
   @State var refreshToken = false
   @Binding var currentContentInfo: MainContent?
   @Binding var index: Int
@@ -164,29 +161,6 @@ struct MainContentPlayerView: View {
                 }
             }
           }
-          .overlay(alignment: .topLeading) {
-            if isUploading {
-              uploadingThumbnail
-                .resizable()
-                .frame(width: 64, height: 64)
-                .clipShape(RoundedRectangle(cornerRadius: 8))
-                .overlay {
-                  ZStack {
-                    RoundedRectangle(cornerRadius: 8)
-                      .fill(.black.opacity(0.48))
-                    RoundedRectangle(cornerRadius: 8)
-                      .strokeBorder(Color.Border_Default_Dark)
-                    CircularProgressBar(progress: UploadProgressViewModel.shared.progress, width: 2)
-                      .padding(8)
-                    Text("\(Int(uploadProgress * 100))%")
-                      .foregroundStyle(Color.white)
-                      .fontSystem(fontDesignSystem: .body2)
-                  }
-                }
-                .padding(.top, 70)
-                .padding(.leading, 16)
-            }
-          }
           .ignoresSafeArea()
         }
         .frame(width: UIScreen.width, height: UIScreen.height)
@@ -227,31 +201,6 @@ struct MainContentPlayerView: View {
       default:
         break
       }
-    }
-    .onChange(of: isUploading) { value in
-      if !value {
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
-          toastViewModel.toastInit(message: ToastMessages().contentUploaded)
-        }
-      }
-    }
-    .onReceive(UploadProgressViewModel.shared.isUploadingSubject) { value in
-      switch value {
-      case true:
-        withAnimation {
-          isUploading = value
-        }
-      case false:
-        withAnimation {
-          isUploading = value
-        }
-      }
-    }
-    .onReceive(UploadProgressViewModel.shared.thumbnailSubject) { value in
-      uploadingThumbnail = value
-    }
-    .onReceive(UploadProgressViewModel.shared.progressSubject) { value in
-      uploadProgress = value
     }
   }
 }

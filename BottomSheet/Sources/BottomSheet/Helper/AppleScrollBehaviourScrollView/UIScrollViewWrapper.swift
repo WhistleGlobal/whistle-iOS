@@ -13,12 +13,12 @@ struct UIScrollViewWrapper<Content: View>: UIViewControllerRepresentable {
   @State private var contentOffsetAnimation: TimerAnimation?
   @Binding private var isScrollEnabled: Bool
   @Binding private var dragState: DragGesture.DragState
-  private var content: Content
+  private var caption: Content
 
   func makeUIViewController(
     context: UIViewControllerRepresentableContext<Self>) -> UIScrollViewViewController<Content>
   {
-    let viewController = UIScrollViewViewController(rootView: content)
+    let viewController = UIScrollViewViewController(rootView: caption)
     viewController.scrollView.delegate = context.coordinator
     return viewController
   }
@@ -28,7 +28,7 @@ struct UIScrollViewWrapper<Content: View>: UIViewControllerRepresentable {
     context _: UIViewControllerRepresentableContext<Self>)
   {
     // Update the content
-    viewController.updateContent(content)
+    viewController.updateContent(caption)
 
     // isScrollEnabled
     if viewController.scrollView.isScrollEnabled != isScrollEnabled {
@@ -215,11 +215,11 @@ struct UIScrollViewWrapper<Content: View>: UIViewControllerRepresentable {
   init(
     isScrollEnabled: Binding<Bool>,
     dragState: Binding<DragGesture.DragState>,
-    @ViewBuilder content: @escaping () -> Content)
+    @ViewBuilder caption: @escaping () -> Content)
   {
     _isScrollEnabled = isScrollEnabled
     _dragState = dragState
-    self.content = content()
+    self.caption = caption()
   }
 }
 
@@ -240,8 +240,8 @@ class UIScrollViewViewController<Content: View>: UIViewController {
   }
 
   // Update
-  fileprivate func updateContent(_ content: Content) {
-    hostingController.rootView = content
+  fileprivate func updateContent(_ caption: Content) {
+    hostingController.rootView = caption
     scrollView.addSubview(hostingController.view)
 
     var contentSize: CGSize = hostingController.view.intrinsicContentSize
