@@ -64,7 +64,7 @@ struct VideoEditorView: View {
           .frame(height: UIScreen.getHeight(44))
           if let video = editorVM.currentVideo {
             NavigationLink(
-              destination: DescriptionAndTagEditorView(
+              destination: DescriptionEditorView(
                 video: video,
                 thumbnail: thumbnail,
                 editorVM: editorVM,

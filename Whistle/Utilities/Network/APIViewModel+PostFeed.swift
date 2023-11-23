@@ -363,6 +363,7 @@ extension APIViewModel: PostFeedProtocol {
             singleContent.userName = singleContentJson["user_name"] as? String
             singleContent.profileImg = singleContentJson["profile_img"] as? String
             singleContent.caption = singleContentJson["caption"] as? String
+            singleContent.sourceURL = singleContentJson["source_url"] as? String
             singleContent.videoUrl = singleContentJson["video_url"] as? String
             singleContent.thumbnailUrl = singleContentJson["thumbnail_url"] as? String
             singleContent.musicArtist = singleContentJson["music_artist"] as? String
@@ -429,6 +430,7 @@ extension APIViewModel: PostFeedProtocol {
               singleContent.userName = singleContentJson["user_name"] as? String
               singleContent.profileImg = singleContentJson["profile_img"] as? String
               singleContent.caption = singleContentJson["caption"] as? String
+              singleContent.sourceURL = singleContentJson["source_url"] as? String
               singleContent.videoUrl = singleContentJson["video_url"] as? String
               singleContent.thumbnailUrl = singleContentJson["thumbnail_url"] as? String
               singleContent.musicArtist = singleContentJson["music_artist"] as? String

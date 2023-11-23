@@ -14,6 +14,7 @@ class MyContent: ObservableObject, Decodable, Hashable {
     case userName = "user_name"
     case profileImg = "profile_img"
     case caption
+    case sourceURL = "source_url"
     case videoUrl = "video_url"
     case thumbnailUrl = "thumbnail_url"
     case musicArtist = "music_artist"
@@ -31,6 +32,7 @@ class MyContent: ObservableObject, Decodable, Hashable {
   @Published var userName: String?
   @Published var profileImg: String?
   @Published var caption: String?
+  @Published var sourceURL: String?
   @Published var videoUrl: String?
   @Published var thumbnailUrl: String?
   @Published var musicArtist: String?
@@ -50,6 +52,7 @@ class MyContent: ObservableObject, Decodable, Hashable {
     userName = try container.decode(String.self, forKey: .userName)
     profileImg = try container.decode(String?.self, forKey: .profileImg)
     caption = try container.decode(String?.self, forKey: .caption)
+    sourceURL = try container.decode(String?.self, forKey: .sourceURL)
     videoUrl = try container.decode(String?.self, forKey: .videoUrl)
     thumbnailUrl = try container.decode(String?.self, forKey: .thumbnailUrl)
     musicArtist = try container.decode(String?.self, forKey: .musicArtist)

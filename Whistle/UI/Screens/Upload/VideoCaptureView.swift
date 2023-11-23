@@ -102,7 +102,7 @@ struct VideoCaptureView: View {
         if let video = editorVM.currentVideo {
           NavigationLink(
             destination:
-            DescriptionAndTagEditorView(
+            DescriptionEditorView(
               video: video,
               thumbnail: thumbnail,
               editorVM: editorVM,

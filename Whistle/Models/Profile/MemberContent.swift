@@ -14,6 +14,7 @@ class MemberContent: ObservableObject, Codable, Hashable {
     case userName = "user_name"
     case profileImg = "profile_img"
     case caption
+    case sourceURL = "source_url"
     case videoUrl = "video_url"
     case thumbnailUrl = "thumbnail_url"
     case musicArtist = "music_artist"
@@ -33,6 +34,7 @@ class MemberContent: ObservableObject, Codable, Hashable {
   var userName: String?
   var profileImg: String?
   var caption: String?
+  var sourceURL: String?
   var videoUrl: String?
   var thumbnailUrl: String?
   var musicArtist: String?
@@ -57,6 +59,7 @@ class MemberContent: ObservableObject, Codable, Hashable {
     userName = try container.decode(String?.self, forKey: .userName)
     profileImg = try container.decode(String?.self, forKey: .profileImg)
     caption = try container.decode(String?.self, forKey: .caption)
+    sourceURL = try container.decode(String?.self, forKey: .sourceURL)
     videoUrl = try container.decode(String?.self, forKey: .videoUrl)
     thumbnailUrl = try container.decode(String?.self, forKey: .thumbnailUrl)
     musicArtist = try container.decode(String?.self, forKey: .musicArtist)

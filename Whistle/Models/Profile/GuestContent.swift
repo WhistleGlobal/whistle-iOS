@@ -16,6 +16,7 @@ class GuestContent: Hashable, ObservableObject, Codable {
     case userName = "user_name"
     case profileImg = "profile_img"
     case caption
+    case sourceURL = "source_url"
     case videoUrl = "video_url"
     case thumbnailUrl = "thumbnail_url"
     case musicArtist = "music_artist"
@@ -32,6 +33,7 @@ class GuestContent: Hashable, ObservableObject, Codable {
     userName: String? = nil,
     profileImg: String? = nil,
     caption: String? = nil,
+    sourceURL: String? = nil,
     videoUrl: String? = nil,
     thumbnailUrl: String? = nil,
     musicArtist: String? = nil,
@@ -45,6 +47,7 @@ class GuestContent: Hashable, ObservableObject, Codable {
     self.userName = userName
     self.profileImg = profileImg
     self.caption = caption
+    self.sourceURL = sourceURL
     self.videoUrl = videoUrl
     self.thumbnailUrl = thumbnailUrl
     self.musicArtist = musicArtist
@@ -61,6 +64,7 @@ class GuestContent: Hashable, ObservableObject, Codable {
   var userName: String?
   var profileImg: String?
   var caption: String?
+  var sourceURL: String?
   var videoUrl: String?
   var thumbnailUrl: String?
   var musicArtist: String?
@@ -79,6 +83,7 @@ class GuestContent: Hashable, ObservableObject, Codable {
     userName = try container.decode(String.self, forKey: .userName)
     profileImg = try container.decode(String?.self, forKey: .profileImg)
     caption = try container.decode(String?.self, forKey: .caption)
+    sourceURL = try container.decode(String?.self, forKey: .sourceURL)
     videoUrl = try container.decode(String.self, forKey: .videoUrl)
     thumbnailUrl = try container.decode(String.self, forKey: .thumbnailUrl)
     musicArtist = try container.decode(String?.self, forKey: .musicArtist)

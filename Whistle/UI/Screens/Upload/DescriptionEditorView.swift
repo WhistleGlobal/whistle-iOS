@@ -1,5 +1,5 @@
 //
-//  DescriptionAndTagEditorView.swift
+//  DescriptionEditorView.swift
 //  Whistle
 //
 //  Created by 박상원 on 10/9/23.
@@ -9,9 +9,9 @@ import BottomSheet
 import Combine
 import SwiftUI
 
-// MARK: - DescriptionAndTagEditorView
+// MARK: - DescriptionEditorView
 
-struct DescriptionAndTagEditorView: View {
+struct DescriptionEditorView: View {
   @AppStorage("isAccess") var isAccess = false
   @Environment(\.dismiss) private var dismiss
   @Environment(\.scenePhase) var scenePhase
@@ -27,7 +27,7 @@ struct DescriptionAndTagEditorView: View {
   @FocusState private var isFocused: Bool
   @FocusState private var isURLFocused: Bool
 
-  @State var content = ""
+  @State var caption = ""
   @State var sourceURL = ""
   @State var onProgress = false
   @State var sheetPosition: BottomSheetPosition = .hidden
@@ -87,7 +87,8 @@ struct DescriptionAndTagEditorView: View {
             NavigationModel.shared.navigate.toggle()
             await exporterVM.action(.save, start: video.rangeDuration.lowerBound)
             // 출처 url의 형식 점검. 반드시 http가 포함되어야 정상 URL로 간주됨
-            if !sourceURL.hasPrefix("http") {
+            sourceURL = sourceURL.replacingOccurrences(of: " ", with: "")
+            if !sourceURL.isEmpty, !sourceURL.hasPrefix("http") {
               sourceURL = "https://" + sourceURL
             }
             if let url = exporterVM.renderedVideoURL {
@@ -97,7 +98,8 @@ struct DescriptionAndTagEditorView: View {
                     apiViewModel.uploadContent(
                       video: exporterVM.videoData,
                       thumbnail: exporterVM.thumbnailData,
-                      caption: content,
+                      caption: caption,
+                      sourceURL: sourceURL,
                       musicID: musicVM.musicInfo?.musicID ?? 0,
                       videoLength: video.totalDuration,
                       aspectRatio: exporterVM.aspectRatio,
@@ -111,7 +113,8 @@ struct DescriptionAndTagEditorView: View {
                       apiViewModel.uploadContent(
                         video: data,
                         thumbnail: exporterVM.thumbnailData,
-                        caption: content,
+                        caption: caption,
+                        sourceURL: sourceURL,
                         musicID: musicVM.musicInfo?.musicID ?? 0,
                         videoLength: video.totalDuration,
                         aspectRatio: exporterVM.aspectRatio,
@@ -164,13 +167,13 @@ struct DescriptionAndTagEditorView: View {
           }
           TextField(
             "",
-            text: $content,
+            text: $caption,
             prompt: Text("내용을 입력해 주세요. (\(textLimit)자 내)")
               .foregroundColor(Color.Disable_Placeholder_Light)
               .font(.system(size: 16)),
             axis: .vertical)
             .foregroundStyle(Color.black)
-            .onReceive(Just(content)) { _ in
+            .onReceive(Just(caption)) { _ in
               limitText(textLimit)
             }
             .frame(height: UIScreen.getHeight(150 - 32), alignment: .topLeading)
@@ -184,7 +187,7 @@ struct DescriptionAndTagEditorView: View {
               RoundedRectangle(cornerRadius: 8)
                 .strokeBorder(Color.Border_Default_Dark))
             .overlay(alignment: .bottomTrailing) {
-              Text("\(content.count)자 / \(textLimit)자")
+              Text("\(caption.count)자 / \(textLimit)자")
                 .padding()
                 .foregroundStyle(Color.Disable_Placeholder_Light)
                 .fontSystem(fontDesignSystem: .body2)
@@ -317,8 +320,8 @@ struct DescriptionAndTagEditorView: View {
   }
 
   func limitText(_ upper: Int) {
-    if content.count > upper {
-      content = String(content.prefix(upper))
+    if caption.count > upper {
+      caption = String(caption.prefix(upper))
     }
   }
 }

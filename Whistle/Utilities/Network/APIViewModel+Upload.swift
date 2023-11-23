@@ -43,6 +43,7 @@ extension APIViewModel: UploadProtocol {
     video: Data,
     thumbnail: Data,
     caption: String,
+    sourceURL: String,
     musicID: Int,
     videoLength: Double,
     aspectRatio: Double = 0.0,
@@ -50,6 +51,7 @@ extension APIViewModel: UploadProtocol {
   {
     let params: [String: Any] = [
       "caption": caption,
+      "source_url": sourceURL,
       "music_id": musicID == 0 ? nil : musicID,
       "video_length": videoLength,
       "aspect_ratio": aspectRatio,
