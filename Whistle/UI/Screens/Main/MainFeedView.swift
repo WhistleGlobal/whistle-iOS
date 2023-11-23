@@ -21,6 +21,7 @@ struct MainFeedView: View {
   @StateObject private var toastViewModel = ToastViewModel.shared
   @StateObject private var feedMoreModel = MainFeedMoreModel.shared
   @StateObject private var tabbarModel = TabbarModel.shared
+  @StateObject private var mainFeedTabModel = MainFeedTabModel.shared
   @StateObject var page: Page = .first()
   @State var uploadingThumbnail = Image("noVideo")
   @State var uploadProgress = 0.0
@@ -34,7 +35,6 @@ struct MainFeedView: View {
   @State var searchQueryString = ""
   @State var isSearching = false
   @State var myTeamSheetPosition: BottomSheetPosition = .hidden
-  @Binding var feedSelection: MainFeedTabSelection
 
   var body: some View {
     Pager(page: page, data: [MainFeedTabSelection.myteam, MainFeedTabSelection.all]) { selection in
@@ -45,7 +45,7 @@ struct MainFeedView: View {
     .onPageChanged { index in
       if index == 0 {
         mainFeedPlayersViewModel.stopPlayer()
-        feedSelection = .myteam
+        mainFeedTabModel.switchTab(to: .myteam)
         if myTeamfeedPlayersViewModel.currentPlayer?.rate == 0.0 {
           myTeamfeedPlayersViewModel.currentPlayer?.play()
           WhistleLogger.logger.debug("MainFeedView onPageChanged index 0")
@@ -56,34 +56,11 @@ struct MainFeedView: View {
         }
       } else {
         myTeamfeedPlayersViewModel.stopPlayer()
-        feedSelection = .all
+        mainFeedTabModel.switchTab(to: .all)
         if mainFeedPlayersViewModel.currentPlayer?.rate == 0.0 {
           mainFeedPlayersViewModel.currentPlayer?.play()
           WhistleLogger.logger.debug("MainFeedView onPageChanged index 1")
         }
-      }
-    }
-    .overlay(alignment: .topLeading) {
-      if isUploading {
-        uploadingThumbnail
-          .resizable()
-          .frame(width: 64, height: 64)
-          .clipShape(RoundedRectangle(cornerRadius: 8))
-          .overlay {
-            ZStack {
-              RoundedRectangle(cornerRadius: 8)
-                .fill(.black.opacity(0.48))
-              RoundedRectangle(cornerRadius: 8)
-                .strokeBorder(Color.Border_Default_Dark)
-              CircularProgressBar(progress: UploadProgressViewModel.shared.progress, width: 2)
-                .padding(8)
-              Text("\(Int(uploadProgress * 100))%")
-                .foregroundStyle(Color.white)
-                .fontSystem(fontDesignSystem: .body2)
-            }
-          }
-          .padding(.top, 70)
-          .padding(.leading, 16)
       }
     }
     .background(Color.black)
@@ -141,7 +118,7 @@ struct MainFeedView: View {
           feedMoreModel.bottomSheetPosition = .hidden
           toastViewModel.cancelToastInit(message: ToastMessages().postHidden) {
             Task {
-              if feedSelection == .all {
+              if mainFeedTabModel.isAllTab {
                 let currentContent = apiViewModel.mainFeed[mainFeedPlayersViewModel.currentVideoIndex]
                 await apiViewModel.actionContentHate(contentID: currentContent.contentId ?? 0, method: .post)
                 mainFeedPlayersViewModel.removePlayer {
@@ -206,7 +183,7 @@ struct MainFeedView: View {
           Button {
             myTeamSheetPosition = .hidden
             withAnimation {
-              feedSelection = .all
+              mainFeedTabModel.switchTab(to: .all)
               page.update(.moveToLast)
               myTeamfeedPlayersViewModel.stopPlayer()
               mainFeedPlayersViewModel.currentPlayer?.play()
@@ -343,13 +320,13 @@ struct MainFeedView: View {
       }
     }
     .fullScreenCover(isPresented: $feedMoreModel.showReport, onDismiss: {
-      if feedSelection == .all {
+      if mainFeedTabModel.isAllTab {
         mainFeedPlayersViewModel.currentPlayer?.play()
       } else {
         myTeamfeedPlayersViewModel.currentPlayer?.play()
       }
     }) {
-      if feedSelection == .all {
+      if mainFeedTabModel.isAllTab {
         MainFeedReportReasonSelectionView(
           goReport: $feedMoreModel.showReport,
           contentId: apiViewModel.mainFeed[mainFeedPlayersViewModel.currentVideoIndex].contentId ?? 0,
@@ -363,7 +340,7 @@ struct MainFeedView: View {
     }
     .onChange(of: tabbarModel.tabSelection) { selection in
       if selection == .main, !feedMoreModel.isRootStacked {
-        if feedSelection == .all {
+        if mainFeedTabModel.isAllTab {
           mainFeedPlayersViewModel.currentPlayer?.play()
         } else {
           myTeamfeedPlayersViewModel.currentPlayer?.play()
@@ -372,60 +349,78 @@ struct MainFeedView: View {
       }
       mainFeedPlayersViewModel.stopPlayer()
     }
-    .overlay {
-      VStack {
-        HStack {
-          Color.clear.frame(width: 28, height: 28)
-          Spacer()
-          Text("마이팀")
-            .fontSystem(fontDesignSystem: .subtitle2)
-            .foregroundColor(.white)
-            .scaleEffect(feedSelection == .myteam ? 1.1 : 1.0)
-            .onTapGesture {
-              withAnimation {
-                feedSelection = .myteam
-                page.update(.moveToFirst)
-                mainFeedPlayersViewModel.stopPlayer()
-                feedSelection = .myteam
-                myTeamfeedPlayersViewModel.currentPlayer?.play()
-              }
+    .overlay(alignment: .top) {
+      HStack {
+        Spacer()
+        Text("마이팀")
+          .fontSystem(fontDesignSystem: .subtitle2)
+          .scaleEffect(mainFeedTabModel.isMyTeamTab ? 1.1 : 1.0)
+          .onTapGesture {
+            withAnimation {
+              mainFeedTabModel.switchTab(to: .myteam)
+              page.update(.moveToFirst)
+              mainFeedPlayersViewModel.stopPlayer()
+              mainFeedTabModel.switchTab(to: .myteam)
+              myTeamfeedPlayersViewModel.currentPlayer?.play()
             }
-
-          Divider()
-            .background(Color.white).frame(height: 12)
-          Text("전체")
-            .fontSystem(fontDesignSystem: .subtitle2)
-            .foregroundColor(.white)
-            .scaleEffect(feedSelection == .all ? 1.1 : 1.0)
-            .onTapGesture {
-              withAnimation {
-                feedSelection = .all
-                page.update(.moveToLast)
-                myTeamfeedPlayersViewModel.stopPlayer()
-                mainFeedPlayersViewModel.currentPlayer?.play()
-              }
-            }
-            .foregroundColor(.white)
-          Spacer()
-          NavigationLink {
-            MainSearchView()
-          } label: {
-            Image(systemName: "magnifyingglass")
-              .font(.system(size: 24))
-              .foregroundColor(.white)
           }
-          .frame(width: 28, height: 28)
-          .id(UUID())
-        }
-        .frame(height: 28)
+        Rectangle()
+          .fill(Color.white)
+          .frame(width: 1, height: 12)
+        Text("전체")
+          .fontSystem(fontDesignSystem: .subtitle2)
+          .scaleEffect(mainFeedTabModel.isAllTab ? 1.1 : 1.0)
+          .onTapGesture {
+            withAnimation {
+              mainFeedTabModel.switchTab(to: .all)
+              page.update(.moveToLast)
+              myTeamfeedPlayersViewModel.stopPlayer()
+              mainFeedPlayersViewModel.currentPlayer?.play()
+            }
+          }
         Spacer()
       }
+      .foregroundColor(.white)
+      .overlay(alignment: .trailing) {
+        NavigationLink {
+          MainSearchView()
+        } label: {
+          Image(systemName: "magnifyingglass")
+            .font(.system(size: 24))
+        }
+        .id(UUID())
+      }
       .padding(.horizontal, 16)
+      .padding(.top, 54)
+      .ignoresSafeArea()
+    }
+    .overlay(alignment: .topLeading) {
+      if isUploading {
+        uploadingThumbnail
+          .resizable()
+          .frame(width: 64, height: 64)
+          .clipShape(RoundedRectangle(cornerRadius: 8))
+          .overlay {
+            ZStack {
+              RoundedRectangle(cornerRadius: 8)
+                .fill(.black.opacity(0.48))
+              RoundedRectangle(cornerRadius: 8)
+                .strokeBorder(Color.Border_Default_Dark)
+              CircularProgressBar(progress: UploadProgressViewModel.shared.progress, width: 2)
+                .padding(8)
+              Text("\(Int(uploadProgress * 100))%")
+                .foregroundStyle(Color.white)
+                .fontSystem(fontDesignSystem: .body2)
+            }
+          }
+          .padding(.top, 70)
+          .padding(.leading, 16)
+      }
     }
     .onAppear {
       feedMoreModel.isRootStacked = false
       tabbarModel.showTabbar()
-      if feedSelection == .myteam {
+      if mainFeedTabModel.isMyTeamTab {
         if myTeamfeedPlayersViewModel.currentVideoIndex != 0 {
           myTeamfeedPlayersViewModel.currentPlayer?.seek(to: .zero)
           if
@@ -449,7 +444,7 @@ struct MainFeedView: View {
         WhistleLogger.logger.debug("MainFeedView onAppear else")
       }
       if apiViewModel.myProfile.myTeam == nil {
-        feedSelection = .all
+        mainFeedTabModel.switchTab(to: .all)
         page.update(.moveToLast)
       }
     }
@@ -484,7 +479,7 @@ extension MainFeedView {
     ZStack {
       Color.black
       if !apiViewModel.mainFeed.isEmpty {
-        MainFeedPageView(index: $allIndex, feedSelection: $feedSelection)
+        MainFeedPageView(index: $allIndex)
       }
     }
     .background(Color.black.edgesIgnoringSafeArea(.all))
@@ -496,7 +491,7 @@ extension MainFeedView {
     ZStack {
       Color.black
       if !apiViewModel.myTeamFeed.isEmpty {
-        MyTeamFeedPageView(index: $myTeamIndex, feedSelection: $feedSelection)
+        MyTeamFeedPageView(index: $myTeamIndex)
       }
     }
     .background(Color.black.edgesIgnoringSafeArea(.all))
@@ -513,10 +508,10 @@ extension MainFeedView {
         allFeedTab()
           .onAppear {
             if apiViewModel.myProfile.myTeam != nil {
-              feedSelection = .myteam
+              mainFeedTabModel.switchTab(to: .myteam)
               page.update(.moveToFirst)
               mainFeedPlayersViewModel.stopPlayer()
-              feedSelection = .myteam
+              mainFeedTabModel.switchTab(to: .myteam)
               myTeamfeedPlayersViewModel.currentPlayer?.play()
             }
           }

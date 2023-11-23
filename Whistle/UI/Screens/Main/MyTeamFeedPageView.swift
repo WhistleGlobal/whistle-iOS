@@ -13,10 +13,10 @@ struct MyTeamFeedPageView: UIViewRepresentable {
   @ObservedObject var refreshableModel = MyTeamRefreshableModel()
   @StateObject var apiViewModel = APIViewModel.shared
   @StateObject var feedPlayersViewModel = MyTeamFeedPlayersViewModel.shared
+  @StateObject var mainFeedTabModel = MainFeedTabModel.shared
   @State var currentContentInfo: MainContent?
   @State var isChangable = true
   @Binding var index: Int
-  @Binding var feedSelection: MainFeedTabSelection
 
   func makeUIView(context: Context) -> UIScrollView {
     let view = UIScrollView()
@@ -80,26 +80,22 @@ struct MyTeamFeedPageView: UIViewRepresentable {
     MyTeamFeedPageView.Coordinator(
       parent: self,
       index: $index,
-      changable: $isChangable,
-      feedSelection: $feedSelection)
+      changable: $isChangable)
   }
 
   class Coordinator: NSObject, UIScrollViewDelegate, ViewLifecycleDelegate {
     var parent: MyTeamFeedPageView
     @Binding var index: Int
     @Binding var changable: Bool
-    @Binding var feedSelection: MainFeedTabSelection
 
     init(
       parent: MyTeamFeedPageView,
       index: Binding<Int>,
-      changable: Binding<Bool>,
-      feedSelection: Binding<MainFeedTabSelection>)
+      changable: Binding<Bool>)
     {
       self.parent = parent
       _index = index
       _changable = changable
-      _feedSelection = feedSelection
     }
 
     func onAppear() {
@@ -114,7 +110,7 @@ struct MyTeamFeedPageView: UIViewRepresentable {
           return
         }
         WhistleLogger.logger.debug("MyTeamFeedPageView onAppear()")
-        if feedSelection == .myteam {
+        if parent.mainFeedTabModel.isMyTeamTab {
           parent.feedPlayersViewModel.currentPlayer?.pause()
           parent.feedPlayersViewModel.currentPlayer?.seek(to: .zero)
           parent.feedPlayersViewModel.currentPlayer?.play()
@@ -158,7 +154,7 @@ struct MyTeamFeedPageView: UIViewRepresentable {
         if BlockList.shared.userIds.contains(parent.currentContentInfo?.userId ?? 0) {
           return
         }
-        if feedSelection == .myteam {
+        if parent.mainFeedTabModel.isMyTeamTab {
           parent.feedPlayersViewModel.currentPlayer?.play()
         }
       }

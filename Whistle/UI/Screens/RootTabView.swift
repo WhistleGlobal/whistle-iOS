@@ -39,8 +39,6 @@ struct RootTabView: View {
   @State var showTermsOfService = false
   @State var showPrivacyPolicy = false
 
-  @State var feedSelection: MainFeedTabSelection = .all
-
   @State private var uploadBottomSheetPosition: BottomSheetPosition = .hidden
   @State private var pickerOptions = PickerOptionsInfo()
   @StateObject private var feedPlayersViewModel = MainFeedPlayersViewModel.shared
@@ -50,7 +48,6 @@ struct RootTabView: View {
   @StateObject var toastViewModel = ToastViewModel.shared
   @StateObject var userAuth = UserAuth.shared
   @StateObject var bartintModel = BarTintModel.shared
-
   @EnvironmentObject var universalRoutingModel: UniversalRoutingModel
   @StateObject var appleSignInViewModel = AppleSignInViewModel()
 
@@ -79,7 +76,7 @@ struct RootTabView: View {
                     .allowsTightening(false)
                     .zIndex(200)
                 }
-                MainFeedView(feedSelection: $feedSelection)
+                MainFeedView()
                   .environmentObject(universalRoutingModel)
               }
               .tag(TabSelection.main)

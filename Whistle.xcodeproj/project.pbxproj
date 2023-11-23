@@ -14,6 +14,8 @@
 		1B0A29AA2AA64ADC009077A1 /* MusicService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B0A29A92AA64ADC009077A1 /* MusicService.swift */; };
 		1B0A29AC2AA64AF3009077A1 /* MusicNote.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B0A29AB2AA64AF3009077A1 /* MusicNote.swift */; };
 		1B0A29AE2AA662CB009077A1 /* HapticsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B0A29AD2AA662CB009077A1 /* HapticsManager.swift */; };
+		1B0B45792B0F3426007848FA /* MainFeedTabModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B0B45782B0F3426007848FA /* MainFeedTabModel.swift */; };
+		1B0B457A2B0F3426007848FA /* MainFeedTabModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B0B45782B0F3426007848FA /* MainFeedTabModel.swift */; };
 		1B21C9ED2AA0AB8A0036158F /* .swiftformat in Resources */ = {isa = PBXBuildFile; fileRef = 1B21C9EC2AA0AB8A0036158F /* .swiftformat */; };
 		1B2CFECB2AD412D000F34AA3 /* DescriptionEditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B2CFECA2AD412D000F34AA3 /* DescriptionEditorView.swift */; };
 		1B2E3CFD2B0C486A003A5288 /* MyTeamSelectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B2E3CFB2B0C486A003A5288 /* MyTeamSelectView.swift */; };
@@ -857,6 +859,7 @@
 		1B0A29AB2AA64AF3009077A1 /* MusicNote.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MusicNote.swift; sourceTree = "<group>"; };
 		1B0A29AD2AA662CB009077A1 /* HapticsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HapticsManager.swift; sourceTree = "<group>"; };
 		1B0A29AF2AA75087009077A1 /* WhistleDebug.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = WhistleDebug.entitlements; sourceTree = "<group>"; };
+		1B0B45782B0F3426007848FA /* MainFeedTabModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainFeedTabModel.swift; sourceTree = "<group>"; };
 		1B21C9E82AA034500036158F /* Whistle.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Whistle.entitlements; sourceTree = "<group>"; };
 		1B21C9EC2AA0AB8A0036158F /* .swiftformat */ = {isa = PBXFileReference; lastKnownFileType = text; path = .swiftformat; sourceTree = "<group>"; };
 		1B2CFECA2AD412D000F34AA3 /* DescriptionEditorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DescriptionEditorView.swift; sourceTree = "<group>"; };
@@ -1400,6 +1403,21 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		1B0B457B2B0F3437007848FA /* FeedPlayersViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				787993002B0D83C500EAFB2A /* MyTeamFeedPlayersViewModel.swift */,
+				1B2E3D002B0C48FA003A5288 /* SearchPlayersViewModel.swift */,
+				1B2E3CFF2B0C48F9003A5288 /* TagSeacrhPlayersViewModel.swift */,
+				78F493E62AEA7BB200A08FC1 /* MainFeedPlayersViewModel.swift */,
+				78FDA5412AEFC65B001C3DA4 /* MyFeedPlayersViewModel.swift */,
+				78BCA9532AEFF6140084E92F /* BookmarkedPlayersViewModel.swift */,
+				78BCA95D2AF086970084E92F /* MemeberPlayersViewModel.swift */,
+				782A6DDC2AF1EBCB004D0A60 /* GuestPlayersViewModel.swift */,
+			);
+			path = FeedPlayersViewModels;
+			sourceTree = "<group>";
+		};
 		1B2CFEC92AD412A400F34AA3 /* Upload */ = {
 			isa = PBXGroup;
 			children = (
@@ -1725,6 +1743,7 @@
 		1B39554E2A9506BD00BCB4DF /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				1B0B45782B0F3426007848FA /* MainFeedTabModel.swift */,
 				1B2E3D372B0C4C11003A5288 /* Search */,
 				788E685E2AD6B6710056C18B /* PhotoAssetModel.swift */,
 				788E68632AD6B6710056C18B /* PhotoFile.swift */,
@@ -1772,8 +1791,7 @@
 		1B3955502A9507A700BCB4DF /* ViewModels */ = {
 			isa = PBXGroup;
 			children = (
-				1B2E3D002B0C48FA003A5288 /* SearchPlayersViewModel.swift */,
-				1B2E3CFF2B0C48F9003A5288 /* TagSeacrhPlayersViewModel.swift */,
+				1B0B457B2B0F3437007848FA /* FeedPlayersViewModels */,
 				1B547D582AEA864300EDE344 /* AlertViewModel.swift */,
 				1B3895582AB9CB9700B4C8DD /* VideoEditor */,
 				1BAC07F42AD559CE0087D8CD /* TagsViewModel.swift */,
@@ -1781,14 +1799,8 @@
 				1BE8E9FE2AAE2DFB00EB0A55 /* MusicServiceProtocol.swift */,
 				1B0A29A72AA64AA2009077A1 /* MusicViewModel.swift */,
 				1BEB20152AE12866008A7253 /* UploadProgressViewModel.swift */,
-				78F493E62AEA7BB200A08FC1 /* MainFeedPlayersViewModel.swift */,
-				78FDA5412AEFC65B001C3DA4 /* MyFeedPlayersViewModel.swift */,
-				78BCA9532AEFF6140084E92F /* BookmarkedPlayersViewModel.swift */,
-				78BCA95D2AF086970084E92F /* MemeberPlayersViewModel.swift */,
-				782A6DDC2AF1EBCB004D0A60 /* GuestPlayersViewModel.swift */,
 				787093672AF28CB30023B400 /* ZoomFactorCombineViewModel.swift */,
 				1B2E3D422B0C9533003A5288 /* LaunchScreenViewModel.swift */,
-				787993002B0D83C500EAFB2A /* MyTeamFeedPlayersViewModel.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -3443,6 +3455,7 @@
 				1B89314A2AE6903100F8579B /* TabbarModel.swift in Sources */,
 				1B38954E2AB9CB7500B4C8DD /* VideoEditorToolsSection.swift in Sources */,
 				1B38958B2AB9CC4300B4C8DD /* VideoPlayerManager.swift in Sources */,
+				1B0B45792B0F3426007848FA /* MainFeedTabModel.swift in Sources */,
 				1B2E3D0F2B0C4A1C003A5288 /* MainSearchView.swift in Sources */,
 				78BCA9542AEFF6140084E92F /* BookmarkedPlayersViewModel.swift in Sources */,
 				787C8AE02AB3293C00723085 /* ProfileReportCommentView.swift in Sources */,
@@ -3737,6 +3750,7 @@
 				1B9936772AF3699E00F5C619 /* TabbarModel.swift in Sources */,
 				1B9936782AF3699E00F5C619 /* VideoEditorToolsSection.swift in Sources */,
 				1B9936792AF3699E00F5C619 /* VideoPlayerManager.swift in Sources */,
+				1B0B457A2B0F3426007848FA /* MainFeedTabModel.swift in Sources */,
 				1B99367A2AF3699E00F5C619 /* BookmarkedPlayersViewModel.swift in Sources */,
 				1B99367C2AF3699E00F5C619 /* ProfileReportCommentView.swift in Sources */,
 				1B99367D2AF3699E00F5C619 /* MemberFeedView.swift in Sources */,
@@ -4275,7 +4289,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.2.0;
+				MARKETING_VERSION = 1.3.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.newcompany.Whistle;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -4322,7 +4336,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.2.0;
+				MARKETING_VERSION = 1.3.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.newcompany.Whistle;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -4446,7 +4460,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.2.0;
+				MARKETING_VERSION = 1.3.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.newcompany.WhistleDev;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -4496,7 +4510,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.2.0;
+				MARKETING_VERSION = 1.3.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.newcompany.WhistleDev;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";

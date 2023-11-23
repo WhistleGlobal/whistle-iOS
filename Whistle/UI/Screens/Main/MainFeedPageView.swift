@@ -13,10 +13,11 @@ struct MainFeedPageView: UIViewRepresentable {
   @ObservedObject var refreshableModel = MainRefreshableModel()
   @StateObject var apiViewModel = APIViewModel.shared
   @StateObject var feedPlayersViewModel = MainFeedPlayersViewModel.shared
+  @StateObject var mainFeedTabModel = MainFeedTabModel.shared
+
   @State var currentContentInfo: MainContent?
   @State var isChangable = true
   @Binding var index: Int
-  @Binding var feedSelection: MainFeedTabSelection
 
   func makeUIView(context: Context) -> UIScrollView {
     let view = UIScrollView()
@@ -80,26 +81,22 @@ struct MainFeedPageView: UIViewRepresentable {
     MainFeedPageView.Coordinator(
       parent: self,
       index: $index,
-      changable: $isChangable,
-      feedSelection: $feedSelection)
+      changable: $isChangable)
   }
 
   class Coordinator: NSObject, UIScrollViewDelegate, ViewLifecycleDelegate {
     var parent: MainFeedPageView
     @Binding var index: Int
     @Binding var changable: Bool
-    @Binding var feedSelection: MainFeedTabSelection
 
     init(
       parent: MainFeedPageView,
       index: Binding<Int>,
-      changable: Binding<Bool>,
-      feedSelection: Binding<MainFeedTabSelection>)
+      changable: Binding<Bool>)
     {
       self.parent = parent
       _index = index
       _changable = changable
-      _feedSelection = feedSelection
     }
 
     func onAppear() {
@@ -114,7 +111,7 @@ struct MainFeedPageView: UIViewRepresentable {
           return
         }
         WhistleLogger.logger.debug("MainFeedPageView onAppear()")
-        if feedSelection == .all {
+        if parent.mainFeedTabModel.isAllTab {
           parent.feedPlayersViewModel.currentPlayer?.pause()
           parent.feedPlayersViewModel.currentPlayer?.seek(to: .zero)
           parent.feedPlayersViewModel.currentPlayer?.play()
