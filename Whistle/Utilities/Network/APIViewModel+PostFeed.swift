@@ -164,6 +164,12 @@ extension APIViewModel: PostFeedProtocol {
         .response { response in
           switch response.result {
           case .success:
+            if method == .post {
+              Mixpanel.mainInstance().people.increment(property: "bookmark_count", by: 1)
+              Mixpanel.mainInstance().track(event: "bookmark", properties: [
+                "content_id": contentID,
+              ])
+            }
             continuation.resume(returning: true)
           case .failure(let error):
             WhistleLogger.logger.error("Failure: \(error)")
@@ -175,11 +181,6 @@ extension APIViewModel: PostFeedProtocol {
 
   func whistleAction(contentID: Int, method: HTTPMethod) async {
     if contentID == 0 { return }
-    if method == .post {
-      Mixpanel.mainInstance().track(event: "whistle", properties: [
-        "content_id": contentID,
-      ])
-    }
     return await withCheckedContinuation { continuation in
       AF.request(
         "\(domainURL)/action/\(contentID)/whistle",
@@ -189,6 +190,12 @@ extension APIViewModel: PostFeedProtocol {
         .response { response in
           switch response.result {
           case .success:
+            if method == .post {
+              Mixpanel.mainInstance().people.increment(property: "whistled_count", by: 1)
+              Mixpanel.mainInstance().track(event: "whistle", properties: [
+                "content_id": contentID,
+              ])
+            }
             continuation.resume()
           case .failure(let error):
             WhistleLogger.logger.error("Failure: \(error)")
