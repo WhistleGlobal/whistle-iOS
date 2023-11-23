@@ -216,6 +216,12 @@ extension APIViewModel: PostFeedProtocol {
         .response { response in
           switch response.result {
           case .success:
+            if method == .post {
+              Mixpanel.mainInstance().people.increment(property: "not_interested_count", by: 1)
+              Mixpanel.mainInstance().track(event: "not_interested", properties: [
+                "content_id": contentID,
+              ])
+            }
             continuation.resume()
           case .failure(let error):
             WhistleLogger.logger.error("Failure: \(error)")
