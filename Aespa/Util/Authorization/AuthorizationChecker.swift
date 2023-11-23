@@ -10,7 +10,7 @@ import Foundation
 
 // MARK: - AuthorizationChecker
 
-struct AuthorizationChecker {
+enum AuthorizationChecker {
   static func checkCaptureAuthorizationStatus() async -> Status {
     switch AVCaptureDevice.authorizationStatus(for: .video) {
     case .authorized:

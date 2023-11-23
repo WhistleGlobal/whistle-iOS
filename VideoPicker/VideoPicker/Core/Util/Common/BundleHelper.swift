@@ -10,7 +10,7 @@ import UIKit
 
 // MARK: - BundleHelper
 
-struct BundleHelper {
+enum BundleHelper {
   static var appName: String {
     if let info = Bundle.main.localizedInfoDictionary {
       if let appName = info["CFBundleDisplayName"] as? String { return appName }

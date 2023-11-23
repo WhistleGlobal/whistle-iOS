@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct AppKeys {
+enum AppKeys {
   #if DEBUG
   static let domainURL = Bundle.main.object(forInfoDictionaryKey: "DevUrl")
   #else
