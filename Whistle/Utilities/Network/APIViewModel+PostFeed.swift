@@ -9,6 +9,7 @@ import Foundation
 
 import Alamofire
 import AVFoundation
+import Mixpanel
 import SwiftyJSON
 import UIKit
 
@@ -174,6 +175,11 @@ extension APIViewModel: PostFeedProtocol {
 
   func whistleAction(contentID: Int, method: HTTPMethod) async {
     if contentID == 0 { return }
+    if method == .post {
+      Mixpanel.mainInstance().track(event: "whistle", properties: [
+        "content_id": contentID,
+      ])
+    }
     return await withCheckedContinuation { continuation in
       AF.request(
         "\(domainURL)/action/\(contentID)/whistle",
