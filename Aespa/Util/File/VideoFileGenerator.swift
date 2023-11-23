@@ -8,7 +8,7 @@
 import AVFoundation
 import UIKit
 
-struct VideoFileGenerator {
+enum VideoFileGenerator {
   static func generate(with path: URL, date: Date) -> VideoFile {
     VideoFile(
       creationDate: date,

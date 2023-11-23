@@ -8,7 +8,7 @@
 
 import UIKit
 
-struct ScreenHelper {
+enum ScreenHelper {
   static var keyWindow: UIWindow? {
     if #available(iOS 13.0, *) {
       let connectedScenes = UIApplication.shared.connectedScenes
