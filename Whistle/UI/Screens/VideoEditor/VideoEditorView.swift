@@ -65,6 +65,7 @@ struct VideoEditorView: View {
           if let video = editorVM.currentVideo {
             NavigationLink(
               destination: DescriptionEditorView(
+                uploadMethod: .gallery,
                 video: video,
                 thumbnail: thumbnail,
                 editorVM: editorVM,
