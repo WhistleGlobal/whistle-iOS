@@ -5,6 +5,7 @@
 //  Created by ChoiYujin on 11/9/23.
 //
 
+import Mixpanel
 import SwiftUI
 import SwiftyJSON
 import UIKit
@@ -138,5 +139,10 @@ extension MainSearchView {
     apiViewModel.requestSearchedUser(queryString: query)
     apiViewModel.requestSearchedTag(queryString: query)
     apiViewModel.requestSearchedContent(queryString: query)
+
+    Mixpanel.mainInstance().people.increment(property: "search_count", by: 1)
+    Mixpanel.mainInstance().track(event: "search", properties: [
+      "search_term": query,
+    ])
   }
 }
