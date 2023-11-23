@@ -387,6 +387,7 @@ struct MainFeedView: View {
         } label: {
           Image(systemName: "magnifyingglass")
             .font(.system(size: 24))
+            .foregroundStyle(Color.white)
         }
         .id(UUID())
       }

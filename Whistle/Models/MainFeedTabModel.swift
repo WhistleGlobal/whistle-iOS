@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import SwiftUI
 
 // MARK: - MainFeedTabSelection
 
@@ -35,6 +36,8 @@ class MainFeedTabModel: ObservableObject {
   }
 
   func switchTab(to tabSelection: MainFeedTabSelection) {
-    self.tabSelection = tabSelection
+    withAnimation {
+      self.tabSelection = tabSelection
+    }
   }
 }
