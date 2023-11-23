@@ -18,4 +18,8 @@ extension String {
       return nil
     }
   }
+
+  static func mixpanelToken() -> String {
+    Bundle.main.object(forInfoDictionaryKey: "MixpanelToken") as! String
+  }
 }

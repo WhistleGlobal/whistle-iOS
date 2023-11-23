@@ -448,6 +448,9 @@ struct ProfileView: View {
     .onChange(of: apiViewModel.bookmark) { _ in
       offsetY = 0
     }
+    .onAppear {
+      WhistleLogger.logger.debug("ProfileView Appear")
+    }
   }
 }
 

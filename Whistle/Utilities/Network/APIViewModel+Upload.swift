@@ -7,6 +7,7 @@
 
 import Alamofire
 import Foundation
+import Mixpanel
 import SwiftUI
 import SwiftyJSON
 import UIKit
@@ -47,8 +48,10 @@ extension APIViewModel: UploadProtocol {
     musicID: Int,
     videoLength: Double,
     aspectRatio: Double = 0.0,
-    hashtags: [String])
+    hashtags: [String],
+    uploadMethod: UploadMethod = .camera)
   {
+    Mixpanel.mainInstance().track(event: "upload_start")
     let params: [String: Any] = [
       "caption": caption,
       "source_url": sourceURL,
@@ -75,12 +78,23 @@ extension APIViewModel: UploadProtocol {
       .uploadProgress { progress in
         UploadProgressViewModel.shared.progress = progress.fractionCompleted
       }
-      //    .validate(statusCode: 200 ..< 501)
       .validate(statusCode: 200 ..< 300)
       .response { response in
         switch response.result {
         case .success(let data):
           WhistleLogger.logger.debug("upload success")
+          Mixpanel.mainInstance().people.set(property: "$first_upload_date", to: Date().koreaTimezone())
+          Mixpanel.mainInstance().people.set(property: "last_upload_date", to: Date().koreaTimezone())
+          Mixpanel.mainInstance().people.increment(property: "upload_count", by: 1)
+          Mixpanel.mainInstance().track(event: "upload_complete", properties: [
+            "upload_method": "\(uploadMethod.rawValue)",
+            "content_caption": "\(caption)",
+            "hashtags": hashtags,
+            "music": musicID == 0 ? false : true,
+            "content_source": "\(sourceURL)",
+            "upload_date": Date().koreaTimezone(),
+            "content_length": Int(videoLength),
+          ])
           UploadProgressViewModel.shared.uploadEnded()
           guard data != nil else {
             return

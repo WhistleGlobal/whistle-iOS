@@ -5,6 +5,7 @@
 //  Created by ChoiYujin on 11/22/23.
 //
 
+import Mixpanel
 import SwiftUI
 
 // MARK: - MyTeamFeedPageView
@@ -16,6 +17,9 @@ struct MyTeamFeedPageView: UIViewRepresentable {
   @StateObject var mainFeedTabModel = MainFeedTabModel.shared
   @State var currentContentInfo: MainContent?
   @State var isChangable = true
+  @Binding var viewDuration: String
+  @Binding var viewedContenId: Set<Int>
+  @Binding var scrolledContentCount: Int
   @Binding var index: Int
 
   func makeUIView(context: Context) -> UIScrollView {
@@ -125,6 +129,24 @@ struct MyTeamFeedPageView: UIViewRepresentable {
     }
 
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+      parent.scrolledContentCount += 1
+      parent.viewedContenId.insert(APIViewModel.shared.myTeamFeed[parent.feedPlayersViewModel.currentVideoIndex].contentId!)
+      let viewDate = parent.viewDuration.toDate()
+      let nowDate = Date.now
+      let viewTime = nowDate.timeIntervalSince(viewDate ?? Date.now)
+      let viewTimeInt = Int(viewTime)
+      Mixpanel.mainInstance().track(event: "play_next", properties: [
+        "follow": APIViewModel.shared.myTeamFeed[parent.feedPlayersViewModel.currentVideoIndex].isFollowed,
+        "whistle": APIViewModel.shared.myTeamFeed[parent.feedPlayersViewModel.currentVideoIndex].isWhistled,
+        "bookmark": APIViewModel.shared.myTeamFeed[parent.feedPlayersViewModel.currentVideoIndex].isBookmarked,
+        "not_interested": false,
+        "content_duration": viewTimeInt,
+        "content_id": APIViewModel.shared.myTeamFeed[parent.feedPlayersViewModel.currentVideoIndex].contentId!,
+        "content_length": 0,
+        "content_caption": APIViewModel.shared.myTeamFeed[parent.feedPlayersViewModel.currentVideoIndex].caption ?? "",
+        "hashtags": APIViewModel.shared.myTeamFeed[parent.feedPlayersViewModel.currentVideoIndex].hashtags ?? [],
+      ])
+      parent.viewDuration = Date().toString()
       parent.feedPlayersViewModel.currentVideoIndex = Int(scrollView.contentOffset.y / UIScreen.main.bounds.height)
       if index < parent.feedPlayersViewModel.currentVideoIndex {
         if index == parent.apiViewModel.myTeamFeed.count - 1 {

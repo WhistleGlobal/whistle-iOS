@@ -8,6 +8,7 @@
 import _AuthenticationServices_SwiftUI
 import _AVKit_SwiftUI
 import BottomSheet
+import Mixpanel
 import SwiftUI
 
 // MARK: - GuestMainFeedView
@@ -198,6 +199,11 @@ struct GuestMainFeedView: View {
           }
         }
       }
+    }
+    .onAppear {
+      Mixpanel.mainInstance().track(event: "login", properties: [
+        "did_login": false,
+      ])
     }
   }
 }

@@ -5,6 +5,7 @@
 //  Created by ChoiYujin on 11/9/23.
 //
 
+import Mixpanel
 import SwiftUI
 import SwiftyJSON
 
@@ -323,7 +324,7 @@ extension SearchResultView {
 }
 
 extension SearchResultView {
-  func search(query _: String) {
+  func search(query: String) {
     searchQueryString = inputText
     switch searchTabSelection {
     case .content:
@@ -333,5 +334,9 @@ extension SearchResultView {
     case .hashtag:
       SearchProgressViewModel.shared.searchTag()
     }
+    Mixpanel.mainInstance().people.increment(property: "search_count", by: 1)
+    Mixpanel.mainInstance().track(event: "search", properties: [
+      "search_term": query,
+    ])
   }
 }

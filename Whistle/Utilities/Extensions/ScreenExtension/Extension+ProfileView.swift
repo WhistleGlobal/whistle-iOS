@@ -8,6 +8,7 @@
 import Foundation
 import GoogleSignIn
 import Kingfisher
+import Mixpanel
 import SwiftUI
 
 // MARK: - Components
@@ -500,6 +501,7 @@ extension ProfileView {
             cancelText: CommonWords().cancel,
             destructiveText: CommonWords().logout)
           {
+            Mixpanel.mainInstance().track(event: "logout")
             NavigationUtil.popToRootView()
             isFirstProfileLoaded = true
             GIDSignIn.sharedInstance.signOut()

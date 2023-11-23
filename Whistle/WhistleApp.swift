@@ -7,6 +7,7 @@
 
 import GoogleSignIn
 import KeychainSwift
+import Mixpanel
 import SwiftUI
 import VideoPicker
 
@@ -102,6 +103,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     didFinishLaunchingWithOptions _: [UIApplication.LaunchOptionsKey: Any]?)
     -> Bool
   {
+    Mixpanel.initialize(token: String.mixpanelToken(), trackAutomaticEvents: true)
+    Mixpanel.mainInstance().loggingEnabled = true
     // APNS 설정
     UNUserNotificationCenter.current().delegate = self
     UNUserNotificationCenter.current()

@@ -7,6 +7,7 @@
 
 import BottomSheet
 import Combine
+import Mixpanel
 import SwiftUI
 
 // MARK: - DescriptionEditorView
@@ -36,6 +37,7 @@ struct DescriptionEditorView: View {
   @State private var inputText = "\u{200B}"
   @Binding var isInitial: Bool
 
+  let uploadMethod: UploadMethod
   let video: EditableVideo
   var thumbnail: Image?
   let videoScale: CGFloat = 16 / 9
@@ -43,6 +45,7 @@ struct DescriptionEditorView: View {
   let textLimit = 100
 
   init(
+    uploadMethod: UploadMethod = .camera,
     video: EditableVideo,
     thumbnail: Image?,
     editorVM: VideoEditorViewModel,
@@ -50,6 +53,7 @@ struct DescriptionEditorView: View {
     musicVM: MusicViewModel,
     isInitial: Binding<Bool>)
   {
+    self.uploadMethod = uploadMethod
     self.video = video
     self.thumbnail = thumbnail
     _exporterVM = StateObject(wrappedValue: VideoExporterViewModel(video: video, musicVolume: musicVM.musicVolume))
@@ -103,7 +107,8 @@ struct DescriptionEditorView: View {
                       musicID: musicVM.musicInfo?.musicID ?? 0,
                       videoLength: video.totalDuration,
                       aspectRatio: exporterVM.aspectRatio,
-                      hashtags: tagsViewModel.getTags())
+                      hashtags: tagsViewModel.getTags(),
+                      uploadMethod: uploadMethod)
                   } else {
                     if let item {
                       var data = Data()
@@ -118,7 +123,8 @@ struct DescriptionEditorView: View {
                         musicID: musicVM.musicInfo?.musicID ?? 0,
                         videoLength: video.totalDuration,
                         aspectRatio: exporterVM.aspectRatio,
-                        hashtags: tagsViewModel.getTags())
+                        hashtags: tagsViewModel.getTags(),
+                        uploadMethod: uploadMethod)
                     }
                   }
                 }
@@ -245,6 +251,7 @@ struct DescriptionEditorView: View {
     }
     .onAppear {
       toastViewModel.onFullScreenCover = true
+      Mixpanel.mainInstance().track(event: "write_content_description")
     }
     .bottomSheet(bottomSheetPosition: $sheetPosition, switchablePositions: [.hidden, .dynamicTop], headerContent: {
       ZStack(alignment: .center) {
@@ -324,4 +331,11 @@ struct DescriptionEditorView: View {
       caption = String(caption.prefix(upper))
     }
   }
+}
+
+// MARK: - UploadMethod
+
+enum UploadMethod: String {
+  case gallery
+  case camera
 }

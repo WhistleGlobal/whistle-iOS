@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import Mixpanel
 import SwiftUI
 
 // MARK: - MyTeamSelectView
@@ -93,16 +94,22 @@ struct MyTeamSelectView: View {
       .padding(.bottom, UIScreen.getHeight(14))
       Button {
         Task {
+          Mixpanel.mainInstance().identify(distinctId: String(apiViewModel.myProfile.userId))
           await apiViewModel.updateMyTeam(myTeam: MyTeamType.teamName(myTeamSelection))
           await apiViewModel.requestMyProfile()
-          if apiViewModel.myTeamFeed.isEmpty {
-            apiViewModel.requestMyTeamFeed { _ in
-              if isMyTeamSelectPassed {
-                dismiss()
-              } else {
-                isMyTeamSelectPassed = true
-              }
-            }
+          guard let myTeam = apiViewModel.myProfile.myTeam else {
+            return
+          }
+          Mixpanel.mainInstance().people.set(property: "myteam", to: "\(myTeam)")
+          Mixpanel.mainInstance().track(event: "select_myteam", properties: [
+            "team_selected": true,
+          ])
+          apiViewModel.requestMyTeamFeed { _ in
+          }
+          if isMyTeamSelectPassed {
+            dismiss()
+          } else {
+            isMyTeamSelectPassed = true
           }
         }
       } label: {
@@ -138,6 +145,9 @@ struct MyTeamSelectView: View {
           if isMyTeamSelectPassed {
             dismiss()
           } else {
+            Mixpanel.mainInstance().track(event: "select_myteam", properties: [
+              "team_selected": false,
+            ])
             isMyTeamSelectPassed = true
           }
         }
