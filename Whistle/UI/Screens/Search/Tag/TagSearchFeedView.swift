@@ -29,6 +29,7 @@ struct TagSearchFeedView: View {
           index: $index,
           dismissAction: dismiss)
           .environmentObject(feedPlayersViewModel)
+          .toolbarRole(.editor)
       } else {
         VStack {
           Spacer()

@@ -367,7 +367,6 @@ struct SearchBar: View {
             Image(systemName: "magnifyingglass")
               .foregroundStyle(Color.LabelColor_Secondary_Dark)
               .font(.system(size: 16))
-              .hLeading()
               .padding(.leading, 8)
           }
           .overlay(alignment: .trailing) {
@@ -378,7 +377,6 @@ struct SearchBar: View {
                 Image(systemName: "xmark.circle.fill")
                   .foregroundColor(Color.LabelColor_Secondary_Dark)
               }
-              .hTrailing()
               .padding(.trailing, 8)
             }
           }
