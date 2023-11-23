@@ -8,7 +8,7 @@
 import Foundation
 import UIKit
 
-struct PhotoFileGenerator {
+enum PhotoFileGenerator {
   static func generate(data: Data, date: Date) -> PhotoFile {
     PhotoFile(
       creationDate: date,

@@ -1,0 +1,53 @@
+name: Alamofire, nameSpecified: Alamofire, owner: Alamofire, version: 5.7.1, source: https://github.com/Alamofire/Alamofire
+
+name: APIKit, nameSpecified: APIKit, owner: ishkawa, version: 5.4.0, source: https://github.com/ishkawa/APIKit
+
+name: AppAuth-iOS, nameSpecified: AppAuth, owner: openid, version: 1.6.2, source: https://github.com/openid/AppAuth-iOS
+
+name: GoogleSignIn-iOS, nameSpecified: GoogleSignIn, owner: google, version: 7.0.0, source: https://github.com/google/GoogleSignIn-iOS
+
+name: gtm-session-fetcher, nameSpecified: gtm-session-fetcher, owner: google, version: 3.1.1, source: https://github.com/google/gtm-session-fetcher
+
+name: GTMAppAuth, nameSpecified: GTMAppAuth, owner: google, version: 2.0.0, source: https://github.com/google/GTMAppAuth
+
+name: HeliumLogger, nameSpecified: HeliumLogger, owner: Kitura, version: 2.0.0, source: https://github.com/Kitura/HeliumLogger
+
+name: keychain-swift, nameSpecified: KeychainSwift, owner: evgenyneu, version: 20.0.0, source: https://github.com/evgenyneu/keychain-swift
+
+name: Kingfisher, nameSpecified: Kingfisher, owner: onevcat, version: 7.9.1, source: https://github.com/onevcat/Kingfisher
+
+name: LicensePlist, nameSpecified: LicensePlist, owner: mono0926, version: 3.25.1, source: https://github.com/mono0926/LicensePlist
+
+name: LoggerAPI, nameSpecified: LoggerAPI, owner: Kitura, version: 2.0.0, source: https://github.com/Kitura/LoggerAPI
+
+name: lottie-ios, nameSpecified: Lottie, owner: airbnb, version: 4.3.3, source: https://github.com/airbnb/lottie-ios
+
+name: ReverseMask, nameSpecified: ReverseMask, owner: stateman92, version: 0.0.1, source: https://github.com/stateman92/ReverseMask
+
+name: SnapKit, nameSpecified: SnapKit, owner: SnapKit, version: 5.6.0, source: https://github.com/SnapKit/SnapKit
+
+name: swift-argument-parser, nameSpecified: swift-argument-parser, owner: apple, version: 1.2.3, source: https://github.com/apple/swift-argument-parser
+
+name: swift-html-entities, nameSpecified: HTMLEntities, owner: Kitura, version: 4.0.1, source: https://github.com/Kitura/swift-html-entities
+
+name: swift-log, nameSpecified: swift-log, owner: apple, version: 1.5.3, source: https://github.com/apple/swift-log
+
+name: SwiftUIPager, nameSpecified: SwiftUIPager, owner: fermoya, version: 2.5.0, source: https://github.com/fermoya/SwiftUIPager
+
+name: SwiftyJSON, nameSpecified: SwiftyJSON, owner: SwiftyJSON, version: 5.0.1, source: https://github.com/SwiftyJSON/SwiftyJSON
+
+name: TagKit, nameSpecified: TagKit, owner: danielsaidi, version: 0.1.1, source: https://github.com/danielsaidi/TagKit
+
+name: XcodeEdit, nameSpecified: XcodeEdit, owner: tomlokhorst, version: 2.9.2, source: https://github.com/tomlokhorst/XcodeEdit
+
+name: Yams, nameSpecified: Yams, owner: jpsim, version: 5.0.6, source: https://github.com/jpsim/Yams
+
+name: Aespa, nameSpecified: Aespa, owner: enebin, version: 0.4.1, source: https://github.com/enebin/Aespa
+
+name: AnyImageKit, nameSpecified: AnyImageKit, owner: RayJiang16 , version: 0.17.0, source: https://github.com/AnyImageKit/AnyImageKit
+
+name: BottomSheet, nameSpecified: BottomSheet, owner: lucaszischka , version: 3.1.1, source: https://github.com/lucaszischka/BottomSheet
+
+add-version-numbers: false
+
+LicensePlist Version: 3.25.1

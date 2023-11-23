@@ -8,7 +8,7 @@
 import CoreImage
 import Foundation
 
-final class VideoFilterHelpers {
+enum VideoFilterHelpers {
   static func createColorFilter(_ colorCorrection: ColorCorrection?) -> CIFilter? {
     guard let colorCorrection else { return nil }
     let colorCorrectionFilter = CIFilter(name: "CIColorControls")

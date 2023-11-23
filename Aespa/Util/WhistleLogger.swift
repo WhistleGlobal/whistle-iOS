@@ -8,7 +8,7 @@
 import Foundation
 import OSLog
 
-class WhistleLogger {
+enum WhistleLogger {
   static let logger = Logger(subsystem: "\(String(describing: Bundle.main.bundleIdentifier))", category: "\(#file)")
 }
 

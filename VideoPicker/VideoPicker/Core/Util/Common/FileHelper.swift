@@ -11,7 +11,7 @@ import MobileCoreServices
 
 // MARK: - FileHelper
 
-struct FileHelper {
+enum FileHelper {
   static func fileExtension(from dataUTI: CFString) -> String {
     guard
       let declaration = UTTypeCopyDeclaration(dataUTI)?.takeRetainedValue() as? [CFString: Any],
