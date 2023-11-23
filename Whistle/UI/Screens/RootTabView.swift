@@ -39,7 +39,7 @@ struct RootTabView: View {
   @State var showTermsOfService = false
   @State var showPrivacyPolicy = false
 
-  @State var feedSelection: MainFeedTabSelection = .myteam
+  @State var feedSelection: MainFeedTabSelection = .all
 
   @State private var uploadBottomSheetPosition: BottomSheetPosition = .hidden
   @State private var pickerOptions = PickerOptionsInfo()

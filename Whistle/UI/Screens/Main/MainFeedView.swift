@@ -457,7 +457,20 @@ extension MainFeedView {
   func feedPager(selection: MainFeedTabSelection) -> some View {
     switch selection {
     case .all:
-      allFeedTab()
+      if apiViewModel.mainFeed.isEmpty {
+        Color.black
+      } else {
+        allFeedTab()
+          .onAppear {
+            if apiViewModel.myProfile.myTeam != nil {
+              feedSelection = .myteam
+              page.update(.moveToFirst)
+              mainFeedPlayersViewModel.stopPlayer()
+              feedSelection = .myteam
+              myTeamfeedPlayersViewModel.currentPlayer?.play()
+            }
+          }
+      }
     case .myteam:
       myTeamFeedTab()
     }
