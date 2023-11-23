@@ -150,11 +150,11 @@
 		1B9398462AEFF0A70050089D /* StringsAndWords.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B9398452AEFF0A70050089D /* StringsAndWords.swift */; };
 		1B9398492AEFF1290050089D /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 1B93984B2AEFF1290050089D /* Localizable.strings */; };
 		1B96ABFE2B01CA2F00CDA102 /* BottomSheet.h in Headers */ = {isa = PBXBuildFile; fileRef = 1B96ABFD2B01CA2F00CDA102 /* BottomSheet.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		1B96AC012B01CA2F00CDA102 /* BottomSheet.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1B96ABFB2B01CA2F00CDA102 /* BottomSheet.framework */; };
-		1B96AC022B01CA2F00CDA102 /* BottomSheet.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 1B96ABFB2B01CA2F00CDA102 /* BottomSheet.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		1B96AC012B01CA2F00CDA102 /* BottomSheet.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1B96ABFB2B01CA2F00CDA102 /* BottomSheet.framework */; platformFilter = ios; };
+		1B96AC022B01CA2F00CDA102 /* BottomSheet.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 1B96ABFB2B01CA2F00CDA102 /* BottomSheet.framework */; platformFilter = ios; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		1B96AC062B01CA3C00CDA102 /* BottomSheet.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1B96ABFB2B01CA2F00CDA102 /* BottomSheet.framework */; };
 		1B96AC072B01CA3C00CDA102 /* BottomSheet.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 1B96ABFB2B01CA2F00CDA102 /* BottomSheet.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		1B96AC0A2B01CA4200CDA102 /* BottomSheet.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1B96ABFB2B01CA2F00CDA102 /* BottomSheet.framework */; };
+		1B96AC0A2B01CA4200CDA102 /* BottomSheet.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1B96ABFB2B01CA2F00CDA102 /* BottomSheet.framework */; platformFilter = ios; };
 		1B96AC3E2B01CA6100CDA102 /* Media.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1B96AC0F2B01CA6100CDA102 /* Media.xcassets */; };
 		1B96AC3F2B01CA6100CDA102 /* BottomSheet+Resizable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B96AC112B01CA6100CDA102 /* BottomSheet+Resizable.swift */; };
 		1B96AC402B01CA6100CDA102 /* BottomSheet+AccountingForKeyboardHeight.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B96AC122B01CA6100CDA102 /* BottomSheet+AccountingForKeyboardHeight.swift */; };
@@ -464,8 +464,8 @@
 		1BA24B4C2ADBFF8600DB0992 /* SessionTerminationTuner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BA24B152ADBFF8600DB0992 /* SessionTerminationTuner.swift */; };
 		1BA24B4D2ADBFF8600DB0992 /* InteractivePreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BA24B172ADBFF8600DB0992 /* InteractivePreview.swift */; };
 		1BA24B4E2ADBFF8600DB0992 /* Preview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BA24B182ADBFF8600DB0992 /* Preview.swift */; };
-		1BA24B4F2ADBFFAF00DB0992 /* Aespa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1BA24ABF2ADBFF4200DB0992 /* Aespa.framework */; };
-		1BA24B502ADBFFAF00DB0992 /* Aespa.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 1BA24ABF2ADBFF4200DB0992 /* Aespa.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		1BA24B4F2ADBFFAF00DB0992 /* Aespa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1BA24ABF2ADBFF4200DB0992 /* Aespa.framework */; platformFilter = ios; };
+		1BA24B502ADBFFAF00DB0992 /* Aespa.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 1BA24ABF2ADBFF4200DB0992 /* Aespa.framework */; platformFilter = ios; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		1BA24B542ADC336200DB0992 /* AlertPopup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BA24B532ADC336200DB0992 /* AlertPopup.swift */; };
 		1BAC07F12AD559880087D8CD /* Tags.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BAC07F02AD559880087D8CD /* Tags.swift */; };
 		1BAC07F32AD559A70087D8CD /* TagsContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BAC07F22AD559A70087D8CD /* TagsContent.swift */; };
@@ -4063,6 +4063,7 @@
 /* Begin PBXTargetDependency section */
 		1B96AC002B01CA2F00CDA102 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
+			platformFilter = ios;
 			target = 1B96ABFA2B01CA2F00CDA102 /* BottomSheet */;
 			targetProxy = 1B96ABFF2B01CA2F00CDA102 /* PBXContainerItemProxy */;
 		};
@@ -4073,6 +4074,7 @@
 		};
 		1B96AC0C2B01CA4200CDA102 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
+			platformFilter = ios;
 			target = 1B96ABFA2B01CA2F00CDA102 /* BottomSheet */;
 			targetProxy = 1B96AC0B2B01CA4200CDA102 /* PBXContainerItemProxy */;
 		};
@@ -4089,6 +4091,7 @@
 		};
 		1BA24B522ADBFFAF00DB0992 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
+			platformFilter = ios;
 			target = 1BA24ABE2ADBFF4200DB0992 /* Aespa */;
 			targetProxy = 1BA24B512ADBFFAF00DB0992 /* PBXContainerItemProxy */;
 		};

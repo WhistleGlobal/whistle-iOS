@@ -13,7 +13,6 @@ import SwiftUIPager
 // MARK: - MainFeedView
 
 struct MainFeedView: View {
-
   @Environment(\.dismiss) var dismiss
   @EnvironmentObject var universalRoutingModel: UniversalRoutingModel
   @StateObject private var apiViewModel = APIViewModel.shared
@@ -23,6 +22,9 @@ struct MainFeedView: View {
   @StateObject private var feedMoreModel = MainFeedMoreModel.shared
   @StateObject private var tabbarModel = TabbarModel.shared
   @StateObject var page: Page = .first()
+  @State var uploadingThumbnail = Image("noVideo")
+  @State var uploadProgress = 0.0
+  @State var isUploading = false
   @State var allIndex = 0
   @State var myTeamIndex = 0
   @State var searchText = ""
@@ -61,8 +63,56 @@ struct MainFeedView: View {
         }
       }
     }
+    .overlay(alignment: .topLeading) {
+      if isUploading {
+        uploadingThumbnail
+          .resizable()
+          .frame(width: 64, height: 64)
+          .clipShape(RoundedRectangle(cornerRadius: 8))
+          .overlay {
+            ZStack {
+              RoundedRectangle(cornerRadius: 8)
+                .fill(.black.opacity(0.48))
+              RoundedRectangle(cornerRadius: 8)
+                .strokeBorder(Color.Border_Default_Dark)
+              CircularProgressBar(progress: UploadProgressViewModel.shared.progress, width: 2)
+                .padding(8)
+              Text("\(Int(uploadProgress * 100))%")
+                .foregroundStyle(Color.white)
+                .fontSystem(fontDesignSystem: .body2)
+            }
+          }
+          .padding(.top, 70)
+          .padding(.leading, 16)
+      }
+    }
     .background(Color.black)
     .ignoresSafeArea()
+    .onChange(of: isUploading) { value in
+      if !value {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+          toastViewModel.toastInit(message: ToastMessages().contentUploaded)
+        }
+      }
+    }
+    .onReceive(UploadProgressViewModel.shared.isUploadingSubject) { value in
+      switch value {
+      case true:
+        withAnimation {
+          isUploading = value
+        }
+      case false:
+        withAnimation {
+          isUploading = value
+        }
+      }
+    }
+    .onReceive(UploadProgressViewModel.shared.thumbnailSubject) { value in
+      uploadingThumbnail = value
+    }
+    .onReceive(UploadProgressViewModel.shared.progressSubject) { value in
+      uploadProgress = value
+    }
     .bottomSheet(
       bottomSheetPosition: $feedMoreModel.bottomSheetPosition,
       switchablePositions: [.hidden, .absolute(242)])
