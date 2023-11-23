@@ -37,8 +37,12 @@ struct MainFeedView: View {
   @State var isSearching = false
   @State var myTeamSheetPosition: BottomSheetPosition = .hidden
 
+  @State var playDuration = Date().toString()
   @State var myTeamViewDuration = Date().toString()
   @State var allViewDuration = Date().toString()
+  @State var allViewedContentId: Set<Int> = []
+  @State var myTeamViewedContentId: Set<Int> = []
+  @State var scrolledContentCount = 0
 
   var body: some View {
     Pager(page: page, data: [MainFeedTabSelection.myteam, MainFeedTabSelection.all]) { selection in
@@ -454,6 +458,10 @@ struct MainFeedView: View {
         page.update(.moveToLast)
       }
       Mixpanel.mainInstance().track(event: "play_start")
+      playDuration = Date().toString()
+      allViewedContentId = []
+      myTeamViewedContentId = []
+      scrolledContentCount = 0
     }
     .onDisappear {
       if tabbarModel.tabSelection == .main {
@@ -463,7 +471,15 @@ struct MainFeedView: View {
       myTeamfeedPlayersViewModel.stopPlayer()
       mainFeedPlayersViewModel.resetPlayer()
       myTeamfeedPlayersViewModel.resetPlayer()
-      WhistleLogger.logger.debug("MainFeedView onDisappear")
+      let viewDate = playDuration.toDate()
+      let nowDate = Date.now
+      let viewTime = nowDate.timeIntervalSince(viewDate ?? Date.now)
+      let viewTimeInt = Int(viewTime)
+      Mixpanel.mainInstance().track(event: "play_complete", properties: [
+        "play_duration": "\(viewTimeInt)",
+        "viewed_contents_count": "\(allViewedContentId.count + myTeamViewedContentId.count)",
+        "scrolled_contents_count": "\(scrolledContentCount)",
+      ])
     }
   }
 }
@@ -486,7 +502,11 @@ extension MainFeedView {
     ZStack {
       Color.black
       if !apiViewModel.mainFeed.isEmpty {
-        MainFeedPageView(viewDuration: $allViewDuration, index: $allIndex)
+        MainFeedPageView(
+          viewDuration: $allViewDuration,
+          viewedContenId: $allViewedContentId,
+          scrolledContentCount: $scrolledContentCount,
+          index: $allIndex)
       }
     }
     .background(Color.black.edgesIgnoringSafeArea(.all))
@@ -498,7 +518,11 @@ extension MainFeedView {
     ZStack {
       Color.black
       if !apiViewModel.myTeamFeed.isEmpty {
-        MyTeamFeedPageView(viewDuration: $myTeamViewDuration,index: $myTeamIndex)
+        MyTeamFeedPageView(
+          viewDuration: $myTeamViewDuration,
+          viewedContenId: $myTeamViewedContentId,
+          scrolledContentCount: $scrolledContentCount,
+          index: $myTeamIndex)
       }
     }
     .background(Color.black.edgesIgnoringSafeArea(.all))

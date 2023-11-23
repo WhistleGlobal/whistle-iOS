@@ -18,6 +18,8 @@ struct MyTeamFeedPageView: UIViewRepresentable {
   @State var currentContentInfo: MainContent?
   @State var isChangable = true
   @Binding var viewDuration: String
+  @Binding var viewedContenId: Set<Int>
+  @Binding var scrolledContentCount: Int
   @Binding var index: Int
 
   func makeUIView(context: Context) -> UIScrollView {
@@ -127,8 +129,10 @@ struct MyTeamFeedPageView: UIViewRepresentable {
     }
 
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
-      var viewDate = parent.viewDuration.toDate()
-      var nowDate = Date.now
+      parent.scrolledContentCount += 1
+      parent.viewedContenId.insert(APIViewModel.shared.myTeamFeed[parent.feedPlayersViewModel.currentVideoIndex].contentId!)
+      let viewDate = parent.viewDuration.toDate()
+      let nowDate = Date.now
       let viewTime = nowDate.timeIntervalSince(viewDate ?? Date.now)
       let viewTimeInt = Int(viewTime)
       Mixpanel.mainInstance().track(event: "play_next", properties: [
