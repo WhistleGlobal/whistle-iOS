@@ -7,6 +7,7 @@
 
 import Alamofire
 import Foundation
+import Mixpanel
 import SwiftUI
 import SwiftyJSON
 import UIKit
@@ -49,6 +50,7 @@ extension APIViewModel: UploadProtocol {
     aspectRatio: Double = 0.0,
     hashtags: [String])
   {
+    Mixpanel.mainInstance().track(event: "upload_start")
     let params: [String: Any] = [
       "caption": caption,
       "source_url": sourceURL,

@@ -10,6 +10,7 @@ import BottomSheet
 import Combine
 import GoogleSignIn
 import KeychainSwift
+import Mixpanel
 import Photos
 import SwiftUI
 import VideoPicker
@@ -50,7 +51,6 @@ struct RootTabView: View {
   @StateObject var bartintModel = BarTintModel.shared
   @EnvironmentObject var universalRoutingModel: UniversalRoutingModel
   @StateObject var appleSignInViewModel = AppleSignInViewModel()
-
   let keychain = KeychainSwift()
 
   var body: some View {
@@ -408,6 +408,7 @@ extension RootTabView {
         VStack {
           Spacer()
           Button {
+            Mixpanel.mainInstance().track(event: "onboarding_complete")
             showGuide = false
           } label: {
             Text(CommonWords().close)

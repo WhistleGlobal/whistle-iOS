@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import Mixpanel
 import SwiftUI
 
 // MARK: - WhistleRankingView
@@ -111,6 +112,7 @@ struct WhistleRankingView: View {
       bartintModel.tintColor = .white
       UINavigationBar.appearance().largeTitleTextAttributes = [.foregroundColor: UIColor.white]
       UINavigationBar.appearance().titleTextAttributes = [.foregroundColor: UIColor.white]
+      Mixpanel.mainInstance().track(event: "view_whistlerank")
     }
     .onDisappear {
       bartintModel.tintColor = .labelColorPrimary

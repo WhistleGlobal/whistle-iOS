@@ -9,6 +9,7 @@
 // import GoogleSignInSwift
 import Alamofire
 import KeychainSwift
+import Mixpanel
 import SwiftUI
 
 // MARK: - Provider
@@ -90,6 +91,34 @@ class UserAuth: ObservableObject {
             self.isAccess = true
             APIViewModel.shared.myProfile = data
           }
+
+          Mixpanel.mainInstance().identify(distinctId: String(self.apiViewModel.myProfile.userId))
+          Task {
+            await self.apiViewModel.requestMyFollow()
+            await self.apiViewModel.requestMyWhistlesCount()
+            await self.apiViewModel.requestMyFollow()
+            Mixpanel.mainInstance().people.set(
+              property: "number_of_whisitle",
+              to: "\(self.apiViewModel.myWhistleCount)")
+            Mixpanel.mainInstance().people.set(
+              property: "number_of_whisitle",
+              to: "\(self.apiViewModel.myWhistleCount)")
+            Mixpanel.mainInstance().people.set(
+              property: "$number_of_following",
+              to: "\(self.apiViewModel.myFollow.followingCount)")
+            Mixpanel.mainInstance().people.set(
+              property: "$number_of_follower",
+              to: "\(self.apiViewModel.myFollow.followerCount)")
+          }
+
+          Mixpanel.mainInstance().people.set(property: "$name", to: String(self.apiViewModel.myProfile.userId))
+          Mixpanel.mainInstance().people.set(property: "$email", to: self.apiViewModel.myProfile.email)
+          Mixpanel.mainInstance().people.set(property: "$first_login_date", to: Date.now.koreaTimezone())
+          Mixpanel.mainInstance().people.set(property: "$login_method", to: "\(self.provider.rawValue)")
+          Mixpanel.mainInstance().track(event: "login", properties: [
+            "did_login": true,
+          ])
+
           completion()
         case .failure(let error):
           switch self.provider {

@@ -14,7 +14,16 @@ extension Date {
     dateFormatter.timeZone = TimeZone(identifier: "UTC")
     return dateFormatter.string(from: self)
   }
+
+  func koreaTimezone() -> Date {
+    let dateFormatter = DateFormatter()
+    dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+    dateFormatter.timeZone = TimeZone(identifier: "Asia/Seoul")
+    guard let date = dateFormatter.date(from: Date().toString()) else { return Date() }
+    return date
+  }
 }
+
 
 extension Date {
   static func timeAgoSinceDate(_ date: Date) -> String {

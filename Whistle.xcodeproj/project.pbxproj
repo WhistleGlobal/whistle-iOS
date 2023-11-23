@@ -638,6 +638,8 @@
 		78370B8B2AB87C7D00090522 /* ReportReason.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78370B8A2AB87C7D00090522 /* ReportReason.swift */; };
 		78395F152B0EFEF400560A0E /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 78395F142B0EFEF400560A0E /* Settings.bundle */; };
 		78395F162B0EFEF400560A0E /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 78395F142B0EFEF400560A0E /* Settings.bundle */; };
+		78395F202B0F43CB00560A0E /* Mixpanel in Frameworks */ = {isa = PBXBuildFile; productRef = 78395F1F2B0F43CB00560A0E /* Mixpanel */; };
+		78395F222B0F43D200560A0E /* Mixpanel in Frameworks */ = {isa = PBXBuildFile; productRef = 78395F212B0F43D200560A0E /* Mixpanel */; };
 		78433E482AEFEB870054035C /* BookMarkedFeedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78433E472AEFEB870054035C /* BookMarkedFeedView.swift */; };
 		78433E4A2AEFEB970054035C /* BookmarkedPageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78433E492AEFEB970054035C /* BookmarkedPageView.swift */; };
 		78433E4C2AEFEBA50054035C /* BookmarkedContentPlayerview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78433E4B2AEFEBA50054035C /* BookmarkedContentPlayerview.swift */; };
@@ -1344,6 +1346,7 @@
 				78F780052AB34876005623CD /* GoogleSignIn in Frameworks */,
 				1BD4E56B2ABA275200ADB783 /* SnapKit in Frameworks */,
 				78E738CA2AA9A90F00480046 /* Kingfisher in Frameworks */,
+				78395F202B0F43CB00560A0E /* Mixpanel in Frameworks */,
 				787AF5652AA85D2C00C190E6 /* SwiftyJSON in Frameworks */,
 				1B96AC012B01CA2F00CDA102 /* BottomSheet.framework in Frameworks */,
 				78F780072AB34876005623CD /* GoogleSignInSwift in Frameworks */,
@@ -1372,6 +1375,7 @@
 				1B9936ED2AF3699E00F5C619 /* GoogleSignIn in Frameworks */,
 				1B9936EE2AF3699E00F5C619 /* SnapKit in Frameworks */,
 				1B9936EF2AF3699E00F5C619 /* Kingfisher in Frameworks */,
+				78395F222B0F43D200560A0E /* Mixpanel in Frameworks */,
 				1B9936F12AF3699E00F5C619 /* SwiftyJSON in Frameworks */,
 				1B9936F22AF3699E00F5C619 /* GoogleSignInSwift in Frameworks */,
 				1B9936F32AF3699E00F5C619 /* Aespa.framework in Frameworks */,
@@ -3044,6 +3048,7 @@
 				78A58E052AD1C287007F6A69 /* ReverseMask */,
 				1B2E3D492B0CAEAB003A5288 /* TagKit */,
 				7848F4432B0DC7890044C3D0 /* SwiftUIPager */,
+				78395F1F2B0F43CB00560A0E /* Mixpanel */,
 			);
 			productName = Whistle;
 			productReference = 1B39553C2A95069C00BCB4DF /* Whistle.app */;
@@ -3098,6 +3103,7 @@
 				1B395D952AFA533B00E28180 /* Lottie */,
 				1B2E3D4B2B0CAEB2003A5288 /* TagKit */,
 				7848F4452B0DC7920044C3D0 /* SwiftUIPager */,
+				78395F212B0F43D200560A0E /* Mixpanel */,
 			);
 			productName = Whistle;
 			productReference = 1B9937082AF3699E00F5C619 /* WhistleDev.app */;
@@ -3190,6 +3196,7 @@
 				1B395D8E2AF9B88D00E28180 /* XCRemoteSwiftPackageReference "lottie-ios" */,
 				1B2E3D482B0CAE44003A5288 /* XCRemoteSwiftPackageReference "TagKit" */,
 				7848F4422B0DC7890044C3D0 /* XCRemoteSwiftPackageReference "SwiftUIPager" */,
+				78395F1E2B0F43CB00560A0E /* XCRemoteSwiftPackageReference "mixpanel-swift" */,
 			);
 			productRefGroup = 1B39553D2A95069C00BCB4DF /* Products */;
 			projectDirPath = "";
@@ -4816,6 +4823,14 @@
 				minimumVersion = 5.0.0;
 			};
 		};
+		78395F1E2B0F43CB00560A0E /* XCRemoteSwiftPackageReference "mixpanel-swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/mixpanel/mixpanel-swift.git";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
 		7848F4422B0DC7890044C3D0 /* XCRemoteSwiftPackageReference "SwiftUIPager" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/fermoya/SwiftUIPager.git";
@@ -4949,6 +4964,16 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 1BD4E5692ABA275200ADB783 /* XCRemoteSwiftPackageReference "SnapKit" */;
 			productName = SnapKit;
+		};
+		78395F1F2B0F43CB00560A0E /* Mixpanel */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 78395F1E2B0F43CB00560A0E /* XCRemoteSwiftPackageReference "mixpanel-swift" */;
+			productName = Mixpanel;
+		};
+		78395F212B0F43D200560A0E /* Mixpanel */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 78395F1E2B0F43CB00560A0E /* XCRemoteSwiftPackageReference "mixpanel-swift" */;
+			productName = Mixpanel;
 		};
 		7848F4432B0DC7890044C3D0 /* SwiftUIPager */ = {
 			isa = XCSwiftPackageProductDependency;

@@ -7,6 +7,7 @@
 
 import _AVKit_SwiftUI
 import BottomSheet
+import Mixpanel
 import SwiftUI
 import SwiftUIPager
 
@@ -447,6 +448,7 @@ struct MainFeedView: View {
         mainFeedTabModel.switchTab(to: .all)
         page.update(.moveToLast)
       }
+      Mixpanel.mainInstance().track(event: "play_start")
     }
     .onDisappear {
       if tabbarModel.tabSelection == .main {

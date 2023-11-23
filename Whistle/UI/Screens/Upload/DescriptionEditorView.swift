@@ -7,6 +7,7 @@
 
 import BottomSheet
 import Combine
+import Mixpanel
 import SwiftUI
 
 // MARK: - DescriptionEditorView
@@ -245,6 +246,7 @@ struct DescriptionEditorView: View {
     }
     .onAppear {
       toastViewModel.onFullScreenCover = true
+      Mixpanel.mainInstance().track(event: "write_content_description")
     }
     .bottomSheet(bottomSheetPosition: $sheetPosition, switchablePositions: [.hidden, .dynamicTop], headerContent: {
       ZStack(alignment: .center) {

@@ -7,6 +7,7 @@
 
 import Alamofire
 import Foundation
+import Mixpanel
 import SwiftyJSON
 
 extension APIViewModel: ProfileProtocol {
@@ -248,6 +249,9 @@ extension APIViewModel: ProfileProtocol {
   func followAction(userID: Int, method: Alamofire.HTTPMethod) async {
     if userID == 0 {
       return
+    }
+    if method == .post {
+      Mixpanel.mainInstance().track(event: "follow")
     }
     return await withCheckedContinuation { continuation in
       AF.request(
