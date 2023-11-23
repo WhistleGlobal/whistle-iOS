@@ -5,6 +5,7 @@
 //  Created by ChoiYujin on 10/26/23.
 //
 
+import Mixpanel
 import SwiftUI
 
 // MARK: - MainFeedPageView
@@ -17,7 +18,9 @@ struct MainFeedPageView: UIViewRepresentable {
 
   @State var currentContentInfo: MainContent?
   @State var isChangable = true
+  @Binding var viewDuration: String
   @Binding var index: Int
+
 
   func makeUIView(context: Context) -> UIScrollView {
     let view = UIScrollView()
@@ -126,6 +129,21 @@ struct MainFeedPageView: UIViewRepresentable {
     }
 
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+      var viewDate = parent.viewDuration.toDate()
+      var nowDate = Date.now
+      let viewTime = nowDate.timeIntervalSince(viewDate ?? Date.now)
+      let viewTimeInt = Int(viewTime)
+      Mixpanel.mainInstance().track(event: "play_next", properties: [
+        "follow": APIViewModel.shared.mainFeed[parent.feedPlayersViewModel.currentVideoIndex].isFollowed,
+        "whistle": APIViewModel.shared.mainFeed[parent.feedPlayersViewModel.currentVideoIndex].isWhistled,
+        "bookmark": APIViewModel.shared.mainFeed[parent.feedPlayersViewModel.currentVideoIndex].isBookmarked,
+        "not_interested": false,
+        "content_duration": viewTimeInt,
+        "content_id": APIViewModel.shared.mainFeed[parent.feedPlayersViewModel.currentVideoIndex].contentId!,
+        "content_length": 0,
+        "content_caption": APIViewModel.shared.mainFeed[parent.feedPlayersViewModel.currentVideoIndex].caption ?? "",
+        "hashtags": APIViewModel.shared.mainFeed[parent.feedPlayersViewModel.currentVideoIndex].hashtags ?? [],
+      ])
       parent.feedPlayersViewModel.currentVideoIndex = Int(scrollView.contentOffset.y / UIScreen.main.bounds.height)
       if index < parent.feedPlayersViewModel.currentVideoIndex {
         if index == parent.apiViewModel.mainFeed.count - 1 {

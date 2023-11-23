@@ -37,6 +37,9 @@ struct MainFeedView: View {
   @State var isSearching = false
   @State var myTeamSheetPosition: BottomSheetPosition = .hidden
 
+  @State var myTeamViewDuration = Date().toString()
+  @State var allViewDuration = Date().toString()
+
   var body: some View {
     Pager(page: page, data: [MainFeedTabSelection.myteam, MainFeedTabSelection.all]) { selection in
       feedPager(selection: selection)
@@ -49,6 +52,7 @@ struct MainFeedView: View {
         mainFeedTabModel.switchTab(to: .myteam)
         if myTeamfeedPlayersViewModel.currentPlayer?.rate == 0.0 {
           myTeamfeedPlayersViewModel.currentPlayer?.play()
+          myTeamViewDuration = Date().toString()
           WhistleLogger.logger.debug("MainFeedView onPageChanged index 0")
         }
         if apiViewModel.myProfile.myTeam == nil {
@@ -61,6 +65,7 @@ struct MainFeedView: View {
         if mainFeedPlayersViewModel.currentPlayer?.rate == 0.0 {
           mainFeedPlayersViewModel.currentPlayer?.play()
           WhistleLogger.logger.debug("MainFeedView onPageChanged index 1")
+          allViewDuration = Date().toString()
         }
       }
     }
@@ -481,7 +486,7 @@ extension MainFeedView {
     ZStack {
       Color.black
       if !apiViewModel.mainFeed.isEmpty {
-        MainFeedPageView(index: $allIndex)
+        MainFeedPageView(viewDuration: $allViewDuration, index: $allIndex)
       }
     }
     .background(Color.black.edgesIgnoringSafeArea(.all))
@@ -493,7 +498,7 @@ extension MainFeedView {
     ZStack {
       Color.black
       if !apiViewModel.myTeamFeed.isEmpty {
-        MyTeamFeedPageView(index: $myTeamIndex)
+        MyTeamFeedPageView(viewDuration: $myTeamViewDuration,index: $myTeamIndex)
       }
     }
     .background(Color.black.edgesIgnoringSafeArea(.all))
