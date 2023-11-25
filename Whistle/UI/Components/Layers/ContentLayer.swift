@@ -266,9 +266,9 @@ struct ContentLayer<
       feedMoreModel.isRootStacked = true
     }
     playersViewModel.stopPlayer()
-    if playersViewModel is MemeberPlayersViewModel || playersViewModel is MyFeedPlayersViewModel {
-      dismissAction?()
-    }
+//    if playersViewModel is MemeberPlayersViewModel || playersViewModel is MyFeedPlayersViewModel {
+//      dismissAction?()
+//    }
   }
 
   func moreButtonAction() {
@@ -466,11 +466,9 @@ protocol PlayersViewModel {
 
 extension MainFeedPlayersViewModel: PlayersViewModel { }
 
-// MARK: - MemeberPlayersViewModel + PlayersViewModel
-
-extension MemeberPlayersViewModel: PlayersViewModel { }
-
 // MARK: - MyFeedPlayersViewModel + PlayersViewModel
+
+// extension MemeberPlayersViewModel: PlayersViewModel { }
 
 extension MyFeedPlayersViewModel: PlayersViewModel { }
 

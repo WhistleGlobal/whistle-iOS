@@ -64,6 +64,7 @@ extension ProfileView {
   }
 
   // MARK: - MyTeam
+
   @ViewBuilder
   func profileCardLayer() -> some View {
     ZStack {
@@ -71,7 +72,7 @@ extension ProfileView {
         if profileType == .my {
           return apiViewModel.myProfile.myTeam
         } else {
-          return apiViewModel.memberProfile.myTeam
+          return memberContentViewModel.memberProfile.myTeam
         }
       }() {
         if isMyTeamBackgroundOn {
@@ -100,14 +101,15 @@ extension ProfileView {
         profileImageView(
           url: profileType == .my
             ? apiViewModel.myProfile.profileImage
-            : apiViewModel.memberProfile.profileImg,
+            :
+            memberContentViewModel.memberProfile.profileImg,
           size: UIScreen.getHeight(100))
           .padding(.bottom, UIScreen.getHeight(16))
         // userName
         Text(
           profileType == .my
             ? apiViewModel.myProfile.userName
-            : apiViewModel.memberProfile.userName)
+            : memberContentViewModel.memberProfile.userName)
           .foregroundColor(Color.LabelColor_Primary_Dark)
           .fontSystem(fontDesignSystem: .title2_Expanded)
           .padding(.bottom, UIScreen.getHeight(4))
@@ -115,7 +117,10 @@ extension ProfileView {
         if profileType == .my {
           introduceText(text: apiViewModel.myProfile.introduce ?? "")
         } else if profileType == .member {
-          introduceText(text: apiViewModel.memberProfile.introduce ?? "")
+          introduceText(
+            text:
+            memberContentViewModel.memberProfile.introduce
+              ?? "")
         }
         // Edit button or Follow Button
         if profileType == .my {
@@ -142,7 +147,7 @@ extension ProfileView {
           } label: {
             VStack(spacing: 4) {
               Text(
-                "\(apiViewModel.memberProfile.isBlocked ? 0 : (profileType == .my ? apiViewModel.myWhistleCount : apiViewModel.memberWhistleCount))")
+                "\(memberContentViewModel.memberProfile.isBlocked ? 0 : (profileType == .my ? apiViewModel.myWhistleCount : memberContentViewModel.memberWhistleCount))")
                 .foregroundColor(Color.LabelColor_Primary_Dark)
                 .fontSystem(fontDesignSystem: .title2_Expanded)
               Text(CommonWords().whistle)
@@ -156,11 +161,14 @@ extension ProfileView {
             if profileType == .my {
               MyFollowListView()
             } else {
-              MemberFollowListView(userName: apiViewModel.memberProfile.userName, userId: userId)
+              MemberFollowListView(
+                memberContentViewModel: memberContentViewModel,
+                userName: memberContentViewModel.memberProfile.userName,
+                userId: userId)
             }
           } label: {
             VStack(spacing: 4) {
-              Text("\(apiViewModel.memberProfile.isBlocked ? 0 : filteredFollower.count)")
+              Text("\(memberContentViewModel.memberProfile.isBlocked ? 0 : filteredFollower.count)")
                 .foregroundColor(Color.LabelColor_Primary_Dark)
                 .fontSystem(fontDesignSystem: .title2_Expanded)
               Text(CommonWords().follower)
@@ -243,11 +251,11 @@ extension ProfileView {
 
   @ViewBuilder
   func memberFollowBlockButton() -> some View {
-    if apiViewModel.memberProfile.isBlocked {
+    if memberContentViewModel.memberProfile.isBlocked {
       Button {
         alertViewModel.linearAlert(
           isRed: true,
-          title: "\(apiViewModel.memberProfile.userName) 님을 차단 해제하시겠어요?",
+          title: "\(memberContentViewModel.memberProfile.userName) 님을 차단 해제하시겠어요?",
           content: AlertContents().block,
           cancelText: CommonWords().cancel,
           destructiveText: CommonWords().unblock)
@@ -257,12 +265,12 @@ extension ProfileView {
             BlockList.shared.userIds.append(userId)
             BlockList.shared.userIds = BlockList.shared.userIds.filter { $0 != userId }
             Task {
-              await apiViewModel.requestMemberProfile(userID: userId)
-              await apiViewModel.requestMemberPostFeed(userID: userId)
+              await memberContentViewModel.requestMemberProfile(userID: userId)
+              await memberContentViewModel.requestMemberPostFeed(userID: userId)
             }
             Task {
-              await apiViewModel.requestMemberFollow(userID: userId)
-              await apiViewModel.requestMemberWhistlesCount(userID: userId)
+              await memberContentViewModel.requestMemberFollow(userID: userId)
+              await memberContentViewModel.requestMemberWhistlesCount(userID: userId)
             }
           }
         }
@@ -273,30 +281,30 @@ extension ProfileView {
     } else {
       Button("") {
         Task {
-          if apiViewModel.memberProfile.isFollowed {
-            apiViewModel.memberProfile.isFollowed.toggle()
+          if memberContentViewModel.memberProfile.isFollowed {
+            memberContentViewModel.memberProfile.isFollowed.toggle()
             await apiViewModel.followAction(userID: userId, method: .delete)
             apiViewModel.mainFeed = apiViewModel.mainFeed.map { item in
               let mutableItem = item
               if mutableItem.userId == userId {
-                mutableItem.isFollowed = apiViewModel.memberProfile.isFollowed
+                mutableItem.isFollowed = memberContentViewModel.memberProfile.isFollowed
               }
               return mutableItem
             }
           } else {
-            apiViewModel.memberProfile.isFollowed.toggle()
+            memberContentViewModel.memberProfile.isFollowed.toggle()
             await apiViewModel.followAction(userID: userId, method: .post)
             apiViewModel.mainFeed = apiViewModel.mainFeed.map { item in
               let mutableItem = item
               if mutableItem.userId == userId {
-                mutableItem.isFollowed = apiViewModel.memberProfile.isFollowed
+                mutableItem.isFollowed = memberContentViewModel.memberProfile.isFollowed
               }
               return mutableItem
             }
           }
         }
       }
-      .buttonStyle(FollowButtonStyle(isFollowed: $apiViewModel.memberProfile.isFollowed))
+      .buttonStyle(FollowButtonStyle(isFollowed: $memberContentViewModel.memberProfile.isFollowed))
       .frame(width: UIScreen.getWidth(114), height: UIScreen.getHeight(36))
       .opacity(isProfileLoaded ? 1 : 0)
       .disabled(userId == apiViewModel.myProfile.userId)
@@ -328,10 +336,10 @@ extension ProfileView {
       Rectangle().frame(width: UIScreen.width, height: 1).foregroundColor(Color.Border_Default_Dark)
       Button {
         bottomSheetPosition = .hidden
-        if apiViewModel.memberProfile.isBlocked {
+        if memberContentViewModel.memberProfile.isBlocked {
           alertViewModel.linearAlert(
             isRed: true,
-            title: "\(apiViewModel.memberProfile.userName) 님을 차단 해제하시겠어요?",
+            title: "\(memberContentViewModel.memberProfile.userName) 님을 차단 해제하시겠어요?",
             content: AlertContents().unblock,
             destructiveText: CommonWords().unblock)
           {
@@ -340,19 +348,19 @@ extension ProfileView {
               BlockList.shared.userIds.append(userId)
               BlockList.shared.userIds = BlockList.shared.userIds.filter { $0 != userId }
               Task {
-                await apiViewModel.requestMemberProfile(userID: userId)
-                await apiViewModel.requestMemberPostFeed(userID: userId)
+                await memberContentViewModel.requestMemberProfile(userID: userId)
+                await memberContentViewModel.requestMemberPostFeed(userID: userId)
               }
               Task {
-                await apiViewModel.requestMemberFollow(userID: userId)
-                await apiViewModel.requestMemberWhistlesCount(userID: userId)
+                await memberContentViewModel.requestMemberFollow(userID: userId)
+                await memberContentViewModel.requestMemberWhistlesCount(userID: userId)
               }
             }
           }
         } else {
           alertViewModel.linearAlert(
             isRed: true,
-            title: "\(apiViewModel.memberProfile.userName) 님을 차단하시겠어요?",
+            title: "\(memberContentViewModel.memberProfile.userName) 님을 차단하시겠어요?",
             content: AlertContents().block,
             cancelText: CommonWords().cancel,
             destructiveText: CommonWords().block)
@@ -361,12 +369,12 @@ extension ProfileView {
               await apiViewModel.blockAction(userID: userId, method: .post)
               BlockList.shared.userIds.append(userId)
               Task {
-                await apiViewModel.requestMemberProfile(userID: userId)
-                await apiViewModel.requestMemberPostFeed(userID: userId)
+                await memberContentViewModel.requestMemberProfile(userID: userId)
+                await memberContentViewModel.requestMemberPostFeed(userID: userId)
               }
               Task {
-                await apiViewModel.requestMemberFollow(userID: userId)
-                await apiViewModel.requestMemberWhistlesCount(userID: userId)
+                await memberContentViewModel.requestMemberFollow(userID: userId)
+                await memberContentViewModel.requestMemberWhistlesCount(userID: userId)
               }
             }
           }
@@ -374,7 +382,7 @@ extension ProfileView {
       } label: {
         bottomSheetRowWithIcon(
           systemName: "nosign",
-          text: apiViewModel.memberProfile.isBlocked ? CommonWords().unblockAction : CommonWords().blockAction)
+          text: memberContentViewModel.memberProfile.isBlocked ? CommonWords().unblockAction : CommonWords().blockAction)
       }
       Rectangle().frame(height: 0.5).padding(.leading, 52).foregroundColor(Color.Border_Default_Dark)
       Button {
@@ -507,7 +515,7 @@ extension ProfileView {
             GIDSignIn.sharedInstance.signOut()
             userAuth.appleSignout()
 //            tabbarModel.switchTab(to: .main)
-            feedPlayersViewModel.resetPlayer()
+            memberContentViewModel.resetPlayer()
           }
         } label: {
           bottomSheetRow(text: CommonWords().logout, color: Color.Info)
@@ -564,7 +572,6 @@ extension ProfileView {
       }
     }
   }
-
 }
 
 // MARK: - Sticky Header Computed Properties
@@ -770,7 +777,7 @@ extension ProfileView {
     if profileType == .my {
       apiViewModel.myFollow.followerList.filter { !BlockList.shared.userIds.contains($0.followerId) }
     } else {
-      apiViewModel.memberFollow.followerList.filter { !BlockList.shared.userIds.contains($0.followerId) }
+      memberContentViewModel.memberFollow.followerList.filter { !BlockList.shared.userIds.contains($0.followerId) }
     }
   }
 }

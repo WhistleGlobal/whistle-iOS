@@ -15,6 +15,7 @@ struct MemberFollowListView: View {
 
   @Environment(\.dismiss) var dismiss
   @StateObject var apiViewModel = APIViewModel.shared
+  @ObservedObject var memberContentViewModel: MemberContentViewModel
   @State var newId = UUID()
   @State var tabStatus: profileTabStatus = .follower
   @State var showOtherProfile = false
@@ -47,7 +48,7 @@ struct MemberFollowListView: View {
       .padding(.horizontal, 16)
       .frame(height: 48)
       if tabStatus == .follower {
-        if apiViewModel.memberFollow.followerCount == 0 {
+        if memberContentViewModel.memberFollow.followerCount == 0 {
           Spacer()
           NoFollowerLabel(tabStatus: $tabStatus, profileType: .member)
         } else {
@@ -58,7 +59,7 @@ struct MemberFollowListView: View {
             .id(newId)
         }
       } else {
-        if apiViewModel.memberFollow.followingCount == 0 {
+        if memberContentViewModel.memberFollow.followingCount == 0 {
           Spacer()
           NoFollowerLabel(tabStatus: $tabStatus, profileType: .member)
         } else {
@@ -76,9 +77,9 @@ struct MemberFollowListView: View {
     .navigationTitle(Text("\(userName)"))
     .navigationBarTitleDisplayMode(.inline)
     .task {
-      await apiViewModel.requestMemberFollow(userID: userId)
-      memberFollower = apiViewModel.memberFollow.followerList
-      memberFollowing = apiViewModel.memberFollow.followingList
+      await memberContentViewModel.requestMemberFollow(userID: userId)
+      memberFollower = memberContentViewModel.memberFollow.followerList
+      memberFollowing = memberContentViewModel.memberFollow.followingList
     }
   }
 }

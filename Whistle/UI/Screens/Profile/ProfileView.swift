@@ -30,7 +30,7 @@ struct ProfileView: View {
   @StateObject var tabbarModel = TabbarModel.shared
   @StateObject var toastViewModel = ToastViewModel.shared
   @StateObject var alertViewModel = AlertViewModel.shared
-  @StateObject var feedPlayersViewModel = MainFeedPlayersViewModel.shared
+  @StateObject var memberContentViewModel = MemberContentViewModel()
 
   @State var bottomSheetPosition: BottomSheetPosition = .hidden
   @State var showProfileEditView = false
@@ -56,7 +56,7 @@ struct ProfileView: View {
   let userId: Int
 
   var profileUrl: String? {
-    profileType == .my ? apiViewModel.myProfile.profileImage : apiViewModel.memberProfile.profileImg
+    profileType == .my ? apiViewModel.myProfile.profileImage : memberContentViewModel.memberProfile.profileImg
   }
 
   var body: some View {
@@ -72,7 +72,7 @@ struct ProfileView: View {
           profileDefaultBackground()
         }
       } else {
-        if let myTeam = apiViewModel.memberProfile.myTeam, isMyTeamBackgroundOn {
+        if let myTeam = memberContentViewModel.memberProfile.myTeam, isMyTeamBackgroundOn {
           MyTeamType.teamGradient(myTeam)
         } else {
           profileDefaultBackground()
@@ -95,7 +95,8 @@ struct ProfileView: View {
               Text(
                 profileType == .my
                   ? apiViewModel.myProfile.userName
-                  : apiViewModel.memberProfile.userName)
+                  :
+                  memberContentViewModel.memberProfile.userName)
                 .foregroundColor(Color.LabelColor_Primary_Dark)
                 .fontSystem(fontDesignSystem: .title2_Expanded)
                 .padding(.top, profileType == .my ? 22 : 42)
@@ -205,8 +206,8 @@ struct ProfileView: View {
                 .padding(.horizontal, 16)
             }
           } else {
-            if apiViewModel.memberFeed.isEmpty {
-              if !apiViewModel.memberProfile.isBlocked {
+            if memberContentViewModel.memberFeed.isEmpty {
+              if !memberContentViewModel.memberProfile.isBlocked {
                 Spacer().frame(height: UIScreen.getHeight(90))
                 Image(systemName: "photo.fill")
                   .resizable()
@@ -235,9 +236,12 @@ struct ProfileView: View {
                 GridItem(.flexible()),
                 GridItem(.flexible()),
               ], spacing: 20) {
-                ForEach(Array(apiViewModel.memberFeed.enumerated()), id: \.element) { index, content in
+                ForEach(Array(memberContentViewModel.memberFeed.enumerated()), id: \.element) { index, content in
                   NavigationLink {
-                    MemberFeedView(index: index, userId: apiViewModel.memberFeed[index].userId ?? 0)
+                    MemberFeedView(
+                      memberContentViewModel: memberContentViewModel,
+                      index: index,
+                      userId: memberContentViewModel.memberFeed[index].userId ?? 0)
                   } label: {
                     videoThumbnailView(
                       thumbnailUrl: content.thumbnailUrl ?? "",
@@ -266,7 +270,7 @@ struct ProfileView: View {
             Spacer().frame(height: 1000)
           }
         } else {
-          if !apiViewModel.memberFeed.isEmpty {
+          if !memberContentViewModel.memberFeed.isEmpty {
             Spacer().frame(height: 1000)
           }
         }
@@ -295,16 +299,16 @@ struct ProfileView: View {
           }
         } else {
           Task {
-            await apiViewModel.requestMemberProfile(userID: userId)
+            await memberContentViewModel.requestMemberProfile(userID: userId)
           }
           Task {
-            await apiViewModel.requestMemberFollow(userID: userId)
+            await memberContentViewModel.requestMemberFollow(userID: userId)
           }
           Task {
-            await apiViewModel.requestMemberWhistlesCount(userID: userId)
+            await memberContentViewModel.requestMemberWhistlesCount(userID: userId)
           }
           Task {
-            await apiViewModel.requestMemberPostFeed(userID: userId)
+            await memberContentViewModel.requestMemberPostFeed(userID: userId)
           }
         }
       }
@@ -389,20 +393,15 @@ struct ProfileView: View {
           await apiViewModel.requestMyFollow()
           await apiViewModel.requestMyWhistlesCount()
           await apiViewModel.requestMyBookmark()
+          await apiViewModel.requestMyPostFeed()
           isFirstProfileLoaded = false
         }
       } else {
-        await apiViewModel.requestMemberProfile(userID: userId)
+        await memberContentViewModel.requestMemberProfile(userID: userId)
         isProfileLoaded = true
-        await apiViewModel.requestMemberFollow(userID: userId)
-        await apiViewModel.requestMemberWhistlesCount(userID: userId)
-      }
-    }
-    .task {
-      if profileType == .my {
-        await apiViewModel.requestMyPostFeed()
-      } else {
-        await apiViewModel.requestMemberPostFeed(userID: userId)
+        await memberContentViewModel.requestMemberFollow(userID: userId)
+        await memberContentViewModel.requestMemberWhistlesCount(userID: userId)
+        await memberContentViewModel.requestMemberPostFeed(userID: userId)
       }
     }
     .onChange(of: bottomSheetPosition) { newValue in
@@ -439,7 +438,7 @@ struct ProfileView: View {
     .onDismiss {
       tabbarModel.showTabbar()
     }
-    .onChange(of: apiViewModel.memberProfile.isBlocked) { _ in
+    .onChange(of: memberContentViewModel.memberProfile.isBlocked) { _ in
       offsetY = 0
     }
     .onChange(of: apiViewModel.myFeed) { _ in

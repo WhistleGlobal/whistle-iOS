@@ -118,7 +118,7 @@ struct ProfileReportCommentView: View {
               Task {
                 let statusCode = await apiViewModel.reportUser(
                   usedID: userId,
-                  contentID: apiViewModel.memberFeed.isEmpty ? 0 : selectedContentId,
+                  contentID: /* apiViewModel.memberFeed.isEmpty ? 0 : */ selectedContentId,
                   reportReason: reportReason,
                   reportDescription: inputReportDetail)
                 if statusCode == 200 {
