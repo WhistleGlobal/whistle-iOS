@@ -142,36 +142,37 @@ struct MemberContentPlayerView: View {
                     HapticManager.instance.impact(style: .medium)
                     feedMoreModel.bottomSheetPosition = .absolute(242)
                   }
-                  .overlay {
-                    ContentGradientLayer()
-                      .allowsHitTesting(false)
-                    if !tabbarModel.isCollpased() {
-                      ContentLayer(
-                        currentVideoInfo: content,
-                        feedMoreModel: MemberFeedMoreModel.shared,
-                        feedPlayersViewModel: MemeberPlayersViewModel.shared,
-                        feedArray: apiViewModel.memberFeed,
-                        whistleAction: whistleToggle,
-                        dismissAction: dismissAction,
-                        refreshToken: $refreshToken)
-                        .padding(.bottom, UIScreen.main.nativeBounds.height == 1334 ? 24 : 0)
-                    }
-                    if feedMoreModel.bottomSheetPosition != .hidden {
-                      DimsThick()
-                        .onAppear {
-                          isChangable = false
-                          isSwipeable = false
-                        }
-                        .onDisappear {
-                          isChangable = true
-                          isSwipeable = true
-                        }
-                    }
-                  }
                 playButton(toPlay: player.rate == 0)
                   .opacity(showPlayButton ? 1 : 0)
                   .allowsHitTesting(false)
               }
+              Group {
+                ContentGradientLayer()
+                  .allowsHitTesting(false)
+                if !tabbarModel.isCollpased() {
+                  ContentLayer(
+                    currentVideoInfo: content,
+                    feedMoreModel: MemberFeedMoreModel.shared,
+                    feedPlayersViewModel: MemeberPlayersViewModel.shared,
+                    feedArray: apiViewModel.memberFeed,
+                    whistleAction: whistleToggle,
+                    dismissAction: dismissAction,
+                    refreshToken: $refreshToken)
+                    .padding(.bottom, UIScreen.main.nativeBounds.height == 1334 ? 24 : 0)
+                }
+                if feedMoreModel.bottomSheetPosition != .hidden {
+                  DimsThick()
+                    .onAppear {
+                      isChangable = false
+                      isSwipeable = false
+                    }
+                    .onDisappear {
+                      isChangable = true
+                      isSwipeable = true
+                    }
+                }
+              }
+              .frame(width: UIScreen.width, height: UIScreen.height)
               if BlockList.shared.userIds.contains(content.userId ?? 0) {
                 KFImage.url(URL(string: content.thumbnailUrl ?? ""))
                   .placeholder {
@@ -254,7 +255,6 @@ struct MemberContentPlayerView: View {
 }
 
 extension MemberContentPlayerView {
-
   func whistleToggle() {
     let index = feedPlayersViewModel.currentVideoIndex
     HapticManager.instance.impact(style: .medium)
@@ -277,5 +277,4 @@ extension MemberContentPlayerView {
     apiViewModel.memberFeed[index].isWhistled.toggle()
     currentContentInfo = apiViewModel.memberFeed[index]
   }
-
 }

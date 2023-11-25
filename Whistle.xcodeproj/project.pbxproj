@@ -3201,6 +3201,7 @@
 				1B2E3D482B0CAE44003A5288 /* XCRemoteSwiftPackageReference "TagKit" */,
 				7848F4422B0DC7890044C3D0 /* XCRemoteSwiftPackageReference "SwiftUIPager" */,
 				78395F1E2B0F43CB00560A0E /* XCRemoteSwiftPackageReference "mixpanel-swift" */,
+				1BA4AD0C2B12263B00E1A5B4 /* XCRemoteSwiftPackageReference "SkeletonUI" */,
 			);
 			productRefGroup = 1B39553D2A95069C00BCB4DF /* Products */;
 			projectDirPath = "";
@@ -4819,6 +4820,14 @@
 			requirement = {
 				kind = upToNextMajorVersion;
 				minimumVersion = 0.0.1;
+			};
+		};
+		1BA4AD0C2B12263B00E1A5B4 /* XCRemoteSwiftPackageReference "SkeletonUI" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/CSolanaM/SkeletonUI.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.0.0;
 			};
 		};
 		1BD4E5692ABA275200ADB783 /* XCRemoteSwiftPackageReference "SnapKit" */ = {
