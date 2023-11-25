@@ -150,15 +150,15 @@ struct MemberContentPlayerView: View {
                 ContentGradientLayer()
                   .allowsHitTesting(false)
                 if !tabbarModel.isCollpased() {
-//                  ContentLayer(
-//                    currentVideoInfo: content,
-//                    feedMoreModel: MemberFeedMoreModel.shared,
-//                    feedPlayersViewModel: MemeberPlayersViewModel.shared,
-//                    feedArray: memberContentViewModel.memberFeed,
-//                    whistleAction: whistleToggle,
-//                    dismissAction: dismissAction,
-//                    refreshToken: $refreshToken)
-//                    .padding(.bottom, UIScreen.main.nativeBounds.height == 1334 ? 24 : 0)
+                  ContentLayer(
+                    currentVideoInfo: content,
+                    feedMoreModel: MemberFeedMoreModel.shared,
+                    feedPlayersViewModel: memberContentViewModel,
+                    feedArray: memberContentViewModel.memberFeed,
+                    whistleAction: whistleToggle,
+                    dismissAction: dismissAction,
+                    refreshToken: $refreshToken)
+                    .padding(.bottom, UIScreen.main.nativeBounds.height == 1334 ? 24 : 0)
                 }
                 if feedMoreModel.bottomSheetPosition != .hidden {
                   DimsThick()

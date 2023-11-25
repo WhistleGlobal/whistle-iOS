@@ -10,6 +10,7 @@ import BottomSheet
 import GoogleSignIn
 import GoogleSignInSwift
 import Kingfisher
+import SkeletonUI
 import SwiftUI
 
 // MARK: - profileTabCase
@@ -46,7 +47,7 @@ struct ProfileView: View {
   @State var isProfileLoaded = false
   @State var isFirstStack = false
   @State var goReport = false
-
+  let arr = [1, 2, 3, 4]
   @State var isProfileScrolled = false
 
   @GestureState private var dragOffset = CGSize.zero
@@ -93,10 +94,7 @@ struct ProfileView: View {
             ZStack {
               glassMorphicView(cornerRadius: 0)
               Text(
-                profileType == .my
-                  ? apiViewModel.myProfile.userName
-                  :
-                  memberContentViewModel.memberProfile.userName)
+                profileType == .my ? apiViewModel.myProfile.userName : memberContentViewModel.memberProfile.userName)
                 .foregroundColor(Color.LabelColor_Primary_Dark)
                 .fontSystem(fontDesignSystem: .title2_Expanded)
                 .padding(.top, profileType == .my ? 22 : 42)
@@ -206,55 +204,72 @@ struct ProfileView: View {
                 .padding(.horizontal, 16)
             }
           } else {
-            if memberContentViewModel.memberFeed.isEmpty {
-              if !memberContentViewModel.memberProfile.isBlocked {
-                Spacer().frame(height: UIScreen.getHeight(90))
-                Image(systemName: "photo.fill")
-                  .resizable()
-                  .scaledToFit()
-                  .frame(width: 48, height: 48)
-                  .foregroundColor(.LabelColor_Primary_Dark)
-                  .padding(.bottom, 24)
-                Text("아직 콘텐츠가 없습니다.")
-                  .fontSystem(fontDesignSystem: .body1)
-                  .foregroundColor(.LabelColor_Primary_Dark)
-                  .padding(.bottom, 76)
-              } else {
-                Spacer().frame(height: UIScreen.getHeight(90))
-                Text("차단된 계정")
-                  .fontSystem(fontDesignSystem: .subtitle1)
-                  .foregroundColor(.LabelColor_Primary_Dark)
-                Text("사용자에 의해 차단된 계정입니다")
-                  .fontSystem(fontDesignSystem: .body1)
-                  .foregroundColor(.LabelColor_Primary_Dark)
-                  .padding(.bottom, 56)
-              }
-              Spacer()
-            } else {
+            switch memberContentViewModel.progress.downloadState {
+            case .notStarted, .downloading:
               LazyVGrid(columns: [
                 GridItem(.flexible()),
                 GridItem(.flexible()),
                 GridItem(.flexible()),
               ], spacing: 20) {
-                ForEach(Array(memberContentViewModel.memberFeed.enumerated()), id: \.element) { index, content in
-                  NavigationLink {
-                    MemberFeedView(
-                      memberContentViewModel: memberContentViewModel,
-                      index: index,
-                      userId: memberContentViewModel.memberFeed[index].userId ?? 0)
-                  } label: {
-                    videoThumbnailView(
-                      thumbnailUrl: content.thumbnailUrl ?? "",
-                      whistleCount: content.whistleCount,
-                      isHated: content.isHated)
-                  }
-                  .id(UUID())
+                ForEach(0 ..< 9) { _ in
+                  skeletonRectangle()
                 }
               }
               .zIndex(0)
               .offset(y: offsetY <= -UIScreen.getHeight(339) ? UIScreen.getHeight(339) - 42 - 64 : 0)
               .padding(.top, 20)
               .padding(.horizontal, 16)
+            case .finished:
+              if memberContentViewModel.memberFeed.isEmpty {
+                if !memberContentViewModel.memberProfile.isBlocked {
+                  Spacer().frame(height: UIScreen.getHeight(90))
+                  Image(systemName: "photo.fill")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 48, height: 48)
+                    .foregroundColor(.LabelColor_Primary_Dark)
+                    .padding(.bottom, 24)
+                  Text("아직 콘텐츠가 없습니다.")
+                    .fontSystem(fontDesignSystem: .body1)
+                    .foregroundColor(.LabelColor_Primary_Dark)
+                    .padding(.bottom, 76)
+                } else {
+                  Spacer().frame(height: UIScreen.getHeight(90))
+                  Text("차단된 계정")
+                    .fontSystem(fontDesignSystem: .subtitle1)
+                    .foregroundColor(.LabelColor_Primary_Dark)
+                  Text("사용자에 의해 차단된 계정입니다")
+                    .fontSystem(fontDesignSystem: .body1)
+                    .foregroundColor(.LabelColor_Primary_Dark)
+                    .padding(.bottom, 56)
+                }
+                Spacer()
+              } else {
+                LazyVGrid(columns: [
+                  GridItem(.flexible()),
+                  GridItem(.flexible()),
+                  GridItem(.flexible()),
+                ], spacing: 20) {
+                  ForEach(Array(memberContentViewModel.memberFeed.enumerated()), id: \.element) { index, content in
+                    NavigationLink {
+                      MemberFeedView(
+                        memberContentViewModel: memberContentViewModel,
+                        index: index,
+                        userId: memberContentViewModel.memberFeed[index].userId ?? 0)
+                    } label: {
+                      videoThumbnailView(
+                        thumbnailUrl: content.thumbnailUrl ?? "",
+                        whistleCount: content.whistleCount,
+                        isHated: content.isHated)
+                    }
+                    .id(UUID())
+                  }
+                }
+                .zIndex(0)
+                .offset(y: offsetY <= -UIScreen.getHeight(339) ? UIScreen.getHeight(339) - 42 - 64 : 0)
+                .padding(.top, 20)
+                .padding(.horizontal, 16)
+              }
             }
           }
         }

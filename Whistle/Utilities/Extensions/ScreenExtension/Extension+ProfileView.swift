@@ -9,6 +9,7 @@ import Foundation
 import GoogleSignIn
 import Kingfisher
 import Mixpanel
+import SkeletonUI
 import SwiftUI
 
 // MARK: - Components

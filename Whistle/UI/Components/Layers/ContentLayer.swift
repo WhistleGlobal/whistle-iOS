@@ -266,9 +266,9 @@ struct ContentLayer<
       feedMoreModel.isRootStacked = true
     }
     playersViewModel.stopPlayer()
-//    if playersViewModel is MemeberPlayersViewModel || playersViewModel is MyFeedPlayersViewModel {
-//      dismissAction?()
-//    }
+    if playersViewModel is MemberContentViewModel || playersViewModel is MyFeedPlayersViewModel {
+      dismissAction?()
+    }
   }
 
   func moreButtonAction() {
@@ -472,6 +472,10 @@ extension MainFeedPlayersViewModel: PlayersViewModel { }
 
 extension MyFeedPlayersViewModel: PlayersViewModel { }
 
+// MARK: - MemberContentViewModel + PlayersViewModel
+
+extension MemberContentViewModel: PlayersViewModel { }
+
 // MARK: - BookmarkedPlayersViewModel + PlayersViewModel
 
 extension BookmarkedPlayersViewModel: PlayersViewModel { }
@@ -529,5 +533,17 @@ extension ContentLayer {
         }
       }
     }
+  }
+}
+
+// MARK: - PressEffectButtonStyle
+
+struct PressEffectButtonStyle: ButtonStyle {
+  func makeBody(configuration: Configuration) -> some View {
+    configuration.label
+      .foregroundColor(.white)
+      .scaleEffect(configuration.isPressed ? 0.8 : 1.0)
+      .opacity(configuration.isPressed ? 0.6 : 1.0)
+      .animation(.easeInOut, value: configuration.isPressed)
   }
 }

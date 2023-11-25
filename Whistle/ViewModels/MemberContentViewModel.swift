@@ -10,6 +10,8 @@ import AVFoundation
 import KeychainSwift
 import SwiftUI
 
+// MARK: - MemberContentViewModel
+
 class MemberContentViewModel: ObservableObject {
   @Published var prevPlayer: AVPlayer?
   @Published var currentPlayer: AVPlayer?
@@ -20,6 +22,7 @@ class MemberContentViewModel: ObservableObject {
   @Published var memberWhistleCount = 0
   @Published var memberFollow = MemberFollow()
   @Published var memberFeed: [MemberContent] = []
+  let progress = MemberContentProgress()
   let decoder = JSONDecoder()
   let keychain = KeychainSwift()
   var idToken: String {
@@ -30,6 +33,156 @@ class MemberContentViewModel: ObservableObject {
     return idTokenKey
   }
 
+  var domainURL: String {
+    AppKeys.domainURL as! String
+  }
+
+  var contentTypeJson: HTTPHeaders {
+    [
+      "Authorization": "Bearer \(idToken)",
+      "Content-Type": "application/json",
+    ]
+  }
+
+  var contentTypeXwwwForm: HTTPHeaders {
+    [
+      "Authorization": "Bearer \(idToken)",
+      "Content-Type": "application/x-www-form-urlencoded",
+    ]
+  }
+
+  var contentTypeMultipart: HTTPHeaders {
+    [
+      "Authorization": "Bearer \(idToken)",
+      "Content-Type": "multipart/form-data",
+    ]
+  }
+
+  func requestMemberProfile(userID: Int) async {
+//    progress.changeDownloadState(state: .downloading)
+    if userID == 0 {
+      return
+    }
+    return await withCheckedContinuation { continuation in
+      AF.request(
+        "\(domainURL)/user/\(userID)/profile",
+        method: .get,
+        headers: contentTypeJson)
+        .validate(statusCode: 200 ... 300)
+        .responseDecodable(of: MemberProfile.self) { response in
+          switch response.result {
+          case .success(let success):
+            self.memberProfile = success
+            continuation.resume()
+//            self.progress.changeDownloadState(state: .finished)
+          case .failure(let error):
+            WhistleLogger.logger.error("Failure: \(error)")
+            continuation.resume()
+//            self.progress.changeDownloadState(state: .finished)
+          }
+        }
+    }
+  }
+
+  func requestMemberWhistlesCount(userID: Int) async {
+    if userID == 0 {
+      return
+    }
+    return await withCheckedContinuation { continuation in
+      AF.request(
+        "\(domainURL)/user/\(userID)/whistle/count",
+        method: .get,
+        headers: contentTypeJson)
+        .validate(statusCode: 200 ..< 300)
+        .response { response in
+          switch response.result {
+          case .success(let data):
+            guard let responseData = data else {
+              return
+            }
+            do {
+              if
+                let jsonObject = try JSONSerialization.jsonObject(with: responseData, options: []) as? [String: Any],
+                let count = jsonObject["whistle_all_count"] as? Int
+              {
+                self.memberWhistleCount = count
+                continuation.resume()
+              }
+            } catch {
+              WhistleLogger.logger.error("Error parsing JSON: \(error)")
+              continuation.resume()
+            }
+          case .failure(let error):
+            WhistleLogger.logger.error("Failure: \(error)")
+          }
+        }
+    }
+  }
+
+  func requestMemberFollow(userID: Int) async {
+    if userID == 0 {
+      return
+    }
+    return await withCheckedContinuation { continuation in
+      AF.request(
+        "\(domainURL)/user/\(userID)/follow-list",
+        method: .get,
+        headers: contentTypeXwwwForm)
+        .validate(statusCode: 200 ... 300)
+        .response { response in
+          switch response.result {
+          case .success(let data):
+            do {
+              self.memberFollow = try self.decoder.decode(MemberFollow.self, from: data ?? .init())
+              continuation.resume()
+            } catch {
+              WhistleLogger.logger.error("Error parsing JSON: \(error)")
+              continuation.resume()
+            }
+          case .failure(let error):
+            WhistleLogger.logger.error("Failure: \(error)")
+            continuation.resume()
+          }
+        }
+    }
+  }
+
+  // FIXME: - 데이터가 없을 시 처리할 로직 생각할 것
+  func requestMemberPostFeed(userID: Int) async {
+    progress.changeDownloadState(state: .downloading)
+    if userID == 0 { return }
+    return await withCheckedContinuation { continuation in
+      AF.request(
+        "\(domainURL)/user/\(userID)/post/feed",
+        method: .get,
+        headers: contentTypeJson)
+        .validate(statusCode: 200 ... 300)
+        .response { response in
+          switch response.result {
+          case .success(let data):
+            do {
+              guard let data else {
+                return
+              }
+              self.memberFeed = try self.decoder.decode([MemberContent].self, from: data)
+              continuation.resume()
+            } catch {
+              WhistleLogger.logger.error("Error parsing JSON: \(error)")
+              continuation.resume()
+            }
+            self.progress.changeDownloadState(state: .finished)
+          case .failure(let error):
+            WhistleLogger.logger.error("Failure: \(error)")
+            self.memberFeed = []
+            continuation.resume()
+            self.progress.changeDownloadState(state: .finished)
+          }
+        }
+    }
+  }
+}
+
+extension MemberContentViewModel {
   func goPlayerNext() {
     let index = min(max(0, currentVideoIndex), memberFeed.count - 1)
     if index == memberFeed.count - 1 {
@@ -193,148 +346,6 @@ class MemberContentViewModel: ObservableObject {
         return
       }
       currentPlayer?.play()
-    }
-  }
-
-  var domainURL: String {
-    AppKeys.domainURL as! String
-  }
-
-  var contentTypeJson: HTTPHeaders {
-    [
-      "Authorization": "Bearer \(idToken)",
-      "Content-Type": "application/json",
-    ]
-  }
-
-  var contentTypeXwwwForm: HTTPHeaders {
-    [
-      "Authorization": "Bearer \(idToken)",
-      "Content-Type": "application/x-www-form-urlencoded",
-    ]
-  }
-
-  var contentTypeMultipart: HTTPHeaders {
-    [
-      "Authorization": "Bearer \(idToken)",
-      "Content-Type": "multipart/form-data",
-    ]
-  }
-
-  func requestMemberProfile(userID: Int) async {
-    if userID == 0 {
-      return
-    }
-    return await withCheckedContinuation { continuation in
-      AF.request(
-        "\(domainURL)/user/\(userID)/profile",
-        method: .get,
-        headers: contentTypeJson)
-        .validate(statusCode: 200 ... 300)
-        .responseDecodable(of: MemberProfile.self) { response in
-          switch response.result {
-          case .success(let success):
-            self.memberProfile = success
-            continuation.resume()
-          case .failure(let error):
-            WhistleLogger.logger.error("Failure: \(error)")
-            continuation.resume()
-          }
-        }
-    }
-  }
-
-  func requestMemberWhistlesCount(userID: Int) async {
-    if userID == 0 {
-      return
-    }
-    return await withCheckedContinuation { continuation in
-      AF.request(
-        "\(domainURL)/user/\(userID)/whistle/count",
-        method: .get,
-        headers: contentTypeJson)
-        .validate(statusCode: 200 ..< 300)
-        .response { response in
-          switch response.result {
-          case .success(let data):
-            guard let responseData = data else {
-              return
-            }
-            do {
-              if
-                let jsonObject = try JSONSerialization.jsonObject(with: responseData, options: []) as? [String: Any],
-                let count = jsonObject["whistle_all_count"] as? Int
-              {
-                self.memberWhistleCount = count
-                continuation.resume()
-              }
-            } catch {
-              WhistleLogger.logger.error("Error parsing JSON: \(error)")
-              continuation.resume()
-            }
-          case .failure(let error):
-            WhistleLogger.logger.error("Failure: \(error)")
-          }
-        }
-    }
-  }
-
-  func requestMemberFollow(userID: Int) async {
-    if userID == 0 {
-      return
-    }
-    return await withCheckedContinuation { continuation in
-      AF.request(
-        "\(domainURL)/user/\(userID)/follow-list",
-        method: .get,
-        headers: contentTypeXwwwForm)
-        .validate(statusCode: 200 ... 300)
-        .response { response in
-          switch response.result {
-          case .success(let data):
-            do {
-              self.memberFollow = try self.decoder.decode(MemberFollow.self, from: data ?? .init())
-              continuation.resume()
-            } catch {
-              WhistleLogger.logger.error("Error parsing JSON: \(error)")
-              continuation.resume()
-            }
-          case .failure(let error):
-            WhistleLogger.logger.error("Failure: \(error)")
-            continuation.resume()
-          }
-        }
-    }
-  }
-
-  // FIXME: - 데이터가 없을 시 처리할 로직 생각할 것
-  func requestMemberPostFeed(userID: Int) async {
-    if userID == 0 { return }
-    return await withCheckedContinuation { continuation in
-      AF.request(
-        "\(domainURL)/user/\(userID)/post/feed",
-        method: .get,
-        headers: contentTypeJson)
-        .validate(statusCode: 200 ... 300)
-        .response { response in
-          switch response.result {
-          case .success(let data):
-            do {
-              guard let data else {
-                return
-              }
-              self.memberFeed = try self.decoder.decode([MemberContent].self, from: data)
-              continuation.resume()
-            } catch {
-              WhistleLogger.logger.error("Error parsing JSON: \(error)")
-              continuation.resume()
-            }
-          case .failure(let error):
-            WhistleLogger.logger.error("Failure: \(error)")
-            self.memberFeed = []
-            continuation.resume()
-          }
-        }
     }
   }
 }
