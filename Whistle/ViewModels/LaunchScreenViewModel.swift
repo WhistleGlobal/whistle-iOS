@@ -14,8 +14,9 @@ class LaunchScreenViewModel: ObservableObject {
 
   @Published var isFeedDownloded = false
   @Published var isContentPlayerReady = false
+  @Published var myTeamContentLoaded = false
   var displayLaunchScreen: Bool {
-    isFeedDownloded && isContentPlayerReady ? false : true
+    isFeedDownloded && isContentPlayerReady && LaunchScreenViewModel.shared.myTeamContentLoaded ? false : true
   }
 
   func feedDownloaded() {

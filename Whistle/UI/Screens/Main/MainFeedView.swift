@@ -83,7 +83,7 @@ struct MainFeedView: View {
         }
       }
     }
-    .onChange(of: pagerModel.myTeamContentLoaeded) { newValue in
+    .onChange(of: LaunchScreenViewModel.shared.myTeamContentLoaded) { newValue in
       if newValue {
         mainFeedTabModel.switchTab(to: .myteam)
         pagerModel.page.update(.moveToFirst)
@@ -568,5 +568,4 @@ class PagerModel: ObservableObject {
   static let shared = PagerModel()
   private init() { }
   @Published var page: Page = .first()
-  @Published var myTeamContentLoaeded = false
 }
