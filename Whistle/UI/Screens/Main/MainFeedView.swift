@@ -306,6 +306,7 @@ struct MainFeedView: View {
         apiViewModel.requestMyTeamFeed { value in
           switch value.result {
           case .success:
+            LaunchScreenViewModel.shared.myTeamFeedDownloaded()
             break
           case .failure:
             WhistleLogger.logger.debug("MyTeamFeed Download Failure")
@@ -547,13 +548,6 @@ extension MainFeedView {
         allFeedTab()
           .onAppear {
             WhistleLogger.logger.debug("TabOnAppear allFeedTab : \(feedMoreModel.isRootStacked)")
-//            if apiViewModel.myProfile.myTeam != nil, !feedMoreModel.isRootStacked {
-//              mainFeedTabModel.switchTab(to: .myteam)
-//              pagerModel.page.update(.moveToFirst)
-//              mainFeedPlayersViewModel.stopPlayer()
-//              myTeamfeedPlayersViewModel.currentPlayer?.play()
-//            }
-//            feedMoreModel.isRootStacked = false
           }
       }
     case .myteam:

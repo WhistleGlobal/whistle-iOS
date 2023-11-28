@@ -13,17 +13,30 @@ class LaunchScreenViewModel: ObservableObject {
   private init() { }
 
   @Published var isFeedDownloded = false
+  @Published var isMyTeamFeedDownloded = false
   @Published var isContentPlayerReady = false
   @Published var myTeamContentLoaded = false
   var displayLaunchScreen: Bool {
-    isFeedDownloded && isContentPlayerReady && LaunchScreenViewModel.shared.myTeamContentLoaded ? false : true
+    if APIViewModel.shared.myProfile.myTeam == nil {
+      isFeedDownloded && isContentPlayerReady ? false : true
+    } else {
+      isFeedDownloded && isContentPlayerReady && myTeamContentLoaded && isMyTeamFeedDownloded ? false : true
+    }
   }
 
   func feedDownloaded() {
     isFeedDownloded = true
   }
 
+  func myTeamFeedDownloaded() {
+    isMyTeamFeedDownloded = true
+  }
+
   func contentPlayerReady() {
     isContentPlayerReady = true
+  }
+
+  func myTeamContentPlayerReady() {
+    myTeamContentLoaded = true
   }
 }
