@@ -61,29 +61,6 @@ extension APIViewModel: ProfileProtocol {
     }
   }
 
-  func requestMemberProfile(userID: Int) async {
-    if userID == 0 {
-      return
-    }
-    return await withCheckedContinuation { continuation in
-      AF.request(
-        "\(domainURL)/user/\(userID)/profile",
-        method: .get,
-        headers: contentTypeJson)
-        .validate(statusCode: 200 ... 300)
-        .responseDecodable(of: MemberProfile.self) { response in
-          switch response.result {
-          case .success(let success):
-            self.memberProfile = success
-            continuation.resume()
-          case .failure(let error):
-            WhistleLogger.logger.error("Failure: \(error)")
-            continuation.resume()
-          }
-        }
-    }
-  }
-
   func requestMyWhistlesCount() async {
     await withCheckedContinuation { continuation in
       AF.request(
@@ -119,41 +96,6 @@ extension APIViewModel: ProfileProtocol {
     }
   }
 
-  func requestMemberWhistlesCount(userID: Int) async {
-    if userID == 0 {
-      return
-    }
-    return await withCheckedContinuation { continuation in
-      AF.request(
-        "\(domainURL)/user/\(userID)/whistle/count",
-        method: .get,
-        headers: contentTypeJson)
-        .validate(statusCode: 200 ..< 300)
-        .response { response in
-          switch response.result {
-          case .success(let data):
-            guard let responseData = data else {
-              return
-            }
-            do {
-              if
-                let jsonObject = try JSONSerialization.jsonObject(with: responseData, options: []) as? [String: Any],
-                let count = jsonObject["whistle_all_count"] as? Int
-              {
-                self.memberWhistleCount = count
-                continuation.resume()
-              }
-            } catch {
-              WhistleLogger.logger.error("Error parsing JSON: \(error)")
-              continuation.resume()
-            }
-          case .failure(let error):
-            WhistleLogger.logger.error("Failure: \(error)")
-          }
-        }
-    }
-  }
-
   func requestMyFollow() async {
     await withCheckedContinuation { continuation in
       AF.request(
@@ -166,34 +108,6 @@ extension APIViewModel: ProfileProtocol {
           case .success(let data):
             do {
               self.myFollow = try self.decoder.decode(MyFollow.self, from: data)
-              continuation.resume()
-            } catch {
-              WhistleLogger.logger.error("Error parsing JSON: \(error)")
-              continuation.resume()
-            }
-          case .failure(let error):
-            WhistleLogger.logger.error("Failure: \(error)")
-            continuation.resume()
-          }
-        }
-    }
-  }
-
-  func requestMemberFollow(userID: Int) async {
-    if userID == 0 {
-      return
-    }
-    return await withCheckedContinuation { continuation in
-      AF.request(
-        "\(domainURL)/user/\(userID)/follow-list",
-        method: .get,
-        headers: contentTypeXwwwForm)
-        .validate(statusCode: 200 ... 300)
-        .response { response in
-          switch response.result {
-          case .success(let data):
-            do {
-              self.memberFollow = try self.decoder.decode(MemberFollow.self, from: data ?? .init())
               continuation.resume()
             } catch {
               WhistleLogger.logger.error("Error parsing JSON: \(error)")

@@ -11,7 +11,6 @@ import UIKit
 
 protocol PostFeedProtocol {
   func requestMyPostFeed() async
-  func requestMemberPostFeed(userID: Int) async
   func requestMyBookmark() async
   func requestMainFeed(completion: @escaping (DataResponse<[MainContent], AFError>) -> Void)
   func requestReportedFeed() async

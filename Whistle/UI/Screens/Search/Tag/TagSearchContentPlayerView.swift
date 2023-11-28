@@ -102,28 +102,29 @@ struct TagSearchContentPlayerView: View {
                   HapticManager.instance.impact(style: .medium)
                   feedMoreModel.bottomSheetPosition = .absolute(242)
                 }
-                .overlay {
-                  ContentGradientLayer()
-                    .allowsHitTesting(false)
-                  if tabbarModel.tabWidth != 56 {
-                    ContentLayer(
-                      currentVideoInfo: content,
-                      feedMoreModel: TagSearchFeedMoreModel.shared,
-                      feedPlayersViewModel: feedPlayersViewModel,
-                      feedArray: feedPlayersViewModel.searchedContents,
-                      whistleAction: whistleToggle,
-                      dismissAction: dismissAction,
-                      refreshToken: $refreshToken)
-                      .padding(.bottom, UIScreen.main.nativeBounds.height == 1334 ? 24 : 0)
-                  }
-                  if feedMoreModel.bottomSheetPosition != .hidden {
-                    DimsThick()
-                  }
-                }
               playButton(toPlay: player.rate == 0)
                 .opacity(showPlayButton ? 1 : 0)
                 .allowsHitTesting(false)
             }
+            Group {
+              ContentGradientLayer()
+                .allowsHitTesting(false)
+              if tabbarModel.tabWidth != 56 {
+                ContentLayer(
+                  currentVideoInfo: content,
+                  feedMoreModel: TagSearchFeedMoreModel.shared,
+                  feedPlayersViewModel: feedPlayersViewModel,
+                  feedArray: feedPlayersViewModel.searchedContents,
+                  whistleAction: whistleToggle,
+                  dismissAction: dismissAction,
+                  refreshToken: $refreshToken)
+                  .padding(.bottom, UIScreen.main.nativeBounds.height == 1334 ? 24 : 0)
+              }
+              if feedMoreModel.bottomSheetPosition != .hidden {
+                DimsThick()
+              }
+            }
+            .frame(width: UIScreen.width, height: UIScreen.height)
             if BlockList.shared.userIds.contains(content.userId ?? 0) {
               KFImage.url(URL(string: content.thumbnailUrl ?? ""))
                 .placeholder {
@@ -204,7 +205,6 @@ struct TagSearchContentPlayerView: View {
 }
 
 extension TagSearchContentPlayerView {
-
   func whistleToggle() {
     let index = feedPlayersViewModel.currentVideoIndex
     HapticManager.instance.impact(style: .medium)
@@ -227,5 +227,4 @@ extension TagSearchContentPlayerView {
     feedPlayersViewModel.searchedContents[index].isWhistled.toggle()
     currentContentInfo = feedPlayersViewModel.searchedContents[index]
   }
-
 }

@@ -18,11 +18,11 @@ struct MemberContentPlayerView: View {
   @Environment(\.scenePhase) var scenePhase
   @Environment(\.dismiss) var dismiss
   @StateObject var apiViewModel = APIViewModel.shared
-  @StateObject var feedPlayersViewModel = MemeberPlayersViewModel.shared
   @StateObject private var toastViewModel = ToastViewModel.shared
   @StateObject private var feedMoreModel = MemberFeedMoreModel.shared
   @StateObject private var tabbarModel = TabbarModel.shared
   @StateObject var bartintModel = BarTintModel.shared
+  @ObservedObject var memberContentViewModel: MemberContentViewModel
 
   @State var newId = UUID()
   @State var timer: Timer? = nil
@@ -41,10 +41,10 @@ struct MemberContentPlayerView: View {
 
   var body: some View {
     VStack(spacing: 0) {
-      ForEach(Array(apiViewModel.memberFeed.enumerated()), id: \.element) { index, content in
+      ForEach(Array(memberContentViewModel.memberFeed.enumerated()), id: \.element) { index, content in
         ZStack {
           Color.black.overlay {
-            KFImage.url(URL(string: apiViewModel.memberFeed[index].thumbnailUrl ?? ""))
+            KFImage.url(URL(string: memberContentViewModel.memberFeed[index].thumbnailUrl ?? ""))
               .placeholder {
                 Color.black
                   .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -90,7 +90,7 @@ struct MemberContentPlayerView: View {
                   }
                 }
             if !content.isHated {
-              if let player = feedPlayersViewModel.currentPlayer, index == feedPlayersViewModel.currentVideoIndex {
+              if let player = memberContentViewModel.currentPlayer, index == memberContentViewModel.currentVideoIndex {
                 ContentPlayer(player: player, aspectRatio: content.aspectRatio)
                   .frame(width: UIScreen.width, height: UIScreen.height)
                   .onTapGesture(count: 2) {
@@ -142,36 +142,37 @@ struct MemberContentPlayerView: View {
                     HapticManager.instance.impact(style: .medium)
                     feedMoreModel.bottomSheetPosition = .absolute(242)
                   }
-                  .overlay {
-                    ContentGradientLayer()
-                      .allowsHitTesting(false)
-                    if !tabbarModel.isCollpased() {
-                      ContentLayer(
-                        currentVideoInfo: content,
-                        feedMoreModel: MemberFeedMoreModel.shared,
-                        feedPlayersViewModel: MemeberPlayersViewModel.shared,
-                        feedArray: apiViewModel.memberFeed,
-                        whistleAction: whistleToggle,
-                        dismissAction: dismissAction,
-                        refreshToken: $refreshToken)
-                        .padding(.bottom, UIScreen.main.nativeBounds.height == 1334 ? 24 : 0)
-                    }
-                    if feedMoreModel.bottomSheetPosition != .hidden {
-                      DimsThick()
-                        .onAppear {
-                          isChangable = false
-                          isSwipeable = false
-                        }
-                        .onDisappear {
-                          isChangable = true
-                          isSwipeable = true
-                        }
-                    }
-                  }
                 playButton(toPlay: player.rate == 0)
                   .opacity(showPlayButton ? 1 : 0)
                   .allowsHitTesting(false)
               }
+              Group {
+                ContentGradientLayer()
+                  .allowsHitTesting(false)
+                if !tabbarModel.isCollpased() {
+                  ContentLayer(
+                    currentVideoInfo: content,
+                    feedMoreModel: MemberFeedMoreModel.shared,
+                    feedPlayersViewModel: memberContentViewModel,
+                    feedArray: memberContentViewModel.memberFeed,
+                    whistleAction: whistleToggle,
+                    dismissAction: dismissAction,
+                    refreshToken: $refreshToken)
+                    .padding(.bottom, UIScreen.main.nativeBounds.height == 1334 ? 24 : 0)
+                }
+                if feedMoreModel.bottomSheetPosition != .hidden {
+                  DimsThick()
+                    .onAppear {
+                      isChangable = false
+                      isSwipeable = false
+                    }
+                    .onDisappear {
+                      isChangable = true
+                      isSwipeable = true
+                    }
+                }
+              }
+              .frame(width: UIScreen.width, height: UIScreen.height)
               if BlockList.shared.userIds.contains(content.userId ?? 0) {
                 KFImage.url(URL(string: content.thumbnailUrl ?? ""))
                   .placeholder {
@@ -218,16 +219,16 @@ struct MemberContentPlayerView: View {
     .onDisappear {
       bartintModel.tintColor = .labelColorPrimary
       lifecycleDelegate?.onDisappear()
-      feedPlayersViewModel.stopPlayer()
+      memberContentViewModel.stopPlayer()
     }
     .ignoresSafeArea()
     .onChange(of: tabbarModel.tabSelection) { newValue in
       if newValue == .main {
-        feedPlayersViewModel.currentPlayer?.seek(to: .zero)
-        feedPlayersViewModel.currentPlayer?.play()
+        memberContentViewModel.currentPlayer?.seek(to: .zero)
+        memberContentViewModel.currentPlayer?.play()
         return
       }
-      feedPlayersViewModel.stopPlayer()
+      memberContentViewModel.stopPlayer()
       apiViewModel.addViewCount(viewCount, notInclude: processedContentId) { viewCountList in
         var tempSet: Set<Int> = []
         for view in viewCountList {
@@ -254,28 +255,26 @@ struct MemberContentPlayerView: View {
 }
 
 extension MemberContentPlayerView {
-
   func whistleToggle() {
-    let index = feedPlayersViewModel.currentVideoIndex
+    let index = memberContentViewModel.currentVideoIndex
     HapticManager.instance.impact(style: .medium)
     timer?.invalidate()
-    if apiViewModel.memberFeed[index].isWhistled {
+    if memberContentViewModel.memberFeed[index].isWhistled {
       timer = Timer.scheduledTimer(withTimeInterval: 2, repeats: false) { _ in
         Task {
           await apiViewModel.whistleAction(contentID: currentContentInfo?.contentId ?? 0, method: .delete)
         }
       }
-      apiViewModel.memberFeed[index].whistleCount -= 1
+      memberContentViewModel.memberFeed[index].whistleCount -= 1
     } else {
       timer = Timer.scheduledTimer(withTimeInterval: 2, repeats: false) { _ in
         Task {
           await apiViewModel.whistleAction(contentID: currentContentInfo?.contentId ?? 0, method: .post)
         }
       }
-      apiViewModel.memberFeed[index].whistleCount += 1
+      memberContentViewModel.memberFeed[index].whistleCount += 1
     }
-    apiViewModel.memberFeed[index].isWhistled.toggle()
-    currentContentInfo = apiViewModel.memberFeed[index]
+    memberContentViewModel.memberFeed[index].isWhistled.toggle()
+    currentContentInfo = memberContentViewModel.memberFeed[index]
   }
-
 }

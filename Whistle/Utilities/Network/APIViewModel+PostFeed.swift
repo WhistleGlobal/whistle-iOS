@@ -45,37 +45,6 @@ extension APIViewModel: PostFeedProtocol {
     }
   }
 
-  // FIXME: - 데이터가 없을 시 처리할 로직 생각할 것
-  func requestMemberPostFeed(userID: Int) async {
-    if userID == 0 { return }
-    return await withCheckedContinuation { continuation in
-      AF.request(
-        "\(domainURL)/user/\(userID)/post/feed",
-        method: .get,
-        headers: contentTypeJson)
-        .validate(statusCode: 200 ... 300)
-        .response { response in
-          switch response.result {
-          case .success(let data):
-            do {
-              guard let data else {
-                return
-              }
-              self.memberFeed = try self.decoder.decode([MemberContent].self, from: data)
-              continuation.resume()
-            } catch {
-              WhistleLogger.logger.error("Error parsing JSON: \(error)")
-              continuation.resume()
-            }
-          case .failure(let error):
-            WhistleLogger.logger.error("Failure: \(error)")
-            self.memberFeed = []
-            continuation.resume()
-          }
-        }
-    }
-  }
-
   // FIXME: - 더미 데이터를 넣어서 테스트할 것
   func requestMyBookmark() async {
     await withCheckedContinuation { continuation in

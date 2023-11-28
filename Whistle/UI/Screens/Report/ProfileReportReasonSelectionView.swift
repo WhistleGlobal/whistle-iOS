@@ -53,27 +53,27 @@ struct ProfileReportReasonSelectionView: View {
           Divider().frame(height: 0.5).padding(.leading, 16).foregroundColor(.labelColorDisablePlaceholder)
         }
       } else {
-        ForEach(UserReportReason.allCases, id: \.self) { reason in
-          NavigationLink {
-            if apiViewModel.memberFeed.isEmpty {
-              ProfileReportCommentView(
-                goReport: $goReport,
-                selectedContentId: .constant(0),
-                reportCategory: .user,
-                reportReason: reason.numericValue,
-                userId: userId)
-            } else {
-              ProfileReportContentSelectionView(
-                selectedContentId: $selectedContentId,
-                goReport: $goReport,
-                userId: userId,
-                reportCategory: .user,
-                reportReason: reason.numericValue)
-            }
-          } label: {
-            reportRow(text: reason.rawValue)
-          }
-          .id(UUID())
+        ForEach(UserReportReason.allCases, id: \.self) { _ in
+//          NavigationLink {
+//            if apiViewModel.memberFeed.isEmpty {
+//              ProfileReportCommentView(
+//                goReport: $goReport,
+//                selectedContentId: .constant(0),
+//                reportCategory: .user,
+//                reportReason: reason.numericValue,
+//                userId: userId)
+//            } else {
+//              ProfileReportContentSelectionView(
+//                selectedContentId: $selectedContentId,
+//                goReport: $goReport,
+//                userId: userId,
+//                reportCategory: .user,
+//                reportReason: reason.numericValue)
+//            }
+//          } label: {
+//            reportRow(text: reason.rawValue)
+//          }
+//          .id(UUID())
 
           Divider().frame(height: 0.5).padding(.leading, 16).foregroundColor(.labelColorDisablePlaceholder)
         }
