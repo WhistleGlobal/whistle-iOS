@@ -84,7 +84,7 @@ struct MainFeedView: View {
       }
     }
     .onChange(of: LaunchScreenViewModel.shared.myTeamContentLoaded) { newValue in
-      if newValue {
+      if newValue, !apiViewModel.myTeamFeed.isEmpty {
         mainFeedTabModel.switchTab(to: .myteam)
         pagerModel.page.update(.moveToFirst)
         mainFeedPlayersViewModel.stopPlayer()

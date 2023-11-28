@@ -450,14 +450,22 @@ extension APIViewModel: PostFeedProtocol {
       "\(domainURL)/content/content-list/myteam",
       method: .get,
       headers: contentTypeJson)
-      .validate(statusCode: 200 ... 500)
+//      .validate(statusCode: 200 ... 500)
       .responseDecodable(of: [MainContent].self) { response in
         switch response.result {
         case .success(let success):
           self.myTeamFeed = success
+          if self.myTeamFeed.isEmpty {
+            LaunchScreenViewModel.shared.myTeamFeedDownloaded()
+            LaunchScreenViewModel.shared.myTeamContentPlayerReady()
+          }
           completion(response)
         case .failure:
           WhistleLogger.logger.error("Failure")
+          if self.myTeamFeed.isEmpty {
+            LaunchScreenViewModel.shared.myTeamFeedDownloaded()
+            LaunchScreenViewModel.shared.myTeamContentPlayerReady()
+          }
           completion(response)
           break
         }
