@@ -104,7 +104,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     -> Bool
   {
     Mixpanel.initialize(token: String.mixpanelToken(), trackAutomaticEvents: true)
-    Mixpanel.mainInstance().loggingEnabled = true
+//    Mixpanel.mainInstance().loggingEnabled = true
     // APNS 설정
     UNUserNotificationCenter.current().delegate = self
     UNUserNotificationCenter.current()

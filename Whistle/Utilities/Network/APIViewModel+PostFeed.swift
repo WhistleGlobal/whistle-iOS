@@ -455,6 +455,7 @@ extension APIViewModel: PostFeedProtocol {
         switch response.result {
         case .success(let success):
           self.myTeamFeed = success
+          PagerModel.shared.myTeamContentLoaeded = true
           completion(response)
         case .failure:
           WhistleLogger.logger.error("Failure")

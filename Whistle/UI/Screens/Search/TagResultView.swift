@@ -15,6 +15,7 @@ struct TagResultView: View {
   @State var tagTabSelection: TagTabSelection = .popular
   @StateObject var apiViewModel = APIViewModel.shared
   @StateObject var feedPlayersViewModel = TagSearchPlayersViewModel()
+  @StateObject var feedMoreModel = MainFeedMoreModel.shared
 
   var body: some View {
     VStack(spacing: 0) {
@@ -39,6 +40,7 @@ struct TagResultView: View {
     .background(.backgroundDefault)
     .onAppear {
       UIApplication.shared.endEditing()
+      feedMoreModel.isRootStacked = true
     }
     .task {
       apiViewModel.requestTagSearchedRecentContent(queryString: tagText) { contents in
