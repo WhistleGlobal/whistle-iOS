@@ -7,6 +7,7 @@
 
 import Combine
 import Kingfisher
+import SkeletonUI
 import SwiftUI
 
 // MARK: - font 관련 코드
@@ -63,6 +64,13 @@ extension View {
           Circle().strokeBorder(Color.Dim_Thin)
         }
     }
+  }
+
+  @ViewBuilder
+  func skeletonRectangle() -> some View {
+    RoundedRectangle(cornerRadius: 12)
+      .skeleton(with: true, shape: .rounded(.radius(12, style: .continuous)))
+      .frame(width: UIScreen.getWidth(204 * 9 / 16), height: UIScreen.getHeight(204))
   }
 
   @ViewBuilder

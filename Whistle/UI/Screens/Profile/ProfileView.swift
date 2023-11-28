@@ -10,6 +10,7 @@ import BottomSheet
 import GoogleSignIn
 import GoogleSignInSwift
 import Kingfisher
+import SkeletonUI
 import SwiftUI
 
 // MARK: - profileTabCase
@@ -30,7 +31,7 @@ struct ProfileView: View {
   @StateObject var tabbarModel = TabbarModel.shared
   @StateObject var toastViewModel = ToastViewModel.shared
   @StateObject var alertViewModel = AlertViewModel.shared
-  @StateObject var feedPlayersViewModel = MainFeedPlayersViewModel.shared
+  @StateObject var memberContentViewModel = MemberContentViewModel()
 
   @State var bottomSheetPosition: BottomSheetPosition = .hidden
   @State var showProfileEditView = false
@@ -46,7 +47,7 @@ struct ProfileView: View {
   @State var isProfileLoaded = false
   @State var isFirstStack = false
   @State var goReport = false
-
+  let arr = [1, 2, 3, 4]
   @State var isProfileScrolled = false
 
   @GestureState private var dragOffset = CGSize.zero
@@ -56,7 +57,7 @@ struct ProfileView: View {
   let userId: Int
 
   var profileUrl: String? {
-    profileType == .my ? apiViewModel.myProfile.profileImage : apiViewModel.memberProfile.profileImg
+    profileType == .my ? apiViewModel.myProfile.profileImage : memberContentViewModel.memberProfile.profileImg
   }
 
   var body: some View {
@@ -72,7 +73,7 @@ struct ProfileView: View {
           profileDefaultBackground()
         }
       } else {
-        if let myTeam = apiViewModel.memberProfile.myTeam, isMyTeamBackgroundOn {
+        if let myTeam = memberContentViewModel.memberProfile.myTeam, isMyTeamBackgroundOn {
           MyTeamType.teamGradient(myTeam)
         } else {
           profileDefaultBackground()
@@ -93,9 +94,7 @@ struct ProfileView: View {
             ZStack {
               glassMorphicView(cornerRadius: 0)
               Text(
-                profileType == .my
-                  ? apiViewModel.myProfile.userName
-                  : apiViewModel.memberProfile.userName)
+                profileType == .my ? apiViewModel.myProfile.userName : memberContentViewModel.memberProfile.userName)
                 .foregroundColor(Color.LabelColor_Primary_Dark)
                 .fontSystem(fontDesignSystem: .title2_Expanded)
                 .padding(.top, profileType == .my ? 22 : 42)
@@ -205,52 +204,72 @@ struct ProfileView: View {
                 .padding(.horizontal, 16)
             }
           } else {
-            if apiViewModel.memberFeed.isEmpty {
-              if !apiViewModel.memberProfile.isBlocked {
-                Spacer().frame(height: UIScreen.getHeight(90))
-                Image(systemName: "photo.fill")
-                  .resizable()
-                  .scaledToFit()
-                  .frame(width: 48, height: 48)
-                  .foregroundColor(.LabelColor_Primary_Dark)
-                  .padding(.bottom, 24)
-                Text("아직 콘텐츠가 없습니다.")
-                  .fontSystem(fontDesignSystem: .body1)
-                  .foregroundColor(.LabelColor_Primary_Dark)
-                  .padding(.bottom, 76)
-              } else {
-                Spacer().frame(height: UIScreen.getHeight(90))
-                Text("차단된 계정")
-                  .fontSystem(fontDesignSystem: .subtitle1)
-                  .foregroundColor(.LabelColor_Primary_Dark)
-                Text("사용자에 의해 차단된 계정입니다")
-                  .fontSystem(fontDesignSystem: .body1)
-                  .foregroundColor(.LabelColor_Primary_Dark)
-                  .padding(.bottom, 56)
-              }
-              Spacer()
-            } else {
+            switch memberContentViewModel.progress.downloadState {
+            case .notStarted, .downloading:
               LazyVGrid(columns: [
                 GridItem(.flexible()),
                 GridItem(.flexible()),
                 GridItem(.flexible()),
               ], spacing: 20) {
-                ForEach(Array(apiViewModel.memberFeed.enumerated()), id: \.element) { index, content in
-                  NavigationLink {
-                    MemberFeedView(index: index, userId: apiViewModel.memberFeed[index].userId ?? 0)
-                  } label: {
-                    videoThumbnailView(
-                      thumbnailUrl: content.thumbnailUrl ?? "",
-                      whistleCount: content.whistleCount,
-                      isHated: content.isHated)
-                  }
-                  .id(UUID())
+                ForEach(0 ..< 9) { _ in
+                  skeletonRectangle()
                 }
               }
               .zIndex(0)
               .offset(y: offsetY <= -UIScreen.getHeight(339) ? UIScreen.getHeight(339) - 42 - 64 : 0)
               .padding(.top, 20)
               .padding(.horizontal, 16)
+            case .finished:
+              if memberContentViewModel.memberFeed.isEmpty {
+                if !memberContentViewModel.memberProfile.isBlocked {
+                  Spacer().frame(height: UIScreen.getHeight(90))
+                  Image(systemName: "photo.fill")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 48, height: 48)
+                    .foregroundColor(.LabelColor_Primary_Dark)
+                    .padding(.bottom, 24)
+                  Text("아직 콘텐츠가 없습니다.")
+                    .fontSystem(fontDesignSystem: .body1)
+                    .foregroundColor(.LabelColor_Primary_Dark)
+                    .padding(.bottom, 76)
+                } else {
+                  Spacer().frame(height: UIScreen.getHeight(90))
+                  Text("차단된 계정")
+                    .fontSystem(fontDesignSystem: .subtitle1)
+                    .foregroundColor(.LabelColor_Primary_Dark)
+                  Text("사용자에 의해 차단된 계정입니다")
+                    .fontSystem(fontDesignSystem: .body1)
+                    .foregroundColor(.LabelColor_Primary_Dark)
+                    .padding(.bottom, 56)
+                }
+                Spacer()
+              } else {
+                LazyVGrid(columns: [
+                  GridItem(.flexible()),
+                  GridItem(.flexible()),
+                  GridItem(.flexible()),
+                ], spacing: 20) {
+                  ForEach(Array(memberContentViewModel.memberFeed.enumerated()), id: \.element) { index, content in
+                    NavigationLink {
+                      MemberFeedView(
+                        memberContentViewModel: memberContentViewModel,
+                        index: index,
+                        userId: memberContentViewModel.memberFeed[index].userId ?? 0)
+                    } label: {
+                      videoThumbnailView(
+                        thumbnailUrl: content.thumbnailUrl ?? "",
+                        whistleCount: content.whistleCount,
+                        isHated: content.isHated)
+                    }
+                    .id(UUID())
+                  }
+                }
+                .zIndex(0)
+                .offset(y: offsetY <= -UIScreen.getHeight(339) ? UIScreen.getHeight(339) - 42 - 64 : 0)
+                .padding(.top, 20)
+                .padding(.horizontal, 16)
+              }
             }
           }
         }
@@ -266,7 +285,7 @@ struct ProfileView: View {
             Spacer().frame(height: 1000)
           }
         } else {
-          if !apiViewModel.memberFeed.isEmpty {
+          if !memberContentViewModel.memberFeed.isEmpty {
             Spacer().frame(height: 1000)
           }
         }
@@ -295,16 +314,16 @@ struct ProfileView: View {
           }
         } else {
           Task {
-            await apiViewModel.requestMemberProfile(userID: userId)
+            await memberContentViewModel.requestMemberProfile(userID: userId)
           }
           Task {
-            await apiViewModel.requestMemberFollow(userID: userId)
+            await memberContentViewModel.requestMemberFollow(userID: userId)
           }
           Task {
-            await apiViewModel.requestMemberWhistlesCount(userID: userId)
+            await memberContentViewModel.requestMemberWhistlesCount(userID: userId)
           }
           Task {
-            await apiViewModel.requestMemberPostFeed(userID: userId)
+            await memberContentViewModel.requestMemberPostFeed(userID: userId)
           }
         }
       }
@@ -389,20 +408,15 @@ struct ProfileView: View {
           await apiViewModel.requestMyFollow()
           await apiViewModel.requestMyWhistlesCount()
           await apiViewModel.requestMyBookmark()
+          await apiViewModel.requestMyPostFeed()
           isFirstProfileLoaded = false
         }
       } else {
-        await apiViewModel.requestMemberProfile(userID: userId)
+        await memberContentViewModel.requestMemberProfile(userID: userId)
         isProfileLoaded = true
-        await apiViewModel.requestMemberFollow(userID: userId)
-        await apiViewModel.requestMemberWhistlesCount(userID: userId)
-      }
-    }
-    .task {
-      if profileType == .my {
-        await apiViewModel.requestMyPostFeed()
-      } else {
-        await apiViewModel.requestMemberPostFeed(userID: userId)
+        await memberContentViewModel.requestMemberFollow(userID: userId)
+        await memberContentViewModel.requestMemberWhistlesCount(userID: userId)
+        await memberContentViewModel.requestMemberPostFeed(userID: userId)
       }
     }
     .onChange(of: bottomSheetPosition) { newValue in
@@ -439,7 +453,7 @@ struct ProfileView: View {
     .onDismiss {
       tabbarModel.showTabbar()
     }
-    .onChange(of: apiViewModel.memberProfile.isBlocked) { _ in
+    .onChange(of: memberContentViewModel.memberProfile.isBlocked) { _ in
       offsetY = 0
     }
     .onChange(of: apiViewModel.myFeed) { _ in

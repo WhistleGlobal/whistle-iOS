@@ -53,7 +53,7 @@ struct ProfileReportTypeSelectionView: View {
         } label: {
           reportRow(text: "특정 콘텐츠", isContentReport: true)
         }
-        .disabled(apiViewModel.memberFeed.isEmpty)
+//        .disabled(apiViewModel.memberFeed.isEmpty)
         .padding(.horizontal, 16)
         Divider().frame(height: 0.5).padding(.leading, 16).foregroundColor(.labelColorDisablePlaceholder)
         NavigationLink {
@@ -94,11 +94,11 @@ struct ProfileReportTypeSelectionView: View {
 
 extension ProfileReportTypeSelectionView {
   @ViewBuilder
-  func reportRow(text: String, isContentReport: Bool) -> some View {
+  func reportRow(text: String, isContentReport _: Bool) -> some View {
     HStack {
       Text(text)
         .fontSystem(fontDesignSystem: .subtitle2)
-        .foregroundColor(apiViewModel.memberFeed.isEmpty && isContentReport ? .labelColorDisablePlaceholder : .labelColorPrimary)
+//        .foregroundColor(apiViewModel.memberFeed.isEmpty && isContentReport ? .labelColorDisablePlaceholder : .labelColorPrimary)
         .frame(maxWidth: .infinity, alignment: .leading)
         .listRowSeparator(.hidden)
       Spacer()

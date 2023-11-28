@@ -30,23 +30,23 @@ struct ProfileReportContentSelectionView: View {
           GridItem(.flexible()),
           GridItem(.flexible()),
         ], spacing: 20) {
-          ForEach(Array(apiViewModel.memberFeed.enumerated()), id: \.element) { index, content in
-            if let url = content.thumbnailUrl {
-              videoThumbnail(url: url, index: index)
-                .onTapGesture {
-                  if reportCategory == .user {
-                    selectedIndex = selectedIndex == index ? -1 : index
-                  } else {
-                    selectedIndex = index
-                  }
-                  if selectedIndex < 0 {
-                    selectedContentId = -1
-                  } else {
-                    selectedContentId = apiViewModel.memberFeed[index].contentId ?? 0
-                  }
-                }
-            }
-          }
+//          ForEach(Array(memberContentViewModel.memberFeed.enumerated()), id: \.element) { index, content in
+//            if let url = content.thumbnailUrl {
+//              videoThumbnail(url: url, index: index)
+//                .onTapGesture {
+//                  if reportCategory == .user {
+//                    selectedIndex = selectedIndex == index ? -1 : index
+//                  } else {
+//                    selectedIndex = index
+//                  }
+//                  if selectedIndex < 0 {
+//                    selectedContentId = -1
+//                  } else {
+//                    selectedContentId = memberContentViewModel.memberFeed[index].contentId ?? 0
+//                  }
+//                }
+//            }
+//          }
         }
       }
       .padding(.top, 12)
@@ -85,7 +85,7 @@ struct ProfileReportContentSelectionView: View {
     }
     .task {
       selectedIndex = reportCategory == .user ? -1 : 0
-      await apiViewModel.requestMemberPostFeed(userID: userId)
+//      await apiViewModel.requestMemberPostFeed(userID: userId)
     }
   }
 }

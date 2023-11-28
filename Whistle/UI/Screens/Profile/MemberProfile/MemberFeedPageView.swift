@@ -12,7 +12,7 @@ import SwiftUI
 struct MemberFeedPageView: UIViewRepresentable {
 
   @StateObject var apiViewModel = APIViewModel.shared
-  @StateObject var feedPlayersViewModel = MemeberPlayersViewModel.shared
+  @ObservedObject var memberContentViewModel: MemberContentViewModel
   @State var currentContentInfo: MemberContent?
   @State var isChangable = true
   @Binding var index: Int
@@ -22,6 +22,7 @@ struct MemberFeedPageView: UIViewRepresentable {
     let view = UIScrollView()
     let childView = UIHostingController(
       rootView: MemberContentPlayerView(
+        memberContentViewModel: memberContentViewModel,
         currentContentInfo: $currentContentInfo,
         index: $index,
         isChangable: $isChangable,
@@ -31,10 +32,10 @@ struct MemberFeedPageView: UIViewRepresentable {
       x: 0,
       y: 0,
       width: UIScreen.main.bounds.width,
-      height: UIScreen.main.bounds.height * CGFloat(apiViewModel.memberFeed.count))
+      height: UIScreen.main.bounds.height * CGFloat(memberContentViewModel.memberFeed.count))
     view.contentSize = CGSize(
       width: UIScreen.main.bounds.width,
-      height: UIScreen.main.bounds.height * CGFloat(apiViewModel.memberFeed.count))
+      height: UIScreen.main.bounds.height * CGFloat(memberContentViewModel.memberFeed.count))
     view.addSubview(childView.view)
     view.isScrollEnabled = isChangable
     view.showsVerticalScrollIndicator = false
@@ -50,14 +51,14 @@ struct MemberFeedPageView: UIViewRepresentable {
   func updateUIView(_ uiView: UIScrollView, context _: Context) {
     uiView.contentSize = CGSize(
       width: UIScreen.width,
-      height: UIScreen.height * CGFloat(apiViewModel.memberFeed.count))
+      height: UIScreen.height * CGFloat(memberContentViewModel.memberFeed.count))
 
     for i in 0..<uiView.subviews.count {
       uiView.subviews[i].frame = CGRect(
         x: 0,
         y: 0,
         width: UIScreen.width,
-        height: UIScreen.height * CGFloat(apiViewModel.memberFeed.count))
+        height: UIScreen.height * CGFloat(memberContentViewModel.memberFeed.count))
     }
     uiView.isScrollEnabled = isChangable
   }
@@ -79,21 +80,21 @@ struct MemberFeedPageView: UIViewRepresentable {
     }
 
     func onAppear() {
-      if !parent.apiViewModel.memberFeed.isEmpty {
-        parent.currentContentInfo = parent.apiViewModel.memberFeed[index]
-        parent.feedPlayersViewModel.currentVideoIndex = index
-        parent.feedPlayersViewModel.initialPlayers(index: index)
-        parent.feedPlayersViewModel.currentPlayer?.seek(to: .zero)
+      if !parent.memberContentViewModel.memberFeed.isEmpty {
+        parent.currentContentInfo = parent.memberContentViewModel.memberFeed[index]
+        parent.memberContentViewModel.currentVideoIndex = index
+        parent.memberContentViewModel.initialPlayers(index: index)
+        parent.memberContentViewModel.currentPlayer?.seek(to: .zero)
         if parent.currentContentInfo?.isHated ?? false {
           return
         }
-        parent.feedPlayersViewModel.currentPlayer?.play()
+        parent.memberContentViewModel.currentPlayer?.play()
       }
     }
 
     func onDisappear() {
-      parent.feedPlayersViewModel.stopPlayer()
-      parent.feedPlayersViewModel.resetPlayer()
+      parent.memberContentViewModel.stopPlayer()
+      parent.memberContentViewModel.resetPlayer()
     }
 
     func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
@@ -101,33 +102,33 @@ struct MemberFeedPageView: UIViewRepresentable {
     }
 
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
-      parent.feedPlayersViewModel.currentVideoIndex = Int(scrollView.contentOffset.y / UIScreen.main.bounds.height)
-      if index < parent.feedPlayersViewModel.currentVideoIndex {
-        if index == parent.apiViewModel.memberFeed.count - 1 {
+      parent.memberContentViewModel.currentVideoIndex = Int(scrollView.contentOffset.y / UIScreen.main.bounds.height)
+      if index < parent.memberContentViewModel.currentVideoIndex {
+        if index == parent.memberContentViewModel.memberFeed.count - 1 {
           return
         }
-        parent.feedPlayersViewModel.goPlayerNext()
-      } else if index > parent.feedPlayersViewModel.currentVideoIndex {
+        parent.memberContentViewModel.goPlayerNext()
+      } else if index > parent.memberContentViewModel.currentVideoIndex {
         if index == 0 { return }
-        parent.feedPlayersViewModel.goPlayerPrev()
-        index = parent.feedPlayersViewModel.currentVideoIndex
+        parent.memberContentViewModel.goPlayerPrev()
+        index = parent.memberContentViewModel.currentVideoIndex
       }
-      index = parent.feedPlayersViewModel.currentVideoIndex
-      parent.currentContentInfo = parent.apiViewModel.memberFeed[index]
+      index = parent.memberContentViewModel.currentVideoIndex
+      parent.currentContentInfo = parent.memberContentViewModel.memberFeed[index]
       scrollView.isScrollEnabled = changable
     }
 
     func scrollViewDidScrollToTop(_ scrollView: UIScrollView) {
       if scrollView.contentOffset.y <= -scrollView.contentInset.top {
         index = 0
-        parent.feedPlayersViewModel.currentVideoIndex = 0
-        parent.feedPlayersViewModel.stopPlayer()
-        parent.feedPlayersViewModel.resetPlayer()
-        parent.feedPlayersViewModel.initialPlayers()
+        parent.memberContentViewModel.currentVideoIndex = 0
+        parent.memberContentViewModel.stopPlayer()
+        parent.memberContentViewModel.resetPlayer()
+        parent.memberContentViewModel.initialPlayers()
         if parent.currentContentInfo?.isHated ?? false {
           return
         }
-        parent.feedPlayersViewModel.currentPlayer?.play()
+        parent.memberContentViewModel.currentPlayer?.play()
       }
     }
   }

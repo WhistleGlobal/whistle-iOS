@@ -107,38 +107,39 @@ struct MyContentPlayerView: View {
                   HapticManager.instance.impact(style: .medium)
                   feedMoreModel.bottomSheetPosition = .absolute(186)
                 }
-                .overlay {
-                  ContentGradientLayer()
-                    .allowsHitTesting(false)
-                  if !tabbarModel.isCollpased() {
-                    ContentLayer(
-                      currentVideoInfo: content,
-                      feedMoreModel: MyFeedMoreModel.shared,
-                      feedPlayersViewModel: MyFeedPlayersViewModel.shared,
-                      feedArray: apiViewModel.myFeed,
-                      whistleAction: {
-                        whistleToggle(content: content, index)
-                      },
-                      dismissAction: dismissAction,
-                      refreshToken: $refreshToken)
-                      .padding(.bottom, UIScreen.main.nativeBounds.height == 1334 ? 24 : 0)
-                  }
-                  if feedMoreModel.bottomSheetPosition != .hidden {
-                    DimsThick()
-                      .onAppear {
-                        isChangable = false
-                        isSwipeable = false
-                      }
-                      .onDisappear {
-                        isChangable = true
-                        isSwipeable = true
-                      }
-                  }
-                }
               playButton(toPlay: player.rate == 0)
                 .opacity(showPlayButton ? 1 : 0)
                 .allowsHitTesting(false)
             }
+            Group {
+              ContentGradientLayer()
+                .allowsHitTesting(false)
+              if !tabbarModel.isCollpased() {
+                ContentLayer(
+                  currentVideoInfo: content,
+                  feedMoreModel: MyFeedMoreModel.shared,
+                  feedPlayersViewModel: MyFeedPlayersViewModel.shared,
+                  feedArray: apiViewModel.myFeed,
+                  whistleAction: {
+                    whistleToggle(content: content, index)
+                  },
+                  dismissAction: dismissAction,
+                  refreshToken: $refreshToken)
+                  .padding(.bottom, UIScreen.main.nativeBounds.height == 1334 ? 24 : 0)
+              }
+              if feedMoreModel.bottomSheetPosition != .hidden {
+                DimsThick()
+                  .onAppear {
+                    isChangable = false
+                    isSwipeable = false
+                  }
+                  .onDisappear {
+                    isChangable = true
+                    isSwipeable = true
+                  }
+              }
+            }
+            .frame(width: UIScreen.width, height: UIScreen.height)
             if BlockList.shared.userIds.contains(content.userId ?? 0) {
               KFImage.url(URL(string: content.thumbnailUrl ?? ""))
                 .placeholder {

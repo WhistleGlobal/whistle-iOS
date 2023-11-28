@@ -22,13 +22,9 @@ class APIViewModel: ObservableObject {
   let keychain = KeychainSwift()
   let publisher: PassthroughSubject<UUID, Never> = PassthroughSubject()
   @Published var myProfile = MyProfile()
-  @Published var memberProfile = MemberProfile()
   @Published var myWhistleCount = 0
-  @Published var memberWhistleCount = 0
   @Published var myFollow = MyFollow()
-  @Published var memberFollow = MemberFollow()
   @Published var myFeed: [MyContent] = []
-  @Published var memberFeed: [MemberContent] = []
   @Published var bookmark: [Bookmark] = []
   @Published var notiSetting: NotiSetting = .init()
   @Published var mainFeed: [MainContent] = []
@@ -48,13 +44,9 @@ class APIViewModel: ObservableObject {
 
   func reset() {
     myProfile = .init()
-    memberProfile = .init()
     myWhistleCount = 0
-    memberWhistleCount = 0
     myFollow = MyFollow()
-    memberFollow = MemberFollow()
     myFeed = []
-    memberFeed = []
     bookmark = []
     notiSetting = .init()
     mainFeed = []

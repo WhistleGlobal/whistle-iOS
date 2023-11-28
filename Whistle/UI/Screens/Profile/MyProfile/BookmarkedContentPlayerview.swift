@@ -105,10 +105,14 @@ struct BookmarkedContentPlayerview: View {
                   HapticManager.instance.impact(style: .medium)
                   feedMoreModel.bottomSheetPosition = .absolute(186)
                 }
-                .overlay {
-                  ContentGradientLayer()
-                    .allowsHitTesting(false)
-                  if !tabbarModel.isCollpased() {
+              playButton(toPlay: player.rate == 0)
+                .opacity(showPlayButton ? 1 : 0)
+                .allowsHitTesting(false)
+            }
+            Group {
+              ContentGradientLayer()
+                .allowsHitTesting(false)
+              if !tabbarModel.isCollpased() {
 //                    ContentLayer(
 //                      currentVideoInfo: content,
 //                      feedMoreModel: BookmarkedFeedMoreModel.shared,
@@ -116,30 +120,27 @@ struct BookmarkedContentPlayerview: View {
 //                      feedArray: apiViewModel.bookmark,
 //                      whistleAction: { whistleToggle(content: content, index) },
 //                      index: $index)
-                    BookmarkedContentLayer(
-                      currentVideoInfo: content,
-                      index: $index,
-                      whistleAction: {
-                        whistleToggle(content: content, index)
-                      })
-                      .padding(.bottom, UIScreen.main.nativeBounds.height == 1334 ? 24 : 0)
+                BookmarkedContentLayer(
+                  currentVideoInfo: content,
+                  index: $index,
+                  whistleAction: {
+                    whistleToggle(content: content, index)
+                  })
+                  .padding(.bottom, UIScreen.main.nativeBounds.height == 1334 ? 24 : 0)
+              }
+              if feedMoreModel.bottomSheetPosition != .hidden {
+                DimsThick()
+                  .onAppear {
+                    isChangable = false
+                    isSwipeable = false
                   }
-                  if feedMoreModel.bottomSheetPosition != .hidden {
-                    DimsThick()
-                      .onAppear {
-                        isChangable = false
-                        isSwipeable = false
-                      }
-                      .onDisappear {
-                        isChangable = true
-                        isSwipeable = true
-                      }
+                  .onDisappear {
+                    isChangable = true
+                    isSwipeable = true
                   }
-                }
-              playButton(toPlay: player.rate == 0)
-                .opacity(showPlayButton ? 1 : 0)
-                .allowsHitTesting(false)
+              }
             }
+            .frame(width: UIScreen.width, height: UIScreen.height)
             if BlockList.shared.userIds.contains(content.userId ?? 0) {
               KFImage.url(URL(string: content.thumbnailUrl))
                 .placeholder {

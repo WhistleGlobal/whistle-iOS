@@ -14,18 +14,21 @@ import SwiftUI
 struct MemberFeedView: View {
   @Environment(\.dismiss) var dismiss
   @StateObject private var apiViewModel = APIViewModel.shared
-  @StateObject private var feedPlayersViewModel = MemeberPlayersViewModel.shared
   @StateObject private var toastViewModel = ToastViewModel.shared
   @StateObject private var feedMoreModel = MemberFeedMoreModel.shared
   @StateObject private var tabbarModel = TabbarModel.shared
+  @ObservedObject var memberContentViewModel: MemberContentViewModel
   @State var index = 0
   let userId: Int
 
   var body: some View {
     ZStack {
       Color.black
-      if !apiViewModel.memberFeed.isEmpty {
-        MemberFeedPageView(index: $index, dismissAction: dismiss)
+      if !memberContentViewModel.memberFeed.isEmpty {
+        MemberFeedPageView(
+          memberContentViewModel: memberContentViewModel,
+          index: $index,
+          dismissAction: dismiss)
       } else {
         VStack {
           Spacer()
@@ -69,9 +72,9 @@ struct MemberFeedView: View {
           feedMoreModel.bottomSheetPosition = .hidden
           toastViewModel.cancelToastInit(message: ToastMessages().postHidden) {
             Task {
-              let currentContent = apiViewModel.memberFeed[feedPlayersViewModel.currentVideoIndex]
+              let currentContent = memberContentViewModel.memberFeed[memberContentViewModel.currentVideoIndex]
               await apiViewModel.actionContentHate(contentID: currentContent.contentId ?? 0, method: .post)
-              feedPlayersViewModel.removePlayer {
+              memberContentViewModel.removePlayer {
                 index -= 1
               }
             }
@@ -82,7 +85,7 @@ struct MemberFeedView: View {
         Rectangle().frame(height: 0.5).padding(.leading, 52).foregroundColor(Color.Border_Default_Dark)
         Button {
           feedMoreModel.bottomSheetPosition = .hidden
-          feedPlayersViewModel.stopPlayer()
+          memberContentViewModel.stopPlayer()
           feedMoreModel.showReport = true
         } label: {
           bottomSheetRowWithIcon(systemName: "exclamationmark.triangle.fill", text: CommonWords().reportAction)
@@ -116,16 +119,16 @@ struct MemberFeedView: View {
       }
     }
     .task {
-      if apiViewModel.memberFeed.isEmpty {
-        await apiViewModel.requestMemberPostFeed(userID: userId)
+      if memberContentViewModel.memberFeed.isEmpty {
+        await memberContentViewModel.requestMemberPostFeed(userID: userId)
       }
     }
     .fullScreenCover(isPresented: $feedMoreModel.showReport, onDismiss: {
-      feedPlayersViewModel.currentPlayer?.play()
+      memberContentViewModel.currentPlayer?.play()
     }) {
       MainFeedReportReasonSelectionView(
         goReport: $feedMoreModel.showReport,
-        contentId: apiViewModel.memberFeed[feedPlayersViewModel.currentVideoIndex].contentId ?? 0,
+        contentId: memberContentViewModel.memberFeed[memberContentViewModel.currentVideoIndex].contentId ?? 0,
         userId: userId)
     }
   }

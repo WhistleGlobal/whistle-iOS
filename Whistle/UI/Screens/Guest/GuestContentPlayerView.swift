@@ -85,27 +85,6 @@ struct GuestContentPlayerView: View {
                   HapticManager.instance.impact(style: .medium)
                   feedMoreModel.bottomSheetPosition = .dynamic
                 }
-                .overlay {
-                  if !tabbarModel.isCollpased() {
-                    ContentLayer(
-                      currentVideoInfo: content,
-                      feedMoreModel: GuestMainFeedMoreModel.shared,
-                      feedPlayersViewModel: GuestFeedPlayersViewModel.shared,
-                      feedArray: apiViewModel.guestFeed,
-                      whistleAction: { },
-                      refreshToken: $refreshToken)
-                      .padding(.bottom, UIScreen.main.nativeBounds.height == 1334 ? 24 : 0)
-                  }
-                  if feedMoreModel.bottomSheetPosition != .hidden {
-                    DimsThick()
-                      .onAppear {
-                        isChangable = false
-                      }
-                      .onDisappear {
-                        isChangable = true
-                      }
-                  }
-                }
                 .onChange(of: tabbarModel.tabSelection) { newValue in
                   if newValue == .main {
                     guard let currentPlayer = feedPlayersViewModel.currentPlayer else {
@@ -120,6 +99,30 @@ struct GuestContentPlayerView: View {
                 .opacity(showPlayButton ? 1 : 0)
                 .allowsHitTesting(false)
             }
+            Group {
+              ContentGradientLayer()
+                .allowsHitTesting(false)
+              if !tabbarModel.isCollpased() {
+                ContentLayer(
+                  currentVideoInfo: content,
+                  feedMoreModel: GuestMainFeedMoreModel.shared,
+                  feedPlayersViewModel: GuestFeedPlayersViewModel.shared,
+                  feedArray: apiViewModel.guestFeed,
+                  whistleAction: { },
+                  refreshToken: $refreshToken)
+                  .padding(.bottom, UIScreen.main.nativeBounds.height == 1334 ? 24 : 0)
+              }
+              if feedMoreModel.bottomSheetPosition != .hidden {
+                DimsThick()
+                  .onAppear {
+                    isChangable = false
+                  }
+                  .onDisappear {
+                    isChangable = true
+                  }
+              }
+            }
+            .frame(width: UIScreen.width, height: UIScreen.height)
             if BlockList.shared.userIds.contains(content.userId ?? 0) {
               KFImage.url(URL(string: content.thumbnailUrl ?? ""))
                 .placeholder {
