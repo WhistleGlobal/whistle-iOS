@@ -277,10 +277,7 @@ struct MainFeedView: View {
             .foregroundStyle(
               LinearGradient.Border_Glass)
         })
-    .onDismiss {
-      tabbarModel.tabbarOpacity = 1.0
-    }
-    .onChange(of: feedMoreModel.bottomSheetPosition) { newValue in
+    .onChange(of: myTeamSheetPosition) { newValue in
       if newValue == .hidden {
         tabbarModel.showTabbar()
       } else {

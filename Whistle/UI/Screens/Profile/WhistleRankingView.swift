@@ -14,6 +14,7 @@ import SwiftUI
 struct WhistleRankingView: View {
 
   @StateObject var bartintModel = BarTintModel.shared
+  @StateObject var apiViewModel = APIViewModel.shared
 
   init() {
     UINavigationBar.appearance().largeTitleTextAttributes = [.foregroundColor: UIColor.white]
@@ -39,11 +40,10 @@ struct WhistleRankingView: View {
               .font(.system(size: 20, weight: .semibold))
               .padding(.trailing, 10)
               .foregroundColor(Color("Gray30").opacity(30))
-            Text("상위 98%")
+            Text("상위 \(apiViewModel.rankingModel.userRanking.percentile)%")
               .fontSystem(fontDesignSystem: .title1_SemiBold)
             Spacer()
-
-            Text("\(23.roundedWithAbbreviations)")
+            Text("\(apiViewModel.rankingModel.userRanking.totalWhistle.roundedWithAbbreviations)")
               .fontSystem(fontDesignSystem: .subtitle3)
             Image(systemName: "heart.fill")
               .fontSystem(fontDesignSystem: .subtitle3)
@@ -66,13 +66,13 @@ struct WhistleRankingView: View {
         .padding(.bottom, 12)
         ScrollView {
           VStack(spacing: 0) {
-            ForEach(0..<10) { index in
+            ForEach(Array(apiViewModel.rankingModel.topRankings.enumerated()), id: \.element) { index, item in
               if index == 2 {
-                myRankingRow()
+                myRankingRow(ranking: index + 1, userName: item.userName, myTeam: item.myTeam, whistleCount: item.totalWhistle)
               } else {
-                rankingRow()
+                rankingRow(ranking: index + 1, userName: item.userName, myTeam: item.myTeam, whistleCount: item.totalWhistle)
               }
-              if index != 9 {
+              if index != apiViewModel.rankingModel.topRankings.count - 1 {
                 Divider()
                   .frame(height: 0.5)
                   .padding(.horizontal, 16)
@@ -108,6 +108,9 @@ struct WhistleRankingView: View {
     .navigationTitle(Text(CommonWords().whistle).foregroundColor(.white))
     .navigationBarTitleDisplayMode(.inline)
     .ignoresSafeArea(edges: .horizontal)
+    .task {
+      apiViewModel.requestRankingList()
+    }
     .onAppear {
       bartintModel.tintColor = .white
       UINavigationBar.appearance().largeTitleTextAttributes = [.foregroundColor: UIColor.white]
@@ -125,9 +128,9 @@ struct WhistleRankingView: View {
 extension WhistleRankingView {
 
   @ViewBuilder
-  func rankingRow() -> some View {
+  func rankingRow(ranking: Int, userName: String, myTeam: String?, whistleCount: Int) -> some View {
     HStack(spacing: 0) {
-      Text("1")
+      Text("\(ranking)")
         .fontSystem(fontDesignSystem: .title1)
         .foregroundColor(.white)
         .frame(width: 32, height: 36)
@@ -135,13 +138,15 @@ extension WhistleRankingView {
       profileImageView(url: "", size: 48)
         .padding(.trailing, 20)
       VStack(alignment: .leading, spacing: 0) {
-        Text("UserName")
+        Text(userName)
           .fontSystem(fontDesignSystem: .subtitle2)
-        Text("두산 베어스")
-          .fontSystem(fontDesignSystem: .body2)
+        if let team = myTeam {
+          Text(team)
+            .fontSystem(fontDesignSystem: .body2)
+        }
       }
       Spacer()
-      Text("\(1500000.roundedWithAbbreviations)")
+      Text("\(whistleCount.roundedWithAbbreviations)")
         .fontSystem(fontDesignSystem: .subtitle3)
       Image(systemName: "heart.fill")
         .fontSystem(fontDesignSystem: .subtitle3)
@@ -152,9 +157,9 @@ extension WhistleRankingView {
   }
 
   @ViewBuilder
-  func myRankingRow() -> some View {
+  func myRankingRow(ranking: Int, userName: String, myTeam: String?, whistleCount: Int) -> some View {
     HStack(spacing: 0) {
-      Text("1")
+      Text("\(ranking)")
         .fontSystem(fontDesignSystem: .title1)
         .foregroundColor(.white)
         .frame(width: 32, height: 36)
@@ -163,13 +168,15 @@ extension WhistleRankingView {
       profileImageView(url: "", size: 48)
         .padding(.trailing, 20)
       VStack(alignment: .leading, spacing: 0) {
-        Text("UserName")
+        Text(userName)
           .fontSystem(fontDesignSystem: .subtitle2)
-        Text("두산 베어스")
-          .fontSystem(fontDesignSystem: .body2)
+        if let team = myTeam {
+          Text(team)
+            .fontSystem(fontDesignSystem: .body2)
+        }
       }
       Spacer()
-      Text("\(1500000.roundedWithAbbreviations)")
+      Text("\(whistleCount.roundedWithAbbreviations)")
         .fontSystem(fontDesignSystem: .subtitle3)
       Image(systemName: "heart.fill")
         .fontSystem(fontDesignSystem: .subtitle3)
