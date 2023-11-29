@@ -204,7 +204,7 @@ struct ProfileView: View {
                 .padding(.horizontal, 16)
             }
           } else {
-            switch memberContentViewModel.progress.downloadState {
+            switch memberContentViewModel.feedProgress.downloadState {
             case .notStarted, .downloading:
               LazyVGrid(columns: [
                 GridItem(.flexible()),

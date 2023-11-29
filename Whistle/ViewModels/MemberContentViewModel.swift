@@ -22,7 +22,8 @@ class MemberContentViewModel: ObservableObject {
   @Published var memberWhistleCount = 0
   @Published var memberFollow = MemberFollow()
   @Published var memberFeed: [MemberContent] = []
-  let progress = MemberContentProgress()
+  let feedProgress = MemberContentProgress()
+  let profileProgress = MemberContentProgress()
   let decoder = JSONDecoder()
   let keychain = KeychainSwift()
   var idToken: String {
@@ -59,7 +60,7 @@ class MemberContentViewModel: ObservableObject {
   }
 
   func requestMemberProfile(userID: Int) async {
-//    progress.changeDownloadState(state: .downloading)
+//    feedProgress.changeDownloadState(state: .downloading)
     if userID == 0 {
       return
     }
@@ -67,20 +68,21 @@ class MemberContentViewModel: ObservableObject {
       AF.request(
         "\(domainURL)/user/\(userID)/profile",
         method: .get,
-        headers: contentTypeJson)
-        .validate(statusCode: 200 ... 300)
-        .responseDecodable(of: MemberProfile.self) { response in
-          switch response.result {
-          case .success(let success):
+        headers: contentTypeJson
+      )
+      .validate(statusCode: 200 ... 300)
+      .responseDecodable(of: MemberProfile.self) { response in
+        switch response.result {
+          case let .success(success):
             self.memberProfile = success
             continuation.resume()
-//            self.progress.changeDownloadState(state: .finished)
-          case .failure(let error):
+//            self.feedProgress.changeDownloadState(state: .finished)
+          case let .failure(error):
             WhistleLogger.logger.error("Failure: \(error)")
             continuation.resume()
-//            self.progress.changeDownloadState(state: .finished)
-          }
+//            self.feedProgress.changeDownloadState(state: .finished)
         }
+      }
     }
   }
 
@@ -92,11 +94,12 @@ class MemberContentViewModel: ObservableObject {
       AF.request(
         "\(domainURL)/user/\(userID)/whistle/count",
         method: .get,
-        headers: contentTypeJson)
-        .validate(statusCode: 200 ..< 300)
-        .response { response in
-          switch response.result {
-          case .success(let data):
+        headers: contentTypeJson
+      )
+      .validate(statusCode: 200 ..< 300)
+      .response { response in
+        switch response.result {
+          case let .success(data):
             guard let responseData = data else {
               return
             }
@@ -112,10 +115,10 @@ class MemberContentViewModel: ObservableObject {
               WhistleLogger.logger.error("Error parsing JSON: \(error)")
               continuation.resume()
             }
-          case .failure(let error):
+          case let .failure(error):
             WhistleLogger.logger.error("Failure: \(error)")
-          }
         }
+      }
     }
   }
 
@@ -127,11 +130,12 @@ class MemberContentViewModel: ObservableObject {
       AF.request(
         "\(domainURL)/user/\(userID)/follow-list",
         method: .get,
-        headers: contentTypeXwwwForm)
-        .validate(statusCode: 200 ... 300)
-        .response { response in
-          switch response.result {
-          case .success(let data):
+        headers: contentTypeXwwwForm
+      )
+      .validate(statusCode: 200 ... 300)
+      .response { response in
+        switch response.result {
+          case let .success(data):
             do {
               self.memberFollow = try self.decoder.decode(MemberFollow.self, from: data ?? .init())
               continuation.resume()
@@ -139,27 +143,28 @@ class MemberContentViewModel: ObservableObject {
               WhistleLogger.logger.error("Error parsing JSON: \(error)")
               continuation.resume()
             }
-          case .failure(let error):
+          case let .failure(error):
             WhistleLogger.logger.error("Failure: \(error)")
             continuation.resume()
-          }
         }
+      }
     }
   }
 
   // FIXME: - 데이터가 없을 시 처리할 로직 생각할 것
   func requestMemberPostFeed(userID: Int) async {
-    progress.changeDownloadState(state: .downloading)
+    feedProgress.changeDownloadState(state: .downloading)
     if userID == 0 { return }
     return await withCheckedContinuation { continuation in
       AF.request(
         "\(domainURL)/user/\(userID)/post/feed",
         method: .get,
-        headers: contentTypeJson)
-        .validate(statusCode: 200 ... 300)
-        .response { response in
-          switch response.result {
-          case .success(let data):
+        headers: contentTypeJson
+      )
+      .validate(statusCode: 200 ... 300)
+      .response { response in
+        switch response.result {
+          case let .success(data):
             do {
               guard let data else {
                 return
@@ -170,14 +175,14 @@ class MemberContentViewModel: ObservableObject {
               WhistleLogger.logger.error("Error parsing JSON: \(error)")
               continuation.resume()
             }
-            self.progress.changeDownloadState(state: .finished)
-          case .failure(let error):
+            self.feedProgress.changeDownloadState(state: .finished)
+          case let .failure(error):
             WhistleLogger.logger.error("Failure: \(error)")
             self.memberFeed = []
             continuation.resume()
-            self.progress.changeDownloadState(state: .finished)
-          }
+            self.feedProgress.changeDownloadState(state: .finished)
         }
+      }
     }
   }
 }
