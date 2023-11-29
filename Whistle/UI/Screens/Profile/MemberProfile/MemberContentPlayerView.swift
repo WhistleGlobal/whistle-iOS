@@ -44,51 +44,79 @@ struct MemberContentPlayerView: View {
       ForEach(Array(memberContentViewModel.memberFeed.enumerated()), id: \.element) { index, content in
         ZStack {
           Color.black.overlay {
-            KFImage.url(URL(string: memberContentViewModel.memberFeed[index].thumbnailUrl ?? ""))
-              .placeholder {
-                Color.black
-                  .frame(maxWidth: .infinity, maxHeight: .infinity)
-              }
-              .resizable()
-              .aspectRatio(
-                contentMode: content.aspectRatio ?? 1.0 > Double(15.0 / 9.0)
-                  ? .fill
-                  : .fit)
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
-                .blur(radius: content.isHated ? 30 : 0)
-                .overlay {
-                  if content.isHated {
-                    VStack {
-                      Spacer()
-                      Image(systemName: "eye.slash.fill")
-                        .font(.system(size: 44))
-                        .foregroundColor(.Gray10)
-                        .padding(.bottom, 26)
-                      Text("관심없음 설정한 콘텐츠입니다.")
-                        .fontSystem(fontDesignSystem: .subtitle1)
-                        .foregroundColor(.LabelColor_Primary_Dark)
-                        .padding(.bottom, 12)
-                      Text("관심없음 설정한 모든 콘텐츠는\n회원님의 피드에 노출되지 않습니다.")
-                        .multilineTextAlignment(.center)
-                        .fontSystem(fontDesignSystem: .body2)
-                        .foregroundColor(.LabelColor_Secondary_Dark)
-                        .padding(.bottom, 24)
-                      Button {
-                        Task {
-                          await apiViewModel.actionContentHate(contentID: content.contentId ?? 0, method: .delete)
-                          content.isHated = false
-                          currentContentInfo?.isHated = false
-                          apiViewModel.publisherSend()
-                        }
-                      } label: {
-                        Text("실행 취소")
-                          .fontSystem(fontDesignSystem: .body2)
-                          .foregroundColor(.info)
-                      }
-                      Spacer()
-                    }
+            if let url = memberContentViewModel.memberFeed[index].thumbnailUrl {
+              if content.isHated {
+                KFImage.url(URL(string: url))
+                  .placeholder {
+                    Color.black
+                      .frame(maxWidth: .infinity, maxHeight: .infinity)
                   }
+                  .resizable()
+                  .aspectRatio(
+                    contentMode: content.aspectRatio ?? 1.0 > Double(15.0 / 9.0)
+                      ? .fill
+                      : .fit)
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    .blur(radius: content.isHated ? 30 : 0)
+                    .overlay {
+                      VStack {
+                        Spacer()
+                        Image(systemName: "eye.slash.fill")
+                          .font(.system(size: 44))
+                          .foregroundColor(.Gray10)
+                          .padding(.bottom, 26)
+                        Text("관심없음 설정한 콘텐츠입니다.")
+                          .fontSystem(fontDesignSystem: .subtitle1)
+                          .foregroundColor(.LabelColor_Primary_Dark)
+                          .padding(.bottom, 12)
+                        Text("관심없음 설정한 모든 콘텐츠는\n회원님의 피드에 노출되지 않습니다.")
+                          .multilineTextAlignment(.center)
+                          .fontSystem(fontDesignSystem: .body2)
+                          .foregroundColor(.LabelColor_Secondary_Dark)
+                          .padding(.bottom, 24)
+                        Button {
+                          Task {
+                            await apiViewModel.actionContentHate(contentID: content.contentId ?? 0, method: .delete)
+                            content.isHated = false
+                            currentContentInfo?.isHated = false
+                            apiViewModel.publisherSend()
+                          }
+                        } label: {
+                          Text("실행 취소")
+                            .fontSystem(fontDesignSystem: .body2)
+                            .foregroundColor(.info)
+                        }
+                        Spacer()
+                      }
+                    }
+              } else {
+                Color.clear.overlay {
+                  KFImage.url(URL(string: url))
+                    .cacheMemoryOnly()
+                    .placeholder {
+                      Color.black
+                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    }
+                    .resizable()
+                    .scaledToFill()
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    .blur(radius: 10)
                 }
+                KFImage.url(URL(string: url))
+                  .cacheMemoryOnly()
+                  .placeholder {
+                    Color.black
+                      .frame(maxWidth: .infinity, maxHeight: .infinity)
+                  }
+                  .resizable()
+                  .aspectRatio(
+                    contentMode: content.aspectRatio ?? 1.0 > Double(15.0 / 9.0)
+                      ? .fill
+                      : .fit)
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+              }
+            }
+
             if !content.isHated {
               if let player = memberContentViewModel.currentPlayer, index == memberContentViewModel.currentVideoIndex {
                 ContentPlayer(player: player, aspectRatio: content.aspectRatio)

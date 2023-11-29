@@ -22,7 +22,13 @@ struct ContentLayerButton: View {
   var body: some View {
     VStack(spacing: 2) {
       switch buttonType {
-      case .whistle(_), .bookmark:
+      case .whistle:
+        Image(isFilled ? "whistleIconFill" : "whistleIcon")
+          .resizable()
+          .scaledToFit()
+          .shadow(color: isFilled ? .black.opacity(0.15) : .black.opacity(0.3), radius: 4, x: 0, y: 0)
+          .frame(width: 36, height: 36)
+      case .bookmark:
         Image(systemName: isFilled ? buttonType.filledSymbol : buttonType.defaultSymbol)
           .font(.system(size: 26))
           .shadow(color: isFilled ? .black.opacity(0.15) : .black.opacity(0.3), radius: 4, x: 0, y: 0)

@@ -280,4 +280,20 @@ extension APIViewModel: ProfileProtocol {
         }
     }
   }
+
+  func requestRankingList() {
+    AF.request(
+      "\(domainURL)/user/whistle-ranking",
+      method: .get,
+      headers: contentTypeJson)
+      .validate(statusCode: 200..<300)
+      .responseDecodable(of: RankingModel.self) { response in
+        switch response.result {
+        case .success(let data):
+          self.rankingModel = data
+        case .failure(let error):
+          WhistleLogger.logger.error("requestRankingList Error: \(error)")
+        }
+      }
+  }
 }

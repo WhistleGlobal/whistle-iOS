@@ -23,7 +23,8 @@ struct MainFeedView: View {
   @StateObject private var feedMoreModel = MainFeedMoreModel.shared
   @StateObject private var tabbarModel = TabbarModel.shared
   @StateObject private var mainFeedTabModel = MainFeedTabModel.shared
-  @StateObject var page: Page = .first()
+  @StateObject private var pagerModel = PagerModel.shared
+//  @StateObject var page: Page = .first()
   @State var uploadingThumbnail = Image("noVideo")
   @State var uploadProgress = 0.0
   @State var isUploading = false
@@ -45,7 +46,7 @@ struct MainFeedView: View {
   @State var scrolledContentCount = 0
 
   var body: some View {
-    Pager(page: page, data: [MainFeedTabSelection.myteam, MainFeedTabSelection.all]) { selection in
+    Pager(page: pagerModel.page, data: [MainFeedTabSelection.myteam, MainFeedTabSelection.all]) { selection in
       feedPager(selection: selection)
     }
     .singlePagination(ratio: 0.33, sensitivity: .low)
@@ -80,6 +81,14 @@ struct MainFeedView: View {
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
           toastViewModel.toastInit(message: ToastMessages().contentUploaded)
         }
+      }
+    }
+    .onChange(of: LaunchScreenViewModel.shared.myTeamContentLoaded) { newValue in
+      if newValue, !apiViewModel.myTeamFeed.isEmpty {
+        mainFeedTabModel.switchTab(to: .myteam)
+        pagerModel.page.update(.moveToFirst)
+        mainFeedPlayersViewModel.stopPlayer()
+        myTeamfeedPlayersViewModel.currentPlayer?.play()
       }
     }
     .onReceive(UploadProgressViewModel.shared.isUploadingSubject) { value in
@@ -194,7 +203,7 @@ struct MainFeedView: View {
             myTeamSheetPosition = .hidden
             withAnimation {
               mainFeedTabModel.switchTab(to: .all)
-              page.update(.moveToLast)
+              pagerModel.page.update(.moveToLast)
               myTeamfeedPlayersViewModel.stopPlayer()
               mainFeedPlayersViewModel.currentPlayer?.play()
             }
@@ -277,10 +286,7 @@ struct MainFeedView: View {
             .foregroundStyle(
               LinearGradient.Border_Glass)
         })
-    .onDismiss {
-      tabbarModel.tabbarOpacity = 1.0
-    }
-    .onChange(of: feedMoreModel.bottomSheetPosition) { newValue in
+    .onChange(of: myTeamSheetPosition) { newValue in
       if newValue == .hidden {
         tabbarModel.showTabbar()
       } else {
@@ -300,6 +306,7 @@ struct MainFeedView: View {
         apiViewModel.requestMyTeamFeed { value in
           switch value.result {
           case .success:
+            LaunchScreenViewModel.shared.myTeamFeedDownloaded()
             break
           case .failure:
             WhistleLogger.logger.debug("MyTeamFeed Download Failure")
@@ -368,7 +375,7 @@ struct MainFeedView: View {
           .onTapGesture {
             withAnimation {
               mainFeedTabModel.switchTab(to: .myteam)
-              page.update(.moveToFirst)
+              pagerModel.page.update(.moveToFirst)
               mainFeedPlayersViewModel.stopPlayer()
               mainFeedTabModel.switchTab(to: .myteam)
               myTeamfeedPlayersViewModel.currentPlayer?.play()
@@ -383,7 +390,7 @@ struct MainFeedView: View {
           .onTapGesture {
             withAnimation {
               mainFeedTabModel.switchTab(to: .all)
-              page.update(.moveToLast)
+              pagerModel.page.update(.moveToLast)
               myTeamfeedPlayersViewModel.stopPlayer()
               mainFeedPlayersViewModel.currentPlayer?.play()
             }
@@ -429,6 +436,7 @@ struct MainFeedView: View {
       }
     }
     .onAppear {
+      WhistleLogger.logger.debug("TabOnAppear : \(feedMoreModel.isRootStacked)")
       feedMoreModel.isRootStacked = false
       tabbarModel.showTabbar()
       if mainFeedTabModel.isMyTeamTab {
@@ -456,7 +464,7 @@ struct MainFeedView: View {
       }
       if apiViewModel.myProfile.myTeam == nil {
         mainFeedTabModel.switchTab(to: .all)
-        page.update(.moveToLast)
+        pagerModel.page.update(.moveToLast)
       }
       Mixpanel.mainInstance().track(event: "play_start")
       playDuration = Date().toString()
@@ -539,17 +547,19 @@ extension MainFeedView {
       } else {
         allFeedTab()
           .onAppear {
-            if apiViewModel.myProfile.myTeam != nil {
-              mainFeedTabModel.switchTab(to: .myteam)
-              page.update(.moveToFirst)
-              mainFeedPlayersViewModel.stopPlayer()
-              mainFeedTabModel.switchTab(to: .myteam)
-              myTeamfeedPlayersViewModel.currentPlayer?.play()
-            }
+            WhistleLogger.logger.debug("TabOnAppear allFeedTab : \(feedMoreModel.isRootStacked)")
           }
       }
     case .myteam:
       myTeamFeedTab()
     }
   }
+}
+
+// MARK: - PagerModel
+
+class PagerModel: ObservableObject {
+  static let shared = PagerModel()
+  private init() { }
+  @Published var page: Page = .first()
 }

@@ -23,8 +23,8 @@ public enum profileTabCase: String {
 // MARK: - ProfileView
 
 struct ProfileView: View {
-  @AppStorage("isMyTeamLabelOn") var isMyTeamLabelOn = false
-  @AppStorage("isMyTeamBackgroundOn") var isMyTeamBackgroundOn = false
+  @AppStorage("isMyTeamLabelOn") var isMyTeamLabelOn = true
+  @AppStorage("isMyTeamBackgroundOn") var isMyTeamBackgroundOn = true
   @Environment(\.dismiss) var dismiss
   @StateObject var userAuth = UserAuth.shared
   @StateObject var apiViewModel = APIViewModel.shared

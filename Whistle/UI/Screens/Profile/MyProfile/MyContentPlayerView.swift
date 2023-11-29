@@ -45,15 +45,30 @@ struct MyContentPlayerView: View {
         ZStack {
           Color.black.overlay {
             if let url = apiViewModel.myFeed[index].thumbnailUrl {
+              Color.clear.overlay {
+                KFImage.url(URL(string: url))
+                  .cacheMemoryOnly()
+                  .placeholder {
+                    Color.black
+                      .frame(maxWidth: .infinity, maxHeight: .infinity)
+                  }
+                  .resizable()
+                  .scaledToFill()
+                  .frame(maxWidth: .infinity, maxHeight: .infinity)
+                  .blur(radius: 10)
+              }
               KFImage.url(URL(string: url))
+                .cacheMemoryOnly()
                 .placeholder {
                   Color.black
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
                 }
                 .resizable()
                 .aspectRatio(
-                  contentMode: content.aspectRatio ?? 1.0 > Double(15.0 / 9.0) ? .fill : .fit)
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                  contentMode: content.aspectRatio ?? 1.0 > Double(15.0 / 9.0)
+                    ? .fill
+                    : .fit)
+                  .frame(maxWidth: .infinity, maxHeight: .infinity)
             }
             if let player = feedPlayersViewModel.currentPlayer, index == feedPlayersViewModel.currentVideoIndex {
               ContentPlayer(player: player, aspectRatio: content.aspectRatio)

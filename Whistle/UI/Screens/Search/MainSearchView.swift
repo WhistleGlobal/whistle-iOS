@@ -98,7 +98,11 @@ struct MainSearchView: View {
     .background(.backgroundDefault)
     .navigationBarBackButtonHidden()
     .overlay {
-      NavigationLink(destination: SearchResultView(searchQueryString: $searchQueryString), isActive: $goSearchResult) {
+      NavigationLink(
+        destination: SearchResultView(
+          searchQueryString: $searchQueryString),
+        isActive: $goSearchResult)
+      {
         EmptyView()
       }
       .id(UUID())
