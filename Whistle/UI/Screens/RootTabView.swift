@@ -447,8 +447,10 @@ extension RootTabView {
   var profileTabClicked: () -> Void {
     {
       if tabbarModel.tabSelection == .profile {
-        HapticManager.instance.impact(style: .medium)
-        NavigationUtil.popToRootView()
+        if isAccess {
+          HapticManager.instance.impact(style: .medium)
+          NavigationUtil.popToRootView()
+        }
         Task {
           await apiViewModel.requestMyFollow()
         }
