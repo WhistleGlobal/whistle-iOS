@@ -98,6 +98,7 @@ extension View {
             .resizable()
             .scaledToFit()
             .frame(width: 18, height: 18)
+            .shadow(color: .black.opacity(0.3), radius: 4, x: 0, y: 0)
           Text("\(whistleCount.roundedWithAbbreviations)")
             .fontSystem(fontDesignSystem: .caption_SemiBold)
             .foregroundColor(Color.LabelColor_Primary_Dark)
