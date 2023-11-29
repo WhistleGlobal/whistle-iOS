@@ -94,9 +94,11 @@ extension View {
       VStack {
         Spacer()
         HStack(spacing: 4) {
-          Image(systemName: "heart.fill")
-            .font(.system(size: 16))
-            .foregroundColor(.Danger)
+          Image("whistleIconFill")
+            .resizable()
+            .scaledToFit()
+            .frame(width: 18, height: 18)
+            .shadow(color: .black.opacity(0.3), radius: 4, x: 0, y: 0)
           Text("\(whistleCount.roundedWithAbbreviations)")
             .fontSystem(fontDesignSystem: .caption_SemiBold)
             .foregroundColor(Color.LabelColor_Primary_Dark)

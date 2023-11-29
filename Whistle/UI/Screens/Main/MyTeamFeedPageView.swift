@@ -15,6 +15,8 @@ struct MyTeamFeedPageView: UIViewRepresentable {
   @StateObject var apiViewModel = APIViewModel.shared
   @StateObject var feedPlayersViewModel = MyTeamFeedPlayersViewModel.shared
   @StateObject var mainFeedTabModel = MainFeedTabModel.shared
+  @StateObject var toastViewModel = ToastViewModel.shared
+  @State var timer: Timer?
   @State var currentContentInfo: MainContent?
   @State var isChangable = true
   @Binding var viewDuration: String
@@ -187,6 +189,24 @@ struct MyTeamFeedPageView: UIViewRepresentable {
         refresh()
       }
       scrollView.isScrollEnabled = changable
+    }
+
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+      guard parent.timer == nil else {
+        return
+      }
+
+      let offsetY = scrollView.contentOffset.y
+      let contentHeight = scrollView.contentSize.height
+      let scrollViewHeight = scrollView.frame.size.height
+
+      if offsetY > contentHeight - scrollViewHeight {
+        parent.toastViewModel.toastInit(message: "모두 시청했습니다")
+        parent.timer = Timer.scheduledTimer(withTimeInterval: 4.0, repeats: false) { [weak self] _ in
+          self?.parent.timer?.invalidate()
+          self?.parent.timer = nil
+        }
+      }
     }
 
     @objc

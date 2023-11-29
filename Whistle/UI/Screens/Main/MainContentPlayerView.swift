@@ -43,7 +43,20 @@ struct MainContentPlayerView: View {
         ZStack {
           Color.black.overlay {
             if let url = apiViewModel.mainFeed[index].thumbnailUrl {
+              Color.clear.overlay {
+                KFImage.url(URL(string: url))
+                  .cacheMemoryOnly()
+                  .placeholder {
+                    Color.black
+                      .frame(maxWidth: .infinity, maxHeight: .infinity)
+                  }
+                  .resizable()
+                  .scaledToFill()
+                  .frame(maxWidth: .infinity, maxHeight: .infinity)
+                  .blur(radius: 10)
+              }
               KFImage.url(URL(string: url))
+                .cacheMemoryOnly()
                 .placeholder {
                   Color.black
                     .frame(maxWidth: .infinity, maxHeight: .infinity)

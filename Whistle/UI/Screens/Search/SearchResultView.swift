@@ -20,7 +20,6 @@ struct SearchResultView: View {
   @Environment(\.dismiss) var dismiss
   @State var scopeSelection = 0
   @State var isSearching = false
-  @State var searchHistoryArray: [String] = []
   @State var searchTabSelection: SearchTabSelection = .content
   @StateObject var apiViewModel = APIViewModel.shared
   @State var contentSearchState: SearchState = .notStarted
@@ -61,18 +60,49 @@ struct SearchResultView: View {
           searchText: $inputText,
           isSearching: $isSearching,
           submitAction: {
+            WhistleLogger.logger.debug("submit inputText: \(inputText)")
             if inputText.isEmpty {
               return
             }
-            if !searchHistoryArray.contains(inputText) {
-              searchHistoryArray.append(inputText)
+            if let jsonData = searchHistory.data(using: .utf8) {
+              do {
+                if let jsonArray = try JSONSerialization.jsonObject(with: jsonData, options: []) as? [String] {
+                  print(jsonArray)
+                  var searchArray = jsonArray
+                  if !searchArray.contains(inputText) {
+                    searchArray.append(inputText)
+                  }
+                  if let jsonData = try? JSON(searchArray).rawData() {
+                    searchHistory = String(data: jsonData, encoding: .utf8) ?? ""
+                  }
+                  SearchProgressViewModel.shared.reset()
+                  searchQueryString = inputText
+                  search(query: inputText)
+                }
+
+              } catch {
+                print("JSON 파싱 에러: \(error.localizedDescription)")
+              }
+            } else {
+              print("JSON 문자열을 Data로 변환하는 데 문제가 발생했습니다.")
             }
-            let jsonArray = searchHistoryArray.map { JSON($0) }
+
+
+            let jsonArray = JSON(searchHistory)
+            if !searchHistory.contains(inputText) {
+              searchHistory.append(inputText)
+            }
+            WhistleLogger.logger.debug("submit searchHistory: \(searchHistory)")
+//            let jsonArray = JSON(searchHistory)
+            WhistleLogger.logger.debug("submit jsonArray: \(jsonArray)")
             if let jsonData = try? JSON(jsonArray).rawData() {
+              WhistleLogger.logger.debug("submit jsonData: \(jsonData)")
               searchHistory = String(data: jsonData, encoding: .utf8) ?? ""
+              WhistleLogger.logger.debug("submit searchHistory: \(searchHistory)")
             }
             SearchProgressViewModel.shared.reset()
             searchQueryString = inputText
+            WhistleLogger.logger.debug("submit searchQueryString: \(searchQueryString)")
             search(query: inputText)
           },
           cancelTapAction: dismiss)
