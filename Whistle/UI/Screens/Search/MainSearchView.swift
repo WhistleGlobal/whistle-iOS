@@ -15,8 +15,7 @@ import UIKit
 struct MainSearchView: View {
   @AppStorage("searchHistory") var searchHistory =
     """
-        [
-      ]
+    []
     """
   @Environment(\.dismiss) var dismiss
   @State var searchText = ""
@@ -33,25 +32,34 @@ struct MainSearchView: View {
     VStack(spacing: 0) {
       Spacer().frame(height: 14)
       Divider()
+
       HStack {
-        Text(SearchWords().recentSearces)
-          .fontSystem(fontDesignSystem: .subtitle1)
-          .foregroundColor(.labelColorPrimary)
-        Spacer()
-        Button {
-          searchHistoryArray.removeAll()
-          let jsonArray = searchHistoryArray.map { JSON($0) }
-          if let jsonData = try? JSON(jsonArray).rawData() {
-            searchHistory = String(data: jsonData, encoding: .utf8) ?? ""
+        if searchHistory.contains("[]") {
+          Text("최근 검색 결과 없음")
+            .foregroundColor(.labelColorSecondary)
+            .fontSystem(fontDesignSystem: .body2)
+            .frame(maxWidth: .infinity, alignment: .leading)
+        } else {
+          Text(SearchWords().recentSearces)
+            .fontSystem(fontDesignSystem: .subtitle1)
+            .foregroundColor(.labelColorPrimary)
+          Spacer()
+          Button {
+            searchHistoryArray.removeAll()
+            let jsonArray = searchHistoryArray.map { JSON($0) }
+            if let jsonData = try? JSON(jsonArray).rawData() {
+              searchHistory = String(data: jsonData, encoding: .utf8) ?? ""
+            }
+          } label: {
+            Text(SearchWords().clearAll)
+              .fontSystem(fontDesignSystem: .subtitle3)
+              .foregroundColor(.info)
           }
-        } label: {
-          Text(SearchWords().clearAll)
-            .fontSystem(fontDesignSystem: .subtitle3)
-            .foregroundColor(.info)
         }
       }
       .padding(.top, 12)
       .padding(.horizontal, 16)
+
       ScrollView {
         VStack(spacing: 0) {
           ForEach(Array(searchHistoryArray.reversed().enumerated()), id: \.element) { index, item in

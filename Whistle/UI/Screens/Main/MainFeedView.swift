@@ -14,11 +14,12 @@ import SwiftUIPager
 // MARK: - MainFeedView
 
 struct MainFeedView: View {
+  @AppStorage("isMyTeamSelected") var isMyTeamSelected = false
   @Environment(\.dismiss) var dismiss
   @EnvironmentObject var universalRoutingModel: UniversalRoutingModel
   @StateObject private var apiViewModel = APIViewModel.shared
   @StateObject private var mainFeedPlayersViewModel = MainFeedPlayersViewModel.shared
-  @StateObject private var myTeamfeedPlayersViewModel = MyTeamFeedPlayersViewModel.shared
+  @StateObject private var myTeamFeedPlayersViewModel = MyTeamFeedPlayersViewModel.shared
   @StateObject private var toastViewModel = ToastViewModel.shared
   @StateObject private var feedMoreModel = MainFeedMoreModel.shared
   @StateObject private var tabbarModel = TabbarModel.shared
@@ -55,8 +56,8 @@ struct MainFeedView: View {
       if index == 0 {
         mainFeedPlayersViewModel.stopPlayer()
         mainFeedTabModel.switchTab(to: .myteam)
-        if myTeamfeedPlayersViewModel.currentPlayer?.rate == 0.0 {
-          myTeamfeedPlayersViewModel.currentPlayer?.play()
+        if myTeamFeedPlayersViewModel.currentPlayer?.rate == 0.0 {
+          myTeamFeedPlayersViewModel.currentPlayer?.play()
           myTeamViewDuration = Date().toString()
           WhistleLogger.logger.debug("MainFeedView onPageChanged index 0")
         }
@@ -65,7 +66,7 @@ struct MainFeedView: View {
           myTeamSheetPosition = .dynamic
         }
       } else {
-        myTeamfeedPlayersViewModel.stopPlayer()
+        myTeamFeedPlayersViewModel.stopPlayer()
         mainFeedTabModel.switchTab(to: .all)
         if mainFeedPlayersViewModel.currentPlayer?.rate == 0.0 {
           mainFeedPlayersViewModel.currentPlayer?.play()
@@ -81,14 +82,6 @@ struct MainFeedView: View {
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
           toastViewModel.toastInit(message: ToastMessages().contentUploaded)
         }
-      }
-    }
-    .onChange(of: LaunchScreenViewModel.shared.myTeamContentLoaded) { newValue in
-      if newValue, !apiViewModel.myTeamFeed.isEmpty {
-        mainFeedTabModel.switchTab(to: .myteam)
-        pagerModel.page.update(.moveToFirst)
-        mainFeedPlayersViewModel.stopPlayer()
-        myTeamfeedPlayersViewModel.currentPlayer?.play()
       }
     }
     .onReceive(UploadProgressViewModel.shared.isUploadingSubject) { value in
@@ -204,7 +197,7 @@ struct MainFeedView: View {
             withAnimation {
               mainFeedTabModel.switchTab(to: .all)
               pagerModel.page.update(.moveToLast)
-              myTeamfeedPlayersViewModel.stopPlayer()
+              myTeamFeedPlayersViewModel.stopPlayer()
               mainFeedPlayersViewModel.currentPlayer?.play()
             }
           } label: {
@@ -340,7 +333,7 @@ struct MainFeedView: View {
       if mainFeedTabModel.isAllTab {
         mainFeedPlayersViewModel.currentPlayer?.play()
       } else {
-        myTeamfeedPlayersViewModel.currentPlayer?.play()
+        myTeamFeedPlayersViewModel.currentPlayer?.play()
       }
     }) {
       if mainFeedTabModel.isAllTab {
@@ -351,8 +344,8 @@ struct MainFeedView: View {
       } else {
         MainFeedReportReasonSelectionView(
           goReport: $feedMoreModel.showReport,
-          contentId: apiViewModel.myTeamFeed[myTeamfeedPlayersViewModel.currentVideoIndex].contentId ?? 0,
-          userId: apiViewModel.myTeamFeed[myTeamfeedPlayersViewModel.currentVideoIndex].userId ?? 0)
+          contentId: apiViewModel.myTeamFeed[myTeamFeedPlayersViewModel.currentVideoIndex].contentId ?? 0,
+          userId: apiViewModel.myTeamFeed[myTeamFeedPlayersViewModel.currentVideoIndex].userId ?? 0)
       }
     }
     .onChange(of: tabbarModel.tabSelection) { selection in
@@ -360,7 +353,7 @@ struct MainFeedView: View {
         if mainFeedTabModel.isAllTab {
           mainFeedPlayersViewModel.currentPlayer?.play()
         } else {
-          myTeamfeedPlayersViewModel.currentPlayer?.play()
+          myTeamFeedPlayersViewModel.currentPlayer?.play()
         }
         return
       }
@@ -378,7 +371,7 @@ struct MainFeedView: View {
               pagerModel.page.update(.moveToFirst)
               mainFeedPlayersViewModel.stopPlayer()
               mainFeedTabModel.switchTab(to: .myteam)
-              myTeamfeedPlayersViewModel.currentPlayer?.play()
+              myTeamFeedPlayersViewModel.currentPlayer?.play()
             }
           }
         Rectangle()
@@ -391,7 +384,7 @@ struct MainFeedView: View {
             withAnimation {
               mainFeedTabModel.switchTab(to: .all)
               pagerModel.page.update(.moveToLast)
-              myTeamfeedPlayersViewModel.stopPlayer()
+              myTeamFeedPlayersViewModel.stopPlayer()
               mainFeedPlayersViewModel.currentPlayer?.play()
             }
           }
@@ -436,15 +429,32 @@ struct MainFeedView: View {
       }
     }
     .onAppear {
+      if feedMoreModel.isFirstAppeared {
+        if isMyTeamSelected {
+          pagerModel.page = .withIndex(1)
+          mainFeedTabModel.switchTab(to: .myteam)
+          pagerModel.page.update(.moveToFirst)
+          mainFeedPlayersViewModel.stopPlayer()
+          myTeamFeedPlayersViewModel.currentPlayer?.play()
+        } else {
+          pagerModel.page = .first()
+          mainFeedTabModel.switchTab(to: .all)
+          pagerModel.page.update(.moveToLast)
+          myTeamFeedPlayersViewModel.stopPlayer()
+          mainFeedPlayersViewModel.currentPlayer?.play()
+        }
+      }
+      feedMoreModel.isFirstAppeared = false
+
       WhistleLogger.logger.debug("TabOnAppear : \(feedMoreModel.isRootStacked)")
       feedMoreModel.isRootStacked = false
       tabbarModel.showTabbar()
       if mainFeedTabModel.isMyTeamTab {
-        if myTeamfeedPlayersViewModel.currentVideoIndex != 0 {
-          myTeamfeedPlayersViewModel.currentPlayer?.seek(to: .zero)
+        if myTeamFeedPlayersViewModel.currentVideoIndex != 0 {
+          myTeamFeedPlayersViewModel.currentPlayer?.seek(to: .zero)
           if
             BlockList.shared.userIds
-              .contains(apiViewModel.myTeamFeed[myTeamfeedPlayersViewModel.currentVideoIndex].userId ?? 0)
+              .contains(apiViewModel.myTeamFeed[myTeamFeedPlayersViewModel.currentVideoIndex].userId ?? 0)
           {
             return
           }
@@ -462,10 +472,6 @@ struct MainFeedView: View {
         }
         WhistleLogger.logger.debug("MainFeedView onAppear else")
       }
-      if apiViewModel.myProfile.myTeam == nil {
-        mainFeedTabModel.switchTab(to: .all)
-        pagerModel.page.update(.moveToLast)
-      }
       Mixpanel.mainInstance().track(event: "play_start")
       playDuration = Date().toString()
       allViewedContentId = []
@@ -477,9 +483,9 @@ struct MainFeedView: View {
         feedMoreModel.isRootStacked = true
       }
       mainFeedPlayersViewModel.stopPlayer()
-      myTeamfeedPlayersViewModel.stopPlayer()
+      myTeamFeedPlayersViewModel.stopPlayer()
       mainFeedPlayersViewModel.resetPlayer()
-      myTeamfeedPlayersViewModel.resetPlayer()
+      myTeamFeedPlayersViewModel.resetPlayer()
       let viewDate = playDuration.toDate()
       let nowDate = Date.now
       let viewTime = nowDate.timeIntervalSince(viewDate ?? Date.now)
@@ -503,6 +509,7 @@ class MainFeedMoreModel: ObservableObject {
   @Published var showUpdate = false
   @Published var isRootStacked = false
   @Published var bottomSheetPosition: BottomSheetPosition = .hidden
+  @Published var isFirstAppeared = true
 }
 
 extension MainFeedView {

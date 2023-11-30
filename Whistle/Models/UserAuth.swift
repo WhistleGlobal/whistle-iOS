@@ -39,6 +39,7 @@ class UserAuth: ObservableObject {
   @AppStorage("isAccess") var isAccess = false
   @AppStorage("provider") var provider: Provider = .apple
   @AppStorage("deviceToken") var deviceToken: String?
+  @AppStorage("isMyTeamSelected") var isMyTeamSelected = false
 
 
   var apiViewModel = APIViewModel.shared
@@ -90,6 +91,11 @@ class UserAuth: ObservableObject {
           } else {
             self.isAccess = true
             APIViewModel.shared.myProfile = data
+            if let myTeam = APIViewModel.shared.myProfile.myTeam {
+              self.isMyTeamSelected = true
+            } else {
+              self.isMyTeamSelected = false
+            }
           }
 
           Mixpanel.mainInstance().identify(distinctId: String(self.apiViewModel.myProfile.userId))

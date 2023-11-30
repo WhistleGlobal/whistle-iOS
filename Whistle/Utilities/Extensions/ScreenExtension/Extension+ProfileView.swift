@@ -515,7 +515,11 @@ extension ProfileView {
             isFirstProfileLoaded = true
             GIDSignIn.sharedInstance.signOut()
             userAuth.appleSignout()
-//            tabbarModel.switchTab(to: .main)
+            MainFeedPlayersViewModel.shared.stopPlayer()
+            MainFeedPlayersViewModel.shared.resetPlayer()
+            MyTeamFeedPlayersViewModel.shared.stopPlayer()
+            MyTeamFeedPlayersViewModel.shared.resetPlayer()
+            tabbarModel.switchTab(to: .main)
             memberContentViewModel.resetPlayer()
           }
         } label: {
