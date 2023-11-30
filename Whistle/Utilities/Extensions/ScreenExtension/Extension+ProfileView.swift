@@ -252,65 +252,70 @@ extension ProfileView {
 
   @ViewBuilder
   func memberFollowBlockButton() -> some View {
-    if memberContentViewModel.memberProfile.isBlocked {
-      Button {
-        alertViewModel.linearAlert(
-          isRed: true,
-          title: "\(memberContentViewModel.memberProfile.userName) 님을 차단 해제하시겠어요?",
-          content: AlertContents().block,
-          cancelText: CommonWords().cancel,
-          destructiveText: CommonWords().unblock)
-        {
-          Task {
-            await apiViewModel.blockAction(userID: userId, method: .delete)
-            BlockList.shared.userIds.append(userId)
-            BlockList.shared.userIds = BlockList.shared.userIds.filter { $0 != userId }
-            Task {
-              await memberContentViewModel.requestMemberProfile(userID: userId)
-              await memberContentViewModel.requestMemberPostFeed(userID: userId)
-            }
-            Task {
-              await memberContentViewModel.requestMemberFollow(userID: userId)
-              await memberContentViewModel.requestMemberWhistlesCount(userID: userId)
-            }
-          }
-        }
-      } label: {
-        unblockButton
-      }
-      .padding(.bottom, UIScreen.getHeight(24))
-    } else {
-      Button("") {
-        Task {
-          if memberContentViewModel.memberProfile.isFollowed {
-            memberContentViewModel.memberProfile.isFollowed.toggle()
-            await apiViewModel.followAction(userID: userId, method: .delete)
-            apiViewModel.mainFeed = apiViewModel.mainFeed.map { item in
-              let mutableItem = item
-              if mutableItem.userId == userId {
-                mutableItem.isFollowed = memberContentViewModel.memberProfile.isFollowed
-              }
-              return mutableItem
-            }
-          } else {
-            memberContentViewModel.memberProfile.isFollowed.toggle()
-            await apiViewModel.followAction(userID: userId, method: .post)
-            apiViewModel.mainFeed = apiViewModel.mainFeed.map { item in
-              let mutableItem = item
-              if mutableItem.userId == userId {
-                mutableItem.isFollowed = memberContentViewModel.memberProfile.isFollowed
-              }
-              return mutableItem
-            }
-          }
-        }
-      }
-      .buttonStyle(FollowButtonStyle(isFollowed: $memberContentViewModel.memberProfile.isFollowed))
-      .frame(width: UIScreen.getWidth(114), height: UIScreen.getHeight(36))
-      .opacity(isProfileLoaded ? 1 : 0)
-      .disabled(userId == apiViewModel.myProfile.userId)
-      .padding(.bottom, UIScreen.getHeight(24))
-    }
+//    switch memberContentViewModel.profileProgress.downloadState {
+//    case .notStarted, .downloading:
+//
+//    case .finished:
+//      if memberContentViewModel.memberProfile.isBlocked {
+//        Button {
+//          alertViewModel.linearAlert(
+//            isRed: true,
+//            title: "\(memberContentViewModel.memberProfile.userName) 님을 차단 해제하시겠어요?",
+//            content: AlertContents().block,
+//            cancelText: CommonWords().cancel,
+//            destructiveText: CommonWords().unblock)
+//          {
+//            Task {
+//              await apiViewModel.blockAction(userID: userId, method: .delete)
+//              BlockList.shared.userIds.append(userId)
+//              BlockList.shared.userIds = BlockList.shared.userIds.filter { $0 != userId }
+//              Task {
+//                await memberContentViewModel.requestMemberProfile(userID: userId)
+//                await memberContentViewModel.requestMemberPostFeed(userID: userId)
+//              }
+//              Task {
+//                await memberContentViewModel.requestMemberFollow(userID: userId)
+//                await memberContentViewModel.requestMemberWhistlesCount(userID: userId)
+//              }
+//            }
+//          }
+//        } label: {
+//          unblockButton
+//        }
+//        .padding(.bottom, UIScreen.getHeight(24))
+//      } else {
+//        Button("") {
+//          Task {
+//            if memberContentViewModel.memberProfile.isFollowed {
+//              memberContentViewModel.memberProfile.isFollowed.toggle()
+//              await apiViewModel.followAction(userID: userId, method: .delete)
+//              apiViewModel.mainFeed = apiViewModel.mainFeed.map { item in
+//                let mutableItem = item
+//                if mutableItem.userId == userId {
+//                  mutableItem.isFollowed = memberContentViewModel.memberProfile.isFollowed
+//                }
+//                return mutableItem
+//              }
+//            } else {
+//              memberContentViewModel.memberProfile.isFollowed.toggle()
+//              await apiViewModel.followAction(userID: userId, method: .post)
+//              apiViewModel.mainFeed = apiViewModel.mainFeed.map { item in
+//                let mutableItem = item
+//                if mutableItem.userId == userId {
+//                  mutableItem.isFollowed = memberContentViewModel.memberProfile.isFollowed
+//                }
+//                return mutableItem
+//              }
+//            }
+//          }
+//        }
+//        .buttonStyle(FollowButtonStyle(isFollowed: $memberContentViewModel.memberProfile.isFollowed))
+//        .frame(width: UIScreen.getWidth(114), height: UIScreen.getHeight(36))
+//        .opacity(isProfileLoaded ? 1 : 0)
+//        .disabled(userId == apiViewModel.myProfile.userId)
+//        .padding(.bottom, UIScreen.getHeight(24))
+//      }
+//    }
   }
 
   @ViewBuilder

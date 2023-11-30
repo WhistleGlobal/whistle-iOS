@@ -12,7 +12,7 @@ import SwiftyJSON
 extension APIViewModel: SearchProtocol {
   func requestSearchedUser(queryString: String) {
     AF.request(
-      "\(domainURL)/search/user?query=\(queryString)",
+      "\(domainURL)/search/user?query=\(queryString)".addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? "",
       method: .get,
       headers: contentTypeJson)
       .validate(statusCode: 200 ... 300)
@@ -30,11 +30,12 @@ extension APIViewModel: SearchProtocol {
 
   func requestSearchedTag(queryString: String) {
     AF.request(
-      "\(domainURL)/search/hashtag?query=\(queryString)",
+      "\(domainURL)/search/hashtag?query=\(queryString)".addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? "",
       method: .get,
       headers: contentTypeJson)
       .validate(statusCode: 200 ... 300)
       .responseDecodable(of: [SearchedTag].self) { response in
+        print(response.result)
         switch response.result {
         case .success(let data):
           self.searchedTag = data
@@ -48,7 +49,7 @@ extension APIViewModel: SearchProtocol {
 
   func requestSearchedContent(queryString: String) {
     AF.request(
-      "\(domainURL)/search/content?query=\(queryString)",
+      "\(domainURL)/search/content?query=\(queryString)".addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? "",
       method: .get,
       headers: contentTypeJson)
       .validate(statusCode: 200 ... 300)
@@ -67,7 +68,8 @@ extension APIViewModel: SearchProtocol {
   func requestTagSearchedRecentContent(queryString: String, completion: @escaping ([MainContent]) -> Void) {
     SearchProgressViewModel.shared.searchTagContent()
     AF.request(
-      "\(domainURL)/search/hashtag-content?query=\(queryString)",
+      "\(domainURL)/search/hashtag-content?query=\(queryString)"
+        .addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? "",
       method: .get,
       headers: contentTypeJson)
       .validate(statusCode: 200 ... 300)
