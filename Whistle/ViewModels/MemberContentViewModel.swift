@@ -69,22 +69,21 @@ class MemberContentViewModel: ObservableObject {
       AF.request(
         "\(domainURL)/user/\(userID)/profile",
         method: .get,
-        headers: contentTypeJson)
-        .validate(statusCode: 200 ... 300)
-        .responseDecodable(of: MemberProfile.self) { response in
-          switch response.result {
-          case .success(let success):
+        headers: contentTypeJson
+      )
+      .validate(statusCode: 200 ... 300)
+      .responseDecodable(of: MemberProfile.self) { response in
+        switch response.result {
+          case let .success(success):
             self.memberProfile = success
             continuation.resume()
-//            DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
             self.profileProgress.changeDownloadState(state: .finished)
-//            }
-          case .failure(let error):
+          case let .failure(error):
             WhistleLogger.logger.error("Failure: \(error)")
             continuation.resume()
             self.profileProgress.changeDownloadState(state: .finished)
-          }
         }
+      }
     }
   }
 
@@ -97,11 +96,12 @@ class MemberContentViewModel: ObservableObject {
       AF.request(
         "\(domainURL)/user/\(userID)/whistle/count",
         method: .get,
-        headers: contentTypeJson)
-        .validate(statusCode: 200 ..< 300)
-        .response { response in
-          switch response.result {
-          case .success(let data):
+        headers: contentTypeJson
+      )
+      .validate(statusCode: 200 ..< 300)
+      .response { response in
+        switch response.result {
+          case let .success(data):
             guard let responseData = data else {
               return
             }
@@ -118,11 +118,11 @@ class MemberContentViewModel: ObservableObject {
               continuation.resume()
             }
             self.whistleCountProgress.changeDownloadState(state: .finished)
-          case .failure(let error):
+          case let .failure(error):
             WhistleLogger.logger.error("Failure: \(error)")
             self.whistleCountProgress.changeDownloadState(state: .finished)
-          }
         }
+      }
     }
   }
 
@@ -134,11 +134,12 @@ class MemberContentViewModel: ObservableObject {
       AF.request(
         "\(domainURL)/user/\(userID)/follow-list",
         method: .get,
-        headers: contentTypeXwwwForm)
-        .validate(statusCode: 200 ... 300)
-        .response { response in
-          switch response.result {
-          case .success(let data):
+        headers: contentTypeXwwwForm
+      )
+      .validate(statusCode: 200 ... 300)
+      .response { response in
+        switch response.result {
+          case let .success(data):
             do {
               self.memberFollow = try self.decoder.decode(MemberFollow.self, from: data ?? .init())
               continuation.resume()
@@ -146,11 +147,11 @@ class MemberContentViewModel: ObservableObject {
               WhistleLogger.logger.error("Error parsing JSON: \(error)")
               continuation.resume()
             }
-          case .failure(let error):
+          case let .failure(error):
             WhistleLogger.logger.error("Failure: \(error)")
             continuation.resume()
-          }
         }
+      }
     }
   }
 
@@ -162,11 +163,12 @@ class MemberContentViewModel: ObservableObject {
       AF.request(
         "\(domainURL)/user/\(userID)/post/feed",
         method: .get,
-        headers: contentTypeJson)
-        .validate(statusCode: 200 ... 300)
-        .response { response in
-          switch response.result {
-          case .success(let data):
+        headers: contentTypeJson
+      )
+      .validate(statusCode: 200 ... 300)
+      .response { response in
+        switch response.result {
+          case let .success(data):
             do {
               guard let data else {
                 return
@@ -177,16 +179,14 @@ class MemberContentViewModel: ObservableObject {
               WhistleLogger.logger.error("Error parsing JSON: \(error)")
               continuation.resume()
             }
-//            DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
             self.feedProgress.changeDownloadState(state: .finished)
-//            }
-          case .failure(let error):
+          case let .failure(error):
             WhistleLogger.logger.error("Failure: \(error)")
             self.memberFeed = []
             continuation.resume()
             self.feedProgress.changeDownloadState(state: .finished)
-          }
         }
+      }
     }
   }
 }

@@ -69,7 +69,11 @@ extension View {
   @ViewBuilder
   func skeletonRectangle() -> some View {
     RoundedRectangle(cornerRadius: 12)
-      .skeleton(with: true, shape: .rounded(.radius(12, style: .continuous)))
+      .skeleton(
+        with: true,
+        animation: .linear(speed: 0.5),
+        appearance: .gradient(color: .gray30Dark, background: .gray20Dark),
+        shape: .rounded(.radius(12, style: .continuous)))
       .frame(width: UIScreen.getWidth(204 * 9 / 16), height: UIScreen.getHeight(204))
   }
 

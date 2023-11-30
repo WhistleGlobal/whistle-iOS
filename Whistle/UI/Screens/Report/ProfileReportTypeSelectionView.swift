@@ -83,11 +83,11 @@ struct ProfileReportTypeSelectionView: View {
             Image(systemName: "xmark")
               .foregroundColor(.labelColorPrimary)
           }
-          ToolbarItem(placement: .principal) {
-            Text(CommonWords().report)
-              .foregroundStyle(Color.labelColorPrimary)
-              .font(.headline)
-          }
+        }
+        ToolbarItem(placement: .principal) {
+          Text(CommonWords().report)
+            .foregroundStyle(Color.labelColorPrimary)
+            .font(.headline)
         }
       }
     }
