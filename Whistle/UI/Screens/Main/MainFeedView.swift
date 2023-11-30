@@ -84,14 +84,6 @@ struct MainFeedView: View {
         }
       }
     }
-    .onChange(of: LaunchScreenViewModel.shared.myTeamContentLoaded) { _ in
-//      if newValue, !apiViewModel.myTeamFeed.isEmpty {
-//        mainFeedTabModel.switchTab(to: .myteam)
-//        pagerModel.page.update(.moveToFirst)
-//        mainFeedPlayersViewModel.stopPlayer()
-//        myTeamFeedPlayersViewModel.currentPlayer?.play()
-//      }
-    }
     .onReceive(UploadProgressViewModel.shared.isUploadingSubject) { value in
       switch value {
       case true:
@@ -437,19 +429,22 @@ struct MainFeedView: View {
       }
     }
     .onAppear {
-      if isMyTeamSelected {
-        pagerModel.page = .withIndex(1)
-        mainFeedTabModel.switchTab(to: .myteam)
-        pagerModel.page.update(.moveToFirst)
-        mainFeedPlayersViewModel.stopPlayer()
-        myTeamFeedPlayersViewModel.currentPlayer?.play()
-      } else {
-        pagerModel.page = .first()
-        mainFeedTabModel.switchTab(to: .all)
-        pagerModel.page.update(.moveToLast)
-        myTeamFeedPlayersViewModel.stopPlayer()
-        mainFeedPlayersViewModel.currentPlayer?.play()
+      if feedMoreModel.isFirstAppeared {
+        if isMyTeamSelected {
+          pagerModel.page = .withIndex(1)
+          mainFeedTabModel.switchTab(to: .myteam)
+          pagerModel.page.update(.moveToFirst)
+          mainFeedPlayersViewModel.stopPlayer()
+          myTeamFeedPlayersViewModel.currentPlayer?.play()
+        } else {
+          pagerModel.page = .first()
+          mainFeedTabModel.switchTab(to: .all)
+          pagerModel.page.update(.moveToLast)
+          myTeamFeedPlayersViewModel.stopPlayer()
+          mainFeedPlayersViewModel.currentPlayer?.play()
+        }
       }
+      feedMoreModel.isFirstAppeared = false
 
       WhistleLogger.logger.debug("TabOnAppear : \(feedMoreModel.isRootStacked)")
       feedMoreModel.isRootStacked = false
@@ -477,10 +472,6 @@ struct MainFeedView: View {
         }
         WhistleLogger.logger.debug("MainFeedView onAppear else")
       }
-//      if apiViewModel.myProfile.myTeam == nil {
-//        mainFeedTabModel.switchTab(to: .all)
-//        pagerModel.page.update(.moveToLast)
-//      }
       Mixpanel.mainInstance().track(event: "play_start")
       playDuration = Date().toString()
       allViewedContentId = []
@@ -518,6 +509,7 @@ class MainFeedMoreModel: ObservableObject {
   @Published var showUpdate = false
   @Published var isRootStacked = false
   @Published var bottomSheetPosition: BottomSheetPosition = .hidden
+  @Published var isFirstAppeared = true
 }
 
 extension MainFeedView {
