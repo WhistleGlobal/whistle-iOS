@@ -122,7 +122,7 @@ extension VideoCaptureView {
       .foregroundColor(.LabelColor_Primary_Dark)
       .padding(.bottom, 64)
     }
-    .frame(height: UIScreen.height * 0.7)
+    .frame(height: UIScreen.height * 0.75)
   }
 
   @ViewBuilder

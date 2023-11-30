@@ -23,6 +23,7 @@ struct RootTabView: View {
   @AppStorage("isMyTeamSelectPassed") var isMyTeamSelectPassed = false
   @AppStorage("isMyTeamLabelOn") var isMyTeamLabelOn = true
   @AppStorage("isMyTeamBackgroundOn") var isMyTeamBackgroundOn = true
+  @AppStorage("isMyTeamSelected") var isMyTeamSelected = false
 
   @State var isFirstProfileLoaded = true
   @State var mainOpacity = 1.0
