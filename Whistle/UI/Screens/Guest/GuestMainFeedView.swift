@@ -205,6 +205,37 @@ struct GuestMainFeedView: View {
         "did_login": false,
       ])
     }
+    .overlay(alignment: .top) {
+      HStack {
+        Spacer()
+        Text("마이팀")
+          .fontSystem(fontDesignSystem: .subtitle2)
+          .onTapGesture {
+            feedMoreModel.bottomSheetPosition = .dynamic
+          }
+        Rectangle()
+          .fill(Color.white)
+          .frame(width: 1, height: 12)
+        Text("전체")
+          .fontSystem(fontDesignSystem: .subtitle2)
+          .scaleEffect(1.1)
+        Spacer()
+      }
+      .foregroundColor(.white)
+      .overlay(alignment: .trailing) {
+        NavigationLink {
+          MainSearchView()
+        } label: {
+          Image(systemName: "magnifyingglass")
+            .font(.system(size: 24))
+            .foregroundStyle(Color.white)
+        }
+        .id(UUID())
+      }
+      .padding(.horizontal, 16)
+      .padding(.top, 54)
+      .ignoresSafeArea()
+    }
   }
 }
 
