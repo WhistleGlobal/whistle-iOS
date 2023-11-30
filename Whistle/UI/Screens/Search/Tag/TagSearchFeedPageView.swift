@@ -13,6 +13,7 @@ struct TagSearchFeedPageView: UIViewRepresentable {
   @EnvironmentObject var feedPlayersViewModel: TagSearchPlayersViewModel
   @StateObject var apiViewModel = APIViewModel.shared
   @State var currentContentInfo: MainContent?
+  @State var isChangable = true
   @Binding var index: Int
   let dismissAction: DismissAction
 
@@ -22,6 +23,7 @@ struct TagSearchFeedPageView: UIViewRepresentable {
       rootView: TagSearchContentPlayerView(
         currentContentInfo: $currentContentInfo,
         index: $index,
+        isChangable: $isChangable,
         lifecycleDelegate: context.coordinator,
         dismissAction: dismissAction)
         .environmentObject(feedPlayersViewModel))
@@ -34,6 +36,7 @@ struct TagSearchFeedPageView: UIViewRepresentable {
       width: UIScreen.main.bounds.width,
       height: UIScreen.main.bounds.height * CGFloat(feedPlayersViewModel.searchedContents.count))
     view.addSubview(childView.view)
+    view.isScrollEnabled = isChangable
     view.showsVerticalScrollIndicator = false
     view.showsHorizontalScrollIndicator = false
     view.contentInsetAdjustmentBehavior = .never
@@ -56,20 +59,23 @@ struct TagSearchFeedPageView: UIViewRepresentable {
         width: UIScreen.width,
         height: UIScreen.height * CGFloat(feedPlayersViewModel.searchedContents.count))
     }
+    uiView.isScrollEnabled = isChangable
   }
 
   func makeCoordinator() -> Coordinator {
-    TagSearchFeedPageView.Coordinator(parent: self, index: $index)
+    TagSearchFeedPageView.Coordinator(parent: self, index: $index, changable: $isChangable)
   }
 
   class Coordinator: NSObject, UIScrollViewDelegate, ViewLifecycleDelegate {
 
     var parent: TagSearchFeedPageView
     @Binding var index: Int
+    @Binding var changable: Bool
 
-    init(parent: TagSearchFeedPageView, index: Binding<Int>) {
+    init(parent: TagSearchFeedPageView, index: Binding<Int>, changable: Binding<Bool>) {
       self.parent = parent
       _index = index
+      _changable = changable
     }
 
     func onAppear() {

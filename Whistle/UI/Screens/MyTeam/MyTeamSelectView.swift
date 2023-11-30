@@ -143,19 +143,21 @@ struct MyTeamSelectView: View {
           .font(.system(size: 17, weight: .semibold))
           .foregroundColor(.white)
       }
-      ToolbarItem(placement: .confirmationAction) {
-        Button("건너뛰기") {
-          if isMyTeamSelectPassed {
-            dismiss()
-          } else {
-            Mixpanel.mainInstance().track(event: "select_myteam", properties: [
-              "team_selected": false,
-            ])
-            isMyTeamSelectPassed = true
+      if !isMyTeamSelected {
+        ToolbarItem(placement: .confirmationAction) {
+          Button("건너뛰기") {
+            if isMyTeamSelectPassed {
+              dismiss()
+            } else {
+              Mixpanel.mainInstance().track(event: "select_myteam", properties: [
+                "team_selected": false,
+              ])
+              isMyTeamSelectPassed = true
+            }
           }
+          .fontSystem(fontDesignSystem: .body2)
+          .foregroundColor(.labelColorDisablePlaceholder)
         }
-        .fontSystem(fontDesignSystem: .body2)
-        .foregroundColor(.labelColorDisablePlaceholder)
       }
     }
     .onAppear {

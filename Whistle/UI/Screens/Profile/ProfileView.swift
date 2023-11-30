@@ -111,6 +111,7 @@ struct ProfileView: View {
                 glassProfile(
                   cornerRadius: 32)
               }
+              .clipShape(RoundedRectangle(cornerRadius: 32))
               .padding(.horizontal, 16)
               .padding(.bottom, 12)
           }
