@@ -14,8 +14,7 @@ import SwiftyJSON
 struct SearchResultView: View {
   @AppStorage("searchHistory") var searchHistory =
     """
-        [
-      ]
+    []
     """
   @Environment(\.dismiss) var dismiss
   @State var scopeSelection = 0
