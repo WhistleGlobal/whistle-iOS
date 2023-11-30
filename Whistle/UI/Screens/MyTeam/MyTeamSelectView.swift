@@ -14,6 +14,8 @@ import SwiftUI
 struct MyTeamSelectView: View {
 
   @AppStorage("isMyTeamSelectPassed") var isMyTeamSelectPassed = false
+  @AppStorage("isMyTeamSelected") var isMyTeamSelected = false
+
   @Environment(\.dismiss) var dismiss
   @State private var currentIndex = 0
   @State private var isDragging = false
@@ -111,6 +113,7 @@ struct MyTeamSelectView: View {
           } else {
             isMyTeamSelectPassed = true
           }
+          isMyTeamSelected = true
         }
       } label: {
         Text(CommonWords().done)
