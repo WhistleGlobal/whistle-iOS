@@ -55,7 +55,6 @@ struct TagResultView: View {
       }
     }
     .toolbarRole(.editor)
-//    .navigationTitle("#\(tagText)")
     .navigationBarTitleDisplayMode(.inline)
   }
 }

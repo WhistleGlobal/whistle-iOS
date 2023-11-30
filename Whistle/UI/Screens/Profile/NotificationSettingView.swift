@@ -41,8 +41,14 @@ struct NotificationSettingView: View {
     .foregroundColor(.labelColorPrimary)
     .tint(.Primary_Default)
     .navigationBarTitleDisplayMode(.inline)
-    .navigationTitle("알림 설정")
     .toolbarRole(.editor)
+    .toolbar {
+      ToolbarItem(placement: .principal) {
+        Text("알림 설정")
+          .foregroundStyle(Color.labelColorPrimary)
+          .font(.headline)
+      }
+    }
     .task {
       await apiViewModel.requestNotiSetting()
       isLoaded = true

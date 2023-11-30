@@ -397,7 +397,7 @@ struct ProfileView: View {
       }
     })
     .fullScreenCover(isPresented: $goReport) {
-      ProfileReportTypeSelectionView(goReport: $goReport, userId: userId)
+      ProfileReportTypeSelectionView(memberContentViewModel: memberContentViewModel, goReport: $goReport, userId: userId)
         .environmentObject(apiViewModel)
     }
     .task {

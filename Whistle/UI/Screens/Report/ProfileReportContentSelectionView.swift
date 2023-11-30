@@ -13,6 +13,7 @@ import SwiftUI
 struct ProfileReportContentSelectionView: View {
   @Environment(\.dismiss) var dismiss
   @StateObject var apiViewModel = APIViewModel.shared
+  @ObservedObject var memberContentViewModel: MemberContentViewModel
   @State var isSelected = false
   @State var selectedIndex = 0
   @Binding var selectedContentId: Int
@@ -30,23 +31,23 @@ struct ProfileReportContentSelectionView: View {
           GridItem(.flexible()),
           GridItem(.flexible()),
         ], spacing: 20) {
-//          ForEach(Array(memberContentViewModel.memberFeed.enumerated()), id: \.element) { index, content in
-//            if let url = content.thumbnailUrl {
-//              videoThumbnail(url: url, index: index)
-//                .onTapGesture {
-//                  if reportCategory == .user {
-//                    selectedIndex = selectedIndex == index ? -1 : index
-//                  } else {
-//                    selectedIndex = index
-//                  }
-//                  if selectedIndex < 0 {
-//                    selectedContentId = -1
-//                  } else {
-//                    selectedContentId = memberContentViewModel.memberFeed[index].contentId ?? 0
-//                  }
-//                }
-//            }
-//          }
+          ForEach(Array(memberContentViewModel.memberFeed.enumerated()), id: \.element) { index, content in
+            if let url = content.thumbnailUrl {
+              videoThumbnail(url: url, index: index)
+                .onTapGesture {
+                  if reportCategory == .user {
+                    selectedIndex = selectedIndex == index ? -1 : index
+                  } else {
+                    selectedIndex = index
+                  }
+                  if selectedIndex < 0 {
+                    selectedContentId = -1
+                  } else {
+                    selectedContentId = memberContentViewModel.memberFeed[index].contentId ?? 0
+                  }
+                }
+            }
+          }
         }
       }
       .padding(.top, 12)
@@ -54,7 +55,6 @@ struct ProfileReportContentSelectionView: View {
     .padding(.horizontal, 16)
     .background(Color.backgroundDefault)
     .toolbarRole(.editor)
-    .navigationTitle("콘텐츠 선택")
     .navigationBarTitleDisplayMode(.inline)
     .toolbar {
       ToolbarItem(placement: .confirmationAction) {
@@ -62,6 +62,7 @@ struct ProfileReportContentSelectionView: View {
           switch reportCategory {
           case .post:
             ProfileReportReasonSelectionView(
+              memberContentViewModel: memberContentViewModel,
               goReport: $goReport,
               selectedContentId: $selectedContentId,
               userId: userId,
@@ -69,6 +70,7 @@ struct ProfileReportContentSelectionView: View {
 
           case .user:
             ProfileReportCommentView(
+              memberContentViewModel: memberContentViewModel,
               goReport: $goReport,
               selectedContentId: $selectedContentId,
               reportCategory: .user,
@@ -82,10 +84,15 @@ struct ProfileReportContentSelectionView: View {
         }
         .disabled(isSelected)
       }
+      ToolbarItem(placement: .principal) {
+        Text("콘텐츠 선택")
+          .foregroundStyle(Color.labelColorPrimary)
+          .font(.headline)
+      }
     }
     .task {
       selectedIndex = reportCategory == .user ? -1 : 0
-//      await apiViewModel.requestMemberPostFeed(userID: userId)
+      await memberContentViewModel.requestMemberPostFeed(userID: userId)
     }
   }
 }

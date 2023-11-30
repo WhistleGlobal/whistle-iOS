@@ -47,52 +47,20 @@ class SearchProgressViewModel {
 
   private init() { }
 
-  func searchUser() {
-    searchingUser = .searching
+  func changeSearchUserState(to: SearchState) {
+    searchingUser = to
   }
 
-  func searchTag() {
-    searchingTag = .searching
+  func changeSearchTagState(to: SearchState) {
+    searchingTag = to
   }
 
-  func searchContent() {
-    searchingContent = .searching
+  func changeSearchContentState(to: SearchState) {
+    searchingContent = to
   }
 
-  func searchTagContent() {
-    searchingTagContent = .searching
-  }
-
-  func searchUserFound() {
-    searchingUser = .found
-  }
-
-  func searchUserNotFound() {
-    searchingUser = .notFound
-  }
-
-  func searchTagFound() {
-    searchingTag = .found
-  }
-
-  func searchTagNotFound() {
-    searchingTag = .notFound
-  }
-
-  func searchContentFound() {
-    searchingContent = .found
-  }
-
-  func searchContentNotFound() {
-    searchingContent = .notFound
-  }
-
-  func searchTagContentFound() {
-    searchingTagContent = .found
-  }
-
-  func searchTagContentNotFound() {
-    searchingTagContent = .notFound
+  func changeSearchTagContentState(to: SearchState) {
+    searchingTagContent = to
   }
 
   func reset() {

@@ -185,7 +185,28 @@ struct ContentLayer<
         .ignoresSafeArea()
     }
     .onChange(of: refreshToken) { _ in
-      whistle()
+      WhistleLogger.logger.debug("refreshToken: \(refreshToken)")
+      guard let currentVideoInfo = currentVideoInfo as? ContentInfo else {
+        return
+      }
+      guard let playersViewModel = feedPlayersViewModel as? PlayersViewModel else {
+        return
+      }
+      isWhistled = currentVideoInfo.isWhistled
+      whistleCount = currentVideoInfo.whistleCount
+
+      guard let currentContent = feedArray[playersViewModel.currentVideoIndex] as? ContentInfo else { return }
+      if feedMoreModel is MainFeedMoreModel {
+      } else {
+        apiViewModel.mainFeed = apiViewModel.mainFeed.map { item in
+          let mutableItem = item
+          if mutableItem.contentId == currentContent.contentId {
+            mutableItem.whistleCount = currentContent.whistleCount
+            mutableItem.isWhistled = isWhistled
+          }
+          return mutableItem
+        }
+      }
     }
   }
 

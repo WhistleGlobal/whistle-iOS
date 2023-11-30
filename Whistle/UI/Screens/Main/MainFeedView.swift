@@ -307,10 +307,8 @@ struct MainFeedView: View {
           switch value.result {
           case .success:
             LaunchScreenViewModel.shared.myTeamFeedDownloaded()
-            break
           case .failure:
             WhistleLogger.logger.debug("MyTeamFeed Download Failure")
-            apiViewModel.requestMyTeamFeed { _ in }
           }
         }
       }
@@ -330,7 +328,6 @@ struct MainFeedView: View {
               LaunchScreenViewModel.shared.feedDownloaded()
             case .failure:
               WhistleLogger.logger.debug("MainFeed Download Failure")
-              apiViewModel.requestMainFeed { _ in }
             }
           }
         }
@@ -431,7 +428,7 @@ struct MainFeedView: View {
                 .fontSystem(fontDesignSystem: .body2)
             }
           }
-          .padding(.top, 70)
+          .padding(.top, 20)
           .padding(.leading, 16)
       }
     }

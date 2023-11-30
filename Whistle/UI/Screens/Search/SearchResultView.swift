@@ -86,8 +86,6 @@ struct SearchResultView: View {
             } else {
               print("JSON 문자열을 Data로 변환하는 데 문제가 발생했습니다.")
             }
-
-
             let jsonArray = JSON(searchHistory)
             if !searchHistory.contains(inputText) {
               searchHistory.append(inputText)
@@ -140,15 +138,15 @@ struct SearchResultView: View {
       switch value {
       case .content:
         if SearchProgressViewModel.shared.searchingContent == .notStarted {
-          SearchProgressViewModel.shared.searchContent()
+          SearchProgressViewModel.shared.changeSearchContentState(to: .searching)
         }
       case .account:
         if SearchProgressViewModel.shared.searchingUser == .notStarted {
-          SearchProgressViewModel.shared.searchUser()
+          SearchProgressViewModel.shared.changeSearchUserState(to: .searching)
         }
       case .hashtag:
         if SearchProgressViewModel.shared.searchingTag == .notStarted {
-          SearchProgressViewModel.shared.searchTag()
+          SearchProgressViewModel.shared.changeSearchTagState(to: .searching)
         }
       }
     }
@@ -358,11 +356,11 @@ extension SearchResultView {
     searchQueryString = inputText
     switch searchTabSelection {
     case .content:
-      SearchProgressViewModel.shared.searchContent()
+      SearchProgressViewModel.shared.changeSearchContentState(to: .searching)
     case .account:
-      SearchProgressViewModel.shared.searchUser()
+      SearchProgressViewModel.shared.changeSearchUserState(to: .searching)
     case .hashtag:
-      SearchProgressViewModel.shared.searchTag()
+      SearchProgressViewModel.shared.changeSearchTagState(to: .searching)
     }
     Mixpanel.mainInstance().people.increment(property: "search_count", by: 1)
     Mixpanel.mainInstance().track(event: "search", properties: [

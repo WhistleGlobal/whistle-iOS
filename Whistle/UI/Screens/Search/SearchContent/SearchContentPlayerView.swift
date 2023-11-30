@@ -57,6 +57,7 @@ struct SearchContentPlayerView: View {
               ContentPlayer(player: player, aspectRatio: content.aspectRatio)
                 .frame(width: UIScreen.width, height: UIScreen.height)
                 .onTapGesture(count: 2) {
+                  whistleToggle()
                   refreshToken.toggle()
                 }
                 .onAppear {
@@ -209,18 +210,18 @@ extension SearchContentPlayerView {
     HapticManager.instance.impact(style: .medium)
     timer?.invalidate()
     if apiViewModel.searchedContent[index].isWhistled {
-      timer = Timer.scheduledTimer(withTimeInterval: 2, repeats: false) { _ in
-        Task {
-          await apiViewModel.whistleAction(contentID: currentContentInfo?.contentId ?? 0, method: .delete)
-        }
+//      timer = Timer.scheduledTimer(withTimeInterval: 2, repeats: false) { _ in
+      Task {
+        await apiViewModel.whistleAction(contentID: currentContentInfo?.contentId ?? 0, method: .delete)
+//        }
       }
       apiViewModel.searchedContent[index].whistleCount -= 1
     } else {
-      timer = Timer.scheduledTimer(withTimeInterval: 2, repeats: false) { _ in
-        Task {
-          await apiViewModel.whistleAction(contentID: currentContentInfo?.contentId ?? 0, method: .post)
-        }
+//      timer = Timer.scheduledTimer(withTimeInterval: 2, repeats: false) { _ in
+      Task {
+        await apiViewModel.whistleAction(contentID: currentContentInfo?.contentId ?? 0, method: .post)
       }
+//      }
       apiViewModel.searchedContent[index].whistleCount += 1
     }
     apiViewModel.searchedContent[index].isWhistled.toggle()

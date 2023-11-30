@@ -77,7 +77,6 @@ struct MainFeedReportCommentView: View {
     .padding(.horizontal, 16)
     .background(.backgroundDefault)
     .toolbarRole(.editor)
-    .navigationTitle(CommonWords().report)
     .navigationBarTitleDisplayMode(.inline)
     .navigationDestination(isPresented: $goComplete) {
       ReportCompleteView(goReport: $goReport)
@@ -120,6 +119,11 @@ struct MainFeedReportCommentView: View {
             .foregroundColor(.Info)
             .fontSystem(fontDesignSystem: .subtitle2)
         }
+      }
+      ToolbarItem(placement: .principal) {
+        Text(CommonWords().report)
+          .foregroundStyle(Color.labelColorPrimary)
+          .font(.headline)
       }
     }
   }

@@ -20,9 +20,9 @@ extension APIViewModel: SearchProtocol {
         switch response.result {
         case .success(let data):
           self.searchedUser = data
-          SearchProgressViewModel.shared.searchUserFound()
+          SearchProgressViewModel.shared.changeSearchUserState(to: .found)
         case .failure(let error):
-          SearchProgressViewModel.shared.searchUserNotFound()
+          SearchProgressViewModel.shared.changeSearchUserState(to: .notFound)
           WhistleLogger.logger.error("\(error)")
         }
       }
@@ -39,9 +39,9 @@ extension APIViewModel: SearchProtocol {
         switch response.result {
         case .success(let data):
           self.searchedTag = data
-          SearchProgressViewModel.shared.searchTagFound()
+          SearchProgressViewModel.shared.changeSearchTagState(to: .found)
         case .failure(let error):
-          SearchProgressViewModel.shared.searchTagNotFound()
+          SearchProgressViewModel.shared.changeSearchTagState(to: .notFound)
           WhistleLogger.logger.error("requestSearchedTag(queryString: String) \(error)")
         }
       }
@@ -57,16 +57,14 @@ extension APIViewModel: SearchProtocol {
         switch response.result {
         case .success(let data):
           self.searchedContent = data
-          SearchProgressViewModel.shared.searchContentFound()
+          SearchProgressViewModel.shared.changeSearchContentState(to: .found)
         case .failure(let error):
-          SearchProgressViewModel.shared.searchContentNotFound()
-          WhistleLogger.logger.error("requestSearchedTag(queryString: String) \(error)")
+          SearchProgressViewModel.shared.changeSearchContentState(to: .notFound)
         }
       }
   }
 
   func requestTagSearchedRecentContent(queryString: String, completion: @escaping ([MainContent]) -> Void) {
-    SearchProgressViewModel.shared.searchTagContent()
     AF.request(
       "\(domainURL)/search/hashtag-content?query=\(queryString)"
         .addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? "",
@@ -78,14 +76,10 @@ extension APIViewModel: SearchProtocol {
         case .success(let data):
           self.tagSearchedRecentContent = data
           completion(self.tagSearchedRecentContent)
-          DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-            SearchProgressViewModel.shared.searchTagContentFound()
-          }
+          SearchProgressViewModel.shared.changeSearchTagContentState(to: .found)
         case .failure(let error):
           WhistleLogger.logger.error("requestTagSearchedContent(queryString: String) \(error)")
-          DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-            SearchProgressViewModel.shared.searchTagContentNotFound()
-          }
+          SearchProgressViewModel.shared.changeSearchTagContentState(to: .notFound)
         }
       }
   }

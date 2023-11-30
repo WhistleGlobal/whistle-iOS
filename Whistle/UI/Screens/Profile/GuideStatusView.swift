@@ -57,7 +57,13 @@ struct GuideStatusView: View {
     .toolbarBackground(Color.backgroundDefault, for: .navigationBar)
     .toolbarBackground(.visible, for: .navigationBar)
     .navigationBarTitleDisplayMode(.inline)
-    .navigationTitle(CommonWords().guideStatus)
+    .toolbar {
+      ToolbarItem(placement: .principal) {
+        Text(CommonWords().guideStatus)
+          .foregroundStyle(Color.labelColorPrimary)
+          .font(.headline)
+      }
+    }
     .task {
       if apiViewModel.reportedContent.isEmpty {
 //        await apiViewModel.requestReportedFeed()
