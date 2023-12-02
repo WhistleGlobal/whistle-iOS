@@ -15,10 +15,14 @@ struct WhistleRankingView: View {
 
   @StateObject var bartintModel = BarTintModel.shared
   @StateObject var apiViewModel = APIViewModel.shared
+  let userID: Int
+  let userName: String
 
-  init() {
+  init(userID: Int = 0, userName: String = "") {
     UINavigationBar.appearance().largeTitleTextAttributes = [.foregroundColor: UIColor.white]
     UINavigationBar.appearance().titleTextAttributes = [.foregroundColor: UIColor.white]
+    self.userID = userID
+    self.userName = userName
   }
 
   var body: some View {
@@ -31,7 +35,7 @@ struct WhistleRankingView: View {
       .ignoresSafeArea()
       VStack(spacing: 0) {
         VStack(spacing: 40) {
-          Text("ddd님의 휘슬 수는")
+          Text("\(userName)님의 휘슬 수는")
             .frame(maxWidth: .infinity, alignment: .leading)
             .padding(.horizontal, 20)
             .padding(.top, 15)
@@ -67,10 +71,15 @@ struct WhistleRankingView: View {
         ScrollView {
           VStack(spacing: 0) {
             ForEach(Array(apiViewModel.rankingModel.topRankings.enumerated()), id: \.element) { index, item in
-              if index == 2 {
+              if apiViewModel.myProfile.userId == item.userId {
                 myRankingRow(ranking: index + 1, userName: item.userName, myTeam: item.myTeam, whistleCount: item.totalWhistle)
               } else {
-                rankingRow(ranking: index + 1, userName: item.userName, myTeam: item.myTeam, whistleCount: item.totalWhistle)
+                rankingRow(
+                  ranking: index + 1,
+                  userName: item.userName,
+                  myTeam: item.myTeam,
+                  whistleCount: item.totalWhistle,
+                  profileImageURL: item.profileImg)
               }
               if index != apiViewModel.rankingModel.topRankings.count - 1 {
                 Divider()
@@ -115,7 +124,7 @@ struct WhistleRankingView: View {
     .navigationBarTitleDisplayMode(.inline)
     .ignoresSafeArea(edges: .horizontal)
     .task {
-      apiViewModel.requestRankingList()
+      apiViewModel.requestRankingList(userID: userID)
     }
     .onAppear {
       bartintModel.tintColor = .white
@@ -134,14 +143,14 @@ struct WhistleRankingView: View {
 extension WhistleRankingView {
 
   @ViewBuilder
-  func rankingRow(ranking: Int, userName: String, myTeam: String?, whistleCount: Int) -> some View {
+  func rankingRow(ranking: Int, userName: String, myTeam: String?, whistleCount: Int, profileImageURL: String?) -> some View {
     HStack(spacing: 0) {
       Text("\(ranking)")
         .fontSystem(fontDesignSystem: .title1)
         .foregroundColor(.white)
         .frame(width: 32, height: 36)
         .padding(.trailing, 10)
-      profileImageView(url: "", size: 48)
+      profileImageView(url: profileImageURL, size: 48)
         .padding(.trailing, 20)
       VStack(alignment: .leading, spacing: 0) {
         Text(userName)
@@ -171,7 +180,7 @@ extension WhistleRankingView {
         .frame(width: 32, height: 36)
         .padding(.trailing, 10)
         .padding(.leading, 20)
-      profileImageView(url: "", size: 48)
+      profileImageView(url: apiViewModel.myProfile.profileImage, size: 48)
         .padding(.trailing, 20)
       VStack(alignment: .leading, spacing: 0) {
         Text(userName)

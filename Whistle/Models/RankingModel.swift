@@ -55,12 +55,14 @@ class TopRanking: Decodable, ObservableObject, Identifiable, Hashable {
   @Published var userName = ""
   @Published var myTeam: String?
   @Published var totalWhistle = 0
+  @Published var profileImg: String?
 
   enum CodingKeys:String, CodingKey {
     case userId = "user_id"
     case userName = "user_name"
     case myTeam = "myteam"
     case totalWhistle = "total_whistle"
+    case profileImg = "profile_img"
   }
 
   required init(from decoder: Decoder) throws {
@@ -69,6 +71,7 @@ class TopRanking: Decodable, ObservableObject, Identifiable, Hashable {
     userName = try container.decode(String.self, forKey: .userName)
     myTeam = try container.decode(String?.self, forKey: .myTeam)
     totalWhistle = try container.decode(Int.self, forKey: .totalWhistle)
+    profileImg = try container.decode(String?.self, forKey: .profileImg)
   }
 
   // Equatable conformance for completeness (optional but recommended)

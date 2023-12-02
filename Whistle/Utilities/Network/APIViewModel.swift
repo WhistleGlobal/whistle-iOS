@@ -38,6 +38,7 @@ class APIViewModel: ObservableObject {
   @Published var searchedTag: [SearchedTag] = []
   @Published var searchedContent: [MainContent] = []
   @Published var tagSearchedRecentContent: [MainContent] = []
+  @Published var tagSearchedRecentContentPopular: [MainContent] = []
   @Published var myTeamFeed: [MainContent] = []
   @Published var rankingModel = RankingModel()
 
@@ -61,6 +62,8 @@ class APIViewModel: ObservableObject {
     searchedContent = []
     myTeamFeed = []
     rankingModel = RankingModel()
+    tagSearchedRecentContent = []
+    tagSearchedRecentContentPopular = []
   }
 }
 
