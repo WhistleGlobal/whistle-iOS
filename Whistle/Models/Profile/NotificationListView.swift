@@ -59,8 +59,14 @@ struct NotificationListView: View {
       Color.backgroundDefault,
       for: .navigationBar)
     .toolbarBackground(.visible, for: .navigationBar)
+    .toolbar {
+      ToolbarItem(placement: .principal) {
+        Text(CommonWords().notification)
+          .foregroundStyle(Color.labelColorPrimary)
+          .font(.headline)
+      }
+    }
     .background(.backgroundDefault)
-    .navigationTitle(CommonWords().notification)
     .navigationBarTitleDisplayMode(.large)
     .toolbarRole(.editor)
     .onAppear {

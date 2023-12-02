@@ -81,8 +81,14 @@ struct LegalInfoView: View {
       for: .navigationBar)
     .toolbarBackground(.visible, for: .navigationBar)
     .toolbarRole(.editor)
+    .toolbar {
+      ToolbarItem(placement: .principal) {
+        Text(CommonWords().about)
+          .foregroundStyle(Color.labelColorPrimary)
+          .font(.headline)
+      }
+    }
     .navigationBarTitleDisplayMode(.inline)
-    .navigationTitle(CommonWords().about)
     .task {
       apiViewModel.requestUserCreateDate()
     }

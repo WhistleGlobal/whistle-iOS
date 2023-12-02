@@ -38,6 +38,7 @@ struct MemberContentPlayerView: View {
 
   let lifecycleDelegate: ViewLifecycleDelegate?
   let dismissAction: DismissAction
+  let processor = BlurImageProcessor(blurRadius: 100)
 
   var body: some View {
     VStack(spacing: 0) {
@@ -98,9 +99,9 @@ struct MemberContentPlayerView: View {
                         .frame(maxWidth: .infinity, maxHeight: .infinity)
                     }
                     .resizable()
+                    .setProcessor(processor)
                     .scaledToFill()
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
-                    .blur(radius: 10)
                 }
                 KFImage.url(URL(string: url))
                   .cacheMemoryOnly()
@@ -122,6 +123,7 @@ struct MemberContentPlayerView: View {
                 ContentPlayer(player: player, aspectRatio: content.aspectRatio)
                   .frame(width: UIScreen.width, height: UIScreen.height)
                   .onTapGesture(count: 2) {
+                    whistleToggle()
                     refreshToken.toggle()
                   }
                   .onAppear {
@@ -288,18 +290,18 @@ extension MemberContentPlayerView {
     HapticManager.instance.impact(style: .medium)
     timer?.invalidate()
     if memberContentViewModel.memberFeed[index].isWhistled {
-      timer = Timer.scheduledTimer(withTimeInterval: 2, repeats: false) { _ in
-        Task {
-          await apiViewModel.whistleAction(contentID: currentContentInfo?.contentId ?? 0, method: .delete)
-        }
+//      timer = Timer.scheduledTimer(withTimeInterval: 2, repeats: false) { _ in
+      Task {
+        await apiViewModel.whistleAction(contentID: currentContentInfo?.contentId ?? 0, method: .delete)
+//        }
       }
       memberContentViewModel.memberFeed[index].whistleCount -= 1
     } else {
-      timer = Timer.scheduledTimer(withTimeInterval: 2, repeats: false) { _ in
-        Task {
-          await apiViewModel.whistleAction(contentID: currentContentInfo?.contentId ?? 0, method: .post)
-        }
+//      timer = Timer.scheduledTimer(withTimeInterval: 2, repeats: false) { _ in
+      Task {
+        await apiViewModel.whistleAction(contentID: currentContentInfo?.contentId ?? 0, method: .post)
       }
+//      }
       memberContentViewModel.memberFeed[index].whistleCount += 1
     }
     memberContentViewModel.memberFeed[index].isWhistled.toggle()

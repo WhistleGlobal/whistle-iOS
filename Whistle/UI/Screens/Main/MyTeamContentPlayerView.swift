@@ -51,9 +51,9 @@ struct MyTeamContentPlayerView: View {
                       .frame(maxWidth: .infinity, maxHeight: .infinity)
                   }
                   .resizable()
+                  .setProcessor(processor)
                   .scaledToFill()
                   .frame(maxWidth: .infinity, maxHeight: .infinity)
-                  .blur(radius: 10)
               }
               KFImage.url(URL(string: url))
                 .cacheMemoryOnly()
@@ -72,6 +72,7 @@ struct MyTeamContentPlayerView: View {
               ContentPlayer(player: player, aspectRatio: content.aspectRatio)
                 .frame(width: UIScreen.width, height: UIScreen.height)
                 .onTapGesture(count: 2) {
+                  whistleToggle(content: content, index)
                   refreshToken.toggle()
                 }
                 .onAppear {
@@ -224,17 +225,17 @@ extension MyTeamContentPlayerView {
     HapticManager.instance.impact(style: .medium)
     timer?.invalidate()
     if apiViewModel.myTeamFeed[index].isWhistled {
-      timer = Timer.scheduledTimer(withTimeInterval: 2, repeats: false) { _ in
-        Task {
-          await apiViewModel.whistleAction(contentID: content.contentId ?? 0, method: .delete)
-        }
+//      timer = Timer.scheduledTimer(withTimeInterval: 2, repeats: false) { _ in
+      Task {
+        await apiViewModel.whistleAction(contentID: content.contentId ?? 0, method: .delete)
       }
+//      }
       apiViewModel.myTeamFeed[index].whistleCount -= 1
     } else {
-      timer = Timer.scheduledTimer(withTimeInterval: 2, repeats: false) { _ in
-        Task {
-          await apiViewModel.whistleAction(contentID: content.contentId ?? 0, method: .post)
-        }
+//      timer = Timer.scheduledTimer(withTimeInterval: 2, repeats: false) { _ in
+      Task {
+        await apiViewModel.whistleAction(contentID: content.contentId ?? 0, method: .post)
+//        }
       }
       apiViewModel.myTeamFeed[index].whistleCount += 1
     }

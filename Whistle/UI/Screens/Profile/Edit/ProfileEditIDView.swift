@@ -78,9 +78,13 @@ struct ProfileEditIDView: View {
     .background(.backgroundDefault)
     .padding(.horizontal, 16)
     .toolbarRole(.editor)
-    .navigationTitle("사용자 ID")
     .navigationBarTitleDisplayMode(.inline)
     .toolbar {
+      ToolbarItem(placement: .principal) {
+        Text("사용자 ID")
+          .foregroundStyle(Color.labelColorPrimary)
+          .font(.headline)
+      }
       ToolbarItem(placement: .confirmationAction) {
         Button {
           isFocused = false

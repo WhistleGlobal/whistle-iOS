@@ -105,7 +105,13 @@ struct WhistleRankingView: View {
       }.ignoresSafeArea()
     }
     .toolbarRole(.editor)
-    .navigationTitle(Text(CommonWords().whistle).foregroundColor(.white))
+    .toolbar {
+      ToolbarItem(placement: .principal) {
+        Text(CommonWords().whistle)
+          .foregroundStyle(Color.labelColorPrimary)
+          .font(.headline)
+      }
+    }
     .navigationBarTitleDisplayMode(.inline)
     .ignoresSafeArea(edges: .horizontal)
     .task {

@@ -31,36 +31,58 @@ struct TagSearchContentPlayerView: View {
   @State var viewCount: ViewCount = .init()
   @State var processedContentId: Set<Int> = []
   @State var refreshToken = false
+  @State var isSwipeable = true
   @Binding var currentContentInfo: MainContent?
   @Binding var index: Int
+  @Binding var isChangable: Bool
+
   let lifecycleDelegate: ViewLifecycleDelegate?
   let dismissAction: DismissAction
+  let processor = BlurImageProcessor(blurRadius: 100)
 
   var body: some View {
     VStack(spacing: 0) {
       ForEach(Array(feedPlayersViewModel.searchedContents.enumerated()), id: \.element) { index, content in
         ZStack {
           Color.black.overlay {
-            KFImage.url(URL(string: feedPlayersViewModel.searchedContents[index].thumbnailUrl ?? ""))
-              .placeholder {
-                Color.black
+            if let url = feedPlayersViewModel.searchedContents[index].thumbnailUrl {
+              Color.clear.overlay {
+                KFImage.url(URL(string: url))
+                  .cacheMemoryOnly()
+                  .placeholder {
+                    Color.black
+                      .frame(maxWidth: .infinity, maxHeight: .infinity)
+                  }
+                  .resizable()
+                  .setProcessor(processor)
+                  .scaledToFill()
                   .frame(maxWidth: .infinity, maxHeight: .infinity)
               }
-              .resizable()
-              .aspectRatio(
-                contentMode: content.aspectRatio ?? 1.0 > Double(15.0 / 9.0)
-                  ? .fill
-                  : .fit)
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
-                .overlay { }
+              KFImage.url(URL(string: url))
+                .cacheMemoryOnly()
+                .placeholder {
+                  Color.black
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                }
+                .resizable()
+                .aspectRatio(
+                  contentMode: content.aspectRatio ?? 1.0 > Double(15.0 / 9.0)
+                    ? .fill
+                    : .fit)
+                  .frame(maxWidth: .infinity, maxHeight: .infinity)
+            }
             if let player = feedPlayersViewModel.currentPlayer, index == feedPlayersViewModel.currentVideoIndex {
               ContentPlayer(player: player, aspectRatio: content.aspectRatio)
                 .frame(width: UIScreen.width, height: UIScreen.height)
                 .onTapGesture(count: 2) {
-//                  whistleToggle()
+                  whistleToggle()
                   refreshToken.toggle()
                 }
                 .onAppear {
+                  isChangable = false
+                  DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                    isChangable = true
+                  }
                   let dateFormatter = DateFormatter()
                   dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
                   let dateString = dateFormatter.string(from: .now)
@@ -122,6 +144,14 @@ struct TagSearchContentPlayerView: View {
               }
               if feedMoreModel.bottomSheetPosition != .hidden {
                 DimsThick()
+                  .onAppear {
+                    isChangable = false
+                    isSwipeable = false
+                  }
+                  .onDisappear {
+                    isChangable = true
+                    isSwipeable = true
+                  }
               }
             }
             .frame(width: UIScreen.width, height: UIScreen.height)
@@ -161,6 +191,7 @@ struct TagSearchContentPlayerView: View {
         .id(newId)
       }
     }
+    .toolbar(!isSwipeable ? .hidden : .visible, for: .navigationBar)
     .toolbarRole(.editor)
     .onAppear {
       bartintModel.tintColor = .white
@@ -210,18 +241,18 @@ extension TagSearchContentPlayerView {
     HapticManager.instance.impact(style: .medium)
     timer?.invalidate()
     if feedPlayersViewModel.searchedContents[index].isWhistled {
-      timer = Timer.scheduledTimer(withTimeInterval: 2, repeats: false) { _ in
-        Task {
-          await apiViewModel.whistleAction(contentID: currentContentInfo?.contentId ?? 0, method: .delete)
-        }
+//      timer = Timer.scheduledTimer(withTimeInterval: 2, repeats: false) { _ in
+      Task {
+        await apiViewModel.whistleAction(contentID: currentContentInfo?.contentId ?? 0, method: .delete)
       }
+//      }
       feedPlayersViewModel.searchedContents[index].whistleCount -= 1
     } else {
-      timer = Timer.scheduledTimer(withTimeInterval: 2, repeats: false) { _ in
-        Task {
-          await apiViewModel.whistleAction(contentID: currentContentInfo?.contentId ?? 0, method: .post)
-        }
+//      timer = Timer.scheduledTimer(withTimeInterval: 2, repeats: false) { _ in
+      Task {
+        await apiViewModel.whistleAction(contentID: currentContentInfo?.contentId ?? 0, method: .post)
       }
+//      }
       feedPlayersViewModel.searchedContents[index].whistleCount += 1
     }
     feedPlayersViewModel.searchedContents[index].isWhistled.toggle()

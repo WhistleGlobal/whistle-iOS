@@ -74,7 +74,13 @@ struct MemberFollowListView: View {
     }
     .background(.backgroundDefault)
     .toolbarRole(.editor)
-    .navigationTitle("\(userName)")
+    .toolbar {
+      ToolbarItem(placement: .principal) {
+        Text("\(userName)")
+          .foregroundStyle(Color.labelColorPrimary)
+          .font(.headline)
+      }
+    }
     .navigationBarTitleDisplayMode(.inline)
     .task {
       await memberContentViewModel.requestMemberFollow(userID: userId)

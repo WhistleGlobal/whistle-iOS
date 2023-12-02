@@ -111,6 +111,7 @@ struct ProfileView: View {
                 glassProfile(
                   cornerRadius: 32)
               }
+              .clipShape(RoundedRectangle(cornerRadius: 32))
               .padding(.horizontal, 16)
               .padding(.bottom, 12)
           }
@@ -204,7 +205,7 @@ struct ProfileView: View {
                 .padding(.horizontal, 16)
             }
           } else {
-            switch memberContentViewModel.progress.downloadState {
+            switch memberContentViewModel.feedProgress.downloadState {
             case .notStarted, .downloading:
               LazyVGrid(columns: [
                 GridItem(.flexible()),
@@ -397,7 +398,7 @@ struct ProfileView: View {
       }
     })
     .fullScreenCover(isPresented: $goReport) {
-      ProfileReportTypeSelectionView(goReport: $goReport, userId: userId)
+      ProfileReportTypeSelectionView(memberContentViewModel: memberContentViewModel, goReport: $goReport, userId: userId)
         .environmentObject(apiViewModel)
     }
     .task {

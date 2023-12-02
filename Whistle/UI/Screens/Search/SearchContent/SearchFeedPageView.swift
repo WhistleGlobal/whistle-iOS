@@ -14,6 +14,8 @@ struct SearchFeedPageView: UIViewRepresentable {
   @StateObject var apiViewModel = APIViewModel.shared
   @StateObject var feedPlayersViewModel = SearchPlayersViewModel.shared
   @State var currentContentInfo: MainContent?
+  @State var isChangable = true
+
   @Binding var index: Int
   let dismissAction: DismissAction
 
@@ -23,6 +25,7 @@ struct SearchFeedPageView: UIViewRepresentable {
       rootView: SearchContentPlayerView(
         currentContentInfo: $currentContentInfo,
         index: $index,
+        isChangable: $isChangable,
         lifecycleDelegate: context.coordinator,
         dismissAction: dismissAction)
         .toolbarRole(.editor))
@@ -35,6 +38,7 @@ struct SearchFeedPageView: UIViewRepresentable {
       width: UIScreen.main.bounds.width,
       height: UIScreen.main.bounds.height * CGFloat(apiViewModel.searchedContent.count))
     view.addSubview(childView.view)
+    view.isScrollEnabled = isChangable
     view.showsVerticalScrollIndicator = false
     view.showsHorizontalScrollIndicator = false
     view.contentInsetAdjustmentBehavior = .never
@@ -57,20 +61,23 @@ struct SearchFeedPageView: UIViewRepresentable {
         width: UIScreen.width,
         height: UIScreen.height * CGFloat(apiViewModel.searchedContent.count))
     }
+    uiView.isScrollEnabled = isChangable
   }
 
   func makeCoordinator() -> Coordinator {
-    SearchFeedPageView.Coordinator(parent: self, index: $index)
+    SearchFeedPageView.Coordinator(parent: self, index: $index, changable: $isChangable)
   }
 
   class Coordinator: NSObject, UIScrollViewDelegate, ViewLifecycleDelegate {
 
     var parent: SearchFeedPageView
     @Binding var index: Int
+    @Binding var changable: Bool
 
-    init(parent: SearchFeedPageView, index: Binding<Int>) {
+    init(parent: SearchFeedPageView, index: Binding<Int>, changable: Binding<Bool>) {
       self.parent = parent
       _index = index
+      _changable = changable
     }
 
     func onAppear() {

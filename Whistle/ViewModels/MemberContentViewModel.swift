@@ -22,7 +22,9 @@ class MemberContentViewModel: ObservableObject {
   @Published var memberWhistleCount = 0
   @Published var memberFollow = MemberFollow()
   @Published var memberFeed: [MemberContent] = []
-  let progress = MemberContentProgress()
+  let feedProgress = MemberContentProgress()
+  let profileProgress = MemberContentProgress()
+  let whistleCountProgress = MemberContentProgress()
   let decoder = JSONDecoder()
   let keychain = KeychainSwift()
   var idToken: String {
@@ -59,7 +61,7 @@ class MemberContentViewModel: ObservableObject {
   }
 
   func requestMemberProfile(userID: Int) async {
-//    progress.changeDownloadState(state: .downloading)
+    profileProgress.changeDownloadState(state: .downloading)
     if userID == 0 {
       return
     }
@@ -74,11 +76,11 @@ class MemberContentViewModel: ObservableObject {
           case .success(let success):
             self.memberProfile = success
             continuation.resume()
-//            self.progress.changeDownloadState(state: .finished)
+            self.profileProgress.changeDownloadState(state: .finished)
           case .failure(let error):
             WhistleLogger.logger.error("Failure: \(error)")
             continuation.resume()
-//            self.progress.changeDownloadState(state: .finished)
+            self.profileProgress.changeDownloadState(state: .finished)
           }
         }
     }
@@ -88,6 +90,7 @@ class MemberContentViewModel: ObservableObject {
     if userID == 0 {
       return
     }
+    whistleCountProgress.changeDownloadState(state: .downloading)
     return await withCheckedContinuation { continuation in
       AF.request(
         "\(domainURL)/user/\(userID)/whistle/count",
@@ -112,8 +115,10 @@ class MemberContentViewModel: ObservableObject {
               WhistleLogger.logger.error("Error parsing JSON: \(error)")
               continuation.resume()
             }
+            self.whistleCountProgress.changeDownloadState(state: .finished)
           case .failure(let error):
             WhistleLogger.logger.error("Failure: \(error)")
+            self.whistleCountProgress.changeDownloadState(state: .finished)
           }
         }
     }
@@ -149,7 +154,7 @@ class MemberContentViewModel: ObservableObject {
 
   // FIXME: - 데이터가 없을 시 처리할 로직 생각할 것
   func requestMemberPostFeed(userID: Int) async {
-    progress.changeDownloadState(state: .downloading)
+    feedProgress.changeDownloadState(state: .downloading)
     if userID == 0 { return }
     return await withCheckedContinuation { continuation in
       AF.request(
@@ -170,12 +175,12 @@ class MemberContentViewModel: ObservableObject {
               WhistleLogger.logger.error("Error parsing JSON: \(error)")
               continuation.resume()
             }
-            self.progress.changeDownloadState(state: .finished)
+            self.feedProgress.changeDownloadState(state: .finished)
           case .failure(let error):
             WhistleLogger.logger.error("Failure: \(error)")
             self.memberFeed = []
             continuation.resume()
-            self.progress.changeDownloadState(state: .finished)
+            self.feedProgress.changeDownloadState(state: .finished)
           }
         }
     }

@@ -36,6 +36,7 @@ struct BookmarkedContentPlayerview: View {
 
   let lifecycleDelegate: ViewLifecycleDelegate?
   let dismissAction: DismissAction
+  let processor = BlurImageProcessor(blurRadius: 100)
 
   var body: some View {
     VStack(spacing: 0) {
@@ -50,9 +51,9 @@ struct BookmarkedContentPlayerview: View {
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
                 }
                 .resizable()
+                .setProcessor(processor)
                 .scaledToFill()
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
-                .blur(radius: 10)
             }
             KFImage.url(URL(string: apiViewModel.bookmark[index].thumbnailUrl))
               .cacheMemoryOnly()
@@ -245,17 +246,17 @@ extension BookmarkedContentPlayerview {
     HapticManager.instance.impact(style: .medium)
     timer?.invalidate()
     if apiViewModel.bookmark[index].isWhistled {
-      timer = Timer.scheduledTimer(withTimeInterval: 2, repeats: false) { _ in
-        Task {
-          await apiViewModel.whistleAction(contentID: content.contentId ?? 0, method: .delete)
-        }
+//      timer = Timer.scheduledTimer(withTimeInterval: 2, repeats: false) { _ in
+      Task {
+        await apiViewModel.whistleAction(contentID: content.contentId ?? 0, method: .delete)
+//        }
       }
       apiViewModel.bookmark[index].whistleCount -= 1
     } else {
-      timer = Timer.scheduledTimer(withTimeInterval: 2, repeats: false) { _ in
-        Task {
-          await apiViewModel.whistleAction(contentID: content.contentId ?? 0, method: .post)
-        }
+//      timer = Timer.scheduledTimer(withTimeInterval: 2, repeats: false) { _ in
+      Task {
+        await apiViewModel.whistleAction(contentID: content.contentId ?? 0, method: .post)
+//        }
       }
       apiViewModel.bookmark[index].whistleCount += 1
     }

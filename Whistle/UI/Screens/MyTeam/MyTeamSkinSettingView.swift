@@ -29,7 +29,13 @@ struct MyTeamSkinSettingView: View {
     .fontSystem(fontDesignSystem: .subtitle2)
     .foregroundColor(.labelColorPrimary)
     .navigationBarTitleDisplayMode(.inline)
-    .navigationTitle(ProfileEditWords().myTeamSkinSelect)
+    .toolbar {
+      ToolbarItem(placement: .principal) {
+        Text(ProfileEditWords().myTeamSkinSelect)
+          .foregroundStyle(Color.labelColorPrimary)
+          .font(.headline)
+      }
+    }
     .toolbarRole(.editor)
   }
 }

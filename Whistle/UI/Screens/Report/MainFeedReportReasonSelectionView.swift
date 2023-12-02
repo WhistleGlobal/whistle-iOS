@@ -54,8 +54,6 @@ struct MainFeedReportReasonSelectionView: View {
       }
       .background(Color.backgroundDefault)
       .navigationBarBackButtonHidden()
-      .navigationTitle(CommonWords().report)
-      .navigationBarTitleDisplayMode(.inline)
       .navigationDestination(isPresented: $goComplete) {
         ReportCompleteView(goReport: $goReport)
       }
@@ -67,6 +65,11 @@ struct MainFeedReportReasonSelectionView: View {
             Image(systemName: "xmark")
               .foregroundColor(.labelColorPrimary)
           }
+        }
+        ToolbarItem(placement: .principal) {
+          Text(CommonWords().report)
+            .font(.headline)
+            .foregroundStyle(Color.labelColorPrimary)
         }
       }
     }

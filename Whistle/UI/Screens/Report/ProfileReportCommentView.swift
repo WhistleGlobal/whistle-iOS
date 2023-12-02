@@ -13,6 +13,7 @@ struct ProfileReportCommentView: View {
   @Environment(\.colorScheme) var colorScheme
   @StateObject var apiViewModel = APIViewModel.shared
   @StateObject var alertViewModel = AlertViewModel.shared
+  @ObservedObject var memberContentViewModel: MemberContentViewModel
   @FocusState private var isFocused: Bool
 
   @State var goComplete = false
@@ -78,7 +79,6 @@ struct ProfileReportCommentView: View {
     .padding(.horizontal, 16)
     .background(Color.backgroundDefault)
     .toolbarRole(.editor)
-    .navigationTitle(CommonWords().report)
     .navigationBarTitleDisplayMode(.inline)
     .navigationDestination(isPresented: $goComplete) {
       ReportCompleteView(goReport: $goReport)
@@ -118,7 +118,7 @@ struct ProfileReportCommentView: View {
               Task {
                 let statusCode = await apiViewModel.reportUser(
                   usedID: userId,
-                  contentID: /* apiViewModel.memberFeed.isEmpty ? 0 : */ selectedContentId,
+                  contentID: memberContentViewModel.memberFeed.isEmpty ? 0 : selectedContentId,
                   reportReason: reportReason,
                   reportDescription: inputReportDetail)
                 if statusCode == 200 {
@@ -142,6 +142,11 @@ struct ProfileReportCommentView: View {
             .foregroundColor(.Info)
             .fontSystem(fontDesignSystem: .subtitle2)
         }
+      }
+      ToolbarItem(placement: .principal) {
+        Text(CommonWords().report)
+          .foregroundStyle(Color.labelColorPrimary)
+          .font(.headline)
       }
     }
     .onAppear {

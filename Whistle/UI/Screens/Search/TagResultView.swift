@@ -47,8 +47,14 @@ struct TagResultView: View {
         feedPlayersViewModel.searchedContents = contents
       }
     }
+    .toolbar {
+      ToolbarItem(placement: .principal) {
+        Text("#\(tagText)")
+          .foregroundStyle(Color.labelColorPrimary)
+          .font(.headline)
+      }
+    }
     .toolbarRole(.editor)
-    .navigationTitle("#\(tagText)")
     .navigationBarTitleDisplayMode(.inline)
   }
 }

@@ -103,7 +103,6 @@ struct ProfileEditView: View {
         }
         Button(CommonWords().cancel, role: .cancel) { }
       }
-      .navigationTitle(ProfileEditWords().edit)
       .navigationBarTitleDisplayMode(.inline)
       .toolbar {
         ToolbarItem(placement: .cancellationAction) {
@@ -117,6 +116,11 @@ struct ProfileEditView: View {
             Image(systemName: "xmark")
               .foregroundColor(.labelColorPrimary)
           }
+        }
+        ToolbarItem(placement: .principal) {
+          Text(ProfileEditWords().edit)
+            .foregroundStyle(Color.labelColorPrimary)
+            .font(.headline)
         }
         ToolbarItem(placement: .confirmationAction) {
           Button {

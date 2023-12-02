@@ -18,6 +18,7 @@ struct ProfileReportTypeSelectionView: View {
   @Environment(\.dismiss) var dismiss
   @StateObject var apiViewModel = APIViewModel.shared
   @StateObject var alertViewModel = AlertViewModel.shared
+  @ObservedObject var memberContentViewModel: MemberContentViewModel
 
   @State var reportType = 0
   @State var selectedContentId = 0
@@ -45,6 +46,7 @@ struct ProfileReportTypeSelectionView: View {
         Divider().frame(width: UIScreen.width)
         NavigationLink {
           ProfileReportContentSelectionView(
+            memberContentViewModel: memberContentViewModel,
             selectedContentId: $selectedContentId,
             goReport: $goReport,
             userId: userId,
@@ -53,11 +55,12 @@ struct ProfileReportTypeSelectionView: View {
         } label: {
           reportRow(text: "특정 콘텐츠", isContentReport: true)
         }
-//        .disabled(apiViewModel.memberFeed.isEmpty)
+        .disabled(memberContentViewModel.memberFeed.isEmpty)
         .padding(.horizontal, 16)
         Divider().frame(height: 0.5).padding(.leading, 16).foregroundColor(.labelColorDisablePlaceholder)
         NavigationLink {
           ProfileReportReasonSelectionView(
+            memberContentViewModel: memberContentViewModel,
             goReport: $goReport,
             selectedContentId: $selectedContentId,
             userId: userId,
@@ -71,7 +74,6 @@ struct ProfileReportTypeSelectionView: View {
         Spacer()
       }
       .background(Color.backgroundDefault)
-      .navigationTitle(CommonWords().report)
       .navigationBarTitleDisplayMode(.inline)
       .toolbar {
         ToolbarItem(placement: .cancellationAction) {
@@ -81,6 +83,11 @@ struct ProfileReportTypeSelectionView: View {
             Image(systemName: "xmark")
               .foregroundColor(.labelColorPrimary)
           }
+        }
+        ToolbarItem(placement: .principal) {
+          Text(CommonWords().report)
+            .foregroundStyle(Color.labelColorPrimary)
+            .font(.headline)
         }
       }
     }
@@ -94,13 +101,16 @@ struct ProfileReportTypeSelectionView: View {
 
 extension ProfileReportTypeSelectionView {
   @ViewBuilder
-  func reportRow(text: String, isContentReport _: Bool) -> some View {
+  func reportRow(text: String, isContentReport: Bool) -> some View {
     HStack {
       Text(text)
         .fontSystem(fontDesignSystem: .subtitle2)
-//        .foregroundColor(apiViewModel.memberFeed.isEmpty && isContentReport ? .labelColorDisablePlaceholder : .labelColorPrimary)
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .listRowSeparator(.hidden)
+        .foregroundColor(
+          memberContentViewModel.memberFeed.isEmpty && isContentReport
+            ? .labelColorDisablePlaceholder
+            : .labelColorPrimary)
+          .frame(maxWidth: .infinity, alignment: .leading)
+          .listRowSeparator(.hidden)
       Spacer()
     }
     .frame(height: 56)

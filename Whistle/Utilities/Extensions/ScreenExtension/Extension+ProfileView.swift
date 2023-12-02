@@ -99,22 +99,59 @@ extension ProfileView {
           }
         }
         // Profile Image
-        profileImageView(
-          url: profileType == .my
-            ? apiViewModel.myProfile.profileImage
-            :
-            memberContentViewModel.memberProfile.profileImg,
-          size: UIScreen.getHeight(100))
-          .padding(.bottom, UIScreen.getHeight(16))
+        if profileType == .my {
+          profileImageView(
+            url: apiViewModel.myProfile.profileImage,
+            size: UIScreen.getHeight(100))
+            .padding(.bottom, UIScreen.getHeight(16))
+        } else {
+          if memberContentViewModel.profileProgress.downloadState == .finished {
+            profileImageView(
+              url: memberContentViewModel.memberProfile.profileImg,
+              size: UIScreen.getHeight(100))
+              .padding(.bottom, UIScreen.getHeight(16))
+          } else {
+            Image("ProfileDefault")
+              .resizable()
+              .scaledToFit()
+              .skeleton(
+                with: true,
+                animation: .linear(speed: 0.5),
+                appearance: .gradient(color: .gray30Dark, background: .gray20Dark))
+              .frame(width: UIScreen.getHeight(100), height: UIScreen.getHeight(100))
+              .clipShape(Circle())
+              .overlay {
+                Circle().strokeBorder(Color.Dim_Thin)
+              }
+              .padding(.bottom, UIScreen.getHeight(16))
+          }
+        }
         // userName
-        Text(
-          profileType == .my
-            ? apiViewModel.myProfile.userName
-            : memberContentViewModel.memberProfile.userName)
-          .foregroundColor(Color.LabelColor_Primary_Dark)
-          .fontSystem(fontDesignSystem: .title2_Expanded)
-          .padding(.bottom, UIScreen.getHeight(4))
-        // intruduce
+        if profileType == .my {
+          Text(apiViewModel.myProfile.userName)
+            .foregroundColor(Color.LabelColor_Primary_Dark)
+            .fontSystem(fontDesignSystem: .title2_Expanded)
+            .padding(.bottom, UIScreen.getHeight(4))
+        } else {
+          if memberContentViewModel.profileProgress.downloadState == .finished {
+            Text(memberContentViewModel.memberProfile.userName)
+              .foregroundColor(Color.LabelColor_Primary_Dark)
+              .fontSystem(fontDesignSystem: .title2_Expanded)
+              .padding(.bottom, UIScreen.getHeight(4))
+          } else {
+            Text(memberContentViewModel.memberProfile.userName)
+              .foregroundColor(Color.LabelColor_Primary_Dark)
+              .skeleton(
+                with: true,
+                animation: .linear(speed: 0.5),
+                appearance: .gradient(color: .gray30Dark, background: .gray20Dark))
+              .frame(width: UIScreen.getWidth(160), height: UIScreen.getHeight(24))
+              .fontSystem(fontDesignSystem: .title2_Expanded)
+              .padding(.bottom, UIScreen.getHeight(4))
+          }
+        }
+
+        // introduce
         if profileType == .my {
           introduceText(text: apiViewModel.myProfile.introduce ?? "")
         } else if profileType == .member {
@@ -123,6 +160,7 @@ extension ProfileView {
             memberContentViewModel.memberProfile.introduce
               ?? "")
         }
+
         // Edit button or Follow Button
         if profileType == .my {
           Button {
@@ -141,22 +179,36 @@ extension ProfileView {
         } else {
           memberFollowBlockButton()
         }
+
         // Whistle or Follow count
         HStack(spacing: 0) {
-          Button {
-            goWhistleRanking = true
-          } label: {
-            VStack(spacing: 4) {
-              Text(
-                "\(memberContentViewModel.memberProfile.isBlocked ? 0 : (profileType == .my ? apiViewModel.myWhistleCount : memberContentViewModel.memberWhistleCount))")
+//          Button {
+//            goWhistleRanking = true
+//          } label: {
+          VStack(spacing: 4) {
+            if profileType == .my {
+              Text("\(apiViewModel.myWhistleCount)")
                 .foregroundColor(Color.LabelColor_Primary_Dark)
                 .fontSystem(fontDesignSystem: .title2_Expanded)
-              Text(CommonWords().whistle)
-                .foregroundColor(Color.LabelColor_Secondary_Dark)
-                .fontSystem(fontDesignSystem: .caption_SemiBold)
+            } else if memberContentViewModel.profileProgress.downloadState == .finished {
+              Text(
+                "\(memberContentViewModel.memberProfile.isBlocked ? 0 : memberContentViewModel.memberWhistleCount)")
+                .foregroundColor(Color.LabelColor_Primary_Dark)
+                .fontSystem(fontDesignSystem: .title2_Expanded)
+            } else {
+              Rectangle()
+                .skeleton(
+                  with: true,
+                  animation: .linear(speed: 0.5),
+                  appearance: .gradient(color: .gray30Dark, background: .gray20Dark))
+                .frame(width: UIScreen.getWidth(48), height: UIScreen.getHeight(24))
             }
-            .hCenter()
+            Text(CommonWords().whistle)
+              .foregroundColor(Color.LabelColor_Secondary_Dark)
+              .fontSystem(fontDesignSystem: .caption_SemiBold)
           }
+          .hCenter()
+//          }
           Rectangle().frame(width: 1).foregroundColor(.white).scaleEffect(0.5)
           NavigationLink {
             if profileType == .my {
@@ -169,9 +221,22 @@ extension ProfileView {
             }
           } label: {
             VStack(spacing: 4) {
-              Text("\(memberContentViewModel.memberProfile.isBlocked ? 0 : filteredFollower.count)")
-                .foregroundColor(Color.LabelColor_Primary_Dark)
-                .fontSystem(fontDesignSystem: .title2_Expanded)
+              if profileType == .my {
+                Text("\(filteredFollower.count)")
+                  .foregroundColor(Color.LabelColor_Primary_Dark)
+                  .fontSystem(fontDesignSystem: .title2_Expanded)
+              } else if memberContentViewModel.profileProgress.downloadState == .finished {
+                Text("\(memberContentViewModel.memberProfile.isBlocked ? 0 : filteredFollower.count)")
+                  .foregroundColor(Color.LabelColor_Primary_Dark)
+                  .fontSystem(fontDesignSystem: .title2_Expanded)
+              } else {
+                Rectangle()
+                  .skeleton(
+                    with: true,
+                    animation: .linear(speed: 0.5),
+                    appearance: .gradient(color: .gray30Dark, background: .gray20Dark))
+                  .frame(width: UIScreen.getWidth(48), height: UIScreen.getHeight(24))
+              }
               Text(CommonWords().follower)
                 .foregroundColor(Color.LabelColor_Secondary_Dark)
                 .fontSystem(fontDesignSystem: .caption_SemiBold)
@@ -236,80 +301,124 @@ extension ProfileView {
 
   @ViewBuilder
   func introduceText(text: String) -> some View {
-    Text(text)
-      .foregroundColor(Color.LabelColor_Secondary_Dark)
-      .fontSystem(fontDesignSystem: .body2)
-      .lineLimit(2)
-      .truncationMode(.tail)
-      .multilineTextAlignment(.center)
-      .fixedSize(horizontal: false, vertical: true)
-      .frame(height: UIScreen.getHeight(20))
-      .padding(.top, text.isEmpty ? 0 : UIScreen.getHeight(16))
-      .padding(.bottom, UIScreen.getHeight(16))
-      .padding(.bottom, UIScreen.getHeight(8))
-      .padding(.horizontal, UIScreen.getWidth(48))
+    if profileType == .member {
+      if memberContentViewModel.profileProgress.downloadState == .finished {
+        Text(text)
+          .foregroundColor(Color.LabelColor_Secondary_Dark)
+          .fontSystem(fontDesignSystem: .body2)
+          .lineLimit(2)
+          .truncationMode(.tail)
+          .multilineTextAlignment(.center)
+          .fixedSize(horizontal: false, vertical: true)
+          .frame(height: UIScreen.getHeight(20))
+          .padding(.top, text.isEmpty ? 0 : UIScreen.getHeight(16))
+          .padding(.bottom, UIScreen.getHeight(16))
+          .padding(.bottom, UIScreen.getHeight(8))
+          .padding(.horizontal, UIScreen.getWidth(48))
+      } else {
+        Text(text)
+          .skeleton(
+            with: true,
+            animation: .linear(speed: 0.5),
+            appearance: .gradient(color: .gray30Dark, background: .gray20Dark))
+          .foregroundColor(Color.LabelColor_Secondary_Dark)
+          .fontSystem(fontDesignSystem: .body2)
+          .lineLimit(2)
+          .truncationMode(.tail)
+          .multilineTextAlignment(.center)
+          .fixedSize(horizontal: false, vertical: true)
+          .frame(width: UIScreen.getWidth(200), height: UIScreen.getHeight(20))
+          .padding(.top, text.isEmpty ? 0 : UIScreen.getHeight(16))
+          .padding(.bottom, UIScreen.getHeight(16))
+          .padding(.bottom, UIScreen.getHeight(8))
+          .padding(.horizontal, UIScreen.getWidth(48))
+      }
+    } else {
+      Text(text)
+        .foregroundColor(Color.LabelColor_Secondary_Dark)
+        .fontSystem(fontDesignSystem: .body2)
+        .lineLimit(2)
+        .truncationMode(.tail)
+        .multilineTextAlignment(.center)
+        .fixedSize(horizontal: false, vertical: true)
+        .frame(height: UIScreen.getHeight(20))
+        .padding(.top, text.isEmpty ? 0 : UIScreen.getHeight(16))
+        .padding(.bottom, UIScreen.getHeight(16))
+        .padding(.bottom, UIScreen.getHeight(8))
+        .padding(.horizontal, UIScreen.getWidth(48))
+    }
   }
 
   @ViewBuilder
   func memberFollowBlockButton() -> some View {
-    if memberContentViewModel.memberProfile.isBlocked {
-      Button {
-        alertViewModel.linearAlert(
-          isRed: true,
-          title: "\(memberContentViewModel.memberProfile.userName) 님을 차단 해제하시겠어요?",
-          content: AlertContents().block,
-          cancelText: CommonWords().cancel,
-          destructiveText: CommonWords().unblock)
-        {
+    switch memberContentViewModel.profileProgress.downloadState {
+    case .notStarted, .downloading:
+      Capsule()
+        .skeleton(
+          with: true,
+          animation: .linear(speed: 0.5),
+          appearance: .gradient(color: .gray30Dark, background: .gray20Dark))
+        .frame(width: UIScreen.getWidth(80), height: UIScreen.getHeight(36))
+    case .finished:
+      if memberContentViewModel.memberProfile.isBlocked {
+        Button {
+          alertViewModel.linearAlert(
+            isRed: true,
+            title: "\(memberContentViewModel.memberProfile.userName) 님을 차단 해제하시겠어요?",
+            content: AlertContents().block,
+            cancelText: CommonWords().cancel,
+            destructiveText: CommonWords().unblock)
+          {
+            Task {
+              await apiViewModel.blockAction(userID: userId, method: .delete)
+              BlockList.shared.userIds.append(userId)
+              BlockList.shared.userIds = BlockList.shared.userIds.filter { $0 != userId }
+              Task {
+                await memberContentViewModel.requestMemberProfile(userID: userId)
+                await memberContentViewModel.requestMemberPostFeed(userID: userId)
+              }
+              Task {
+                await memberContentViewModel.requestMemberFollow(userID: userId)
+                await memberContentViewModel.requestMemberWhistlesCount(userID: userId)
+              }
+            }
+          }
+        } label: {
+          unblockButton
+        }
+        .padding(.bottom, UIScreen.getHeight(24))
+      } else {
+        Button("") {
           Task {
-            await apiViewModel.blockAction(userID: userId, method: .delete)
-            BlockList.shared.userIds.append(userId)
-            BlockList.shared.userIds = BlockList.shared.userIds.filter { $0 != userId }
-            Task {
-              await memberContentViewModel.requestMemberProfile(userID: userId)
-              await memberContentViewModel.requestMemberPostFeed(userID: userId)
-            }
-            Task {
-              await memberContentViewModel.requestMemberFollow(userID: userId)
-              await memberContentViewModel.requestMemberWhistlesCount(userID: userId)
+            if memberContentViewModel.memberProfile.isFollowed {
+              memberContentViewModel.memberProfile.isFollowed.toggle()
+              await apiViewModel.followAction(userID: userId, method: .delete)
+              apiViewModel.mainFeed = apiViewModel.mainFeed.map { item in
+                let mutableItem = item
+                if mutableItem.userId == userId {
+                  mutableItem.isFollowed = memberContentViewModel.memberProfile.isFollowed
+                }
+                return mutableItem
+              }
+            } else {
+              memberContentViewModel.memberProfile.isFollowed.toggle()
+              await apiViewModel.followAction(userID: userId, method: .post)
+              apiViewModel.mainFeed = apiViewModel.mainFeed.map { item in
+                let mutableItem = item
+                if mutableItem.userId == userId {
+                  mutableItem.isFollowed = memberContentViewModel.memberProfile.isFollowed
+                }
+                return mutableItem
+              }
             }
           }
         }
-      } label: {
-        unblockButton
+        .buttonStyle(FollowButtonStyle(isFollowed: $memberContentViewModel.memberProfile.isFollowed))
+        .frame(width: UIScreen.getWidth(114), height: UIScreen.getHeight(36))
+        .opacity(isProfileLoaded ? 1 : 0)
+        .disabled(userId == apiViewModel.myProfile.userId)
+        .padding(.bottom, UIScreen.getHeight(24))
       }
-      .padding(.bottom, UIScreen.getHeight(24))
-    } else {
-      Button("") {
-        Task {
-          if memberContentViewModel.memberProfile.isFollowed {
-            memberContentViewModel.memberProfile.isFollowed.toggle()
-            await apiViewModel.followAction(userID: userId, method: .delete)
-            apiViewModel.mainFeed = apiViewModel.mainFeed.map { item in
-              let mutableItem = item
-              if mutableItem.userId == userId {
-                mutableItem.isFollowed = memberContentViewModel.memberProfile.isFollowed
-              }
-              return mutableItem
-            }
-          } else {
-            memberContentViewModel.memberProfile.isFollowed.toggle()
-            await apiViewModel.followAction(userID: userId, method: .post)
-            apiViewModel.mainFeed = apiViewModel.mainFeed.map { item in
-              let mutableItem = item
-              if mutableItem.userId == userId {
-                mutableItem.isFollowed = memberContentViewModel.memberProfile.isFollowed
-              }
-              return mutableItem
-            }
-          }
-        }
-      }
-      .buttonStyle(FollowButtonStyle(isFollowed: $memberContentViewModel.memberProfile.isFollowed))
-      .frame(width: UIScreen.getWidth(114), height: UIScreen.getHeight(36))
-      .opacity(isProfileLoaded ? 1 : 0)
-      .disabled(userId == apiViewModel.myProfile.userId)
-      .padding(.bottom, UIScreen.getHeight(24))
     }
   }
 

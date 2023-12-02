@@ -89,10 +89,24 @@ extension APIViewModel: PostFeedProtocol {
         case .failure:
           WhistleLogger.logger.error("Failure")
           completion(response)
+//          self.retryRequestMainFeed(completion: completion)
           break
         }
       }
   }
+
+//
+//  func retryRequestMainFeed(completion: @escaping (DataResponse<[MainContent], AFError>) -> Void, retryCount: Int = 3) {
+//    guard retryCount > 0 else {
+//      // 최대 재시도 횟수 초과
+//      return
+//    }
+//
+//    // 재시도 로직: 2초 간격을 두고 다시 시도하는 방식
+//    DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
+//      self.requestMainFeed(completion: completion)
+//    }
+//  }
 
   // /user/post/suspend-list
   func requestReportedFeed() async {
@@ -467,10 +481,25 @@ extension APIViewModel: PostFeedProtocol {
             LaunchScreenViewModel.shared.myTeamContentPlayerReady()
           }
           completion(response)
+//          self.retryRequestMyTeamFeed(completion: completion)
           break
         }
       }
   }
+
+//  func retryRequestMyTeamFeed(completion: @escaping (DataResponse<[MainContent], AFError>) -> Void) {
+//    var retryCount = 3
+//    guard retryCount > 0 else {
+//      // 최대 재시도 횟수 초과
+//      return
+//    }
+//
+//    // 재시도 로직: 2초 간격을 두고 다시 시도하는 방식
+//    DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
+//      retryCount -= 1
+//      self.requestMyTeamFeed(completion: completion)
+//    }
+//  }
 
   func publisherSend() {
     publisher.send(UUID())

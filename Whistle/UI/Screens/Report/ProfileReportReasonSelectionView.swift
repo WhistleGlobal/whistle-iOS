@@ -12,7 +12,7 @@ import SwiftUI
 struct ProfileReportReasonSelectionView: View {
   @Environment(\.dismiss) var dismiss
   @StateObject var apiViewModel = APIViewModel.shared
-
+  @ObservedObject var memberContentViewModel: MemberContentViewModel
   @State var goComplete = false
   @Binding var goReport: Bool
   @Binding var selectedContentId: Int
@@ -41,6 +41,7 @@ struct ProfileReportReasonSelectionView: View {
         ForEach(ContentReportReason.allCases, id: \.self) { reason in
           NavigationLink {
             ProfileReportCommentView(
+              memberContentViewModel: memberContentViewModel,
               goReport: $goReport,
               selectedContentId: $selectedContentId,
               reportCategory: .post,
@@ -53,27 +54,29 @@ struct ProfileReportReasonSelectionView: View {
           Divider().frame(height: 0.5).padding(.leading, 16).foregroundColor(.labelColorDisablePlaceholder)
         }
       } else {
-        ForEach(UserReportReason.allCases, id: \.self) { _ in
-//          NavigationLink {
-//            if apiViewModel.memberFeed.isEmpty {
-//              ProfileReportCommentView(
-//                goReport: $goReport,
-//                selectedContentId: .constant(0),
-//                reportCategory: .user,
-//                reportReason: reason.numericValue,
-//                userId: userId)
-//            } else {
-//              ProfileReportContentSelectionView(
-//                selectedContentId: $selectedContentId,
-//                goReport: $goReport,
-//                userId: userId,
-//                reportCategory: .user,
-//                reportReason: reason.numericValue)
-//            }
-//          } label: {
-//            reportRow(text: reason.rawValue)
-//          }
-//          .id(UUID())
+        ForEach(UserReportReason.allCases, id: \.self) { reason in
+          NavigationLink {
+            if memberContentViewModel.memberFeed.isEmpty {
+              ProfileReportCommentView(
+                memberContentViewModel: memberContentViewModel,
+                goReport: $goReport,
+                selectedContentId: .constant(0),
+                reportCategory: .user,
+                reportReason: reason.numericValue,
+                userId: userId)
+            } else {
+              ProfileReportContentSelectionView(
+                memberContentViewModel: memberContentViewModel,
+                selectedContentId: $selectedContentId,
+                goReport: $goReport,
+                userId: userId,
+                reportCategory: .user,
+                reportReason: reason.numericValue)
+            }
+          } label: {
+            reportRow(text: reason.rawValue)
+          }
+          .id(UUID())
 
           Divider().frame(height: 0.5).padding(.leading, 16).foregroundColor(.labelColorDisablePlaceholder)
         }
@@ -81,7 +84,13 @@ struct ProfileReportReasonSelectionView: View {
       Spacer()
     }
     .background(Color.backgroundDefault)
-    .navigationTitle(CommonWords().report)
+    .toolbar {
+      ToolbarItem(placement: .principal) {
+        Text(CommonWords().report)
+          .foregroundStyle(Color.labelColorPrimary)
+          .font(.headline)
+      }
+    }
     .navigationBarTitleDisplayMode(.inline)
     .toolbarRole(.editor)
     .navigationDestination(isPresented: $goComplete) {

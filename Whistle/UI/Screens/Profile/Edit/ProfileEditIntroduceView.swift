@@ -45,9 +45,13 @@ struct ProfileEditIntroduceView: View {
     .background(.backgroundDefault)
     .padding(.horizontal, 16)
     .toolbarRole(.editor)
-    .navigationTitle(ProfileEditWords().intro)
     .navigationBarTitleDisplayMode(.inline)
     .toolbar {
+      ToolbarItem(placement: .principal) {
+        Text(ProfileEditWords().intro)
+          .foregroundStyle(Color.labelColorPrimary)
+          .font(.headline)
+      }
       ToolbarItem(placement: .confirmationAction) {
         Button {
           Task {
