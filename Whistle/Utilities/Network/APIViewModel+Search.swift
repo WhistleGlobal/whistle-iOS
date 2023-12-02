@@ -83,4 +83,24 @@ extension APIViewModel: SearchProtocol {
         }
       }
   }
+
+  func requestTagSearchedPopularContent(queryString: String, completion: @escaping ([MainContent]) -> Void) {
+    AF.request(
+      "\(domainURL)/search/hashtag-content/popular?query=\(queryString)"
+        .addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? "",
+      method: .get,
+      headers: contentTypeJson)
+      .validate(statusCode: 200 ... 300)
+      .responseDecodable(of: [MainContent].self) { response in
+        switch response.result {
+        case .success(let data):
+          self.tagSearchedRecentContentPopular = data
+          completion(self.tagSearchedRecentContent)
+          SearchProgressViewModel.shared.changeSearchTagContentState(to: .found)
+        case .failure(let error):
+          WhistleLogger.logger.error("requestTagSearchedContent(queryString: String) \(error)")
+          SearchProgressViewModel.shared.changeSearchTagContentState(to: .notFound)
+        }
+      }
+  }
 }

@@ -12,7 +12,7 @@ import SwiftUI
 struct TagResultView: View {
 
   let tagText: String
-  @State var tagTabSelection: TagTabSelection = .popular
+  @State var tagTabSelection: TagTabSelection = .recent
   @StateObject var apiViewModel = APIViewModel.shared
   @StateObject var feedPlayersViewModel = TagSearchPlayersViewModel()
   @StateObject var feedMoreModel = MainFeedMoreModel.shared
@@ -23,8 +23,8 @@ struct TagResultView: View {
         .fontSystem(fontDesignSystem: .subtitle3)
         .foregroundColor(.LabelColor_DisablePlaceholder_Dark)
       HStack(spacing: 0) {
-        SearchTabItem(tabSelected: $tagTabSelection, tabType: .popular)
         SearchTabItem(tabSelected: $tagTabSelection, tabType: .recent)
+        SearchTabItem(tabSelected: $tagTabSelection, tabType: .popular)
       }
       .padding(.horizontal, 16)
       switch tagTabSelection {
@@ -46,6 +46,8 @@ struct TagResultView: View {
       apiViewModel.requestTagSearchedRecentContent(queryString: tagText) { contents in
         feedPlayersViewModel.searchedContents = contents
       }
+      apiViewModel.requestTagSearchedPopularContent(queryString: tagText) { _ in
+      }
     }
     .toolbar {
       ToolbarItem(placement: .principal) {
@@ -56,6 +58,13 @@ struct TagResultView: View {
     }
     .toolbarRole(.editor)
     .navigationBarTitleDisplayMode(.inline)
+    .onChange(of: tagTabSelection) { newValue in
+      if newValue == .recent {
+        feedPlayersViewModel.searchedContents = apiViewModel.tagSearchedRecentContent
+      } else {
+        feedPlayersViewModel.searchedContents = apiViewModel.tagSearchedRecentContentPopular
+      }
+    }
   }
 }
 
@@ -94,8 +103,14 @@ extension TagResultView {
     .padding(.horizontal, 16)
     .scrollIndicators(.hidden)
     .refreshable {
-      apiViewModel.requestTagSearchedRecentContent(queryString: tagText) { contents in
-        feedPlayersViewModel.searchedContents = contents
+      if tagTabSelection == .recent {
+        apiViewModel.requestTagSearchedRecentContent(queryString: tagText) { contents in
+          feedPlayersViewModel.searchedContents = contents
+        }
+      } else {
+        apiViewModel.requestTagSearchedPopularContent(queryString: tagText) { contents in
+          feedPlayersViewModel.searchedContents = contents
+        }
       }
     }
   }
