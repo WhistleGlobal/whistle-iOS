@@ -281,9 +281,9 @@ extension APIViewModel: ProfileProtocol {
     }
   }
 
-  func requestRankingList() {
+  func requestRankingList(userID: Int) {
     AF.request(
-      "\(domainURL)/user/whistle-ranking",
+      "\(domainURL)/user/whistle-ranking/\(userID)",
       method: .get,
       headers: contentTypeJson)
       .validate(statusCode: 200..<300)

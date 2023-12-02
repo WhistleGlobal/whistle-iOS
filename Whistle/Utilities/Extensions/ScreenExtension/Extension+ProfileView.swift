@@ -55,7 +55,9 @@ extension ProfileView {
       }
       .id(UUID())
       NavigationLink(
-        destination: WhistleRankingView(),
+        destination: profileType == .my
+          ? WhistleRankingView(userID: apiViewModel.myProfile.userId, userName: apiViewModel.myProfile.userName)
+          : WhistleRankingView(userID: userId, userName: memberContentViewModel.memberProfile.userName),
         isActive: $goWhistleRanking)
       {
         EmptyView()
@@ -182,33 +184,33 @@ extension ProfileView {
 
         // Whistle or Follow count
         HStack(spacing: 0) {
-//          Button {
-//            goWhistleRanking = true
-//          } label: {
-          VStack(spacing: 4) {
-            if profileType == .my {
-              Text("\(apiViewModel.myWhistleCount)")
-                .foregroundColor(Color.LabelColor_Primary_Dark)
-                .fontSystem(fontDesignSystem: .title2_Expanded)
-            } else if memberContentViewModel.profileProgress.downloadState == .finished {
-              Text(
-                "\(memberContentViewModel.memberProfile.isBlocked ? 0 : memberContentViewModel.memberWhistleCount)")
-                .foregroundColor(Color.LabelColor_Primary_Dark)
-                .fontSystem(fontDesignSystem: .title2_Expanded)
-            } else {
-              Rectangle()
-                .skeleton(
-                  with: true,
-                  animation: .linear(speed: 0.5),
-                  appearance: .gradient(color: .gray30Dark, background: .gray20Dark))
-                .frame(width: UIScreen.getWidth(48), height: UIScreen.getHeight(24))
+          Button {
+            goWhistleRanking = true
+          } label: {
+            VStack(spacing: 4) {
+              if profileType == .my {
+                Text("\(apiViewModel.myWhistleCount)")
+                  .foregroundColor(Color.LabelColor_Primary_Dark)
+                  .fontSystem(fontDesignSystem: .title2_Expanded)
+              } else if memberContentViewModel.profileProgress.downloadState == .finished {
+                Text(
+                  "\(memberContentViewModel.memberProfile.isBlocked ? 0 : memberContentViewModel.memberWhistleCount)")
+                  .foregroundColor(Color.LabelColor_Primary_Dark)
+                  .fontSystem(fontDesignSystem: .title2_Expanded)
+              } else {
+                Rectangle()
+                  .skeleton(
+                    with: true,
+                    animation: .linear(speed: 0.5),
+                    appearance: .gradient(color: .gray30Dark, background: .gray20Dark))
+                  .frame(width: UIScreen.getWidth(48), height: UIScreen.getHeight(24))
+              }
+              Text(CommonWords().whistle)
+                .foregroundColor(Color.LabelColor_Secondary_Dark)
+                .fontSystem(fontDesignSystem: .caption_SemiBold)
             }
-            Text(CommonWords().whistle)
-              .foregroundColor(Color.LabelColor_Secondary_Dark)
-              .fontSystem(fontDesignSystem: .caption_SemiBold)
+            .hCenter()
           }
-          .hCenter()
-//          }
           Rectangle().frame(width: 1).foregroundColor(.white).scaleEffect(0.5)
           NavigationLink {
             if profileType == .my {

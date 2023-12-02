@@ -18,4 +18,5 @@ protocol ProfileProtocol {
   func rebokeAppleToken() async
   func blockAction(userID: Int, method: HTTPMethod) async
   func updateMyTeam(myTeam: String) async
+  func requestRankingList(userID: Int)
 }
