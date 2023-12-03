@@ -11,7 +11,7 @@ import Foundation
 
 class RankingModel: Decodable, ObservableObject {
   @Published var userRanking = UserRanking()
-  @Published var topRankings : [TopRanking] = []
+  @Published var topRankings: [TopRanking] = []
 
   enum CodingKeys: String, CodingKey {
     case userRanking
@@ -33,14 +33,14 @@ class UserRanking: Decodable, ObservableObject {
   @Published var percentile = 0
   @Published var totalWhistle = 0
 
-  enum CodingKeys:String, CodingKey {
+  enum CodingKeys: String, CodingKey {
     case percentile
     case totalWhistle
   }
 
   required init(from decoder: Decoder) throws {
     let container = try decoder.container(keyedBy: CodingKeys.self)
-    percentile = Int(Double(try container.decode(String.self, forKey: .percentile)) ?? 0.0)
+    percentile = try Int(Double(container.decode(String.self, forKey: .percentile)) ?? 0.0)
     totalWhistle = try container.decode(Int.self, forKey: .totalWhistle)
   }
 
@@ -57,7 +57,7 @@ class TopRanking: Decodable, ObservableObject, Identifiable, Hashable {
   @Published var totalWhistle = 0
   @Published var profileImg: String?
 
-  enum CodingKeys:String, CodingKey {
+  enum CodingKeys: String, CodingKey {
     case userId = "user_id"
     case userName = "user_name"
     case myTeam = "myteam"

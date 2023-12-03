@@ -792,13 +792,13 @@ extension VideoCaptureView {
                 editorVM.currentVideo?.setVolume(0)
               }
               Task {
-                UploadProgressViewModel.shared.uploadStarted()
+                UploadProgress.shared.uploadStarted()
                 tabbarModel.switchTab(to: .main)
                 alertViewModel.onFullScreenCover = false
               }
               Task {
                 if let video = editorVM.currentVideo {
-                  UploadProgressViewModel.shared.thumbnail = video.getThumbnail()
+                  UploadProgress.shared.thumbnail = video.getThumbnail()
                   dismiss()
                   let exporterVM = VideoExporterViewModel(video: video, musicVolume: musicVM.musicVolume)
                   await exporterVM.action(.save, start: video.rangeDuration.lowerBound)

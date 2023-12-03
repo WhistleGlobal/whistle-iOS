@@ -41,7 +41,6 @@ class UserAuth: ObservableObject {
   @AppStorage("deviceToken") var deviceToken: String?
   @AppStorage("isMyTeamSelected") var isMyTeamSelected = false
 
-
   var apiViewModel = APIViewModel.shared
   var email: String? = ""
   var userName = ""
@@ -91,7 +90,7 @@ class UserAuth: ObservableObject {
           } else {
             self.isAccess = true
             APIViewModel.shared.myProfile = data
-            if let myTeam = APIViewModel.shared.myProfile.myTeam {
+            if APIViewModel.shared.myProfile.myTeam != nil {
               self.isMyTeamSelected = true
             } else {
               self.isMyTeamSelected = false

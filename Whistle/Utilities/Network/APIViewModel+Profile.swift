@@ -270,7 +270,7 @@ extension APIViewModel: ProfileProtocol {
         .validate(statusCode: 200...300)
         .response { response in
           switch response.result {
-          case .success(let data):
+          case .success:
             WhistleLogger.logger.debug("updateMyTeam success!!")
             continuaion.resume()
           case .failure(let error):

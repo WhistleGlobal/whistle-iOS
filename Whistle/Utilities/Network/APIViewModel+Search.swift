@@ -20,9 +20,9 @@ extension APIViewModel: SearchProtocol {
         switch response.result {
         case .success(let data):
           self.searchedUser = data
-          SearchProgressViewModel.shared.changeSearchUserState(to: .found)
+          SearchProgress.shared.changeSearchUserState(to: .found)
         case .failure(let error):
-          SearchProgressViewModel.shared.changeSearchUserState(to: .notFound)
+          SearchProgress.shared.changeSearchUserState(to: .notFound)
           WhistleLogger.logger.error("\(error)")
         }
       }
@@ -39,9 +39,9 @@ extension APIViewModel: SearchProtocol {
         switch response.result {
         case .success(let data):
           self.searchedTag = data
-          SearchProgressViewModel.shared.changeSearchTagState(to: .found)
+          SearchProgress.shared.changeSearchTagState(to: .found)
         case .failure(let error):
-          SearchProgressViewModel.shared.changeSearchTagState(to: .notFound)
+          SearchProgress.shared.changeSearchTagState(to: .notFound)
           WhistleLogger.logger.error("requestSearchedTag(queryString: String) \(error)")
         }
       }
@@ -57,9 +57,9 @@ extension APIViewModel: SearchProtocol {
         switch response.result {
         case .success(let data):
           self.searchedContent = data
-          SearchProgressViewModel.shared.changeSearchContentState(to: .found)
+          SearchProgress.shared.changeSearchContentState(to: .found)
         case .failure(let error):
-          SearchProgressViewModel.shared.changeSearchContentState(to: .notFound)
+          SearchProgress.shared.changeSearchContentState(to: .notFound)
         }
       }
   }
@@ -76,10 +76,10 @@ extension APIViewModel: SearchProtocol {
         case .success(let data):
           self.tagSearchedRecentContent = data
           completion(self.tagSearchedRecentContent)
-          SearchProgressViewModel.shared.changeSearchTagContentState(to: .found)
+          SearchProgress.shared.changeSearchTagContentState(to: .found)
         case .failure(let error):
           WhistleLogger.logger.error("requestTagSearchedContent(queryString: String) \(error)")
-          SearchProgressViewModel.shared.changeSearchTagContentState(to: .notFound)
+          SearchProgress.shared.changeSearchTagContentState(to: .notFound)
         }
       }
   }
@@ -96,10 +96,10 @@ extension APIViewModel: SearchProtocol {
         case .success(let data):
           self.tagSearchedRecentContentPopular = data
           completion(self.tagSearchedRecentContent)
-          SearchProgressViewModel.shared.changeSearchTagContentState(to: .found)
+          SearchProgress.shared.changeSearchTagContentState(to: .found)
         case .failure(let error):
           WhistleLogger.logger.error("requestTagSearchedContent(queryString: String) \(error)")
-          SearchProgressViewModel.shared.changeSearchTagContentState(to: .notFound)
+          SearchProgress.shared.changeSearchTagContentState(to: .notFound)
         }
       }
   }

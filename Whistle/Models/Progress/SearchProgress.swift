@@ -1,5 +1,5 @@
 //
-//  SearchProgressViewModel.swift
+//  SearchProgress.swift
 //  Whistle
 //
 //  Created by 박상원 on 11/23/23.
@@ -15,10 +15,10 @@ enum SearchState {
   case notStarted, searching, found, notFound
 }
 
-// MARK: - SearchProgressViewModel
+// MARK: - SearchProgress
 
-class SearchProgressViewModel {
-  static let shared = SearchProgressViewModel()
+class SearchProgress {
+  static let shared = SearchProgress()
 
   let searchUserSubject = CurrentValueSubject<SearchState, Never>(.notStarted)
   let searchTagSubject = CurrentValueSubject<SearchState, Never>(.notStarted)

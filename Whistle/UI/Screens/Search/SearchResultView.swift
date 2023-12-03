@@ -74,7 +74,7 @@ struct SearchResultView: View {
                   if let jsonData = try? JSON(searchArray).rawData() {
                     searchHistory = String(data: jsonData, encoding: .utf8) ?? ""
                   }
-                  SearchProgressViewModel.shared.reset()
+                  SearchProgress.shared.reset()
                   searchQueryString = inputText
                   search(query: inputText)
                 }
@@ -97,7 +97,7 @@ struct SearchResultView: View {
               searchHistory = String(data: jsonData, encoding: .utf8) ?? ""
               WhistleLogger.logger.debug("submit searchHistory: \(searchHistory)")
             }
-            SearchProgressViewModel.shared.reset()
+            SearchProgress.shared.reset()
             searchQueryString = inputText
             WhistleLogger.logger.debug("submit searchQueryString: \(searchQueryString)")
             search(query: inputText)
@@ -112,21 +112,21 @@ struct SearchResultView: View {
     .onDisappear {
       UIApplication.shared.endEditing()
     }
-    .onReceive(SearchProgressViewModel.shared.searchContentSubject) { newValue in
+    .onReceive(SearchProgress.shared.searchContentSubject) { newValue in
       contentSearchState = newValue
       if newValue == .searching {
         apiViewModel.searchedContent = []
         apiViewModel.requestSearchedContent(queryString: inputText)
       }
     }
-    .onReceive(SearchProgressViewModel.shared.searchUserSubject) { newValue in
+    .onReceive(SearchProgress.shared.searchUserSubject) { newValue in
       userSearchState = newValue
       if newValue == .searching {
         apiViewModel.searchedUser = []
         apiViewModel.requestSearchedUser(queryString: inputText)
       }
     }
-    .onReceive(SearchProgressViewModel.shared.searchTagSubject) { newValue in
+    .onReceive(SearchProgress.shared.searchTagSubject) { newValue in
       tagSearchState = newValue
       if newValue == .searching {
         apiViewModel.searchedTag = []
@@ -136,16 +136,16 @@ struct SearchResultView: View {
     .onChange(of: searchTabSelection) { value in
       switch value {
       case .content:
-        if SearchProgressViewModel.shared.searchingContent == .notStarted {
-          SearchProgressViewModel.shared.changeSearchContentState(to: .searching)
+        if SearchProgress.shared.searchingContent == .notStarted {
+          SearchProgress.shared.changeSearchContentState(to: .searching)
         }
       case .account:
-        if SearchProgressViewModel.shared.searchingUser == .notStarted {
-          SearchProgressViewModel.shared.changeSearchUserState(to: .searching)
+        if SearchProgress.shared.searchingUser == .notStarted {
+          SearchProgress.shared.changeSearchUserState(to: .searching)
         }
       case .hashtag:
-        if SearchProgressViewModel.shared.searchingTag == .notStarted {
-          SearchProgressViewModel.shared.changeSearchTagState(to: .searching)
+        if SearchProgress.shared.searchingTag == .notStarted {
+          SearchProgress.shared.changeSearchTagState(to: .searching)
         }
       }
     }
@@ -355,11 +355,11 @@ extension SearchResultView {
     searchQueryString = inputText
     switch searchTabSelection {
     case .content:
-      SearchProgressViewModel.shared.changeSearchContentState(to: .searching)
+      SearchProgress.shared.changeSearchContentState(to: .searching)
     case .account:
-      SearchProgressViewModel.shared.changeSearchUserState(to: .searching)
+      SearchProgress.shared.changeSearchUserState(to: .searching)
     case .hashtag:
-      SearchProgressViewModel.shared.changeSearchTagState(to: .searching)
+      SearchProgress.shared.changeSearchTagState(to: .searching)
     }
     Mixpanel.mainInstance().people.increment(property: "search_count", by: 1)
     Mixpanel.mainInstance().track(event: "search", properties: [

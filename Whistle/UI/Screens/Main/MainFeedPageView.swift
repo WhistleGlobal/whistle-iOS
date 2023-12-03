@@ -24,7 +24,6 @@ struct MainFeedPageView: UIViewRepresentable {
   @Binding var scrolledContentCount: Int
   @Binding var index: Int
 
-
   func makeUIView(context: Context) -> UIScrollView {
     let view = UIScrollView()
     let childView = UIHostingController(

@@ -27,6 +27,7 @@ struct WhistleApp: App {
   }
 
   // MARK: Internal
+
   @AppStorage("isAccess") var isAccess = false
   @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
   @StateObject var appleSignInViewModel = AppleSignInViewModel()

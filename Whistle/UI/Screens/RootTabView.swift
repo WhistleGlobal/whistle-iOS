@@ -165,7 +165,7 @@ struct RootTabView: View {
         .opacity(showGuide ? 0.0 : tabbarModel.tabbarOpacity)
         .padding(.horizontal, 16)
         .onReceive(NavigationModel.shared.$navigate, perform: { _ in
-          if UploadProgressViewModel.shared.isUploading {
+          if UploadProgress.shared.isUploading {
             tabbarModel.switchTab(to: .main)
             tabbarModel.showVideoCaptureView = false
           }

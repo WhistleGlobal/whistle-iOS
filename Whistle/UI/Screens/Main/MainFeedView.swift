@@ -84,7 +84,7 @@ struct MainFeedView: View {
         }
       }
     }
-    .onReceive(UploadProgressViewModel.shared.isUploadingSubject) { value in
+    .onReceive(UploadProgress.shared.isUploadingSubject) { value in
       switch value {
       case true:
         withAnimation {
@@ -96,10 +96,10 @@ struct MainFeedView: View {
         }
       }
     }
-    .onReceive(UploadProgressViewModel.shared.thumbnailSubject) { value in
+    .onReceive(UploadProgress.shared.thumbnailSubject) { value in
       uploadingThumbnail = value
     }
-    .onReceive(UploadProgressViewModel.shared.progressSubject) { value in
+    .onReceive(UploadProgress.shared.progressSubject) { value in
       uploadProgress = value
     }
     .bottomSheet(
@@ -416,7 +416,7 @@ struct MainFeedView: View {
                 .fill(.black.opacity(0.48))
               RoundedRectangle(cornerRadius: 8)
                 .strokeBorder(Color.Border_Default_Dark)
-              CircularProgressBar(progress: UploadProgressViewModel.shared.progress, width: 2)
+              CircularProgressBar(progress: UploadProgress.shared.progress, width: 2)
                 .padding(8)
               Text("\(Int(uploadProgress * 100))%")
                 .foregroundStyle(Color.white)

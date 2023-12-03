@@ -83,11 +83,11 @@ struct DescriptionEditorView: View {
             isAccess = true
             tabbarModel.showTabbar()
           }
-          UploadProgressViewModel.shared.uploadStarted()
+          UploadProgress.shared.uploadStarted()
         }
         Task {
           if let video = editorVM.currentVideo {
-            UploadProgressViewModel.shared.thumbnail = video.getThumbnail(start: video.rangeDuration.lowerBound)
+            UploadProgress.shared.thumbnail = video.getThumbnail(start: video.rangeDuration.lowerBound)
             NavigationModel.shared.navigate.toggle()
             await exporterVM.action(.save, start: video.rangeDuration.lowerBound)
             // 출처 url의 형식 점검. 반드시 http가 포함되어야 정상 URL로 간주됨
