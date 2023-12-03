@@ -95,6 +95,25 @@ extension APIViewModel: PostFeedProtocol {
       }
   }
 
+  func requestMainFeedPagination(page: Int, completion: @escaping (DataResponse<[MainContent], AFError>) -> Void) {
+    AF.request(
+      "\(domainURL)/content/content-list/personalize/pagination?page=\(page)",
+      method: .get,
+      headers: contentTypeJson)
+      .validate(statusCode: 200 ... 300)
+      .responseDecodable(of: [MainContent].self) { response in
+        switch response.result {
+        case .success(let success):
+          self.mainFeed = success
+          completion(response)
+        case .failure:
+          WhistleLogger.logger.error("Failure")
+          completion(response)
+          break
+        }
+      }
+  }
+
 //
 //  func retryRequestMainFeed(completion: @escaping (DataResponse<[MainContent], AFError>) -> Void, retryCount: Int = 3) {
 //    guard retryCount > 0 else {

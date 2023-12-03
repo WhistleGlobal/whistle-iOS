@@ -106,7 +106,21 @@ struct MyTeamSelectView: View {
           Mixpanel.mainInstance().track(event: "select_myteam", properties: [
             "team_selected": true,
           ])
-          apiViewModel.requestMyTeamFeed { _ in
+          apiViewModel.requestMyTeamFeed { value in
+            switch value.result {
+            case .success:
+              LaunchScreenViewModel.shared.myTeamFeedDownloaded()
+            case .failure:
+              apiViewModel.requestMyTeamFeed { value in
+                switch value.result {
+                case .success:
+                  LaunchScreenViewModel.shared.myTeamFeedDownloaded()
+                case .failure:
+                  WhistleLogger.logger.debug("MyTeamFeed Download Failure")
+                }
+              }
+              WhistleLogger.logger.debug("MyTeamFeed Download Failure")
+            }
           }
           if isMyTeamSelectPassed {
             dismiss()

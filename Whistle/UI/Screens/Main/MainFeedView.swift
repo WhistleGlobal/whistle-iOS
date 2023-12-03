@@ -301,6 +301,14 @@ struct MainFeedView: View {
           case .success:
             LaunchScreenViewModel.shared.myTeamFeedDownloaded()
           case .failure:
+            apiViewModel.requestMyTeamFeed { value in
+              switch value.result {
+              case .success:
+                LaunchScreenViewModel.shared.myTeamFeedDownloaded()
+              case .failure:
+                WhistleLogger.logger.debug("MyTeamFeed Download Failure")
+              }
+            }
             WhistleLogger.logger.debug("MyTeamFeed Download Failure")
           }
         }
@@ -320,7 +328,14 @@ struct MainFeedView: View {
             case .success:
               LaunchScreenViewModel.shared.feedDownloaded()
             case .failure:
-              WhistleLogger.logger.debug("MainFeed Download Failure")
+              apiViewModel.requestMainFeed { value in
+                switch value.result {
+                case .success:
+                  LaunchScreenViewModel.shared.feedDownloaded()
+                case .failure:
+                  WhistleLogger.logger.debug("MainFeed Download Failure")
+                }
+              }
             }
           }
         }

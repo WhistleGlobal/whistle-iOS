@@ -171,7 +171,7 @@ struct ProfileView: View {
               }
               .zIndex(0)
               .offset(y: offsetY <= -UIScreen.getHeight(339) ? UIScreen.getHeight(339 - 42 - 64) : 12)
-              .padding(.bottom, offsetY <= -UIScreen.getHeight(339) ? UIScreen.getHeight(339 - 42 - 64 + 90) : 90)
+              .padding(.bottom, offsetY <= -UIScreen.getHeight(339) ? UIScreen.getHeight(339 - 42 - 64 + 100) : 100)
               .padding(.top, 12)
               .padding(.horizontal, 16)
 
@@ -193,7 +193,7 @@ struct ProfileView: View {
               }
               .zIndex(0)
               .offset(y: offsetY <= -UIScreen.getHeight(339) ? UIScreen.getHeight(339 - 42 - 64) : 12)
-              .padding(.bottom, offsetY <= -UIScreen.getHeight(339) ? UIScreen.getHeight(339 - 42 - 64 + 90) : 90)
+              .padding(.bottom, offsetY <= -UIScreen.getHeight(339) ? UIScreen.getHeight(339 - 42 - 64 + 100) : 100)
               .padding(.top, 20)
               .padding(.horizontal, 16)
             // 내 비디오 탭 & 올린 컨텐츠 없음
@@ -220,7 +220,7 @@ struct ProfileView: View {
               }
               .zIndex(0)
               .offset(y: offsetY <= -UIScreen.getHeight(339) ? UIScreen.getHeight(339 - 42 - 64) : 0)
-              .padding(.bottom, offsetY <= -UIScreen.getHeight(339) ? UIScreen.getHeight(339 - 42 - 64 + 90) : 90)
+              .padding(.bottom, offsetY <= -UIScreen.getHeight(339) ? UIScreen.getHeight(339 - 42 - 64 + 100) : 100)
               .padding(.top, 20)
               .padding(.horizontal, 16)
             case .finished:
@@ -271,7 +271,7 @@ struct ProfileView: View {
                 }
                 .zIndex(0)
                 .offset(y: offsetY <= -UIScreen.getHeight(339) ? UIScreen.getHeight(339 - 42 - 64) : 0)
-                .padding(.bottom, offsetY <= -UIScreen.getHeight(339) ? UIScreen.getHeight(339 - 42 - 64 + 90) : 90)
+                .padding(.bottom, offsetY <= -UIScreen.getHeight(339) ? UIScreen.getHeight(339 - 42 - 64 + 100) : 100)
                 .padding(.top, 20)
                 .padding(.horizontal, 16)
               }
