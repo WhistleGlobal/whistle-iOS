@@ -46,7 +46,6 @@ struct FeedSearchBar: View {
           .overlay(alignment: .leading) {
             Image(systemName: "magnifyingglass")
               .foregroundStyle(.labelColorSecondary)
-//              .foregroundStyle(colorModel.placeholderColor)
               .font(.system(size: 16))
               .padding(.leading, 8)
           }

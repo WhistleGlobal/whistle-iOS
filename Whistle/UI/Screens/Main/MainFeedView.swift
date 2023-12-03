@@ -357,50 +357,52 @@ struct MainFeedView: View {
       mainFeedPlayersViewModel.stopPlayer()
     }
     .overlay(alignment: .top) {
-      HStack {
-        Spacer()
-        Text("마이팀")
-          .fontSystem(fontDesignSystem: .subtitle2)
-          .scaleEffect(mainFeedTabModel.isMyTeamTab ? 1.1 : 1.0)
-          .onTapGesture {
-            withAnimation {
-              mainFeedTabModel.switchTab(to: .myteam)
-              pagerModel.page.update(.moveToFirst)
-              mainFeedPlayersViewModel.stopPlayer()
-              mainFeedTabModel.switchTab(to: .myteam)
-              myTeamFeedPlayersViewModel.currentPlayer?.play()
+      if !LaunchScreenViewModel.shared.displayLaunchScreen {
+        HStack {
+          Spacer()
+          Text("마이팀")
+            .fontSystem(fontDesignSystem: .subtitle2)
+            .scaleEffect(mainFeedTabModel.isMyTeamTab ? 1.1 : 1.0)
+            .onTapGesture {
+              withAnimation {
+                mainFeedTabModel.switchTab(to: .myteam)
+                pagerModel.page.update(.moveToFirst)
+                mainFeedPlayersViewModel.stopPlayer()
+                mainFeedTabModel.switchTab(to: .myteam)
+                myTeamFeedPlayersViewModel.currentPlayer?.play()
+              }
             }
-          }
-        Rectangle()
-          .fill(Color.white)
-          .frame(width: 1, height: 12)
-        Text("전체")
-          .fontSystem(fontDesignSystem: .subtitle2)
-          .scaleEffect(mainFeedTabModel.isAllTab ? 1.1 : 1.0)
-          .onTapGesture {
-            withAnimation {
-              mainFeedTabModel.switchTab(to: .all)
-              pagerModel.page.update(.moveToLast)
-              myTeamFeedPlayersViewModel.stopPlayer()
-              mainFeedPlayersViewModel.currentPlayer?.play()
+          Rectangle()
+            .fill(Color.white)
+            .frame(width: 1, height: 12)
+          Text("전체")
+            .fontSystem(fontDesignSystem: .subtitle2)
+            .scaleEffect(mainFeedTabModel.isAllTab ? 1.1 : 1.0)
+            .onTapGesture {
+              withAnimation {
+                mainFeedTabModel.switchTab(to: .all)
+                pagerModel.page.update(.moveToLast)
+                myTeamFeedPlayersViewModel.stopPlayer()
+                mainFeedPlayersViewModel.currentPlayer?.play()
+              }
             }
-          }
-        Spacer()
-      }
-      .foregroundColor(.white)
-      .overlay(alignment: .trailing) {
-        NavigationLink {
-          MainSearchView()
-        } label: {
-          Image(systemName: "magnifyingglass")
-            .font(.system(size: 24))
-            .foregroundStyle(Color.white)
+          Spacer()
         }
-        .id(UUID())
+        .foregroundColor(.white)
+        .overlay(alignment: .trailing) {
+          NavigationLink {
+            MainSearchView()
+          } label: {
+            Image(systemName: "magnifyingglass")
+              .font(.system(size: 24))
+              .foregroundStyle(Color.white)
+          }
+          .id(UUID())
+        }
+        .padding(.horizontal, 16)
+        .padding(.top, 54)
+        .ignoresSafeArea()
       }
-      .padding(.horizontal, 16)
-      .padding(.top, 54)
-      .ignoresSafeArea()
     }
     .overlay(alignment: .topLeading) {
       if isUploading {

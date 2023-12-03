@@ -12,7 +12,6 @@ import SwiftUI
 // MARK: - WhistleRankingView
 
 struct WhistleRankingView: View {
-
   @StateObject var bartintModel = BarTintModel.shared
   @StateObject var apiViewModel = APIViewModel.shared
   let userID: Int
@@ -33,42 +32,42 @@ struct WhistleRankingView: View {
           .scaledToFill()
       }
       .ignoresSafeArea()
-      VStack(spacing: 0) {
-        VStack(spacing: 40) {
-          Text("\(userName)님의 휘슬 수는")
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .padding(.horizontal, 20)
-            .padding(.top, 15)
-          HStack(spacing: 0) {
-            Image(systemName: "trophy.fill")
-              .font(.system(size: 20, weight: .semibold))
-              .padding(.trailing, 10)
-              .foregroundColor(Color("Gray30").opacity(30))
-            Text("상위 \(apiViewModel.rankingModel.userRanking.percentile)%")
-              .fontSystem(fontDesignSystem: .title1_SemiBold)
-            Spacer()
-            Text("\(apiViewModel.rankingModel.userRanking.totalWhistle.roundedWithAbbreviations)")
-              .fontSystem(fontDesignSystem: .subtitle3)
-            Image(systemName: "heart.fill")
-              .fontSystem(fontDesignSystem: .subtitle3)
-          }
-          .padding(.horizontal, 20)
-          .padding(.bottom, 15)
-        }
-        .foregroundColor(.white)
-        .frame(width: UIScreen.width - 32, height: 130)
-        .background {
-          glassMorphicDarkView(cornerRadius: 20)
-            .overlay {
-              RoundedRectangle(cornerRadius: 20)
-                .stroke(lineWidth: 1)
-                .foregroundStyle(
-                  LinearGradient.Border_Glass)
+      ScrollView {
+        VStack(spacing: 0) {
+          VStack(spacing: 40) {
+            Text("\(userName)님의 휘슬 수는")
+              .frame(maxWidth: .infinity, alignment: .leading)
+              .padding(.horizontal, 20)
+              .padding(.top, 15)
+            HStack(spacing: 0) {
+              Image(systemName: "trophy.fill")
+                .font(.system(size: 20, weight: .semibold))
+                .padding(.trailing, 10)
+                .foregroundColor(Color("Gray30").opacity(30))
+              Text("상위 \(apiViewModel.rankingModel.userRanking.percentile)%")
+                .fontSystem(fontDesignSystem: .title1_SemiBold)
+              Spacer()
+              Text("\(apiViewModel.rankingModel.userRanking.totalWhistle.roundedWithAbbreviations)")
+                .fontSystem(fontDesignSystem: .subtitle3)
+              Image(systemName: "heart.fill")
+                .fontSystem(fontDesignSystem: .subtitle3)
             }
-        }
-        .padding(.top, 10)
-        .padding(.bottom, 12)
-        ScrollView {
+            .padding(.horizontal, 20)
+            .padding(.bottom, 15)
+          }
+          .foregroundColor(.white)
+          .frame(width: UIScreen.width - 32, height: 130)
+          .background {
+            glassMorphicDarkView(cornerRadius: 20)
+              .overlay {
+                RoundedRectangle(cornerRadius: 20)
+                  .stroke(lineWidth: 1)
+                  .foregroundStyle(
+                    LinearGradient.Border_Glass)
+              }
+          }
+          .padding(.top, 10)
+          .padding(.bottom, 12)
           VStack(spacing: 0) {
             ForEach(Array(apiViewModel.rankingModel.topRankings.enumerated()), id: \.element) { index, item in
               if apiViewModel.myProfile.userId == item.userId {
@@ -113,11 +112,12 @@ struct WhistleRankingView: View {
           .frame(height: 140)
       }.ignoresSafeArea()
     }
+    .toolbarBackground(.primaryDefault, for: .navigationBar)
     .toolbarRole(.editor)
     .toolbar {
       ToolbarItem(placement: .principal) {
         Text(CommonWords().whistle)
-          .foregroundStyle(Color.labelColorPrimary)
+          .foregroundStyle(Color.white)
           .font(.headline)
       }
     }
@@ -141,7 +141,6 @@ struct WhistleRankingView: View {
 }
 
 extension WhistleRankingView {
-
   @ViewBuilder
   func rankingRow(ranking: Int, userName: String, myTeam: String?, whistleCount: Int, profileImageURL: String?) -> some View {
     HStack(spacing: 0) {
