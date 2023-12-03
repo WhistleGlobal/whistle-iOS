@@ -58,7 +58,7 @@ extension APIViewModel: SearchProtocol {
         case .success(let data):
           self.searchedContent = data
           SearchProgress.shared.changeSearchContentState(to: .found)
-        case .failure(let error):
+        case .failure:
           SearchProgress.shared.changeSearchContentState(to: .notFound)
         }
       }

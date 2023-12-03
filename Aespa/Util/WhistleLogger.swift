@@ -11,4 +11,3 @@ import OSLog
 enum WhistleLogger {
   static let logger = Logger(subsystem: "\(String(describing: Bundle.main.bundleIdentifier))", category: "\(#file)")
 }
-

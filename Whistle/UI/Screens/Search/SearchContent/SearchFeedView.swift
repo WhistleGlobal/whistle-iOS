@@ -147,4 +147,3 @@ class SearchFeedMoreModel: ObservableObject {
   @Published var isRootStacked = false
   @Published var bottomSheetPosition: BottomSheetPosition = .hidden
 }
-

@@ -61,6 +61,10 @@ struct GuestContentPlayerView: View {
                 }
                 .onAppear {
                   LaunchScreenViewModel.shared.contentPlayerReady()
+                  isChangable = false
+                  DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                    isChangable = true
+                  }
                 }
                 .onTapGesture {
                   if player.rate == 0.0 {

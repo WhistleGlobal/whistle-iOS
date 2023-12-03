@@ -75,10 +75,7 @@ extension PlayerHolderView {
         .onChange(of: videoPlayer.isPlaying) { value in
           switch value {
           case true:
-            if
-              let startTime = musicVM.startTime,
-              let duration = editorVM.currentVideo?.rangeDuration
-            {
+            if let duration = editorVM.currentVideo?.rangeDuration {
               let minTime = duration.lowerBound
               let videoCurrentTime = videoPlayer.currentTime
               let timeOffset = duration.upperBound <= videoCurrentTime ? 0 : videoCurrentTime - minTime
