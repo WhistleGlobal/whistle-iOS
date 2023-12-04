@@ -20,7 +20,6 @@ struct NotificationListView: View {
     ScrollView {
       VStack(spacing: 0) {
         Divider().foregroundColor(.labelColorDisablePlaceholder)
-
         ForEach(
           apiViewModel.notiList.filter { noti in noti.senderID != apiViewModel.myProfile.userId },
           id: \.self)
@@ -52,7 +51,7 @@ struct NotificationListView: View {
           newId = id
         }
         .id(newId)
-        Spacer().frame(height: 200)
+        Spacer().frame(height: 70)
       }
     }
     .toolbarBackground(
@@ -67,7 +66,7 @@ struct NotificationListView: View {
       }
     }
     .background(.backgroundDefault)
-    .navigationBarTitleDisplayMode(.large)
+    .navigationBarTitleDisplayMode(.inline)
     .toolbarRole(.editor)
     .onAppear {
       apiViewModel.requestNotiList()

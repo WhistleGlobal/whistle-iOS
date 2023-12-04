@@ -85,12 +85,32 @@ extension APIViewModel: PostFeedProtocol {
         switch response.result {
         case .success(let success):
           self.mainFeed = success
+          if self.mainFeed.count > 20 {
+            self.mainFeed.removeSubrange(21...)
+          }
           completion(response)
         case .failure:
           WhistleLogger.logger.error("Failure")
           completion(response)
 //          self.retryRequestMainFeed(completion: completion)
-          break
+        }
+      }
+  }
+
+  func requestMainFeedPagination(page: Int, completion: @escaping (DataResponse<[MainContent], AFError>) -> Void) {
+    AF.request(
+      "\(domainURL)/content/content-list/personalize/pagination?page=\(page)",
+      method: .get,
+      headers: contentTypeJson)
+      .validate(statusCode: 200 ... 300)
+      .responseDecodable(of: [MainContent].self) { response in
+        switch response.result {
+        case .success(let success):
+          self.mainFeed = success
+          completion(response)
+        case .failure:
+          WhistleLogger.logger.error("Failure")
+          completion(response)
         }
       }
   }
@@ -337,7 +357,6 @@ extension APIViewModel: PostFeedProtocol {
         case .failure:
           WhistleLogger.logger.error("Error parsing JSON")
           completion(response)
-          break
         }
       }
   }
@@ -469,6 +488,9 @@ extension APIViewModel: PostFeedProtocol {
         switch response.result {
         case .success(let success):
           self.myTeamFeed = success
+          if self.myTeamFeed.count > 20 {
+            self.myTeamFeed.removeSubrange(21...)
+          }
           if self.myTeamFeed.isEmpty {
             LaunchScreenViewModel.shared.myTeamFeedDownloaded()
             LaunchScreenViewModel.shared.myTeamContentPlayerReady()
@@ -481,8 +503,6 @@ extension APIViewModel: PostFeedProtocol {
             LaunchScreenViewModel.shared.myTeamContentPlayerReady()
           }
           completion(response)
-//          self.retryRequestMyTeamFeed(completion: completion)
-          break
         }
       }
   }

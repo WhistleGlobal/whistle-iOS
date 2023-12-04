@@ -81,7 +81,7 @@ struct NotificationSettingView: View {
       alertViewModel.submitAlert(
         title: adMarketingTitle(isAllow: newValue),
         content: "\(adMarketingText(isAllow: newValue))",
-        submitText:CommonWords().confirm)
+        submitText: CommonWords().confirm)
       Task {
         await apiViewModel.updateAdNoti(newSetting: newValue)
       }
@@ -90,7 +90,6 @@ struct NotificationSettingView: View {
 }
 
 extension NotificationSettingView {
-
   func adMarketingText(isAllow: Bool) -> String {
     let userLocale = Locale.current
     let languageCode = userLocale.language.languageCode?.identifier ?? "KR"

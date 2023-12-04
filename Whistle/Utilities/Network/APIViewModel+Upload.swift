@@ -76,7 +76,7 @@ extension APIViewModel: UploadProtocol {
       to: "\(domainURL)/content/upload",
       headers: contentTypeMultipart)
       .uploadProgress { progress in
-        UploadProgressViewModel.shared.progress = progress.fractionCompleted
+        UploadProgress.shared.progress = progress.fractionCompleted
       }
       .validate(statusCode: 200 ..< 300)
       .response { response in
@@ -95,12 +95,12 @@ extension APIViewModel: UploadProtocol {
             "upload_date": Date().koreaTimezone(),
             "content_length": Int(videoLength),
           ])
-          UploadProgressViewModel.shared.uploadEnded()
+          UploadProgress.shared.uploadEnded()
           guard data != nil else {
             return
           }
         case .failure(let error):
-          UploadProgressViewModel.shared.error = true
+          UploadProgress.shared.error = true
           WhistleLogger.logger.error("Failure Upload: \(error)")
         }
       }

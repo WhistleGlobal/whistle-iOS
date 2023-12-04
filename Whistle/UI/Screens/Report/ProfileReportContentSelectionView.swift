@@ -30,7 +30,7 @@ struct ProfileReportContentSelectionView: View {
           GridItem(.flexible()),
           GridItem(.flexible()),
           GridItem(.flexible()),
-        ], spacing: 20) {
+        ], spacing: 8) {
           ForEach(Array(memberContentViewModel.memberFeed.enumerated()), id: \.element) { index, content in
             if let url = content.thumbnailUrl {
               videoThumbnail(url: url, index: index)

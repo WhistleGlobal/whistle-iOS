@@ -46,7 +46,8 @@ public struct PickerOptionsInfo {
 
   /// Select Options
   /// - Default: Video
-  /// - .photoLive and .photoGIF are subtype of .photo and will be treated as a photo when not explicitly indicated, otherwise special handling will be possible (playable & proprietary)
+  /// - .photoLive and .photoGIF are subtype of .photo and will be treated as a photo
+  /// when not explicitly indicated, otherwise special handling will be possible (playable & proprietary)
   public var selectOptions: PickerSelectOption = [.video]
 
   /// Selection Tap Action

@@ -12,7 +12,8 @@ import SwiftUI
 // MARK: - MyTeamSelectView
 
 struct MyTeamSelectView: View {
-
+  @AppStorage("isMyTeamLabelOn") var isMyTeamLabelOn = true
+  @AppStorage("isMyTeamBackgroundOn") var isMyTeamBackgroundOn = true
   @AppStorage("isMyTeamSelectPassed") var isMyTeamSelectPassed = false
   @AppStorage("isMyTeamSelected") var isMyTeamSelected = false
 
@@ -106,7 +107,21 @@ struct MyTeamSelectView: View {
           Mixpanel.mainInstance().track(event: "select_myteam", properties: [
             "team_selected": true,
           ])
-          apiViewModel.requestMyTeamFeed { _ in
+          apiViewModel.requestMyTeamFeed { value in
+            switch value.result {
+            case .success:
+              LaunchScreenViewModel.shared.myTeamFeedDownloaded()
+            case .failure:
+              apiViewModel.requestMyTeamFeed { value in
+                switch value.result {
+                case .success:
+                  LaunchScreenViewModel.shared.myTeamFeedDownloaded()
+                case .failure:
+                  WhistleLogger.logger.debug("MyTeamFeed Download Failure")
+                }
+              }
+              WhistleLogger.logger.debug("MyTeamFeed Download Failure")
+            }
           }
           if isMyTeamSelectPassed {
             dismiss()
@@ -114,6 +129,8 @@ struct MyTeamSelectView: View {
             isMyTeamSelectPassed = true
           }
           isMyTeamSelected = true
+          isMyTeamLabelOn = true
+          isMyTeamBackgroundOn = true
         }
       } label: {
         Text(CommonWords().done)
@@ -320,6 +337,33 @@ enum MyTeamType: String {
       return Image("lgLabel")
     case "KIA 타이거즈":
       return Image("kiaLabel")
+    default:
+      return Image("")
+    }
+  }
+
+  static func teamCard(_ teamName: String) -> Image {
+    switch teamName {
+    case "삼성 라이온즈":
+      return Image("samsungCard")
+    case "두산 베어스":
+      return Image("doosanCard")
+    case "키움 히어로즈":
+      return Image("kiwoomCard")
+    case "SSG 랜더스":
+      return Image("ssgCard")
+    case "한화 이글스":
+      return Image("hanwhaCard")
+    case "KT 위즈":
+      return Image("ktCard")
+    case "롯데 자이언츠":
+      return Image("lotteCard")
+    case "NC 다이노스":
+      return Image("ncCard")
+    case "LG 트윈스":
+      return Image("lgCard")
+    case "KIA 타이거즈":
+      return Image("kiaCard")
     default:
       return Image("")
     }

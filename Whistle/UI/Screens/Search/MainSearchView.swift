@@ -155,7 +155,7 @@ struct MainSearchView: View {
 
 extension MainSearchView {
   func search(query: String) {
-    SearchProgressViewModel.shared.reset()
+    SearchProgress.shared.reset()
     apiViewModel.searchedTag = []
     apiViewModel.searchedUser = []
     apiViewModel.searchedContent = []

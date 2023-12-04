@@ -151,4 +151,3 @@ class TagSearchFeedMoreModel: ObservableObject {
   @Published var isRootStacked = false
   @Published var bottomSheetPosition: BottomSheetPosition = .hidden
 }
-

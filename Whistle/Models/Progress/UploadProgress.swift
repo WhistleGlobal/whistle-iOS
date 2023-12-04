@@ -1,5 +1,5 @@
 //
-//  UploadProgressViewModel.swift
+//  UploadProgress.swift
 //  Whistle
 //
 //  Created by 박상원 on 10/19/23.
@@ -9,8 +9,8 @@ import Combine
 import Foundation
 import SwiftUI
 
-class UploadProgressViewModel {
-  static let shared = UploadProgressViewModel()
+class UploadProgress {
+  static let shared = UploadProgress()
 
   let thumbnailSubject = CurrentValueSubject<Image, Never>(Image("noVideo"))
   let isUploadingSubject = CurrentValueSubject<Bool, Never>(false)

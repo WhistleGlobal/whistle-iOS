@@ -84,7 +84,7 @@ struct MainFeedView: View {
         }
       }
     }
-    .onReceive(UploadProgressViewModel.shared.isUploadingSubject) { value in
+    .onReceive(UploadProgress.shared.isUploadingSubject) { value in
       switch value {
       case true:
         withAnimation {
@@ -96,10 +96,10 @@ struct MainFeedView: View {
         }
       }
     }
-    .onReceive(UploadProgressViewModel.shared.thumbnailSubject) { value in
+    .onReceive(UploadProgress.shared.thumbnailSubject) { value in
       uploadingThumbnail = value
     }
-    .onReceive(UploadProgressViewModel.shared.progressSubject) { value in
+    .onReceive(UploadProgress.shared.progressSubject) { value in
       uploadProgress = value
     }
     .bottomSheet(
@@ -301,6 +301,14 @@ struct MainFeedView: View {
           case .success:
             LaunchScreenViewModel.shared.myTeamFeedDownloaded()
           case .failure:
+            apiViewModel.requestMyTeamFeed { value in
+              switch value.result {
+              case .success:
+                LaunchScreenViewModel.shared.myTeamFeedDownloaded()
+              case .failure:
+                WhistleLogger.logger.debug("MyTeamFeed Download Failure")
+              }
+            }
             WhistleLogger.logger.debug("MyTeamFeed Download Failure")
           }
         }
@@ -320,7 +328,14 @@ struct MainFeedView: View {
             case .success:
               LaunchScreenViewModel.shared.feedDownloaded()
             case .failure:
-              WhistleLogger.logger.debug("MainFeed Download Failure")
+              apiViewModel.requestMainFeed { value in
+                switch value.result {
+                case .success:
+                  LaunchScreenViewModel.shared.feedDownloaded()
+                case .failure:
+                  WhistleLogger.logger.debug("MainFeed Download Failure")
+                }
+              }
             }
           }
         }
@@ -416,7 +431,7 @@ struct MainFeedView: View {
                 .fill(.black.opacity(0.48))
               RoundedRectangle(cornerRadius: 8)
                 .strokeBorder(Color.Border_Default_Dark)
-              CircularProgressBar(progress: UploadProgressViewModel.shared.progress, width: 2)
+              CircularProgressBar(progress: UploadProgress.shared.progress, width: 2)
                 .padding(8)
               Text("\(Int(uploadProgress * 100))%")
                 .foregroundStyle(Color.white)
@@ -538,6 +553,37 @@ extension MainFeedView {
           viewedContenId: $myTeamViewedContentId,
           scrolledContentCount: $scrolledContentCount,
           index: $myTeamIndex)
+      } else {
+        Image("BlurredDefaultBG")
+          .resizable()
+          .scaledToFill()
+          .ignoresSafeArea()
+        VStack {
+          Text("아직 마이팀에 게시된 영상이 없어요.")
+            .fontSystem(fontDesignSystem: .body1)
+            .foregroundColor(.LabelColor_Primary_Dark)
+            .padding(.bottom, 8)
+          if let myteam = apiViewModel.myProfile.myTeam {
+            MyTeamType.teamCard(myteam)
+              .resizable()
+              .scaledToFit()
+              .frame(width: UIScreen.getWidth(334), height: UIScreen.getHeight(444))
+              .padding(.bottom, UIScreen.getHeight(24))
+          }
+          Text("마이팀의 첫 번째 영상을 올려주세요.")
+            .fontSystem(fontDesignSystem: .body1)
+            .foregroundColor(.LabelColor_Primary_Dark)
+            .padding(.bottom, 20)
+          Button {
+            tabbarModel.showVideoCaptureView = true
+          } label: {
+            Text(ContentWords().goUpload)
+              .fontSystem(fontDesignSystem: .subtitle2)
+              .foregroundColor(Color.LabelColor_Primary_Dark)
+              .frame(width: 142, height: 36)
+          }
+          .buttonStyle(ProfileEditButtonStyle())
+        }
       }
     }
     .background(Color.black.edgesIgnoringSafeArea(.all))

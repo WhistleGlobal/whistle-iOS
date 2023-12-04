@@ -24,7 +24,6 @@ extension Date {
   }
 }
 
-
 extension Date {
   static func timeAgoSinceDate(_ date: Date) -> String {
     let calendar = Calendar.current

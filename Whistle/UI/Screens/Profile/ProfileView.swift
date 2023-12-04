@@ -157,7 +157,7 @@ struct ProfileView: View {
                 GridItem(.flexible()),
                 GridItem(.flexible()),
                 GridItem(.flexible()),
-              ], spacing: 20) {
+              ], spacing: 8) {
                 ForEach(Array(apiViewModel.myFeed.enumerated()), id: \.element) { index, content in
                   NavigationLink {
                     MyFeedView(index: index)
@@ -170,7 +170,8 @@ struct ProfileView: View {
                 }
               }
               .zIndex(0)
-              .offset(y: offsetY <= -UIScreen.getHeight(339) ? UIScreen.getHeight(339) - 42 - 64 : 12)
+              .offset(y: offsetY <= -UIScreen.getHeight(339) ? UIScreen.getHeight(339 - 42 - 64) : 12)
+              .padding(.bottom, offsetY <= -UIScreen.getHeight(339) ? UIScreen.getHeight(339 - 42 - 64 + 100) : 100)
               .padding(.top, 12)
               .padding(.horizontal, 16)
 
@@ -180,7 +181,7 @@ struct ProfileView: View {
                 GridItem(.flexible()),
                 GridItem(.flexible()),
                 GridItem(.flexible()),
-              ], spacing: 20) {
+              ], spacing: 8) {
                 ForEach(Array(apiViewModel.bookmark.enumerated()), id: \.element) { index, content in
                   NavigationLink {
                     BookMarkedFeedView(index: index)
@@ -191,7 +192,8 @@ struct ProfileView: View {
                 }
               }
               .zIndex(0)
-              .offset(y: offsetY <= -UIScreen.getHeight(339) ? UIScreen.getHeight(339) - 42 - 64 : 12)
+              .offset(y: offsetY <= -UIScreen.getHeight(339) ? UIScreen.getHeight(339 - 42 - 64) : 12)
+              .padding(.bottom, offsetY <= -UIScreen.getHeight(339) ? UIScreen.getHeight(339 - 42 - 64 + 100) : 100)
               .padding(.top, 20)
               .padding(.horizontal, 16)
             // 내 비디오 탭 & 올린 컨텐츠 없음
@@ -211,13 +213,14 @@ struct ProfileView: View {
                 GridItem(.flexible()),
                 GridItem(.flexible()),
                 GridItem(.flexible()),
-              ], spacing: 20) {
+              ], spacing: 8) {
                 ForEach(0 ..< 9) { _ in
                   skeletonRectangle()
                 }
               }
               .zIndex(0)
-              .offset(y: offsetY <= -UIScreen.getHeight(339) ? UIScreen.getHeight(339) - 42 - 64 : 0)
+              .offset(y: offsetY <= -UIScreen.getHeight(339) ? UIScreen.getHeight(339 - 42 - 64) : 0)
+              .padding(.bottom, offsetY <= -UIScreen.getHeight(339) ? UIScreen.getHeight(339 - 42 - 64 + 100) : 100)
               .padding(.top, 20)
               .padding(.horizontal, 16)
             case .finished:
@@ -250,7 +253,7 @@ struct ProfileView: View {
                   GridItem(.flexible()),
                   GridItem(.flexible()),
                   GridItem(.flexible()),
-                ], spacing: 20) {
+                ], spacing: 8) {
                   ForEach(Array(memberContentViewModel.memberFeed.enumerated()), id: \.element) { index, content in
                     NavigationLink {
                       MemberFeedView(
@@ -267,7 +270,8 @@ struct ProfileView: View {
                   }
                 }
                 .zIndex(0)
-                .offset(y: offsetY <= -UIScreen.getHeight(339) ? UIScreen.getHeight(339) - 42 - 64 : 0)
+                .offset(y: offsetY <= -UIScreen.getHeight(339) ? UIScreen.getHeight(339 - 42 - 64) : 0)
+                .padding(.bottom, offsetY <= -UIScreen.getHeight(339) ? UIScreen.getHeight(339 - 42 - 64 + 100) : 100)
                 .padding(.top, 20)
                 .padding(.horizontal, 16)
               }
@@ -277,18 +281,6 @@ struct ProfileView: View {
         .ignoresSafeArea()
         .offset(coordinateSpace: .named("SCROLL")) { offset in
           offsetY = offset
-        }
-        if profileType == .my {
-          if !apiViewModel.myFeed.isEmpty, tabSelection == .myVideo {
-            Spacer().frame(height: 1000)
-          }
-          if !apiViewModel.bookmark.isEmpty, tabSelection == .bookmark {
-            Spacer().frame(height: 1000)
-          }
-        } else {
-          if !memberContentViewModel.memberFeed.isEmpty {
-            Spacer().frame(height: 1000)
-          }
         }
       }
       .ignoresSafeArea()
