@@ -489,8 +489,6 @@ extension MainFeedPlayersViewModel: PlayersViewModel { }
 
 // MARK: - MyFeedPlayersViewModel + PlayersViewModel
 
-// extension MemeberPlayersViewModel: PlayersViewModel { }
-
 extension MyFeedPlayersViewModel: PlayersViewModel { }
 
 // MARK: - MemberContentViewModel + PlayersViewModel
