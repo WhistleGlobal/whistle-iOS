@@ -1,10 +1,4 @@
-//
-//  VideoFile.swift
-//
-//
-//  Created by 이영빈 on 2023/06/13.
-//
-
+import Foundation
 import SwiftUI
 import UIKit
 
@@ -27,6 +21,12 @@ public struct VideoFile {
 
   /// A thumbnail image, of type `UIImage`, generated from the video.
   public var thumbnail: UIImage
+
+  public init(creationDate: Date, path: URL?, thumbnail: UIImage) {
+    self.creationDate = creationDate
+    self.path = path
+    self.thumbnail = thumbnail
+  }
 }
 
 // MARK: Comparable

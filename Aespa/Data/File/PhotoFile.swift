@@ -1,10 +1,3 @@
-//
-//  PhotoFile.swift
-//
-//
-//  Created by 이영빈 on 2023/06/18.
-//
-
 import Foundation
 import SwiftUI
 import UIKit
@@ -21,6 +14,11 @@ public struct PhotoFile {
 
   /// The captured image of type `UIImage`.
   public var image: UIImage
+
+  public init(creationDate: Date, image: UIImage) {
+    self.creationDate = creationDate
+    self.image = image
+  }
 }
 
 // MARK: Comparable
@@ -36,4 +34,12 @@ extension PhotoFile {
   public var thumbnailImage: Image {
     Image(uiImage: image)
   }
+}
+
+// MARK: - AespaFileTypes
+
+/// Namespace used by downstream modules to reference Aespa file models.
+public enum AespaFileTypes {
+  public typealias Photo = PhotoFile
+  public typealias Video = VideoFile
 }
