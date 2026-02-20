@@ -1,13 +1,4 @@
-//
-//  BookmarkedPlayersViewModel.swift
-//  Whistle
-//
-//  Created by ChoiYujin on 10/30/23.
-//
-
-import AVFoundation
-
-class BookmarkedPlayersViewModel: BaseFeedPlayersViewModel {
+final class BookmarkedPlayersViewModel: BaseFeedPlayersViewModel {
 
   static let shared = BookmarkedPlayersViewModel()
   private override init() {

@@ -165,7 +165,7 @@ class BaseFeedPlayersViewModel: ObservableObject {
 
 // MARK: - TagSearchPlayersViewModel
 
-class TagSearchPlayersViewModel: BaseFeedPlayersViewModel {
+final class TagSearchPlayersViewModel: BaseFeedPlayersViewModel {
 
   @Published var searchedContents: [MainContent] = []
 

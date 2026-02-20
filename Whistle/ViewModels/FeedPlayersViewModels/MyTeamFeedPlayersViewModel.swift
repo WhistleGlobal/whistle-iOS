@@ -1,15 +1,6 @@
-//
-//  MyTeamFeedPlayersViewModel.swift
-//  Whistle
-//
-//  Created by ChoiYujin on 11/22/23.
-//
-
-import AVFoundation
-
 // FIXME: - MyTeam API 나오면 고쳐보기
 
-class MyTeamFeedPlayersViewModel: BaseFeedPlayersViewModel {
+final class MyTeamFeedPlayersViewModel: BaseFeedPlayersViewModel {
 
   static let shared = MyTeamFeedPlayersViewModel()
   private override init() {

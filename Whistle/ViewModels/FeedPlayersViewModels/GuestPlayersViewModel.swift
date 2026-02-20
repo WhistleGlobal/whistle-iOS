@@ -1,13 +1,4 @@
-//
-//  GuestPlayersViewModel.swift
-//  Whistle
-//
-//  Created by ChoiYujin on 11/1/23.
-//
-
-import AVFoundation
-
-class GuestFeedPlayersViewModel: BaseFeedPlayersViewModel {
+final class GuestFeedPlayersViewModel: BaseFeedPlayersViewModel {
 
   static let shared = GuestFeedPlayersViewModel()
   private override init() {

@@ -1,8 +1,6 @@
-import AVFoundation
-
 // MARK: - SearchPlayersViewModel
 
-class SearchPlayersViewModel: BaseFeedPlayersViewModel {
+final class SearchPlayersViewModel: BaseFeedPlayersViewModel {
 
   static let shared = SearchPlayersViewModel()
   private override init() {

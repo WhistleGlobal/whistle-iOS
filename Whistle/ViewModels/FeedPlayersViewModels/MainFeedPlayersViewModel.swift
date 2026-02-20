@@ -1,13 +1,4 @@
-//
-//  FeedPlayersViewModel.swift
-//  Whistle
-//
-//  Created by ChoiYujin on 10/26/23.
-//
-
-import AVFoundation
-
-class MainFeedPlayersViewModel: BaseFeedPlayersViewModel {
+final class MainFeedPlayersViewModel: BaseFeedPlayersViewModel {
 
   static let shared = MainFeedPlayersViewModel()
   private override init() {
