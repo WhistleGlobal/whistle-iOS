@@ -1,20 +1,17 @@
-//
-//  VideoCaptureView+ViewBuilder.swift
-//  Whistle
-//
-//  Created by 박상원 on 11/10/23.
-//
-
 import _AuthenticationServices_SwiftUI
 import Aespa
 import AVFoundation
 import Combine
 import SwiftUI
 
+// MARK: - AuthLoginDismissStyle
+
 enum AuthLoginDismissStyle {
   case closeIcon
   case cancelText
 }
+
+// MARK: - AuthLoginSheetView
 
 struct AuthLoginSheetView: View {
   let dismissStyle: AuthLoginDismissStyle
