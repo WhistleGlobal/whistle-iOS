@@ -6,62 +6,59 @@
 //
 import AVFoundation
 
-class SearchPlayersViewModel: ObservableObject {
+// MARK: - BaseFeedPlayersViewModel
 
-  static let shared = SearchPlayersViewModel()
-  private init() { }
-
+class BaseFeedPlayersViewModel: ObservableObject {
   @Published var prevPlayer: AVPlayer?
   @Published var currentPlayer: AVPlayer?
   @Published var nextPlayer: AVPlayer?
   @Published var apiViewModel = APIViewModel.shared
   @Published var currentVideoIndex = 0
 
+  var feedCount: Int { 0 }
+
+  func videoURL(at _: Int) -> String? {
+    nil
+  }
+
+  func shouldAutoPlayCurrent() -> Bool {
+    true
+  }
+
+  func removeAllContents() { }
+
+  func removeContent(at _: Int) { }
+
+  func removeLastContent() { }
+
   func goPlayerNext() {
-    let index = min(max(0, currentVideoIndex), apiViewModel.searchedContent.count - 1)
-    if index == apiViewModel.searchedContent.count - 1 {
-      stopPlayer()
-      prevPlayer = nil
-      prevPlayer = currentPlayer
-      currentPlayer = nextPlayer
-      nextPlayer = nil
-      currentPlayer?.seek(to: .zero)
-      currentPlayer?.play()
-    } else {
-      stopPlayer()
-      prevPlayer = nil
-      prevPlayer = currentPlayer
-      currentPlayer = nextPlayer
-      nextPlayer = nil
-      nextPlayer = AVPlayer(url: URL(string: apiViewModel.searchedContent[index + 1].videoUrl ?? "")!)
-      currentPlayer?.seek(to: .zero)
-      currentPlayer?.play()
+    let lastIndex = feedCount - 1
+    guard lastIndex >= 0 else { return }
+
+    let index = min(max(0, currentVideoIndex), lastIndex)
+    stopPlayer()
+    prevPlayer = currentPlayer
+    currentPlayer = nextPlayer
+    nextPlayer = nil
+    if index < lastIndex {
+      nextPlayer = makePlayer(at: index + 1)
     }
+    currentPlayer?.seek(to: .zero)
+    playCurrentIfAllowed()
   }
 
   func goPlayerPrev() {
-    if currentVideoIndex == 0 {
-      stopPlayer()
-      nextPlayer = nil
-      nextPlayer = currentPlayer
-      currentPlayer = nil
-      currentPlayer = prevPlayer
-      prevPlayer = nil
-      currentPlayer?.seek(to: .zero)
-      currentPlayer?.play()
-      return
-    }
+    guard feedCount > 0 else { return }
+
     stopPlayer()
-    nextPlayer = nil
     nextPlayer = currentPlayer
-    currentPlayer = nil
     currentPlayer = prevPlayer
     prevPlayer = nil
     if currentVideoIndex != 0 {
-      prevPlayer = AVPlayer(url: URL(string: apiViewModel.searchedContent[currentVideoIndex - 1].videoUrl ?? "")!)
+      prevPlayer = makePlayer(at: currentVideoIndex - 1)
     }
     currentPlayer?.seek(to: .zero)
-    currentPlayer?.play()
+    playCurrentIfAllowed()
   }
 
   func stopPlayer() {
@@ -86,79 +83,118 @@ class SearchPlayersViewModel: ObservableObject {
   }
 
   func initialPlayers() {
-    if apiViewModel.searchedContent.isEmpty { return }
-    guard let urlString = apiViewModel.searchedContent.first?.videoUrl else { return }
-    currentPlayer = AVPlayer(url: URL(string: urlString)!)
-    if apiViewModel.searchedContent.count < 2 { return }
-    let urlStringNext = apiViewModel.searchedContent[1].videoUrl
-    nextPlayer = AVPlayer(url: URL(string: urlStringNext ?? "")!)
+    guard feedCount > 0 else { return }
+    currentPlayer = makePlayer(at: 0)
+    if feedCount < 2 { return }
+    nextPlayer = makePlayer(at: 1)
   }
 
   func initialPlayers(index: Int) {
-    if apiViewModel.searchedContent.isEmpty { return }
-    if apiViewModel.searchedContent.count == 1 {
-      guard let urlString = apiViewModel.searchedContent.first?.videoUrl else { return }
-      currentPlayer = AVPlayer(url: URL(string: urlString)!)
+    guard feedCount > 0 else { return }
+
+    if feedCount == 1 {
+      currentPlayer = makePlayer(at: 0)
       return
     }
-    if index == 0 {
-      guard let urlString = apiViewModel.searchedContent.first?.videoUrl else { return }
-      currentPlayer = AVPlayer(url: URL(string: urlString)!)
-      let urlStringNext = apiViewModel.searchedContent[1].videoUrl
-      nextPlayer = AVPlayer(url: URL(string: urlStringNext ?? "")!)
-    } else if index == apiViewModel.searchedContent.count - 1 {
-      guard let urlString = apiViewModel.searchedContent.last?.videoUrl else { return }
-      currentPlayer = AVPlayer(url: URL(string: urlString)!)
-      let urlStringPrev = apiViewModel.searchedContent[index - 1].videoUrl
-      prevPlayer = AVPlayer(url: URL(string: urlStringPrev ?? "")!)
+
+    if index <= 0 {
+      currentPlayer = makePlayer(at: 0)
+      prevPlayer = nil
+      nextPlayer = makePlayer(at: 1)
+    } else if index >= feedCount - 1 {
+      currentPlayer = makePlayer(at: feedCount - 1)
+      prevPlayer = makePlayer(at: feedCount - 2)
+      nextPlayer = nil
     } else {
-      let urlString = apiViewModel.searchedContent[index].videoUrl
-      currentPlayer = AVPlayer(url: URL(string: urlString ?? "")!)
-      let urlStringPrev = apiViewModel.searchedContent[index - 1].videoUrl
-      prevPlayer = AVPlayer(url: URL(string: urlStringPrev ?? "")!)
-      let urlStringNext = apiViewModel.searchedContent[index + 1].videoUrl
-      nextPlayer = AVPlayer(url: URL(string: urlStringNext ?? "")!)
+      currentPlayer = makePlayer(at: index)
+      prevPlayer = makePlayer(at: index - 1)
+      nextPlayer = makePlayer(at: index + 1)
     }
   }
 
   func removePlayer(completion: @escaping () -> Void) {
     stopPlayer()
-    if apiViewModel.searchedContent.count == 1 {
-      apiViewModel.searchedContent.removeAll()
-      prevPlayer = nil
-      currentPlayer = nil
-      nextPlayer = nil
+
+    let count = feedCount
+    if count == 1 {
+      removeAllContents()
+      resetPlayer()
       return
     }
-    if apiViewModel.searchedContent.count == 2, currentVideoIndex == 0 {
-      currentPlayer = nil
+
+    if count == 2, currentVideoIndex == 0 {
       currentPlayer = nextPlayer
-      apiViewModel.searchedContent.remove(at: currentVideoIndex)
-      nextPlayer = AVPlayer(url: URL(string: apiViewModel.searchedContent[currentVideoIndex].videoUrl ?? "")!)
+      removeContent(at: currentVideoIndex)
+      nextPlayer = makePlayer(at: currentVideoIndex)
       currentPlayer?.seek(to: .zero)
-      currentPlayer?.play()
+      playCurrentIfAllowed()
       return
     }
-    if currentVideoIndex == apiViewModel.searchedContent.count - 1 {
-      currentPlayer = nil
+
+    if currentVideoIndex == count - 1 {
       currentPlayer = prevPlayer
-      apiViewModel.searchedContent.removeLast()
+      removeLastContent()
       currentVideoIndex -= 1
       if currentVideoIndex == 0 {
         prevPlayer = nil
       } else {
-        prevPlayer = AVPlayer(url: URL(string: apiViewModel.searchedContent[currentVideoIndex - 1].videoUrl ?? "")!)
+        prevPlayer = makePlayer(at: currentVideoIndex - 1)
       }
       currentPlayer?.seek(to: .zero)
-      currentPlayer?.play()
+      playCurrentIfAllowed()
       completion()
     } else {
-      currentPlayer = nil
       currentPlayer = nextPlayer
-      nextPlayer = AVPlayer(url: URL(string: apiViewModel.searchedContent[currentVideoIndex + 1].videoUrl ?? "")!)
-      apiViewModel.searchedContent.remove(at: currentVideoIndex)
+      removeContent(at: currentVideoIndex)
+      if currentVideoIndex != feedCount - 1 {
+        nextPlayer = makePlayer(at: currentVideoIndex + 1)
+      } else {
+        nextPlayer = nil
+      }
       currentPlayer?.seek(to: .zero)
+      playCurrentIfAllowed()
+    }
+  }
+
+  private func makePlayer(at index: Int) -> AVPlayer? {
+    guard index >= 0, index < feedCount else { return nil }
+    guard let urlString = videoURL(at: index), let url = URL(string: urlString) else { return nil }
+    return AVPlayer(url: url)
+  }
+
+  private func playCurrentIfAllowed() {
+    if shouldAutoPlayCurrent() {
       currentPlayer?.play()
     }
+  }
+}
+
+// MARK: - SearchPlayersViewModel
+
+class SearchPlayersViewModel: BaseFeedPlayersViewModel {
+
+  static let shared = SearchPlayersViewModel()
+  private override init() {
+    super.init()
+  }
+
+  override var feedCount: Int {
+    apiViewModel.searchedContent.count
+  }
+
+  override func videoURL(at index: Int) -> String? {
+    apiViewModel.searchedContent[index].videoUrl
+  }
+
+  override func removeAllContents() {
+    apiViewModel.searchedContent.removeAll()
+  }
+
+  override func removeContent(at index: Int) {
+    apiViewModel.searchedContent.remove(at: index)
+  }
+
+  override func removeLastContent() {
+    apiViewModel.searchedContent.removeLast()
   }
 }
