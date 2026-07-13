@@ -1,34 +1,34 @@
-//
-//  VideoCaptureView+ViewBuilder.swift
-//  Whistle
-//
-//  Created by 박상원 on 11/10/23.
-//
-
 import _AuthenticationServices_SwiftUI
 import Aespa
 import AVFoundation
 import Combine
 import SwiftUI
 
-extension VideoCaptureView {
-  @ViewBuilder
-  func loginSheet() -> some View {
+// MARK: - AuthLoginDismissStyle
+
+enum AuthLoginDismissStyle {
+  case closeIcon
+  case cancelText
+}
+
+// MARK: - AuthLoginSheetView
+
+struct AuthLoginSheetView: View {
+  let dismissStyle: AuthLoginDismissStyle
+  let dismissBottomPadding: CGFloat
+  let contentHeight: CGFloat
+  let onDismiss: () -> Void
+  let onGoogleSignIn: () -> Void
+  let onAppleRequest: (ASAuthorizationAppleIDRequest) -> Void
+  let onAppleCompletion: (Result<ASAuthorization, Error>) -> Void
+  let onTerms: () -> Void
+  let onPrivacy: () -> Void
+
+  var body: some View {
     VStack(spacing: 0) {
-      HStack {
-        Spacer()
-        Button {
-          tabbarModel.showTabbar()
-          uploadBottomSheetPosition = .hidden
-        } label: {
-          Text(CommonWords().cancel)
-            .fontSystem(fontDesignSystem: .subtitle2)
-            .foregroundColor(.white)
-            .padding(.horizontal, 16)
-        }
-      }
-      .frame(height: 52)
-      .padding(.bottom, 36)
+      dismissHeader
+        .frame(height: 52)
+        .padding(.bottom, dismissBottomPadding)
       Group {
         Text("Whistle")
           .font(.system(size: 24, weight: .semibold)) +
@@ -45,7 +45,7 @@ extension VideoCaptureView {
         .foregroundColor(.LabelColor_Secondary_Dark)
       Spacer()
       Button {
-        handleSignInButton()
+        onGoogleSignIn()
       } label: {
         Capsule()
           .foregroundColor(.white)
@@ -71,8 +71,8 @@ extension VideoCaptureView {
       }
 
       SignInWithAppleButton(
-        onRequest: appleSignInViewModel.configureRequest,
-        onCompletion: appleSignInViewModel.handleResult)
+        onRequest: onAppleRequest,
+        onCompletion: onAppleCompletion)
         .frame(maxWidth: 360, maxHeight: 48)
         .cornerRadius(48)
         .overlay {
@@ -105,24 +105,73 @@ extension VideoCaptureView {
         .foregroundColor(.LabelColor_Primary_Dark)
       HStack(spacing: 16) {
         Button {
-          showTermsOfService = true
+          onTerms()
         } label: {
           Text("이용약관")
-            .font(.system(size: 12, weight: .semibold))
             .underline(true, color: .LabelColor_Primary_Dark)
+            .fontSystem(fontDesignSystem: .caption_SemiBold)
         }
         Button {
-          showPrivacyPolicy = true
+          onPrivacy()
         } label: {
           Text("개인정보처리방침")
-            .font(.system(size: 12, weight: .semibold))
             .underline(true, color: .LabelColor_Primary_Dark)
+            .fontSystem(fontDesignSystem: .caption_SemiBold)
         }
       }
       .foregroundColor(.LabelColor_Primary_Dark)
       .padding(.bottom, 64)
     }
-    .frame(height: UIScreen.height * 0.75)
+    .frame(height: contentHeight)
+  }
+
+  @ViewBuilder
+  private var dismissHeader: some View {
+    switch dismissStyle {
+    case .closeIcon:
+      HStack {
+        Button(action: onDismiss) {
+          Image(systemName: "xmark")
+            .foregroundColor(.white)
+            .frame(width: 18, height: 18)
+            .padding(.horizontal, 16)
+        }
+        Spacer()
+      }
+    case .cancelText:
+      HStack {
+        Spacer()
+        Button(action: onDismiss) {
+          Text(CommonWords().cancel)
+            .fontSystem(fontDesignSystem: .subtitle2)
+            .foregroundColor(.white)
+            .padding(.horizontal, 16)
+        }
+      }
+    }
+  }
+}
+
+extension VideoCaptureView {
+  @ViewBuilder
+  func loginSheet() -> some View {
+    AuthLoginSheetView(
+      dismissStyle: .cancelText,
+      dismissBottomPadding: 36,
+      contentHeight: UIScreen.height * 0.75,
+      onDismiss: {
+        tabbarModel.showTabbar()
+        uploadBottomSheetPosition = .hidden
+      },
+      onGoogleSignIn: handleSignInButton,
+      onAppleRequest: appleSignInViewModel.configureRequest,
+      onAppleCompletion: appleSignInViewModel.handleResult,
+      onTerms: {
+        showTermsOfService = true
+      },
+      onPrivacy: {
+        showPrivacyPolicy = true
+      })
   }
 
   @ViewBuilder

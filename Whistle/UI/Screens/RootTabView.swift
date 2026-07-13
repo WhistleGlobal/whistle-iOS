@@ -190,115 +190,22 @@ struct RootTabView: View {
       bottomSheetPosition: $uploadBottomSheetPosition,
       switchablePositions: [.hidden, .absolute(UIScreen.height - 68)])
     {
-      VStack(spacing: 0) {
-        HStack {
-          Button {
-            uploadBottomSheetPosition = .hidden
-          } label: {
-            Image(systemName: "xmark")
-              .foregroundColor(.white)
-              .frame(width: 18, height: 18)
-              .padding(.horizontal, 16)
-          }
-          Spacer()
-        }
-        .frame(height: 52)
-        .padding(.bottom, 56)
-        Group {
-          Text("Whistle")
-            .font(.system(size: 24, weight: .semibold)) +
-            Text("에 로그인")
-            .font(.custom("AppleSDGothicNeo-SemiBold", size: 24))
-        }
-        .fontWidth(.expanded)
-        .lineSpacing(8)
-        .padding(.vertical, 4)
-        .padding(.bottom, 12)
-        .foregroundColor(.LabelColor_Primary_Dark)
-
-        Text("더 많은 스포츠 콘텐츠를 즐겨보세요")
-          .fontSystem(fontDesignSystem: .body1)
-          .foregroundColor(.LabelColor_Secondary_Dark)
-        Spacer()
-        Button {
-          handleSignInButton()
-        } label: {
-          Capsule()
-            .foregroundColor(.white)
-            .frame(maxWidth: 360, maxHeight: 48)
-            .overlay {
-              HStack(alignment: .center) {
-                Image("GoogleLogo")
-                  .resizable()
-                  .scaledToFit()
-                  .frame(width: 18, height: 18)
-                Spacer()
-                Text("Google로 계속하기")
-                  .font(.custom("Roboto-Medium", size: 16))
-                  .fontWeight(.semibold)
-                  .foregroundColor(.black.opacity(0.54))
-                Spacer()
-                Color.clear
-                  .frame(width: 18, height: 18)
-              }
-              .padding(.horizontal, 24)
-            }
-            .padding(.bottom, 16)
-        }
-
-        SignInWithAppleButton(
-          onRequest: appleSignInViewModel.configureRequest,
-          onCompletion: appleSignInViewModel.handleResult)
-          .frame(maxWidth: 360, maxHeight: 48)
-          .cornerRadius(48)
-          .overlay {
-            Capsule()
-              .foregroundColor(.black)
-              .frame(maxWidth: 360, maxHeight: 48)
-              .overlay {
-                HStack(alignment: .center) {
-                  Image(systemName: "apple.logo")
-                    .resizable()
-                    .scaledToFit()
-                    .foregroundColor(.white)
-                    .frame(width: 18, height: 18)
-                  Spacer()
-                  Text("Apple로 계속하기")
-                    .font(.system(size: 16))
-                    .fontWeight(.semibold)
-                    .foregroundColor(.white)
-                  Spacer()
-                  Color.clear
-                    .frame(width: 18, height: 18)
-                }
-                .padding(.horizontal, 24)
-              }
-              .allowsHitTesting(false)
-          }
-          .padding(.bottom, 24)
-        Text("가입을 진행할 경우, 아래의 정책에 대해 동의한 것으로 간주합니다.")
-          .fontSystem(fontDesignSystem: .caption_Regular)
-          .foregroundColor(.LabelColor_Primary_Dark)
-        HStack(spacing: 16) {
-          Button {
-            showTermsOfService = true
-          } label: {
-            Text("이용약관")
-              .underline(true, color: .LabelColor_Primary_Dark)
-              .fontSystem(fontDesignSystem: .caption_SemiBold)
-          }
-          Button {
-            showPrivacyPolicy = true
-          } label: {
-            Text("개인정보처리방침")
-              .underline(true, color: .LabelColor_Primary_Dark)
-              .fontSystem(fontDesignSystem: .caption_SemiBold)
-          }
-        }
-        .foregroundColor(.LabelColor_Primary_Dark)
-        .padding(.bottom, 64)
-      }
-      .frame(height: UIScreen.height - 68)
+      AuthLoginSheetView(
+        dismissStyle: .closeIcon,
+        dismissBottomPadding: 56,
+        contentHeight: UIScreen.height - 68,
+        onDismiss: {
+          uploadBottomSheetPosition = .hidden
+        },
+        onGoogleSignIn: handleSignInButton,
+        onAppleRequest: appleSignInViewModel.configureRequest,
+        onAppleCompletion: appleSignInViewModel.handleResult,
+        onTerms: {
+          showTermsOfService = true
+        },
+        onPrivacy: {
+          showPrivacyPolicy = true
+        })
     }
     .enableSwipeToDismiss(true)
     .enableTapToDismiss(true)
