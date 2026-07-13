@@ -483,39 +483,13 @@ protocol PlayersViewModel {
   func stopPlayer()
 }
 
-// MARK: - MainFeedPlayersViewModel + PlayersViewModel
+// MARK: - BaseFeedPlayersViewModel + PlayersViewModel
 
-extension MainFeedPlayersViewModel: PlayersViewModel { }
-
-// MARK: - MyFeedPlayersViewModel + PlayersViewModel
-
-// extension MemeberPlayersViewModel: PlayersViewModel { }
-
-extension MyFeedPlayersViewModel: PlayersViewModel { }
+extension BaseFeedPlayersViewModel: PlayersViewModel { }
 
 // MARK: - MemberContentViewModel + PlayersViewModel
 
 extension MemberContentViewModel: PlayersViewModel { }
-
-// MARK: - BookmarkedPlayersViewModel + PlayersViewModel
-
-extension BookmarkedPlayersViewModel: PlayersViewModel { }
-
-// MARK: - SearchPlayersViewModel + PlayersViewModel
-
-extension SearchPlayersViewModel: PlayersViewModel { }
-
-// MARK: - TagSearchPlayersViewModel + PlayersViewModel
-
-extension TagSearchPlayersViewModel: PlayersViewModel { }
-
-// MARK: - GuestFeedPlayersViewModel + PlayersViewModel
-
-extension GuestFeedPlayersViewModel: PlayersViewModel { }
-
-// MARK: - MyTeamFeedPlayersViewModel + PlayersViewModel
-
-extension MyTeamFeedPlayersViewModel: PlayersViewModel { }
 
 extension ContentLayer {
   @ViewBuilder
